@@ -22,8 +22,14 @@ type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' 
 
 const ITEMS_PER_PAGE = 12;
 
-// Map URL badge params to internal badge keys
+// Map URL badge params to internal badge keys (supports both new stable keys and legacy Swedish)
 const urlBadgeToKey: Record<string, BadgeKey> = {
+  // Stable keys (preferred)
+  'new': 'new',
+  'newPrice': 'newPrice',
+  'popular': 'popular',
+  'limited': 'limited',
+  // Legacy Swedish params (backwards compatibility)
   'Nytt+pris': 'newPrice',
   'Nytt pris': 'newPrice',
   'Nyhet': 'new',
@@ -31,8 +37,14 @@ const urlBadgeToKey: Record<string, BadgeKey> = {
   'Begränsat': 'limited',
 };
 
-// Map URL strength params to internal strength keys
+// Map URL strength params to internal strength keys (supports both new stable keys and legacy Swedish)
 const urlStrengthToKey: Record<string, StrengthKey> = {
+  // Stable keys (preferred)
+  'normal': 'normal',
+  'strong': 'strong',
+  'extraStrong': 'extraStrong',
+  'ultraStrong': 'ultraStrong',
+  // Legacy Swedish params (backwards compatibility)
   'Normal': 'normal',
   'Stark': 'strong',
   'Extra+Stark': 'extraStrong',
@@ -55,9 +67,9 @@ export default function ProductListing() {
   const sortLabels: Record<SortOption, string> = {
     popularity: t('sort.popularity'),
     newest: t('sort.newest'),
-    oldest: t('sort.newest'),
-    'name-asc': 'A-Z',
-    'name-desc': 'Z-A',
+    oldest: t('sort.oldest'),
+    'name-asc': t('sort.nameAsc'),
+    'name-desc': t('sort.nameDesc'),
     'price-asc': t('sort.priceLow'),
     'price-desc': t('sort.priceHigh'),
   };

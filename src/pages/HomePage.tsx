@@ -19,7 +19,7 @@ export default function HomePage() {
         title={t('products.featured')}
         filterFn={(p) => p.badgeKeys.includes('popular')}
         limit={4}
-        viewAllHref="/produkter?badge=Populär"
+        viewAllHref="/produkter?badge=popular"
       />
       
       <div className="bg-muted/30">
@@ -27,7 +27,7 @@ export default function HomePage() {
           title={t('badge.newPrice')}
           filterFn={(p) => p.badgeKeys.includes('newPrice')}
           limit={4}
-          viewAllHref="/produkter?badge=Nytt+pris"
+          viewAllHref="/produkter?badge=newPrice"
         />
       </div>
       
@@ -35,7 +35,7 @@ export default function HomePage() {
         title={t('badge.new')}
         filterFn={(p) => p.badgeKeys.includes('new')}
         limit={4}
-        viewAllHref="/produkter?badge=Nyhet"
+        viewAllHref="/produkter?badge=new"
       />
     </Layout>
   );

@@ -9,44 +9,52 @@ export function CategoryShortcuts() {
 
   const categories = useMemo(() => [
     {
+      id: 'white-snus',
       name: t('categories.whiteSnus'),
       icon: Cigarette,
       href: '/produkter',
     },
     {
+      id: 'news',
       name: t('categories.news'),
       icon: Sparkles,
-      href: '/produkter?badge=Nyhet',
+      href: '/produkter?badge=new',
     },
     {
+      id: 'new-price',
       name: t('categories.newPrice'),
       icon: Tag,
-      href: '/produkter?badge=Nytt+pris',
+      href: '/produkter?badge=newPrice',
     },
     {
+      id: 'pick-mix',
       name: t('categories.pickMix'),
       icon: Package,
       href: '/produkter',
     },
     {
+      id: 'sub-snus',
       name: t('categories.subSnus'),
       icon: RefreshCw,
       href: '/produkter',
     },
     {
+      id: 'monthly',
       name: t('categories.monthlyDoses'),
       icon: Calendar,
-      href: '/produkter?badge=Populär',
+      href: '/produkter?badge=popular',
     },
     {
+      id: 'extra-strong',
       name: t('strength.extraStrong'),
       icon: Zap,
-      href: '/produkter?strength=Extra+Stark',
+      href: '/produkter?strength=extraStrong',
     },
     {
+      id: 'deals',
       name: t('badge.newPrice'),
       icon: Gift,
-      href: '/produkter?badge=Nytt+pris',
+      href: '/produkter?badge=newPrice',
     },
   ], [t]);
 
@@ -56,7 +64,7 @@ export function CategoryShortcuts() {
         <div className="flex gap-3 overflow-x-auto pb-3 scrollbar-hide md:grid md:grid-cols-4 lg:grid-cols-8 md:gap-3 md:overflow-visible md:pb-0">
           {categories.map((category) => (
             <Link
-              key={category.name}
+              key={category.id}
               to={category.href}
               className="group flex flex-col items-center gap-2 shrink-0"
             >
