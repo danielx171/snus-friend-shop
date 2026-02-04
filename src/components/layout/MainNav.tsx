@@ -8,28 +8,30 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { useTranslation } from '@/hooks/useTranslation';
 import { brands as brandsList } from '@/data/products';
 
 export function MainNav() {
-  const { t } = useTranslation();
-
   const categories = [
     {
-      title: t('nav.whiteSnus'),
-      href: '/produkter',
-      description: t('hero.subtitle'),
+      title: 'All Nicotine Pouches',
+      href: '/nicotine-pouches',
+      description: 'Browse our complete range of nicotine pouches',
     },
     {
-      title: t('nav.allBrands'),
-      href: '/produkter?show=brands',
-      description: t('products.viewAll'),
+      title: 'Nicotine-Free',
+      href: '/nicotine-pouches?strength=normal',
+      description: 'Pouches with lower nicotine content',
+    },
+    {
+      title: 'Caffeine Pouches',
+      href: '/nicotine-pouches',
+      description: 'Energy-boosting caffeine pouches',
     },
   ];
 
-  const brands = brandsList.slice(0, 6).map(name => ({
+  const brands = brandsList.slice(0, 8).map(name => ({
     name,
-    href: `/produkter?brand=${encodeURIComponent(name)}`,
+    href: `/nicotine-pouches?brand=${encodeURIComponent(name)}`,
   }));
 
   return (
@@ -39,10 +41,10 @@ export function MainNav() {
           <NavigationMenuList className="gap-0">
             <NavigationMenuItem>
               <NavigationMenuTrigger className="h-10 rounded-none bg-transparent hover:bg-accent/50 data-[state=open]:bg-accent/50 text-sm">
-                {t('nav.whiteSnus')}
+                Nicotine Pouches
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-2 p-3 md:w-[450px] md:grid-cols-2">
+                <ul className="grid w-[400px] gap-2 p-3 md:w-[500px] md:grid-cols-2">
                   {categories.map((category) => (
                     <li key={category.title}>
                       <NavigationMenuLink asChild>
@@ -66,10 +68,10 @@ export function MainNav() {
 
             <NavigationMenuItem>
               <NavigationMenuTrigger className="h-10 rounded-none bg-transparent hover:bg-accent/50 data-[state=open]:bg-accent/50 text-sm">
-                {t('nav.brands')}
+                Brands
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-[280px] gap-0.5 p-3">
+                <ul className="grid w-[320px] grid-cols-2 gap-0.5 p-3">
                   {brands.map((brand) => (
                     <li key={brand.name}>
                       <NavigationMenuLink asChild>
@@ -88,45 +90,45 @@ export function MainNav() {
 
             <NavigationMenuItem>
               <Link
-                to="/produkter?badge=new"
-                className={cn(
-                  'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
-                )}
-              >
-                {t('nav.news')}
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <Link
-                to="/produkter?badge=newPrice"
+                to="/nicotine-pouches?badge=newPrice"
                 className={cn(
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium text-primary transition-colors hover:bg-accent/50'
                 )}
               >
-                {t('nav.newPrice')}
+                99p Picks
               </Link>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
               <Link
-                to="/produkter"
+                to="/nicotine-pouches?badge=new"
                 className={cn(
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
                 )}
               >
-                {t('nav.pickMix')}
+                New
               </Link>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
               <Link
-                to="/om"
+                to="/nicotine-pouches?badge=popular"
                 className={cn(
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
                 )}
               >
-                {t('nav.about')}
+                Bestsellers
+              </Link>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link
+                to="/nicotine-pouches?badge=newPrice"
+                className={cn(
+                  'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
+                )}
+              >
+                Offers
               </Link>
             </NavigationMenuItem>
           </NavigationMenuList>

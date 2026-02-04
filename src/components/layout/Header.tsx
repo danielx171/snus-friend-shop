@@ -1,4 +1,4 @@
-import { ShoppingCart, Search, Menu, User } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCart } from '@/context/CartContext';
@@ -8,88 +8,111 @@ import { useState } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export function Header() {
-  const { totalItems, openCart } = useCart();
+  const { totalItems, totalPrice, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { t } = useTranslation();
+  const [searchOpen, setSearchOpen] = useState(false);
+  const { t, formatPrice } = useTranslation();
+
+  const navLinks = [
+    { href: '/nicotine-pouches', label: 'Nicotine Pouches' },
+    { href: '/nicotine-pouches?badge=newPrice', label: 'Offers' },
+    { href: '/nicotine-pouches?badge=new', label: 'New' },
+    { href: '/nicotine-pouches?badge=popular', label: 'Bestsellers' },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
-      <div className="container flex h-14 items-center justify-between gap-4">
+      <div className="container flex h-16 items-center justify-between gap-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-base shadow-sm">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg shadow-sm">
             SF
           </div>
-          <span className="hidden sm:block text-lg font-bold text-foreground tracking-tight">
+          <span className="hidden sm:block text-xl font-bold text-foreground tracking-tight">
             SnusFriend
           </span>
         </Link>
 
         {/* Search - Desktop */}
-        <div className="hidden md:flex flex-1 max-w-lg mx-6">
+        <div className="hidden md:flex flex-1 max-w-xl mx-6">
           <div className="relative w-full">
             <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder={t('search.placeholder')}
-              className="w-full pl-10 h-10 rounded-xl bg-background border-border focus:border-primary"
+              placeholder="Search products..."
+              className="w-full pl-10 h-11 rounded-xl bg-background border-border focus:border-primary"
             />
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-0.5">
-          <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-9 w-9">
-            <User className="h-4.5 w-4.5" />
-          </Button>
-          
+        <div className="flex items-center gap-2">
+          {/* Mobile Search Toggle */}
           <Button
             variant="ghost"
             size="icon"
-            className="relative rounded-xl h-9 w-9"
+            className="md:hidden rounded-xl h-10 w-10"
+            onClick={() => setSearchOpen(!searchOpen)}
+          >
+            <Search className="h-5 w-5" />
+          </Button>
+
+          {/* Account */}
+          <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-10 w-10" asChild>
+            <Link to="/account">
+              <User className="h-5 w-5" />
+            </Link>
+          </Button>
+          
+          {/* Cart */}
+          <Button
+            variant="ghost"
+            className="relative rounded-xl h-10 gap-2 px-3"
             onClick={openCart}
           >
-            <ShoppingCart className="h-4.5 w-4.5" />
+            <ShoppingCart className="h-5 w-5" />
             {totalItems > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
-                {totalItems}
-              </span>
+              <>
+                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
+                  {totalItems}
+                </span>
+                <span className="hidden lg:inline text-sm font-medium">
+                  {formatPrice(totalPrice)}
+                </span>
+              </>
             )}
           </Button>
 
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden rounded-xl h-9 w-9">
-                <Menu className="h-4.5 w-4.5" />
+              <Button variant="ghost" size="icon" className="lg:hidden rounded-xl h-10 w-10">
+                <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-80">
               <div className="flex flex-col gap-5 pt-5">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input placeholder={t('search.placeholder')} className="pl-10 rounded-xl" />
+                  <Input placeholder="Search products..." className="pl-10 rounded-xl" />
                 </div>
-                <nav className="flex flex-col gap-0.5">
+                <nav className="flex flex-col gap-1">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      className="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:bg-accent transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                   <Link
-                    to="/produkter"
-                    className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
+                    to="/account"
+                    className="flex items-center rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    {t('nav.allProducts')}
-                  </Link>
-                  <Link
-                    to="/produkter?badge=newPrice"
-                    className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-primary hover:bg-accent transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {t('nav.newPrice')}
-                  </Link>
-                  <Link
-                    to="/produkter?badge=new"
-                    className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {t('nav.news')}
+                    <User className="h-4 w-4 mr-2" />
+                    My Account
                   </Link>
                 </nav>
               </div>
@@ -97,6 +120,16 @@ export function Header() {
           </Sheet>
         </div>
       </div>
+
+      {/* Mobile Search Bar */}
+      {searchOpen && (
+        <div className="md:hidden border-t border-border p-3 bg-card">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input placeholder="Search products..." className="pl-10 rounded-xl" autoFocus />
+          </div>
+        </div>
+      )}
     </header>
   );
 }

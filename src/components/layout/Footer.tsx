@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
-import { useTranslation } from '@/hooks/useTranslation';
 
 export function Footer() {
-  const { t } = useTranslation();
-
   return (
     <footer className="border-t border-border bg-card">
       <div className="container py-12">
@@ -18,32 +15,32 @@ export function Footer() {
               <span className="text-xl font-bold text-foreground">SnusFriend</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              {t('hero.subtitle')}
+              Your trusted source for premium nicotine pouches. Fast UK delivery and excellent customer service.
             </p>
           </div>
 
           {/* Customer Service */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">{t('footer.customerService')}</h3>
+            <h3 className="font-semibold text-foreground mb-4">Customer Service</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/kontakt" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.contact')}
+                <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
+                  Contact Us
                 </Link>
               </li>
               <li>
                 <Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.faq')}
+                  FAQ
                 </Link>
               </li>
               <li>
-                <Link to="/leverans" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.shipping')}
+                <Link to="/shipping" className="text-muted-foreground hover:text-primary transition-colors">
+                  Shipping Information
                 </Link>
               </li>
               <li>
-                <Link to="/retur" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.returns')}
+                <Link to="/returns" className="text-muted-foreground hover:text-primary transition-colors">
+                  Returns & Refunds
                 </Link>
               </li>
             </ul>
@@ -51,26 +48,26 @@ export function Footer() {
 
           {/* Information */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">{t('footer.information')}</h3>
+            <h3 className="font-semibold text-foreground mb-4">Information</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/om" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.about')}
+                <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link to="/villkor" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.terms')}
+                <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">
+                  Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link to="/integritet" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.privacy')}
+                <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
+                  Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link to="/cookies" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.cookies')}
+                  Cookie Policy
                 </Link>
               </li>
             </ul>
@@ -78,7 +75,7 @@ export function Footer() {
 
           {/* Follow Us */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">{t('footer.followUs')}</h3>
+            <h3 className="font-semibold text-foreground mb-4">Follow Us</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
@@ -95,6 +92,11 @@ export function Footer() {
                   TikTok
                 </a>
               </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  Twitter
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -103,10 +105,10 @@ export function Footer() {
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <p className="text-xs text-muted-foreground">
-            {t('footer.copyright')}
+            © {new Date().getFullYear()} SnusFriend. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground">
-            ⚠️ {t('compliance.nicotineWarning')}
+            ⚠️ This product contains nicotine. Nicotine is an addictive chemical.
           </p>
         </div>
       </div>

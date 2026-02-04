@@ -26,22 +26,16 @@ export function useTranslation() {
     
     let text: string;
     
-    // Try current language first
     if (langTranslations?.[key]) {
       text = langTranslations[key];
-    } 
-    // Fall back to English
-    else if (englishTranslations?.[key]) {
+    } else if (englishTranslations?.[key]) {
       warnMissingKey(key, langCode);
       text = englishTranslations[key];
-    } 
-    // Return key if nothing found
-    else {
+    } else {
       warnMissingKey(key, 'en');
       return key;
     }
     
-    // Handle replacements
     if (replacements) {
       Object.entries(replacements).forEach(([placeholder, value]) => {
         text = text.replace(`{${placeholder}}`, String(value));
@@ -51,40 +45,20 @@ export function useTranslation() {
     return text;
   };
 
-  // Translate flavor using stable key
-  const translateFlavor = (flavorKey: FlavorKey): string => {
-    return t(`flavor.${flavorKey}`);
-  };
+  const translateFlavor = (flavorKey: FlavorKey): string => t(`flavor.${flavorKey}`);
+  const translateStrength = (strengthKey: StrengthKey): string => t(`strength.${strengthKey}`);
+  const translateFormat = (formatKey: FormatKey): string => t(`format.${formatKey}`);
+  const translateBadge = (badgeKey: BadgeKey): string => t(`badge.${badgeKey}`);
+  const translateCategory = (categoryKey: CategoryKey): string => t(`category.${categoryKey}`);
 
-  // Translate strength using stable key
-  const translateStrength = (strengthKey: StrengthKey): string => {
-    return t(`strength.${strengthKey}`);
-  };
-
-  // Translate format using stable key
-  const translateFormat = (formatKey: FormatKey): string => {
-    return t(`format.${formatKey}`);
-  };
-
-  // Translate badge using stable key
-  const translateBadge = (badgeKey: BadgeKey): string => {
-    return t(`badge.${badgeKey}`);
-  };
-
-  // Translate category using stable key
-  const translateCategory = (categoryKey: CategoryKey): string => {
-    return t(`category.${categoryKey}`);
-  };
-
-  // Format price with proper locale and currency
-  const formatPrice = (sekPrice: number, decimals: number = 2): string => {
-    return formatPriceFn(sekPrice, currentLanguage, { decimals });
+  // Format price in GBP
+  const formatPrice = (amount: number, decimals: number = 2): string => {
+    return formatPriceFn(amount, decimals);
   };
 
   // Format price with per-unit suffix
-  const formatPriceWithUnit = (sekPrice: number): string => {
-    const unitSuffix = t('products.perUnitSuffix');
-    return formatPricePerUnitFn(sekPrice, currentLanguage, unitSuffix);
+  const formatPriceWithUnit = (amount: number): string => {
+    return formatPricePerUnitFn(amount, '/can');
   };
   
   return { 

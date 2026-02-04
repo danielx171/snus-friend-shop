@@ -8,6 +8,9 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import HomePage from "./pages/HomePage";
 import ProductListing from "./pages/ProductListing";
 import ProductDetail from "./pages/ProductDetail";
+import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import AccountPage from "./pages/AccountPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,7 +26,12 @@ const App = () => (
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/produkter" element={<ProductListing />} />
+              <Route path="/nicotine-pouches" element={<ProductListing />} />
               <Route path="/produkt/:id" element={<ProductDetail />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/account" element={<AccountPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

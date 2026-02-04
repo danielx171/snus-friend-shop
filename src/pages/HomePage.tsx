@@ -3,40 +3,57 @@ import { HeroBanner } from '@/components/home/HeroBanner';
 import { CategoryShortcuts } from '@/components/home/CategoryShortcuts';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { AgeGate } from '@/components/compliance/AgeGate';
-import { useTranslation } from '@/hooks/useTranslation';
+import { SEOHead } from '@/components/seo/SEOHead';
 
 export default function HomePage() {
-  const { t } = useTranslation();
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'SnusFriend',
+    url: window.location.origin,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${window.location.origin}/nicotine-pouches?search={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  };
 
   return (
-    <Layout showNicotineWarning={true}>
-      <AgeGate />
-      <HeroBanner />
-      <CategoryShortcuts />
-      
-      {/* Featured Products Sections */}
-      <FeaturedProducts
-        title={t('products.featured')}
-        filterFn={(p) => p.badgeKeys.includes('popular')}
-        limit={4}
-        viewAllHref="/produkter?badge=popular"
+    <>
+      <SEOHead
+        title="SnusFriend | Premium Nicotine Pouches | Free UK Delivery"
+        description="Shop the UK's best selection of nicotine pouches from top brands like ZYN, VELO, and more. Free delivery over £25. Subscribe and save 10%."
+        jsonLd={jsonLd}
       />
-      
-      <div className="bg-muted/30">
+      <Layout showNicotineWarning={true}>
+        <AgeGate />
+        <HeroBanner />
+        <CategoryShortcuts />
+        
+        {/* Featured Products Sections */}
         <FeaturedProducts
-          title={t('badge.newPrice')}
-          filterFn={(p) => p.badgeKeys.includes('newPrice')}
+          title="Bestsellers"
+          filterFn={(p) => p.badgeKeys.includes('popular')}
           limit={4}
-          viewAllHref="/produkter?badge=newPrice"
+          viewAllHref="/nicotine-pouches?badge=popular"
         />
-      </div>
-      
-      <FeaturedProducts
-        title={t('badge.new')}
-        filterFn={(p) => p.badgeKeys.includes('new')}
-        limit={4}
-        viewAllHref="/produkter?badge=new"
-      />
-    </Layout>
+        
+        <div className="bg-muted/30">
+          <FeaturedProducts
+            title="Special Offers"
+            filterFn={(p) => p.badgeKeys.includes('newPrice')}
+            limit={4}
+            viewAllHref="/nicotine-pouches?badge=newPrice"
+          />
+        </div>
+        
+        <FeaturedProducts
+          title="New Arrivals"
+          filterFn={(p) => p.badgeKeys.includes('new')}
+          limit={4}
+          viewAllHref="/nicotine-pouches?badge=new"
+        />
+      </Layout>
+    </>
   );
 }
