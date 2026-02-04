@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { products, Product } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
+import { ActiveFilters } from '@/components/product/ActiveFilters';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -12,11 +13,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Filter, SlidersHorizontal } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { AgeGate } from '@/components/compliance/AgeGate';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
+
+const sortLabels: Record<SortOption, string> = {
+  popularity: 'Popularitet',
+  newest: 'Nyast först',
+  oldest: 'Äldst först',
+  'name-asc': 'Namn A-Ö',
+  'name-desc': 'Namn Ö-A',
+  'price-asc': 'Lägst pris',
+  'price-desc': 'Högst pris',
+};
 
 const ITEMS_PER_PAGE = 12;
 
@@ -98,6 +109,20 @@ export default function ProductListing() {
     setCurrentPage(1);
   };
 
+  const handleRemoveFilter = (category: keyof FilterState, value: string) => {
+    const updated = {
+      ...filters,
+      [category]: filters[category].filter((v) => v !== value),
+    };
+    setFilters(updated);
+    setCurrentPage(1);
+  };
+
+  const handleClearAll = () => {
+    setFilters({ brands: [], strengths: [], flavors: [], formats: [] });
+    setCurrentPage(1);
+  };
+
   const activeFilterCount =
     filters.brands.length +
     filters.strengths.length +
@@ -115,19 +140,19 @@ export default function ProductListing() {
     <Layout showNicotineWarning={false}>
       <AgeGate />
 
-      <div className="container py-8">
+      <div className="container py-6">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">{pageTitle}</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6">
+          <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1">{pageTitle}</h1>
+          <p className="text-sm text-muted-foreground">
             Utforska vårt breda sortiment av nikotinpåsar från ledande varumärken
           </p>
         </div>
 
-        <div className="flex gap-8">
-          {/* Desktop Sidebar Filters */}
-          <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-40 rounded-2xl border border-border bg-card p-6">
+        <div className="flex gap-6">
+          {/* Desktop Sidebar Filters - Sticky */}
+          <aside className="hidden lg:block w-60 shrink-0">
+            <div className="sticky top-28 rounded-2xl border border-border bg-card p-5 max-h-[calc(100vh-8rem)] overflow-y-auto">
               <ProductFilters
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -137,17 +162,17 @@ export default function ProductListing() {
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-            {/* Toolbar */}
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
+            {/* Toolbar - aligned baseline */}
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
                 {/* Mobile Filter Button */}
                 <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="outline" className="lg:hidden gap-2 rounded-xl">
-                      <Filter className="h-4 w-4" />
+                    <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9">
+                      <Filter className="h-3.5 w-3.5" />
                       Filter
                       {activeFilterCount > 0 && (
-                        <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                        <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
                           {activeFilterCount}
                         </span>
                       )}
@@ -163,49 +188,53 @@ export default function ProductListing() {
                   </SheetContent>
                 </Sheet>
 
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Visar {paginatedProducts.length} av {sortedProducts.length} artiklar
                 </p>
               </div>
 
-              {/* Sort Dropdown */}
+              {/* Sort Dropdown - Swedish label */}
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground hidden sm:inline">Sortera:</span>
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                  <SelectTrigger className="w-44 rounded-xl">
+                  <SelectTrigger className="w-36 rounded-xl h-9 text-xs">
                     <SelectValue placeholder="Sortera" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="popularity">Popularitet</SelectItem>
-                    <SelectItem value="newest">Nyast först</SelectItem>
-                    <SelectItem value="oldest">Äldst först</SelectItem>
-                    <SelectItem value="name-asc">Namn A-Ö</SelectItem>
-                    <SelectItem value="name-desc">Namn Ö-A</SelectItem>
-                    <SelectItem value="price-asc">Lägst pris</SelectItem>
-                    <SelectItem value="price-desc">Högst pris</SelectItem>
+                    {Object.entries(sortLabels).map(([value, label]) => (
+                      <SelectItem key={value} value={value} className="text-xs">
+                        {label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
+            {/* Active Filters Chips */}
+            <ActiveFilters
+              filters={filters}
+              onRemoveFilter={handleRemoveFilter}
+              onClearAll={handleClearAll}
+            />
+
             {/* Product Grid */}
             {paginatedProducts.length > 0 ? (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {paginatedProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-16">
-                <p className="text-lg text-muted-foreground mb-4">
+              <div className="flex flex-col items-center justify-center py-12">
+                <p className="text-sm text-muted-foreground mb-3">
                   Inga produkter matchar dina filter
                 </p>
                 <Button
                   variant="outline"
+                  size="sm"
                   className="rounded-xl"
-                  onClick={() =>
-                    setFilters({ brands: [], strengths: [], flavors: [], formats: [] })
-                  }
+                  onClick={handleClearAll}
                 >
                   Rensa filter
                 </Button>
@@ -214,11 +243,11 @@ export default function ProductListing() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="mt-8 flex items-center justify-center gap-2">
+              <div className="mt-6 flex items-center justify-center gap-1.5">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="rounded-xl"
+                  className="rounded-xl h-8 text-xs"
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((p) => p - 1)}
                 >
@@ -239,7 +268,7 @@ export default function ProductListing() {
                       key={pageNum}
                       variant={currentPage === pageNum ? 'default' : 'outline'}
                       size="sm"
-                      className="rounded-xl"
+                      className="rounded-xl h-8 w-8 text-xs p-0"
                       onClick={() => setCurrentPage(pageNum)}
                     >
                       {pageNum}
@@ -249,7 +278,7 @@ export default function ProductListing() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="rounded-xl"
+                  className="rounded-xl h-8 text-xs"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage((p) => p + 1)}
                 >

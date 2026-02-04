@@ -6,6 +6,7 @@ import { Minus, Plus, Trash2, ShoppingBag, Truck } from 'lucide-react';
 import { packSizeLabels, packSizeMultipliers } from '@/data/products';
 import { Link } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
+import { formatPrice, formatPricePerUnit } from '@/lib/format';
 
 const FREE_SHIPPING_THRESHOLD = 149;
 
@@ -40,13 +41,13 @@ export function CartDrawer() {
         ) : (
           <>
             {/* Free shipping progress */}
-            <div className="py-4">
+            <div className="py-3">
               {remainingForFreeShipping > 0 ? (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm">
                     <Truck className="h-4 w-4 text-primary" />
                     <span className="text-muted-foreground">
-                      Handla för <span className="font-medium text-foreground">{remainingForFreeShipping} kr</span> till för fri frakt!
+                      Handla för <span className="font-medium text-foreground">{formatPrice(remainingForFreeShipping, 0)} kr</span> till för fri frakt!
                     </span>
                   </div>
                   <Progress value={shippingProgress} className="h-2" />
@@ -60,18 +61,16 @@ export function CartDrawer() {
             </div>
 
             <div className="flex-1 overflow-y-auto">
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {items.map((item) => {
-                  const pricePerCan = (
-                    item.product.prices[item.packSize] /
-                    packSizeMultipliers[item.packSize]
-                  ).toFixed(2);
+                  const pricePerCan = item.product.prices[item.packSize] / packSizeMultipliers[item.packSize];
+                  const lineTotal = item.product.prices[item.packSize] * item.quantity;
                   return (
                     <div
                       key={`${item.product.id}-${item.packSize}`}
-                      className="flex gap-4 rounded-xl border border-border bg-card p-3"
+                      className="flex gap-3 rounded-xl border border-border bg-card p-2.5"
                     >
-                      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
+                      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-muted">
                         <img
                           src={item.product.image}
                           alt={item.product.name}
@@ -81,33 +80,33 @@ export function CartDrawer() {
                       <div className="flex flex-1 flex-col">
                         <div className="flex items-start justify-between">
                           <div>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-[10px] text-muted-foreground">
                               {item.product.brand}
                             </p>
-                            <p className="font-medium text-sm">
+                            <p className="font-medium text-sm leading-tight">
                               {item.product.name}
                             </p>
-                            <p className="text-xs text-muted-foreground">
-                              {packSizeLabels[item.packSize]} · {pricePerCan} kr/st
+                            <p className="text-[10px] text-muted-foreground">
+                              {packSizeLabels[item.packSize]} · {formatPricePerUnit(pricePerCan)}
                             </p>
                           </div>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                            className="h-7 w-7 text-muted-foreground hover:text-destructive"
                             onClick={() =>
                               removeFromCart(item.product.id, item.packSize)
                             }
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3.5 w-3.5" />
                           </Button>
                         </div>
-                        <div className="mt-2 flex items-center justify-between">
-                          <div className="flex items-center gap-1">
+                        <div className="mt-1.5 flex items-center justify-between">
+                          <div className="flex items-center gap-0.5">
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-7 w-7 rounded-lg"
+                              className="h-6 w-6 rounded-md"
                               onClick={() =>
                                 updateQuantity(
                                   item.product.id,
@@ -118,13 +117,13 @@ export function CartDrawer() {
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
-                            <span className="w-8 text-center text-sm font-medium">
+                            <span className="w-7 text-center text-xs font-medium">
                               {item.quantity}
                             </span>
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-7 w-7 rounded-lg"
+                              className="h-6 w-6 rounded-md"
                               onClick={() =>
                                 updateQuantity(
                                   item.product.id,
@@ -136,8 +135,8 @@ export function CartDrawer() {
                               <Plus className="h-3 w-3" />
                             </Button>
                           </div>
-                          <p className="font-semibold">
-                            {(item.product.prices[item.packSize] * item.quantity).toFixed(2)} kr
+                          <p className="font-semibold text-sm">
+                            {formatPrice(lineTotal)} kr
                           </p>
                         </div>
                       </div>
@@ -147,34 +146,35 @@ export function CartDrawer() {
               </div>
             </div>
 
-            <div className="border-t border-border pt-4">
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
+            <div className="border-t border-border pt-3">
+              <div className="space-y-1.5 text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted-foreground">Delsumma (exkl. moms)</span>
-                  <span>{priceExVat.toFixed(2)} kr</span>
+                  <span>{formatPrice(priceExVat)} kr</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted-foreground">Moms (25%)</span>
-                  <span>{vatAmount.toFixed(2)} kr</span>
+                  <span>{formatPrice(vatAmount)} kr</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted-foreground">Frakt</span>
                   <span className={remainingForFreeShipping === 0 ? 'text-primary' : ''}>
                     {remainingForFreeShipping === 0 ? 'Gratis!' : '49 kr'}
                   </span>
                 </div>
-                <Separator />
-                <div className="flex justify-between font-semibold text-lg">
+                <Separator className="my-2" />
+                <div className="flex justify-between font-semibold text-base">
                   <span>Totalt</span>
-                  <span>{totalPrice.toFixed(2)} kr</span>
+                  <span>{formatPrice(totalPrice)} kr</span>
                 </div>
               </div>
-              <Button className="mt-4 w-full rounded-xl" size="lg">
+              <Button className="mt-3 w-full rounded-xl" size="default">
                 Till kassan
               </Button>
               <Button
                 variant="ghost"
-                className="mt-2 w-full"
+                size="sm"
+                className="mt-1.5 w-full text-sm"
                 onClick={closeCart}
               >
                 Fortsätt handla
