@@ -1,4 +1,4 @@
-import { brands, flavors, strengths, formats } from '@/data/products';
+import { brands, flavorKeys, strengthKeys, formatKeys, FlavorKey, StrengthKey, FormatKey } from '@/data/products';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -8,9 +8,9 @@ import { useTranslation } from '@/hooks/useTranslation';
 
 export interface FilterState {
   brands: string[];
-  strengths: string[];
-  flavors: string[];
-  formats: string[];
+  strengths: StrengthKey[];
+  flavors: FlavorKey[];
+  formats: FormatKey[];
 }
 
 interface ProductFiltersProps {
@@ -20,35 +20,19 @@ interface ProductFiltersProps {
   isMobile?: boolean;
 }
 
-// Map strength to translation key
-const strengthTranslationKeys: Record<string, string> = {
-  'Normal': 'strength.normal',
-  'Stark': 'strength.strong',
-  'Extra Stark': 'strength.extraStrong',
-  'Ultra Stark': 'strength.ultraStrong',
-};
-
-// Map format to translation key
-const formatTranslationKeys: Record<string, string> = {
-  'Slim': 'format.slim',
-  'Mini': 'format.mini',
-  'Original': 'format.original',
-  'Large': 'format.large',
-};
-
 export function ProductFilters({
   filters,
   onFilterChange,
   onClose,
   isMobile = false,
 }: ProductFiltersProps) {
-  const { t, translateFlavor } = useTranslation();
+  const { t, translateFlavor, translateStrength, translateFormat } = useTranslation();
 
   const toggleFilter = (
     category: keyof FilterState,
     value: string
   ) => {
-    const current = filters[category];
+    const current = filters[category] as string[];
     const updated = current.includes(value)
       ? current.filter((v) => v !== value)
       : [...current, value];
@@ -98,7 +82,7 @@ export function ProductFilters({
               />
               <Label
                 htmlFor={`brand-${brand}`}
-                className="text-sm text-foreground cursor-pointer"
+                className="text-sm text-foreground cursor-pointer truncate"
               >
                 {brand}
               </Label>
@@ -113,7 +97,7 @@ export function ProductFilters({
       <div>
         <h3 className="mb-3 font-medium text-foreground">{t('filter.strength')}</h3>
         <div className="space-y-2">
-          {strengths.map((strength) => (
+          {strengthKeys.map((strength) => (
             <div key={strength} className="flex items-center gap-2">
               <Checkbox
                 id={`strength-${strength}`}
@@ -122,9 +106,9 @@ export function ProductFilters({
               />
               <Label
                 htmlFor={`strength-${strength}`}
-                className="text-sm text-foreground cursor-pointer"
+                className="text-sm text-foreground cursor-pointer truncate"
               >
-                {t(strengthTranslationKeys[strength])}
+                {translateStrength(strength)}
               </Label>
             </div>
           ))}
@@ -137,7 +121,7 @@ export function ProductFilters({
       <div>
         <h3 className="mb-3 font-medium text-foreground">{t('filter.flavor')}</h3>
         <div className="space-y-2 max-h-48 overflow-y-auto">
-          {flavors.map((flavor) => (
+          {flavorKeys.map((flavor) => (
             <div key={flavor} className="flex items-center gap-2">
               <Checkbox
                 id={`flavor-${flavor}`}
@@ -146,7 +130,7 @@ export function ProductFilters({
               />
               <Label
                 htmlFor={`flavor-${flavor}`}
-                className="text-sm text-foreground cursor-pointer"
+                className="text-sm text-foreground cursor-pointer truncate"
               >
                 {translateFlavor(flavor)}
               </Label>
@@ -161,7 +145,7 @@ export function ProductFilters({
       <div>
         <h3 className="mb-3 font-medium text-foreground">{t('filter.format')}</h3>
         <div className="space-y-2">
-          {formats.map((format) => (
+          {formatKeys.map((format) => (
             <div key={format} className="flex items-center gap-2">
               <Checkbox
                 id={`format-${format}`}
@@ -170,9 +154,9 @@ export function ProductFilters({
               />
               <Label
                 htmlFor={`format-${format}`}
-                className="text-sm text-foreground cursor-pointer"
+                className="text-sm text-foreground cursor-pointer truncate"
               >
-                {t(formatTranslationKeys[format])}
+                {translateFormat(format)}
               </Label>
             </div>
           ))}

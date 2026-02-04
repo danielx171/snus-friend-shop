@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { products } from '@/data/products';
+import { products, BadgeKey, StrengthKey, FlavorKey, FormatKey } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
 import { ActiveFilters } from '@/components/product/ActiveFilters';
@@ -22,12 +22,35 @@ type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' 
 
 const ITEMS_PER_PAGE = 12;
 
+// Map URL badge params to internal badge keys
+const urlBadgeToKey: Record<string, BadgeKey> = {
+  'Nytt+pris': 'newPrice',
+  'Nytt pris': 'newPrice',
+  'Nyhet': 'new',
+  'Populär': 'popular',
+  'Begränsat': 'limited',
+};
+
+// Map URL strength params to internal strength keys
+const urlStrengthToKey: Record<string, StrengthKey> = {
+  'Normal': 'normal',
+  'Stark': 'strong',
+  'Extra+Stark': 'extraStrong',
+  'Extra Stark': 'extraStrong',
+  'Ultra+Stark': 'ultraStrong',
+  'Ultra Stark': 'ultraStrong',
+};
+
 export default function ProductListing() {
   const [searchParams] = useSearchParams();
   const badgeFilter = searchParams.get('badge');
   const brandFilter = searchParams.get('brand');
   const strengthFilter = searchParams.get('strength');
-  const { t } = useTranslation();
+  const { t, translateBadge } = useTranslation();
+
+  // Convert URL params to internal keys
+  const badgeKeyFilter = badgeFilter ? urlBadgeToKey[badgeFilter] : undefined;
+  const strengthKeyFilter = strengthFilter ? urlStrengthToKey[strengthFilter] : undefined;
 
   const sortLabels: Record<SortOption, string> = {
     popularity: t('sort.popularity'),
@@ -41,7 +64,7 @@ export default function ProductListing() {
 
   const [filters, setFilters] = useState<FilterState>({
     brands: brandFilter ? [brandFilter] : [],
-    strengths: strengthFilter ? [strengthFilter] : [],
+    strengths: strengthKeyFilter ? [strengthKeyFilter] : [],
     flavors: [],
     formats: [],
   });
@@ -53,24 +76,24 @@ export default function ProductListing() {
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       // URL badge filter
-      if (badgeFilter && !product.badges.includes(badgeFilter as any)) {
+      if (badgeKeyFilter && !product.badgeKeys.includes(badgeKeyFilter)) {
         return false;
       }
       if (filters.brands.length > 0 && !filters.brands.includes(product.brand)) {
         return false;
       }
-      if (filters.strengths.length > 0 && !filters.strengths.includes(product.strength)) {
+      if (filters.strengths.length > 0 && !filters.strengths.includes(product.strengthKey)) {
         return false;
       }
-      if (filters.flavors.length > 0 && !filters.flavors.includes(product.flavor)) {
+      if (filters.flavors.length > 0 && !filters.flavors.includes(product.flavorKey)) {
         return false;
       }
-      if (filters.formats.length > 0 && !filters.formats.includes(product.format)) {
+      if (filters.formats.length > 0 && !filters.formats.includes(product.formatKey)) {
         return false;
       }
       return true;
     });
-  }, [filters, badgeFilter]);
+  }, [filters, badgeKeyFilter]);
 
   // Sort products
   const sortedProducts = useMemo(() => {
@@ -80,11 +103,11 @@ export default function ProductListing() {
         return sorted.sort((a, b) => b.ratings - a.ratings);
       case 'newest':
         return sorted.sort((a, b) => 
-          a.badges.includes('Nyhet') ? -1 : b.badges.includes('Nyhet') ? 1 : 0
+          a.badgeKeys.includes('new') ? -1 : b.badgeKeys.includes('new') ? 1 : 0
         );
       case 'oldest':
         return sorted.sort((a, b) => 
-          a.badges.includes('Nyhet') ? 1 : b.badges.includes('Nyhet') ? -1 : 0
+          a.badgeKeys.includes('new') ? 1 : b.badgeKeys.includes('new') ? -1 : 0
         );
       case 'name-asc':
         return sorted.sort((a, b) => a.name.localeCompare(b.name, 'sv'));
@@ -114,7 +137,7 @@ export default function ProductListing() {
   const handleRemoveFilter = (category: keyof FilterState, value: string) => {
     const updated = {
       ...filters,
-      [category]: filters[category].filter((v) => v !== value),
+      [category]: (filters[category] as string[]).filter((v) => v !== value),
     };
     setFilters(updated);
     setCurrentPage(1);
@@ -132,9 +155,7 @@ export default function ProductListing() {
     filters.formats.length;
 
   // Page title based on filters
-  const pageTitle = badgeFilter === 'Nytt pris' ? t('badge.newPrice') :
-                    badgeFilter === 'Nyhet' ? t('badge.new') :
-                    badgeFilter === 'Populär' ? t('badge.popular') :
+  const pageTitle = badgeKeyFilter ? translateBadge(badgeKeyFilter) :
                     brandFilter ? brandFilter :
                     t('categories.whiteSnus');
 
@@ -145,8 +166,8 @@ export default function ProductListing() {
       <div className="container py-6">
         {/* Page Header */}
         <div className="mb-6">
-          <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1">{pageTitle}</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1 line-clamp-2">{pageTitle}</h1>
+          <p className="text-sm text-muted-foreground line-clamp-2">
             {t('hero.subtitle')}
           </p>
         </div>
@@ -166,13 +187,13 @@ export default function ProductListing() {
           <div className="flex-1 min-w-0">
             {/* Toolbar - aligned baseline */}
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0">
                 {/* Mobile Filter Button */}
                 <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9">
+                    <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9 shrink-0">
                       <Filter className="h-3.5 w-3.5" />
-                      {t('filter.title')}
+                      <span className="truncate">{t('filter.title')}</span>
                       {activeFilterCount > 0 && (
                         <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
                           {activeFilterCount}
@@ -190,13 +211,13 @@ export default function ProductListing() {
                   </SheetContent>
                 </Sheet>
 
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground truncate">
                   {t('products.showing')} {paginatedProducts.length} {t('products.of')} {sortedProducts.length} {t('products.productsLabel')}
                 </p>
               </div>
 
               {/* Sort Dropdown */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 <span className="text-xs text-muted-foreground hidden sm:inline">{t('sort.label')}:</span>
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                   <SelectTrigger className="w-36 rounded-xl h-9 text-xs">
@@ -245,7 +266,7 @@ export default function ProductListing() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="mt-6 flex items-center justify-center gap-1.5">
+              <div className="mt-6 flex items-center justify-center gap-1.5 flex-wrap">
                 <Button
                   variant="outline"
                   size="sm"

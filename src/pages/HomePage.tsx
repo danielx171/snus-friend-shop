@@ -3,8 +3,11 @@ import { HeroBanner } from '@/components/home/HeroBanner';
 import { CategoryShortcuts } from '@/components/home/CategoryShortcuts';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { AgeGate } from '@/components/compliance/AgeGate';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function HomePage() {
+  const { t } = useTranslation();
+
   return (
     <Layout showNicotineWarning={true}>
       <AgeGate />
@@ -13,24 +16,24 @@ export default function HomePage() {
       
       {/* Featured Products Sections */}
       <FeaturedProducts
-        title="Utvalda produkter"
-        filterFn={(p) => p.badges.includes('Populär')}
+        title={t('products.featured')}
+        filterFn={(p) => p.badgeKeys.includes('popular')}
         limit={4}
         viewAllHref="/produkter?badge=Populär"
       />
       
       <div className="bg-muted/30">
         <FeaturedProducts
-          title="Nya priser"
-          filterFn={(p) => p.badges.includes('Nytt pris')}
+          title={t('badge.newPrice')}
+          filterFn={(p) => p.badgeKeys.includes('newPrice')}
           limit={4}
           viewAllHref="/produkter?badge=Nytt+pris"
         />
       </div>
       
       <FeaturedProducts
-        title="Nyheter"
-        filterFn={(p) => p.badges.includes('Nyhet')}
+        title={t('badge.new')}
+        filterFn={(p) => p.badgeKeys.includes('new')}
         limit={4}
         viewAllHref="/produkter?badge=Nyhet"
       />
