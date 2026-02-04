@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { products, Product } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
@@ -13,15 +14,21 @@ import {
 } from '@/components/ui/select';
 import { Filter, SlidersHorizontal } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
+import { AgeGate } from '@/components/compliance/AgeGate';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
 
 const ITEMS_PER_PAGE = 12;
 
-export default function Index() {
+export default function ProductListing() {
+  const [searchParams] = useSearchParams();
+  const badgeFilter = searchParams.get('badge');
+  const brandFilter = searchParams.get('brand');
+  const strengthFilter = searchParams.get('strength');
+
   const [filters, setFilters] = useState<FilterState>({
-    brands: [],
-    strengths: [],
+    brands: brandFilter ? [brandFilter] : [],
+    strengths: strengthFilter ? [strengthFilter] : [],
     flavors: [],
     formats: [],
   });
@@ -32,6 +39,10 @@ export default function Index() {
   // Filter products
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
+      // URL badge filter
+      if (badgeFilter && !product.badges.includes(badgeFilter as any)) {
+        return false;
+      }
       if (filters.brands.length > 0 && !filters.brands.includes(product.brand)) {
         return false;
       }
@@ -46,7 +57,7 @@ export default function Index() {
       }
       return true;
     });
-  }, [filters]);
+  }, [filters, badgeFilter]);
 
   // Sort products
   const sortedProducts = useMemo(() => {
@@ -93,21 +104,21 @@ export default function Index() {
     filters.flavors.length +
     filters.formats.length;
 
+  // Page title based on filters
+  const pageTitle = badgeFilter === 'Nytt pris' ? 'Nya priser' :
+                    badgeFilter === 'Nyhet' ? 'Nyheter' :
+                    badgeFilter === 'Populär' ? 'Populära produkter' :
+                    brandFilter ? brandFilter :
+                    'Nikotinpåsar';
+
   return (
-    <Layout>
-      {/* Age Notice */}
-      <div className="bg-secondary py-2">
-        <div className="container text-center">
-          <p className="text-sm text-secondary-foreground">
-            🔞 Du måste vara 18 år eller äldre för att handla hos oss
-          </p>
-        </div>
-      </div>
+    <Layout showNicotineWarning={false}>
+      <AgeGate />
 
       <div className="container py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Nikotinpåsar</h1>
+          <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">{pageTitle}</h1>
           <p className="text-muted-foreground">
             Utforska vårt breda sortiment av nikotinpåsar från ledande varumärken
           </p>
@@ -116,7 +127,7 @@ export default function Index() {
         <div className="flex gap-8">
           {/* Desktop Sidebar Filters */}
           <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 rounded-lg border border-border bg-card p-6">
+            <div className="sticky top-40 rounded-2xl border border-border bg-card p-6">
               <ProductFilters
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -132,7 +143,7 @@ export default function Index() {
                 {/* Mobile Filter Button */}
                 <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="outline" className="lg:hidden gap-2">
+                    <Button variant="outline" className="lg:hidden gap-2 rounded-xl">
                       <Filter className="h-4 w-4" />
                       Filter
                       {activeFilterCount > 0 && (
@@ -161,7 +172,7 @@ export default function Index() {
               <div className="flex items-center gap-2">
                 <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                  <SelectTrigger className="w-44">
+                  <SelectTrigger className="w-44 rounded-xl">
                     <SelectValue placeholder="Sortera" />
                   </SelectTrigger>
                   <SelectContent>
@@ -191,6 +202,7 @@ export default function Index() {
                 </p>
                 <Button
                   variant="outline"
+                  className="rounded-xl"
                   onClick={() =>
                     setFilters({ brands: [], strengths: [], flavors: [], formats: [] })
                   }
@@ -206,6 +218,7 @@ export default function Index() {
                 <Button
                   variant="outline"
                   size="sm"
+                  className="rounded-xl"
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((p) => p - 1)}
                 >
@@ -226,6 +239,7 @@ export default function Index() {
                       key={pageNum}
                       variant={currentPage === pageNum ? 'default' : 'outline'}
                       size="sm"
+                      className="rounded-xl"
                       onClick={() => setCurrentPage(pageNum)}
                     >
                       {pageNum}
@@ -235,6 +249,7 @@ export default function Index() {
                 <Button
                   variant="outline"
                   size="sm"
+                  className="rounded-xl"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage((p) => p + 1)}
                 >

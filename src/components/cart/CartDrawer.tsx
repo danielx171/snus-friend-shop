@@ -2,15 +2,20 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/context/CartContext';
-import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, Truck } from 'lucide-react';
 import { packSizeLabels, packSizeMultipliers } from '@/data/products';
 import { Link } from 'react-router-dom';
+import { Progress } from '@/components/ui/progress';
+
+const FREE_SHIPPING_THRESHOLD = 149;
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeFromCart, totalPrice } = useCart();
 
   const vatAmount = Math.round(totalPrice * 0.25);
   const priceExVat = totalPrice - vatAmount;
+  const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalPrice);
+  const shippingProgress = Math.min(100, (totalPrice / FREE_SHIPPING_THRESHOLD) * 100);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -28,25 +33,45 @@ export function CartDrawer() {
               <ShoppingBag className="h-10 w-10 text-muted-foreground" />
             </div>
             <p className="text-muted-foreground">Din varukorg är tom</p>
-            <Button onClick={closeCart} asChild>
+            <Button onClick={closeCart} asChild className="rounded-xl">
               <Link to="/">Börja handla</Link>
             </Button>
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-y-auto py-4">
-              <div className="space-y-4">
+            {/* Free shipping progress */}
+            <div className="py-4">
+              {remainingForFreeShipping > 0 ? (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Truck className="h-4 w-4 text-primary" />
+                    <span className="text-muted-foreground">
+                      Handla för <span className="font-medium text-foreground">{remainingForFreeShipping} kr</span> till för fri frakt!
+                    </span>
+                  </div>
+                  <Progress value={shippingProgress} className="h-2" />
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 text-sm bg-primary/10 rounded-xl p-3">
+                  <Truck className="h-4 w-4 text-primary" />
+                  <span className="text-primary font-medium">Du har fri frakt! 🎉</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 overflow-y-auto">
+              <div className="space-y-3">
                 {items.map((item) => {
-                  const pricePerCan = Math.round(
+                  const pricePerCan = (
                     item.product.prices[item.packSize] /
-                      packSizeMultipliers[item.packSize]
-                  );
+                    packSizeMultipliers[item.packSize]
+                  ).toFixed(2);
                   return (
                     <div
                       key={`${item.product.id}-${item.packSize}`}
-                      className="flex gap-4 rounded-lg border border-border bg-card p-3"
+                      className="flex gap-4 rounded-xl border border-border bg-card p-3"
                     >
-                      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-md bg-muted">
+                      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
                         <img
                           src={item.product.image}
                           alt={item.product.name}
@@ -78,11 +103,11 @@ export function CartDrawer() {
                           </Button>
                         </div>
                         <div className="mt-2 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1">
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-7 w-7"
+                              className="h-7 w-7 rounded-lg"
                               onClick={() =>
                                 updateQuantity(
                                   item.product.id,
@@ -99,7 +124,7 @@ export function CartDrawer() {
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-7 w-7"
+                              className="h-7 w-7 rounded-lg"
                               onClick={() =>
                                 updateQuantity(
                                   item.product.id,
@@ -112,7 +137,7 @@ export function CartDrawer() {
                             </Button>
                           </div>
                           <p className="font-semibold">
-                            {item.product.prices[item.packSize] * item.quantity} kr
+                            {(item.product.prices[item.packSize] * item.quantity).toFixed(2)} kr
                           </p>
                         </div>
                       </div>
@@ -126,19 +151,25 @@ export function CartDrawer() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Delsumma (exkl. moms)</span>
-                  <span>{priceExVat} kr</span>
+                  <span>{priceExVat.toFixed(2)} kr</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Moms (25%)</span>
-                  <span>{vatAmount} kr</span>
+                  <span>{vatAmount.toFixed(2)} kr</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Frakt</span>
+                  <span className={remainingForFreeShipping === 0 ? 'text-primary' : ''}>
+                    {remainingForFreeShipping === 0 ? 'Gratis!' : '49 kr'}
+                  </span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-semibold text-lg">
                   <span>Totalt</span>
-                  <span>{totalPrice} kr</span>
+                  <span>{totalPrice.toFixed(2)} kr</span>
                 </div>
               </div>
-              <Button className="mt-4 w-full" size="lg">
+              <Button className="mt-4 w-full rounded-xl" size="lg">
                 Till kassan
               </Button>
               <Button
