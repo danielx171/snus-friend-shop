@@ -17,8 +17,8 @@ export function formatPriceSEK(value: number, decimals = 2): string {
 }
 
 /**
- * Format a per-unit price
+ * Format a per-unit price (without suffix - use translation for suffix)
  */
-export function formatPricePerUnit(value: number): string {
-  return `${formatPrice(value, 2)} kr/st`;
+export function formatPricePerUnit(value: number, suffix: string = 'kr/st'): string {
+  return `${formatPrice(value, 2)} ${suffix}`;
 }

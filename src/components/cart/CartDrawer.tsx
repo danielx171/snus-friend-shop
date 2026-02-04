@@ -89,7 +89,7 @@ export function CartDrawer() {
                               {item.product.name}
                             </p>
                             <p className="text-[10px] text-muted-foreground">
-                              {packSizeLabels[item.packSize]} · {formatPricePerUnit(pricePerCan)}
+                              {t(`pack.${item.packSize.replace('pack', '')}`)} · {formatPricePerUnit(pricePerCan, t('products.perUnit'))}
                             </p>
                           </div>
                           <Button

@@ -153,13 +153,13 @@ export function ProductCard({ product }: ProductCardProps) {
             ))}
           </div>
 
-          {/* Prices - Swedish formatting */}
+          {/* Prices - localized formatting */}
           <div className="mb-3 flex items-baseline justify-between">
             <span className="text-lg font-bold text-foreground">
               {formatPrice(currentPrice)} kr
             </span>
             <span className="text-xs text-muted-foreground">
-              {formatPricePerUnit(pricePerCan)}
+              {formatPricePerUnit(pricePerCan, t('products.perUnit'))}
             </span>
           </div>
 

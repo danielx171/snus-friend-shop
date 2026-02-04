@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { products, PackSize, packSizeLabels, packSizeMultipliers } from '@/data/products';
+import { products, PackSize, packSizeMultipliers } from '@/data/products';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -26,24 +26,51 @@ import {
 import { useCart } from '@/context/CartContext';
 import { AgeGate } from '@/components/compliance/AgeGate';
 import { cn } from '@/lib/utils';
+import { formatPrice, formatPricePerUnit } from '@/lib/format';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const packSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10', 'pack30'];
+
+// Map internal badge names to translation keys
+const badgeTranslationKeys: Record<string, string> = {
+  'Nyhet': 'badge.new',
+  'Nytt pris': 'badge.newPrice',
+  'Populär': 'badge.popular',
+  'Begränsat': 'badge.limited',
+};
+
+// Map internal strength names to translation keys
+const strengthTranslationKeys: Record<string, string> = {
+  'Normal': 'strength.normal',
+  'Stark': 'strength.strong',
+  'Extra Stark': 'strength.extraStrong',
+  'Ultra Stark': 'strength.ultraStrong',
+};
+
+// Map internal format names to translation keys
+const formatTranslationKeys: Record<string, string> = {
+  'Slim': 'format.slim',
+  'Mini': 'format.mini',
+  'Original': 'format.original',
+  'Large': 'format.large',
+};
 
 export default function ProductDetail() {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
+  const { t } = useTranslation();
 
   if (!product) {
     return (
       <Layout>
         <div className="container py-16 text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">
-            Produkten hittades inte
+            {t('detail.productNotFound')}
           </h1>
           <Button asChild>
-            <Link to="/">Tillbaka till produkter</Link>
+            <Link to="/">{t('detail.backToProducts')}</Link>
           </Button>
         </div>
       </Layout>
@@ -51,7 +78,7 @@ export default function ProductDetail() {
   }
 
   const currentPrice = product.prices[selectedPack];
-  const pricePerCan = (currentPrice / packSizeMultipliers[selectedPack]).toFixed(2);
+  const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
 
   return (
     <Layout showNicotineWarning={false}>
@@ -65,7 +92,7 @@ export default function ProductDetail() {
             className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             <ChevronLeft className="mr-1 h-4 w-4" />
-            Tillbaka till produkter
+            {t('detail.backToProducts')}
           </Link>
         </nav>
 
@@ -99,9 +126,9 @@ export default function ProductDetail() {
               {product.description}
             </p>
 
-            {/* Flavor chips (if we had multiple flavors) */}
+            {/* Flavor chips */}
             <div>
-              <h3 className="text-sm font-medium text-foreground mb-2">Smak</h3>
+              <h3 className="text-sm font-medium text-foreground mb-2">{t('detail.flavor')}</h3>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="outline" className="rounded-full bg-primary/10 text-primary border-primary/20 px-3 py-1">
                   {product.flavor}
@@ -109,9 +136,9 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* Pack Size Selector - Table style like Haypp */}
+            {/* Pack Size Selector */}
             <div>
-              <h3 className="text-sm font-medium text-foreground mb-3">Välj förpackning</h3>
+              <h3 className="text-sm font-medium text-foreground mb-3">{t('product.selectPack')}</h3>
               <RadioGroup
                 value={selectedPack}
                 onValueChange={(v) => setSelectedPack(v as PackSize)}
@@ -119,8 +146,9 @@ export default function ProductDetail() {
               >
                 {packSizes.map((size) => {
                   const price = product.prices[size];
-                  const perCan = (price / packSizeMultipliers[size]).toFixed(2);
+                  const perCan = price / packSizeMultipliers[size];
                   const isSelected = selectedPack === size;
+                  const packNum = size.replace('pack', '');
                   
                   return (
                     <Label
@@ -142,15 +170,15 @@ export default function ProductDetail() {
                           {isSelected && <Check className="h-3 w-3 text-primary-foreground" />}
                         </div>
                         <span className="font-medium text-foreground">
-                          {packSizeLabels[size]}
+                          {t(`pack.${packNum}`)}
                         </span>
                       </div>
                       <div className="text-right">
                         <span className="text-lg font-bold text-foreground">
-                          {price.toFixed(2)} kr
+                          {formatPrice(price)} kr
                         </span>
                         <span className="block text-xs text-muted-foreground">
-                          {perCan} kr/st
+                          {formatPricePerUnit(perCan, t('products.perUnit'))}
                         </span>
                       </div>
                     </Label>
@@ -167,7 +195,7 @@ export default function ProductDetail() {
                 className="flex-1 gap-2 rounded-xl"
               >
                 <Repeat className="h-5 w-5" />
-                Prenumerera
+                {t('product.subscribe')}
               </Button>
               <Button
                 size="lg"
@@ -175,23 +203,23 @@ export default function ProductDetail() {
                 onClick={() => addToCart(product, selectedPack)}
               >
                 <ShoppingCart className="h-5 w-5" />
-                Köp
+                {t('product.buy')}
               </Button>
             </div>
 
             {/* Summary chips */}
             <div className="flex flex-wrap gap-2">
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
-                Format: {product.format}
+                {t('detail.format')}: {t(formatTranslationKeys[product.format])}
               </Badge>
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
-                Styrka: {product.strength}
+                {t('detail.strengthDef')}: {t(strengthTranslationKeys[product.strength])}
               </Badge>
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
-                Smak: {product.flavor}
+                {t('detail.flavor')}: {product.flavor}
               </Badge>
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
-                {product.nicotineContent} mg/portion
+                {product.nicotineContent} {t('detail.mgPerPortion')}
               </Badge>
             </div>
           </div>
@@ -219,7 +247,7 @@ export default function ProductDetail() {
                           badge === 'Begränsat' && 'bg-destructive text-destructive-foreground'
                         )}
                       >
-                        {badge}
+                        {t(badgeTranslationKeys[badge])}
                       </Badge>
                     ))}
                   </div>
@@ -230,15 +258,15 @@ export default function ProductDetail() {
               <div className="mt-4 grid grid-cols-3 gap-3">
                 <div className="flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3">
                   <Truck className="h-5 w-5 text-primary" />
-                  <span className="text-xs text-muted-foreground text-center">Fri frakt 149kr</span>
+                  <span className="text-xs text-muted-foreground text-center">{t('detail.freeShipping')}</span>
                 </div>
                 <div className="flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3">
                   <Package className="h-5 w-5 text-primary" />
-                  <span className="text-xs text-muted-foreground text-center">Snabb leverans</span>
+                  <span className="text-xs text-muted-foreground text-center">{t('detail.fastDelivery')}</span>
                 </div>
                 <div className="flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3">
                   <RefreshCw className="h-5 w-5 text-primary" />
-                  <span className="text-xs text-muted-foreground text-center">Enkel retur</span>
+                  <span className="text-xs text-muted-foreground text-center">{t('detail.easyReturns')}</span>
                 </div>
               </div>
             </div>
@@ -250,36 +278,36 @@ export default function ProductDetail() {
           <Accordion type="single" collapsible className="space-y-3">
             <AccordionItem value="details" className="rounded-xl border border-border bg-card px-4">
               <AccordionTrigger className="text-base font-medium hover:no-underline py-4">
-                Detaljer om {product.name}
+                {t('detail.detailsAbout')} {product.name}
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <ul className="space-y-3">
                   <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">Kategori</span>
+                    <span className="text-muted-foreground">{t('detail.category')}</span>
                     <span className="font-medium text-foreground">{product.category}</span>
                   </li>
                   <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">Smak</span>
+                    <span className="text-muted-foreground">{t('detail.flavor')}</span>
                     <span className="font-medium text-foreground">{product.flavor}</span>
                   </li>
                   <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">Styrka</span>
-                    <span className="font-medium text-foreground">{product.strength}</span>
+                    <span className="text-muted-foreground">{t('detail.strengthDef')}</span>
+                    <span className="font-medium text-foreground">{t(strengthTranslationKeys[product.strength])}</span>
                   </li>
                   <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">Format</span>
-                    <span className="font-medium text-foreground">{product.format}</span>
+                    <span className="text-muted-foreground">{t('detail.format')}</span>
+                    <span className="font-medium text-foreground">{t(formatTranslationKeys[product.format])}</span>
                   </li>
                   <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">Nikotinhalt</span>
-                    <span className="font-medium text-foreground">{product.nicotineContent} mg/portion</span>
+                    <span className="text-muted-foreground">{t('detail.nicotineContent')}</span>
+                    <span className="font-medium text-foreground">{product.nicotineContent} {t('detail.mgPerPortion')}</span>
                   </li>
                   <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">Antal prillor per dosa</span>
-                    <span className="font-medium text-foreground">{product.portionsPerCan} st</span>
+                    <span className="text-muted-foreground">{t('detail.portionsPerCan')}</span>
+                    <span className="font-medium text-foreground">{product.portionsPerCan} {t('detail.pieces')}</span>
                   </li>
                   <li className="flex justify-between">
-                    <span className="text-muted-foreground">Tillverkare</span>
+                    <span className="text-muted-foreground">{t('detail.manufacturer')}</span>
                     <span className="font-medium text-foreground">{product.manufacturer}</span>
                   </li>
                 </ul>
@@ -288,45 +316,37 @@ export default function ProductDetail() {
 
             <AccordionItem value="taste" className="rounded-xl border border-border bg-card px-4">
               <AccordionTrigger className="text-base font-medium hover:no-underline py-4">
-                Smak och styrka hos {product.name}
+                {t('detail.tasteAndStrength')} {product.name}
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <p className="text-muted-foreground leading-relaxed">
-                  {product.name} från {product.brand} erbjuder en {product.flavor.toLowerCase()}-smak 
-                  med {product.strength.toLowerCase()} styrka. Med ett nikotininnehåll på {product.nicotineContent} mg 
-                  per portion ger denna produkt en {product.strength === 'Normal' ? 'balanserad' : 
-                  product.strength === 'Stark' ? 'kraftfull' : 
-                  product.strength === 'Extra Stark' ? 'intensiv' : 'extrem'} upplevelse.
+                  {product.description}
                 </p>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="brand" className="rounded-xl border border-border bg-card px-4">
               <AccordionTrigger className="text-base font-medium hover:no-underline py-4">
-                Om {product.brand}
+                {t('detail.aboutBrand')} {product.brand}
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <p className="text-muted-foreground leading-relaxed">
-                  {product.brand} är ett ledande varumärke inom nikotinpåsar, tillverkat av {product.manufacturer}. 
-                  Varumärket är känt för sin höga kvalitet och breda sortiment av smaker och styrkor.
+                  {t('detail.brandDescription', { brand: product.brand, manufacturer: product.manufacturer })}
                 </p>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="delivery" className="rounded-xl border border-border bg-card px-4">
               <AccordionTrigger className="text-base font-medium hover:no-underline py-4">
-                Leverans & retur
+                {t('detail.deliveryReturns')}
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <div className="space-y-4 text-muted-foreground">
-                  <p>
-                    Vi erbjuder snabb leverans till hela Sverige. Beställningar lagda före kl. 15:00 
-                    vardagar skickas samma dag.
-                  </p>
+                  <p>{t('detail.deliveryInfo')}</p>
                   <ul className="list-disc list-inside space-y-1">
-                    <li>Fri frakt vid köp över 149 kr</li>
-                    <li>Leverans inom 1-3 arbetsdagar</li>
-                    <li>14 dagars öppet köp på oöppnade förpackningar</li>
+                    <li>{t('detail.freeShippingThreshold')}</li>
+                    <li>{t('detail.deliveryTime')}</li>
+                    <li>{t('detail.returnPolicy')}</li>
                   </ul>
                 </div>
               </AccordionContent>
@@ -334,21 +354,18 @@ export default function ProductDetail() {
 
             <AccordionItem value="faq" className="rounded-xl border border-border bg-card px-4">
               <AccordionTrigger className="text-base font-medium hover:no-underline py-4">
-                Frågor & svar
+                {t('detail.faq')}
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-medium text-foreground mb-1">Hur förvarar jag produkten?</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Förvara produkten svalt och torrt. Undvik direkt solljus och hög värme.
-                    </p>
+                    <h4 className="font-medium text-foreground mb-1">{t('detail.storageQuestion')}</h4>
+                    <p className="text-sm text-muted-foreground">{t('detail.storageAnswer')}</p>
                   </div>
                   <div>
-                    <h4 className="font-medium text-foreground mb-1">Hur länge håller en dosa?</h4>
+                    <h4 className="font-medium text-foreground mb-1">{t('detail.durationQuestion')}</h4>
                     <p className="text-sm text-muted-foreground">
-                      En dosa innehåller {product.portionsPerCan} portioner. Hur länge den räcker beror 
-                      på ditt användningsmönster.
+                      {t('detail.durationAnswer', { portions: product.portionsPerCan })}
                     </p>
                   </div>
                 </div>
@@ -362,8 +379,8 @@ export default function ProductDetail() {
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card p-4 lg:hidden z-40">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <span className="text-2xl font-bold text-foreground">{currentPrice.toFixed(2)} kr</span>
-            <span className="block text-xs text-muted-foreground">{pricePerCan} kr/st</span>
+            <span className="text-2xl font-bold text-foreground">{formatPrice(currentPrice)} kr</span>
+            <span className="block text-xs text-muted-foreground">{formatPricePerUnit(pricePerCan, t('products.perUnit'))}</span>
           </div>
           <Button
             size="lg"
@@ -371,7 +388,7 @@ export default function ProductDetail() {
             onClick={() => addToCart(product, selectedPack)}
           >
             <ShoppingCart className="h-5 w-5" />
-            Köp
+            {t('product.buy')}
           </Button>
         </div>
       </div>
