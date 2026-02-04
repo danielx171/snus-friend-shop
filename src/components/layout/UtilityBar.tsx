@@ -1,7 +1,8 @@
-import { Globe, Star, Truck, Zap, User, ShoppingCart } from 'lucide-react';
+import { Star, Truck, Zap, User, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { formatPrice } from '@/lib/format';
+import { LanguageSelector } from './LanguageSelector';
 
 export function UtilityBar() {
   const { totalItems, totalPrice, openCart } = useCart();
@@ -32,11 +33,8 @@ export function UtilityBar() {
         </div>
 
         {/* Right side actions */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Globe className="h-3 w-3" />
-            <span>SV / Sverige</span>
-          </div>
+        <div className="flex items-center gap-2">
+          <LanguageSelector />
           <Button variant="ghost" size="sm" className="h-6 gap-1 text-[11px] px-2">
             <User className="h-3 w-3" />
             <span className="hidden sm:inline">Logga in</span>
