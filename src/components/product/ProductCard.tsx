@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Product, PackSize, packSizeLabels, packSizeMultipliers } from '@/data/products';
+import { Product, PackSize, packSizeMultipliers } from '@/data/products';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,7 +7,6 @@ import { Star, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { formatPrice, formatPricePerUnit } from '@/lib/format';
 import { useTranslation } from '@/hooks/useTranslation';
 
 interface ProductCardProps {
@@ -50,7 +49,7 @@ const strengthTranslationKeys: Record<Product['strength'], string> = {
 export function ProductCard({ product }: ProductCardProps) {
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack1');
   const { addToCart } = useCart();
-  const { t } = useTranslation();
+  const { t, formatPrice, formatPriceWithUnit } = useTranslation();
 
   const currentPrice = product.prices[selectedPack];
   const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
@@ -133,33 +132,36 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {/* Pack Size Selector - compact */}
           <div className="mb-2.5 flex flex-wrap gap-1">
-            {cardPackSizes.map((size) => (
-              <button
-                key={size}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setSelectedPack(size);
-                }}
-                className={cn(
-                  'rounded-md px-1.5 py-0.5 text-[10px] font-medium transition-all',
-                  selectedPack === size
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                )}
-              >
-                {packSizeLabels[size]}
-              </button>
-            ))}
+            {cardPackSizes.map((size) => {
+              const packNum = size.replace('pack', '');
+              return (
+                <button
+                  key={size}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSelectedPack(size);
+                  }}
+                  className={cn(
+                    'rounded-md px-1.5 py-0.5 text-[10px] font-medium transition-all',
+                    selectedPack === size
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  )}
+                >
+                  {t(`pack.${packNum}`)}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Prices - localized formatting */}
+          {/* Prices - localized currency */}
           <div className="mb-3 flex items-baseline justify-between">
             <span className="text-lg font-bold text-foreground">
-              {formatPrice(currentPrice)} kr
+              {formatPrice(currentPrice)}
             </span>
             <span className="text-xs text-muted-foreground">
-              {formatPricePerUnit(pricePerCan, t('products.perUnit'))}
+              {formatPriceWithUnit(pricePerCan)}
             </span>
           </div>
 

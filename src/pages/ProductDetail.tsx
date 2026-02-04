@@ -4,7 +4,7 @@ import { products, PackSize, packSizeMultipliers } from '@/data/products';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import {
@@ -26,7 +26,6 @@ import {
 import { useCart } from '@/context/CartContext';
 import { AgeGate } from '@/components/compliance/AgeGate';
 import { cn } from '@/lib/utils';
-import { formatPrice, formatPricePerUnit } from '@/lib/format';
 import { useTranslation } from '@/hooks/useTranslation';
 
 const packSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10', 'pack30'];
@@ -60,7 +59,7 @@ export default function ProductDetail() {
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
-  const { t } = useTranslation();
+  const { t, formatPrice, formatPriceWithUnit, translateFlavor } = useTranslation();
 
   if (!product) {
     return (
@@ -131,7 +130,7 @@ export default function ProductDetail() {
               <h3 className="text-sm font-medium text-foreground mb-2">{t('detail.flavor')}</h3>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="outline" className="rounded-full bg-primary/10 text-primary border-primary/20 px-3 py-1">
-                  {product.flavor}
+                  {translateFlavor(product.flavor)}
                 </Badge>
               </div>
             </div>
@@ -175,10 +174,10 @@ export default function ProductDetail() {
                       </div>
                       <div className="text-right">
                         <span className="text-lg font-bold text-foreground">
-                          {formatPrice(price)} kr
+                          {formatPrice(price)}
                         </span>
                         <span className="block text-xs text-muted-foreground">
-                          {formatPricePerUnit(perCan, t('products.perUnit'))}
+                          {formatPriceWithUnit(perCan)}
                         </span>
                       </div>
                     </Label>
@@ -216,7 +215,7 @@ export default function ProductDetail() {
                 {t('detail.strengthDef')}: {t(strengthTranslationKeys[product.strength])}
               </Badge>
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
-                {t('detail.flavor')}: {product.flavor}
+                {t('detail.flavor')}: {translateFlavor(product.flavor)}
               </Badge>
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
                 {product.nicotineContent} {t('detail.mgPerPortion')}
@@ -288,7 +287,7 @@ export default function ProductDetail() {
                   </li>
                   <li className="flex justify-between border-b border-border pb-2">
                     <span className="text-muted-foreground">{t('detail.flavor')}</span>
-                    <span className="font-medium text-foreground">{product.flavor}</span>
+                    <span className="font-medium text-foreground">{translateFlavor(product.flavor)}</span>
                   </li>
                   <li className="flex justify-between border-b border-border pb-2">
                     <span className="text-muted-foreground">{t('detail.strengthDef')}</span>
@@ -379,8 +378,8 @@ export default function ProductDetail() {
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card p-4 lg:hidden z-40">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <span className="text-2xl font-bold text-foreground">{formatPrice(currentPrice)} kr</span>
-            <span className="block text-xs text-muted-foreground">{formatPricePerUnit(pricePerCan, t('products.perUnit'))}</span>
+            <span className="text-2xl font-bold text-foreground">{formatPrice(currentPrice)}</span>
+            <span className="block text-xs text-muted-foreground">{formatPriceWithUnit(pricePerCan)}</span>
           </div>
           <Button
             size="lg"
