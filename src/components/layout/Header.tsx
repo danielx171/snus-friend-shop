@@ -14,63 +14,41 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
       <div className="container flex h-16 items-center justify-between gap-4">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+        <Link to="/" className="flex items-center gap-3 shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg shadow-sm">
             SF
           </div>
-          <span className="hidden sm:block text-xl font-semibold text-foreground">
+          <span className="hidden sm:block text-xl font-bold text-foreground tracking-tight">
             SnusFriend
           </span>
         </Link>
 
         {/* Search - Desktop */}
-        <div className="hidden md:flex flex-1 max-w-md">
+        <div className="hidden md:flex flex-1 max-w-xl mx-8">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Sök produkter..."
-              className="w-full pl-10 bg-background"
+              placeholder="Sök bland våra produkter..."
+              className="w-full pl-11 h-11 rounded-xl bg-background border-border focus:border-primary"
             />
           </div>
         </div>
 
-        {/* Navigation - Desktop */}
-        <nav className="hidden lg:flex items-center gap-6">
-          <Link
-            to="/"
-            className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-          >
-            Alla produkter
-          </Link>
-          <Link
-            to="/?badge=Nytt+pris"
-            className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-          >
-            Nya priser
-          </Link>
-          <Link
-            to="/?badge=Nyhet"
-            className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-          >
-            Nyheter
-          </Link>
-        </nav>
-
         {/* Actions */}
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="hidden md:flex">
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-10 w-10">
             <User className="h-5 w-5" />
           </Button>
           
           <Button
             variant="ghost"
             size="icon"
-            className="relative"
+            className="relative rounded-xl h-10 w-10"
             onClick={openCart}
           >
             <ShoppingCart className="h-5 w-5" />
             {totalItems > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
                 {totalItems}
               </span>
             )}
@@ -79,37 +57,44 @@ export function Header() {
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
+              <Button variant="ghost" size="icon" className="lg:hidden rounded-xl h-10 w-10">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72">
+            <SheetContent side="right" className="w-80">
               <div className="flex flex-col gap-6 pt-6">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input placeholder="Sök produkter..." className="pl-10" />
+                  <Input placeholder="Sök produkter..." className="pl-10 rounded-xl" />
                 </div>
-                <nav className="flex flex-col gap-4">
+                <nav className="flex flex-col gap-1">
                   <Link
-                    to="/"
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    to="/produkter"
+                    className="flex items-center rounded-xl px-4 py-3 text-base font-medium text-foreground hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Alla produkter
                   </Link>
                   <Link
-                    to="/?badge=Nytt+pris"
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    to="/produkter?badge=Nytt+pris"
+                    className="flex items-center rounded-xl px-4 py-3 text-base font-medium text-primary hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Nya priser
                   </Link>
                   <Link
-                    to="/?badge=Nyhet"
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    to="/produkter?badge=Nyhet"
+                    className="flex items-center rounded-xl px-4 py-3 text-base font-medium text-foreground hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Nyheter
+                  </Link>
+                  <Link
+                    to="/produkter?badge=Populär"
+                    className="flex items-center rounded-xl px-4 py-3 text-base font-medium text-foreground hover:bg-accent transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Populära
                   </Link>
                 </nav>
               </div>
