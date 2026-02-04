@@ -8,6 +8,7 @@ import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { formatPrice, formatPricePerUnit } from '@/lib/format';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface ProductCardProps {
   product: Product;
@@ -30,9 +31,26 @@ function getDisplayBadges(badges: Product['badges']): Product['badges'][number][
   return badgePriority.filter((b) => badges.includes(b)).slice(0, 2);
 }
 
+// Map internal badge names to translation keys
+const badgeTranslationKeys: Record<Product['badges'][number], string> = {
+  'Nyhet': 'badge.new',
+  'Nytt pris': 'badge.newPrice',
+  'Populär': 'badge.popular',
+  'Begränsat': 'badge.limited',
+};
+
+// Map internal strength names to translation keys
+const strengthTranslationKeys: Record<Product['strength'], string> = {
+  'Normal': 'strength.normal',
+  'Stark': 'strength.strong',
+  'Extra Stark': 'strength.extraStrong',
+  'Ultra Stark': 'strength.ultraStrong',
+};
+
 export function ProductCard({ product }: ProductCardProps) {
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack1');
   const { addToCart } = useCart();
+  const { t } = useTranslation();
 
   const currentPrice = product.prices[selectedPack];
   const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
@@ -67,7 +85,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     badge === 'Populär' && 'bg-card/95 text-foreground border border-border'
                   )}
                 >
-                  {badge}
+                  {t(badgeTranslationKeys[badge])}
                 </Badge>
               ))}
             </div>
@@ -102,7 +120,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 />
               ))}
             </div>
-            <span className="text-[10px] text-muted-foreground">{product.strength}</span>
+            <span className="text-[10px] text-muted-foreground">{t(strengthTranslationKeys[product.strength])}</span>
           </div>
 
           {/* Ratings */}
@@ -152,8 +170,8 @@ export function ProductCard({ product }: ProductCardProps) {
             size="sm"
           >
             <ShoppingCart className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Lägg i varukorg</span>
-            <span className="sm:hidden">Köp</span>
+            <span className="hidden sm:inline">{t('product.addToCart')}</span>
+            <span className="sm:hidden">{t('product.buy')}</span>
           </Button>
         </CardContent>
       </Link>

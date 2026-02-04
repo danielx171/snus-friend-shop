@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export interface FilterState {
   brands: string[];
@@ -25,6 +26,8 @@ export function ProductFilters({
   onClose,
   isMobile = false,
 }: ProductFiltersProps) {
+  const { t } = useTranslation();
+
   const toggleFilter = (
     category: keyof FilterState,
     value: string
@@ -50,7 +53,7 @@ export function ProductFilters({
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-lg text-foreground">Filter</h2>
+        <h2 className="font-semibold text-lg text-foreground">{t('filter.title')}</h2>
         {isMobile && onClose && (
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-5 w-5" />
@@ -60,7 +63,7 @@ export function ProductFilters({
 
       {hasActiveFilters && (
         <Button variant="ghost" size="sm" onClick={clearFilters} className="text-primary">
-          Rensa alla filter
+          {t('filter.clearAll')}
         </Button>
       )}
 
@@ -68,7 +71,7 @@ export function ProductFilters({
 
       {/* Brand Filter */}
       <div>
-        <h3 className="mb-3 font-medium text-foreground">Varumärke</h3>
+        <h3 className="mb-3 font-medium text-foreground">{t('filter.brand')}</h3>
         <div className="space-y-2 max-h-48 overflow-y-auto">
           {brands.map((brand) => (
             <div key={brand} className="flex items-center gap-2">
@@ -92,7 +95,7 @@ export function ProductFilters({
 
       {/* Strength Filter */}
       <div>
-        <h3 className="mb-3 font-medium text-foreground">Styrka</h3>
+        <h3 className="mb-3 font-medium text-foreground">{t('filter.strength')}</h3>
         <div className="space-y-2">
           {strengths.map((strength) => (
             <div key={strength} className="flex items-center gap-2">
@@ -116,7 +119,7 @@ export function ProductFilters({
 
       {/* Flavor Filter */}
       <div>
-        <h3 className="mb-3 font-medium text-foreground">Smak</h3>
+        <h3 className="mb-3 font-medium text-foreground">{t('filter.flavor')}</h3>
         <div className="space-y-2 max-h-48 overflow-y-auto">
           {flavors.map((flavor) => (
             <div key={flavor} className="flex items-center gap-2">
@@ -140,7 +143,7 @@ export function ProductFilters({
 
       {/* Format Filter */}
       <div>
-        <h3 className="mb-3 font-medium text-foreground">Format</h3>
+        <h3 className="mb-3 font-medium text-foreground">{t('filter.format')}</h3>
         <div className="space-y-2">
           {formats.map((format) => (
             <div key={format} className="flex items-center gap-2">
@@ -163,7 +166,7 @@ export function ProductFilters({
       {/* Mobile Apply Button */}
       {isMobile && onClose && (
         <Button className="w-full" onClick={onClose}>
-          Visa resultat
+          {t('filter.showResults')}
         </Button>
       )}
     </div>

@@ -8,30 +8,30 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-
-const categories = [
-  {
-    title: 'Vitt snus',
-    href: '/produkter',
-    description: 'Nikotinpåsar utan tobak',
-  },
-  {
-    title: 'Alla varumärken',
-    href: '/produkter?show=brands',
-    description: 'Utforska vårt sortiment',
-  },
-];
-
-const brands = [
-  { name: 'ZYN', href: '/produkter?brand=ZYN' },
-  { name: 'VELO', href: '/produkter?brand=VELO' },
-  { name: 'ON!', href: '/produkter?brand=ON!' },
-  { name: 'LOOP', href: '/produkter?brand=LOOP' },
-  { name: 'Lyft', href: '/produkter?brand=Lyft' },
-  { name: 'Nordic Spirit', href: '/produkter?brand=Nordic+Spirit' },
-];
+import { useTranslation } from '@/hooks/useTranslation';
+import { brands as brandsList } from '@/data/products';
 
 export function MainNav() {
+  const { t } = useTranslation();
+
+  const categories = [
+    {
+      title: t('nav.whiteSnus'),
+      href: '/produkter',
+      description: t('hero.subtitle'),
+    },
+    {
+      title: t('nav.allBrands'),
+      href: '/produkter?show=brands',
+      description: t('products.viewAll'),
+    },
+  ];
+
+  const brands = brandsList.slice(0, 6).map(name => ({
+    name,
+    href: `/produkter?brand=${encodeURIComponent(name)}`,
+  }));
+
   return (
     <nav className="hidden lg:block border-b border-border bg-card/50">
       <div className="container">
@@ -39,7 +39,7 @@ export function MainNav() {
           <NavigationMenuList className="gap-0">
             <NavigationMenuItem>
               <NavigationMenuTrigger className="h-10 rounded-none bg-transparent hover:bg-accent/50 data-[state=open]:bg-accent/50 text-sm">
-                Vitt snus
+                {t('nav.whiteSnus')}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-2 p-3 md:w-[450px] md:grid-cols-2">
@@ -66,7 +66,7 @@ export function MainNav() {
 
             <NavigationMenuItem>
               <NavigationMenuTrigger className="h-10 rounded-none bg-transparent hover:bg-accent/50 data-[state=open]:bg-accent/50 text-sm">
-                Våra varumärken
+                {t('nav.brands')}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[280px] gap-0.5 p-3">
@@ -93,7 +93,7 @@ export function MainNav() {
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
                 )}
               >
-                Nyheter
+                {t('nav.news')}
               </Link>
             </NavigationMenuItem>
 
@@ -104,7 +104,7 @@ export function MainNav() {
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium text-primary transition-colors hover:bg-accent/50'
                 )}
               >
-                Nytt pris
+                {t('nav.newPrice')}
               </Link>
             </NavigationMenuItem>
 
@@ -115,7 +115,7 @@ export function MainNav() {
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
                 )}
               >
-                Pick & Mix – fr. 14,90 kr/st
+                {t('nav.pickMix')}
               </Link>
             </NavigationMenuItem>
 
@@ -126,7 +126,7 @@ export function MainNav() {
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
                 )}
               >
-                Om oss
+                {t('nav.about')}
               </Link>
             </NavigationMenuItem>
           </NavigationMenuList>

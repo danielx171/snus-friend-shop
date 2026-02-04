@@ -1,51 +1,55 @@
 import { Link } from 'react-router-dom';
 import { Cigarette, Sparkles, Tag, Package, RefreshCw, Calendar, Zap, Gift } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const categories = [
-  {
-    name: 'Vitt snus',
-    icon: Cigarette,
-    href: '/produkter',
-  },
-  {
-    name: 'Nyheter',
-    icon: Sparkles,
-    href: '/produkter?badge=Nyhet',
-  },
-  {
-    name: 'Nytt pris',
-    icon: Tag,
-    href: '/produkter?badge=Nytt+pris',
-  },
-  {
-    name: 'Pick & Mix',
-    icon: Package,
-    href: '/produkter',
-  },
-  {
-    name: 'Prenumerera',
-    icon: RefreshCw,
-    href: '/produkter',
-  },
-  {
-    name: 'Månadens',
-    icon: Calendar,
-    href: '/produkter?badge=Populär',
-  },
-  {
-    name: 'Extra stark',
-    icon: Zap,
-    href: '/produkter?strength=Extra+Stark',
-  },
-  {
-    name: 'Erbjudanden',
-    icon: Gift,
-    href: '/produkter?badge=Nytt+pris',
-  },
-];
+import { useTranslation } from '@/hooks/useTranslation';
+import { useMemo } from 'react';
 
 export function CategoryShortcuts() {
+  const { t } = useTranslation();
+
+  const categories = useMemo(() => [
+    {
+      name: t('categories.whiteSnus'),
+      icon: Cigarette,
+      href: '/produkter',
+    },
+    {
+      name: t('categories.news'),
+      icon: Sparkles,
+      href: '/produkter?badge=Nyhet',
+    },
+    {
+      name: t('categories.newPrice'),
+      icon: Tag,
+      href: '/produkter?badge=Nytt+pris',
+    },
+    {
+      name: t('categories.pickMix'),
+      icon: Package,
+      href: '/produkter',
+    },
+    {
+      name: t('categories.subSnus'),
+      icon: RefreshCw,
+      href: '/produkter',
+    },
+    {
+      name: t('categories.monthlyDoses'),
+      icon: Calendar,
+      href: '/produkter?badge=Populär',
+    },
+    {
+      name: t('strength.extraStrong'),
+      icon: Zap,
+      href: '/produkter?strength=Extra+Stark',
+    },
+    {
+      name: t('badge.newPrice'),
+      icon: Gift,
+      href: '/produkter?badge=Nytt+pris',
+    },
+  ], [t]);
+
   return (
     <section className="py-6 md:py-10">
       <div className="container">

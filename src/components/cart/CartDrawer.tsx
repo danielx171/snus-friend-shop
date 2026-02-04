@@ -7,11 +7,13 @@ import { packSizeLabels, packSizeMultipliers } from '@/data/products';
 import { Link } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
 import { formatPrice, formatPricePerUnit } from '@/lib/format';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const FREE_SHIPPING_THRESHOLD = 149;
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const { t } = useTranslation();
 
   const vatAmount = Math.round(totalPrice * 0.25);
   const priceExVat = totalPrice - vatAmount;
@@ -24,7 +26,7 @@ export function CartDrawer() {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <ShoppingBag className="h-5 w-5" />
-            Din varukorg
+            {t('cart.title')}
           </SheetTitle>
         </SheetHeader>
 
@@ -33,9 +35,9 @@ export function CartDrawer() {
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
               <ShoppingBag className="h-10 w-10 text-muted-foreground" />
             </div>
-            <p className="text-muted-foreground">Din varukorg är tom</p>
+            <p className="text-muted-foreground">{t('cart.empty')}</p>
             <Button onClick={closeCart} asChild className="rounded-xl">
-              <Link to="/">Börja handla</Link>
+              <Link to="/">{t('cart.startShopping')}</Link>
             </Button>
           </div>
         ) : (
@@ -47,7 +49,7 @@ export function CartDrawer() {
                   <div className="flex items-center gap-2 text-sm">
                     <Truck className="h-4 w-4 text-primary" />
                     <span className="text-muted-foreground">
-                      Handla för <span className="font-medium text-foreground">{formatPrice(remainingForFreeShipping, 0)} kr</span> till för fri frakt!
+                      {t('cart.freeShippingProgress', { amount: formatPrice(remainingForFreeShipping, 0) })}
                     </span>
                   </div>
                   <Progress value={shippingProgress} className="h-2" />
@@ -55,7 +57,7 @@ export function CartDrawer() {
               ) : (
                 <div className="flex items-center gap-2 text-sm bg-primary/10 rounded-xl p-3">
                   <Truck className="h-4 w-4 text-primary" />
-                  <span className="text-primary font-medium">Du har fri frakt! 🎉</span>
+                  <span className="text-primary font-medium">{t('cart.freeShippingAchieved')}</span>
                 </div>
               )}
             </div>
@@ -149,27 +151,27 @@ export function CartDrawer() {
             <div className="border-t border-border pt-3">
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Delsumma (exkl. moms)</span>
+                  <span className="text-muted-foreground">{t('cart.subtotal')}</span>
                   <span>{formatPrice(priceExVat)} kr</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Moms (25%)</span>
+                  <span className="text-muted-foreground">{t('cart.vat')}</span>
                   <span>{formatPrice(vatAmount)} kr</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Frakt</span>
+                  <span className="text-muted-foreground">{t('cart.shipping')}</span>
                   <span className={remainingForFreeShipping === 0 ? 'text-primary' : ''}>
-                    {remainingForFreeShipping === 0 ? 'Gratis!' : '49 kr'}
+                    {remainingForFreeShipping === 0 ? t('cart.free') : '49 kr'}
                   </span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between font-semibold text-base">
-                  <span>Totalt</span>
+                  <span>{t('cart.total')}</span>
                   <span>{formatPrice(totalPrice)} kr</span>
                 </div>
               </div>
               <Button className="mt-3 w-full rounded-xl" size="default">
-                Till kassan
+                {t('cart.checkout')}
               </Button>
               <Button
                 variant="ghost"
@@ -177,7 +179,7 @@ export function CartDrawer() {
                 className="mt-1.5 w-full text-sm"
                 onClick={closeCart}
               >
-                Fortsätt handla
+                {t('cart.continueShopping')}
               </Button>
             </div>
           </>

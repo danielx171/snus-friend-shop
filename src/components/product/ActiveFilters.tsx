@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FilterState } from './ProductFilters';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface ActiveFiltersProps {
   filters: FilterState;
@@ -9,6 +10,8 @@ interface ActiveFiltersProps {
 }
 
 export function ActiveFilters({ filters, onRemoveFilter, onClearAll }: ActiveFiltersProps) {
+  const { t } = useTranslation();
+
   const allFilters: { category: keyof FilterState; value: string; label: string }[] = [];
 
   filters.brands.forEach((v) => allFilters.push({ category: 'brands', value: v, label: v }));
@@ -20,7 +23,7 @@ export function ActiveFilters({ filters, onRemoveFilter, onClearAll }: ActiveFil
 
   return (
     <div className="flex flex-wrap items-center gap-2 mb-4">
-      <span className="text-sm text-muted-foreground">Aktiva filter:</span>
+      <span className="text-sm text-muted-foreground">{t('filter.activeFilters')}:</span>
       {allFilters.map((filter) => (
         <Button
           key={`${filter.category}-${filter.value}`}
@@ -39,7 +42,7 @@ export function ActiveFilters({ filters, onRemoveFilter, onClearAll }: ActiveFil
         className="h-7 text-xs text-primary hover:text-primary/80"
         onClick={onClearAll}
       >
-        Rensa alla
+        {t('filter.clearAll')}
       </Button>
     </div>
   );

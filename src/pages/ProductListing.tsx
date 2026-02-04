@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { products, Product } from '@/data/products';
+import { products } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
 import { ActiveFilters } from '@/components/product/ActiveFilters';
@@ -16,18 +16,9 @@ import {
 import { Filter } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { AgeGate } from '@/components/compliance/AgeGate';
+import { useTranslation } from '@/hooks/useTranslation';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
-
-const sortLabels: Record<SortOption, string> = {
-  popularity: 'Popularitet',
-  newest: 'Nyast först',
-  oldest: 'Äldst först',
-  'name-asc': 'Namn A-Ö',
-  'name-desc': 'Namn Ö-A',
-  'price-asc': 'Lägst pris',
-  'price-desc': 'Högst pris',
-};
 
 const ITEMS_PER_PAGE = 12;
 
@@ -36,6 +27,17 @@ export default function ProductListing() {
   const badgeFilter = searchParams.get('badge');
   const brandFilter = searchParams.get('brand');
   const strengthFilter = searchParams.get('strength');
+  const { t } = useTranslation();
+
+  const sortLabels: Record<SortOption, string> = {
+    popularity: t('sort.popularity'),
+    newest: t('sort.newest'),
+    oldest: t('sort.newest'),
+    'name-asc': 'A-Z',
+    'name-desc': 'Z-A',
+    'price-asc': t('sort.priceLow'),
+    'price-desc': t('sort.priceHigh'),
+  };
 
   const [filters, setFilters] = useState<FilterState>({
     brands: brandFilter ? [brandFilter] : [],
@@ -130,11 +132,11 @@ export default function ProductListing() {
     filters.formats.length;
 
   // Page title based on filters
-  const pageTitle = badgeFilter === 'Nytt pris' ? 'Nya priser' :
-                    badgeFilter === 'Nyhet' ? 'Nyheter' :
-                    badgeFilter === 'Populär' ? 'Populära produkter' :
+  const pageTitle = badgeFilter === 'Nytt pris' ? t('badge.newPrice') :
+                    badgeFilter === 'Nyhet' ? t('badge.new') :
+                    badgeFilter === 'Populär' ? t('badge.popular') :
                     brandFilter ? brandFilter :
-                    'Nikotinpåsar';
+                    t('categories.whiteSnus');
 
   return (
     <Layout showNicotineWarning={false}>
@@ -145,7 +147,7 @@ export default function ProductListing() {
         <div className="mb-6">
           <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1">{pageTitle}</h1>
           <p className="text-sm text-muted-foreground">
-            Utforska vårt breda sortiment av nikotinpåsar från ledande varumärken
+            {t('hero.subtitle')}
           </p>
         </div>
 
@@ -170,7 +172,7 @@ export default function ProductListing() {
                   <SheetTrigger asChild>
                     <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9">
                       <Filter className="h-3.5 w-3.5" />
-                      Filter
+                      {t('filter.title')}
                       {activeFilterCount > 0 && (
                         <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
                           {activeFilterCount}
@@ -189,16 +191,16 @@ export default function ProductListing() {
                 </Sheet>
 
                 <p className="text-xs text-muted-foreground">
-                  Visar {paginatedProducts.length} av {sortedProducts.length} artiklar
+                  {t('products.showing')} {paginatedProducts.length} {t('products.of')} {sortedProducts.length} {t('products.productsLabel')}
                 </p>
               </div>
 
-              {/* Sort Dropdown - Swedish label */}
+              {/* Sort Dropdown */}
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground hidden sm:inline">Sortera:</span>
+                <span className="text-xs text-muted-foreground hidden sm:inline">{t('sort.label')}:</span>
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                   <SelectTrigger className="w-36 rounded-xl h-9 text-xs">
-                    <SelectValue placeholder="Sortera" />
+                    <SelectValue placeholder={t('sort.label')} />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(sortLabels).map(([value, label]) => (
@@ -228,7 +230,7 @@ export default function ProductListing() {
             ) : (
               <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-sm text-muted-foreground mb-3">
-                  Inga produkter matchar dina filter
+                  {t('filter.clearAll')}
                 </p>
                 <Button
                   variant="outline"
@@ -236,7 +238,7 @@ export default function ProductListing() {
                   className="rounded-xl"
                   onClick={handleClearAll}
                 >
-                  Rensa filter
+                  {t('filter.clearAll')}
                 </Button>
               </div>
             )}
@@ -251,7 +253,7 @@ export default function ProductListing() {
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((p) => p - 1)}
                 >
-                  Föregående
+                  {t('pagination.previous')}
                 </Button>
                 {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                   let pageNum = i + 1;
@@ -282,7 +284,7 @@ export default function ProductListing() {
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage((p) => p + 1)}
                 >
-                  Nästa
+                  {t('pagination.next')}
                 </Button>
               </div>
             )}
