@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { products, PackSize, packSizeMultipliers } from '@/data/products';
+import { products, PackSize, packSizeMultipliers, BadgeKey } from '@/data/products';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -30,36 +30,12 @@ import { useTranslation } from '@/hooks/useTranslation';
 
 const packSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10', 'pack30'];
 
-// Map internal badge names to translation keys
-const badgeTranslationKeys: Record<string, string> = {
-  'Nyhet': 'badge.new',
-  'Nytt pris': 'badge.newPrice',
-  'Populär': 'badge.popular',
-  'Begränsat': 'badge.limited',
-};
-
-// Map internal strength names to translation keys
-const strengthTranslationKeys: Record<string, string> = {
-  'Normal': 'strength.normal',
-  'Stark': 'strength.strong',
-  'Extra Stark': 'strength.extraStrong',
-  'Ultra Stark': 'strength.ultraStrong',
-};
-
-// Map internal format names to translation keys
-const formatTranslationKeys: Record<string, string> = {
-  'Slim': 'format.slim',
-  'Mini': 'format.mini',
-  'Original': 'format.original',
-  'Large': 'format.large',
-};
-
 export default function ProductDetail() {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
-  const { t, formatPrice, formatPriceWithUnit, translateFlavor } = useTranslation();
+  const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateFormat, translateBadge, translateCategory } = useTranslation();
 
   if (!product) {
     return (
@@ -79,6 +55,11 @@ export default function ProductDetail() {
   const currentPrice = product.prices[selectedPack];
   const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
 
+  // Get product description (fallback to generic description key)
+  const productDescription = t(product.descriptionKey) !== product.descriptionKey 
+    ? t(product.descriptionKey) 
+    : t('detail.genericDescription', { name: product.name, brand: product.brand });
+
   return (
     <Layout showNicotineWarning={false}>
       <AgeGate />
@@ -97,16 +78,16 @@ export default function ProductDetail() {
 
         <div className="grid gap-8 lg:grid-cols-2">
           {/* LEFT COLUMN - Product Info */}
-          <div className="space-y-6 order-2 lg:order-1">
+          <div className="space-y-6 order-2 lg:order-1 min-w-0">
             {/* Header */}
             <div>
               <p className="text-sm text-muted-foreground uppercase tracking-wide mb-1">
                 {product.brand}
               </p>
-              <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+              <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3 break-words">
                 {product.name}
               </h1>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <div className="flex items-center gap-1">
                   <Star className="h-4 w-4 fill-primary text-primary" />
                   <Star className="h-4 w-4 fill-primary text-primary" />
@@ -122,7 +103,7 @@ export default function ProductDetail() {
 
             {/* Short description */}
             <p className="text-muted-foreground leading-relaxed">
-              {product.description}
+              {productDescription}
             </p>
 
             {/* Flavor chips */}
@@ -130,7 +111,7 @@ export default function ProductDetail() {
               <h3 className="text-sm font-medium text-foreground mb-2">{t('detail.flavor')}</h3>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="outline" className="rounded-full bg-primary/10 text-primary border-primary/20 px-3 py-1">
-                  {translateFlavor(product.flavor)}
+                  {translateFlavor(product.flavorKey)}
                 </Badge>
               </div>
             </div>
@@ -187,35 +168,35 @@ export default function ProductDetail() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <Button
                 variant="outline"
                 size="lg"
-                className="flex-1 gap-2 rounded-xl"
+                className="flex-1 gap-2 rounded-xl min-w-[140px]"
               >
-                <Repeat className="h-5 w-5" />
-                {t('product.subscribe')}
+                <Repeat className="h-5 w-5 shrink-0" />
+                <span className="truncate">{t('product.subscribe')}</span>
               </Button>
               <Button
                 size="lg"
-                className="flex-1 gap-2 rounded-xl"
+                className="flex-1 gap-2 rounded-xl min-w-[140px]"
                 onClick={() => addToCart(product, selectedPack)}
               >
-                <ShoppingCart className="h-5 w-5" />
-                {t('product.buy')}
+                <ShoppingCart className="h-5 w-5 shrink-0" />
+                <span className="truncate">{t('product.buy')}</span>
               </Button>
             </div>
 
             {/* Summary chips */}
             <div className="flex flex-wrap gap-2">
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
-                {t('detail.format')}: {t(formatTranslationKeys[product.format])}
+                {t('detail.format')}: {translateFormat(product.formatKey)}
               </Badge>
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
-                {t('detail.strengthDef')}: {t(strengthTranslationKeys[product.strength])}
+                {t('detail.strengthDef')}: {translateStrength(product.strengthKey)}
               </Badge>
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
-                {t('detail.flavor')}: {translateFlavor(product.flavor)}
+                {t('detail.flavor')}: {translateFlavor(product.flavorKey)}
               </Badge>
               <Badge variant="secondary" className="rounded-lg px-3 py-1.5 text-xs">
                 {product.nicotineContent} {t('detail.mgPerPortion')}
@@ -235,18 +216,18 @@ export default function ProductDetail() {
                   />
                   {/* Badges */}
                   <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-                    {product.badges.map((badge) => (
+                    {product.badgeKeys.map((badge) => (
                       <Badge
                         key={badge}
                         className={cn(
                           'text-sm rounded-full px-3 py-1',
-                          badge === 'Nytt pris' && 'bg-primary text-primary-foreground',
-                          badge === 'Nyhet' && 'bg-secondary text-secondary-foreground',
-                          badge === 'Populär' && 'bg-card text-foreground border border-border',
-                          badge === 'Begränsat' && 'bg-destructive text-destructive-foreground'
+                          badge === 'newPrice' && 'bg-primary text-primary-foreground',
+                          badge === 'new' && 'bg-secondary text-secondary-foreground',
+                          badge === 'popular' && 'bg-card text-foreground border border-border',
+                          badge === 'limited' && 'bg-destructive text-destructive-foreground'
                         )}
                       >
-                        {t(badgeTranslationKeys[badge])}
+                        {translateBadge(badge)}
                       </Badge>
                     ))}
                   </div>
@@ -256,16 +237,16 @@ export default function ProductDetail() {
               {/* Trust badges below image */}
               <div className="mt-4 grid grid-cols-3 gap-3">
                 <div className="flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3">
-                  <Truck className="h-5 w-5 text-primary" />
-                  <span className="text-xs text-muted-foreground text-center">{t('detail.freeShipping')}</span>
+                  <Truck className="h-5 w-5 text-primary shrink-0" />
+                  <span className="text-xs text-muted-foreground text-center line-clamp-2">{t('detail.freeShipping')}</span>
                 </div>
                 <div className="flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3">
-                  <Package className="h-5 w-5 text-primary" />
-                  <span className="text-xs text-muted-foreground text-center">{t('detail.fastDelivery')}</span>
+                  <Package className="h-5 w-5 text-primary shrink-0" />
+                  <span className="text-xs text-muted-foreground text-center line-clamp-2">{t('detail.fastDelivery')}</span>
                 </div>
                 <div className="flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3">
-                  <RefreshCw className="h-5 w-5 text-primary" />
-                  <span className="text-xs text-muted-foreground text-center">{t('detail.easyReturns')}</span>
+                  <RefreshCw className="h-5 w-5 text-primary shrink-0" />
+                  <span className="text-xs text-muted-foreground text-center line-clamp-2">{t('detail.easyReturns')}</span>
                 </div>
               </div>
             </div>
@@ -281,33 +262,33 @@ export default function ProductDetail() {
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <ul className="space-y-3">
-                  <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">{t('detail.category')}</span>
-                    <span className="font-medium text-foreground">{product.category}</span>
+                  <li className="flex justify-between border-b border-border pb-2 gap-4">
+                    <span className="text-muted-foreground shrink-0">{t('detail.category')}</span>
+                    <span className="font-medium text-foreground text-right">{translateCategory(product.categoryKey)}</span>
                   </li>
-                  <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">{t('detail.flavor')}</span>
-                    <span className="font-medium text-foreground">{translateFlavor(product.flavor)}</span>
+                  <li className="flex justify-between border-b border-border pb-2 gap-4">
+                    <span className="text-muted-foreground shrink-0">{t('detail.flavor')}</span>
+                    <span className="font-medium text-foreground text-right">{translateFlavor(product.flavorKey)}</span>
                   </li>
-                  <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">{t('detail.strengthDef')}</span>
-                    <span className="font-medium text-foreground">{t(strengthTranslationKeys[product.strength])}</span>
+                  <li className="flex justify-between border-b border-border pb-2 gap-4">
+                    <span className="text-muted-foreground shrink-0">{t('detail.strengthDef')}</span>
+                    <span className="font-medium text-foreground text-right">{translateStrength(product.strengthKey)}</span>
                   </li>
-                  <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">{t('detail.format')}</span>
-                    <span className="font-medium text-foreground">{t(formatTranslationKeys[product.format])}</span>
+                  <li className="flex justify-between border-b border-border pb-2 gap-4">
+                    <span className="text-muted-foreground shrink-0">{t('detail.format')}</span>
+                    <span className="font-medium text-foreground text-right">{translateFormat(product.formatKey)}</span>
                   </li>
-                  <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">{t('detail.nicotineContent')}</span>
-                    <span className="font-medium text-foreground">{product.nicotineContent} {t('detail.mgPerPortion')}</span>
+                  <li className="flex justify-between border-b border-border pb-2 gap-4">
+                    <span className="text-muted-foreground shrink-0">{t('detail.nicotineContent')}</span>
+                    <span className="font-medium text-foreground text-right">{product.nicotineContent} {t('detail.mgPerPortion')}</span>
                   </li>
-                  <li className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">{t('detail.portionsPerCan')}</span>
-                    <span className="font-medium text-foreground">{product.portionsPerCan} {t('detail.pieces')}</span>
+                  <li className="flex justify-between border-b border-border pb-2 gap-4">
+                    <span className="text-muted-foreground shrink-0">{t('detail.portionsPerCan')}</span>
+                    <span className="font-medium text-foreground text-right">{product.portionsPerCan} {t('detail.pieces')}</span>
                   </li>
-                  <li className="flex justify-between">
-                    <span className="text-muted-foreground">{t('detail.manufacturer')}</span>
-                    <span className="font-medium text-foreground">{product.manufacturer}</span>
+                  <li className="flex justify-between gap-4">
+                    <span className="text-muted-foreground shrink-0">{t('detail.manufacturer')}</span>
+                    <span className="font-medium text-foreground text-right">{product.manufacturer}</span>
                   </li>
                 </ul>
               </AccordionContent>
@@ -319,7 +300,7 @@ export default function ProductDetail() {
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <p className="text-muted-foreground leading-relaxed">
-                  {product.description}
+                  {productDescription}
                 </p>
               </AccordionContent>
             </AccordionItem>
@@ -377,13 +358,13 @@ export default function ProductDetail() {
       {/* Mobile sticky CTA */}
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card p-4 lg:hidden z-40">
         <div className="flex items-center justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             <span className="text-2xl font-bold text-foreground">{formatPrice(currentPrice)}</span>
-            <span className="block text-xs text-muted-foreground">{formatPriceWithUnit(pricePerCan)}</span>
+            <span className="block text-xs text-muted-foreground truncate">{formatPriceWithUnit(pricePerCan)}</span>
           </div>
           <Button
             size="lg"
-            className="gap-2 rounded-xl"
+            className="gap-2 rounded-xl shrink-0"
             onClick={() => addToCart(product, selectedPack)}
           >
             <ShoppingCart className="h-5 w-5" />

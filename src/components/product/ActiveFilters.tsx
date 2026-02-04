@@ -2,6 +2,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FilterState } from './ProductFilters';
 import { useTranslation } from '@/hooks/useTranslation';
+import { FlavorKey, StrengthKey, FormatKey } from '@/data/products';
 
 interface ActiveFiltersProps {
   filters: FilterState;
@@ -9,24 +10,8 @@ interface ActiveFiltersProps {
   onClearAll: () => void;
 }
 
-// Map strength to translation key
-const strengthTranslationKeys: Record<string, string> = {
-  'Normal': 'strength.normal',
-  'Stark': 'strength.strong',
-  'Extra Stark': 'strength.extraStrong',
-  'Ultra Stark': 'strength.ultraStrong',
-};
-
-// Map format to translation key
-const formatTranslationKeys: Record<string, string> = {
-  'Slim': 'format.slim',
-  'Mini': 'format.mini',
-  'Original': 'format.original',
-  'Large': 'format.large',
-};
-
 export function ActiveFilters({ filters, onRemoveFilter, onClearAll }: ActiveFiltersProps) {
-  const { t, translateFlavor } = useTranslation();
+  const { t, translateFlavor, translateStrength, translateFormat } = useTranslation();
 
   const allFilters: { category: keyof FilterState; value: string; label: string }[] = [];
 
@@ -37,28 +22,28 @@ export function ActiveFilters({ filters, onRemoveFilter, onClearAll }: ActiveFil
   filters.strengths.forEach((v) => allFilters.push({ 
     category: 'strengths', 
     value: v, 
-    label: t(strengthTranslationKeys[v]) 
+    label: translateStrength(v as StrengthKey) 
   }));
   
   // Translate flavors
   filters.flavors.forEach((v) => allFilters.push({ 
     category: 'flavors', 
     value: v, 
-    label: translateFlavor(v) 
+    label: translateFlavor(v as FlavorKey) 
   }));
   
   // Translate formats
   filters.formats.forEach((v) => allFilters.push({ 
     category: 'formats', 
     value: v, 
-    label: t(formatTranslationKeys[v]) 
+    label: translateFormat(v as FormatKey) 
   }));
 
   if (allFilters.length === 0) return null;
 
   return (
     <div className="flex flex-wrap items-center gap-2 mb-4">
-      <span className="text-sm text-muted-foreground">{t('filter.activeFilters')}:</span>
+      <span className="text-sm text-muted-foreground shrink-0">{t('filter.activeFilters')}:</span>
       {allFilters.map((filter) => (
         <Button
           key={`${filter.category}-${filter.value}`}
@@ -67,14 +52,14 @@ export function ActiveFilters({ filters, onRemoveFilter, onClearAll }: ActiveFil
           className="h-7 gap-1.5 rounded-full px-3 text-xs font-medium"
           onClick={() => onRemoveFilter(filter.category, filter.value)}
         >
-          {filter.label}
-          <X className="h-3 w-3" />
+          <span className="truncate max-w-[120px]">{filter.label}</span>
+          <X className="h-3 w-3 shrink-0" />
         </Button>
       ))}
       <Button
         variant="ghost"
         size="sm"
-        className="h-7 text-xs text-primary hover:text-primary/80"
+        className="h-7 text-xs text-primary hover:text-primary/80 shrink-0"
         onClick={onClearAll}
       >
         {t('filter.clearAll')}
