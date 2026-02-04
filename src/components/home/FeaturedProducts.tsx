@@ -3,7 +3,6 @@ import { ProductCard } from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { useTranslation } from '@/hooks/useTranslation';
 
 interface FeaturedProductsProps {
   title: string;
@@ -16,10 +15,9 @@ export function FeaturedProducts({
   title,
   filterFn = () => true,
   limit = 4,
-  viewAllHref = '/produkter',
+  viewAllHref = '/nicotine-pouches',
 }: FeaturedProductsProps) {
   const filteredProducts = products.filter(filterFn).slice(0, limit);
-  const { t } = useTranslation();
 
   return (
     <section className="py-8 md:py-12">
@@ -28,7 +26,7 @@ export function FeaturedProducts({
           <h2 className="text-2xl font-bold text-foreground">{title}</h2>
           <Button asChild variant="ghost" className="gap-1 text-primary">
             <Link to={viewAllHref}>
-              {t('products.viewAll')}
+              View all
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>

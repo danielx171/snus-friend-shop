@@ -171,8 +171,10 @@ export function CartDrawer() {
                   <span>{formatPrice(totalPrice)}</span>
                 </div>
               </div>
-              <Button className="mt-3 w-full rounded-xl" size="default">
-                {t('cart.checkout')}
+              <Button asChild className="mt-3 w-full rounded-xl" size="default">
+                <Link to="/cart" onClick={closeCart}>
+                  {t('cart.checkout')}
+                </Link>
               </Button>
               <Button
                 variant="ghost"

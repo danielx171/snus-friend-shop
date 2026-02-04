@@ -86,6 +86,7 @@ export const flavorKeys: FlavorKey[] = [
 export const strengthKeys: StrengthKey[] = ['normal', 'strong', 'extraStrong', 'ultraStrong'];
 export const formatKeys: FormatKey[] = ['slim', 'mini', 'original', 'large'];
 
+// Prices in GBP (£)
 export const products: Product[] = [
   {
     id: '1',
@@ -101,7 +102,7 @@ export const products: Product[] = [
     image: flavorImages['mint'],
     ratings: 342,
     badgeKeys: ['newPrice', 'popular'],
-    prices: { pack1: 59, pack3: 169, pack5: 265, pack10: 499, pack30: 1399 },
+    prices: { pack1: 4.99, pack3: 13.99, pack5: 21.99, pack10: 39.99, pack30: 109.99 },
     manufacturer: 'Swedish Match',
   },
   {
@@ -118,7 +119,7 @@ export const products: Product[] = [
     image: flavorImages['mint'],
     ratings: 256,
     badgeKeys: ['new'],
-    prices: { pack1: 55, pack3: 159, pack5: 249, pack10: 469, pack30: 1299 },
+    prices: { pack1: 4.49, pack3: 12.49, pack5: 19.99, pack10: 37.99, pack30: 104.99 },
     manufacturer: 'British American Tobacco',
   },
   {
@@ -135,7 +136,7 @@ export const products: Product[] = [
     image: flavorImages['citrus'],
     ratings: 189,
     badgeKeys: ['newPrice'],
-    prices: { pack1: 49, pack3: 139, pack5: 219, pack10: 419, pack30: 1199 },
+    prices: { pack1: 3.99, pack3: 10.99, pack5: 17.49, pack10: 33.49, pack30: 95.99 },
     manufacturer: 'Altria',
   },
   {
@@ -152,7 +153,7 @@ export const products: Product[] = [
     image: flavorImages['berry'],
     ratings: 412,
     badgeKeys: ['popular'],
-    prices: { pack1: 52, pack3: 149, pack5: 235, pack10: 449, pack30: 1249 },
+    prices: { pack1: 4.29, pack3: 11.99, pack5: 18.99, pack10: 35.99, pack30: 99.99 },
     manufacturer: 'Another Snus Factory',
   },
   {
@@ -169,7 +170,7 @@ export const products: Product[] = [
     image: flavorImages['mint'],
     ratings: 567,
     badgeKeys: ['limited'],
-    prices: { pack1: 69, pack3: 195, pack5: 299, pack10: 559, pack30: 1549 },
+    prices: { pack1: 5.69, pack3: 15.99, pack5: 24.49, pack10: 45.99, pack30: 126.99 },
     manufacturer: 'GN Tobacco',
   },
   {
@@ -186,7 +187,7 @@ export const products: Product[] = [
     image: flavorImages['mint'],
     ratings: 298,
     badgeKeys: ['newPrice'],
-    prices: { pack1: 54, pack3: 155, pack5: 245, pack10: 465, pack30: 1295 },
+    prices: { pack1: 4.39, pack3: 12.49, pack5: 19.99, pack10: 37.99, pack30: 105.99 },
     manufacturer: 'British American Tobacco',
   },
   {
@@ -203,7 +204,7 @@ export const products: Product[] = [
     image: flavorImages['tropical'],
     ratings: 178,
     badgeKeys: ['new', 'newPrice'],
-    prices: { pack1: 56, pack3: 162, pack5: 255, pack10: 485, pack30: 1349 },
+    prices: { pack1: 4.59, pack3: 12.99, pack5: 20.99, pack10: 39.49, pack30: 109.99 },
     manufacturer: 'JTI',
   },
   {
@@ -220,7 +221,7 @@ export const products: Product[] = [
     image: flavorImages['coffee'],
     ratings: 145,
     badgeKeys: [],
-    prices: { pack1: 58, pack3: 165, pack5: 259, pack10: 495, pack30: 1379 },
+    prices: { pack1: 4.79, pack3: 13.49, pack5: 21.49, pack10: 40.49, pack30: 112.99 },
     manufacturer: 'Imperial Brands',
   },
   {
@@ -237,7 +238,7 @@ export const products: Product[] = [
     image: flavorImages['cola'],
     ratings: 423,
     badgeKeys: ['popular', 'limited'],
-    prices: { pack1: 72, pack3: 205, pack5: 319, pack10: 599, pack30: 1649 },
+    prices: { pack1: 5.99, pack3: 16.79, pack5: 26.49, pack10: 49.49, pack30: 134.99 },
     manufacturer: 'NGP Empire',
   },
   {
@@ -254,7 +255,7 @@ export const products: Product[] = [
     image: flavorImages['vanilla'],
     ratings: 234,
     badgeKeys: ['new'],
-    prices: { pack1: 62, pack3: 175, pack5: 275, pack10: 519, pack30: 1449 },
+    prices: { pack1: 5.09, pack3: 14.29, pack5: 22.49, pack10: 42.49, pack30: 118.49 },
     manufacturer: 'NGP Empire',
   },
   {
@@ -271,7 +272,7 @@ export const products: Product[] = [
     image: flavorImages['licorice'],
     ratings: 312,
     badgeKeys: ['newPrice'],
-    prices: { pack1: 59, pack3: 169, pack5: 265, pack10: 499, pack30: 1399 },
+    prices: { pack1: 4.99, pack3: 13.99, pack5: 21.99, pack10: 39.99, pack30: 109.99 },
     manufacturer: 'Swedish Match',
   },
   {
@@ -288,7 +289,7 @@ export const products: Product[] = [
     image: flavorImages['berry'],
     ratings: 278,
     badgeKeys: ['new', 'popular'],
-    prices: { pack1: 55, pack3: 159, pack5: 249, pack10: 469, pack30: 1299 },
+    prices: { pack1: 4.49, pack3: 12.49, pack5: 19.99, pack10: 37.99, pack30: 104.99 },
     manufacturer: 'British American Tobacco',
   },
 ];

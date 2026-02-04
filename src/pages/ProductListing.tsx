@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { products, BadgeKey, StrengthKey, FlavorKey, FormatKey } from '@/data/products';
+import { products, BadgeKey, StrengthKey } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
 import { ActiveFilters } from '@/components/product/ActiveFilters';
@@ -16,41 +16,43 @@ import {
 import { Filter } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { AgeGate } from '@/components/compliance/AgeGate';
-import { useTranslation } from '@/hooks/useTranslation';
+import { SEOHead } from '@/components/seo/SEOHead';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
 
 const ITEMS_PER_PAGE = 12;
 
-// Map URL badge params to internal badge keys (supports both new stable keys and legacy Swedish)
+// Map URL badge params to internal badge keys
 const urlBadgeToKey: Record<string, BadgeKey> = {
-  // Stable keys (preferred)
   'new': 'new',
   'newPrice': 'newPrice',
   'popular': 'popular',
   'limited': 'limited',
-  // Legacy Swedish params (backwards compatibility)
-  'Nytt+pris': 'newPrice',
-  'Nytt pris': 'newPrice',
-  'Nyhet': 'new',
-  'Populär': 'popular',
-  'Begränsat': 'limited',
 };
 
-// Map URL strength params to internal strength keys (supports both new stable keys and legacy Swedish)
+// Map URL strength params to internal strength keys
 const urlStrengthToKey: Record<string, StrengthKey> = {
-  // Stable keys (preferred)
   'normal': 'normal',
   'strong': 'strong',
   'extraStrong': 'extraStrong',
   'ultraStrong': 'ultraStrong',
-  // Legacy Swedish params (backwards compatibility)
-  'Normal': 'normal',
-  'Stark': 'strong',
-  'Extra+Stark': 'extraStrong',
-  'Extra Stark': 'extraStrong',
-  'Ultra+Stark': 'ultraStrong',
-  'Ultra Stark': 'ultraStrong',
+};
+
+const badgeLabels: Record<BadgeKey, string> = {
+  new: 'New Arrivals',
+  newPrice: 'Special Offers',
+  popular: 'Bestsellers',
+  limited: 'Limited Edition',
+};
+
+const sortLabels: Record<SortOption, string> = {
+  popularity: 'Most Popular',
+  newest: 'Newest First',
+  oldest: 'Oldest First',
+  'name-asc': 'A-Z',
+  'name-desc': 'Z-A',
+  'price-asc': 'Price: Low to High',
+  'price-desc': 'Price: High to Low',
 };
 
 export default function ProductListing() {
@@ -58,21 +60,10 @@ export default function ProductListing() {
   const badgeFilter = searchParams.get('badge');
   const brandFilter = searchParams.get('brand');
   const strengthFilter = searchParams.get('strength');
-  const { t, translateBadge } = useTranslation();
 
   // Convert URL params to internal keys
   const badgeKeyFilter = badgeFilter ? urlBadgeToKey[badgeFilter] : undefined;
   const strengthKeyFilter = strengthFilter ? urlStrengthToKey[strengthFilter] : undefined;
-
-  const sortLabels: Record<SortOption, string> = {
-    popularity: t('sort.popularity'),
-    newest: t('sort.newest'),
-    oldest: t('sort.oldest'),
-    'name-asc': t('sort.nameAsc'),
-    'name-desc': t('sort.nameDesc'),
-    'price-asc': t('sort.priceLow'),
-    'price-desc': t('sort.priceHigh'),
-  };
 
   const [filters, setFilters] = useState<FilterState>({
     brands: brandFilter ? [brandFilter] : [],
@@ -87,7 +78,6 @@ export default function ProductListing() {
   // Filter products
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      // URL badge filter
       if (badgeKeyFilter && !product.badgeKeys.includes(badgeKeyFilter)) {
         return false;
       }
@@ -122,9 +112,9 @@ export default function ProductListing() {
           a.badgeKeys.includes('new') ? 1 : b.badgeKeys.includes('new') ? -1 : 0
         );
       case 'name-asc':
-        return sorted.sort((a, b) => a.name.localeCompare(b.name, 'sv'));
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
       case 'name-desc':
-        return sorted.sort((a, b) => b.name.localeCompare(a.name, 'sv'));
+        return sorted.sort((a, b) => b.name.localeCompare(a.name));
       case 'price-asc':
         return sorted.sort((a, b) => a.prices.pack1 - b.prices.pack1);
       case 'price-desc':
@@ -167,163 +157,193 @@ export default function ProductListing() {
     filters.formats.length;
 
   // Page title based on filters
-  const pageTitle = badgeKeyFilter ? translateBadge(badgeKeyFilter) :
+  const pageTitle = badgeKeyFilter ? badgeLabels[badgeKeyFilter] :
                     brandFilter ? brandFilter :
-                    t('categories.whiteSnus');
+                    'Nicotine Pouches';
+  
+  const pageDescription = badgeKeyFilter
+    ? `Shop our ${badgeLabels[badgeKeyFilter].toLowerCase()} nicotine pouches. Free UK delivery over £25.`
+    : `Browse our complete range of nicotine pouches. Free UK delivery over £25.`;
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: window.location.origin,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: pageTitle,
+        item: window.location.href,
+      },
+    ],
+  };
 
   return (
-    <Layout showNicotineWarning={false}>
-      <AgeGate />
+    <>
+      <SEOHead
+        title={`${pageTitle} | SnusFriend UK`}
+        description={pageDescription}
+        jsonLd={breadcrumbJsonLd}
+      />
+      <Layout showNicotineWarning={false}>
+        <AgeGate />
 
-      <div className="container py-6">
-        {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1 line-clamp-2">{pageTitle}</h1>
-          <p className="text-sm text-muted-foreground line-clamp-2">
-            {t('hero.subtitle')}
-          </p>
-        </div>
+        <div className="container py-6">
+          {/* Page Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1">{pageTitle}</h1>
+            <p className="text-sm text-muted-foreground">
+              {pageDescription}
+            </p>
+          </div>
 
-        <div className="flex gap-6">
-          {/* Desktop Sidebar Filters - Sticky */}
-          <aside className="hidden lg:block w-60 shrink-0">
-            <div className="sticky top-28 rounded-2xl border border-border bg-card p-5 max-h-[calc(100vh-8rem)] overflow-y-auto">
-              <ProductFilters
+          <div className="flex gap-6">
+            {/* Desktop Sidebar Filters */}
+            <aside className="hidden lg:block w-60 shrink-0">
+              <div className="sticky top-28 rounded-2xl border border-border bg-card p-5 max-h-[calc(100vh-8rem)] overflow-y-auto">
+                <ProductFilters
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                />
+              </div>
+            </aside>
+
+            {/* Main Content */}
+            <div className="flex-1 min-w-0">
+              {/* Toolbar */}
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  {/* Mobile Filter Button */}
+                  <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9 shrink-0">
+                        <Filter className="h-3.5 w-3.5" />
+                        <span>Filters</span>
+                        {activeFilterCount > 0 && (
+                          <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                            {activeFilterCount}
+                          </span>
+                        )}
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="left" className="w-80 overflow-y-auto">
+                      <ProductFilters
+                        filters={filters}
+                        onFilterChange={handleFilterChange}
+                        onClose={() => setMobileFiltersOpen(false)}
+                        isMobile
+                      />
+                    </SheetContent>
+                  </Sheet>
+
+                  <p className="text-xs text-muted-foreground">
+                    Showing {paginatedProducts.length} of {sortedProducts.length} products
+                  </p>
+                </div>
+
+                {/* Sort Dropdown */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-xs text-muted-foreground hidden sm:inline">Sort:</span>
+                  <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+                    <SelectTrigger className="w-40 rounded-xl h-9 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(sortLabels).map(([value, label]) => (
+                        <SelectItem key={value} value={value} className="text-xs">
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Active Filters Chips */}
+              <ActiveFilters
                 filters={filters}
-                onFilterChange={handleFilterChange}
+                onRemoveFilter={handleRemoveFilter}
+                onClearAll={handleClearAll}
               />
-            </div>
-          </aside>
 
-          {/* Main Content */}
-          <div className="flex-1 min-w-0">
-            {/* Toolbar - aligned baseline */}
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3 min-w-0">
-                {/* Mobile Filter Button */}
-                <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9 shrink-0">
-                      <Filter className="h-3.5 w-3.5" />
-                      <span className="truncate">{t('filter.title')}</span>
-                      {activeFilterCount > 0 && (
-                        <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
-                          {activeFilterCount}
-                        </span>
-                      )}
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="w-80 overflow-y-auto">
-                    <ProductFilters
-                      filters={filters}
-                      onFilterChange={handleFilterChange}
-                      onClose={() => setMobileFiltersOpen(false)}
-                      isMobile
-                    />
-                  </SheetContent>
-                </Sheet>
+              {/* Product Grid */}
+              {paginatedProducts.length > 0 ? (
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {paginatedProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    No products found matching your filters.
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl"
+                    onClick={handleClearAll}
+                  >
+                    Clear all filters
+                  </Button>
+                </div>
+              )}
 
-                <p className="text-xs text-muted-foreground truncate">
-                  {t('products.showing')} {paginatedProducts.length} {t('products.of')} {sortedProducts.length} {t('products.productsLabel')}
-                </p>
-              </div>
-
-              {/* Sort Dropdown */}
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-xs text-muted-foreground hidden sm:inline">{t('sort.label')}:</span>
-                <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                  <SelectTrigger className="w-36 rounded-xl h-9 text-xs">
-                    <SelectValue placeholder={t('sort.label')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(sortLabels).map(([value, label]) => (
-                      <SelectItem key={value} value={value} className="text-xs">
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Active Filters Chips */}
-            <ActiveFilters
-              filters={filters}
-              onRemoveFilter={handleRemoveFilter}
-              onClearAll={handleClearAll}
-            />
-
-            {/* Product Grid */}
-            {paginatedProducts.length > 0 ? (
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {paginatedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12">
-                <p className="text-sm text-muted-foreground mb-3">
-                  {t('filter.clearAll')}
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-xl"
-                  onClick={handleClearAll}
-                >
-                  {t('filter.clearAll')}
-                </Button>
-              </div>
-            )}
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="mt-6 flex items-center justify-center gap-1.5 flex-wrap">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-xl h-8 text-xs"
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((p) => p - 1)}
-                >
-                  {t('pagination.previous')}
-                </Button>
-                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                  let pageNum = i + 1;
-                  if (totalPages > 5) {
-                    if (currentPage > 3) {
-                      pageNum = currentPage - 2 + i;
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-6 flex items-center justify-center gap-1.5 flex-wrap">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl h-8 text-xs"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => p - 1)}
+                  >
+                    Previous
+                  </Button>
+                  {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                    let pageNum = i + 1;
+                    if (totalPages > 5) {
+                      if (currentPage > 3) {
+                        pageNum = currentPage - 2 + i;
+                      }
+                      if (currentPage > totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      }
                     }
-                    if (currentPage > totalPages - 2) {
-                      pageNum = totalPages - 4 + i;
-                    }
-                  }
-                  return (
-                    <Button
-                      key={pageNum}
-                      variant={currentPage === pageNum ? 'default' : 'outline'}
-                      size="sm"
-                      className="rounded-xl h-8 w-8 text-xs p-0"
-                      onClick={() => setCurrentPage(pageNum)}
-                    >
-                      {pageNum}
-                    </Button>
-                  );
-                })}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-xl h-8 text-xs"
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage((p) => p + 1)}
-                >
-                  {t('pagination.next')}
-                </Button>
-              </div>
-            )}
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? 'default' : 'outline'}
+                        size="sm"
+                        className="rounded-xl h-8 w-8 text-xs p-0"
+                        onClick={() => setCurrentPage(pageNum)}
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  })}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl h-8 text-xs"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((p) => p + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   );
 }
