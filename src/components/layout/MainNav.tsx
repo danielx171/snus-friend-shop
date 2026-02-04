@@ -88,7 +88,7 @@ export function MainNav() {
 
             <NavigationMenuItem>
               <Link
-                to="/produkter?badge=Nyhet"
+                to="/produkter?badge=new"
                 className={cn(
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
                 )}
@@ -99,7 +99,7 @@ export function MainNav() {
 
             <NavigationMenuItem>
               <Link
-                to="/produkter?badge=Nytt+pris"
+                to="/produkter?badge=newPrice"
                 className={cn(
                   'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium text-primary transition-colors hover:bg-accent/50'
                 )}

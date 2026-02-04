@@ -78,14 +78,14 @@ export function Header() {
                     {t('nav.allProducts')}
                   </Link>
                   <Link
-                    to="/produkter?badge=Nytt+pris"
+                    to="/produkter?badge=newPrice"
                     className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-primary hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {t('nav.newPrice')}
                   </Link>
                   <Link
-                    to="/produkter?badge=Nyhet"
+                    to="/produkter?badge=new"
                     className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
