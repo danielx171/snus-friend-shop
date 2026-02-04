@@ -1,74 +1,72 @@
 import { Link } from 'react-router-dom';
 import { Cigarette, Sparkles, Tag, Package, RefreshCw, Calendar, Zap, Gift } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const categories = [
   {
     name: 'Vitt snus',
     icon: Cigarette,
     href: '/produkter',
-    color: 'bg-primary/10 text-primary hover:bg-primary/20',
   },
   {
     name: 'Nyheter',
     icon: Sparkles,
     href: '/produkter?badge=Nyhet',
-    color: 'bg-secondary/20 text-secondary hover:bg-secondary/30',
   },
   {
     name: 'Nytt pris',
     icon: Tag,
     href: '/produkter?badge=Nytt+pris',
-    color: 'bg-chart-1/20 text-chart-1 hover:bg-chart-1/30',
   },
   {
     name: 'Pick & Mix',
     icon: Package,
     href: '/produkter',
-    color: 'bg-muted text-muted-foreground hover:bg-muted/80',
   },
   {
     name: 'Prenumerera',
     icon: RefreshCw,
     href: '/produkter',
-    color: 'bg-chart-2/20 text-chart-2 hover:bg-chart-2/30',
   },
   {
     name: 'Månadens',
     icon: Calendar,
     href: '/produkter?badge=Populär',
-    color: 'bg-chart-5/20 text-chart-5 hover:bg-chart-5/30',
   },
   {
     name: 'Extra stark',
     icon: Zap,
     href: '/produkter?strength=Extra+Stark',
-    color: 'bg-destructive/10 text-destructive hover:bg-destructive/20',
   },
   {
     name: 'Erbjudanden',
     icon: Gift,
     href: '/produkter?badge=Nytt+pris',
-    color: 'bg-primary/10 text-primary hover:bg-primary/20',
   },
 ];
 
 export function CategoryShortcuts() {
   return (
-    <section className="py-8 md:py-12">
+    <section className="py-6 md:py-10">
       <div className="container">
-        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide md:grid md:grid-cols-4 lg:grid-cols-8 md:gap-4 md:overflow-visible md:pb-0">
+        <div className="flex gap-3 overflow-x-auto pb-3 scrollbar-hide md:grid md:grid-cols-4 lg:grid-cols-8 md:gap-3 md:overflow-visible md:pb-0">
           {categories.map((category) => (
             <Link
               key={category.name}
               to={category.href}
-              className="flex flex-col items-center gap-2 shrink-0"
+              className="group flex flex-col items-center gap-2 shrink-0"
             >
               <div
-                className={`flex h-16 w-16 items-center justify-center rounded-2xl transition-colors ${category.color}`}
+                className={cn(
+                  'flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-200',
+                  'bg-muted/60 text-muted-foreground',
+                  'group-hover:bg-primary/10 group-hover:text-primary group-hover:scale-105',
+                  'group-active:scale-95'
+                )}
               >
-                <category.icon className="h-6 w-6" />
+                <category.icon className="h-5 w-5 stroke-[1.5]" />
               </div>
-              <span className="text-xs font-medium text-foreground text-center whitespace-nowrap">
+              <span className="text-[11px] font-medium text-foreground text-center whitespace-nowrap group-hover:text-primary transition-colors">
                 {category.name}
               </span>
             </Link>

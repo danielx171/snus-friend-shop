@@ -7,12 +7,14 @@ import { Star, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { formatPrice, formatPricePerUnit } from '@/lib/format';
 
 interface ProductCardProps {
   product: Product;
 }
 
-const packSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10', 'pack30'];
+// Show fewer pack sizes on card, "Fler" for rest
+const cardPackSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10'];
 
 const strengthLevels: Record<Product['strength'], number> = {
   'Normal': 1,
@@ -21,13 +23,21 @@ const strengthLevels: Record<Product['strength'], number> = {
   'Ultra Stark': 4,
 };
 
+// Badge priority order: Nyhet, Nytt pris, Populär (max 2)
+const badgePriority: Product['badges'][number][] = ['Nyhet', 'Nytt pris', 'Populär'];
+
+function getDisplayBadges(badges: Product['badges']): Product['badges'][number][] {
+  return badgePriority.filter((b) => badges.includes(b)).slice(0, 2);
+}
+
 export function ProductCard({ product }: ProductCardProps) {
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack1');
   const { addToCart } = useCart();
 
   const currentPrice = product.prices[selectedPack];
-  const pricePerCan = (currentPrice / packSizeMultipliers[selectedPack]).toFixed(2);
+  const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
   const strengthLevel = strengthLevels[product.strength];
+  const displayBadges = getDisplayBadges(product.badges);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -44,45 +54,45 @@ export function ProductCard({ product }: ProductCardProps) {
             alt={product.name}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          {/* Badges */}
-          <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-            {product.badges.includes('Nytt pris') && (
-              <Badge className="bg-primary text-primary-foreground text-xs rounded-full px-2.5">
-                Nytt pris
-              </Badge>
-            )}
-            {product.badges.includes('Nyhet') && (
-              <Badge className="bg-secondary text-secondary-foreground text-xs rounded-full px-2.5">
-                Nyhet
-              </Badge>
-            )}
-            {product.badges.includes('Populär') && (
-              <Badge variant="outline" className="bg-card/95 text-xs rounded-full px-2.5">
-                Populär
-              </Badge>
-            )}
-          </div>
+          {/* Badges - max 2, ordered by priority */}
+          {displayBadges.length > 0 && (
+            <div className="absolute left-2.5 top-2.5 flex flex-wrap gap-1">
+              {displayBadges.map((badge) => (
+                <Badge
+                  key={badge}
+                  className={cn(
+                    'text-[10px] font-semibold rounded-full px-2 py-0.5',
+                    badge === 'Nyhet' && 'bg-secondary text-secondary-foreground',
+                    badge === 'Nytt pris' && 'bg-primary text-primary-foreground',
+                    badge === 'Populär' && 'bg-card/95 text-foreground border border-border'
+                  )}
+                >
+                  {badge}
+                </Badge>
+              ))}
+            </div>
+          )}
         </div>
 
-        <CardContent className="p-4">
+        <CardContent className="p-3.5">
           {/* Brand & Name */}
-          <div className="mb-2">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider">
+          <div className="mb-1.5">
+            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
               {product.brand}
             </p>
-            <h3 className="font-semibold text-foreground line-clamp-1 text-base">
+            <h3 className="font-semibold text-foreground line-clamp-1 text-sm leading-tight">
               {product.name}
             </h3>
           </div>
 
           {/* Strength indicator - visual bars */}
-          <div className="mb-3 flex items-center gap-2">
+          <div className="mb-2 flex items-center gap-1.5">
             <div className="flex gap-0.5">
               {[1, 2, 3, 4].map((level) => (
                 <div
                   key={level}
                   className={cn(
-                    'h-2 w-4 rounded-sm transition-colors',
+                    'h-1.5 w-3 rounded-sm transition-colors',
                     level <= strengthLevel
                       ? strengthLevel >= 4 ? 'bg-destructive' :
                         strengthLevel >= 3 ? 'bg-chart-1' :
@@ -92,20 +102,20 @@ export function ProductCard({ product }: ProductCardProps) {
                 />
               ))}
             </div>
-            <span className="text-xs text-muted-foreground">{product.strength}</span>
+            <span className="text-[10px] text-muted-foreground">{product.strength}</span>
           </div>
 
           {/* Ratings */}
-          <div className="mb-3 flex items-center gap-1">
-            <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-            <span className="text-xs text-muted-foreground">
+          <div className="mb-2 flex items-center gap-1">
+            <Star className="h-3 w-3 fill-primary text-primary" />
+            <span className="text-[10px] text-muted-foreground">
               ({product.ratings})
             </span>
           </div>
 
-          {/* Pack Size Selector */}
-          <div className="mb-3 flex flex-wrap gap-1">
-            {packSizes.map((size) => (
+          {/* Pack Size Selector - compact */}
+          <div className="mb-2.5 flex flex-wrap gap-1">
+            {cardPackSizes.map((size) => (
               <button
                 key={size}
                 onClick={(e) => {
@@ -114,7 +124,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   setSelectedPack(size);
                 }}
                 className={cn(
-                  'rounded-lg px-2 py-1 text-xs font-medium transition-all',
+                  'rounded-md px-1.5 py-0.5 text-[10px] font-medium transition-all',
                   selectedPack === size
                     ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -125,26 +135,25 @@ export function ProductCard({ product }: ProductCardProps) {
             ))}
           </div>
 
-          {/* Prices */}
-          <div className="mb-4 flex items-baseline justify-between">
-            <div>
-              <span className="text-xl font-bold text-foreground">
-                {currentPrice.toFixed(2)} kr
-              </span>
-            </div>
-            <span className="text-sm text-muted-foreground">
-              {pricePerCan} kr/st
+          {/* Prices - Swedish formatting */}
+          <div className="mb-3 flex items-baseline justify-between">
+            <span className="text-lg font-bold text-foreground">
+              {formatPrice(currentPrice)} kr
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {formatPricePerUnit(pricePerCan)}
             </span>
           </div>
 
-          {/* Add to Cart */}
+          {/* Add to Cart - responsive CTA */}
           <Button
             onClick={handleAddToCart}
-            className="w-full gap-2 rounded-xl"
-            size="default"
+            className="w-full gap-2 rounded-xl text-sm"
+            size="sm"
           >
-            <ShoppingCart className="h-4 w-4" />
-            Köp
+            <ShoppingCart className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Lägg i varukorg</span>
+            <span className="sm:hidden">Köp</span>
           </Button>
         </CardContent>
       </Link>
