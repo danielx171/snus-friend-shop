@@ -1,13 +1,12 @@
 import { Star, Truck, Zap, User, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
-import { formatPrice } from '@/lib/format';
 import { LanguageSelector } from './LanguageSelector';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export function UtilityBar() {
   const { totalItems, totalPrice, openCart } = useCart();
-  const { t } = useTranslation();
+  const { t, formatPrice } = useTranslation();
 
   return (
     <div className="border-b border-border bg-secondary/30">
@@ -49,9 +48,9 @@ export function UtilityBar() {
           >
             <ShoppingCart className="h-3 w-3" />
             {totalItems > 0 ? (
-              <span className="font-medium">{formatPrice(totalPrice)} kr</span>
+              <span className="font-medium">{formatPrice(totalPrice)}</span>
             ) : (
-              <span className="hidden sm:inline">0,00 kr</span>
+              <span className="hidden sm:inline">{formatPrice(0)}</span>
             )}
           </Button>
         </div>

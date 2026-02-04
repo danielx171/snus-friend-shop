@@ -3,22 +3,22 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/context/CartContext';
 import { Minus, Plus, Trash2, ShoppingBag, Truck } from 'lucide-react';
-import { packSizeLabels, packSizeMultipliers } from '@/data/products';
+import { packSizeMultipliers } from '@/data/products';
 import { Link } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
-import { formatPrice, formatPricePerUnit } from '@/lib/format';
 import { useTranslation } from '@/hooks/useTranslation';
 
 const FREE_SHIPPING_THRESHOLD = 149;
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeFromCart, totalPrice } = useCart();
-  const { t } = useTranslation();
+  const { t, formatPrice, formatPriceWithUnit, convertPrice } = useTranslation();
 
   const vatAmount = Math.round(totalPrice * 0.25);
   const priceExVat = totalPrice - vatAmount;
   const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalPrice);
   const shippingProgress = Math.min(100, (totalPrice / FREE_SHIPPING_THRESHOLD) * 100);
+  const shippingCost = 49;
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -67,6 +67,7 @@ export function CartDrawer() {
                 {items.map((item) => {
                   const pricePerCan = item.product.prices[item.packSize] / packSizeMultipliers[item.packSize];
                   const lineTotal = item.product.prices[item.packSize] * item.quantity;
+                  const packNum = item.packSize.replace('pack', '');
                   return (
                     <div
                       key={`${item.product.id}-${item.packSize}`}
@@ -89,7 +90,7 @@ export function CartDrawer() {
                               {item.product.name}
                             </p>
                             <p className="text-[10px] text-muted-foreground">
-                              {t(`pack.${item.packSize.replace('pack', '')}`)} · {formatPricePerUnit(pricePerCan, t('products.perUnit'))}
+                              {t(`pack.${packNum}`)} · {formatPriceWithUnit(pricePerCan)}
                             </p>
                           </div>
                           <Button
@@ -138,7 +139,7 @@ export function CartDrawer() {
                             </Button>
                           </div>
                           <p className="font-semibold text-sm">
-                            {formatPrice(lineTotal)} kr
+                            {formatPrice(lineTotal)}
                           </p>
                         </div>
                       </div>
@@ -152,22 +153,22 @@ export function CartDrawer() {
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.subtotal')}</span>
-                  <span>{formatPrice(priceExVat)} kr</span>
+                  <span>{formatPrice(priceExVat)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.vat')}</span>
-                  <span>{formatPrice(vatAmount)} kr</span>
+                  <span>{formatPrice(vatAmount)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.shipping')}</span>
                   <span className={remainingForFreeShipping === 0 ? 'text-primary' : ''}>
-                    {remainingForFreeShipping === 0 ? t('cart.free') : '49 kr'}
+                    {remainingForFreeShipping === 0 ? t('cart.free') : formatPrice(shippingCost)}
                   </span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between font-semibold text-base">
                   <span>{t('cart.total')}</span>
-                  <span>{formatPrice(totalPrice)} kr</span>
+                  <span>{formatPrice(totalPrice)}</span>
                 </div>
               </div>
               <Button className="mt-3 w-full rounded-xl" size="default">

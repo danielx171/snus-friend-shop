@@ -9,15 +9,50 @@ interface ActiveFiltersProps {
   onClearAll: () => void;
 }
 
+// Map strength to translation key
+const strengthTranslationKeys: Record<string, string> = {
+  'Normal': 'strength.normal',
+  'Stark': 'strength.strong',
+  'Extra Stark': 'strength.extraStrong',
+  'Ultra Stark': 'strength.ultraStrong',
+};
+
+// Map format to translation key
+const formatTranslationKeys: Record<string, string> = {
+  'Slim': 'format.slim',
+  'Mini': 'format.mini',
+  'Original': 'format.original',
+  'Large': 'format.large',
+};
+
 export function ActiveFilters({ filters, onRemoveFilter, onClearAll }: ActiveFiltersProps) {
-  const { t } = useTranslation();
+  const { t, translateFlavor } = useTranslation();
 
   const allFilters: { category: keyof FilterState; value: string; label: string }[] = [];
 
+  // Brands stay as-is (proper nouns)
   filters.brands.forEach((v) => allFilters.push({ category: 'brands', value: v, label: v }));
-  filters.strengths.forEach((v) => allFilters.push({ category: 'strengths', value: v, label: v }));
-  filters.flavors.forEach((v) => allFilters.push({ category: 'flavors', value: v, label: v }));
-  filters.formats.forEach((v) => allFilters.push({ category: 'formats', value: v, label: v }));
+  
+  // Translate strengths
+  filters.strengths.forEach((v) => allFilters.push({ 
+    category: 'strengths', 
+    value: v, 
+    label: t(strengthTranslationKeys[v]) 
+  }));
+  
+  // Translate flavors
+  filters.flavors.forEach((v) => allFilters.push({ 
+    category: 'flavors', 
+    value: v, 
+    label: translateFlavor(v) 
+  }));
+  
+  // Translate formats
+  filters.formats.forEach((v) => allFilters.push({ 
+    category: 'formats', 
+    value: v, 
+    label: t(formatTranslationKeys[v]) 
+  }));
 
   if (allFilters.length === 0) return null;
 

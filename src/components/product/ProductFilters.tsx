@@ -20,13 +20,29 @@ interface ProductFiltersProps {
   isMobile?: boolean;
 }
 
+// Map strength to translation key
+const strengthTranslationKeys: Record<string, string> = {
+  'Normal': 'strength.normal',
+  'Stark': 'strength.strong',
+  'Extra Stark': 'strength.extraStrong',
+  'Ultra Stark': 'strength.ultraStrong',
+};
+
+// Map format to translation key
+const formatTranslationKeys: Record<string, string> = {
+  'Slim': 'format.slim',
+  'Mini': 'format.mini',
+  'Original': 'format.original',
+  'Large': 'format.large',
+};
+
 export function ProductFilters({
   filters,
   onFilterChange,
   onClose,
   isMobile = false,
 }: ProductFiltersProps) {
-  const { t } = useTranslation();
+  const { t, translateFlavor } = useTranslation();
 
   const toggleFilter = (
     category: keyof FilterState,
@@ -108,7 +124,7 @@ export function ProductFilters({
                 htmlFor={`strength-${strength}`}
                 className="text-sm text-foreground cursor-pointer"
               >
-                {strength}
+                {t(strengthTranslationKeys[strength])}
               </Label>
             </div>
           ))}
@@ -132,7 +148,7 @@ export function ProductFilters({
                 htmlFor={`flavor-${flavor}`}
                 className="text-sm text-foreground cursor-pointer"
               >
-                {flavor}
+                {translateFlavor(flavor)}
               </Label>
             </div>
           ))}
@@ -156,7 +172,7 @@ export function ProductFilters({
                 htmlFor={`format-${format}`}
                 className="text-sm text-foreground cursor-pointer"
               >
-                {format}
+                {t(formatTranslationKeys[format])}
               </Label>
             </div>
           ))}
