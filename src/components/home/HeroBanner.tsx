@@ -1,34 +1,29 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export function HeroBanner() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-background to-primary/5">
       <div className="container py-16 md:py-24">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
           {/* Content */}
           <div className="space-y-6">
-            <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-              Nytt hos SnusFriend
-            </div>
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              Premium nikotinpåsar
-              <span className="block text-primary">till bästa pris</span>
+              {t('hero.title')}
             </h1>
             <p className="max-w-lg text-lg text-muted-foreground leading-relaxed">
-              Utforska Sveriges största urval av nikotinpåsar från ledande varumärken. 
-              Fri frakt vid köp över 149 kr och snabb leverans direkt till din dörr.
+              {t('hero.subtitle')}
             </p>
             <div className="flex flex-wrap gap-4">
               <Button asChild size="lg" className="gap-2 rounded-xl">
                 <Link to="/produkter">
-                  Handla nu
+                  {t('hero.cta')}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-xl">
-                <Link to="/produkter?badge=Nytt+pris">Se nya priser</Link>
               </Button>
             </div>
           </div>

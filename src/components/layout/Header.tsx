@@ -5,10 +5,12 @@ import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export function Header() {
   const { totalItems, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
@@ -28,7 +30,7 @@ export function Header() {
           <div className="relative w-full">
             <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Sök bland våra produkter..."
+              placeholder={t('search.placeholder')}
               className="w-full pl-10 h-10 rounded-xl bg-background border-border focus:border-primary"
             />
           </div>
@@ -65,7 +67,7 @@ export function Header() {
               <div className="flex flex-col gap-5 pt-5">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input placeholder="Sök produkter..." className="pl-10 rounded-xl" />
+                  <Input placeholder={t('search.placeholder')} className="pl-10 rounded-xl" />
                 </div>
                 <nav className="flex flex-col gap-0.5">
                   <Link
@@ -73,28 +75,21 @@ export function Header() {
                     className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Alla produkter
+                    {t('nav.allProducts')}
                   </Link>
                   <Link
                     to="/produkter?badge=Nytt+pris"
                     className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-primary hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Nya priser
+                    {t('nav.newPrice')}
                   </Link>
                   <Link
                     to="/produkter?badge=Nyhet"
                     className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Nyheter
-                  </Link>
-                  <Link
-                    to="/produkter?badge=Populär"
-                    className="flex items-center rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Populära
+                    {t('nav.news')}
                   </Link>
                 </nav>
               </div>
