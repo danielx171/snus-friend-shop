@@ -10,9 +10,8 @@ interface LayoutProps {
   showNicotineWarning?: boolean;
 }
 
-{showNicotineWarning && (
-  <NicotineWarning onClose={() => setShowNicotineWarning(false)} />
-)}
+export function Layout({ children, showNicotineWarning = true }: LayoutProps) {
+  return (
     <div className="flex min-h-screen flex-col bg-background">
       <UtilityBar />
       <Header />
