@@ -10,7 +10,7 @@ import { Minus, Plus, Trash2, ShoppingBag, Truck, ArrowRight, RefreshCw } from '
 import { packSizeMultipliers, products } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { useTranslation } from '@/hooks/useTranslation';
-import { SEOHead } from '@/components/seo/SEOHead';
+import { SEO } from '@/components/seo/SEO';
 
 const frequencyLabels: Record<SubscriptionFrequency, string> = {
   once: 'One-time purchase',
@@ -44,7 +44,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <>
-        <SEOHead
+        <SEO
           title="Your Cart | SnusFriend"
           description="Review your cart and proceed to checkout."
         />
@@ -66,7 +66,7 @@ export default function CartPage() {
 
   return (
     <>
-      <SEOHead
+      <SEO
         title={`Your Cart (${totalItems} items) | SnusFriend`}
         description="Review your cart and proceed to checkout."
       />
