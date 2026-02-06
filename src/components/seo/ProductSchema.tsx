@@ -1,5 +1,5 @@
 import { Product, PackSize, packSizeMultipliers } from '@/data/products';
-import { SEOHead } from './SEOHead';
+import { SEO } from './SEO';
 
 interface ProductSchemaProps {
   product: Product;
@@ -71,7 +71,7 @@ export function ProductSchema({ product, selectedPackSize }: ProductSchemaProps)
   const combinedJsonLd = [jsonLd, breadcrumbJsonLd];
 
   return (
-    <SEOHead
+    <SEO
       title={`${product.name} | ${product.brand} | SnusFriend`}
       description={`Buy ${product.name} by ${product.brand}. From £${unitPrice.toFixed(2)}/can. ${product.nicotineContent}mg nicotine, ${product.portionsPerCan} pouches. Fast UK delivery.`}
       canonical={productUrl}

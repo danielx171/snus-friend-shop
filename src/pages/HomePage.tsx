@@ -3,7 +3,7 @@ import { HeroBanner } from '@/components/home/HeroBanner';
 import { CategoryShortcuts } from '@/components/home/CategoryShortcuts';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { AgeGate } from '@/components/compliance/AgeGate';
-import { SEOHead } from '@/components/seo/SEOHead';
+import { SEO } from '@/components/seo/SEO';
 
 export default function HomePage() {
   const jsonLd = {
@@ -20,9 +20,10 @@ export default function HomePage() {
 
   return (
     <>
-      <SEOHead
+      <SEO
         title="SnusFriend | Premium Nicotine Pouches | Free UK Delivery"
         description="Shop the UK's best selection of nicotine pouches from top brands like ZYN, VELO, and more. Free delivery over £25. Subscribe and save 10%."
+        canonical={window.location.origin + '/'}
         jsonLd={jsonLd}
       />
       <Layout showNicotineWarning={true}>

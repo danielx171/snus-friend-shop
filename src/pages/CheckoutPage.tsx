@@ -18,7 +18,7 @@ import { Check, ChevronRight, CreditCard, Package, Tag, Truck, ShoppingBag } fro
 import { packSizeMultipliers } from '@/data/products';
 import { useTranslation } from '@/hooks/useTranslation';
 import { toast } from '@/hooks/use-toast';
-import { SEOHead } from '@/components/seo/SEOHead';
+import { SEO } from '@/components/seo/SEO';
 
 type CheckoutStep = 'shipping' | 'payment' | 'complete';
 
@@ -145,7 +145,7 @@ export default function CheckoutPage() {
   if (items.length === 0 && currentStep !== 'complete') {
     return (
       <>
-        <SEOHead
+        <SEO
           title="Checkout | SnusFriend"
           description="Complete your order securely."
         />
@@ -168,7 +168,7 @@ export default function CheckoutPage() {
   if (currentStep === 'complete') {
     return (
       <>
-        <SEOHead
+        <SEO
           title="Order Complete | SnusFriend"
           description="Thank you for your order!"
         />
@@ -193,7 +193,7 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <SEOHead
+      <SEO
         title="Checkout | SnusFriend"
         description="Complete your order securely."
       />

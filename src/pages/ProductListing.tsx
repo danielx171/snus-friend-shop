@@ -16,7 +16,7 @@ import {
 import { Filter } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { AgeGate } from '@/components/compliance/AgeGate';
-import { SEOHead } from '@/components/seo/SEOHead';
+import { SEO } from '@/components/seo/SEO';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
 
@@ -186,10 +186,12 @@ export default function ProductListing() {
 
   return (
     <>
-      <SEOHead
+      <SEO
         title={`${pageTitle} | SnusFriend UK`}
         description={pageDescription}
+        canonical={window.location.origin + '/nicotine-pouches'}
         jsonLd={breadcrumbJsonLd}
+        metaRobots={activeFilterCount > 1 ? 'noindex,follow' : undefined}
       />
       <Layout showNicotineWarning={false}>
         <AgeGate />

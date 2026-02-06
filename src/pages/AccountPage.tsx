@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User, Package, CreditCard, Settings, LogIn } from 'lucide-react';
-import { SEOHead } from '@/components/seo/SEOHead';
+import { SEO } from '@/components/seo/SEO';
 
 export default function AccountPage() {
   // Placeholder - no actual auth implemented
@@ -14,7 +14,7 @@ export default function AccountPage() {
   if (!isLoggedIn) {
     return (
       <>
-        <SEOHead
+        <SEO
           title="Account | SnusFriend"
           description="Sign in to your SnusFriend account to manage orders and subscriptions."
         />
@@ -55,7 +55,7 @@ export default function AccountPage() {
 
   return (
     <>
-      <SEOHead
+      <SEO
         title="My Account | SnusFriend"
         description="Manage your SnusFriend account, orders, and subscriptions."
       />
