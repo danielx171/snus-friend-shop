@@ -11,13 +11,7 @@ import { packSizeMultipliers, products } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SEO } from '@/components/seo/SEO';
-
-const frequencyLabels: Record<SubscriptionFrequency, string> = {
-  once: 'One-time purchase',
-  '14days': 'Every 14 days',
-  '1month': 'Every month',
-  '2months': 'Every 2 months',
-};
+import { formatMarketPrice } from '@/lib/market';
 
 export default function CartPage() {
   const {
@@ -27,11 +21,19 @@ export default function CartPage() {
     updateQuantity,
     removeFromCart,
     updateSubscription,
-    hasReachedFreeShipping,
-    amountToFreeShipping,
-    freeShippingThreshold,
   } = useCart();
-  const { t, formatPrice } = useTranslation();
+  const { t, formatPrice, market } = useTranslation();
+
+  // Market-aware shipping logic
+  const localTotal = totalPrice * market.rateFromGBP;
+  const hasFreeShipping = localTotal >= market.freeShippingThreshold;
+  const amountToFreeShipping = Math.max(0, market.freeShippingThreshold - localTotal);
+  const shippingProgress = Math.min(100, (localTotal / market.freeShippingThreshold) * 100);
+  const shippingCostGBP = market.shippingCost / market.rateFromGBP;
+
+  const formatLocalAmount = (amount: number): string => {
+    return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
+  };
 
   // Get recommended products (different from cart items)
   const cartProductIds = new Set(items.map(item => item.product.id));
@@ -39,24 +41,22 @@ export default function CartPage() {
     .filter(p => !cartProductIds.has(p.id))
     .slice(0, 4);
 
-  const shippingProgress = Math.min(100, (totalPrice / freeShippingThreshold) * 100);
-
   if (items.length === 0) {
     return (
       <>
         <SEO
-          title="Your Cart | SnusFriend"
-          description="Review your cart and proceed to checkout."
+          title={`${t('cart.title')} | SnusFriend`}
+          description={t('cart.emptyDescription')}
         />
         <Layout showNicotineWarning={false}>
           <div className="container py-16 text-center">
             <ShoppingBag className="mx-auto h-16 w-16 text-muted-foreground mb-6" />
-            <h1 className="text-2xl font-bold text-foreground mb-2">Your cart is empty</h1>
+            <h1 className="text-2xl font-bold text-foreground mb-2">{t('cart.empty')}</h1>
             <p className="text-muted-foreground mb-8">
-              Looks like you haven't added anything yet.
+              {t('cart.emptyDescription')}
             </p>
             <Button asChild size="lg">
-              <Link to="/nicotine-pouches">Browse Products</Link>
+              <Link to="/nicotine-pouches">{t('cart.browseProducts')}</Link>
             </Button>
           </div>
         </Layout>
@@ -64,20 +64,22 @@ export default function CartPage() {
     );
   }
 
+  const itemLabel = totalItems === 1 ? t('cart.item') : t('cart.items');
+
   return (
     <>
       <SEO
-        title={`Your Cart (${totalItems} items) | SnusFriend`}
-        description="Review your cart and proceed to checkout."
+        title={`${t('cart.title')} (${totalItems} ${itemLabel}) | SnusFriend`}
+        description={t('cart.emptyDescription')}
       />
       <Layout showNicotineWarning={false}>
         <div className="container py-8">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground">
-              Your cart
+              {t('cart.title')}
               <span className="text-muted-foreground font-normal ml-2">
-                ({totalItems} {totalItems === 1 ? 'item' : 'items'})
+                ({totalItems} {itemLabel})
               </span>
             </h1>
           </div>
@@ -90,13 +92,13 @@ export default function CartPage() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <Truck className="h-5 w-5 text-primary" />
-                    {hasReachedFreeShipping ? (
+                    {hasFreeShipping ? (
                       <span className="font-semibold text-primary">
-                        🎉 You've unlocked free delivery!
+                        {t('cart.freeShippingAchieved')}
                       </span>
                     ) : (
                       <span className="text-sm text-foreground">
-                        Add {formatPrice(amountToFreeShipping)} more for <strong>free delivery</strong>
+                        {t('cart.freeShippingProgress', { amount: formatLocalAmount(amountToFreeShipping) })}
                       </span>
                     )}
                   </div>
@@ -114,6 +116,7 @@ export default function CartPage() {
                 const packCount = packSizeMultipliers[item.packSize];
                 const unitPrice = item.product.prices[item.packSize] / packCount;
                 const itemTotal = item.product.prices[item.packSize] * item.quantity;
+                const canLabel = packCount === 1 ? t('cart.can') : t('cart.cans');
 
                 return (
                   <Card key={`${item.product.id}-${item.packSize}`}>
@@ -139,13 +142,13 @@ export default function CartPage() {
                                 {item.product.name}
                               </Link>
                               <p className="text-sm text-muted-foreground">
-                                {item.product.brand} • {packCount} {packCount === 1 ? 'can' : 'cans'}
+                                {item.product.brand} • {packCount} {canLabel}
                               </p>
                             </div>
                             <div className="text-right">
                               <p className="font-bold text-foreground">{formatPrice(itemTotal)}</p>
                               <p className="text-xs text-muted-foreground">
-                                {formatPrice(unitPrice)}/can
+                                {formatPrice(unitPrice)}/{t('cart.can')}
                               </p>
                             </div>
                           </div>
@@ -155,7 +158,7 @@ export default function CartPage() {
                             <div className="mt-2 flex items-center gap-2 flex-wrap">
                               <Badge variant="secondary" className="gap-1">
                                 <RefreshCw className="h-3 w-3" />
-                                Subscription
+                                {t('cart.subscription')}
                               </Badge>
                               <Select
                                 value={item.subscriptionFrequency}
@@ -172,9 +175,9 @@ export default function CartPage() {
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="14days">Every 14 days</SelectItem>
-                                  <SelectItem value="1month">Every month</SelectItem>
-                                  <SelectItem value="2months">Every 2 months</SelectItem>
+                                  <SelectItem value="14days">{t('cart.freq.14days')}</SelectItem>
+                                  <SelectItem value="1month">{t('cart.freq.1month')}</SelectItem>
+                                  <SelectItem value="2months">{t('cart.freq.2months')}</SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
@@ -212,7 +215,7 @@ export default function CartPage() {
                               onClick={() => removeFromCart(item.product.id, item.packSize)}
                             >
                               <Trash2 className="h-4 w-4 mr-1" />
-                              Remove
+                              {t('cart.remove')}
                             </Button>
                           </div>
                         </div>
@@ -227,42 +230,42 @@ export default function CartPage() {
             <div className="lg:col-span-1">
               <Card className="sticky top-24">
                 <CardContent className="p-6">
-                  <h2 className="text-lg font-bold text-foreground mb-4">Order Summary</h2>
+                  <h2 className="text-lg font-bold text-foreground mb-4">{t('cart.orderSummary')}</h2>
 
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="text-muted-foreground">{t('cart.subtotal')}</span>
                       <span className="font-medium">{formatPrice(totalPrice)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Delivery</span>
+                      <span className="text-muted-foreground">{t('cart.delivery')}</span>
                       <span className="font-medium">
-                        {hasReachedFreeShipping ? (
-                          <span className="text-primary">Free</span>
+                        {hasFreeShipping ? (
+                          <span className="text-primary">{t('cart.free')}</span>
                         ) : (
-                          formatPrice(3.99)
+                          formatPrice(shippingCostGBP)
                         )}
                       </span>
                     </div>
                     <Separator />
                     <div className="flex justify-between text-base">
-                      <span className="font-bold">Total</span>
+                      <span className="font-bold">{t('cart.total')}</span>
                       <span className="font-bold">
-                        {formatPrice(totalPrice + (hasReachedFreeShipping ? 0 : 3.99))}
+                        {formatPrice(totalPrice + (hasFreeShipping ? 0 : shippingCostGBP))}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground">Including VAT</p>
+                    <p className="text-xs text-muted-foreground">{t('cart.includingVat')}</p>
                   </div>
 
                   <Button asChild size="lg" className="w-full mt-6 gap-2">
                     <Link to="/checkout">
-                      Proceed to Checkout
+                      {t('cart.proceedToCheckout')}
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>
 
                   <p className="text-xs text-muted-foreground text-center mt-4">
-                    Secure checkout powered by Stripe
+                    {t('cart.secureCheckout')}
                   </p>
                 </CardContent>
               </Card>
@@ -273,7 +276,7 @@ export default function CartPage() {
           {recommendedProducts.length > 0 && (
             <section className="mt-16">
               <h2 className="text-2xl font-bold text-foreground mb-6">
-                Don't miss out these products!
+                {t('cart.recommendations')}
               </h2>
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {recommendedProducts.map((product) => (

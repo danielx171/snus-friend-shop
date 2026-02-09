@@ -7,18 +7,24 @@ import { packSizeMultipliers } from '@/data/products';
 import { Link } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
 import { useTranslation } from '@/hooks/useTranslation';
-
-const FREE_SHIPPING_THRESHOLD = 149;
+import { formatMarketPrice } from '@/lib/market';
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeFromCart, totalPrice } = useCart();
-  const { t, formatPrice, formatPriceWithUnit, convertPrice } = useTranslation();
+  const { t, formatPrice, formatPriceWithUnit, market } = useTranslation();
 
-  const vatAmount = Math.round(totalPrice * 0.25);
-  const priceExVat = totalPrice - vatAmount;
-  const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalPrice);
-  const shippingProgress = Math.min(100, (totalPrice / FREE_SHIPPING_THRESHOLD) * 100);
-  const shippingCost = 49;
+  const freeShippingThreshold = market.freeShippingThreshold;
+  const shippingCost = market.shippingCost;
+
+  // Convert GBP totalPrice to local currency for threshold comparison
+  const localTotal = totalPrice * market.rateFromGBP;
+  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - localTotal);
+  const shippingProgress = Math.min(100, (localTotal / freeShippingThreshold) * 100);
+  const hasFreeShipping = localTotal >= freeShippingThreshold;
+
+  const formatLocalAmount = (amount: number): string => {
+    return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -44,12 +50,12 @@ export function CartDrawer() {
           <>
             {/* Free shipping progress */}
             <div className="py-3">
-              {remainingForFreeShipping > 0 ? (
+              {!hasFreeShipping ? (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm">
                     <Truck className="h-4 w-4 text-primary" />
                     <span className="text-muted-foreground">
-                      {t('cart.freeShippingProgress', { amount: formatPrice(remainingForFreeShipping, 0) })}
+                      {t('cart.freeShippingProgress', { amount: formatLocalAmount(remainingForFreeShipping) })}
                     </span>
                   </div>
                   <Progress value={shippingProgress} className="h-2" />
@@ -153,23 +159,20 @@ export function CartDrawer() {
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.subtotal')}</span>
-                  <span>{formatPrice(priceExVat)}</span>
+                  <span>{formatPrice(totalPrice)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('cart.vat')}</span>
-                  <span>{formatPrice(vatAmount)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('cart.shipping')}</span>
-                  <span className={remainingForFreeShipping === 0 ? 'text-primary' : ''}>
-                    {remainingForFreeShipping === 0 ? t('cart.free') : formatPrice(shippingCost)}
+                  <span className="text-muted-foreground">{t('cart.delivery')}</span>
+                  <span className={hasFreeShipping ? 'text-primary' : ''}>
+                    {hasFreeShipping ? t('cart.free') : formatPrice(shippingCost / market.rateFromGBP)}
                   </span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between font-semibold text-base">
                   <span>{t('cart.total')}</span>
-                  <span>{formatPrice(totalPrice)}</span>
+                  <span>{formatPrice(totalPrice + (hasFreeShipping ? 0 : shippingCost / market.rateFromGBP))}</span>
                 </div>
+                <p className="text-xs text-muted-foreground">{t('cart.includingVat')}</p>
               </div>
               <Button asChild className="mt-3 w-full rounded-xl" size="default">
                 <Link to="/cart" onClick={closeCart}>
