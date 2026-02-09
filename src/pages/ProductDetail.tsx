@@ -349,7 +349,7 @@ export default function ProductDetail() {
                     <span className="font-medium">{translateFlavor(product.flavorKey)}</span>
                   </div>
                   <div className="flex justify-between col-span-2">
-                    <span className="text-muted-foreground">Manufacturer</span>
+                    <span className="text-muted-foreground">{t('detail.manufacturer')}</span>
                     <span className="font-medium">{product.manufacturer}</span>
                   </div>
                 </div>
@@ -358,25 +358,25 @@ export default function ProductDetail() {
 
             <AccordionItem value="about" className="rounded-xl border border-border bg-card px-4">
               <AccordionTrigger className="text-base font-medium hover:no-underline py-4">
-                About {product.brand}
+                {t('detail.aboutBrand')} {product.brand}
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <p className="text-muted-foreground leading-relaxed">
-                  {product.brand} is a leading manufacturer of premium nicotine pouches, known for quality ingredients and consistent flavor experiences. Made by {product.manufacturer}.
+                  {t('detail.brandDescription', { brand: product.brand, manufacturer: product.manufacturer })}
                 </p>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="delivery" className="rounded-xl border border-border bg-card px-4">
               <AccordionTrigger className="text-base font-medium hover:no-underline py-4">
-                Delivery & Returns
+                {t('detail.deliveryReturns')}
               </AccordionTrigger>
               <AccordionContent className="pb-4">
                 <div className="space-y-3 text-muted-foreground text-sm">
-                  <p>• Free UK delivery on orders over £25</p>
-                  <p>• Standard delivery: 2-3 business days</p>
-                  <p>• Express delivery available</p>
-                  <p>• 14-day return policy on unopened products</p>
+                  <p>• {t('detail.freeShippingThreshold', { amount: formatPrice(25) })}</p>
+                  <p>• {t('detail.deliveryTime')}</p>
+                  <p>• {t('detail.fastDelivery')}</p>
+                  <p>• {t('detail.returnPolicy')}</p>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -387,7 +387,7 @@ export default function ProductDetail() {
         {relatedProducts.length > 0 && (
           <section className="mt-16">
             <h2 className="text-2xl font-bold text-foreground mb-6">
-              More from {product.brand}
+              {t('detail.aboutBrand')} {product.brand}
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {relatedProducts.map((p) => (
@@ -404,7 +404,7 @@ export default function ProductDetail() {
           <div className="min-w-0">
             <span className="text-2xl font-bold text-foreground">{formatPrice(displayPrice)}</span>
             <span className="block text-xs text-muted-foreground truncate">
-              {formatPrice(displayPricePerCan)}/can
+              {formatPrice(displayPricePerCan)}/{t('cart.can')}
               {purchaseMode === 'subscribe' && ' • Subscribe'}
             </span>
           </div>
@@ -414,7 +414,7 @@ export default function ProductDetail() {
             onClick={handleAddToCart}
           >
             <ShoppingCart className="h-5 w-5" />
-            {purchaseMode === 'subscribe' ? 'Subscribe' : 'Add to Cart'}
+            {purchaseMode === 'subscribe' ? t('product.subscribe') : t('product.addToCart')}
           </Button>
         </div>
       </div>

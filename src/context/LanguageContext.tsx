@@ -1,9 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import { getMarketForLanguage, convertFromGBP, formatMarketPrice, MarketConfig } from '@/lib/market';
 
 export interface Currency {
   code: string;
   symbol: string;
-  rate: number; // Exchange rate from SEK (1 SEK = X currency)
+  rate: number; // kept for backward-compat; now derived from market
   position: 'before' | 'after';
 }
 
@@ -14,7 +15,7 @@ export interface Language {
   currency: Currency;
 }
 
-// Exchange rates from SEK (approximate)
+// Full language list (currency metadata kept for reference but market.ts is the source of truth)
 export const europeanLanguages: Language[] = [
   { code: 'sv', name: 'Svenska', flag: '🇸🇪', currency: { code: 'SEK', symbol: 'kr', rate: 1, position: 'after' } },
   { code: 'en', name: 'English', flag: '🇬🇧', currency: { code: 'GBP', symbol: '£', rate: 0.074, position: 'before' } },
@@ -43,7 +44,7 @@ export const europeanLanguages: Language[] = [
   { code: 'ga', name: 'Gaeilge', flag: '🇮🇪', currency: { code: 'EUR', symbol: '€', rate: 0.086, position: 'after' } },
   { code: 'is', name: 'Íslenska', flag: '🇮🇸', currency: { code: 'ISK', symbol: 'kr', rate: 12.8, position: 'after' } },
   { code: 'uk', name: 'Українська', flag: '🇺🇦', currency: { code: 'UAH', symbol: '₴', rate: 3.85, position: 'after' } },
-  { code: 'sr', name: 'Српски', flag: '🇷🇸', currency: { code: 'RSD', symbol: 'дин', rate: 10.1, position: 'after' } },
+  { code: 'sr', name: 'Српски', flag: '🇷🇸', currency: { code: 'RSD', symbol: 'дін', rate: 10.1, position: 'after' } },
   { code: 'bs', name: 'Bosanski', flag: '🇧🇦', currency: { code: 'BAM', symbol: 'KM', rate: 0.17, position: 'after' } },
   { code: 'mk', name: 'Македонски', flag: '🇲🇰', currency: { code: 'MKD', symbol: 'ден', rate: 5.3, position: 'after' } },
   { code: 'sq', name: 'Shqip', flag: '🇦🇱', currency: { code: 'ALL', symbol: 'L', rate: 8.7, position: 'after' } },
@@ -55,8 +56,12 @@ interface LanguageContextType {
   currentLanguage: Language;
   setLanguage: (lang: Language) => void;
   languages: Language[];
-  formatPrice: (sekPrice: number, decimals?: number) => string;
-  convertPrice: (sekPrice: number) => number;
+  /** Market config derived from current language */
+  market: MarketConfig;
+  /** Format a GBP price to the current market's locale+currency string */
+  formatPrice: (gbpPrice: number, decimals?: number) => string;
+  /** Convert a GBP price to the current market's currency (raw number) */
+  convertPrice: (gbpPrice: number) => number;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -66,41 +71,41 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem('snusfriend-language');
     if (saved) {
       const parsed = JSON.parse(saved);
-      return europeanLanguages.find(l => l.code === parsed.code) || europeanLanguages[0];
+      return europeanLanguages.find(l => l.code === parsed.code) || europeanLanguages[1]; // default EN
     }
-    return europeanLanguages[0]; // Swedish as default
+    return europeanLanguages[1]; // English as default
   });
 
   useEffect(() => {
     localStorage.setItem('snusfriend-language', JSON.stringify(currentLanguage));
   }, [currentLanguage]);
 
-  const setLanguage = (lang: Language) => {
-    setCurrentLanguage(lang);
+  const setLanguage = (lang: Language) => setCurrentLanguage(lang);
+
+  const market = useMemo(() => getMarketForLanguage(currentLanguage.code), [currentLanguage.code]);
+
+  const convertPrice = (gbpPrice: number): number => {
+    return convertFromGBP(gbpPrice, market);
   };
 
-  const convertPrice = (sekPrice: number): number => {
-    return sekPrice * currentLanguage.currency.rate;
-  };
-
-  const formatPrice = (sekPrice: number, decimals: number = 2): string => {
-    const converted = convertPrice(sekPrice);
-    const formatted = converted.toFixed(decimals).replace('.', ',');
-    const { symbol, position } = currentLanguage.currency;
-    
-    if (position === 'before') {
-      return `${symbol}${formatted}`;
+  const formatPrice = (gbpPrice: number, decimals: number = 2): string => {
+    const converted = convertFromGBP(gbpPrice, market);
+    const formatted = formatMarketPrice(converted, market, decimals);
+    // For non-GBP markets, prefix with ≈ to signal approximation
+    if (market.currencyCode !== 'GBP') {
+      return `≈ ${formatted}`;
     }
-    return `${formatted} ${symbol}`;
+    return formatted;
   };
 
   return (
-    <LanguageContext.Provider value={{ 
-      currentLanguage, 
-      setLanguage, 
+    <LanguageContext.Provider value={{
+      currentLanguage,
+      setLanguage,
       languages: europeanLanguages,
+      market,
       formatPrice,
-      convertPrice
+      convertPrice,
     }}>
       {children}
     </LanguageContext.Provider>

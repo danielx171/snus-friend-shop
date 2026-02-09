@@ -1,7 +1,7 @@
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/i18n/translations';
-import { formatPrice as formatPriceFn, formatPricePerUnit as formatPricePerUnitFn } from '@/lib/currency';
 import { FlavorKey, StrengthKey, FormatKey, BadgeKey, CategoryKey } from '@/data/products';
+import { MarketConfig } from '@/lib/market';
 
 // Development mode warning for missing translations
 const warnedKeys = new Set<string>();
@@ -17,7 +17,7 @@ function warnMissingKey(key: string, langCode: string) {
 }
 
 export function useTranslation() {
-  const { currentLanguage, convertPrice } = useLanguage();
+  const { currentLanguage, formatPrice: ctxFormatPrice, convertPrice, market } = useLanguage();
   
   const t = (key: string, replacements?: Record<string, string | number>): string => {
     const langCode = currentLanguage.code;
@@ -51,19 +51,21 @@ export function useTranslation() {
   const translateBadge = (badgeKey: BadgeKey): string => t(`badge.${badgeKey}`);
   const translateCategory = (categoryKey: CategoryKey): string => t(`category.${categoryKey}`);
 
-  // Format price in GBP
-  const formatPrice = (amount: number, decimals: number = 2): string => {
-    return formatPriceFn(amount, decimals);
+  /** Format a GBP price to the current market's locale+currency string */
+  const formatPrice = (gbpAmount: number, decimals: number = 2): string => {
+    return ctxFormatPrice(gbpAmount, decimals);
   };
 
-  // Format price with per-unit suffix
-  const formatPriceWithUnit = (amount: number): string => {
-    return formatPricePerUnitFn(amount, '/can');
+  /** Format price with per-unit suffix (e.g., "£4.99/can" or "≈ 5,79 €/Stk") */
+  const formatPriceWithUnit = (gbpAmount: number): string => {
+    const suffix = t('products.perUnitSuffix');
+    return `${formatPrice(gbpAmount)}${suffix}`;
   };
   
   return { 
     t, 
-    currentLanguage, 
+    currentLanguage,
+    market,
     formatPrice, 
     convertPrice,
     translateFlavor,
