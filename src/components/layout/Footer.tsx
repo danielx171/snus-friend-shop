@@ -104,9 +104,14 @@ export function Footer() {
         <Separator className="my-8" />
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} SnusFriend. All rights reserved.
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} SnusFriend. All rights reserved.
+            </p>
+            <Link to="/ops" className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+              Ops
+            </Link>
+          </div>
           <p className="text-xs text-muted-foreground">
             ⚠️ This product contains nicotine. Nicotine is an addictive chemical.
           </p>

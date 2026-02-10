@@ -13,6 +13,9 @@ import CheckoutPage from "./pages/CheckoutPage";
 import AccountPage from "./pages/AccountPage";
 import NotFound from "./pages/NotFound";
 import BrandHub from "./pages/BrandHub";
+import OpsDashboard from "./pages/ops/OpsDashboard";
+import WebhookInbox from "./pages/ops/WebhookInbox";
+import SyncStatus from "./pages/ops/SyncStatus";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +37,9 @@ const App = () => (
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/account" element={<AccountPage />} />
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
+              <Route path="/ops" element={<OpsDashboard />} />
+              <Route path="/ops/webhooks" element={<WebhookInbox />} />
+              <Route path="/ops/sync" element={<SyncStatus />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
