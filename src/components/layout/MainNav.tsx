@@ -131,6 +131,17 @@ export function MainNav() {
                 Offers
               </Link>
             </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link
+                to="/brands"
+                className={cn(
+                  'inline-flex h-10 items-center justify-center px-3.5 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground'
+                )}
+              >
+                Brands
+              </Link>
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
