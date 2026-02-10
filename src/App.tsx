@@ -13,6 +13,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import AccountPage from "./pages/AccountPage";
 import NotFound from "./pages/NotFound";
 import BrandHub from "./pages/BrandHub";
+import BrandsIndex from "./pages/BrandsIndex";
 import OpsDashboard from "./pages/ops/OpsDashboard";
 import WebhookInbox from "./pages/ops/WebhookInbox";
 import SyncStatus from "./pages/ops/SyncStatus";
@@ -36,6 +37,8 @@ const App = () => (
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/account" element={<AccountPage />} />
+              <Route path="/brands" element={<BrandsIndex />} />
+              <Route path="/brands" element={<BrandsIndex />} />
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
               <Route path="/ops" element={<OpsDashboard />} />
               <Route path="/ops/webhooks" element={<WebhookInbox />} />
