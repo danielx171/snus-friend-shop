@@ -1,0 +1,182 @@
+import { useState, useMemo } from 'react';
+import { Layout } from '@/components/layout/Layout';
+import { SEO } from '@/components/seo/SEO';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
+import { mockWebhookEvents } from '@/data/opsMock';
+import type { WebhookEvent, WebhookProvider, WebhookStatus } from '@/types/ops';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
+
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+}
+
+const statusColor: Record<string, string> = {
+  received: 'bg-muted text-muted-foreground',
+  processed: 'bg-primary/10 text-primary',
+  failed: 'bg-destructive/10 text-destructive',
+};
+
+export default function WebhookInbox() {
+  const [providerFilter, setProviderFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState<WebhookEvent | null>(null);
+
+  const filtered = useMemo(() => {
+    return mockWebhookEvents.filter((e) => {
+      if (providerFilter !== 'all' && e.provider !== providerFilter) return false;
+      if (statusFilter !== 'all' && e.status !== statusFilter) return false;
+      if (search) {
+        const q = search.toLowerCase();
+        if (!e.eventId.toLowerCase().includes(q) && !e.topic.toLowerCase().includes(q)) return false;
+      }
+      return true;
+    });
+  }, [providerFilter, statusFilter, search]);
+
+  return (
+    <Layout showNicotineWarning={false}>
+      <SEO title="Webhook Inbox — SnusFriend Ops" description="Internal webhook event log." metaRobots="noindex,nofollow" />
+      <div className="container py-8 space-y-6">
+        <div className="flex items-center gap-3">
+          <Link to="/ops" className="text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <h1 className="text-2xl font-bold text-foreground">Webhook Inbox</h1>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Select value={providerFilter} onValueChange={setProviderFilter}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Provider" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All providers</SelectItem>
+              <SelectItem value="shopify">Shopify</SelectItem>
+              <SelectItem value="nyehandel">Nyehandel</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All statuses</SelectItem>
+              <SelectItem value="received">Received</SelectItem>
+              <SelectItem value="processed">Processed</SelectItem>
+              <SelectItem value="failed">Failed</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Input
+            placeholder="Search event ID or topic…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="sm:max-w-xs"
+          />
+        </div>
+
+        {/* Table */}
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Event ID</TableHead>
+                  <TableHead>Provider</TableHead>
+                  <TableHead>Topic</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Attempts</TableHead>
+                  <TableHead className="text-right">Received</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                      No events match your filters.
+                    </TableCell>
+                  </TableRow>
+                )}
+                {filtered.map((evt) => (
+                  <TableRow
+                    key={evt.eventId}
+                    className="cursor-pointer transition-colors duration-150 hover:bg-muted/50"
+                    onClick={() => setSelected(evt)}
+                  >
+                    <TableCell className="font-mono text-xs">{evt.eventId}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="capitalize">{evt.provider}</Badge>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{evt.topic}</TableCell>
+                    <TableCell>
+                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${statusColor[evt.status]}`}>
+                        {evt.status}
+                      </span>
+                    </TableCell>
+                    <TableCell>{evt.attempts}</TableCell>
+                    <TableCell className="text-right text-muted-foreground text-sm">{timeAgo(evt.receivedAt)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        {/* Detail drawer */}
+        <Sheet open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
+          <SheetContent side="right" className="sm:max-w-lg overflow-y-auto">
+            {selected && (
+              <>
+                <SheetHeader>
+                  <SheetTitle className="font-mono text-sm">{selected.eventId}</SheetTitle>
+                  <SheetDescription>
+                    {selected.provider} · {selected.topic}
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-6 space-y-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Status</p>
+                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium mt-1 ${statusColor[selected.status]}`}>
+                        {selected.status}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Attempts</p>
+                      <p className="font-medium text-foreground">{selected.attempts}</p>
+                    </div>
+                    <div className="col-span-2">
+                      <p className="text-muted-foreground">Received at</p>
+                      <p className="font-medium text-foreground">{new Date(selected.receivedAt).toLocaleString()}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-2">Payload</p>
+                    <pre className="rounded-lg bg-muted p-4 text-xs overflow-x-auto text-foreground">
+                      {JSON.stringify(selected.payload, null, 2)}
+                    </pre>
+                  </div>
+                </div>
+              </>
+            )}
+          </SheetContent>
+        </Sheet>
+      </div>
+    </Layout>
+  );
+}
