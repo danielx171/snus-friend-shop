@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Search, Link2, AlertTriangle, XCircle } from 'lucide-react';
+import { ArrowLeft, Search, Link2, AlertTriangle, XCircle, Download, Copy, Check } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,6 +22,8 @@ const statusConfig: Record<SkuMappingStatus, { label: string; variant: 'default'
 export default function SkuMappings() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   const filtered = useMemo(() => {
     return mockSkuMappings.filter((m) => {
@@ -36,6 +39,44 @@ export default function SkuMappings() {
       return true;
     });
   }, [statusFilter, search]);
+
+  const csvEscape = (val: string) => {
+    if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+      return `"${val.replace(/"/g, '""')}"`;
+    }
+    return val;
+  };
+
+  const buildCsv = useCallback(() => {
+    const header = 'productName,nyehandelSku,shopifySku,status,lastVerified';
+    const rows = filtered.map((m) =>
+      [m.productName, m.nyehandelSku, m.shopifySku ?? '', m.status, m.lastVerified]
+        .map(csvEscape)
+        .join(',')
+    );
+    return [header, ...rows].join('\n');
+  }, [filtered]);
+
+  const handleExport = () => {
+    const csv = buildCsv();
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sku-mappings-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(buildCsv());
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: 'Copy failed', description: 'Could not copy to clipboard.', variant: 'destructive' });
+    }
+  };
 
   const counts = useMemo(() => ({
     mapped: mockSkuMappings.filter((m) => m.status === 'mapped').length,
@@ -53,13 +94,25 @@ export default function SkuMappings() {
 
       <div className="container py-6 md:py-8 space-y-6">
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-            <Link to="/ops"><ArrowLeft className="h-4 w-4" /></Link>
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">SKU Mappings</h1>
-            <p className="text-sm text-muted-foreground">Nyehandel → Shopify SKU mapping status</p>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+              <Link to="/ops"><ArrowLeft className="h-4 w-4" /></Link>
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">SKU Mappings</h1>
+              <p className="text-sm text-muted-foreground">Nyehandel → Shopify SKU mapping status</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="gap-1.5" onClick={handleCopy}>
+              {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+              {copied ? 'Copied' : 'Copy CSV'}
+            </Button>
+            <Button variant="default" size="sm" className="gap-1.5" onClick={handleExport}>
+              <Download className="h-3.5 w-3.5" />
+              Export CSV
+            </Button>
           </div>
         </div>
 
