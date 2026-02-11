@@ -49,6 +49,8 @@ export default function OpsDashboard() {
             <Link to="/ops/webhooks" className="text-primary hover:underline">Webhooks</Link>
             <span className="text-muted-foreground">·</span>
             <Link to="/ops/sync" className="text-primary hover:underline">Sync Status</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/ops/mappings" className="text-primary hover:underline">Mappings</Link>
           </div>
         </div>
 

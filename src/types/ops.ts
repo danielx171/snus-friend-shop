@@ -23,3 +23,14 @@ export interface SyncRun {
   itemsProcessed: number;
   errors: number;
 }
+
+export type SkuMappingStatus = 'mapped' | 'missing' | 'conflict';
+
+export interface SkuMapping {
+  id: string;
+  nyehandelSku: string;
+  shopifySku: string | null;
+  productName: string;
+  status: SkuMappingStatus;
+  lastVerified: string;
+}

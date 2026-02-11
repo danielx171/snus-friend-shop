@@ -17,6 +17,7 @@ import BrandsIndex from "./pages/BrandsIndex";
 import OpsDashboard from "./pages/ops/OpsDashboard";
 import WebhookInbox from "./pages/ops/WebhookInbox";
 import SyncStatus from "./pages/ops/SyncStatus";
+import SkuMappings from "./pages/ops/SkuMappings";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/ops" element={<OpsDashboard />} />
               <Route path="/ops/webhooks" element={<WebhookInbox />} />
               <Route path="/ops/sync" element={<SyncStatus />} />
+              <Route path="/ops/mappings" element={<SkuMappings />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
