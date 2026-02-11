@@ -1,4 +1,4 @@
-import type { WebhookEvent, SyncRun } from '@/types/ops';
+import type { WebhookEvent, SyncRun, SkuMapping } from '@/types/ops';
 
 export const mockWebhookEvents: WebhookEvent[] = [
   {
@@ -104,4 +104,19 @@ export const mockSyncRuns: SyncRun[] = [
   { id: 'sr_008', type: 'inventory', status: 'success', startedAt: new Date(Date.now() - 1000 * 60 * 215).toISOString(), durationMs: 8400, itemsProcessed: 246, errors: 0 },
   { id: 'sr_009', type: 'catalog', status: 'success', startedAt: new Date(Date.now() - 1000 * 60 * 270).toISOString(), durationMs: 11900, itemsProcessed: 244, errors: 0 },
   { id: 'sr_010', type: 'inventory', status: 'success', startedAt: new Date(Date.now() - 1000 * 60 * 275).toISOString(), durationMs: 7800, itemsProcessed: 244, errors: 0 },
+];
+
+export const mockSkuMappings: SkuMapping[] = [
+  { id: 'map_01', nyehandelSku: 'NH-ZYN-COOL-MINT-6', shopifySku: 'ZYN-COOL-MINT-6', productName: 'ZYN Cool Mint 6mg', status: 'mapped', lastVerified: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
+  { id: 'map_02', nyehandelSku: 'NH-VELO-ICE-COOL-4', shopifySku: 'VELO-ICE-COOL-4', productName: 'VELO Ice Cool 4mg', status: 'mapped', lastVerified: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
+  { id: 'map_03', nyehandelSku: 'NH-VELO-FREEZE-MAX', shopifySku: null, productName: 'VELO Freeze Max', status: 'missing', lastVerified: new Date(Date.now() - 1000 * 60 * 90).toISOString() },
+  { id: 'map_04', nyehandelSku: 'NH-ZYN-ESPRESSINO-9', shopifySku: 'ZYN-ESPRESSINO-9MG', productName: 'ZYN Espressino 9mg', status: 'mapped', lastVerified: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
+  { id: 'map_05', nyehandelSku: 'NH-SKRUF-FRESH-3', shopifySku: 'SKRUF-SWFRESH-3', productName: 'Skruf Super White Fresh #3', status: 'conflict', lastVerified: new Date(Date.now() - 1000 * 60 * 60).toISOString() },
+  { id: 'map_06', nyehandelSku: 'NH-ON-CITRUS-6', shopifySku: 'ON-CITRUS-6MG', productName: 'ON! Citrus 6mg', status: 'mapped', lastVerified: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
+  { id: 'map_07', nyehandelSku: 'NH-LOOP-JALAPA', shopifySku: null, productName: 'Loop Jalapeño Lime', status: 'missing', lastVerified: new Date(Date.now() - 1000 * 60 * 120).toISOString() },
+  { id: 'map_08', nyehandelSku: 'NH-KILLA-COLD-MINT', shopifySku: 'KILLA-COLDMINT-X', productName: 'Killa Cold Mint Extra Strong', status: 'conflict', lastVerified: new Date(Date.now() - 1000 * 60 * 45).toISOString() },
+  { id: 'map_09', nyehandelSku: 'NH-ZYN-CITRUS-3', shopifySku: 'ZYN-CITRUS-3', productName: 'ZYN Citrus 3mg', status: 'mapped', lastVerified: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
+  { id: 'map_10', nyehandelSku: 'NH-VELO-RUBY-BERRY', shopifySku: 'VELO-RUBY-BERRY-7', productName: 'VELO Ruby Berry 7mg', status: 'mapped', lastVerified: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
+  { id: 'map_11', nyehandelSku: 'NH-ACE-EUCALYPTUS', shopifySku: null, productName: 'ACE Eucalyptus', status: 'missing', lastVerified: new Date(Date.now() - 1000 * 60 * 180).toISOString() },
+  { id: 'map_12', nyehandelSku: 'NH-XQS-FIZZY-COLA', shopifySku: 'XQS-FIZZYCOLA-STR', productName: 'XQS Fizzy Cola Strong', status: 'mapped', lastVerified: new Date(Date.now() - 1000 * 60 * 30).toISOString() },
 ];
