@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Search, Link2, AlertTriangle, XCircle, Download, Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -11,7 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { mockSkuMappings } from '@/data/opsMock';
-import type { SkuMappingStatus } from '@/types/ops';
+import type { SkuMapping, SkuMappingStatus } from '@/types/ops';
+import { fetchNyehandel } from '@/lib/api';
 
 const statusConfig: Record<SkuMappingStatus, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: typeof Link2 }> = {
   mapped: { label: 'Mapped', variant: 'default', icon: Link2 },
@@ -23,10 +24,17 @@ export default function SkuMappings() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [copied, setCopied] = useState(false);
+  const [mappings, setMappings] = useState<SkuMapping[]>(mockSkuMappings);
   const { toast } = useToast();
 
+  useEffect(() => {
+    fetchNyehandel<SkuMapping[]>('sku-mappings').then((data) => {
+      if (data) setMappings(data);
+    });
+  }, []);
+
   const filtered = useMemo(() => {
-    return mockSkuMappings.filter((m) => {
+    return mappings.filter((m) => {
       if (statusFilter !== 'all' && m.status !== statusFilter) return false;
       if (search) {
         const q = search.toLowerCase();
@@ -79,10 +87,10 @@ export default function SkuMappings() {
   };
 
   const counts = useMemo(() => ({
-    mapped: mockSkuMappings.filter((m) => m.status === 'mapped').length,
-    missing: mockSkuMappings.filter((m) => m.status === 'missing').length,
-    conflict: mockSkuMappings.filter((m) => m.status === 'conflict').length,
-  }), []);
+    mapped: mappings.filter((m) => m.status === 'mapped').length,
+    missing: mappings.filter((m) => m.status === 'missing').length,
+    conflict: mappings.filter((m) => m.status === 'conflict').length,
+  }), [mappings]);
 
   return (
     <Layout showNicotineWarning={false}>

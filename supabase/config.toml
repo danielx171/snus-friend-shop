@@ -1,0 +1,10 @@
+project_id = "puepjsnoacwuwuwwpbsz"
+
+[functions.healthcheck]
+verify_jwt = false
+
+[functions.nyehandel-proxy]
+verify_jwt = false
+
+[functions.verify-admin]
+verify_jwt = false
