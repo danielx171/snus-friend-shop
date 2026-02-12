@@ -101,7 +101,7 @@ export default function SkuMappings() {
             </Button>
             <div>
               <h1 className="text-2xl font-bold text-foreground">SKU Mappings</h1>
-              <p className="text-sm text-muted-foreground">Nyehandel → Shopify SKU mapping status</p>
+              <p className="text-sm text-muted-foreground">Nyehandel - Shopify SKU mapping status</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -140,7 +140,7 @@ export default function SkuMappings() {
           <div className="relative flex-1">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search SKU or product name…"
+              placeholder="Search SKU or product name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-9"

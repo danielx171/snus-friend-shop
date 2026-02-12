@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import HomePage from "./pages/HomePage";
@@ -45,6 +45,7 @@ const App = () => (
               <Route path="/ops/webhooks" element={<WebhookInbox />} />
               <Route path="/ops/sync" element={<SyncStatus />} />
               <Route path="/ops/mappings" element={<SkuMappings />} />
+              <Route path="/mappings" element={<Navigate to="/ops/mappings" replace />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
