@@ -14,6 +14,8 @@ import AccountPage from "./pages/AccountPage";
 import NotFound from "./pages/NotFound";
 import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
+import OpsAuthGuard from "./components/auth/OpsAuthGuard";
+import OpsLogin from "./pages/ops/OpsLogin";
 import OpsDashboard from "./pages/ops/OpsDashboard";
 import WebhookInbox from "./pages/ops/WebhookInbox";
 import SyncStatus from "./pages/ops/SyncStatus";
@@ -41,10 +43,11 @@ const App = () => (
               <Route path="/brands" element={<BrandsIndex />} />
               <Route path="/brands" element={<BrandsIndex />} />
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
-              <Route path="/ops" element={<OpsDashboard />} />
-              <Route path="/ops/webhooks" element={<WebhookInbox />} />
-              <Route path="/ops/sync" element={<SyncStatus />} />
-              <Route path="/ops/mappings" element={<SkuMappings />} />
+              <Route path="/ops/login" element={<OpsLogin />} />
+              <Route path="/ops" element={<OpsAuthGuard><OpsDashboard /></OpsAuthGuard>} />
+              <Route path="/ops/webhooks" element={<OpsAuthGuard><WebhookInbox /></OpsAuthGuard>} />
+              <Route path="/ops/sync" element={<OpsAuthGuard><SyncStatus /></OpsAuthGuard>} />
+              <Route path="/ops/mappings" element={<OpsAuthGuard><SkuMappings /></OpsAuthGuard>} />
 
               <Route path="/mappings" element={<Navigate to="/ops/mappings" replace />} />
 
