@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { apiFetch } from '@/lib/api';
 import type { Session } from '@supabase/supabase-js';
 
 export default function OpsAuthGuard({ children }: { children: React.ReactNode }) {
@@ -25,15 +26,9 @@ export default function OpsAuthGuard({ children }: { children: React.ReactNode }
       return;
     }
 
-    supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', session.user.id)
-      .eq('role', 'admin')
-      .maybeSingle()
-      .then(({ data }) => {
-        setIsAdmin(!!data);
-      });
+    apiFetch<{ isAdmin: boolean }>('verify-admin')
+      .then(({ isAdmin }) => setIsAdmin(isAdmin))
+      .catch(() => setIsAdmin(false));
   }, [session]);
 
   if (session === undefined || (session && isAdmin === undefined)) {
