@@ -45,8 +45,9 @@ const App = () => (
               <Route path="/ops/webhooks" element={<WebhookInbox />} />
               <Route path="/ops/sync" element={<SyncStatus />} />
               <Route path="/ops/mappings" element={<SkuMappings />} />
+
               <Route path="/mappings" element={<Navigate to="/ops/mappings" replace />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
