@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +11,7 @@ import { mockWebhookEvents } from '@/data/opsMock';
 import type { WebhookEvent, WebhookProvider, WebhookStatus } from '@/types/ops';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { fetchNyehandel } from '@/lib/api';
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -33,9 +34,16 @@ export default function WebhookInbox() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<WebhookEvent | null>(null);
+  const [events, setEvents] = useState<WebhookEvent[]>(mockWebhookEvents);
+
+  useEffect(() => {
+    fetchNyehandel<WebhookEvent[]>('webhooks').then((data) => {
+      if (data) setEvents(data);
+    });
+  }, []);
 
   const filtered = useMemo(() => {
-    return mockWebhookEvents.filter((e) => {
+    return events.filter((e) => {
       if (providerFilter !== 'all' && e.provider !== providerFilter) return false;
       if (statusFilter !== 'all' && e.status !== statusFilter) return false;
       if (search) {

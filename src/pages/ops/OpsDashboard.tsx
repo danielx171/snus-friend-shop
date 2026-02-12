@@ -1,12 +1,16 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { mockWebhookEvents, mockSyncRuns } from '@/data/opsMock';
-import { Webhook, AlertTriangle, RefreshCw, Package } from 'lucide-react';
+import { Webhook, AlertTriangle, RefreshCw, Package, LogOut } from 'lucide-react';
+import { fetchNyehandel } from '@/lib/api';
+import { supabase } from '@/integrations/supabase/client';
+import type { WebhookEvent, SyncRun } from '@/types/ops';
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -25,12 +29,31 @@ const statusColor: Record<string, string> = {
 };
 
 export default function OpsDashboard() {
-  const todayEvents = mockWebhookEvents.filter(
+  const navigate = useNavigate();
+  const [events, setEvents] = useState<WebhookEvent[]>(mockWebhookEvents);
+  const [syncRuns, setSyncRuns] = useState<SyncRun[]>(mockSyncRuns);
+
+  useEffect(() => {
+    // Try loading from backend; fall back to mock on failure
+    fetchNyehandel<WebhookEvent[]>('webhooks').then((data) => {
+      if (data) setEvents(data);
+    });
+    fetchNyehandel<SyncRun[]>('sync-runs').then((data) => {
+      if (data) setSyncRuns(data);
+    });
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/ops/login');
+  };
+
+  const todayEvents = events.filter(
     (e) => new Date(e.receivedAt).toDateString() === new Date().toDateString()
   );
-  const failedEvents = mockWebhookEvents.filter((e) => e.status === 'failed');
-  const lastCatalog = mockSyncRuns.find((r) => r.type === 'catalog');
-  const lastInventory = mockSyncRuns.find((r) => r.type === 'inventory');
+  const failedEvents = events.filter((e) => e.status === 'failed');
+  const lastCatalog = syncRuns.find((r) => r.type === 'catalog');
+  const lastInventory = syncRuns.find((r) => r.type === 'inventory');
 
   const kpis = [
     { label: 'Webhooks today', value: todayEvents.length, icon: Webhook },
@@ -45,12 +68,16 @@ export default function OpsDashboard() {
       <div className="container py-8 space-y-8">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-foreground">Ops Dashboard</h1>
-          <div className="flex gap-2 text-sm">
+          <div className="flex items-center gap-3 text-sm">
             <Link to="/ops/webhooks" className="text-primary hover:underline">Webhooks</Link>
             <span className="text-muted-foreground">·</span>
             <Link to="/ops/sync" className="text-primary hover:underline">Sync Status</Link>
             <span className="text-muted-foreground">·</span>
             <Link to="/ops/mappings" className="text-primary hover:underline">Mappings</Link>
+            <Button variant="ghost" size="sm" className="gap-1.5 ml-2" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </Button>
           </div>
         </div>
 
@@ -86,7 +113,7 @@ export default function OpsDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockWebhookEvents.slice(0, 10).map((evt) => (
+                {events.slice(0, 10).map((evt) => (
                   <TableRow key={evt.eventId} className="transition-colors duration-150 cursor-default">
                     <TableCell className="font-mono text-xs">{evt.eventId}</TableCell>
                     <TableCell>
