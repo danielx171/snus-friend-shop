@@ -455,7 +455,7 @@ export const translations: Record<string, TranslationStrings> = {
     'trust.klarna': 'Mit Klarna bezahlen',
     'auth.login': 'Anmelden',
     'hero.title': 'Premium Nikotinbeutel',
-    'hero.subtitle': 'Entdecken Sie unser breites Sortiment an Qualitätsprodukten führender Marken',
+    'hero.subtitle': 'Entdecken Sie unser breites Sortiment an Qualitätsprodukten führender Marken.',
     'hero.cta': 'Produkte entdecken',
     'categories.whiteSnus': 'Weißer Snus',
     'categories.vapes': 'Vapes',
