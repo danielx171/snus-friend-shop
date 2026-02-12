@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { mockSyncRuns } from '@/data/opsMock';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Package, RefreshCw } from 'lucide-react';
+import { fetchNyehandel } from '@/lib/api';
+import type { SyncRun } from '@/types/ops';
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -29,8 +32,16 @@ const statusVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'o
 };
 
 export default function SyncStatus() {
-  const catalogRuns = mockSyncRuns.filter((r) => r.type === 'catalog');
-  const inventoryRuns = mockSyncRuns.filter((r) => r.type === 'inventory');
+  const [runs, setRuns] = useState<SyncRun[]>(mockSyncRuns);
+
+  useEffect(() => {
+    fetchNyehandel<SyncRun[]>('sync-runs').then((data) => {
+      if (data) setRuns(data);
+    });
+  }, []);
+
+  const catalogRuns = runs.filter((r) => r.type === 'catalog');
+  const inventoryRuns = runs.filter((r) => r.type === 'inventory');
   const lastCatalog = catalogRuns[0];
   const lastInventory = inventoryRuns[0];
 
@@ -102,7 +113,7 @@ export default function SyncStatus() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockSyncRuns.map((run) => (
+                {runs.map((run) => (
                   <TableRow key={run.id} className="transition-colors duration-150">
                     <TableCell className="capitalize text-foreground">{run.type}</TableCell>
                     <TableCell>
