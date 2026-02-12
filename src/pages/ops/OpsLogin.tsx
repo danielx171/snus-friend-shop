@@ -13,7 +13,6 @@ import { useToast } from '@/hooks/use-toast';
 export default function OpsLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -22,9 +21,7 @@ export default function OpsLogin() {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = isSignUp
-      ? await supabase.auth.signUp({ email, password })
-      : await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     setLoading(false);
 
@@ -33,7 +30,7 @@ export default function OpsLogin() {
       return;
     }
 
-    toast({ title: isSignUp ? 'Account created' : 'Signed in' });
+    toast({ title: 'Signed in' });
     navigate('/ops', { replace: true });
   };
 
@@ -47,7 +44,7 @@ export default function OpsLogin() {
               <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                 <LogIn className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle>{isSignUp ? 'Create Ops Account' : 'Ops Console Login'}</CardTitle>
+              <CardTitle>Ops Console Login</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -60,14 +57,8 @@ export default function OpsLogin() {
                   <Input id="ops-password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? 'Please wait...' : isSignUp ? 'Create Account' : 'Sign In'}
+                  {loading ? 'Please wait...' : 'Sign In'}
                 </Button>
-                <div className="text-center text-sm text-muted-foreground">
-                  {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-                  <Button type="button" variant="link" className="p-0 h-auto" onClick={() => setIsSignUp(!isSignUp)}>
-                    {isSignUp ? 'Sign in' : 'Create one'}
-                  </Button>
-                </div>
               </form>
             </CardContent>
           </Card>
