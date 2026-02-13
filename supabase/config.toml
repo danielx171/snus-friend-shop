@@ -8,3 +8,9 @@ verify_jwt = false
 
 [functions.verify-admin]
 verify_jwt = false
+
+[functions.sync-nyehandel]
+verify_jwt = false
+
+[functions.nyehandel-webhook]
+verify_jwt = false

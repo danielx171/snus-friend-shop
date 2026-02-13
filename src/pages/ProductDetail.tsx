@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { products, PackSize, packSizeMultipliers } from '@/data/products';
+import { products as mockProducts, PackSize, packSizeMultipliers } from '@/data/products';
+import { useCatalogProducts, useCatalogProduct } from '@/hooks/useCatalog';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -41,12 +42,23 @@ const packSizes: PackSize[] = ['pack1', 'pack5', 'pack10', 'pack30'];
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const product = products.find((p) => p.id === id);
+  const { data: product, isLoading } = useCatalogProduct(id);
+  const { data: allProducts = [] } = useCatalogProducts();
   const { addToCart } = useCart();
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
   const [purchaseMode, setPurchaseMode] = useState<'once' | 'subscribe'>('once');
   const [subscriptionFrequency, setSubscriptionFrequency] = useState<SubscriptionFrequency>('1month');
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateFormat, translateBadge, translateCategory } = useTranslation();
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container py-16 text-center">
+          <p className="text-muted-foreground">Loading…</p>
+        </div>
+      </Layout>
+    );
+  }
 
   if (!product) {
     return (
@@ -78,7 +90,7 @@ export default function ProductDetail() {
     : t('detail.genericDescription', { name: product.name, brand: product.brand });
 
   // Get related products from same brand
-  const relatedProducts = products
+  const relatedProducts = allProducts
     .filter(p => p.brand === product.brand && p.id !== product.id)
     .slice(0, 4);
 

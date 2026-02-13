@@ -1,17 +1,16 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { mockWebhookEvents } from '@/data/opsMock';
-import type { WebhookEvent, WebhookProvider, WebhookStatus } from '@/types/ops';
+import type { WebhookEvent } from '@/types/ops';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { fetchNyehandel } from '@/lib/api';
+import { useWebhookEvents } from '@/hooks/useOpsData';
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -34,13 +33,7 @@ export default function WebhookInbox() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<WebhookEvent | null>(null);
-  const [events, setEvents] = useState<WebhookEvent[]>(mockWebhookEvents);
-
-  useEffect(() => {
-    fetchNyehandel<WebhookEvent[]>('webhooks').then((data) => {
-      if (data) setEvents(data);
-    });
-  }, []);
+  const { data: events = [], isLoading } = useWebhookEvents();
 
   const filtered = useMemo(() => {
     return events.filter((e) => {
@@ -52,7 +45,7 @@ export default function WebhookInbox() {
       }
       return true;
     });
-  }, [providerFilter, statusFilter, search]);
+  }, [events, providerFilter, statusFilter, search]);
 
   return (
     <Layout showNicotineWarning={false}>
@@ -113,7 +106,14 @@ export default function WebhookInbox() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.length === 0 && (
+                {isLoading && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                      Loading…
+                    </TableCell>
+                  </TableRow>
+                )}
+                {!isLoading && filtered.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
                       No events match your filters.
@@ -126,7 +126,7 @@ export default function WebhookInbox() {
                     className="cursor-pointer transition-colors duration-150 hover:bg-muted/50"
                     onClick={() => setSelected(evt)}
                   >
-                    <TableCell className="font-mono text-xs">{evt.eventId}</TableCell>
+                    <TableCell className="font-mono text-xs">{evt.eventId.slice(0, 12)}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className="capitalize">{evt.provider}</Badge>
                     </TableCell>
@@ -151,7 +151,7 @@ export default function WebhookInbox() {
             {selected && (
               <>
                 <SheetHeader>
-                  <SheetTitle className="font-mono text-sm">{selected.eventId}</SheetTitle>
+                  <SheetTitle className="font-mono text-sm">{selected.eventId.slice(0, 12)}</SheetTitle>
                   <SheetDescription>
                     {selected.provider} · {selected.topic}
                   </SheetDescription>
