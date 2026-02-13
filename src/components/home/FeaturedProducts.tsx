@@ -1,4 +1,5 @@
-import { products } from '@/data/products';
+import { products as mockProducts } from '@/data/products';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -7,7 +8,7 @@ import { useTranslation } from '@/hooks/useTranslation';
 
 interface FeaturedProductsProps {
   title: string;
-  filterFn?: (product: typeof products[0]) => boolean;
+  filterFn?: (product: typeof mockProducts[0]) => boolean;
   limit?: number;
   viewAllHref?: string;
 }
@@ -19,6 +20,7 @@ export function FeaturedProducts({
   viewAllHref = '/nicotine-pouches',
 }: FeaturedProductsProps) {
   const { t } = useTranslation();
+  const { data: products = [] } = useCatalogProducts();
   const filteredProducts = products.filter(filterFn).slice(0, limit);
 
   return (

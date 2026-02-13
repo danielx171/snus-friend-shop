@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { products, BadgeKey, StrengthKey } from '@/data/products';
+import { BadgeKey, StrengthKey } from '@/data/products';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
 import { ActiveFilters } from '@/components/product/ActiveFilters';
@@ -56,6 +57,7 @@ const sortLabels: Record<SortOption, string> = {
 };
 
 export default function ProductListing() {
+  const { data: products = [], isLoading } = useCatalogProducts();
   const [searchParams] = useSearchParams();
   const badgeFilter = searchParams.get('badge');
   const brandFilter = searchParams.get('brand');
@@ -95,7 +97,7 @@ export default function ProductListing() {
       }
       return true;
     });
-  }, [filters, badgeKeyFilter]);
+  }, [products, filters, badgeKeyFilter]);
 
   // Sort products
   const sortedProducts = useMemo(() => {
