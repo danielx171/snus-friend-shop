@@ -20,6 +20,7 @@ import OpsDashboard from "./pages/ops/OpsDashboard";
 import WebhookInbox from "./pages/ops/WebhookInbox";
 import SyncStatus from "./pages/ops/SyncStatus";
 import SkuMappings from "./pages/ops/SkuMappings";
+import OpsUsers from "./pages/ops/OpsUsers";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/ops/webhooks" element={<OpsAuthGuard><WebhookInbox /></OpsAuthGuard>} />
               <Route path="/ops/sync" element={<OpsAuthGuard><SyncStatus /></OpsAuthGuard>} />
               <Route path="/ops/mappings" element={<OpsAuthGuard><SkuMappings /></OpsAuthGuard>} />
+              <Route path="/ops/users" element={<OpsAuthGuard><OpsUsers /></OpsAuthGuard>} />
 
               <Route path="/mappings" element={<Navigate to="/ops/mappings" replace />} />
 

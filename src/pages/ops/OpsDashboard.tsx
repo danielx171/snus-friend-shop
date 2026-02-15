@@ -74,6 +74,8 @@ export default function OpsDashboard() {
             <Link to="/ops/sync" className="text-primary hover:underline">Sync Status</Link>
             <span className="text-muted-foreground">·</span>
             <Link to="/ops/mappings" className="text-primary hover:underline">Mappings</Link>
+            <span className="text-muted-foreground">·</span>
+            <Link to="/ops/users" className="text-primary hover:underline">Users</Link>
             <Button variant="ghost" size="sm" className="gap-1.5 ml-2" onClick={handleSignOut}>
               <LogOut className="h-4 w-4" />
               Sign Out
