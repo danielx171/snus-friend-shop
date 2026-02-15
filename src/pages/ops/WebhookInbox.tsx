@@ -28,6 +28,26 @@ const statusColor: Record<string, string> = {
   failed: 'bg-destructive/10 text-destructive',
 };
 
+/** Try to extract an order ID from the payload */
+function extractOrderId(payload: Record<string, unknown>): string | null {
+  return (
+    (payload.order_id as string) ||
+    (payload.orderId as string) ||
+    ((payload.data as any)?.order_id as string) ||
+    ((payload.data as any)?.id as string) ||
+    null
+  );
+}
+
+/** Derive event type from topic string (strip order: prefix if present) */
+function extractEventType(topic: string, payload: Record<string, unknown>): string {
+  // If topic was stored as "order:<id>", try to get actual event from payload
+  if (topic.startsWith('order:')) {
+    return (payload.topic as string) || (payload.event as string) || 'order-event';
+  }
+  return topic;
+}
+
 export default function WebhookInbox() {
   const [providerFilter, setProviderFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -41,7 +61,12 @@ export default function WebhookInbox() {
       if (statusFilter !== 'all' && e.status !== statusFilter) return false;
       if (search) {
         const q = search.toLowerCase();
-        if (!e.eventId.toLowerCase().includes(q) && !e.topic.toLowerCase().includes(q)) return false;
+        const orderId = extractOrderId(e.payload) || '';
+        if (
+          !e.eventId.toLowerCase().includes(q) &&
+          !e.topic.toLowerCase().includes(q) &&
+          !orderId.toLowerCase().includes(q)
+        ) return false;
       }
       return true;
     });
@@ -84,7 +109,7 @@ export default function WebhookInbox() {
           </Select>
 
           <Input
-            placeholder="Search event ID or topic…"
+            placeholder="Search event, topic, or order ID…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="sm:max-w-xs"
@@ -99,9 +124,9 @@ export default function WebhookInbox() {
                 <TableRow>
                   <TableHead>Event ID</TableHead>
                   <TableHead>Provider</TableHead>
-                  <TableHead>Topic</TableHead>
+                  <TableHead>Event Type</TableHead>
+                  <TableHead>Order ID</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Attempts</TableHead>
                   <TableHead className="text-right">Received</TableHead>
                 </TableRow>
               </TableHeader>
@@ -120,26 +145,30 @@ export default function WebhookInbox() {
                     </TableCell>
                   </TableRow>
                 )}
-                {filtered.map((evt) => (
-                  <TableRow
-                    key={evt.eventId}
-                    className="cursor-pointer transition-colors duration-150 hover:bg-muted/50"
-                    onClick={() => setSelected(evt)}
-                  >
-                    <TableCell className="font-mono text-xs">{evt.eventId.slice(0, 12)}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="capitalize">{evt.provider}</Badge>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{evt.topic}</TableCell>
-                    <TableCell>
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${statusColor[evt.status]}`}>
-                        {evt.status}
-                      </span>
-                    </TableCell>
-                    <TableCell>{evt.attempts}</TableCell>
-                    <TableCell className="text-right text-muted-foreground text-sm">{timeAgo(evt.receivedAt)}</TableCell>
-                  </TableRow>
-                ))}
+                {filtered.map((evt) => {
+                  const orderId = extractOrderId(evt.payload);
+                  const eventType = extractEventType(evt.topic, evt.payload);
+                  return (
+                    <TableRow
+                      key={evt.eventId}
+                      className="cursor-pointer transition-colors duration-150 hover:bg-muted/50"
+                      onClick={() => setSelected(evt)}
+                    >
+                      <TableCell className="font-mono text-xs">{evt.eventId.slice(0, 12)}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="capitalize">{evt.provider}</Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">{eventType}</TableCell>
+                      <TableCell className="font-mono text-xs text-muted-foreground">{orderId ?? '—'}</TableCell>
+                      <TableCell>
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${statusColor[evt.status]}`}>
+                          {evt.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right text-muted-foreground text-sm">{timeAgo(evt.receivedAt)}</TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </CardContent>
@@ -148,40 +177,54 @@ export default function WebhookInbox() {
         {/* Detail drawer */}
         <Sheet open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
           <SheetContent side="right" className="sm:max-w-lg overflow-y-auto">
-            {selected && (
-              <>
-                <SheetHeader>
-                  <SheetTitle className="font-mono text-sm">{selected.eventId.slice(0, 12)}</SheetTitle>
-                  <SheetDescription>
-                    {selected.provider} · {selected.topic}
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="mt-6 space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-muted-foreground">Status</p>
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium mt-1 ${statusColor[selected.status]}`}>
-                        {selected.status}
-                      </span>
+            {selected && (() => {
+              const orderId = extractOrderId(selected.payload);
+              const eventType = extractEventType(selected.topic, selected.payload);
+              return (
+                <>
+                  <SheetHeader>
+                    <SheetTitle className="font-mono text-sm">{selected.eventId.slice(0, 12)}</SheetTitle>
+                    <SheetDescription>
+                      {selected.provider} · {eventType}
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="mt-6 space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-muted-foreground">Status</p>
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium mt-1 ${statusColor[selected.status]}`}>
+                          {selected.status}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Event Type</p>
+                        <p className="font-medium text-foreground">{eventType}</p>
+                      </div>
+                      {orderId && (
+                        <div>
+                          <p className="text-muted-foreground">Order ID</p>
+                          <p className="font-mono text-foreground">{orderId}</p>
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-muted-foreground">Attempts</p>
+                        <p className="font-medium text-foreground">{selected.attempts}</p>
+                      </div>
+                      <div className="col-span-2">
+                        <p className="text-muted-foreground">Received at</p>
+                        <p className="font-medium text-foreground">{new Date(selected.receivedAt).toLocaleString()}</p>
+                      </div>
                     </div>
                     <div>
-                      <p className="text-muted-foreground">Attempts</p>
-                      <p className="font-medium text-foreground">{selected.attempts}</p>
-                    </div>
-                    <div className="col-span-2">
-                      <p className="text-muted-foreground">Received at</p>
-                      <p className="font-medium text-foreground">{new Date(selected.receivedAt).toLocaleString()}</p>
+                      <p className="text-sm text-muted-foreground mb-2">Raw Payload</p>
+                      <pre className="rounded-lg bg-muted p-4 text-xs overflow-x-auto text-foreground max-h-96">
+                        {JSON.stringify(selected.payload, null, 2)}
+                      </pre>
                     </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-2">Payload</p>
-                    <pre className="rounded-lg bg-muted p-4 text-xs overflow-x-auto text-foreground">
-                      {JSON.stringify(selected.payload, null, 2)}
-                    </pre>
-                  </div>
-                </div>
-              </>
-            )}
+                </>
+              );
+            })()}
           </SheetContent>
         </Sheet>
       </div>
