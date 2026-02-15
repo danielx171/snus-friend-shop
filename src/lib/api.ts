@@ -4,6 +4,8 @@ const FUNCTIONS_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
 
 interface ApiOptions {
   params?: Record<string, string>;
+  method?: string;
+  body?: unknown;
 }
 
 /**
@@ -30,7 +32,12 @@ export async function apiFetch<T = unknown>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(url.toString(), { headers });
+  const fetchOpts: RequestInit = { headers, method: opts?.method ?? 'GET' };
+  if (opts?.body) {
+    fetchOpts.body = JSON.stringify(opts.body);
+  }
+
+  const res = await fetch(url.toString(), fetchOpts);
 
   if (!res.ok) {
     throw new Error(`apiFetch ${fnName}: ${res.status}`);
