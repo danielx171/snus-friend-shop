@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
@@ -6,11 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { mockWebhookEvents, mockSyncRuns } from '@/data/opsMock';
 import { Webhook, AlertTriangle, RefreshCw, Package, LogOut } from 'lucide-react';
-import { fetchNyehandel } from '@/lib/api';
 import { supabase } from '@/integrations/supabase/client';
-import type { WebhookEvent, SyncRun } from '@/types/ops';
+import { useWebhookEvents, useSyncRuns } from '@/hooks/useOpsData';
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -30,18 +27,8 @@ const statusColor: Record<string, string> = {
 
 export default function OpsDashboard() {
   const navigate = useNavigate();
-  const [events, setEvents] = useState<WebhookEvent[]>(mockWebhookEvents);
-  const [syncRuns, setSyncRuns] = useState<SyncRun[]>(mockSyncRuns);
-
-  useEffect(() => {
-    // Try loading from backend; fall back to mock on failure
-    fetchNyehandel<WebhookEvent[]>('webhooks').then((data) => {
-      if (data) setEvents(data);
-    });
-    fetchNyehandel<SyncRun[]>('sync-runs').then((data) => {
-      if (data) setSyncRuns(data);
-    });
-  }, []);
+  const { data: events = [] } = useWebhookEvents();
+  const { data: syncRuns = [] } = useSyncRuns();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
