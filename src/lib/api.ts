@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 
-const FUNCTIONS_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
+const FUNCTIONS_BASE = new URL('functions/v1', import.meta.env.VITE_SUPABASE_URL).href;
 
 interface ApiOptions {
   params?: Record<string, string>;
