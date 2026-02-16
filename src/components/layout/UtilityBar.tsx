@@ -18,34 +18,34 @@ export function UtilityBar() {
   );
 
   return (
-    <div className="border-b border-border bg-secondary/30">
-      <div className="container flex h-8 items-center justify-between text-[11px]">
+    <div className="border-b border-border/30 bg-secondary/10">
+      <div className="container flex h-9 items-center justify-between text-[11px]">
         {/* Trust props - Left side */}
-        <div className="hidden md:flex items-center gap-5">
+        <div className="hidden md:flex items-center gap-6">
           <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Truck className="h-3 w-3 text-primary" />
+            <Truck className="h-3 w-3 text-primary/80" />
             <span>{t('trust.freeShipping', { amount: freeShippingFormatted })}</span>
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
-            <CreditCard className="h-3 w-3 text-primary" />
+            <CreditCard className="h-3 w-3 text-primary/80" />
             <span>{t('trust.klarna')}</span>
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Star className="h-3 w-3 fill-primary text-primary" />
+            <Star className="h-3 w-3 fill-primary/80 text-primary/80" />
             <span>{t('trust.trustpilot')}</span>
           </div>
         </div>
 
         {/* Mobile - simplified */}
         <div className="flex md:hidden items-center gap-1.5 text-muted-foreground">
-          <Truck className="h-3 w-3 text-primary" />
+          <Truck className="h-3 w-3 text-primary/80" />
           <span>{t('trust.freeShipping', { amount: freeShippingFormatted })}</span>
         </div>
 
         {/* Right side actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <LanguageSelector />
-          <Button variant="ghost" size="sm" className="h-6 gap-1 text-[11px] px-2" asChild>
+          <Button variant="ghost" size="sm" className="h-7 gap-1 text-[11px] px-2 text-muted-foreground hover:text-foreground" asChild>
             <Link to="/account">
               <User className="h-3 w-3" />
               <span className="hidden sm:inline">{t('auth.login')}</span>
@@ -54,7 +54,7 @@ export function UtilityBar() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-6 gap-1 text-[11px] px-2"
+            className="h-7 gap-1 text-[11px] px-2 text-muted-foreground hover:text-foreground"
             onClick={openCart}
           >
             <ShoppingCart className="h-3 w-3" />

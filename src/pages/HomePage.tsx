@@ -2,6 +2,7 @@ import { Layout } from '@/components/layout/Layout';
 import { HeroBanner } from '@/components/home/HeroBanner';
 import { CategoryShortcuts } from '@/components/home/CategoryShortcuts';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
+import { TrustBar } from '@/components/home/TrustBar';
 import { AgeGate } from '@/components/compliance/AgeGate';
 import { SEO } from '@/components/seo/SEO';
 
@@ -30,6 +31,7 @@ export default function HomePage() {
         <AgeGate />
         <HeroBanner />
         <CategoryShortcuts />
+        <TrustBar />
         
         {/* Featured Products Sections */}
         <FeaturedProducts
@@ -39,7 +41,7 @@ export default function HomePage() {
           viewAllHref="/nicotine-pouches?badge=popular"
         />
         
-        <div className="bg-muted/30">
+        <div className="bg-muted/15">
           <FeaturedProducts
             title="Special Offers"
             filterFn={(p) => p.badgeKeys.includes('newPrice')}

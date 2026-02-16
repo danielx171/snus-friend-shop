@@ -13,7 +13,6 @@ interface ProductCardProps {
   product: Product;
 }
 
-// Show fewer pack sizes on card, "Fler" for rest
 const cardPackSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10'];
 
 const strengthLevels: Record<Product['strengthKey'], number> = {
@@ -23,7 +22,6 @@ const strengthLevels: Record<Product['strengthKey'], number> = {
   'ultraStrong': 4,
 };
 
-// Badge priority order: new, newPrice, popular (max 2)
 const badgePriority: BadgeKey[] = ['new', 'newPrice', 'popular'];
 
 function getDisplayBadges(badges: BadgeKey[]): BadgeKey[] {
@@ -47,25 +45,24 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="group overflow-hidden transition-all hover:shadow-xl border-border rounded-2xl bg-card">
+    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg border-border/50 rounded-2xl bg-card">
       <Link to={`/product/${product.id}`}>
-        <div className="relative aspect-square overflow-hidden bg-muted">
+        <div className="relative aspect-square overflow-hidden bg-muted/50">
           <img
             src={product.image}
             alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          {/* Badges - max 2, ordered by priority */}
           {displayBadges.length > 0 && (
-            <div className="absolute left-2.5 top-2.5 flex flex-wrap gap-1">
+            <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
               {displayBadges.map((badge) => (
                 <Badge
                   key={badge}
                   className={cn(
-                    'text-[10px] font-semibold rounded-full px-2 py-0.5',
+                    'text-[10px] font-semibold rounded-full px-2.5 py-0.5 shadow-xs',
                     badge === 'new' && 'bg-secondary text-secondary-foreground',
                     badge === 'newPrice' && 'bg-primary text-primary-foreground',
-                    badge === 'popular' && 'bg-card/95 text-foreground border border-border'
+                    badge === 'popular' && 'bg-card/95 text-foreground border border-border/60'
                   )}
                 >
                   {translateBadge(badge)}
@@ -75,30 +72,30 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        <CardContent className="p-3.5">
+        <CardContent className="p-4">
           {/* Brand & Name */}
-          <div className="mb-1.5 min-w-0">
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider truncate">
+          <div className="mb-2 min-w-0">
+            <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">
               {product.brand}
             </p>
-            <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-tight min-h-[2.5rem]">
+            <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">
               {product.name}
             </h3>
           </div>
 
-          {/* Strength indicator - visual bars */}
-          <div className="mb-2 flex items-center gap-1.5 min-w-0">
+          {/* Strength indicator */}
+          <div className="mb-2.5 flex items-center gap-2 min-w-0">
             <div className="flex gap-0.5 shrink-0">
               {[1, 2, 3, 4].map((level) => (
                 <div
                   key={level}
                   className={cn(
-                    'h-1.5 w-3 rounded-sm transition-colors',
+                    'h-1.5 w-3.5 rounded-full transition-colors',
                     level <= strengthLevel
                       ? strengthLevel >= 4 ? 'bg-destructive' :
                         strengthLevel >= 3 ? 'bg-chart-1' :
                         strengthLevel >= 2 ? 'bg-chart-2' : 'bg-chart-3'
-                      : 'bg-muted'
+                      : 'bg-muted/60'
                   )}
                 />
               ))}
@@ -107,15 +104,15 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* Ratings */}
-          <div className="mb-2 flex items-center gap-1">
+          <div className="mb-3 flex items-center gap-1">
             <Star className="h-3 w-3 fill-primary text-primary shrink-0" />
             <span className="text-[10px] text-muted-foreground">
               ({product.ratings})
             </span>
           </div>
 
-          {/* Pack Size Selector - compact */}
-          <div className="mb-2.5 flex flex-wrap gap-1">
+          {/* Pack Size Selector */}
+          <div className="mb-3 flex flex-wrap gap-1.5">
             {cardPackSizes.map((size) => {
               const packNum = size.replace('pack', '');
               return (
@@ -127,10 +124,10 @@ export function ProductCard({ product }: ProductCardProps) {
                     setSelectedPack(size);
                   }}
                   className={cn(
-                    'rounded-md px-1.5 py-0.5 text-[10px] font-medium transition-all shrink-0',
+                    'rounded-lg px-2 py-1 text-[10px] font-medium transition-all shrink-0',
                     selectedPack === size
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                      ? 'bg-primary text-primary-foreground shadow-xs'
+                      : 'bg-muted/40 text-muted-foreground hover:bg-muted/60 border border-border/30'
                   )}
                 >
                   {t(`pack.${packNum}`)}
@@ -139,8 +136,8 @@ export function ProductCard({ product }: ProductCardProps) {
             })}
           </div>
 
-          {/* Prices - localized currency */}
-          <div className="mb-3 flex items-baseline justify-between gap-2 min-w-0">
+          {/* Prices */}
+          <div className="mb-3.5 flex items-baseline justify-between gap-2 min-w-0">
             <span className="text-lg font-bold text-foreground truncate">
               {formatPrice(currentPrice)}
             </span>
@@ -149,10 +146,10 @@ export function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
 
-          {/* Add to Cart - responsive CTA */}
+          {/* Add to Cart */}
           <Button
             onClick={handleAddToCart}
-            className="w-full gap-2 rounded-xl text-sm"
+            className="w-full gap-2 rounded-xl text-sm shadow-xs hover:shadow-sm transition-shadow"
             size="sm"
           >
             <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
