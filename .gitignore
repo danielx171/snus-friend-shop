@@ -25,3 +25,5 @@ dist-ssr
 changes.patch
 changes.patch
 .env
+# Supabase local cache
+supabase/.temp/

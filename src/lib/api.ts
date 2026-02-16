@@ -1,9 +1,13 @@
 import { supabase } from '@/integrations/supabase/client';
+import type { WebhookEvent } from '@/types/ops';
 
 const FUNCTIONS_BASE = new URL('functions/v1', import.meta.env.VITE_SUPABASE_URL).href;
 
 interface ApiOptions {
   params?: Record<string, string>;
+  method?: string;
+  body?: unknown;
+  headers?: Record<string, string>;
 }
 
 /**
@@ -14,8 +18,9 @@ export async function apiFetch<T = unknown>(
   fnName: string,
   opts?: ApiOptions,
 ): Promise<T> {
-  const { data: { session } } = await supabase.auth.getSession();
-  const token = session?.access_token;
+  const { data } = await supabase.auth.getSession();
+  const accessToken = data.session?.access_token;
+  console.log('apiFetch token?', Boolean(accessToken), 'fn:', fnName);
 
   const url = new URL(`${FUNCTIONS_BASE}/${fnName}`);
   if (opts?.params) {
@@ -23,14 +28,17 @@ export async function apiFetch<T = unknown>(
   }
 
   const headers: Record<string, string> = {
+    apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
     'Content-Type': 'application/json',
-    'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    ...(opts?.headers ?? {}),
   };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
 
-  const res = await fetch(url.toString(), { headers });
+  const res = await fetch(url.toString(), {
+    method: opts?.method ?? 'GET',
+    headers,
+    body: opts?.body ? JSON.stringify(opts.body) : undefined,
+  });
 
   if (!res.ok) {
     throw new Error(`apiFetch ${fnName}: ${res.status}`);
@@ -54,3 +62,31 @@ export async function fetchNyehandel<T = unknown>(resource: string): Promise<T |
     return null;
   }
 }
+
+export async function opsWebhookInbox(limit = 50): Promise<{ events: WebhookEvent[] }> {
+  const res = await apiFetch<{ events: OpsWebhookInboxRow[] }>('ops-webhook-inbox', {
+    params: { limit: String(limit) },
+  });
+
+  const events: WebhookEvent[] = (res.events ?? []).map((r) => ({
+    eventId: r.id,
+    provider: r.provider,
+    topic: r.topic,
+    status: r.status,
+    attempts: r.attempts ?? 0,
+    receivedAt: r.received_at ?? new Date().toISOString(),
+    payload: (r.payload as Record<string, unknown>) ?? {},
+  }));
+
+  return { events };
+}
+
+type OpsWebhookInboxRow = {
+  id: string;
+  provider: 'shopify' | 'nyehandel';
+  topic: string;
+  status: 'received' | 'processed' | 'failed';
+  attempts: number | null;
+  received_at: string | null;
+  payload: unknown;
+};

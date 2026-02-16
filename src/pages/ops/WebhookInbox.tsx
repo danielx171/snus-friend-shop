@@ -7,11 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { mockWebhookEvents } from '@/data/opsMock';
-import type { WebhookEvent, WebhookProvider, WebhookStatus } from '@/types/ops';
+import type { WebhookEvent } from '@/types/ops';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { fetchNyehandel } from '@/lib/api';
+import { opsWebhookInbox } from '@/lib/api';
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -34,12 +33,24 @@ export default function WebhookInbox() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<WebhookEvent | null>(null);
-  const [events, setEvents] = useState<WebhookEvent[]>(mockWebhookEvents);
+  const [events, setEvents] = useState<WebhookEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchNyehandel<WebhookEvent[]>('webhooks').then((data) => {
-      if (data) setEvents(data);
-    });
+    (async () => {
+      try {
+        setLoading(true);
+        setLoadError(null);
+        const res = await opsWebhookInbox(50);
+        setEvents(res?.events ?? []);
+      } catch (e: unknown) {
+        setLoadError(e instanceof Error ? e.message : 'Failed to load webhook inbox');
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const filtered = useMemo(() => {
@@ -52,7 +63,7 @@ export default function WebhookInbox() {
       }
       return true;
     });
-  }, [providerFilter, statusFilter, search]);
+  }, [events, providerFilter, statusFilter, search]);
 
   return (
     <Layout showNicotineWarning={false}>
@@ -113,14 +124,28 @@ export default function WebhookInbox() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.length === 0 && (
+                {loading && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                      Loading webhook events...
+                    </TableCell>
+                  </TableRow>
+                )}
+                {!loading && loadError && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-destructive py-8">
+                      {loadError}
+                    </TableCell>
+                  </TableRow>
+                )}
+                {!loading && !loadError && filtered.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
                       No events match your filters.
                     </TableCell>
                   </TableRow>
                 )}
-                {filtered.map((evt) => (
+                {!loading && !loadError && filtered.map((evt) => (
                   <TableRow
                     key={evt.eventId}
                     className="cursor-pointer transition-colors duration-150 hover:bg-muted/50"
