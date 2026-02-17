@@ -29,7 +29,7 @@ export function FeaturedProducts({
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-foreground tracking-tight">{title}</h2>
-          <Button asChild variant="ghost" className="gap-1.5 text-primary hover:text-primary/80">
+          <Button asChild variant="ghost" className="gap-1.5 text-primary hover:text-primary/80 hover:bg-primary/8">
             <Link to={viewAllHref}>
               {t('products.viewAll')}
               <ArrowRight className="h-4 w-4" />

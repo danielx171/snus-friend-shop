@@ -16,10 +16,7 @@ interface ProductCardProps {
 const cardPackSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10'];
 
 const strengthLevels: Record<Product['strengthKey'], number> = {
-  'normal': 1,
-  'strong': 2,
-  'extraStrong': 3,
-  'ultraStrong': 4,
+  'normal': 1, 'strong': 2, 'extraStrong': 3, 'ultraStrong': 4,
 };
 
 const badgePriority: BadgeKey[] = ['new', 'newPrice', 'popular'];
@@ -45,9 +42,9 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg border-border/50 rounded-2xl bg-card">
+    <Card className="group overflow-hidden transition-all duration-300 hover:border-primary/30 border-border/30 rounded-2xl bg-card/80 backdrop-blur-sm hover:glow-primary">
       <Link to={`/product/${product.id}`}>
-        <div className="relative aspect-square overflow-hidden bg-muted/50">
+        <div className="relative aspect-square overflow-hidden bg-muted/30">
           <img
             src={product.image}
             alt={product.name}
@@ -59,10 +56,10 @@ export function ProductCard({ product }: ProductCardProps) {
                 <Badge
                   key={badge}
                   className={cn(
-                    'text-[10px] font-semibold rounded-full px-2.5 py-0.5 shadow-xs',
-                    badge === 'new' && 'bg-secondary text-secondary-foreground',
+                    'text-[10px] font-semibold rounded-full px-2.5 py-0.5 shadow-xs border-0',
+                    badge === 'new' && 'bg-chart-2 text-primary-foreground',
                     badge === 'newPrice' && 'bg-primary text-primary-foreground',
-                    badge === 'popular' && 'bg-card/95 text-foreground border border-border/60'
+                    badge === 'popular' && 'bg-card/90 text-foreground border border-border/40'
                   )}
                 >
                   {translateBadge(badge)}
@@ -73,17 +70,11 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <CardContent className="p-4">
-          {/* Brand & Name */}
           <div className="mb-2 min-w-0">
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">
-              {product.brand}
-            </p>
-            <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">
-              {product.name}
-            </h3>
+            <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
+            <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">{product.name}</h3>
           </div>
 
-          {/* Strength indicator */}
           <div className="mb-2.5 flex items-center gap-2 min-w-0">
             <div className="flex gap-0.5 shrink-0">
               {[1, 2, 3, 4].map((level) => (
@@ -94,8 +85,8 @@ export function ProductCard({ product }: ProductCardProps) {
                     level <= strengthLevel
                       ? strengthLevel >= 4 ? 'bg-destructive' :
                         strengthLevel >= 3 ? 'bg-chart-1' :
-                        strengthLevel >= 2 ? 'bg-chart-2' : 'bg-chart-3'
-                      : 'bg-muted/60'
+                        strengthLevel >= 2 ? 'bg-chart-5' : 'bg-muted-foreground'
+                      : 'bg-muted/40'
                   )}
                 />
               ))}
@@ -103,31 +94,23 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-[10px] text-muted-foreground truncate">{translateStrength(product.strengthKey)}</span>
           </div>
 
-          {/* Ratings */}
           <div className="mb-3 flex items-center gap-1">
             <Star className="h-3 w-3 fill-primary text-primary shrink-0" />
-            <span className="text-[10px] text-muted-foreground">
-              ({product.ratings})
-            </span>
+            <span className="text-[10px] text-muted-foreground">({product.ratings})</span>
           </div>
 
-          {/* Pack Size Selector */}
           <div className="mb-3 flex flex-wrap gap-1.5">
             {cardPackSizes.map((size) => {
               const packNum = size.replace('pack', '');
               return (
                 <button
                   key={size}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setSelectedPack(size);
-                  }}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedPack(size); }}
                   className={cn(
                     'rounded-lg px-2 py-1 text-[10px] font-medium transition-all shrink-0',
                     selectedPack === size
-                      ? 'bg-primary text-primary-foreground shadow-xs'
-                      : 'bg-muted/40 text-muted-foreground hover:bg-muted/60 border border-border/30'
+                      ? 'bg-primary text-primary-foreground glow-primary'
+                      : 'bg-muted/30 text-muted-foreground hover:bg-muted/50 border border-border/30'
                   )}
                 >
                   {t(`pack.${packNum}`)}
@@ -136,20 +119,14 @@ export function ProductCard({ product }: ProductCardProps) {
             })}
           </div>
 
-          {/* Prices */}
           <div className="mb-3.5 flex items-baseline justify-between gap-2 min-w-0">
-            <span className="text-lg font-bold text-foreground truncate">
-              {formatPrice(currentPrice)}
-            </span>
-            <span className="text-xs text-muted-foreground shrink-0">
-              {formatPriceWithUnit(pricePerCan)}
-            </span>
+            <span className="text-lg font-bold text-foreground truncate">{formatPrice(currentPrice)}</span>
+            <span className="text-xs text-muted-foreground shrink-0">{formatPriceWithUnit(pricePerCan)}</span>
           </div>
 
-          {/* Add to Cart */}
           <Button
             onClick={handleAddToCart}
-            className="w-full gap-2 rounded-xl text-sm shadow-xs hover:shadow-sm transition-shadow"
+            className="w-full gap-2 rounded-xl text-sm glow-primary hover:shadow-lg transition-shadow"
             size="sm"
           >
             <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
