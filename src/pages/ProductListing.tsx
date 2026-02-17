@@ -9,11 +9,7 @@ import { ActiveFilters } from '@/components/product/ActiveFilters';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { Filter } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
@@ -21,39 +17,12 @@ import { AgeGate } from '@/components/compliance/AgeGate';
 import { SEO } from '@/components/seo/SEO';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
-
 const ITEMS_PER_PAGE = 12;
 
-const urlBadgeToKey: Record<string, BadgeKey> = {
-  'new': 'new',
-  'newPrice': 'newPrice',
-  'popular': 'popular',
-  'limited': 'limited',
-};
-
-const urlStrengthToKey: Record<string, StrengthKey> = {
-  'normal': 'normal',
-  'strong': 'strong',
-  'extraStrong': 'extraStrong',
-  'ultraStrong': 'ultraStrong',
-};
-
-const badgeLabels: Record<BadgeKey, string> = {
-  new: 'New Arrivals',
-  newPrice: 'Special Offers',
-  popular: 'Bestsellers',
-  limited: 'Limited Edition',
-};
-
-const sortLabels: Record<SortOption, string> = {
-  popularity: 'Most Popular',
-  newest: 'Newest First',
-  oldest: 'Oldest First',
-  'name-asc': 'A-Z',
-  'name-desc': 'Z-A',
-  'price-asc': 'Price: Low to High',
-  'price-desc': 'Price: High to Low',
-};
+const urlBadgeToKey: Record<string, BadgeKey> = { 'new': 'new', 'newPrice': 'newPrice', 'popular': 'popular', 'limited': 'limited' };
+const urlStrengthToKey: Record<string, StrengthKey> = { 'normal': 'normal', 'strong': 'strong', 'extraStrong': 'extraStrong', 'ultraStrong': 'ultraStrong' };
+const badgeLabels: Record<BadgeKey, string> = { new: 'New Arrivals', newPrice: 'Special Offers', popular: 'Bestsellers', limited: 'Limited Edition' };
+const sortLabels: Record<SortOption, string> = { popularity: 'Most Popular', newest: 'Newest First', oldest: 'Oldest First', 'name-asc': 'A-Z', 'name-desc': 'Z-A', 'price-asc': 'Price: Low to High', 'price-desc': 'Price: High to Low' };
 
 export default function ProductListing() {
   const { data: products = [], isLoading } = useCatalogProducts();
@@ -68,8 +37,7 @@ export default function ProductListing() {
   const [filters, setFilters] = useState<FilterState>({
     brands: brandFilter ? [brandFilter] : [],
     strengths: strengthKeyFilter ? [strengthKeyFilter] : [],
-    flavors: [],
-    formats: [],
+    flavors: [], formats: [],
   });
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
   const [currentPage, setCurrentPage] = useState(1);
@@ -114,7 +82,6 @@ export default function ProductListing() {
   const handleClearAll = () => { setFilters({ brands: [], strengths: [], flavors: [], formats: [] }); setCurrentPage(1); };
 
   const activeFilterCount = filters.brands.length + filters.strengths.length + filters.flavors.length + filters.formats.length;
-
   const pageTitle = badgeKeyFilter ? badgeLabels[badgeKeyFilter] : brandFilter ? brandFilter : 'Nicotine Pouches';
   const pageDescription = badgeKeyFilter
     ? `Shop our ${badgeLabels[badgeKeyFilter].toLowerCase()} nicotine pouches. Free UK delivery over £25.`
@@ -142,28 +109,25 @@ export default function ProductListing() {
         <AgeGate />
 
         <div className="container py-8 lg:py-10">
-          {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2 tracking-tight">{pageTitle}</h1>
             <p className="text-sm text-muted-foreground max-w-lg">{pageDescription}</p>
           </div>
 
           <div className="flex gap-8">
-            {/* Desktop Sidebar Filters */}
+            {/* Desktop Sidebar */}
             <aside className="hidden lg:block w-64 shrink-0">
-              <div className="sticky top-28 rounded-2xl border border-border/40 bg-card/80 backdrop-blur-sm p-6 max-h-[calc(100vh-8rem)] overflow-y-auto shadow-xs">
+              <div className="sticky top-28 rounded-2xl border border-border/30 glass-panel-strong p-6 max-h-[calc(100vh-8rem)] overflow-y-auto">
                 <ProductFilters filters={filters} onFilterChange={handleFilterChange} />
               </div>
             </aside>
 
-            {/* Main Content */}
             <div className="flex-1 min-w-0">
-              {/* Toolbar */}
               <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
                     <SheetTrigger asChild>
-                      <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9 shrink-0 border-border/50">
+                      <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9 shrink-0 border-border/30 hover:border-primary/30">
                         <Filter className="h-3.5 w-3.5" />
                         <span>Filters</span>
                         {activeFilterCount > 0 && (
@@ -173,7 +137,7 @@ export default function ProductListing() {
                         )}
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="w-80 overflow-y-auto border-border/40">
+                    <SheetContent side="left" className="w-80 overflow-y-auto glass-panel-strong border-border/30">
                       <ProductFilters filters={filters} onFilterChange={handleFilterChange} onClose={() => setMobileFiltersOpen(false)} isMobile />
                     </SheetContent>
                   </Sheet>
@@ -186,12 +150,12 @@ export default function ProductListing() {
                 <div className="flex items-center gap-2 shrink-0">
                   <span className="text-xs text-muted-foreground hidden sm:inline">Sort:</span>
                   <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                    <SelectTrigger className="w-44 rounded-xl h-9 text-xs border-border/50">
+                    <SelectTrigger className="w-44 rounded-xl h-9 text-xs border-border/30">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="glass-panel-strong">
                       {Object.entries(sortLabels).map(([value, label]) => (
-                        <SelectItem key={value} value={value} className="text-xs">{label}</SelectItem>
+                        <SelectItem key={value} value={value} className="text-xs hover:bg-primary/8">{label}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -200,7 +164,6 @@ export default function ProductListing() {
 
               <ActiveFilters filters={filters} onRemoveFilter={handleRemoveFilter} onClearAll={handleClearAll} />
 
-              {/* Product Grid */}
               {isLoading ? (
                 <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
@@ -214,16 +177,15 @@ export default function ProductListing() {
               ) : (
                 <div className="flex flex-col items-center justify-center py-16">
                   <p className="text-sm text-muted-foreground mb-4">No products found matching your filters.</p>
-                  <Button variant="outline" size="sm" className="rounded-xl border-border/50" onClick={handleClearAll}>
+                  <Button variant="outline" size="sm" className="rounded-xl border-border/30" onClick={handleClearAll}>
                     Clear all filters
                   </Button>
                 </div>
               )}
 
-              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="mt-8 flex items-center justify-center gap-1.5 flex-wrap">
-                  <Button variant="outline" size="sm" className="rounded-xl h-9 text-xs border-border/50" disabled={currentPage === 1} onClick={() => setCurrentPage((p) => p - 1)}>
+                  <Button variant="outline" size="sm" className="rounded-xl h-9 text-xs border-border/30" disabled={currentPage === 1} onClick={() => setCurrentPage((p) => p - 1)}>
                     Previous
                   </Button>
                   {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
@@ -237,14 +199,14 @@ export default function ProductListing() {
                         key={pageNum}
                         variant={currentPage === pageNum ? 'default' : 'outline'}
                         size="sm"
-                        className="rounded-xl h-9 w-9 text-xs p-0 border-border/50"
+                        className={`rounded-xl h-9 w-9 text-xs p-0 ${currentPage === pageNum ? 'glow-primary' : 'border-border/30'}`}
                         onClick={() => setCurrentPage(pageNum)}
                       >
                         {pageNum}
                       </Button>
                     );
                   })}
-                  <Button variant="outline" size="sm" className="rounded-xl h-9 text-xs border-border/50" disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => p + 1)}>
+                  <Button variant="outline" size="sm" className="rounded-xl h-9 text-xs border-border/30" disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => p + 1)}>
                     Next
                   </Button>
                 </div>

@@ -33,7 +33,6 @@ export default function HomePage() {
         <CategoryShortcuts />
         <TrustBar />
         
-        {/* Featured Products Sections */}
         <FeaturedProducts
           title="Bestsellers"
           filterFn={(p) => p.badgeKeys.includes('popular')}
@@ -41,7 +40,7 @@ export default function HomePage() {
           viewAllHref="/nicotine-pouches?badge=popular"
         />
         
-        <div className="bg-muted/15">
+        <div className="border-y border-border/10 bg-card/20">
           <FeaturedProducts
             title="Special Offers"
             filterFn={(p) => p.badgeKeys.includes('newPrice')}
