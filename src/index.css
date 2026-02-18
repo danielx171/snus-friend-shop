@@ -87,9 +87,77 @@
     --spacing: 0.25rem;
   }
 
-  /* Dark mode is default — light override if needed */
+  /* Dark mode is default — .dark class mirrors :root */
   .dark {
     /* Same as root since the whole theme is dark */
+  }
+
+  /* Light / Glacier theme — applied via next-themes when theme="light" */
+  .light {
+    /* Glacier / Scandinavian palette */
+    --background: 210 30% 97%;
+    --foreground: 220 25% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 12%;
+
+    /* Glacier Navy primary */
+    --primary: 213 60% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Ice Blue secondary */
+    --secondary: 205 40% 92%;
+    --secondary-foreground: 213 60% 25%;
+
+    /* Frost muted */
+    --muted: 210 20% 93%;
+    --muted-foreground: 220 15% 45%;
+
+    /* Accent — subtle ice */
+    --accent: 205 35% 88%;
+    --accent-foreground: 213 60% 25%;
+
+    /* Destructive */
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 210 20% 86%;
+    --input: 210 20% 86%;
+    --ring: 213 60% 35%;
+
+    /* Sidebar */
+    --sidebar-background: 210 30% 95%;
+    --sidebar-foreground: 220 25% 12%;
+    --sidebar-primary: 213 60% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 205 40% 92%;
+    --sidebar-accent-foreground: 213 60% 25%;
+    --sidebar-border: 210 20% 86%;
+    --sidebar-ring: 213 60% 35%;
+
+    /* Charts */
+    --chart-1: 213 60% 35%;
+    --chart-2: 205 55% 45%;
+    --chart-3: 160 50% 40%;
+    --chart-4: 35 80% 55%;
+    --chart-5: 280 45% 50%;
+
+    /* Shadows — soft neutrals */
+    --shadow-2xs: 0 1px 2px 0px hsl(220 20% 60% / 0.08);
+    --shadow-xs: 0 1px 3px 0px hsl(220 20% 60% / 0.10);
+    --shadow-sm: 0 2px 6px 0px hsl(220 20% 60% / 0.10), 0 1px 2px -1px hsl(220 20% 60% / 0.08);
+    --shadow: 0 4px 12px 0px hsl(220 20% 60% / 0.10), 0 2px 4px -1px hsl(220 20% 60% / 0.08);
+    --shadow-md: 0 6px 16px 0px hsl(220 20% 60% / 0.10), 0 3px 6px -1px hsl(220 20% 60% / 0.08);
+    --shadow-lg: 0 10px 24px 0px hsl(220 20% 60% / 0.12), 0 4px 8px -1px hsl(220 20% 60% / 0.08);
+    --shadow-xl: 0 16px 40px 0px hsl(220 20% 60% / 0.14), 0 8px 16px -1px hsl(220 20% 60% / 0.08);
+    --shadow-2xl: 0 24px 50px 0px hsl(220 20% 60% / 0.16);
+
+    /* Glow — navy tinted */
+    --glow-primary: 0 0 20px hsl(213 60% 35% / 0.15), 0 0 40px hsl(213 60% 35% / 0.07);
   }
 }
 
@@ -109,6 +177,7 @@
     box-shadow: var(--glow-primary);
   }
 
+  /* Dark theme glass panels */
   .glass-panel {
     background: hsl(220 14% 12% / 0.6);
     backdrop-filter: blur(20px);
@@ -121,5 +190,20 @@
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid hsl(220 12% 20% / 0.6);
+  }
+
+  /* Light theme glass panels override */
+  .light .glass-panel {
+    background: hsl(0 0% 100% / 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(210 20% 86% / 0.6);
+  }
+
+  .light .glass-panel-strong {
+    background: hsl(0 0% 100% / 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(210 20% 86% / 0.7);
   }
 }

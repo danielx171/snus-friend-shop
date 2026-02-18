@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
@@ -61,6 +62,8 @@ export function Header() {
               <User className="h-5 w-5" />
             </Link>
           </Button>
+
+          <ThemeToggle />
           
           <Button
             variant="ghost"
