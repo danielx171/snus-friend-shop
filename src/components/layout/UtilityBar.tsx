@@ -1,7 +1,7 @@
 import { Star, Truck, CreditCard, User, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
-import { LanguageSelector } from './LanguageSelector';
+
 import { useTranslation } from '@/hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { formatMarketPrice } from '@/lib/market';
