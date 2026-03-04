@@ -1,18 +1,18 @@
 import { ShoppingCart, Search, Menu, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { ThemeToggle } from './ThemeToggle';
+import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { t, formatPrice } = useTranslation();
+  const { formatPrice } = useTranslation();
 
   const navLinks = [
     { href: '/nicotine-pouches', label: 'Nicotine Pouches' },
@@ -37,13 +37,7 @@ export function Header() {
 
         {/* Search - Desktop */}
         <div className="hidden md:flex flex-1 max-w-lg mx-8">
-          <div className="relative w-full">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search products..."
-              className="w-full pl-11 h-11 rounded-2xl bg-muted/30 border-border/40 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
-            />
-          </div>
+          <SearchAutocomplete />
         </div>
 
         {/* Actions */}
@@ -93,10 +87,7 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-80 glass-panel-strong border-border/30">
               <div className="flex flex-col gap-6 pt-6">
-                <div className="relative">
-                  <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input placeholder="Search products..." className="pl-10 rounded-2xl h-11 bg-muted/30 border-border/40" />
-                </div>
+                <SearchAutocomplete onClose={() => setMobileMenuOpen(false)} autoFocus={false} />
                 <nav className="flex flex-col gap-0.5">
                   {navLinks.map((link) => (
                     <Link
@@ -125,10 +116,7 @@ export function Header() {
 
       {searchOpen && (
         <div className="md:hidden border-t border-border/20 p-4 glass-panel">
-          <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search products..." className="pl-10 rounded-2xl h-11 bg-muted/30 border-border/40" autoFocus />
-          </div>
+          <SearchAutocomplete onClose={() => setSearchOpen(false)} autoFocus />
         </div>
       )}
     </header>
