@@ -16,7 +16,7 @@ interface ErrorStateProps {
 const variantDefaults: Record<ErrorVariant, { icon: React.ElementType; title: string; description: string }> = {
   network: { icon: WifiOff, title: 'Connection issue', description: 'Please check your internet connection and try again.' },
   server: { icon: ServerCrash, title: 'Something went wrong', description: 'Our servers are having a moment. Please try again shortly.' },
-  notFound: { icon: AlertTriangle, title: 'Not found', description: 'The page or resource you're looking for doesn't exist.' },
+  notFound: { icon: AlertTriangle, title: 'Not found', description: "The page or resource you're looking for doesn't exist." },
   generic: { icon: AlertTriangle, title: 'Something went wrong', description: 'An unexpected error occurred. Please try again.' },
 };
 
