@@ -6,6 +6,7 @@ import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
 import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
 import { ActiveFilters } from '@/components/product/ActiveFilters';
+import { PLPEmptyState } from '@/components/product/PLPEmptyState';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -109,6 +110,7 @@ export default function ProductListing() {
         <AgeGate />
 
         <div className="container py-8 lg:py-10">
+          {/* Page header */}
           <div className="mb-8">
             <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2 tracking-tight">{pageTitle}</h1>
             <p className="text-sm text-muted-foreground max-w-lg">{pageDescription}</p>
@@ -123,8 +125,10 @@ export default function ProductListing() {
             </aside>
 
             <div className="flex-1 min-w-0">
+              {/* Toolbar */}
               <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
+                  {/* Mobile filter trigger */}
                   <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
                     <SheetTrigger asChild>
                       <Button variant="outline" size="sm" className="lg:hidden gap-1.5 rounded-xl h-9 shrink-0 border-border/30 hover:border-primary/30">
@@ -164,6 +168,7 @@ export default function ProductListing() {
 
               <ActiveFilters filters={filters} onRemoveFilter={handleRemoveFilter} onClearAll={handleClearAll} />
 
+              {/* Product grid */}
               {isLoading ? (
                 <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
@@ -175,16 +180,12 @@ export default function ProductListing() {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <p className="text-sm text-muted-foreground mb-4">No products found matching your filters.</p>
-                  <Button variant="outline" size="sm" className="rounded-xl border-border/30" onClick={handleClearAll}>
-                    Clear all filters
-                  </Button>
-                </div>
+                <PLPEmptyState onClearFilters={handleClearAll} />
               )}
 
+              {/* Pagination */}
               {totalPages > 1 && (
-                <div className="mt-8 flex items-center justify-center gap-1.5 flex-wrap">
+                <nav className="mt-8 flex items-center justify-center gap-1.5 flex-wrap" aria-label="Pagination">
                   <Button variant="outline" size="sm" className="rounded-xl h-9 text-xs border-border/30" disabled={currentPage === 1} onClick={() => setCurrentPage((p) => p - 1)}>
                     Previous
                   </Button>
@@ -201,6 +202,7 @@ export default function ProductListing() {
                         size="sm"
                         className={`rounded-xl h-9 w-9 text-xs p-0 ${currentPage === pageNum ? 'glow-primary' : 'border-border/30'}`}
                         onClick={() => setCurrentPage(pageNum)}
+                        aria-current={currentPage === pageNum ? 'page' : undefined}
                       >
                         {pageNum}
                       </Button>
@@ -209,7 +211,7 @@ export default function ProductListing() {
                   <Button variant="outline" size="sm" className="rounded-xl h-9 text-xs border-border/30" disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => p + 1)}>
                     Next
                   </Button>
-                </div>
+                </nav>
               )}
             </div>
           </div>

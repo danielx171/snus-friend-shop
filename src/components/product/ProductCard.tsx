@@ -3,7 +3,7 @@ import { Product, PackSize, packSizeMultipliers, BadgeKey } from '@/data/product
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Star, ShoppingCart } from 'lucide-react';
+import { Star, ShoppingCart, Award } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -42,14 +42,16 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:border-primary/30 border-border/30 rounded-2xl bg-card/80 backdrop-blur-sm hover:glow-primary">
+    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md hover:border-primary/30 border-border/30 rounded-2xl bg-card/80 backdrop-blur-sm">
       <Link to={`/product/${product.id}`}>
-        <div className="relative aspect-square overflow-hidden bg-muted/30">
+        <div className="relative aspect-square overflow-hidden bg-muted/20">
           <img
             src={product.image}
             alt={product.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
           />
+          {/* Badges */}
           {displayBadges.length > 0 && (
             <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
               {displayBadges.map((badge) => (
@@ -70,13 +72,15 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <CardContent className="p-4">
+          {/* Brand + Name */}
           <div className="mb-2 min-w-0">
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">{product.name}</h3>
           </div>
 
+          {/* Strength + Flavor */}
           <div className="mb-2.5 flex items-center gap-2 min-w-0">
-            <div className="flex gap-0.5 shrink-0">
+            <div className="flex gap-0.5 shrink-0" aria-label={`Strength: ${translateStrength(product.strengthKey)}`}>
               {[1, 2, 3, 4].map((level) => (
                 <div
                   key={level}
@@ -94,11 +98,13 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-[10px] text-muted-foreground truncate">{translateStrength(product.strengthKey)}</span>
           </div>
 
+          {/* Rating */}
           <div className="mb-3 flex items-center gap-1">
             <Star className="h-3 w-3 fill-primary text-primary shrink-0" />
             <span className="text-[10px] text-muted-foreground">({product.ratings})</span>
           </div>
 
+          {/* Pack sizes */}
           <div className="mb-3 flex flex-wrap gap-1.5">
             {cardPackSizes.map((size) => {
               const packNum = size.replace('pack', '');
@@ -107,7 +113,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   key={size}
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedPack(size); }}
                   className={cn(
-                    'rounded-lg px-2 py-1 text-[10px] font-medium transition-all shrink-0',
+                    'rounded-lg px-2 py-1 text-[10px] font-medium transition-all shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                     selectedPack === size
                       ? 'bg-primary text-primary-foreground glow-primary'
                       : 'bg-muted/30 text-muted-foreground hover:bg-muted/50 border border-border/30'
@@ -119,14 +125,22 @@ export function ProductCard({ product }: ProductCardProps) {
             })}
           </div>
 
+          {/* Price block */}
           <div className="mb-3.5 flex items-baseline justify-between gap-2 min-w-0">
             <span className="text-lg font-bold text-foreground truncate">{formatPrice(currentPrice)}</span>
             <span className="text-xs text-muted-foreground shrink-0">{formatPriceWithUnit(pricePerCan)}</span>
           </div>
 
+          {/* Loyalty pill */}
+          <div className="mb-3 flex items-center gap-1.5">
+            <Award className="h-3 w-3 text-primary shrink-0" />
+            <span className="text-[10px] text-muted-foreground">Earn {Math.floor(currentPrice * 10)} points</span>
+          </div>
+
+          {/* CTA */}
           <Button
             onClick={handleAddToCart}
-            className="w-full gap-2 rounded-xl text-sm glow-primary hover:shadow-lg transition-shadow"
+            className="w-full gap-2 rounded-xl text-sm glow-primary hover:shadow-md transition-all focus-visible:ring-2 focus-visible:ring-ring"
             size="sm"
           >
             <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
