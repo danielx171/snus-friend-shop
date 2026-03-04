@@ -53,12 +53,13 @@ export function Header() {
             size="icon"
             className="md:hidden rounded-xl h-10 w-10 text-muted-foreground hover:text-primary"
             onClick={() => setSearchOpen(!searchOpen)}
+            aria-label="Search"
           >
             <Search className="h-5 w-5" />
           </Button>
 
           <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-10 w-10 text-muted-foreground hover:text-primary" asChild>
-            <Link to="/account">
+            <Link to="/account" aria-label="Account">
               <User className="h-5 w-5" />
             </Link>
           </Button>
@@ -69,6 +70,7 @@ export function Header() {
             variant="ghost"
             className="relative rounded-xl h-10 gap-2 px-3 text-muted-foreground hover:text-primary"
             onClick={openCart}
+            aria-label={`Cart with ${totalItems} items`}
           >
             <ShoppingCart className="h-5 w-5" />
             {totalItems > 0 && (
@@ -85,7 +87,7 @@ export function Header() {
 
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden rounded-xl h-10 w-10 text-muted-foreground hover:text-primary">
+              <Button variant="ghost" size="icon" className="lg:hidden rounded-xl h-10 w-10 text-muted-foreground hover:text-primary" aria-label="Menu">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>

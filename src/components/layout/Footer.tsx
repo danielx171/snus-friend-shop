@@ -3,7 +3,7 @@ import { Separator } from '@/components/ui/separator';
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/20 bg-card/40">
+    <footer className="border-t border-border/20 bg-card/30">
       <div className="container py-16">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="space-y-4">
@@ -63,6 +63,15 @@ export function Footer() {
         </div>
 
         <Separator className="my-10 bg-border/30" />
+
+        {/* Payment badges row */}
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+          {['Visa', 'Mastercard', 'Klarna', 'PayPal', 'Apple Pay'].map((badge) => (
+            <div key={badge} className="px-3 py-1.5 rounded-lg bg-muted/20 border border-border/20 text-xs text-muted-foreground font-medium">
+              {badge}
+            </div>
+          ))}
+        </div>
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
