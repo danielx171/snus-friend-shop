@@ -31,8 +31,8 @@ export default function ForgotPasswordPage() {
                 <CardTitle className="text-2xl">{submitted ? 'Check your email' : 'Reset your password'}</CardTitle>
                 <CardDescription>
                   {submitted
-                    ? `We've sent a reset link to ${email}. Check your inbox and follow the instructions.`
-                    : 'Enter your email and we'll send you a link to reset your password.'}
+                    ? {"We've sent a reset link to " + email + ". Check your inbox and follow the instructions."}
+                    : "Enter your email and we'll send you a link to reset your password."}
                 </CardDescription>
               </CardHeader>
               <CardContent>
