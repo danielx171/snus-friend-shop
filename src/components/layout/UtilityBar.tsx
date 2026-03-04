@@ -41,7 +41,7 @@ export function UtilityBar() {
         </div>
 
         <div className="flex items-center gap-1">
-          <LanguageSelector />
+          
           <Button variant="ghost" size="sm" className="h-7 gap-1 text-[11px] px-2 text-muted-foreground hover:text-primary" asChild>
             <Link to="/account">
               <User className="h-3 w-3" />
