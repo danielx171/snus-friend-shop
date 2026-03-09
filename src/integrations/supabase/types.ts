@@ -14,6 +14,258 @@ export type Database = {
   }
   public: {
     Tables: {
+      brands: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          manufacturer: string | null
+          name: string
+          slug: string
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          manufacturer?: string | null
+          name: string
+          slug: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          manufacturer?: string | null
+          name?: string
+          slug?: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inventory: {
+        Row: {
+          id: string
+          quantity: number
+          updated_at: string
+          variant_id: string
+          warehouse: string | null
+        }
+        Insert: {
+          id?: string
+          quantity?: number
+          updated_at?: string
+          variant_id: string
+          warehouse?: string | null
+        }
+        Update: {
+          id?: string
+          quantity?: number
+          updated_at?: string
+          variant_id?: string
+          warehouse?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: true
+            referencedRelation: "product_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_variants: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          pack_size: number
+          price: number
+          product_id: string
+          sku: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          pack_size: number
+          price: number
+          product_id: string
+          sku?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          pack_size?: number
+          price?: number
+          product_id?: string
+          sku?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          badge_keys: string[]
+          brand_id: string
+          category_key: string
+          created_at: string
+          description_key: string | null
+          flavor_key: string
+          format_key: string
+          id: string
+          image_url: string | null
+          is_active: boolean
+          manufacturer: string | null
+          name: string
+          nicotine_mg: number
+          nyehandel_id: string | null
+          portions_per_can: number
+          ratings: number
+          slug: string
+          strength_key: string
+          updated_at: string
+        }
+        Insert: {
+          badge_keys?: string[]
+          brand_id: string
+          category_key?: string
+          created_at?: string
+          description_key?: string | null
+          flavor_key: string
+          format_key: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          manufacturer?: string | null
+          name: string
+          nicotine_mg?: number
+          nyehandel_id?: string | null
+          portions_per_can?: number
+          ratings?: number
+          slug: string
+          strength_key: string
+          updated_at?: string
+        }
+        Update: {
+          badge_keys?: string[]
+          brand_id?: string
+          category_key?: string
+          created_at?: string
+          description_key?: string | null
+          flavor_key?: string
+          format_key?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          manufacturer?: string | null
+          name?: string
+          nicotine_mg?: number
+          nyehandel_id?: string | null
+          portions_per_can?: number
+          ratings?: number
+          slug?: string
+          strength_key?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sku_mappings: {
+        Row: {
+          created_at: string
+          id: string
+          last_verified: string
+          nyehandel_sku: string
+          product_name: string
+          shopify_sku: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_verified?: string
+          nyehandel_sku: string
+          product_name: string
+          shopify_sku?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_verified?: string
+          nyehandel_sku?: string
+          product_name?: string
+          shopify_sku?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      sync_runs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          duration_ms: number
+          error_details: Json | null
+          errors: number
+          id: string
+          items_processed: number
+          started_at: string
+          status: string
+          type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          duration_ms?: number
+          error_details?: Json | null
+          errors?: number
+          id?: string
+          items_processed?: number
+          started_at?: string
+          status?: string
+          type: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          duration_ms?: number
+          error_details?: Json | null
+          errors?: number
+          id?: string
+          items_processed?: number
+          started_at?: string
+          status?: string
+          type?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -32,6 +284,42 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      webhook_inbox: {
+        Row: {
+          attempts: number
+          created_at: string
+          id: string
+          payload: Json
+          processed_at: string | null
+          provider: string
+          received_at: string
+          status: string
+          topic: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+          provider: string
+          received_at?: string
+          status?: string
+          topic: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+          provider?: string
+          received_at?: string
+          status?: string
+          topic?: string
         }
         Relationships: []
       }

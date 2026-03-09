@@ -1,7 +1,7 @@
 import { Star, Truck, CreditCard, User, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
-import { LanguageSelector } from './LanguageSelector';
+
 import { useTranslation } from '@/hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { formatMarketPrice } from '@/lib/market';
@@ -18,10 +18,9 @@ export function UtilityBar() {
   );
 
   return (
-    <div className="border-b border-border bg-secondary/30">
-      <div className="container flex h-8 items-center justify-between text-[11px]">
-        {/* Trust props - Left side */}
-        <div className="hidden md:flex items-center gap-5">
+    <div className="border-b border-border/20 bg-background">
+      <div className="container flex h-9 items-center justify-between text-[11px]">
+        <div className="hidden md:flex items-center gap-6">
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Truck className="h-3 w-3 text-primary" />
             <span>{t('trust.freeShipping', { amount: freeShippingFormatted })}</span>
@@ -36,16 +35,14 @@ export function UtilityBar() {
           </div>
         </div>
 
-        {/* Mobile - simplified */}
         <div className="flex md:hidden items-center gap-1.5 text-muted-foreground">
           <Truck className="h-3 w-3 text-primary" />
           <span>{t('trust.freeShipping', { amount: freeShippingFormatted })}</span>
         </div>
 
-        {/* Right side actions */}
-        <div className="flex items-center gap-2">
-          <LanguageSelector />
-          <Button variant="ghost" size="sm" className="h-6 gap-1 text-[11px] px-2" asChild>
+        <div className="flex items-center gap-1">
+          
+          <Button variant="ghost" size="sm" className="h-7 gap-1 text-[11px] px-2 text-muted-foreground hover:text-primary" asChild>
             <Link to="/account">
               <User className="h-3 w-3" />
               <span className="hidden sm:inline">{t('auth.login')}</span>
@@ -54,12 +51,12 @@ export function UtilityBar() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-6 gap-1 text-[11px] px-2"
+            className="h-7 gap-1 text-[11px] px-2 text-muted-foreground hover:text-primary"
             onClick={openCart}
           >
             <ShoppingCart className="h-3 w-3" />
             {totalItems > 0 ? (
-              <span className="font-medium">{formatPrice(totalPrice)}</span>
+              <span className="font-medium text-primary">{formatPrice(totalPrice)}</span>
             ) : (
               <span className="hidden sm:inline">{formatPrice(0)}</span>
             )}

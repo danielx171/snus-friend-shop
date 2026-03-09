@@ -40,7 +40,7 @@ const deliveryOptions: DeliveryOption[] = [
 
 export default function CheckoutPage() {
   const { items, totalPrice } = useCart();
-  const { t, formatPrice, market } = useTranslation();
+  const { t, formatPrice, market } = useTranslation(
 
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('shipping');
   const [discountCode, setDiscountCode] = useState('');

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Search, Link2, AlertTriangle, XCircle, Download, Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -10,9 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { mockSkuMappings } from '@/data/opsMock';
 import type { SkuMapping, SkuMappingStatus } from '@/types/ops';
-import { fetchNyehandel } from '@/lib/api';
+import { useSkuMappings } from '@/hooks/useOpsData';
 
 const statusConfig: Record<SkuMappingStatus, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: typeof Link2 }> = {
   mapped: { label: 'Mapped', variant: 'default', icon: Link2 },
@@ -24,14 +23,8 @@ export default function SkuMappings() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [copied, setCopied] = useState(false);
-  const [mappings, setMappings] = useState<SkuMapping[]>(mockSkuMappings);
+  const { data: mappings = [], isLoading } = useSkuMappings();
   const { toast } = useToast();
-
-  useEffect(() => {
-    fetchNyehandel<SkuMapping[]>('sku-mappings').then((data) => {
-      if (data) setMappings(data);
-    });
-  }, []);
 
   const filtered = useMemo(() => {
     return mappings.filter((m) => {
@@ -46,7 +39,7 @@ export default function SkuMappings() {
       }
       return true;
     });
-  }, [statusFilter, search]);
+  }, [mappings, statusFilter, search]);
 
   const csvEscape = (val: string) => {
     if (val.includes(',') || val.includes('"') || val.includes('\n')) {
@@ -171,7 +164,7 @@ export default function SkuMappings() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base">
-              {filtered.length} mapping{filtered.length !== 1 ? 's' : ''}
+              {isLoading ? 'Loading…' : `${filtered.length} mapping${filtered.length !== 1 ? 's' : ''}`}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
@@ -205,7 +198,7 @@ export default function SkuMappings() {
                       </TableRow>
                     );
                   })}
-                  {filtered.length === 0 && (
+                  {filtered.length === 0 && !isLoading && (
                     <TableRow>
                       <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                         No mappings match your filters.

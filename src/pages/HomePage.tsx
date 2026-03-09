@@ -2,6 +2,9 @@ import { Layout } from '@/components/layout/Layout';
 import { HeroBanner } from '@/components/home/HeroBanner';
 import { CategoryShortcuts } from '@/components/home/CategoryShortcuts';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
+import { TrustBar } from '@/components/home/TrustBar';
+import { WhySnusFriends } from '@/components/home/WhySnusFriends';
+import { EditorialHighlights } from '@/components/home/EditorialHighlights';
 import { AgeGate } from '@/components/compliance/AgeGate';
 import { SEO } from '@/components/seo/SEO';
 
@@ -30,16 +33,18 @@ export default function HomePage() {
         <AgeGate />
         <HeroBanner />
         <CategoryShortcuts />
+        <TrustBar />
         
-        {/* Featured Products Sections */}
         <FeaturedProducts
           title="Bestsellers"
           filterFn={(p) => p.badgeKeys.includes('popular')}
           limit={4}
           viewAllHref="/nicotine-pouches?badge=popular"
         />
+
+        <EditorialHighlights />
         
-        <div className="bg-muted/30">
+        <div className="border-y border-border/10 bg-card/20">
           <FeaturedProducts
             title="Special Offers"
             filterFn={(p) => p.badgeKeys.includes('newPrice')}
@@ -47,6 +52,8 @@ export default function HomePage() {
             viewAllHref="/nicotine-pouches?badge=newPrice"
           />
         </div>
+
+        <WhySnusFriends />
         
         <FeaturedProducts
           title="New Arrivals"
