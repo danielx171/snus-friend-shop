@@ -12,10 +12,7 @@ import { getCartTotals } from '@/lib/cart-utils';
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeFromCart } = useCart();
-  const { t, formatPrice, formatPriceWithUnit, market } = useTranslation();
-
- HEAD
-  const { subtotal, shipping, finalTotal, freeShipping, progress } = getCartTotals(
+  const { t, formatPrice, formatPriceWithUnit, market } = useTranslation();  const { subtotal, shipping, finalTotal, freeShipping, progress } = getCartTotals(
     items,
     market,
   );
