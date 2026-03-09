@@ -27,3 +27,10 @@ changes.patch
 .env
 # Supabase local cache
 supabase/.temp/
+# WILLIAM'S SECRETS & DATA (DO NOT UPLOAD)
+*.csv
+*.xlsx
+*.xls
+customers.csv
+william-automation/.env
+william-automation/keys.json

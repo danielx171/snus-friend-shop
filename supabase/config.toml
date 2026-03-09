@@ -23,3 +23,12 @@ verify_jwt = false
 
 [functions.create-shopify-checkout]
 verify_jwt = false
+
+[functions.shopify-webhook]
+verify_jwt = false
+
+[functions.push-order-to-nyehandel]
+verify_jwt = false
+
+[functions.retry-failed-nyehandel-orders]
+verify_jwt = false

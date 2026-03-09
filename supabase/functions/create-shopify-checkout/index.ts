@@ -50,12 +50,13 @@ function toShopifyMerchandiseId(shopifyVariantId: string): string {
 }
 
 Deno.serve(async (req) => {
+  const requestId = req.headers.get("x-request-id") ?? crypto.randomUUID();
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+    return new Response(JSON.stringify({ error: "Method not allowed", requestId }), {
       status: 405,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -185,6 +186,12 @@ Deno.serve(async (req) => {
     });
 
     const shopifyBody = (await shopifyRes.json()) as ShopifyCartCreateResponse;
+    console.log(JSON.stringify({
+      requestId,
+      event: "shopify_cart_create_response",
+      status: shopifyRes.status,
+      orderId: insertedOrder.id,
+    }));
 
     const apiErrors = shopifyBody.errors?.map((e) => e.message) ?? [];
     const userErrors = shopifyBody.data?.cartCreate?.userErrors?.map((e) => e.message) ?? [];
@@ -205,6 +212,7 @@ Deno.serve(async (req) => {
         JSON.stringify({
           error: "shopify_checkout_failed",
           orderId: insertedOrder.id,
+          requestId,
           details: allErrors,
         }),
         {
@@ -226,14 +234,16 @@ Deno.serve(async (req) => {
         checkoutUrl,
         orderId: insertedOrder.id,
         idempotencyKey,
+        requestId,
       }),
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       },
     );
-  } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+  } catch (error) {
+    console.error(JSON.stringify({ requestId, event: "create_shopify_checkout_error", error: String(error) }));
+    return new Response(JSON.stringify({ error: "Invalid JSON body", requestId }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

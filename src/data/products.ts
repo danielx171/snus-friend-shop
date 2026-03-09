@@ -25,6 +25,7 @@ export type CategoryKey = 'nicotinePouches';
 
 export interface Product {
   id: string;
+  shopifyVariantId?: string;
   name: string;
   brand: string;
   categoryKey: CategoryKey;
@@ -90,6 +91,7 @@ export const formatKeys: FormatKey[] = ['slim', 'mini', 'original', 'large'];
 export const products: Product[] = [
   {
     id: '1',
+    shopifyVariantId: 'mock_variant_id_1',
     name: 'Cool Mint Slim',
     brand: 'ZYN',
     categoryKey: 'nicotinePouches',
@@ -107,6 +109,7 @@ export const products: Product[] = [
   },
   {
     id: '2',
+    shopifyVariantId: 'mock_variant_id_2',
     name: 'Ice Cool Strong',
     brand: 'VELO',
     categoryKey: 'nicotinePouches',
@@ -124,6 +127,7 @@ export const products: Product[] = [
   },
   {
     id: '3',
+    shopifyVariantId: 'mock_variant_id_3',
     name: 'Citrus Burst',
     brand: 'ON!',
     categoryKey: 'nicotinePouches',
@@ -141,6 +145,7 @@ export const products: Product[] = [
   },
   {
     id: '4',
+    shopifyVariantId: 'mock_variant_id_4',
     name: 'Berry Frost',
     brand: 'LOOP',
     categoryKey: 'nicotinePouches',
@@ -158,6 +163,7 @@ export const products: Product[] = [
   },
   {
     id: '5',
+    shopifyVariantId: 'mock_variant_id_5',
     name: 'Super Strong Mint',
     brand: 'Siberia',
     categoryKey: 'nicotinePouches',
@@ -175,6 +181,7 @@ export const products: Product[] = [
   },
   {
     id: '6',
+    shopifyVariantId: 'mock_variant_id_6',
     name: 'Fresh Spearmint',
     brand: 'Lyft',
     categoryKey: 'nicotinePouches',
@@ -192,6 +199,7 @@ export const products: Product[] = [
   },
   {
     id: '7',
+    shopifyVariantId: 'mock_variant_id_7',
     name: 'Tropical Thunder',
     brand: 'Nordic Spirit',
     categoryKey: 'nicotinePouches',
@@ -209,6 +217,7 @@ export const products: Product[] = [
   },
   {
     id: '8',
+    shopifyVariantId: 'mock_variant_id_8',
     name: 'Dark Roast Coffee',
     brand: 'Skruf',
     categoryKey: 'nicotinePouches',
@@ -226,6 +235,7 @@ export const products: Product[] = [
   },
   {
     id: '9',
+    shopifyVariantId: 'mock_variant_id_9',
     name: 'Fresh Cola',
     brand: 'Pablo',
     categoryKey: 'nicotinePouches',
@@ -243,6 +253,7 @@ export const products: Product[] = [
   },
   {
     id: '10',
+    shopifyVariantId: 'mock_variant_id_10',
     name: 'Sweet Vanilla',
     brand: 'Killa',
     categoryKey: 'nicotinePouches',
@@ -260,6 +271,7 @@ export const products: Product[] = [
   },
   {
     id: '11',
+    shopifyVariantId: 'mock_variant_id_11',
     name: 'Black Licorice',
     brand: 'ZYN',
     categoryKey: 'nicotinePouches',
@@ -277,6 +289,7 @@ export const products: Product[] = [
   },
   {
     id: '12',
+    shopifyVariantId: 'mock_variant_id_12',
     name: 'Frozen Berries',
     brand: 'VELO',
     categoryKey: 'nicotinePouches',

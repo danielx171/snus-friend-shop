@@ -4,10 +4,10 @@ Use this file to track implementation issues and resolutions during the Shopify 
 
 ## Open
 
-- [ ] 2026-03-09: Step 10 blocked - cannot remove `/checkout/legacy` yet because end-to-end handoff is not verifiable in current state.
-  - Missing Shopify credentials in runtime env for `create-shopify-checkout` (`SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_ACCESS_TOKEN`).
-  - Frontend cart products currently have no Shopify variant mapping fields in `src/data/products.ts`, so Step 08 fail-fast correctly blocks checkout creation.
+- [ ] (none)
 
 ## Resolved
 
 - [x] 2026-03-09: Step 02 types sync done manually by updating `src/integrations/supabase/types.ts` to include `orders` and new `product_variants` fields (`shopify_variant_id`, `is_checkout_enabled`).
+- [x] 2026-03-09: Step 10 unblocked and completed after adding Shopify env vars and product-level `shopifyVariantId` mappings; removed `/checkout/legacy` route from `src/App.tsx`.
+- [x] 2026-03-09: Step 19 unblocked with migration `supabase/migrations/20260309143000_setup_retry_cron.sql` scheduling hourly cron invocation for `retry-failed-nyehandel-orders`.
