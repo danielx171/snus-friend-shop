@@ -82,34 +82,79 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          created_at: string
+          currency: string
+          customer_email: string | null
+          id: string
+          last_sync_error: string | null
+          nyehandel_order_id: string | null
+          nyehandel_sync_status: string
+          shopify_order_id: string | null
+          total_price: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          customer_email?: string | null
+          id?: string
+          last_sync_error?: string | null
+          nyehandel_order_id?: string | null
+          nyehandel_sync_status?: string
+          shopify_order_id?: string | null
+          total_price: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          customer_email?: string | null
+          id?: string
+          last_sync_error?: string | null
+          nyehandel_order_id?: string | null
+          nyehandel_sync_status?: string
+          shopify_order_id?: string | null
+          total_price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_variants: {
         Row: {
           created_at: string
           id: string
+          is_checkout_enabled: boolean
           is_default: boolean
           pack_size: number
           price: number
           product_id: string
+          shopify_variant_id: string | null
           sku: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: string
+          is_checkout_enabled?: boolean
           is_default?: boolean
           pack_size: number
           price: number
           product_id: string
+          shopify_variant_id?: string | null
           sku?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: string
+          is_checkout_enabled?: boolean
           is_default?: boolean
           pack_size?: number
           price?: number
           product_id?: string
+          shopify_variant_id?: string | null
           sku?: string | null
           updated_at?: string
         }

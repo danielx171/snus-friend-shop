@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
@@ -10,10 +11,14 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
 import { getCartTotals } from '@/lib/cart-utils';
 import { SEO } from '@/components/seo/SEO';
+import { apiFetch } from '@/lib/api';
+import { toast } from '@/hooks/use-toast';
 
 export default function CheckoutHandoff() {
   const { items } = useCart();
   const { t, formatPrice, market } = useTranslation();
+  const [isRedirectingToCheckout, setIsRedirectingToCheckout] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const { subtotal, shipping, finalTotal, freeShipping, progress } = getCartTotals(
     items,
@@ -26,6 +31,87 @@ export default function CheckoutHandoff() {
 
   const formatLocalAmount = (amount: number): string => {
     return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
+  };
+
+  const resolveShopifyVariantId = (item: (typeof items)[number]): string | null => {
+    const productRecord = item.product as unknown as Record<string, unknown>;
+    const direct = productRecord.shopifyVariantId;
+    if (typeof direct === 'string' && direct.trim().length > 0) return direct;
+
+    const snakeCase = productRecord.shopify_variant_id;
+    if (typeof snakeCase === 'string' && snakeCase.trim().length > 0) return snakeCase;
+
+    const variantsByPack = productRecord.shopifyVariantIds;
+    if (variantsByPack && typeof variantsByPack === 'object') {
+      const packVariantId = (variantsByPack as Record<string, unknown>)[item.packSize];
+      if (typeof packVariantId === 'string' && packVariantId.trim().length > 0) return packVariantId;
+    }
+
+    return null;
+  };
+
+  const handleProceedToCheckout = async () => {
+    if (isRedirectingToCheckout) return;
+
+    setCheckoutError(null);
+
+    const payloadItems: Array<{ shopifyVariantId: string; quantity: number }> = [];
+    const missingVariantMappings: string[] = [];
+
+    items.forEach((item) => {
+      const shopifyVariantId = resolveShopifyVariantId(item);
+      if (!shopifyVariantId) {
+        missingVariantMappings.push(item.product.name);
+        return;
+      }
+
+      payloadItems.push({
+        shopifyVariantId,
+        quantity: item.quantity,
+      });
+    });
+
+    if (missingVariantMappings.length > 0) {
+      const message = `Missing Shopify variant mapping for: ${missingVariantMappings.join(', ')}`;
+      setCheckoutError(message);
+      toast({
+        title: t('checkout.orderFailed'),
+        description: message,
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsRedirectingToCheckout(true);
+
+    try {
+      const response = await apiFetch<{ checkoutUrl: string }>('create-shopify-checkout', {
+        method: 'POST',
+        body: {
+          items: payloadItems,
+          totalPrice: finalTotal,
+          currency: market.currencyCode,
+          customer: {
+            locale: market.locale,
+          },
+        },
+      });
+
+      if (!response?.checkoutUrl) {
+        throw new Error('Missing checkoutUrl from create-shopify-checkout');
+      }
+
+      window.location.assign(response.checkoutUrl);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to create Shopify checkout';
+      setCheckoutError(message);
+      toast({
+        title: t('checkout.orderFailed'),
+        description: message,
+        variant: 'destructive',
+      });
+      setIsRedirectingToCheckout(false);
+    }
   };
 
   if (items.length === 0) {
@@ -139,12 +225,21 @@ export default function CheckoutHandoff() {
                     <p className="text-xs text-muted-foreground">{t('cart.includingVat')}</p>
                   </div>
 
-                  <Button asChild size="lg" className="w-full mt-6 gap-2">
-                    <Link to="/checkout/legacy">
-                      {t('cart.proceedToCheckout')}
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
+                  <Button
+                    size="lg"
+                    className="w-full mt-6 gap-2"
+                    disabled={isRedirectingToCheckout}
+                    onClick={handleProceedToCheckout}
+                  >
+                    {isRedirectingToCheckout ? t('checkout.processing') : t('cart.proceedToCheckout')}
+                    <ArrowRight className="h-4 w-4" />
                   </Button>
+
+                  {checkoutError && (
+                    <p className="text-xs text-destructive mt-2">
+                      {checkoutError}
+                    </p>
+                  )}
 
                   <p className="text-xs text-muted-foreground text-center mt-4">
                     {t('cart.secureCheckout')}
