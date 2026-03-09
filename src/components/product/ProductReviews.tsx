@@ -56,7 +56,7 @@ const mockReviews = [
     rating: 3,
     date: 'Jan 12, 2026',
     title: 'Decent but expected more',
-    text: 'Flavour is nice but fades quicker than I'd like. Format is comfortable though and shipping was fast.',
+    text: 'Flavour is nice but fades quicker than I would like. Format is comfortable though and shipping was fast.',
     helpful: 3,
   },
 ];
