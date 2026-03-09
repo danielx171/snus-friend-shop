@@ -39,7 +39,7 @@ const deliveryOptions: DeliveryOption[] = [
 ];
 
 export default function CheckoutPage() {
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice } = useCart();
   const { t, formatPrice, market } = useTranslation();
 
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('shipping');
@@ -54,6 +54,7 @@ export default function CheckoutPage() {
   });
 
   const [selectedPayment, setSelectedPayment] = useState<string>('');
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const validatePostcode = () => {
     const postcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i;
@@ -100,7 +101,10 @@ export default function CheckoutPage() {
     shippingDetails.address && shippingDetails.city && shippingDetails.email;
 
   const handlePlaceOrder = async () => {
+    if (isPlacingOrder) return;
+    setIsPlacingOrder(true);
     try {
+      // TODO: Fetch Shopify Checkout URL from backend and redirect user instead of local success step.
       await apiFetch('sync-nyehandel', {
         method: 'POST',
         body: {
@@ -109,10 +113,6 @@ export default function CheckoutPage() {
           shippingDetails,
         },
       });
-
-      setCurrentStep('complete');
-      clearCart();
-      toast({ title: t('checkout.orderPlaced'), description: t('checkout.orderPlacedDesc') });
     } catch (error) {
       console.error('Failed to sync with Nyehandel:', error);
       toast({
@@ -120,6 +120,8 @@ export default function CheckoutPage() {
         description: t('checkout.orderFailedDesc'),
         variant: 'destructive',
       });
+    } finally {
+      setIsPlacingOrder(false);
     }
   };
 
@@ -324,8 +326,15 @@ export default function CheckoutPage() {
                         </label>
                       </RadioGroup>
 
-                      <Button size="lg" className="w-full" disabled={selectedPayment === ''} onClick={handlePlaceOrder}>
-                        {t('checkout.placeOrder')} • {formatPrice(finalTotal)}
+                      <Button
+                        size="lg"
+                        className="w-full"
+                        disabled={selectedPayment === '' || isPlacingOrder}
+                        onClick={handlePlaceOrder}
+                      >
+                        {isPlacingOrder
+                          ? t('checkout.processing')
+                          : `${t('checkout.placeOrder')} • ${formatPrice(finalTotal)}`}
                       </Button>
                     </>
                   )}
