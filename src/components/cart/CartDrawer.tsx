@@ -14,7 +14,7 @@ export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeFromCart } = useCart();
   const { t, formatPrice, formatPriceWithUnit, market } = useTranslation();
 
-<<<<<<< HEAD
+ HEAD
   const { subtotal, shipping, finalTotal, freeShipping, progress } = getCartTotals(
     items,
     market,

@@ -1,44 +1,45 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { useCart } from '@/context/CartContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import {
-  Accordion, AccordionContent, AccordionItem, AccordionTrigger,
-} from '@/components/ui/accordion';
-import {
-  ShoppingBag, Lock, Truck, RotateCcw, Shield, CreditCard,
-  Tag, ChevronRight, Check, ExternalLink,
-} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ShoppingBag, ArrowRight, Truck } from 'lucide-react';
 import { packSizeMultipliers } from '@/data/products';
-import { EmptyState } from '@/components/ui/states/EmptyState';
+import { useTranslation } from '@/hooks/useTranslation';
+import { formatMarketPrice } from '@/lib/market';
+import { getCartTotals } from '@/lib/cart-utils';
 import { SEO } from '@/components/seo/SEO';
 
 export default function CheckoutHandoff() {
-  const { items, totalPrice } = useCart();
-  const [discountCode, setDiscountCode] = useState('');
-  const [discountApplied, setDiscountApplied] = useState(false);
+  const { items } = useCart();
+  const { t, formatPrice, market } = useTranslation();
 
-  const discountAmount = discountApplied ? totalPrice * 0.1 : 0;
-  const hasFreeShipping = totalPrice >= 25;
-  const shippingCost = hasFreeShipping ? 0 : 3.99;
-  const finalTotal = totalPrice - discountAmount + shippingCost;
+  const { subtotal, shipping, finalTotal, freeShipping, progress } = getCartTotals(
+    items,
+    market,
+  );
 
-  const applyDiscount = () => {
-    if (discountCode.toUpperCase() === 'WELCOME10') setDiscountApplied(true);
+  const localSubtotal = subtotal * market.rateFromGBP;
+  const amountToFreeShipping = Math.max(0, market.freeShippingThreshold - localSubtotal);
+  const shippingProgress = progress;
+
+  const formatLocalAmount = (amount: number): string => {
+    return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
   };
 
   if (items.length === 0) {
     return (
       <>
-        <SEO title="Checkout | SnusFriend" description="Complete your SnusFriend order." />
+        <SEO title={`${t('checkout.title')} | SnusFriend`} description={t('checkout.emptyDescription')} />
         <Layout showNicotineWarning={false}>
-          <div className="container py-16">
-            <EmptyState variant="cart" actionLabel="Browse Products" actionHref="/nicotine-pouches" />
+          <div className="container py-16 text-center">
+            <ShoppingBag className="mx-auto h-16 w-16 text-muted-foreground mb-6" />
+            <h1 className="text-2xl font-bold text-foreground mb-2">{t('cart.empty')}</h1>
+            <p className="text-muted-foreground mb-8">{t('checkout.emptyDescription')}</p>
+            <Button asChild size="lg">
+              <Link to="/nicotine-pouches">{t('cart.browseProducts')}</Link>
+            </Button>
           </div>
         </Layout>
       </>
@@ -47,152 +48,109 @@ export default function CheckoutHandoff() {
 
   return (
     <>
-      <SEO title="Checkout | SnusFriend" description="Review your order and proceed to secure checkout." />
+      <SEO title={`${t('checkout.title')} | SnusFriend`} description={t('checkout.emptyDescription')} />
       <Layout showNicotineWarning={false}>
-        <div className="container py-8 lg:py-12">
-          <div className="max-w-4xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-10">
-              <h1 className="text-3xl lg:text-4xl font-bold text-foreground tracking-tight mb-2">Review Your Order</h1>
-              <p className="text-muted-foreground">Almost there — just one more step to checkout</p>
+        <div className="container py-8">
+          <h1 className="text-3xl font-bold text-foreground mb-8">{t('checkout.title')}</h1>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              {/* Free Shipping Progress */}
+              <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Truck className="h-5 w-5 text-primary" />
+                    {freeShipping ? (
+                      <span className="font-semibold text-primary">
+                        {t('cart.freeShippingAchieved')}
+                      </span>
+                    ) : (
+                      <span className="text-sm text-foreground">
+                        {t('cart.freeShippingProgress', { amount: formatLocalAmount(amountToFreeShipping) })}
+                      </span>
+                    )}
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div
+                      className="bg-primary h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${shippingProgress}%` }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Cart Items (read-only) */}
+              <div className="space-y-4">
+                {items.map((item) => {
+                  const packCount = packSizeMultipliers[item.packSize];
+                  const itemTotal = item.product.prices[item.packSize] * item.quantity;
+                  const canLabel = packCount === 1 ? t('cart.can') : t('cart.cans');
+
+                  return (
+                    <Card key={`${item.product.id}-${item.packSize}`}>
+                      <CardContent className="p-4">
+                        <div className="flex gap-4">
+                          <img
+                            src={item.product.image}
+                            alt={item.product.name}
+                            className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-xl shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-foreground line-clamp-1">{item.product.name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {item.product.brand} • {packCount} {canLabel} × {item.quantity}
+                            </p>
+                            <p className="mt-1 font-medium text-foreground">{formatPrice(itemTotal)}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="grid lg:grid-cols-5 gap-8">
-              {/* Order Summary */}
-              <div className="lg:col-span-3 space-y-6">
-                <Card className="border-border/30">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <ShoppingBag className="h-5 w-5 text-primary" />
-                      Your Items ({items.length})
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {items.map((item) => {
-                      const packCount = packSizeMultipliers[item.packSize];
-                      const lineTotal = item.product.prices[item.packSize] * item.quantity;
-                      return (
-                        <div key={`${item.product.id}-${item.packSize}`} className="flex gap-4 py-3 border-b border-border/10 last:border-0">
-                          <img src={item.product.image} alt={item.product.name} className="w-16 h-16 object-cover rounded-xl shrink-0" />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-xs text-muted-foreground">{item.product.brand}</p>
-                            <p className="font-medium text-sm text-foreground">{item.product.name}</p>
-                            <p className="text-xs text-muted-foreground">{packCount} {packCount === 1 ? 'can' : 'cans'} × {item.quantity}</p>
-                            {item.isSubscription && (
-                              <Badge variant="outline" className="mt-1 text-[10px] rounded-full border-primary/30 text-primary">Subscribe & Save</Badge>
-                            )}
-                          </div>
-                          <p className="font-semibold text-sm">£{lineTotal.toFixed(2)}</p>
-                        </div>
-                      );
-                    })}
-                  </CardContent>
-                </Card>
+            {/* Order Summary */}
+            <div className="lg:col-span-1">
+              <Card className="sticky top-24">
+                <CardContent className="p-6">
+                  <h2 className="text-lg font-bold text-foreground mb-4">{t('cart.orderSummary')}</h2>
 
-                {/* Discount Code */}
-                <Accordion type="single" collapsible>
-                  <AccordionItem value="discount" className="border border-border/30 rounded-xl px-4">
-                    <AccordionTrigger className="hover:no-underline py-4">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Tag className="h-4 w-4 text-primary" />
-                        Have a discount code?
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="flex gap-2 pb-3">
-                        <Input
-                          placeholder="Enter code (try WELCOME10)"
-                          value={discountCode}
-                          onChange={e => setDiscountCode(e.target.value)}
-                          disabled={discountApplied}
-                          className="rounded-xl"
-                        />
-                        <Button variant="outline" onClick={applyDiscount} disabled={discountApplied || !discountCode} className="rounded-xl border-border/30">
-                          {discountApplied ? <Check className="h-4 w-4" /> : 'Apply'}
-                        </Button>
-                      </div>
-                      {discountApplied && <p className="text-xs text-primary pb-2">10% discount applied!</p>}
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-
-                {/* Reassurance */}
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { icon: Truck, title: 'Free Delivery', desc: 'On orders over £25' },
-                    { icon: RotateCcw, title: 'Easy Returns', desc: '14-day hassle-free returns' },
-                    { icon: Shield, title: 'Genuine Products', desc: '100% authentic guaranteed' },
-                    { icon: Lock, title: 'Secure Checkout', desc: '256-bit SSL encryption' },
-                  ].map(({ icon: Icon, title, desc }) => (
-                    <div key={title} className="flex items-start gap-3 rounded-xl border border-border/20 bg-card/60 p-4">
-                      <Icon className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-medium text-foreground">{title}</p>
-                        <p className="text-xs text-muted-foreground">{desc}</p>
-                      </div>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">{t('cart.subtotal')}</span>
+                      <span className="font-medium">{formatPrice(subtotal)}</span>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sidebar - Totals + CTA */}
-              <div className="lg:col-span-2">
-                <Card className="border-border/30 sticky top-24">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg">Order Total</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Subtotal</span>
-                        <span>£{totalPrice.toFixed(2)}</span>
-                      </div>
-                      {discountApplied && (
-                        <div className="flex justify-between text-primary">
-                          <span>Discount (10%)</span>
-                          <span>-£{discountAmount.toFixed(2)}</span>
-                        </div>
-                      )}
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Delivery</span>
-                        <span className={hasFreeShipping ? 'text-primary' : ''}>
-                          {hasFreeShipping ? 'Free' : `£${shippingCost.toFixed(2)}`}
-                        </span>
-                      </div>
-                      <Separator className="bg-border/20" />
-                      <div className="flex justify-between font-bold text-lg pt-1">
-                        <span>Total</span>
-                        <span>£{finalTotal.toFixed(2)}</span>
-                      </div>
-                      <p className="text-[11px] text-muted-foreground">Including VAT</p>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">{t('cart.delivery')}</span>
+                      <span className="font-medium">
+                        {freeShipping ? (
+                          <span className="text-primary">{t('cart.free')}</span>
+                        ) : (
+                          formatPrice(shipping)
+                        )}
+                      </span>
                     </div>
-
-                    <Button className="w-full h-13 rounded-2xl text-base gap-2 glow-primary hover:shadow-lg transition-shadow">
-                      <Lock className="h-4 w-4" />
-                      Proceed to Secure Checkout
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-
-                    <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
-                      You'll be redirected to our secure payment partner to complete your order.
-                    </p>
-
-                    {/* Payment badges */}
-                    <div className="flex items-center justify-center gap-3 pt-2 border-t border-border/20">
-                      {['Visa', 'MC', 'Amex', 'Klarna'].map(name => (
-                        <div key={name} className="flex items-center justify-center h-8 px-3 rounded-md bg-muted/20 border border-border/20">
-                          <span className="text-[10px] font-bold text-muted-foreground">{name}</span>
-                        </div>
-                      ))}
+                    <Separator />
+                    <div className="flex justify-between text-base">
+                      <span className="font-bold">{t('cart.total')}</span>
+                      <span className="font-bold">{formatPrice(finalTotal)}</span>
                     </div>
+                    <p className="text-xs text-muted-foreground">{t('cart.includingVat')}</p>
+                  </div>
 
-                    <div className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
-                      <Lock className="h-3 w-3" />
-                      Secure payment powered by SSL encryption
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                  <Button asChild size="lg" className="w-full mt-6 gap-2">
+                    <Link to="/checkout/legacy">
+                      {t('cart.proceedToCheckout')}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+
+                  <p className="text-xs text-muted-foreground text-center mt-4">
+                    {t('cart.secureCheckout')}
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
