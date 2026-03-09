@@ -18,6 +18,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import SearchResults from "./pages/SearchResults";
 import NotFound from "./pages/NotFound";
+import OrderConfirmation from "./pages/OrderConfirmation";
 import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
