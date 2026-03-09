@@ -46,7 +46,7 @@ const mockReviews = [
     rating: 5,
     date: 'Jan 30, 2026',
     title: 'My daily go-to',
-    text: 'Switched from another brand and haven't looked back. The flavour is clean and the pouches are comfortable. 10-pack pricing is excellent value.',
+    text: 'Switched from another brand and have not looked back. The flavour is clean and the pouches are comfortable. 10-pack pricing is excellent value.',
     helpful: 21,
   },
   {
