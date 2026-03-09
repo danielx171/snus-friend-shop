@@ -12,15 +12,24 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (req.method !== 'GET') {
+    return new Response(
+      JSON.stringify({ error: 'method_not_allowed' }),
+      { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+    );
+  }
+
   // Authenticate caller
   const authHeader = req.headers.get('Authorization');
   if (!authHeader?.startsWith('Bearer ')) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
+    return new Response(
+      JSON.stringify({ error: 'unauthorized' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+    );
   }
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     global: { headers: { Authorization: authHeader } },
@@ -29,27 +38,39 @@ Deno.serve(async (req) => {
   const token = authHeader.replace('Bearer ', '');
   const { data: userData, error: authError } = await supabase.auth.getUser(token);
   if (authError || !userData?.user) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
+    return new Response(
+      JSON.stringify({ error: 'unauthorized' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+    );
   }
 
-  // Check admin role server-side using service role client
-  const adminClient = createClient(supabaseUrl, serviceRoleKey);
-  const { data: roleData } = await adminClient
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userData.user.id)
-    .eq('role', 'admin')
-    .maybeSingle();
+  // Enforce that caller has admin or ops role using has_role helper
+  const userId = userData.user.id;
+  const [{ data: isAdmin, error: adminErr }, { data: isOps, error: opsErr }] = await Promise.all([
+    supabase.rpc('has_role', { _role: 'admin', _user_id: userId }),
+    supabase.rpc('has_role', { _role: 'ops', _user_id: userId }),
+  ]);
 
-  if (!roleData) {
-    return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  if (adminErr && opsErr) {
+    console.error('role check failed', { adminErr, opsErr });
+    return new Response(
+      JSON.stringify({ error: 'role_check_failed' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+    );
+  }
+
+  if (!isAdmin && !isOps) {
+    return new Response(
+      JSON.stringify({ error: 'forbidden' }),
+      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+    );
   }
 
   // Validate resource parameter (allowlist)
   const url = new URL(req.url);
   const resource = url.searchParams.get('resource');
 
-  if (!resource || !ALLOWED_RESOURCES.includes(resource)) {
+  if (!resource || !ALLOWED_RESOURCES.includes(resource) || resource.includes('/')) {
     return new Response(
       JSON.stringify({ error: 'Invalid resource parameter' }),
       { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
@@ -76,9 +97,23 @@ Deno.serve(async (req) => {
       },
     });
 
-    const body = await resp.json();
+    let parsed: unknown = null;
+    const contentType = resp.headers.get('content-type') ?? '';
+
+    if (contentType.toLowerCase().includes('application/json')) {
+      try {
+        parsed = await resp.json();
+      } catch {
+        const textBody = await resp.text();
+        parsed = textBody;
+      }
+    } else {
+      const textBody = await resp.text();
+      parsed = textBody;
+    }
+
     return new Response(
-      JSON.stringify({ data: body, status: resp.status }),
+      JSON.stringify({ data: parsed, status: resp.status }),
       { status: resp.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
     );
   } catch (err) {

@@ -1,0 +1,12 @@
+You are an expert Full Stack Developer working on the Snus Friend shop.
+Tech Stack: React, Vite, TypeScript, Tailwind CSS, Shadcn UI, and Supabase.
+Style Rules: > - Always use TypeScript with strict types.
+
+Use functional components with arrow functions.
+
+Use Shadcn UI components for all UI elements.
+
+When adding backend logic, use Supabase Edge Functions in the /supabase/functions folder.
+
+Keep the design "premium and clean" as established in the current UI.
+Whenever you complete a major refactor or add a new feature, you must automatically update the CHANGELOG.md file with a bulleted list of exactly what files you changed and the logic you updated

@@ -8,19 +8,20 @@ import { Link } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
+import { getCartTotals } from '@/lib/cart-utils';
 
 export function CartDrawer() {
-  const { items, isOpen, closeCart, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const { items, isOpen, closeCart, updateQuantity, removeFromCart } = useCart();
   const { t, formatPrice, formatPriceWithUnit, market } = useTranslation();
 
-  const freeShippingThreshold = market.freeShippingThreshold;
-  const shippingCost = market.shippingCost;
+  const { subtotal, shipping, finalTotal, freeShipping, progress } = getCartTotals(
+    items,
+    market,
+  );
 
-  // Convert GBP totalPrice to local currency for threshold comparison
-  const localTotal = totalPrice * market.rateFromGBP;
-  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - localTotal);
-  const shippingProgress = Math.min(100, (localTotal / freeShippingThreshold) * 100);
-  const hasFreeShipping = localTotal >= freeShippingThreshold;
+  const localSubtotal = subtotal * market.rateFromGBP;
+  const remainingForFreeShipping = Math.max(0, market.freeShippingThreshold - localSubtotal);
+  const shippingProgress = progress;
 
   const formatLocalAmount = (amount: number): string => {
     return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
@@ -50,7 +51,7 @@ export function CartDrawer() {
           <>
             {/* Free shipping progress */}
             <div className="py-3">
-              {!hasFreeShipping ? (
+              {!freeShipping ? (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm">
                     <Truck className="h-4 w-4 text-primary" />
@@ -159,18 +160,18 @@ export function CartDrawer() {
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.subtotal')}</span>
-                  <span>{formatPrice(totalPrice)}</span>
+                  <span>{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.delivery')}</span>
-                  <span className={hasFreeShipping ? 'text-primary' : ''}>
-                    {hasFreeShipping ? t('cart.free') : formatPrice(shippingCost / market.rateFromGBP)}
+                  <span className={freeShipping ? 'text-primary' : ''}>
+                    {freeShipping ? t('cart.free') : formatPrice(shipping)}
                   </span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between font-semibold text-base">
                   <span>{t('cart.total')}</span>
-                  <span>{formatPrice(totalPrice + (hasFreeShipping ? 0 : shippingCost / market.rateFromGBP))}</span>
+                  <span>{formatPrice(finalTotal)}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">{t('cart.includingVat')}</p>
               </div>

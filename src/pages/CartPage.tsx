@@ -12,24 +12,26 @@ import { ProductCard } from '@/components/product/ProductCard';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SEO } from '@/components/seo/SEO';
 import { formatMarketPrice } from '@/lib/market';
+import { getCartTotals } from '@/lib/cart-utils';
 
 export default function CartPage() {
   const {
     items,
     totalItems,
-    totalPrice,
     updateQuantity,
     removeFromCart,
     updateSubscription,
   } = useCart();
   const { t, formatPrice, market } = useTranslation();
 
-  // Market-aware shipping logic
-  const localTotal = totalPrice * market.rateFromGBP;
-  const hasFreeShipping = localTotal >= market.freeShippingThreshold;
-  const amountToFreeShipping = Math.max(0, market.freeShippingThreshold - localTotal);
-  const shippingProgress = Math.min(100, (localTotal / market.freeShippingThreshold) * 100);
-  const shippingCostGBP = market.shippingCost / market.rateFromGBP;
+  const { subtotal, shipping, finalTotal, freeShipping, progress } = getCartTotals(
+    items,
+    market,
+  );
+
+  const localSubtotal = subtotal * market.rateFromGBP;
+  const amountToFreeShipping = Math.max(0, market.freeShippingThreshold - localSubtotal);
+  const shippingProgress = progress;
 
   const formatLocalAmount = (amount: number): string => {
     return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
@@ -92,7 +94,7 @@ export default function CartPage() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <Truck className="h-5 w-5 text-primary" />
-                    {hasFreeShipping ? (
+                    {freeShipping ? (
                       <span className="font-semibold text-primary">
                         {t('cart.freeShippingAchieved')}
                       </span>
@@ -235,15 +237,15 @@ export default function CartPage() {
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">{t('cart.subtotal')}</span>
-                      <span className="font-medium">{formatPrice(totalPrice)}</span>
+                      <span className="font-medium">{formatPrice(subtotal)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">{t('cart.delivery')}</span>
                       <span className="font-medium">
-                        {hasFreeShipping ? (
+                        {freeShipping ? (
                           <span className="text-primary">{t('cart.free')}</span>
                         ) : (
-                          formatPrice(shippingCostGBP)
+                          formatPrice(shipping)
                         )}
                       </span>
                     </div>
@@ -251,7 +253,7 @@ export default function CartPage() {
                     <div className="flex justify-between text-base">
                       <span className="font-bold">{t('cart.total')}</span>
                       <span className="font-bold">
-                        {formatPrice(totalPrice + (hasFreeShipping ? 0 : shippingCostGBP))}
+                        {formatPrice(finalTotal)}
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground">{t('cart.includingVat')}</p>
