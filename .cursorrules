@@ -10,3 +10,4 @@ When adding backend logic, use Supabase Edge Functions in the /supabase/function
 
 Keep the design "premium and clean" as established in the current UI.
 Whenever you complete a major refactor or add a new feature, you must automatically update the CHANGELOG.md file with a bulleted list of exactly what files you changed and the logic you updated
+Regel att lägga till i filen: "Vi bygger en Headless Shopify-butik. Frontend är React/Vite. Backend och databas är Supabase. All orderlogik och integration mot Nyehandel (3PL) sker i Supabase Edge Functions. Rör ALDRIG cart-utils.ts utan explicit tillåtelse."
