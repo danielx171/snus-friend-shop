@@ -19,6 +19,8 @@ import { packSizeMultipliers } from '@/data/products';
 import { useTranslation } from '@/hooks/useTranslation';
 import { toast } from '@/hooks/use-toast';
 import { SEO } from '@/components/seo/SEO';
+import { getCartTotals, CartDeliveryOption } from '@/lib/cart-utils';
+import { apiFetch } from '@/lib/api';
 
 type CheckoutStep = 'shipping' | 'payment' | 'complete';
 
@@ -39,9 +41,6 @@ const deliveryOptions: DeliveryOption[] = [
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const { t, formatPrice, market } = useTranslation();
-
-  const localTotal = totalPrice * market.rateFromGBP;
-  const hasFreeShipping = localTotal >= market.freeShippingThreshold;
 
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('shipping');
   const [discountCode, setDiscountCode] = useState('');
@@ -75,18 +74,53 @@ export default function CheckoutPage() {
   };
 
   const selectedOption = deliveryOptions.find((o) => o.id === selectedDelivery);
-  const deliveryPriceGBP = hasFreeShipping && selectedDelivery === 'standard' ? 0 : (selectedOption?.priceGBP || 0);
-  const discountAmount = discountApplied ? totalPrice * 0.1 : 0;
-  const finalTotal = totalPrice - discountAmount + deliveryPriceGBP;
+
+  const deliveryOptionForTotals: CartDeliveryOption | undefined = selectedOption
+    ? {
+        id: selectedOption.id,
+        priceGBP: selectedOption.priceGBP,
+      }
+    : undefined;
+
+  const appliedDiscountCode = discountApplied ? discountCode : undefined;
+
+  const { subtotal, discount, shipping, finalTotal, freeShipping } = getCartTotals(
+    items,
+    market,
+    deliveryOptionForTotals,
+    appliedDiscountCode,
+  );
+
+  const deliveryPriceGBP = shipping;
+  const discountAmount = discount;
+  const hasFreeShipping = freeShipping;
 
   const canProceedToPayment = postcodeValid && selectedDelivery &&
     shippingDetails.firstName && shippingDetails.lastName &&
     shippingDetails.address && shippingDetails.city && shippingDetails.email;
 
-  const handlePlaceOrder = () => {
-    setCurrentStep('complete');
-    clearCart();
-    toast({ title: t('checkout.orderPlaced'), description: t('checkout.orderPlacedDesc') });
+  const handlePlaceOrder = async () => {
+    try {
+      await apiFetch('sync-nyehandel', {
+        method: 'POST',
+        body: {
+          items,
+          finalTotal,
+          shippingDetails,
+        },
+      });
+
+      setCurrentStep('complete');
+      clearCart();
+      toast({ title: t('checkout.orderPlaced'), description: t('checkout.orderPlacedDesc') });
+    } catch (error) {
+      console.error('Failed to sync with Nyehandel:', error);
+      toast({
+        title: t('checkout.orderFailed'),
+        description: t('checkout.orderFailedDesc'),
+        variant: 'destructive',
+      });
+    }
   };
 
   if (items.length === 0 && currentStep !== 'complete') {
