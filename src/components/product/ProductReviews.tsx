@@ -25,7 +25,7 @@ const mockReviews = [
     initials: 'ML',
     rating: 5,
     date: 'Feb 28, 2026',
-    title: 'Best mint pouch I've tried',
+    title: 'Best mint pouch I have tried',
     text: 'Smooth flavour that lasts a long time. The slim format fits perfectly and the nicotine release is just right. Will definitely reorder.',
     helpful: 14,
   },
