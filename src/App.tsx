@@ -18,6 +18,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import SearchResults from "./pages/SearchResults";
 import NotFound from "./pages/NotFound";
+import OrderConfirmation from "./pages/OrderConfirmation";
 import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
@@ -58,6 +59,7 @@ const App = () => (
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot" element={<ForgotPasswordPage />} />
               <Route path="/account" element={<AccountPage />} />
+              <Route path="/order-confirmation" element={<OrderConfirmation />} />
               <Route path="/brands" element={<BrandsIndex />} />
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
               <Route path="/ops/login" element={<OpsLogin />} />
