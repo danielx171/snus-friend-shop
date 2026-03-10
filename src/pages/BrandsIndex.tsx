@@ -18,6 +18,9 @@ const breadcrumbJsonLd = {
 };
 
 export default function BrandsIndex() {
+  const { data: allProducts = [] } = useCatalogProducts();
+  const getProductCount = (brandName: string) => allProducts.filter(p => p.brand === brandName).length;
+
   return (
     <Layout>
       <SEO
