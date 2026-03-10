@@ -3,8 +3,9 @@ import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { AgeGate } from '@/components/compliance/AgeGate';
 import { getBrandBySlug } from '@/data/brands';
-import { products } from '@/data/products';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
+import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
