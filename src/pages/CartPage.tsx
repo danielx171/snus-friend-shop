@@ -36,9 +36,10 @@ export default function CartPage() {
     return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
   };
 
-  // Get recommended products (different from cart items)
+  // Get recommended products from Shopify (different from cart items)
+  const { data: catalogProducts = [] } = useCatalogProducts();
   const cartProductIds = new Set(items.map(item => item.product.id));
-  const recommendedProducts = products
+  const recommendedProducts = catalogProducts
     .filter(p => !cartProductIds.has(p.id))
     .slice(0, 4);
 

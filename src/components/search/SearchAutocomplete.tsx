@@ -58,7 +58,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
       }));
 
     return [...productResults, ...brandResults];
-  }, [query]);
+  }, [query, allProducts]);
 
   useEffect(() => {
     setIsOpen(results.length > 0 || query.length >= 2);

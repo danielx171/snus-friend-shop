@@ -117,9 +117,12 @@ export default function BrandHub() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {topProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+              {productsLoading
+                ? Array.from({ length: TOP_PRODUCTS_LIMIT }).map((_, i) => <ProductCardSkeleton key={i} />)
+                : topProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))
+              }
             </div>
 
             {brandProducts.length > TOP_PRODUCTS_LIMIT && (

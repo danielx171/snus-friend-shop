@@ -1,4 +1,3 @@
-import { products as mockProducts } from '@/data/products';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
@@ -6,10 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
+import type { Product } from '@/data/products';
 
 interface FeaturedProductsProps {
   title: string;
-  filterFn?: (product: typeof mockProducts[0]) => boolean;
+  filterFn?: (product: Product) => boolean;
   limit?: number;
   viewAllHref?: string;
 }

@@ -20,6 +20,7 @@ export default function SearchResults() {
   const query = searchParams.get('q') || '';
   const [sortBy, setSortBy] = useState<SortOption>('relevance');
   const [brandFilter, setBrandFilter] = useState<string[]>([]);
+  const { data: allProducts = [], isLoading } = useCatalogProducts();
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
@@ -29,7 +30,7 @@ export default function SearchResults() {
       p.brand.toLowerCase().includes(q) ||
       p.flavorKey.toLowerCase().includes(q)
     );
-  }, [query]);
+  }, [query, allProducts]);
 
   const matchedBrands = useMemo(() => {
     if (!query.trim()) return [];
