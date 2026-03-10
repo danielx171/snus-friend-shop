@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { products as allProducts } from '@/data/products';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { brandDirectory } from '@/data/brands';
 import { Layout } from '@/components/layout/Layout';
 import { ProductCard } from '@/components/product/ProductCard';
@@ -20,6 +20,7 @@ export default function SearchResults() {
   const query = searchParams.get('q') || '';
   const [sortBy, setSortBy] = useState<SortOption>('relevance');
   const [brandFilter, setBrandFilter] = useState<string[]>([]);
+  const { data: allProducts = [], isLoading } = useCatalogProducts();
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
@@ -29,7 +30,7 @@ export default function SearchResults() {
       p.brand.toLowerCase().includes(q) ||
       p.flavorKey.toLowerCase().includes(q)
     );
-  }, [query]);
+  }, [query, allProducts]);
 
   const matchedBrands = useMemo(() => {
     if (!query.trim()) return [];

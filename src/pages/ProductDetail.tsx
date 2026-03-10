@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { products as mockProducts, PackSize, packSizeMultipliers } from '@/data/products';
+import { PackSize, packSizeMultipliers } from '@/data/products';
 import { useCatalogProducts, useCatalogProduct } from '@/hooks/useCatalog';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
