@@ -28,6 +28,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const { data: allProducts = [] } = useCatalogProducts();
 
   const results = useMemo<SearchResult[]>(() => {
     if (query.length < 2) return [];
