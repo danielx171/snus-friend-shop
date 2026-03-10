@@ -21,10 +21,11 @@ const TOP_PRODUCTS_LIMIT = 4;
 export default function BrandHub() {
   const { brandSlug } = useParams<{ brandSlug: string }>();
   const brand = brandSlug ? getBrandBySlug(brandSlug) : undefined;
+  const { data: allProducts = [], isLoading: productsLoading } = useCatalogProducts();
 
   if (!brand) return <NotFound />;
 
-  const brandProducts = products.filter((p) => p.brand === brand.name);
+  const brandProducts = allProducts.filter((p) => p.brand === brand.name);
   const topProducts = [...brandProducts]
     .sort((a, b) => b.ratings - a.ratings)
     .slice(0, TOP_PRODUCTS_LIMIT);
