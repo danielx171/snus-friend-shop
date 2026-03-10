@@ -10,7 +10,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-internal-function-secret",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
@@ -34,6 +34,16 @@ Deno.serve(async (req) => {
 
   if (req.method !== "POST") {
     return jsonResponse({ error: "method_not_allowed", requestId }, 405);
+  }
+
+  const internalFunctionsSecret = Deno.env.get("INTERNAL_FUNCTIONS_SECRET");
+  if (!internalFunctionsSecret) {
+    return jsonResponse({ error: "missing_internal_functions_secret", requestId }, 500);
+  }
+
+  const providedInternalSecret = req.headers.get("x-internal-function-secret");
+  if (!providedInternalSecret || providedInternalSecret !== internalFunctionsSecret) {
+    return jsonResponse({ error: "unauthorized", requestId }, 401);
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");

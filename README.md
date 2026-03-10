@@ -1,73 +1,66 @@
-# Welcome to your Lovable project
+# snus-friend-shop
 
-## Project info
+Headless Shopify storefront with React/Vite frontend and Supabase backend.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Architecture
 
-## How can I edit this code?
+- Frontend: React + Vite + TypeScript + Tailwind + shadcn/ui
+- Backend: Supabase (Postgres + Edge Functions)
+- Core rule: checkout/order/Nyehandel logic lives in `supabase/functions/`
 
-There are several ways of editing your application.
+## Critical boundaries
 
-**Use Lovable**
+- Never edit `src/lib/cart-utils.ts` without explicit permission.
+- Do not implement or modify Pipedrive/WhatsApp/Cowork automation.
+- Follow `NYEHANDEL_API_SYNC.md` collaboration boundaries.
+- Never commit secrets or customer data.
 
-Simply visit the [https://github.com/danielx171/snus-friend-shop.git) and start prompting.
+## Package manager policy
 
-Changes made via Lovable will be committed automatically to this repo.
+Use Bun as the default workflow.
 
-**Use your preferred IDE**
+- Install dependencies: `bun install`
+- Run scripts: `bun run <script>`
+- Avoid mixing lockfile ecosystems in one task.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Development commands
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+bun install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Start dev server
+bun run dev
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Lint
+bun run lint
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+# Build
+bun run build
+
+# Run tests once
+bun run test
 ```
 
-**Edit a file directly in GitHub**
+## Project structure
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- `src/`: frontend app
+- `src/pages/`: route pages (wired in `src/App.tsx`)
+- `src/components/ui/`: shadcn UI primitives
+- `src/lib/`: utilities and API helpers
+- `supabase/functions/`: checkout/order/Nyehandel server logic
+- `supabase/migrations/`: SQL migrations
 
-**Use GitHub Codespaces**
+## Operational docs
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- `AGENTS.md`: agent workflow and coding rules
+- `.cursorrules`: mandatory repository constraints
+- `ROADMAP.md`: project execution status and next steps
+- `DEPLOYMENT_CHECKLIST.md`: required env/config before deployment
+- `NYEHANDEL_API_SYNC.md`: collaboration and ownership boundaries
 
-## What technologies are used for this project?
+## Notes for contributors
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- Keep diffs scoped and avoid unrelated refactors.
+- Use TypeScript and functional React components.
+- For major features/refactors, update `ROADMAP.md` and `CHANGELOG.md`.

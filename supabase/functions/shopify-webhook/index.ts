@@ -38,6 +38,7 @@ type ShopifyLineItem = {
 
 type ShopifyOrderPayload = {
   id?: number;
+  admin_graphql_api_id?: string;
   order_number?: number;
   email?: string;
   total_price?: string;
@@ -83,8 +84,118 @@ async function verifyShopifyHmac(rawBody: string, hmacHeader: string, secret: st
 }
 
 function isPaidEvent(topic: string, payload: ShopifyOrderPayload): boolean {
-  if (topic === "orders/paid") return true;
-  return (payload.financial_status ?? "").toLowerCase() === "paid";
+  if (topic !== "orders/paid") return false;
+  return (payload.financial_status ?? "paid").toLowerCase() === "paid";
+}
+
+function buildShopifyOrderGid(payload: ShopifyOrderPayload): string | null {
+  if (payload.admin_graphql_api_id && payload.admin_graphql_api_id.startsWith("gid://shopify/Order/")) {
+    return payload.admin_graphql_api_id;
+  }
+
+  if (payload.id) {
+    return `gid://shopify/Order/${payload.id}`;
+  }
+
+  return null;
+}
+
+async function callShopifyAdminGraphql(
+  shopDomain: string,
+  adminToken: string,
+  apiVersion: string,
+  query: string,
+  variables: Record<string, unknown>,
+): Promise<{ ok: boolean; details?: string; data?: Record<string, unknown> }> {
+  const response = await fetch(`https://${shopDomain}/admin/api/${apiVersion}/graphql.json`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": adminToken,
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+
+  if (!response.ok) {
+    const details = await response.text();
+    return { ok: false, details: `http_${response.status}:${details}` };
+  }
+
+  const data = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+  const graphqlErrors = Array.isArray(data?.errors) ? data.errors : [];
+  if (graphqlErrors.length > 0) {
+    return { ok: false, details: `graphql_errors:${JSON.stringify(graphqlErrors)}` };
+  }
+
+  return { ok: true, data };
+}
+
+async function markShopifyOrderSyncFailed(
+  shopDomain: string,
+  adminToken: string,
+  apiVersion: string,
+  orderGid: string,
+): Promise<{ ok: boolean; details?: string }> {
+  const mutation = `
+    mutation AddOrderTag($id: ID!, $tags: [String!]!) {
+      tagsAdd(id: $id, tags: $tags) {
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const result = await callShopifyAdminGraphql(shopDomain, adminToken, apiVersion, mutation, {
+    id: orderGid,
+    tags: ["NYE_SYNC_FAILED"],
+  });
+
+  const userErrors = (result.data?.tagsAdd as { userErrors?: unknown[] } | undefined)?.userErrors ?? [];
+  if (Array.isArray(userErrors) && userErrors.length > 0) {
+    return { ok: false, details: `tags_add_user_errors:${JSON.stringify(userErrors)}` };
+  }
+
+  return result;
+}
+
+async function writeNyehandelOrderIdMetafield(
+  shopDomain: string,
+  adminToken: string,
+  apiVersion: string,
+  orderGid: string,
+  nyehandelOrderId: string,
+): Promise<{ ok: boolean; details?: string }> {
+  const mutation = `
+    mutation SetOrderMetafield($metafields: [MetafieldsSetInput!]!) {
+      metafieldsSet(metafields: $metafields) {
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const result = await callShopifyAdminGraphql(shopDomain, adminToken, apiVersion, mutation, {
+    metafields: [
+      {
+        ownerId: orderGid,
+        namespace: "nyehandel",
+        key: "order_id",
+        type: "single_line_text_field",
+        value: nyehandelOrderId,
+      },
+    ],
+  });
+
+  const userErrors = (result.data?.metafieldsSet as { userErrors?: unknown[] } | undefined)?.userErrors ?? [];
+  if (Array.isArray(userErrors) && userErrors.length > 0) {
+    return { ok: false, details: `metafields_set_user_errors:${JSON.stringify(userErrors)}` };
+  }
+
+  return result;
 }
 
 Deno.serve(async (req) => {
@@ -98,13 +209,29 @@ Deno.serve(async (req) => {
   }
 
   const secret = Deno.env.get("SHOPIFY_WEBHOOK_SECRET");
+  const expectedShopDomain = (Deno.env.get("SHOPIFY_STORE_DOMAIN") ?? "").trim().toLowerCase();
+  const shopifyAdminToken = Deno.env.get("SHOPIFY_ADMIN_API_ACCESS_TOKEN");
+  const shopifyApiVersion = (Deno.env.get("SHOPIFY_API_VERSION") ?? "2024-10").trim();
   if (!secret) {
     return jsonResponse({ error: "missing_webhook_secret", requestId }, 500);
   }
 
+  if (!expectedShopDomain) {
+    return jsonResponse({ error: "missing_shopify_store_domain", requestId }, 500);
+  }
+
+  if (!shopifyAdminToken) {
+    return jsonResponse({ error: "missing_shopify_admin_api_access_token", requestId }, 500);
+  }
+
   const hmacHeader = req.headers.get("x-shopify-hmac-sha256") ?? "";
+  const shopDomainHeader = (req.headers.get("x-shopify-shop-domain") ?? "").trim().toLowerCase();
   const topic = req.headers.get("x-shopify-topic") ?? "unknown";
   const webhookId = req.headers.get("x-shopify-webhook-id") ?? crypto.randomUUID();
+
+  if (!shopDomainHeader || shopDomainHeader !== expectedShopDomain) {
+    return jsonResponse({ error: "invalid_shop_domain", requestId, webhookId }, 401);
+  }
 
   const rawBody = await req.text();
   if (!hmacHeader) {
@@ -125,8 +252,13 @@ Deno.serve(async (req) => {
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const internalFunctionsSecret = Deno.env.get("INTERNAL_FUNCTIONS_SECRET");
   if (!supabaseUrl || !serviceRoleKey) {
     return jsonResponse({ error: "missing_supabase_env", requestId }, 500);
+  }
+
+  if (!internalFunctionsSecret) {
+    return jsonResponse({ error: "missing_internal_functions_secret", requestId }, 500);
   }
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
@@ -180,6 +312,15 @@ Deno.serve(async (req) => {
       const paidAt = payload.paid_at ?? payload.created_at ?? new Date().toISOString();
       const lineItems = Array.isArray(payload.line_items) ? payload.line_items : [];
       const shippingAddress = payload.shipping_address ?? {};
+      const orderGid = buildShopifyOrderGid(payload);
+
+      if (!orderGid) {
+        await adminClient
+          .from("webhook_inbox")
+          .update({ status: "failed", processed_at: new Date().toISOString() })
+          .eq("id", webhookRow.id);
+        return jsonResponse({ error: "missing_shopify_order_gid", requestId, webhookId }, 500);
+      }
 
       const { data: upsertedOrder, error: upsertError } = await adminClient
         .from("orders")
@@ -212,6 +353,8 @@ Deno.serve(async (req) => {
           "Content-Type": "application/json",
           apikey: serviceRoleKey,
           Authorization: `Bearer ${serviceRoleKey}`,
+          "x-internal-function-secret": internalFunctionsSecret,
+          "x-request-id": requestId,
         },
         body: JSON.stringify({ orderId: upsertedOrder.id }),
       });
@@ -232,7 +375,45 @@ Deno.serve(async (req) => {
             last_sync_error: `push_order_trigger_failed_${pushResponse.status}:${details}`,
           })
           .eq("id", upsertedOrder.id);
+
+        const syncFailedTagResult = await markShopifyOrderSyncFailed(
+          expectedShopDomain,
+          shopifyAdminToken,
+          shopifyApiVersion,
+          orderGid,
+        );
+
+        if (!syncFailedTagResult.ok) {
+          await adminClient
+            .from("orders")
+            .update({
+              last_sync_error: `shopify_tag_failed:${syncFailedTagResult.details ?? "unknown"}`,
+            })
+            .eq("id", upsertedOrder.id);
+        }
       } else {
+        const pushResult = await pushResponse.json().catch(() => ({}));
+        const nyehandelOrderId = String(pushResult?.nyehandelOrderId ?? "").trim();
+
+        if (nyehandelOrderId) {
+          const metafieldResult = await writeNyehandelOrderIdMetafield(
+            expectedShopDomain,
+            shopifyAdminToken,
+            shopifyApiVersion,
+            orderGid,
+            nyehandelOrderId,
+          );
+
+          if (!metafieldResult.ok) {
+            await adminClient
+              .from("orders")
+              .update({
+                last_sync_error: `shopify_metafield_failed:${metafieldResult.details ?? "unknown"}`,
+              })
+              .eq("id", upsertedOrder.id);
+          }
+        }
+
         console.log(JSON.stringify({
           requestId,
           webhookId,

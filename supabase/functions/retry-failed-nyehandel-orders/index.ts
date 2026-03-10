@@ -22,21 +22,29 @@ function jsonResponse(body: unknown, status = 200): Response {
 }
 
 Deno.serve(async (req) => {
+  const requestId = req.headers.get("x-request-id") ?? crypto.randomUUID();
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
-  if (req.method !== "POST") return jsonResponse({ error: "method_not_allowed" }, 405);
+  if (req.method !== "POST") return jsonResponse({ error: "method_not_allowed", requestId }, 405);
 
   const cronSecret = Deno.env.get("RETRY_FAILED_ORDERS_SECRET");
-  if (cronSecret) {
-    const provided = req.headers.get("x-cron-secret");
-    if (!provided || provided !== cronSecret) {
-      return jsonResponse({ error: "unauthorized" }, 401);
-    }
+  if (!cronSecret) {
+    return jsonResponse({ error: "missing_retry_failed_orders_secret", requestId }, 500);
+  }
+
+  const provided = req.headers.get("x-cron-secret");
+  if (!provided || provided !== cronSecret) {
+    return jsonResponse({ error: "unauthorized", requestId }, 401);
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const internalFunctionsSecret = Deno.env.get("INTERNAL_FUNCTIONS_SECRET");
   if (!supabaseUrl || !serviceRoleKey) {
-    return jsonResponse({ error: "missing_supabase_env" }, 500);
+    return jsonResponse({ error: "missing_supabase_env", requestId }, 500);
+  }
+
+  if (!internalFunctionsSecret) {
+    return jsonResponse({ error: "missing_internal_functions_secret", requestId }, 500);
   }
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
@@ -50,7 +58,7 @@ Deno.serve(async (req) => {
     .limit(50);
 
   if (fetchError) {
-    return jsonResponse({ error: "failed_to_fetch_failed_orders", details: fetchError.message }, 500);
+    return jsonResponse({ error: "failed_to_fetch_failed_orders", details: fetchError.message, requestId }, 500);
   }
 
   const results: Array<{ orderId: string; ok: boolean; status: number; details?: string }> = [];
@@ -62,6 +70,8 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json",
         apikey: serviceRoleKey,
         Authorization: `Bearer ${serviceRoleKey}`,
+        "x-internal-function-secret": internalFunctionsSecret,
+        "x-request-id": requestId,
       },
       body: JSON.stringify({ orderId: order.id }),
     });
@@ -79,6 +89,7 @@ Deno.serve(async (req) => {
   }
 
   return jsonResponse({
+    requestId,
     scanned: failedOrders?.length ?? 0,
     retried: results.length,
     success: results.filter((r) => r.ok).length,

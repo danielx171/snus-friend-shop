@@ -28,7 +28,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.push-order-to-nyehandel]
-verify_jwt = false
+verify_jwt = true
 
 [functions.retry-failed-nyehandel-orders]
-verify_jwt = false
+verify_jwt = true

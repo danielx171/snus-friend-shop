@@ -27,10 +27,28 @@ import WebhookInbox from "./pages/ops/WebhookInbox";
 import SyncStatus from "./pages/ops/SyncStatus";
 import SkuMappings from "./pages/ops/SkuMappings";
 import OpsUsers from "./pages/ops/OpsUsers";
+import { hasSupabaseEnv, missingSupabaseEnvVars } from "@/integrations/supabase/client";
 
 const queryClient = new QueryClient();
 
+const MissingApiKeysScreen = () => (
+  <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-6">
+    <div className="w-full max-w-xl rounded-lg border border-destructive/40 bg-card p-6">
+      <h1 className="text-2xl font-semibold">Missing API Keys</h1>
+      <p className="mt-3 text-sm text-muted-foreground">
+        Frontend environment variables for Supabase are missing. Add the variables below and restart the Vite dev server.
+      </p>
+      <ul className="mt-4 list-disc pl-5 text-sm">
+        {missingSupabaseEnvVars.map((envVar) => (
+          <li key={envVar}>{envVar}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+);
+
 const App = () => (
+  !hasSupabaseEnv ? <MissingApiKeysScreen /> :
   <ThemeProvider
     attribute="class"
     defaultTheme="dark"
