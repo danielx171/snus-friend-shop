@@ -1,0 +1,12 @@
+{
+  "id": "metrics-2026-03-10",
+  "title": "Daily order pipeline metrics",
+  "date": "2026-03-10",
+  "orders_paid": 48,
+  "orders_synced": 41,
+  "orders_failed_sync": 7,
+  "webhook_failures": 3,
+  "retry_success_rate": 0.42,
+  "collected_at": "2026-03-10T08:30:00Z",
+  "tags": ["metrics", "daily"]
+}

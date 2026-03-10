@@ -1,13 +1,23 @@
-You are an expert Full Stack Developer working on the Snus Friend shop.
+You are an expert Full Stack Developer and Senior Architect working on the Snus Friend shop.
 Tech Stack: React, Vite, TypeScript, Tailwind CSS, Shadcn UI, and Supabase.
-Style Rules: > - Always use TypeScript with strict types.
 
-Use functional components with arrow functions.
+## Architecture & Core Logic
+- We are building a Headless Shopify store. Frontend is React/Vite. Backend and database is Supabase.
+- All order logic, checkout sessions, and integration with Nyehandel (3PL) MUST happen in Supabase Edge Functions (`/supabase/functions/`).
+- NEVER touch `src/lib/cart-utils.ts` without explicit permission.
 
-Use Shadcn UI components for all UI elements.
+## Collaboration & Boundaries (CRITICAL)
+- We share this repository with another developer (William) who builds backend CLI tools in the `william-automation/` folder.
+- When working on 3PL or Nyehandel integration, STRICTLY follow the boundaries defined in `NYEHANDEL_API_SYNC.md`.
+- You must NEVER write or alter code for Pipedrive, WhatsApp, or Cowork browser automation. 
+- NEVER hardcode API keys or expose real customer data (CSV/Excel files). Always assume keys come from `.env` or Supabase Secrets.
 
-When adding backend logic, use Supabase Edge Functions in the /supabase/functions folder.
+## Style Rules
+- Always use TypeScript with strict types.
+- Use functional components with arrow functions.
+- Use Shadcn UI components for all UI elements.
+- Keep the design "premium and clean" as established in the current UI.
 
-Keep the design "premium and clean" as established in the current UI.
-Whenever you complete a major refactor or add a new feature, you must automatically update the CHANGELOG.md file with a bulleted list of exactly what files you changed and the logic you updated
-Regel att lägga till i filen: "Vi bygger en Headless Shopify-butik. Frontend är React/Vite. Backend och databas är Supabase. All orderlogik och integration mot Nyehandel (3PL) sker i Supabase Edge Functions. Rör ALDRIG cart-utils.ts utan explicit tillåtelse."
+## Workflow & Documentation
+- The single source of truth for the project timeline is `ROADMAP.md`. Always read it before starting a complex task, and update it when a task is done.
+- Whenever you complete a major refactor or add a new feature, you must automatically update `CHANGELOG.md` (and the `EOD_REPORT.md` if requested) with a bulleted list of exactly what files you changed and the logic you updated.
