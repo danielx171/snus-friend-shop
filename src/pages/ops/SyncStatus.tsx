@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { mockSyncRuns } from '@/data/opsMock';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Package, RefreshCw } from 'lucide-react';
-import { fetchNyehandel } from '@/lib/api';
+import { ArrowLeft, Package, RefreshCw, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useSyncRuns } from '@/hooks/useOpsData';
+import { apiFetch } from '@/lib/api';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 import type { SyncRun } from '@/types/ops';
 
 function timeAgo(iso: string) {
@@ -32,13 +34,22 @@ const statusVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'o
 };
 
 export default function SyncStatus() {
-  const [runs, setRuns] = useState<SyncRun[]>(mockSyncRuns);
+  const { data: runs = [], isLoading, refetch } = useSyncRuns();
+  const [syncing, setSyncing] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  useEffect(() => {
-    fetchNyehandel<SyncRun[]>('sync-runs').then((data) => {
-      if (data) setRuns(data);
-    });
-  }, []);
+  const handleSync = async (type: 'catalog' | 'inventory') => {
+    setSyncing(type);
+    try {
+      await apiFetch('sync-nyehandel', { params: { type } });
+      toast({ title: 'Sync started', description: `${type} sync has been triggered.` });
+      setTimeout(() => refetch(), 2000);
+    } catch (e: any) {
+      toast({ title: 'Sync failed', description: e.message, variant: 'destructive' });
+    } finally {
+      setSyncing(null);
+    }
+  };
 
   const catalogRuns = runs.filter((r) => r.type === 'catalog');
   const inventoryRuns = runs.filter((r) => r.type === 'inventory');
@@ -49,18 +60,30 @@ export default function SyncStatus() {
     <Layout showNicotineWarning={false}>
       <SEO title="Sync Status — SnusFriend Ops" description="Internal sync monitoring." metaRobots="noindex,nofollow" />
       <div className="container py-8 space-y-8">
-        <div className="flex items-center gap-3">
-          <Link to="/ops" className="text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <h1 className="text-2xl font-bold text-foreground">Sync Status</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link to="/ops" className="text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <h1 className="text-2xl font-bold text-foreground">Sync Status</h1>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" disabled={!!syncing} onClick={() => handleSync('catalog')}>
+              {syncing === 'catalog' ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Package className="h-4 w-4 mr-1" />}
+              Sync Catalog
+            </Button>
+            <Button size="sm" variant="outline" disabled={!!syncing} onClick={() => handleSync('inventory')}>
+              {syncing === 'inventory' ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <RefreshCw className="h-4 w-4 mr-1" />}
+              Sync Inventory
+            </Button>
+          </div>
         </div>
 
         {/* Summary cards */}
         <div className="grid gap-4 sm:grid-cols-2">
           {[
-            { label: 'Catalog Sync', icon: Package, run: lastCatalog },
-            { label: 'Inventory Sync', icon: RefreshCw, run: lastInventory },
+            { label: 'Catalog Sync', icon: Package, run: lastCatalog, type: 'catalog' as const },
+            { label: 'Inventory Sync', icon: RefreshCw, run: lastInventory, type: 'inventory' as const },
           ].map(({ label, icon: Icon, run }) => (
             <Card key={label} className="transition-shadow duration-200 hover:shadow-md">
               <CardHeader className="flex flex-row items-center gap-3 pb-2">
@@ -88,7 +111,7 @@ export default function SyncStatus() {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-muted-foreground text-sm">No runs recorded.</p>
+                  <p className="text-muted-foreground text-sm">{isLoading ? 'Loading…' : 'No runs recorded.'}</p>
                 )}
               </CardContent>
             </Card>
@@ -127,6 +150,13 @@ export default function SyncStatus() {
                     <TableCell className="text-right text-muted-foreground text-sm">{timeAgo(run.startedAt)}</TableCell>
                   </TableRow>
                 ))}
+                {runs.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                      {isLoading ? 'Loading…' : 'No sync runs yet.'}
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </CardContent>

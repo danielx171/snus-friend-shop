@@ -3,112 +3,82 @@ import { Separator } from '@/components/ui/separator';
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-card">
-      <div className="container py-12">
-        <div className="grid gap-8 md:grid-cols-4">
-          {/* Brand */}
+    <footer className="border-t border-border/20 bg-card/30">
+      <div className="container py-16">
+        <div className="grid gap-10 md:grid-cols-4">
           <div className="space-y-4">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg shadow-sm">
+            <Link to="/" className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg glow-primary">
                 SF
               </div>
-              <span className="text-xl font-bold text-foreground">SnusFriend</span>
+              <span className="text-xl font-semibold text-foreground">SnusFriend</span>
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               Your trusted source for premium nicotine pouches. Fast UK delivery and excellent customer service.
             </p>
           </div>
 
-          {/* Customer Service */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Customer Service</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link to="/shipping" className="text-muted-foreground hover:text-primary transition-colors">
-                  Shipping Information
-                </Link>
-              </li>
-              <li>
-                <Link to="/returns" className="text-muted-foreground hover:text-primary transition-colors">
-                  Returns & Refunds
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Information */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Information</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">
-                  Terms & Conditions
-                </Link>
-              </li>
-              <li>
-                <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/cookies" className="text-muted-foreground hover:text-primary transition-colors">
-                  Cookie Policy
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Follow Us */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Follow Us</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Facebook
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  TikTok
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Twitter
-                </a>
-              </li>
-            </ul>
-          </div>
+          {[
+            {
+              title: 'Customer Service',
+              links: [
+                { to: '/contact', label: 'Contact Us' },
+                { to: '/faq', label: 'FAQ' },
+                { to: '/shipping', label: 'Shipping Information' },
+                { to: '/returns', label: 'Returns & Refunds' },
+              ],
+            },
+            {
+              title: 'Information',
+              links: [
+                { to: '/about', label: 'About Us' },
+                { to: '/terms', label: 'Terms & Conditions' },
+                { to: '/privacy', label: 'Privacy Policy' },
+                { to: '/cookies', label: 'Cookie Policy' },
+              ],
+            },
+            {
+              title: 'Follow Us',
+              links: [
+                { to: '#', label: 'Instagram' },
+                { to: '#', label: 'Facebook' },
+                { to: '#', label: 'TikTok' },
+                { to: '#', label: 'Twitter' },
+              ],
+            },
+          ].map((section) => (
+            <div key={section.title}>
+              <h3 className="font-semibold text-foreground mb-5 text-sm uppercase tracking-wider">{section.title}</h3>
+              <ul className="space-y-3 text-sm">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.to} className="text-muted-foreground hover:text-primary transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <Separator className="my-8" />
+        <Separator className="my-10 bg-border/30" />
+
+        {/* Payment badges row */}
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+          {['Visa', 'Mastercard', 'Klarna', 'PayPal', 'Apple Pay'].map((badge) => (
+            <div key={badge} className="px-3 py-1.5 rounded-lg bg-muted/20 border border-border/20 text-xs text-muted-foreground font-medium">
+              {badge}
+            </div>
+          ))}
+        </div>
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
             <p className="text-xs text-muted-foreground">
               © {new Date().getFullYear()} SnusFriend. All rights reserved.
             </p>
-            <Link to="/ops" className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+            <Link to="/ops" className="text-xs text-muted-foreground/40 hover:text-primary transition-colors">
               Ops
             </Link>
           </div>
