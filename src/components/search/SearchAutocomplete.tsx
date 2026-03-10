@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRight, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { products as allProducts } from '@/data/products';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { brandDirectory } from '@/data/brands';
 import { cn } from '@/lib/utils';
 
