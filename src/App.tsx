@@ -29,7 +29,20 @@ import SkuMappings from "./pages/ops/SkuMappings";
 import OpsUsers from "./pages/ops/OpsUsers";
 import { hasSupabaseEnv, missingSupabaseEnvVars } from "@/integrations/supabase/client";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Do not retry on client errors (4xx). Retrying auth failures or missing
+      // resources wastes requests and delays showing the real error to the user.
+      retry: (failureCount, error) => {
+        if (error instanceof Error && /^apiFetch .+: [45]\d\d$/.test(error.message)) {
+          return false;
+        }
+        return failureCount < 2;
+      },
+    },
+  },
+});
 
 const MissingApiKeysScreen = () => (
   <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-6">

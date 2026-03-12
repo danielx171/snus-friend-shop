@@ -84,37 +84,61 @@ export type Database = {
       }
       orders: {
         Row: {
+          checkout_status: 'pending' | 'paid' | 'failed' | 'cancelled'
           created_at: string
           currency: string
           customer_email: string | null
+          customer_metadata: Json
           id: string
+          idempotency_key: string | null
           last_sync_error: string | null
+          line_items_snapshot: Json
           nyehandel_order_id: string | null
-          nyehandel_sync_status: string
+          nyehandel_order_status: string | null
+          nyehandel_sync_status: 'pending' | 'synced' | 'failed'
+          paid_at: string | null
+          shipping_address: Json
+          shopify_checkout_id: string | null
           shopify_order_id: string | null
           total_price: number
           updated_at: string
         }
         Insert: {
+          checkout_status?: 'pending' | 'paid' | 'failed' | 'cancelled'
           created_at?: string
           currency?: string
           customer_email?: string | null
+          customer_metadata?: Json
           id?: string
+          idempotency_key?: string | null
           last_sync_error?: string | null
+          line_items_snapshot?: Json
           nyehandel_order_id?: string | null
-          nyehandel_sync_status?: string
+          nyehandel_order_status?: string | null
+          nyehandel_sync_status?: 'pending' | 'synced' | 'failed'
+          paid_at?: string | null
+          shipping_address?: Json
+          shopify_checkout_id?: string | null
           shopify_order_id?: string | null
           total_price: number
           updated_at?: string
         }
         Update: {
+          checkout_status?: 'pending' | 'paid' | 'failed' | 'cancelled'
           created_at?: string
           currency?: string
           customer_email?: string | null
+          customer_metadata?: Json
           id?: string
+          idempotency_key?: string | null
           last_sync_error?: string | null
+          line_items_snapshot?: Json
           nyehandel_order_id?: string | null
-          nyehandel_sync_status?: string
+          nyehandel_order_status?: string | null
+          nyehandel_sync_status?: 'pending' | 'synced' | 'failed'
+          paid_at?: string | null
+          shipping_address?: Json
+          shopify_checkout_id?: string | null
           shopify_order_id?: string | null
           total_price?: number
           updated_at?: string
@@ -250,7 +274,7 @@ export type Database = {
           nyehandel_sku: string
           product_name: string
           shopify_sku: string | null
-          status: string
+          status: 'mapped' | 'missing' | 'conflict'
         }
         Insert: {
           created_at?: string
@@ -259,7 +283,7 @@ export type Database = {
           nyehandel_sku: string
           product_name: string
           shopify_sku?: string | null
-          status?: string
+          status?: 'mapped' | 'missing' | 'conflict'
         }
         Update: {
           created_at?: string
@@ -268,7 +292,7 @@ export type Database = {
           nyehandel_sku?: string
           product_name?: string
           shopify_sku?: string | null
-          status?: string
+          status?: 'mapped' | 'missing' | 'conflict'
         }
         Relationships: []
       }
@@ -282,8 +306,8 @@ export type Database = {
           id: string
           items_processed: number
           started_at: string
-          status: string
-          type: string
+          status: 'success' | 'partial' | 'failed' | 'running'
+          type: 'catalog' | 'inventory'
         }
         Insert: {
           completed_at?: string | null
@@ -294,8 +318,8 @@ export type Database = {
           id?: string
           items_processed?: number
           started_at?: string
-          status?: string
-          type: string
+          status?: 'success' | 'partial' | 'failed' | 'running'
+          type: 'catalog' | 'inventory'
         }
         Update: {
           completed_at?: string | null
@@ -306,8 +330,8 @@ export type Database = {
           id?: string
           items_processed?: number
           started_at?: string
-          status?: string
-          type?: string
+          status?: 'success' | 'partial' | 'failed' | 'running'
+          type?: 'catalog' | 'inventory'
         }
         Relationships: []
       }
@@ -339,9 +363,9 @@ export type Database = {
           id: string
           payload: Json
           processed_at: string | null
-          provider: string
+          provider: 'shopify' | 'nyehandel'
           received_at: string
-          status: string
+          status: 'received' | 'processed' | 'failed'
           topic: string
         }
         Insert: {
@@ -350,9 +374,9 @@ export type Database = {
           id?: string
           payload?: Json
           processed_at?: string | null
-          provider: string
+          provider: 'shopify' | 'nyehandel'
           received_at?: string
-          status?: string
+          status?: 'received' | 'processed' | 'failed'
           topic: string
         }
         Update: {
@@ -361,9 +385,9 @@ export type Database = {
           id?: string
           payload?: Json
           processed_at?: string | null
-          provider?: string
+          provider?: 'shopify' | 'nyehandel'
           received_at?: string
-          status?: string
+          status?: 'received' | 'processed' | 'failed'
           topic?: string
         }
         Relationships: []
