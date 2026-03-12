@@ -24,6 +24,25 @@ export interface SyncRun {
   errors: number;
 }
 
+export type AlertRuleKey = 'unpaid_deadline' | 'deliverable_delay';
+export type AlertSeverity = 'low' | 'medium' | 'high' | 'critical';
+export type AlertStatus = 'open' | 'resolved';
+
+export interface OpsAlert {
+  id: string;
+  alertDate: string;
+  ruleKey: AlertRuleKey;
+  severity: AlertSeverity;
+  status: AlertStatus;
+  sourceOrderId: string;
+  sourceShopifyOrderId: string | null;
+  title: string;
+  message: string;
+  context: Record<string, unknown>;
+  createdAt: string;
+  resolvedAt: string | null;
+}
+
 export type SkuMappingStatus = 'mapped' | 'missing' | 'conflict';
 
 export interface SkuMapping {

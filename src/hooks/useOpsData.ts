@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { mockSyncRuns, mockWebhookEvents, mockSkuMappings } from '@/data/opsMock';
 import type { SyncRun, WebhookEvent, SkuMapping } from '@/types/ops';
 
 export function useSyncRuns() {
@@ -13,11 +12,9 @@ export function useSyncRuns() {
         .order('started_at', { ascending: false })
         .limit(50);
 
-      if (error || !data || data.length === 0) {
-        return mockSyncRuns;
-      }
+      if (error) throw new Error(error.message);
 
-      return data.map((r: any) => ({
+      return (data ?? []).map((r: any) => ({
         id: r.id,
         type: r.type as SyncRun['type'],
         status: r.status as SyncRun['status'],
@@ -35,24 +32,23 @@ export function useWebhookEvents() {
   return useQuery({
     queryKey: ['ops-webhook-events'],
     queryFn: async (): Promise<WebhookEvent[]> => {
+      // Fetch only summary columns — payload is large JSON and not needed for the dashboard list.
       const { data, error } = await supabase
         .from('webhook_inbox')
-        .select('*')
+        .select('id, provider, topic, status, attempts, received_at')
         .order('received_at', { ascending: false })
         .limit(100);
 
-      if (error || !data || data.length === 0) {
-        return mockWebhookEvents;
-      }
+      if (error) throw new Error(error.message);
 
-      return data.map((e: any) => ({
+      return (data ?? []).map((e: any) => ({
         eventId: e.id,
         provider: e.provider as WebhookEvent['provider'],
         topic: e.topic,
         status: e.status as WebhookEvent['status'],
         attempts: e.attempts,
         receivedAt: e.received_at,
-        payload: e.payload as Record<string, unknown>,
+        payload: {},
       }));
     },
     refetchInterval: 10000,
@@ -68,11 +64,9 @@ export function useSkuMappings() {
         .select('*')
         .order('product_name');
 
-      if (error || !data || data.length === 0) {
-        return mockSkuMappings;
-      }
+      if (error) throw new Error(error.message);
 
-      return data.map((m: any) => ({
+      return (data ?? []).map((m: any) => ({
         id: m.id,
         nyehandelSku: m.nyehandel_sku,
         shopifySku: m.shopify_sku,

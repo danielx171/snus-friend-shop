@@ -170,26 +170,32 @@ export default function WebhookInbox() {
                     </TableCell>
                   </TableRow>
                 )}
-                {!loading && !loadError && filtered.map((evt) => (
-                  <TableRow
-                    key={evt.eventId}
-                    className="cursor-pointer transition-colors duration-150 hover:bg-muted/50"
-                    onClick={() => setSelected(evt)}
-                  >
-                    <TableCell className="font-mono text-xs">{evt.eventId}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="capitalize">{evt.provider}</Badge>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{evt.topic}</TableCell>
-                    <TableCell>
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${statusColor[evt.status]}`}>
-                        {evt.status}
-                      </span>
-                    </TableCell>
-                    <TableCell>{evt.attempts}</TableCell>
-                    <TableCell className="text-right text-muted-foreground text-sm">{timeAgo(evt.receivedAt)}</TableCell>
-                  </TableRow>
-                ))}
+                {!loading && !loadError && filtered.map((evt) => {
+                  const eventType = extractEventType(evt.topic, evt.payload);
+                  const orderId = extractOrderId(evt.payload);
+                  return (
+                    <TableRow
+                      key={evt.eventId}
+                      className="cursor-pointer transition-colors duration-150 hover:bg-muted/50"
+                      onClick={() => setSelected(evt)}
+                    >
+                      <TableCell className="font-mono text-xs">{evt.eventId}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="capitalize">{evt.provider}</Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">{eventType}</TableCell>
+                      <TableCell className="font-mono text-xs text-muted-foreground">
+                        {orderId ?? '—'}
+                      </TableCell>
+                      <TableCell>
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${statusColor[evt.status]}`}>
+                          {evt.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right text-muted-foreground text-sm">{timeAgo(evt.receivedAt)}</TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </CardContent>

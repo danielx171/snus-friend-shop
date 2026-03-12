@@ -20,7 +20,6 @@ export async function apiFetch<T = unknown>(
 ): Promise<T> {
   const { data } = await supabase.auth.getSession();
   const accessToken = data.session?.access_token;
-  console.log('apiFetch token?', Boolean(accessToken), 'fn:', fnName);
 
   const url = new URL(`${FUNCTIONS_BASE}/${fnName}`);
   if (opts?.params) {
