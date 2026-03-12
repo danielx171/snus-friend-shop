@@ -32,3 +32,6 @@ verify_jwt = true
 
 [functions.retry-failed-nyehandel-orders]
 verify_jwt = true
+
+[functions.ops-b2b-queues]
+verify_jwt = true

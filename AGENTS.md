@@ -39,6 +39,30 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 - William should not touch React frontend implementation.
 - Shared Nyehandel API logic is allowed in agreed boundaries.
 
+## Cross-Repo Integration Protocol
+- When reviewing William's remote repository, work in an isolated review branch (for example `granskning-*`), not on `dev`.
+- Never merge, cherry-pick, or otherwise import William's branch into `dev`/`main` without explicit user instruction.
+- Treat William's code as a business-logic reference, not a runtime dependency.
+- Before implementing logic inspired by William's code, include a short translation spec in handoff notes:
+  - source file/function in William repo
+  - target file/function in this repo
+  - rule/behavior being translated
+  - required auth, logging, and idempotency guarantees
+
+## Shared Logic, Separate Runtime
+- You may reuse business rules and API mapping ideas from William's Python automation work.
+- Do not introduce Python/Flask runtime code paths into this repository's production flow.
+- Keep production checkout/order/Nyehandel execution in Supabase Edge Functions (`supabase/functions/`).
+
+## Data Governance for Shared Work
+- Never commit real customer/order data artifacts while collaborating across repos.
+- Keep operational exports anonymized if examples are needed in documentation.
+- When new function secrets are required, update `.env.example` and deployment docs in the same task.
+
+## Rule Externalization Policy
+- Avoid hardcoded customer-specific rules (owner filters, skipped IDs, carrier special-cases) in function code.
+- Place mutable rules in environment variables or database configuration tables so ops can adjust without code edits.
+
 ## Package Manager Policy
 - Preferred workflow: Bun only.
 - Use `bun install` for dependency installs.

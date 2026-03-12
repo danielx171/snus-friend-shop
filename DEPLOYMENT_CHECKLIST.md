@@ -7,12 +7,15 @@
 - [ ] Set `INTERNAL_FUNCTIONS_SECRET` for internal function-to-function auth (`shopify-webhook`, `push-order-to-nyehandel`, `retry-failed-nyehandel-orders`).
 - [ ] Set `NYEHANDEL_API_URL` and `NYEHANDEL_API_TOKEN` for `push-order-to-nyehandel`.
 - [ ] Set `RETRY_FAILED_ORDERS_SECRET` and pass `x-cron-secret` for retry invocations.
+- [ ] Set `OPS_ALERTS_CRON_SECRET` and pass `x-cron-secret` for `ops-b2b-queues` invocations.
 - [ ] Store Vault secrets for scheduler: `SUPABASE_FUNCTIONS_BASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `RETRY_FAILED_ORDERS_SECRET`.
+- [ ] Store Vault secret for nightly ops queue scheduler: `OPS_ALERTS_CRON_SECRET`.
 - [ ] Confirm `supabase/config.toml` has explicit entries for:
   - `create-shopify-checkout`
   - `shopify-webhook`
   - `push-order-to-nyehandel`
   - `retry-failed-nyehandel-orders`
+  - `ops-b2b-queues`
 - [ ] Deploy DB migrations in order.
 - [ ] Deploy Edge Functions.
 - [ ] Create Shopify webhook subscription for `orders/paid` pointing to `/functions/v1/shopify-webhook`.
