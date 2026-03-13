@@ -1,5 +1,4 @@
 import { supabase } from '@/integrations/supabase/client';
-import type { WebhookEvent } from '@/types/ops';
 
 const FUNCTIONS_BASE = new URL('functions/v1', import.meta.env.VITE_SUPABASE_URL).href;
 
@@ -62,30 +61,3 @@ export async function fetchNyehandel<T = unknown>(resource: string): Promise<T |
   }
 }
 
-export async function opsWebhookInbox(limit = 50): Promise<{ events: WebhookEvent[] }> {
-  const res = await apiFetch<{ events: OpsWebhookInboxRow[] }>('ops-webhook-inbox', {
-    params: { limit: String(limit) },
-  });
-
-  const events: WebhookEvent[] = (res.events ?? []).map((r) => ({
-    eventId: r.id,
-    provider: r.provider,
-    topic: r.topic,
-    status: r.status,
-    attempts: r.attempts ?? 0,
-    receivedAt: r.received_at ?? new Date().toISOString(),
-    payload: (r.payload as Record<string, unknown>) ?? {},
-  }));
-
-  return { events };
-}
-
-type OpsWebhookInboxRow = {
-  id: string;
-  provider: 'shopify' | 'nyehandel';
-  topic: string;
-  status: 'received' | 'processed' | 'failed';
-  attempts: number | null;
-  received_at: string | null;
-  payload: unknown;
-};

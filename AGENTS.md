@@ -3,7 +3,7 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 
 ## Project Snapshot
 - Stack: React + Vite + TypeScript + Tailwind + shadcn/ui + Supabase.
-- Architecture: Headless Shopify storefront + Supabase Edge Functions.
+- Architecture: Nyehandel-first storefront + Supabase Edge Functions. Shopify checkout is being removed as part of an active migration — see ROADMAP.md for transition state.
 - Core rule: checkout/order/Nyehandel flows belong in `supabase/functions/`.
 - Current toolchain supports npm scripts, but team standard is Bun-first.
 
@@ -33,7 +33,7 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 - For major refactors/features, update `CHANGELOG.md` (and `EOD_REPORT.md` if requested).
 
 ## Collaboration Boundaries (`NYEHANDEL_API_SYNC.md`)
-- Daniel ownership: B2C Shopify and frontend scope.
+- Daniel ownership: B2C storefront and frontend scope.
 - William ownership: B2B automation scope.
 - Daniel should not touch Pipedrive/WhatsApp/Cowork automation.
 - William should not touch React frontend implementation.
@@ -89,7 +89,6 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 - Test environment is `jsdom`; setup file is `src/test/setup.ts`.
 
 ## Useful Operational Commands
-- Shopify/Nyehandel smoke flow: `bash scripts/smoke-tests/shopify-nyehandel-flow.sh`
 - Supabase config file: `supabase/config.toml`
 - SQL migrations location: `supabase/migrations/*.sql`
 
@@ -159,8 +158,8 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 - Handle `OPTIONS` requests explicitly for CORS.
 - Validate HTTP method and payload shape before business logic.
 - Use `SUPABASE_SERVICE_ROLE_KEY` only in server-side contexts.
-- Verify Shopify webhook HMAC on raw request body before JSON parsing.
 - Make webhook/push handlers idempotent and safe for retries.
+- Verify inbound webhook authenticity (signature or shared secret) on raw body before JSON parsing.
 
 ## Database and Migration Practices
 - Add schema changes as forward-only SQL migrations in `supabase/migrations/`.
@@ -187,3 +186,13 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 - Error responses are machine-readable and operationally actionable.
 - Logs include enough context IDs for production diagnosis.
 - Required docs are updated when the change is major.
+
+## Lovable Intake Rule
+- Lovable output is a **visual reference only**. Never copy edge function code, auth flows, DB schema, or type definitions from Lovable into this repo.
+- Safe use: describe a UI component or page layout to Lovable, then rewrite the result from scratch using the repo's shadcn primitives and existing hooks.
+- Before integrating any Lovable-derived component, verify it uses no hardcoded data, no inline auth logic, and no direct DB calls.
+
+## MCP Safety Stance
+- Read-only MCP tools (file readers, doc fetchers) are acceptable.
+- Do not authorize MCP servers with write access to Supabase, the filesystem, or any production endpoint.
+- Do not use MCP to execute secrets, run migrations, or deploy edge functions — those actions go through the established CLI workflow.

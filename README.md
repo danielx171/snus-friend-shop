@@ -1,17 +1,20 @@
 # snus-friend-shop
 
-Headless Shopify storefront with React/Vite frontend and Supabase backend.
+Headless storefront with a React/Vite frontend and Supabase backend.
 
-## Architecture
+## Current architecture status
 
 - Frontend: React + Vite + TypeScript + Tailwind + shadcn/ui
-- Backend: Supabase (Postgres + Edge Functions)
-- Core rule: checkout/order/Nyehandel logic lives in `supabase/functions/`
+- Backend: Supabase Postgres + Edge Functions
+- Core rule: checkout, order, and Nyehandel logic belong in `supabase/functions/`
+- Current roadmap status: the project is migrating from a legacy Shopify-first checkout flow toward a Nyehandel-first checkout flow
+
+When docs disagree, treat `ROADMAP.md` and `PROJECT_STATE.md` as the source of truth.
 
 ## Critical boundaries
 
 - Never edit `src/lib/cart-utils.ts` without explicit permission.
-- Do not implement or modify Pipedrive/WhatsApp/Cowork automation.
+- Do not implement or modify Pipedrive, WhatsApp, or Cowork automation.
 - Follow `NYEHANDEL_API_SYNC.md` collaboration boundaries.
 - Never commit secrets or customer data.
 
@@ -21,46 +24,41 @@ Use Bun as the default workflow.
 
 - Install dependencies: `bun install`
 - Run scripts: `bun run <script>`
-- Avoid mixing lockfile ecosystems in one task.
+- Avoid mixing Bun and npm lockfile changes in the same task unless required
 
 ## Development commands
 
 ```sh
-# Install dependencies
 bun install
-
-# Start dev server
 bun run dev
-
-# Lint
 bun run lint
-
-# Build
 bun run build
-
-# Run tests once
 bun run test
 ```
 
 ## Project structure
 
 - `src/`: frontend app
-- `src/pages/`: route pages (wired in `src/App.tsx`)
+- `src/pages/`: route pages wired in `src/App.tsx`
 - `src/components/ui/`: shadcn UI primitives
 - `src/lib/`: utilities and API helpers
-- `supabase/functions/`: checkout/order/Nyehandel server logic
+- `supabase/functions/`: checkout, order, webhook, and fulfillment logic
 - `supabase/migrations/`: SQL migrations
 
-## Operational docs
+## Context pack
 
-- `AGENTS.md`: agent workflow and coding rules
-- `.cursorrules`: mandatory repository constraints
-- `ROADMAP.md`: project execution status and next steps
-- `DEPLOYMENT_CHECKLIST.md`: required env/config before deployment
-- `NYEHANDEL_API_SYNC.md`: collaboration and ownership boundaries
+These files are the recommended AI and collaborator context pack:
+
+- `ROADMAP.md`: canonical execution order
+- `PROJECT_STATE.md`: latest session status
+- `CURRENT_PRIORITIES.md`: short list of what matters now
+- `SYSTEM_BOUNDARIES.md`: compact rule summary
+- `ACTIVE_RISKS.md`: live blockers and drift risks
+- `NYEHANDEL_API.md`: Step 25 research log
+- `DEPLOYMENT_CHECKLIST.md`: env and deploy requirements
 
 ## Notes for contributors
 
 - Keep diffs scoped and avoid unrelated refactors.
 - Use TypeScript and functional React components.
-- For major features/refactors, update `ROADMAP.md` and `CHANGELOG.md`.
+- For major features or refactors, update `ROADMAP.md` and `CHANGELOG.md/CHANGELOG.md`.

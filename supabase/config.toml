@@ -21,12 +21,6 @@ verify_jwt = false
 [functions.ops-set-role]
 verify_jwt = false
 
-[functions.create-shopify-checkout]
-verify_jwt = false
-
-[functions.shopify-webhook]
-verify_jwt = false
-
 [functions.push-order-to-nyehandel]
 verify_jwt = true
 

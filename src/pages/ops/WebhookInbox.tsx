@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,7 +11,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '
 import type { WebhookEvent } from '@/types/ops';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { opsWebhookInbox } from '@/lib/api';
+import { supabase } from '@/integrations/supabase/client';
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -53,25 +54,29 @@ export default function WebhookInbox() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<WebhookEvent | null>(null);
-  const [events, setEvents] = useState<WebhookEvent[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        setLoadError(null);
-        const res = await opsWebhookInbox(50);
-        setEvents(res?.events ?? []);
-      } catch (e: unknown) {
-        setLoadError(e instanceof Error ? e.message : 'Failed to load webhook inbox');
-        setEvents([]);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+  const { data: events = [], isLoading: loading, error } = useQuery({
+    queryKey: ['ops-webhook-inbox'],
+    queryFn: async (): Promise<WebhookEvent[]> => {
+      const { data, error } = await supabase
+        .from('webhook_inbox')
+        .select('id, provider, topic, status, attempts, received_at, payload')
+        .order('received_at', { ascending: false })
+        .limit(100);
+      if (error) throw new Error(error.message);
+      return (data ?? []).map((e: any) => ({
+        eventId: e.id,
+        provider: e.provider as WebhookEvent['provider'],
+        topic: e.topic,
+        status: e.status as WebhookEvent['status'],
+        attempts: e.attempts ?? 0,
+        receivedAt: e.received_at ?? new Date().toISOString(),
+        payload: (e.payload as Record<string, unknown>) ?? {},
+      }));
+    },
+    refetchInterval: 10000,
+  });
+  const loadError = error instanceof Error ? error.message : error ? 'Failed to load webhook inbox' : null;
 
   const filtered = useMemo(() => {
     return events.filter((e) => {
@@ -109,7 +114,6 @@ export default function WebhookInbox() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All providers</SelectItem>
-              <SelectItem value="shopify">Shopify</SelectItem>
               <SelectItem value="nyehandel">Nyehandel</SelectItem>
             </SelectContent>
           </Select>

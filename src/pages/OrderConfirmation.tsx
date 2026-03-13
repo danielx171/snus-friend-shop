@@ -1,33 +1,118 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Check, Package, Truck, MapPin, Home, ArrowRight, Copy } from 'lucide-react';
+import { Check, Package, Truck, MapPin, Home, ArrowRight, Copy, Loader2 } from 'lucide-react';
 import { formatPrice } from '@/lib/currency';
-import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
+import { useCart } from '@/context/CartContext';
 
-/* ── mock data ── */
-const mockOrder = {
-  id: 'SF-20260309-4821',
-  date: 'March 9, 2026',
-  items: [
-    { name: 'ZYN Cool Mint Slim', qty: 2, packLabel: '10-pack', price: 39.99 },
-    { name: 'VELO Ice Cool Strong', qty: 1, packLabel: '5-pack', price: 19.99 },
-    { name: 'LOOP Berry Frost', qty: 1, packLabel: '3-pack', price: 11.99 },
-  ],
-  subtotal: 111.96,
-  shipping: 0,
-  discount: -11.20,
-  total: 100.76,
-  address: {
-    name: 'James Wilson',
-    line1: '42 Camden High Street',
-    line2: 'London NW1 0JH',
-    country: 'United Kingdom',
-  },
-};
+/* ── Types ── */
+
+interface LineItem {
+  name: string;
+  qty: number;
+  packLabel: string;
+  price: number;
+}
+
+interface Address {
+  name: string;
+  line1: string;
+  line2: string;
+  country: string;
+}
+
+type PageState =
+  | { kind: 'loading' }
+  | { kind: 'no-id' }
+  | { kind: 'not-auth' }
+  | { kind: 'not-found' }
+  | { kind: 'error'; message: string }
+  | {
+      kind: 'ok';
+      orderId: string;
+      date: string;
+      items: LineItem[];
+      total: number;
+      currency: string;
+      address: Address | null;
+    };
+
+/* ── Defensive normalisers ── */
+
+function normalizeLineItems(snapshot: unknown): LineItem[] {
+  if (!Array.isArray(snapshot)) return [];
+  return snapshot.flatMap((raw): LineItem[] => {
+    if (!raw || typeof raw !== 'object') return [];
+    const r = raw as Record<string, unknown>;
+    const name =
+      typeof r.product_name === 'string'
+        ? r.product_name
+        : typeof r.name === 'string'
+        ? r.name
+        : 'Product';
+    const qty =
+      typeof r.quantity === 'number'
+        ? r.quantity
+        : typeof r.qty === 'number'
+        ? r.qty
+        : 1;
+    const packLabel =
+      typeof r.pack_size === 'string'
+        ? r.pack_size
+        : typeof r.packLabel === 'string'
+        ? r.packLabel
+        : '';
+    const price =
+      typeof r.unit_price === 'number'
+        ? r.unit_price
+        : typeof r.price === 'number'
+        ? r.price
+        : 0;
+    return [{ name, qty, packLabel, price }];
+  });
+}
+
+function normalizeAddress(raw: unknown): Address | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Record<string, unknown>;
+  const firstName =
+    typeof r.first_name === 'string' ? r.first_name : '';
+  const lastName =
+    typeof r.last_name === 'string' ? r.last_name : '';
+  const fullName =
+    typeof r.name === 'string'
+      ? r.name
+      : [firstName, lastName].filter(Boolean).join(' ');
+  if (!fullName) return null;
+
+  const line1 =
+    typeof r.address1 === 'string'
+      ? r.address1
+      : typeof r.line1 === 'string'
+      ? r.line1
+      : '';
+  const city = typeof r.city === 'string' ? r.city : '';
+  const zip = typeof r.zip === 'string' ? r.zip : '';
+  const line2 =
+    typeof r.line2 === 'string'
+      ? r.line2
+      : [city, zip].filter(Boolean).join(' ');
+  const country =
+    typeof r.country === 'string'
+      ? r.country
+      : typeof r.country_name === 'string'
+      ? r.country_name
+      : '';
+
+  return { name: fullName, line1, line2, country };
+}
+
+/* ── Static timeline ── */
 
 const timelineSteps = [
   { key: 'placed', label: 'Order Placed', icon: Check, done: true, active: false },
@@ -36,20 +121,177 @@ const timelineSteps = [
   { key: 'delivered', label: 'Delivered', icon: Home, done: false, active: false },
 ] as const;
 
+/* ── Component ── */
+
 export default function OrderConfirmation() {
+  const { orderId: paramOrderId } = useParams<{ orderId: string }>();
+  const [searchParams] = useSearchParams();
+  const orderId = paramOrderId ?? searchParams.get('orderId') ?? undefined;
+
+  const [state, setState] = useState<PageState>({ kind: 'loading' });
   const [showCheck, setShowCheck] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const { clearCart } = useCart();
+  const cartCleared = useRef(false);
+
+  /* ── Fetch order ── */
   useEffect(() => {
+    if (!orderId) {
+      setState({ kind: 'no-id' });
+      return;
+    }
+
+    let cancelled = false;
+
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (cancelled) return;
+
+      const customerEmail = session?.user.email;
+      if (!customerEmail) {
+        setState({ kind: 'not-auth' });
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('orders')
+        .select('id, created_at, total_price, currency, line_items_snapshot, shipping_address')
+        .eq('id', orderId)
+        .eq('customer_email', customerEmail)
+        .maybeSingle();
+
+      if (cancelled) return;
+
+      if (error) {
+        setState({ kind: 'error', message: error.message });
+        return;
+      }
+      if (!data) {
+        setState({ kind: 'not-found' });
+        return;
+      }
+
+      setState({
+        kind: 'ok',
+        orderId: data.id,
+        date: new Date(data.created_at).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }),
+        items: normalizeLineItems(data.line_items_snapshot),
+        total: typeof data.total_price === 'number' ? data.total_price : 0,
+        currency: typeof data.currency === 'string' ? data.currency : 'SEK',
+        address: normalizeAddress(data.shipping_address),
+      });
+    })();
+
+    return () => { cancelled = true; };
+  }, [orderId]);
+
+  /* ── Clear cart once on success ── */
+  useEffect(() => {
+    if (state.kind === 'ok' && !cartCleared.current) {
+      cartCleared.current = true;
+      clearCart();
+    }
+  }, [state.kind, clearCart]);
+
+  /* ── Animate check icon on success ── */
+  useEffect(() => {
+    if (state.kind !== 'ok') return;
     const t = setTimeout(() => setShowCheck(true), 150);
     return () => clearTimeout(t);
-  }, []);
+  }, [state.kind]);
 
   const copyOrderId = () => {
-    navigator.clipboard.writeText(mockOrder.id);
+    if (state.kind !== 'ok') return;
+    navigator.clipboard.writeText(state.orderId);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  /* ── Non-ok states ── */
+
+  if (state.kind === 'loading') {
+    return (
+      <Layout>
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (state.kind === 'no-id') {
+    return (
+      <Layout>
+        <div className="mx-auto max-w-lg px-4 py-20 text-center">
+          <h1 className="font-serif text-2xl font-semibold">No order found</h1>
+          <p className="mt-2 text-muted-foreground">No order ID was provided in the URL.</p>
+          <Button asChild className="mt-6">
+            <Link to="/">Back to shop</Link>
+          </Button>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (state.kind === 'not-auth') {
+    return (
+      <Layout>
+        <div className="mx-auto max-w-lg px-4 py-20 text-center">
+          <h1 className="font-serif text-2xl font-semibold">Sign in required</h1>
+          <p className="mt-2 text-muted-foreground">
+            Please sign in to view your order confirmation.
+          </p>
+          <Button asChild className="mt-6">
+            <Link to="/login">Sign in</Link>
+          </Button>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (state.kind === 'not-found') {
+    return (
+      <Layout>
+        <div className="mx-auto max-w-lg px-4 py-20 text-center">
+          <h1 className="font-serif text-2xl font-semibold">Order not found</h1>
+          <p className="mt-2 text-muted-foreground">
+            We couldn't find that order on your account.
+          </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Button asChild>
+              <Link to="/account">View orders</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/">Back to shop</Link>
+            </Button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (state.kind === 'error') {
+    return (
+      <Layout>
+        <div className="mx-auto max-w-lg px-4 py-20 text-center">
+          <h1 className="font-serif text-2xl font-semibold">Something went wrong</h1>
+          <p className="mt-2 text-muted-foreground text-sm">{state.message}</p>
+          <Button asChild className="mt-6">
+            <Link to="/account">View orders</Link>
+          </Button>
+        </div>
+      </Layout>
+    );
+  }
+
+  /* ── Success state ── */
+
+  const { orderId: displayId, date, items, total, address } = state;
 
   return (
     <Layout>
@@ -76,7 +318,7 @@ export default function OrderConfirmation() {
             onClick={copyOrderId}
             className="mt-4 inline-flex items-center gap-2 rounded-md border border-border bg-secondary/60 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
           >
-            <span className="font-mono tracking-wide">{mockOrder.id}</span>
+            <span className="font-mono tracking-wide">{displayId}</span>
             <Copy className="h-3.5 w-3.5 text-muted-foreground" />
             {copied && <span className="text-xs text-[hsl(var(--success))]">Copied</span>}
           </button>
@@ -95,7 +337,6 @@ export default function OrderConfirmation() {
 
                 return (
                   <div key={step.key} className="flex flex-1 items-center">
-                    {/* Step node */}
                     <div className="flex flex-col items-center gap-2">
                       <div
                         className={cn(
@@ -124,7 +365,6 @@ export default function OrderConfirmation() {
                       </span>
                     </div>
 
-                    {/* Connector line */}
                     {!isLast && (
                       <div className="mx-1 mb-6 h-0.5 flex-1 sm:mx-2">
                         <div
@@ -147,69 +387,60 @@ export default function OrderConfirmation() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="font-serif text-lg">Order Summary</CardTitle>
-              <span className="text-sm text-muted-foreground">{mockOrder.date}</span>
+              <span className="text-sm text-muted-foreground">{date}</span>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            {mockOrder.items.map((item, i) => (
-              <div key={i} className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium text-foreground">{item.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {item.packLabel} × {item.qty}
-                  </p>
+            {items.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No items available.</p>
+            ) : (
+              items.map((item, i) => (
+                <div key={i} className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{item.name}</p>
+                    {item.packLabel && (
+                      <p className="text-xs text-muted-foreground">
+                        {item.packLabel} × {item.qty}
+                      </p>
+                    )}
+                  </div>
+                  <span className="text-sm font-medium text-foreground">
+                    {formatPrice(item.price * item.qty)}
+                  </span>
                 </div>
-                <span className="text-sm font-medium text-foreground">
-                  {formatPrice(item.price * item.qty)}
-                </span>
-              </div>
-            ))}
+              ))
+            )}
 
             <Separator />
 
             <div className="space-y-1.5 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Subtotal</span>
-                <span className="text-foreground">{formatPrice(mockOrder.subtotal)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Shipping</span>
-                <span className="text-[hsl(var(--success))]">Free</span>
-              </div>
-              {mockOrder.discount !== 0 && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Discount</span>
-                  <span className="text-[hsl(var(--success))]">
-                    {formatPrice(mockOrder.discount)}
-                  </span>
-                </div>
-              )}
-              <Separator />
               <div className="flex justify-between pt-1 text-base font-semibold">
                 <span className="text-foreground">Total</span>
-                <span className="text-foreground">{formatPrice(mockOrder.total)}</span>
+                <span className="text-foreground">{formatPrice(total)}</span>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* ── Shipping Address ── */}
-        <Card className="mb-10">
-          <CardHeader>
-            <CardTitle className="font-serif text-lg">Shipping Address</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-              <div className="text-sm leading-relaxed text-foreground">
-                <p className="font-medium">{mockOrder.address.name}</p>
-                <p className="text-muted-foreground">{mockOrder.address.line1}</p>
-                <p className="text-muted-foreground">{mockOrder.address.line2}</p>
-                <p className="text-muted-foreground">{mockOrder.address.country}</p>
+        {address && (
+          <Card className="mb-10">
+            <CardHeader>
+              <CardTitle className="font-serif text-lg">Shipping Address</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-start gap-3">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <div className="text-sm leading-relaxed text-foreground">
+                  <p className="font-medium">{address.name}</p>
+                  {address.line1 && <p className="text-muted-foreground">{address.line1}</p>}
+                  {address.line2 && <p className="text-muted-foreground">{address.line2}</p>}
+                  {address.country && <p className="text-muted-foreground">{address.country}</p>}
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* ── Actions ── */}
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">

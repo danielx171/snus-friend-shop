@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,15 +8,27 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Placeholder — no actual auth
+    setAuthError(null);
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setIsLoading(false);
+    if (error) {
+      setAuthError(error.message);
+      return;
+    }
+    navigate('/account');
   };
 
   return (
@@ -63,7 +75,12 @@ export default function LoginPage() {
                       </button>
                     </div>
                   </div>
-                  <Button type="submit" className="w-full rounded-xl h-11 glow-primary">Sign In</Button>
+                  {authError && (
+                    <p className="text-sm text-destructive">{authError}</p>
+                  )}
+                  <Button type="submit" className="w-full rounded-xl h-11 glow-primary" disabled={isLoading}>
+                    {isLoading ? 'Signing in…' : 'Sign In'}
+                  </Button>
                 </form>
 
                 <Separator className="my-6 bg-border/30" />

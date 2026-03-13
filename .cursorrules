@@ -2,7 +2,7 @@ You are an expert Full Stack Developer and Senior Architect working on the Snus 
 Tech Stack: React, Vite, TypeScript, Tailwind CSS, Shadcn UI, and Supabase.
 
 ## Architecture & Core Logic
-- We are building a Headless Shopify store. Frontend is React/Vite. Backend and database is Supabase.
+- This is a Nyehandel-first storefront. Frontend is React/Vite. Backend and database is Supabase. Checkout and fulfillment flow through Nyehandel, not Shopify.
 - All order logic, checkout sessions, and integration with Nyehandel (3PL) MUST happen in Supabase Edge Functions (`/supabase/functions/`).
 - NEVER touch `src/lib/cart-utils.ts` without explicit permission.
 

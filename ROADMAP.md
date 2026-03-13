@@ -64,10 +64,10 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 - [ ] Step 28: Ta bort `shopify-webhook` edge function. Implementera Nyehandel callback/webhook-handler om Nyehandel stöder det, annars polling via cron.
 - [ ] Step 29: Uppdatera `push-order-to-nyehandel`: byt `external_order_id` från `shopify_order_id` till intern UUID. Rensa Shopify-specifika fält ur payload.
 - [ ] Step 30: Uppdatera `CheckoutHandoff.tsx`: ta bort `resolveShopifyVariantId` 3-vägs-fallback. Ersätt med direkt access på `product.shopifyVariantIds[packSize]` (nu korrekt populerat från DB).
-- [ ] Step 31: Implementera riktig Supabase-auth i `LoginPage.tsx` (`signInWithPassword`) och `RegisterPage.tsx` (`signUp`). Lägg till `useNavigate`-redirect efter lyckad auth.
-- [ ] Step 32: Koppla `AccountPage.tsx` till riktig data: ta bort `isLoggedIn = useState(true)`, hämta session via `supabase.auth.getUser()`, hämta orders från `orders`-tabellen per `customer_email`.
-- [ ] Step 33: Koppla `OrderConfirmation.tsx` till riktig data: läs `orderId` från URL-param, hämta order från DB, rensa kundvagnen via `clearCart()` efter bekräftad order.
-- [ ] Step 34: Koppla `ForgotPasswordPage.tsx` return URL till en riktig `UpdatePasswordPage` (`/update-password`) som hanterar Supabase auth callback och `updateUser({ password })`.
+- [x] Step 31: Implementera riktig Supabase-auth i `LoginPage.tsx` (`signInWithPassword`) och `RegisterPage.tsx` (`signUp`). Lägg till `useNavigate`-redirect efter lyckad auth.
+- [x] Step 32: Koppla `AccountPage.tsx` till riktig data: ta bort `isLoggedIn = useState(true)`, hämta session via `supabase.auth.getUser()`, hämta orders från `orders`-tabellen per `customer_email`.
+- [x] Step 33: Koppla `OrderConfirmation.tsx` till riktig data: läs `orderId` från URL-param, hämta order från DB, rensa kundvagnen via `clearCart()` efter bekräftad order.
+- [x] Step 34: Koppla `ForgotPasswordPage.tsx` return URL till en riktig `UpdatePasswordPage` (`/update-password`) som hanterar Supabase auth callback och `updateUser({ password })`.
 - [ ] Step 35: Fixa `ProductListing.tsx` — hantera `isError`-state från `useCatalogProducts` (visa felmeddelande, inte tyst tomvy). Ta bort `window.location.origin/href` från render.
 - [ ] Step 36: Fixa `ProductDetail.tsx` — hantera `isError`, ta bort oanvänd `mockProducts`-import, fixa "related products"-rubrik (fel i18n-nyckel), rätta stjärnbetyg till att använda `product.ratings`.
 - [ ] Step 37: Flytta `DbProduct`-typen från `useCatalog.ts` till `src/integrations/supabase/types.ts` för konsistens med manuellt underhållna typer.

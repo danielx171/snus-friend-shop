@@ -9,77 +9,87 @@ bun run dev          # Vite dev server
 bun run build        # Production build (use to verify TypeScript compiles)
 bun run lint         # ESLint
 bun run test         # Run all Vitest tests once
-bun run simulate     # Step 24 UAT: full order-flow simulator (no DB required)
-
 # Scoped tests
 bun run test -- src/test/example.test.ts
 bunx vitest run "src/**/*checkout*.test.ts"
 bun run test -- -t "test name substring"
 ```
 
-Test environment is `jsdom`; setup file is `src/test/setup.ts`. Deno is **not** installed — edge function unit tests cannot run locally.
+Test environment is `jsdom`; setup file is `src/test/setup.ts`. Deno is not installed, so edge function unit tests cannot run locally.
 
 ## Architecture
 
-**Headless Shopify storefront** → checkout handed off to Shopify → paid event triggers backend flow → Nyehandel (3PL) fulfillment.
+This repo is in an architecture transition.
 
-### Order Flow (the critical path)
+- Historical flow: Shopify-first checkout and paid webhook handling.
+- Current target flow: Nyehandel-first checkout with Supabase Edge Functions owning the server flow.
+- Tiebreaker docs: `ROADMAP.md` and `PROJECT_STATE.md`.
 
-```
+### Order Flow (target)
+
+```text
 src/pages/CheckoutHandoff.tsx
-  → POST supabase/functions/create-shopify-checkout   (creates pending orders row, returns Shopify checkoutUrl)
-  → [user pays in Shopify]
-  → POST supabase/functions/shopify-webhook            (HMAC-verified, upserts order to paid, writes webhook_inbox)
-  → POST supabase/functions/push-order-to-nyehandel   (3 retries, sets nyehandel_sync_status=synced|failed)
-  → cron: retry-failed-nyehandel-orders               (pg_cron → pg_net → edge function, nightly)
+  -> POST supabase/functions/create-nyehandel-checkout
+  -> Nyehandel payment or checkout session
+  -> Nyehandel callback or polling confirmation
+  -> orders row update
+  -> POST supabase/functions/push-order-to-nyehandel
+  -> cron: retry-failed-nyehandel-orders
 ```
 
 ### Ops / B2B Alerts Flow
 
-```
+```text
 pg_cron 01:15 UTC
-  → supabase/functions/ops-b2b-queues                 (x-cron-secret auth, upserts ops_alerts)
+  -> supabase/functions/ops-b2b-queues                 (x-cron-secret auth, upserts ops_alerts)
     rules: supabase/functions/ops-b2b-queues/rules.ts  (pure TS, importable by Bun)
-  → src/pages/ops/OpsDashboard.tsx                    (reads ops_alerts via useOpsAlerts hook)
+  -> src/pages/ops/OpsDashboard.tsx                    (reads ops_alerts via useOpsAlerts hook)
 ```
 
 ### Frontend layers
 
-- **Pages** (`src/pages/`): route-level components; ops pages are under `src/pages/ops/`
-- **Hooks** (`src/hooks/`): React Query wrappers — `useOpsData.ts`, `useOpsAlerts.ts`; all ops hooks **fail closed** (throw on DB error, no mock fallback)
-- **Context** (`src/context/`): `CartContext`, `LanguageContext` — wrapped at root in `App.tsx`
-- **API helper** (`src/lib/api.ts`): `apiFetch()` attaches Supabase auth token; `fetchNyehandel()` for proxy calls
-- **Auth guard** (`src/components/auth/OpsAuthGuard.tsx`): wraps all `/ops/*` routes; calls `verify-admin` edge function; dependency on `userId` (not `session`) to avoid re-checking on token refresh
+- Pages: `src/pages/` route-level components; ops pages are under `src/pages/ops/`
+- Hooks: `src/hooks/` React Query wrappers; fail closed on DB error
+- Context: `src/context/` state providers wrapped in `src/App.tsx`
+- API helper: `src/lib/api.ts` for authenticated edge-function calls and Nyehandel proxy access
+- Auth guard: `src/components/auth/OpsAuthGuard.tsx` protects ops routes
 
 ### Database types
 
-`src/integrations/supabase/types.ts` is **manually maintained** (not auto-generated). When schema migrations are added, update types.ts manually to match. The `orders` table type includes: `checkout_status`, `paid_at`, `shipping_address`, `line_items_snapshot`, `customer_metadata`, `shopify_checkout_id`, `idempotency_key`, `nyehandel_order_status`. Status fields use literal union types throughout — do not widen back to `string`.
+`src/integrations/supabase/types.ts` is manually maintained. When schema migrations change app-facing tables, update `types.ts` in the same task. Treat legacy Shopify fields as transitional until the checkout pivot is complete.
 
 ### Edge Function conventions
 
 - All functions live in `supabase/functions/<name>/index.ts`
-- Auth in `supabase/config.toml`: public-facing functions have `verify_jwt = false`; internal functions (`push-order-to-nyehandel`, `retry-failed-nyehandel-orders`, `ops-b2b-queues`) have `verify_jwt = true`
-- Internal function-to-function calls use `x-internal-function-secret` header
-- Cron-triggered functions use `x-cron-secret` header
-- All functions return structured JSON errors with a machine-readable `error` key and a `requestId`
+- Public-facing functions use explicit `verify_jwt = false` in `supabase/config.toml`
+- Internal functions use `verify_jwt = true`
+- Internal function-to-function calls use `x-internal-function-secret`
+- Cron-triggered functions use `x-cron-secret`
+- Functions should return structured JSON errors with machine-readable `error` keys and a `requestId`
 
 ## Hard Boundaries
 
-- **Never edit `src/lib/cart-utils.ts`** without explicit permission.
-- All order/checkout/Nyehandel logic must stay in `supabase/functions/` — not in frontend code.
-- **William's code** (`william-automation/`) is a business-logic reference only. Never merge or cherry-pick from his branch into `dev`/`main` without explicit user instruction. Code review of his repo must happen on an isolated `granskning-*` branch. Do not introduce Python/Flask runtime paths into this repo.
+- Never edit `src/lib/cart-utils.ts` without explicit permission.
+- All order, checkout, and Nyehandel logic must stay in `supabase/functions/`, not in frontend code.
+- William's code is a business-logic reference only. Never merge or cherry-pick from his branch into `dev` or `main` without explicit instruction.
+- Do not introduce Python or Flask runtime paths into this repo's production flow.
 - Never implement or alter Pipedrive, WhatsApp, or Cowork automation code.
 
 ## State and Secrets
 
-- Frontend env vars use `VITE_` prefix (see `.env.example`). Server secrets belong in Supabase Edge Function secrets only — not in `.env`.
-- When adding a new secret to an edge function, update `.env.example` and `DEPLOYMENT_CHECKLIST.md` in the same task.
-- Vault secrets power the pg_cron schedulers; see `DEPLOYMENT_CHECKLIST.md` for the full list.
+- Frontend env vars use the `VITE_` prefix.
+- Server secrets belong in Supabase secrets only, not frontend env files.
+- When adding a new edge-function secret, update `.env.example` and `DEPLOYMENT_CHECKLIST.md` in the same task.
 
 ## Project Docs
 
 Read before complex work; update when done:
-- `ROADMAP.md` — canonical step-by-step progress tracker (currently on Step 25)
-- `PROJECT_STATE.md` — session-level state log
-- `DEPLOYMENT_CHECKLIST.md` — required secrets and deploy order
-- `AGENTS.md` — extended coding rules and scoped test commands
+
+- `ROADMAP.md`: canonical step-by-step progress tracker
+- `PROJECT_STATE.md`: session-level state log
+- `CURRENT_PRIORITIES.md`: short list of active workstreams
+- `SYSTEM_BOUNDARIES.md`: compact architecture and ownership rules
+- `ACTIVE_RISKS.md`: known blockers and drift risks
+- `NYEHANDEL_API.md`: Step 25 investigation log
+- `DEPLOYMENT_CHECKLIST.md`: required secrets and deploy order
+- `AGENTS.md`: extended coding rules and scoped test commands

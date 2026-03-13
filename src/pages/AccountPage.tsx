@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import type { User } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,40 +20,86 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { EmptyState } from '@/components/ui/states/EmptyState';
-import { Package, MapPin, Settings, LogOut, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Package, MapPin, Settings, LogOut } from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
 import { formatPrice } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 
-/* ── Mock data ── */
-type OrderStatus = 'delivered' | 'shipped' | 'processing' | 'pending' | 'cancelled';
+type DisplayStatus = 'fulfilled' | 'processing' | 'pending' | 'cancelled';
 
-const statusConfig: Record<OrderStatus, { label: string; className: string }> = {
-  delivered: { label: 'Delivered', className: 'bg-[hsl(var(--success))]/15 text-[hsl(var(--success))] border-[hsl(var(--success))]/30' },
-  shipped: { label: 'Shipped', className: 'bg-[hsl(var(--info))]/15 text-[hsl(var(--info))] border-[hsl(var(--info))]/30' },
+const statusConfig: Record<DisplayStatus, { label: string; className: string }> = {
+  fulfilled:  { label: 'Fulfilled',  className: 'bg-[hsl(var(--success))]/15 text-[hsl(var(--success))] border-[hsl(var(--success))]/30' },
   processing: { label: 'Processing', className: 'bg-primary/15 text-primary border-primary/30' },
-  pending: { label: 'Pending', className: 'bg-muted text-muted-foreground border-border' },
-  cancelled: { label: 'Cancelled', className: 'bg-destructive/15 text-destructive border-destructive/30' },
+  pending:    { label: 'Pending',    className: 'bg-muted text-muted-foreground border-border' },
+  cancelled:  { label: 'Cancelled',  className: 'bg-destructive/15 text-destructive border-destructive/30' },
 };
 
-const mockOrders = [
-  { id: 'SF-20260305-1192', date: 'Mar 5, 2026', status: 'processing' as OrderStatus, items: 3, total: 62.97 },
-  { id: 'SF-20260221-0874', date: 'Feb 21, 2026', status: 'shipped' as OrderStatus, items: 1, total: 21.99 },
-  { id: 'SF-20260210-0531', date: 'Feb 10, 2026', status: 'delivered' as OrderStatus, items: 5, total: 109.99 },
-  { id: 'SF-20260128-0412', date: 'Jan 28, 2026', status: 'delivered' as OrderStatus, items: 2, total: 39.98 },
-  { id: 'SF-20260115-0203', date: 'Jan 15, 2026', status: 'cancelled' as OrderStatus, items: 1, total: 4.99 },
-  { id: 'SF-20260103-0091', date: 'Jan 3, 2026', status: 'delivered' as OrderStatus, items: 10, total: 134.99 },
-];
+function toDisplayStatus(
+  checkoutStatus: string,
+  nyehandelSyncStatus: string,
+): DisplayStatus {
+  if (checkoutStatus === 'cancelled' || checkoutStatus === 'failed') return 'cancelled';
+  if (checkoutStatus === 'pending') return 'pending';
+  // paid
+  if (nyehandelSyncStatus === 'synced') return 'fulfilled';
+  return 'processing';
+}
 
-const mockAddresses = [
-  { id: '1', label: 'Home', name: 'John Doe', line1: '42 Camden High Street', line2: 'London NW1 0JH', country: 'United Kingdom', isDefault: true },
-  { id: '2', label: 'Work', name: 'John Doe', line1: '10 Finsbury Square', line2: 'London EC2A 1AF', country: 'United Kingdom', isDefault: false },
-];
+type OrderRow = {
+  id: string;
+  created_at: string;
+  checkout_status: string;
+  nyehandel_sync_status: string;
+  total_price: number;
+  currency: string;
+  line_items_snapshot: unknown;
+};
 
 export default function AccountPage() {
-  const [isLoggedIn] = useState(true);
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null | undefined>(undefined);
 
-  if (!isLoggedIn) {
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'TOKEN_REFRESHED') return;
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const { data: orders = [], isLoading: ordersLoading } = useQuery({
+    queryKey: ['account-orders', user?.email],
+    queryFn: async (): Promise<OrderRow[]> => {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('id, created_at, checkout_status, nyehandel_sync_status, total_price, currency, line_items_snapshot')
+        .eq('customer_email', user!.email!)
+        .order('created_at', { ascending: false });
+      if (error) throw new Error(error.message);
+      return (data ?? []) as OrderRow[];
+    },
+    enabled: !!user?.email,
+  });
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
+  };
+
+  // Still loading session
+  if (user === undefined) {
+    return (
+      <Layout showNicotineWarning={false}>
+        <div className="container py-16" />
+      </Layout>
+    );
+  }
+
+  // Not logged in
+  if (user === null) {
     return (
       <>
         <SEO title="Account | SnusFriend" description="Sign in to your SnusFriend account." />
@@ -68,18 +118,21 @@ export default function AccountPage() {
     );
   }
 
+  const firstName = (user.user_metadata?.first_name as string | undefined) ?? '';
+  const lastName = (user.user_metadata?.last_name as string | undefined) ?? '';
+  const displayName = firstName || (user.email?.split('@')[0] ?? 'there');
+
   return (
     <>
       <SEO title="My Account | SnusFriend" description="Manage your SnusFriend account, orders, and subscriptions." />
       <Layout showNicotineWarning={false}>
         <div className="container py-8">
-          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">My Account</h1>
-              <p className="text-sm text-muted-foreground mt-1">Welcome back, John</p>
+              <p className="text-sm text-muted-foreground mt-1">Welcome back, {displayName}</p>
             </div>
-            <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-destructive">
+            <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-destructive" onClick={handleSignOut}>
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Sign Out</span>
             </Button>
@@ -112,61 +165,81 @@ export default function AccountPage() {
                   <CardDescription>Track and manage your past orders</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {/* Desktop table */}
-                  <div className="hidden sm:block overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="border-border/20 hover:bg-transparent">
-                          <TableHead className="text-muted-foreground">Order ID</TableHead>
-                          <TableHead className="text-muted-foreground">Date</TableHead>
-                          <TableHead className="text-muted-foreground">Items</TableHead>
-                          <TableHead className="text-muted-foreground">Status</TableHead>
-                          <TableHead className="text-right text-muted-foreground">Total</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {mockOrders.map((order) => {
-                          const cfg = statusConfig[order.status];
+                  {ordersLoading ? (
+                    <p className="text-sm text-muted-foreground py-6 text-center">Loading orders…</p>
+                  ) : orders.length === 0 ? (
+                    <EmptyState
+                      variant="generic"
+                      title="No orders yet"
+                      description="Your order history will appear here after your first purchase."
+                      actionLabel="Browse Products"
+                      actionHref="/nicotine-pouches"
+                    />
+                  ) : (
+                    <>
+                      {/* Desktop table */}
+                      <div className="hidden sm:block overflow-x-auto">
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="border-border/20 hover:bg-transparent">
+                              <TableHead className="text-muted-foreground">Order ID</TableHead>
+                              <TableHead className="text-muted-foreground">Date</TableHead>
+                              <TableHead className="text-muted-foreground">Items</TableHead>
+                              <TableHead className="text-muted-foreground">Status</TableHead>
+                              <TableHead className="text-right text-muted-foreground">Total</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {orders.map((order) => {
+                              const status = toDisplayStatus(order.checkout_status, order.nyehandel_sync_status);
+                              const cfg = statusConfig[status];
+                              const itemCount = Array.isArray(order.line_items_snapshot) ? order.line_items_snapshot.length : '—';
+                              const date = new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                              return (
+                                <TableRow key={order.id} className="border-border/20">
+                                  <TableCell className="font-mono text-sm text-foreground">{order.id.slice(0, 8).toUpperCase()}</TableCell>
+                                  <TableCell className="text-sm text-muted-foreground">{date}</TableCell>
+                                  <TableCell className="text-sm text-muted-foreground">{itemCount}</TableCell>
+                                  <TableCell>
+                                    <Badge variant="outline" className={cn('text-xs font-medium', cfg.className)}>
+                                      {cfg.label}
+                                    </Badge>
+                                  </TableCell>
+                                  <TableCell className="text-right text-sm font-medium text-foreground">
+                                    {formatPrice(order.total_price)}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </div>
+
+                      {/* Mobile cards */}
+                      <div className="space-y-3 sm:hidden">
+                        {orders.map((order) => {
+                          const status = toDisplayStatus(order.checkout_status, order.nyehandel_sync_status);
+                          const cfg = statusConfig[status];
+                          const itemCount = Array.isArray(order.line_items_snapshot) ? order.line_items_snapshot.length : '—';
+                          const date = new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
                           return (
-                            <TableRow key={order.id} className="border-border/20">
-                              <TableCell className="font-mono text-sm text-foreground">{order.id}</TableCell>
-                              <TableCell className="text-sm text-muted-foreground">{order.date}</TableCell>
-                              <TableCell className="text-sm text-muted-foreground">{order.items}</TableCell>
-                              <TableCell>
+                            <div key={order.id} className="rounded-lg border border-border/20 bg-secondary/20 p-4 space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="font-mono text-xs text-foreground">{order.id.slice(0, 8).toUpperCase()}</span>
                                 <Badge variant="outline" className={cn('text-xs font-medium', cfg.className)}>
                                   {cfg.label}
                                 </Badge>
-                              </TableCell>
-                              <TableCell className="text-right text-sm font-medium text-foreground">
-                                {formatPrice(order.total)}
-                              </TableCell>
-                            </TableRow>
+                              </div>
+                              <div className="flex items-center justify-between text-sm">
+                                <span className="text-muted-foreground">{date} &middot; {itemCount} items</span>
+                                <span className="font-medium text-foreground">{formatPrice(order.total_price)}</span>
+                              </div>
+                            </div>
                           );
                         })}
-                      </TableBody>
-                    </Table>
-                  </div>
-
-                  {/* Mobile cards */}
-                  <div className="space-y-3 sm:hidden">
-                    {mockOrders.map((order) => {
-                      const cfg = statusConfig[order.status];
-                      return (
-                        <div key={order.id} className="rounded-lg border border-border/20 bg-secondary/20 p-4 space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="font-mono text-xs text-foreground">{order.id}</span>
-                            <Badge variant="outline" className={cn('text-xs font-medium', cfg.className)}>
-                              {cfg.label}
-                            </Badge>
-                          </div>
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">{order.date} &middot; {order.items} items</span>
-                            <span className="font-medium text-foreground">{formatPrice(order.total)}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                      </div>
+                    </>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -174,49 +247,16 @@ export default function AccountPage() {
             {/* ── Saved Addresses ── */}
             <TabsContent value="addresses">
               <Card className="border-border/30">
-                <CardHeader className="flex-row items-center justify-between space-y-0">
-                  <div>
-                    <CardTitle className="font-serif">Saved Addresses</CardTitle>
-                    <CardDescription className="mt-1">Manage your delivery addresses</CardDescription>
-                  </div>
-                  <Button size="sm" className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    <span className="hidden sm:inline">Add Address</span>
-                  </Button>
+                <CardHeader>
+                  <CardTitle className="font-serif">Saved Addresses</CardTitle>
+                  <CardDescription>Manage your delivery addresses</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {mockAddresses.map((addr) => (
-                      <div
-                        key={addr.id}
-                        className={cn(
-                          'relative rounded-lg border p-4 space-y-1',
-                          addr.isDefault ? 'border-primary/40 bg-primary/5' : 'border-border/20 bg-secondary/20',
-                        )}
-                      >
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-sm font-semibold text-foreground">{addr.label}</span>
-                          {addr.isDefault && (
-                            <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">
-                              Default
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-sm font-medium text-foreground">{addr.name}</p>
-                        <p className="text-sm text-muted-foreground">{addr.line1}</p>
-                        <p className="text-sm text-muted-foreground">{addr.line2}</p>
-                        <p className="text-sm text-muted-foreground">{addr.country}</p>
-                        <div className="flex gap-2 pt-3">
-                          <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs text-muted-foreground">
-                            <Pencil className="h-3 w-3" /> Edit
-                          </Button>
-                          <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-destructive">
-                            <Trash2 className="h-3 w-3" /> Remove
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <EmptyState
+                    variant="generic"
+                    title="No saved addresses"
+                    description="Address management is coming soon."
+                  />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -224,7 +264,6 @@ export default function AccountPage() {
             {/* ── Account Settings ── */}
             <TabsContent value="settings">
               <div className="space-y-6">
-                {/* Personal info */}
                 <Card className="border-border/30">
                   <CardHeader>
                     <CardTitle className="font-serif">Personal Information</CardTitle>
@@ -234,15 +273,15 @@ export default function AccountPage() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label>First name</Label>
-                        <Input placeholder="John" defaultValue="John" />
+                        <Input placeholder="First name" defaultValue={firstName} />
                       </div>
                       <div className="space-y-2">
                         <Label>Last name</Label>
-                        <Input placeholder="Doe" defaultValue="Doe" />
+                        <Input placeholder="Last name" defaultValue={lastName} />
                       </div>
                       <div className="space-y-2 sm:col-span-2">
                         <Label>Email</Label>
-                        <Input type="email" defaultValue="john@example.com" />
+                        <Input type="email" defaultValue={user.email ?? ''} disabled />
                       </div>
                       <div className="space-y-2 sm:col-span-2">
                         <Label>Phone (optional)</Label>
@@ -253,7 +292,6 @@ export default function AccountPage() {
                   </CardContent>
                 </Card>
 
-                {/* Security */}
                 <Card className="border-border/30">
                   <CardHeader>
                     <CardTitle className="font-serif">Security</CardTitle>
