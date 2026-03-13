@@ -1,4 +1,11 @@
-# UAT Preflight Checklist (Step 24)
+# UAT Preflight Checklist (Step 24) — ARCHIVED
+
+> **ARCHIVED — Shopify phase (completed 2026-03-12)**
+> This runbook was written for the Shopify-first checkout flow. `create-shopify-checkout` and `shopify-webhook` were deleted on 2026-03-13 as part of the Nyehandel-first architecture pivot. The runbook below is no longer executable. A replacement UAT runbook for the Nyehandel-first flow will be written as part of Step 39.
+
+---
+
+*Original runbook preserved below for historical reference only.*
 
 Manual for end-to-end UAT of the flow:
 Frontend Checkout -> Shopify paid order -> Supabase `orders` update -> Nyehandel push -> `synced` status.

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "build": {
+      "prompt": "{file:~/.claude/agents/snus-friend-shop/frontend-implementer.md}"
+    },
+    "reviewer": {
+      "description": "snus-friend-shop code review",
+      "prompt": "{file:~/.claude/agents/snus-friend-shop/reviewer.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false
+      }
+    },
+    "brand-ui": {
+      "description": "snus-friend-shop brand and UI checks",
+      "prompt": "{file:~/.claude/agents/snus-friend-shop/brand-ui.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false
+      }
+    }
+  }
+}
