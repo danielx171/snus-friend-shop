@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { products as mockProducts, type Product as MockProduct } from '@/data/products';
+import type { Product as MockProduct } from '@/data/products';
 
 export interface DbProduct {
   id: string;
@@ -23,14 +23,19 @@ export interface DbProduct {
   created_at: string;
   updated_at: string;
   brands: { id: string; slug: string; name: string; manufacturer: string | null } | null;
-  product_variants: { pack_size: number; price: number; sku: string | null }[];
+  product_variants: { pack_size: number; price: number; sku: string | null; shopify_variant_id: string | null }[];
 }
 
-/** Convert DB product row to the frontend Product shape (backward compatible). */
+/** Convert DB product row to the frontend Product shape. */
 function toProduct(row: DbProduct): MockProduct {
   const pricesMap: Record<string, number> = {};
+  const shopifyVariantIds: Partial<Record<string, string>> = {};
+
   for (const v of row.product_variants ?? []) {
     pricesMap[`pack${v.pack_size}`] = Number(v.price);
+    if (v.shopify_variant_id) {
+      shopifyVariantIds[`pack${v.pack_size}`] = v.shopify_variant_id;
+    }
   }
 
   return {
@@ -55,6 +60,7 @@ function toProduct(row: DbProduct): MockProduct {
       pack30: pricesMap['pack30'] ?? 0,
     },
     manufacturer: row.manufacturer ?? row.brands?.manufacturer ?? '',
+    shopifyVariantIds: Object.keys(shopifyVariantIds).length > 0 ? shopifyVariantIds : undefined,
   };
 }
 
@@ -64,15 +70,12 @@ export function useCatalogProducts() {
     queryFn: async (): Promise<MockProduct[]> => {
       const { data, error } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, shopify_variant_id)')
         .eq('is_active', true)
         .order('name');
 
-      if (error || !data || data.length === 0) {
-        // Fall back to mock data
-        console.log('Using mock product data (DB empty or error):', error?.message);
-        return mockProducts;
-      }
+      if (error) throw new Error(error.message);
+      if (!data) return [];
 
       return (data as unknown as DbProduct[]).map(toProduct);
     },
@@ -89,27 +92,24 @@ export function useCatalogProduct(id: string | undefined) {
       // Try UUID lookup first
       const { data, error } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, shopify_variant_id)')
         .eq('id', id)
         .maybeSingle();
 
-      if (data) {
-        return toProduct(data as unknown as DbProduct);
-      }
+      if (error) throw new Error(error.message);
+      if (data) return toProduct(data as unknown as DbProduct);
 
       // Fallback: try slug
-      const { data: slugData } = await supabase
+      const { data: slugData, error: slugError } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, shopify_variant_id)')
         .eq('slug', id)
         .maybeSingle();
 
-      if (slugData) {
-        return toProduct(slugData as unknown as DbProduct);
-      }
+      if (slugError) throw new Error(slugError.message);
+      if (slugData) return toProduct(slugData as unknown as DbProduct);
 
-      // Final fallback: mock
-      return mockProducts.find(p => p.id === id);
+      return undefined;
     },
     enabled: !!id,
     staleTime: 5 * 60 * 1000,

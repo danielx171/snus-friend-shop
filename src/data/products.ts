@@ -26,6 +26,7 @@ export type CategoryKey = 'nicotinePouches';
 export interface Product {
   id: string;
   shopifyVariantId?: string;
+  shopifyVariantIds?: Partial<Record<string, string>>;
   name: string;
   brand: string;
   categoryKey: CategoryKey;

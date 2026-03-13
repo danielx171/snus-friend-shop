@@ -7,13 +7,30 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { KeyRound, Mail, ArrowLeft, Check } from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setAuthError(null);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/account`,
+    });
+
+    setIsLoading(false);
+
+    if (error) {
+      setAuthError(error.message);
+      return;
+    }
+
     setSubmitted(true);
   };
 
@@ -58,7 +75,12 @@ export default function ForgotPasswordPage() {
                         <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} className="pl-10" required />
                       </div>
                     </div>
-                    <Button type="submit" className="w-full rounded-xl h-11 glow-primary">Send Reset Link</Button>
+                    {authError && (
+                      <p className="text-xs text-destructive">{authError}</p>
+                    )}
+                    <Button type="submit" className="w-full rounded-xl h-11 glow-primary" disabled={isLoading}>
+                      {isLoading ? 'Sending…' : 'Send Reset Link'}
+                    </Button>
                     <Button asChild variant="ghost" className="w-full text-sm">
                       <Link to="/login">
                         <ArrowLeft className="h-4 w-4 mr-2" />
