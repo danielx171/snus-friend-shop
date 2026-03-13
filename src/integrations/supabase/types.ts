@@ -531,6 +531,30 @@ export type CompositeTypes<
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
+export interface DbProduct {
+  id: string;
+  brand_id: string;
+  slug: string;
+  name: string;
+  description_key: string | null;
+  category_key: string;
+  flavor_key: string;
+  strength_key: string;
+  format_key: string;
+  nicotine_mg: number;
+  portions_per_can: number;
+  image_url: string | null;
+  ratings: number;
+  badge_keys: string[];
+  manufacturer: string | null;
+  is_active: boolean;
+  nyehandel_id: string | null;
+  created_at: string;
+  updated_at: string;
+  brands: { id: string; slug: string; name: string; manufacturer: string | null } | null;
+  product_variants: { pack_size: number; price: number; sku: string | null; shopify_variant_id: string | null }[];
+}
+
 export const Constants = {
   public: {
     Enums: {
