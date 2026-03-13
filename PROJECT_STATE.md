@@ -32,7 +32,7 @@ Branch: `dev`
 - Added `isLoading` and `authError` state.
 - Button shows "Sending..." during request and is disabled.
 - Inline error message shown on Supabase auth failure.
-- `redirectTo` set to `window.location.origin + '/account'` (temporary - Step 34 adds a proper `/update-password` page).
+- `redirectTo` updated to `window.location.origin + '/update-password'` (Step 34 complete).
 
 Both fixes verified with `bun run build` (clean, no TypeScript errors).
 
@@ -96,6 +96,30 @@ Both fixes verified with `bun run build` (clean, no TypeScript errors).
 - Addresses tab shows empty state (no DB table yet — not a regression).
 - Build verified clean.
 
+### `src/pages/ProductListing.tsx`
+**Status: Completed (Step 35, 2026-03-13)**
+- `isError` read from `useCatalogProducts()`; explicit error branch added between loading skeleton and products/empty-state check.
+- Toolbar count text also guarded: shows "Could not load products" on error instead of "Showing 0 of 0".
+- States are now distinct: loading → query error → zero filtered results → product grid.
+- Build verified clean.
+
+### `src/pages/ProductDetail.tsx`
+**Status: Completed (Step 36, 2026-03-13)**
+- Unused `products as mockProducts` import removed.
+- `isError` read from `useCatalogProduct()`; explicit error early-return added before `!product` not-found guard.
+- Hardcoded 4-filled+1-empty star score display removed; replaced with single `★` icon + `{product.ratings}` value (neutral — `ratings` shape not yet confirmed as count vs score).
+- Related-products heading fixed: was `{t('detail.aboutBrand')} {product.brand}` (wrong key); now `More from {product.brand}` (hardcoded — no correct i18n key exists).
+- Build verified clean.
+
+### `src/pages/UpdatePasswordPage.tsx` + `ForgotPasswordPage.tsx`
+**Status: Completed (Step 34, 2026-03-13)**
+- New page at `/update-password` handles Supabase password-reset callback.
+- Recovery context gated on `type=recovery` in URL hash (captured before Supabase strips it); `onAuthStateChange` catches both sync and async token-exchange outcomes.
+- Page states: `loading | ready | no-recovery | expired | init-error | submitting | success`.
+- `supabase.auth.updateUser({ password })` called only after confirmed recovery context.
+- `ForgotPasswordPage.tsx` `redirectTo` updated from `/account` to `/update-password`.
+- Manually verified end-to-end via WSL dev URL. Build verified clean.
+
 ---
 
 ## Architecture Decision
@@ -110,7 +134,7 @@ See `ROADMAP.md` for Steps 25-40.
 ## Next Session: Start Here
 
 1. **Step 25** — BLOCKED. Waiting for Nyehandel API details from CEO. Document findings in `NYEHANDEL_API.md` when received.
-2. **Step 34** — Add `UpdatePasswordPage` at `/update-password` to handle Supabase password-reset callback and `updateUser({ password })`.
-3. **Steps 35–36** — Fix `ProductListing.tsx` silent error state; fix `ProductDetail.tsx` hardcoded star rating and wrong i18n key on related products.
+2. **Step 37** — Move `DbProduct` type from `useCatalog.ts` to `src/integrations/supabase/types.ts`.
+3. **Step 38** — Fix 874 kB JS bundle with code splitting.
 
-Steps 33–36 are frontend-only and do not require Nyehandel resolution.
+Steps 35–36 are frontend-only and do not require Nyehandel resolution.

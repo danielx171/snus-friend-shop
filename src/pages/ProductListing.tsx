@@ -26,7 +26,7 @@ const badgeLabels: Record<BadgeKey, string> = { new: 'New Arrivals', newPrice: '
 const sortLabels: Record<SortOption, string> = { popularity: 'Most Popular', newest: 'Newest First', oldest: 'Oldest First', 'name-asc': 'A-Z', 'name-desc': 'Z-A', 'price-asc': 'Price: Low to High', 'price-desc': 'Price: High to Low' };
 
 export default function ProductListing() {
-  const { data: products = [], isLoading } = useCatalogProducts();
+  const { data: products = [], isLoading, isError } = useCatalogProducts();
   const [searchParams] = useSearchParams();
   const badgeFilter = searchParams.get('badge');
   const brandFilter = searchParams.get('brand');
@@ -147,7 +147,7 @@ export default function ProductListing() {
                   </Sheet>
 
                   <p className="text-xs text-muted-foreground">
-                    {isLoading ? 'Loading…' : `Showing ${paginatedProducts.length} of ${sortedProducts.length} products`}
+                    {isLoading ? 'Loading…' : isError ? 'Could not load products' : `Showing ${paginatedProducts.length} of ${sortedProducts.length} products`}
                   </p>
                 </div>
 
@@ -172,6 +172,11 @@ export default function ProductListing() {
               {isLoading ? (
                 <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
+                </div>
+              ) : isError ? (
+                <div className="py-20 text-center">
+                  <p className="text-foreground font-medium mb-2">Failed to load products</p>
+                  <p className="text-sm text-muted-foreground">There was a problem fetching the catalog. Please refresh the page.</p>
                 </div>
               ) : paginatedProducts.length > 0 ? (
                 <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { products as mockProducts, PackSize, packSizeMultipliers } from '@/data/products';
+import { PackSize, packSizeMultipliers } from '@/data/products';
 import { useCatalogProducts, useCatalogProduct } from '@/hooks/useCatalog';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,7 @@ const packSizes: PackSize[] = ['pack1', 'pack5', 'pack10', 'pack30'];
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const { data: product, isLoading } = useCatalogProduct(id);
+  const { data: product, isLoading, isError } = useCatalogProduct(id);
   const { data: allProducts = [] } = useCatalogProducts();
   const { addToCart } = useCart();
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
@@ -40,6 +40,20 @@ export default function ProductDetail() {
 
   if (isLoading) {
     return <Layout><PDPSkeleton /></Layout>;
+  }
+
+  if (isError) {
+    return (
+      <Layout>
+        <div className="container py-20 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Unable to load product</h1>
+          <p className="text-muted-foreground mb-6 text-sm">There was a problem fetching this product. Please try again.</p>
+          <Button asChild variant="outline" className="rounded-xl border-border/30">
+            <Link to="/nicotine-pouches">{t('detail.backToProducts')}</Link>
+          </Button>
+        </div>
+      </Layout>
+    );
   }
 
   if (!product) {
@@ -135,9 +149,8 @@ export default function ProductDetail() {
               <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 break-words tracking-tight">{product.name}</h1>
               <div className="flex items-center gap-3 flex-wrap">
                 <div className="flex items-center gap-0.5">
-                  {[1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-primary text-primary" />)}
-                  <Star className="h-4 w-4 text-muted/40" />
-                  <span className="ml-2 text-sm text-muted-foreground">({product.ratings} reviews)</span>
+                  <Star className="h-4 w-4 fill-primary text-primary" />
+                  <span className="ml-2 text-sm text-muted-foreground">{product.ratings}</span>
                 </div>
               </div>
             </div>
@@ -281,7 +294,7 @@ export default function ProductDetail() {
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <section className="mt-20">
-            <h2 className="text-2xl font-bold text-foreground mb-8 tracking-tight">{t('detail.aboutBrand')} {product.brand}</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-8 tracking-tight">More from {product.brand}</h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {relatedProducts.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>

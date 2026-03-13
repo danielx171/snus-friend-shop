@@ -3,6 +3,17 @@
 This file is the short AI-facing change log.
 It supplements `CHANGELOG.md/CHANGELOG.md` and is meant to keep planning tools in sync.
 
+## 2026-03-13 (session 4 — Claude Code)
+
+- Step 35 ✓ — `ProductListing.tsx`: `isError` added to `useCatalogProducts()` destructure; explicit error branch inserted between loading skeleton and products/empty-state; toolbar count text guarded on `isError`.
+- Step 36 ✓ — `ProductDetail.tsx`: `products as mockProducts` import removed; `isError` added to `useCatalogProduct()` destructure; `isError` early-return added before `!product` not-found guard; hardcoded 4-filled+1-empty star row replaced with `★ {product.ratings}` (neutral, no invented label); related-products `<h2>` fixed from `{t('detail.aboutBrand')} {brand}` to `"More from {brand}"` (no correct i18n key exists for this heading).
+
+## 2026-03-13 (session 3 — Claude Code)
+
+- Step 33 ✓ — `OrderConfirmation.tsx` fully replaced: reads `orderId` from `/order-confirmation/:orderId` param, fetches order from DB with `customer_email` session guard, calls `clearCart()` once via `useRef`, discriminated union states, defensive normalisers for `line_items_snapshot` and `shipping_address`. Route added in `App.tsx`.
+- Step 34 ✓ — `UpdatePasswordPage.tsx` added at `/update-password`: recovery context gated on `type=recovery` URL hash captured before Supabase strips it; `onAuthStateChange` handles both sync (`INITIAL_SESSION`) and async (`PASSWORD_RECOVERY`) token-exchange paths; explicit `no-recovery`, `expired`, `init-error` states; `supabase.auth.updateUser({ password })` called only after confirmed recovery. `ForgotPasswordPage.tsx` `redirectTo` updated to `/update-password`. Manually verified end-to-end via WSL dev URL.
+- `vite.config.ts` ✓ — `lovable-tagger` import and plugin entry removed; was causing dev-server stack overflow via Vite's dev-only transform path.
+
 ## 2026-03-13 (session 2 — Claude Code)
 
 - Step 31 ✓ — `LoginPage.tsx` and `RegisterPage.tsx` wired to real `supabase.auth.signInWithPassword` / `signUp`; controlled inputs, loading states, error display, redirect on success, email confirmation fallback.

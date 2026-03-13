@@ -68,9 +68,10 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 - [x] Step 32: Koppla `AccountPage.tsx` till riktig data: ta bort `isLoggedIn = useState(true)`, hämta session via `supabase.auth.getUser()`, hämta orders från `orders`-tabellen per `customer_email`.
 - [x] Step 33: Koppla `OrderConfirmation.tsx` till riktig data: läs `orderId` från URL-param, hämta order från DB, rensa kundvagnen via `clearCart()` efter bekräftad order.
 - [x] Step 34: Koppla `ForgotPasswordPage.tsx` return URL till en riktig `UpdatePasswordPage` (`/update-password`) som hanterar Supabase auth callback och `updateUser({ password })`.
-- [ ] Step 35: Fixa `ProductListing.tsx` — hantera `isError`-state från `useCatalogProducts` (visa felmeddelande, inte tyst tomvy). Ta bort `window.location.origin/href` från render.
-- [ ] Step 36: Fixa `ProductDetail.tsx` — hantera `isError`, ta bort oanvänd `mockProducts`-import, fixa "related products"-rubrik (fel i18n-nyckel), rätta stjärnbetyg till att använda `product.ratings`.
+- [x] Step 35: Fixa `ProductListing.tsx` — hantera `isError`-state från `useCatalogProducts` (visa felmeddelande, inte tyst tomvy).
+- [x] Step 36: Fixa `ProductDetail.tsx` — hantera `isError`, ta bort oanvänd `mockProducts`-import, fixa "related products"-rubrik (fel i18n-nyckel), rätta stjärnbetyg till att använda `product.ratings`.
 - [ ] Step 37: Flytta `DbProduct`-typen från `useCatalog.ts` till `src/integrations/supabase/types.ts` för konsistens med manuellt underhållna typer.
 - [ ] Step 38: Lös chunk size-varning (865 kB JS bundle) — code splitting med `manualChunks` eller dynamic imports för tunga routes.
+- [ ] Step 38b: Ta bort `window.location.origin/href` från `ProductListing.tsx` render (breadcrumb JSON-LD och canonical-prop). Ersätt med konstanta sökvägar eller `VITE_SITE_URL`.
 - [ ] Step 39: UAT av komplett Nyehandel-first checkout-flöde: frontend → Nyehandel payment → order row → fulfillment-push → status `synced`.
 - [ ] Step 40: Pre-launch security review: CORS-lås på edge functions (ta bort wildcard `*` på interna funktioner), verifiera RLS-policies, kör OWASP top-10 check.
