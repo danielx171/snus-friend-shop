@@ -134,7 +134,5 @@ See `ROADMAP.md` for Steps 25-40.
 ## Next Session: Start Here
 
 1. **Step 25** — BLOCKED. Waiting for Nyehandel API details from CEO. Document findings in `NYEHANDEL_API.md` when received.
-2. **Step 37** — Move `DbProduct` type from `useCatalog.ts` to `src/integrations/supabase/types.ts`.
-3. **Step 38** — Fix 874 kB JS bundle with code splitting.
 
-Steps 35–36 are frontend-only and do not require Nyehandel resolution.
+Steps 37, 38, and 38b are complete. Steps 25–29 remain blocked on Nyehandel API.

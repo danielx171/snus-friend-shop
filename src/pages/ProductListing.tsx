@@ -19,6 +19,8 @@ import { SEO } from '@/components/seo/SEO';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
 const ITEMS_PER_PAGE = 12;
+const SITE_URL = import.meta.env.VITE_SITE_URL as string | undefined;
+const listingUrl = SITE_URL ? SITE_URL + '/nicotine-pouches' : undefined;
 
 const urlBadgeToKey: Record<string, BadgeKey> = { 'new': 'new', 'newPrice': 'newPrice', 'popular': 'popular', 'limited': 'limited' };
 const urlStrengthToKey: Record<string, StrengthKey> = { 'normal': 'normal', 'strong': 'strong', 'extraStrong': 'extraStrong', 'ultraStrong': 'ultraStrong' };
@@ -92,8 +94,8 @@ export default function ProductListing() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin },
-      { '@type': 'ListItem', position: 2, name: pageTitle, item: window.location.href },
+      { '@type': 'ListItem', position: 1, name: 'Home', ...(SITE_URL && { item: SITE_URL }) },
+      { '@type': 'ListItem', position: 2, name: pageTitle, ...(listingUrl && { item: listingUrl }) },
     ],
   };
 
@@ -102,7 +104,7 @@ export default function ProductListing() {
       <SEO
         title={`${pageTitle} | SnusFriend UK`}
         description={pageDescription}
-        canonical={window.location.origin + '/nicotine-pouches'}
+        canonical={listingUrl}
         jsonLd={breadcrumbJsonLd}
         metaRobots={activeFilterCount > 1 ? 'noindex,follow' : undefined}
       />

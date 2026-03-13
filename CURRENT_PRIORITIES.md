@@ -16,12 +16,13 @@ Use it together with `ROADMAP.md` and `PROJECT_STATE.md`.
 - `vite.config.ts` ✓ — `lovable-tagger` removed (was causing dev-server stack overflow)
 - Step 35 ✓ — `ProductListing.tsx` now distinguishes loading / query error / zero filtered results; error state shown explicitly instead of falling through to empty-state
 - Step 36 ✓ — `ProductDetail.tsx` now distinguishes loading / query error / not found; unused `mockProducts` import removed; hardcoded star score removed (neutral `★ {ratings}` display); related-products heading fixed (`detail.aboutBrand` key → `"More from {brand}"`)
+- Step 37 ✓ — `DbProduct` moved from `useCatalog.ts` to `src/integrations/supabase/types.ts`; re-exported from hook for backwards compat; build clean
+- Step 38 ✓ — `manualChunks` added to `vite.config.ts`; single 874 kB chunk split into vendor (301 kB), entry (270 kB), supabase (167 kB), radix (111 kB), icons (25 kB); chunk-size warning gone
+- Step 38b ✓ — `window.location.origin/href` removed from `ProductListing.tsx` render; replaced with `SITE_URL`/`listingUrl` constants derived from `VITE_SITE_URL`; canonical and breadcrumb `item` fields omitted when env var is absent (no invalid empty-string URLs emitted); build clean
 
 ## Active sequence
 
 1. **Step 25** (BLOCKED) — Waiting for Nyehandel API reply from CEO. Findings go in `NYEHANDEL_API.md`.
-2. **Step 37** — Move `DbProduct` type from `useCatalog.ts` to `src/integrations/supabase/types.ts`.
-3. **Step 38** — Fix 874 kB JS bundle with code splitting.
 
 ## What not to do
 

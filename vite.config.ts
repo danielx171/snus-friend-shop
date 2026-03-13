@@ -16,4 +16,23 @@ export default defineConfig(() => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (!id.includes('node_modules')) return undefined;
+          // recharts pulls in a large d3 sub-tree — isolate it
+          if (id.includes('recharts') || id.includes('/d3-') || id.includes('/d3/')) return 'charts';
+          // Supabase client + realtime/postgrest deps
+          if (id.includes('@supabase/')) return 'supabase';
+          // All Radix UI primitives
+          if (id.includes('@radix-ui/')) return 'radix';
+          // Icon set (tree-shaken at import but still sizeable)
+          if (id.includes('lucide-react')) return 'icons';
+          // Everything else (react, react-dom, router, query, …)
+          return 'vendor';
+        },
+      },
+    },
+  },
 }));

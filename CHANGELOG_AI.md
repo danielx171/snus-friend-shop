@@ -3,6 +3,12 @@
 This file is the short AI-facing change log.
 It supplements `CHANGELOG.md/CHANGELOG.md` and is meant to keep planning tools in sync.
 
+## 2026-03-13 (session 5 — Claude Code)
+
+- Step 37 ✓ — `DbProduct` interface moved from `src/hooks/useCatalog.ts` to `src/integrations/supabase/types.ts`; `useCatalog.ts` imports and re-exports it so no call-site changes needed. Build clean.
+- Step 38 ✓ — `vite.config.ts`: added `build.rollupOptions.output.manualChunks`; splits `recharts`+d3 → `charts`, `@supabase/*` → `supabase`, `@radix-ui/*` → `radix`, `lucide-react` → `icons`, remaining `node_modules` → `vendor`. Single 874 kB chunk replaced by largest chunk of 301 kB; chunk-size warning eliminated.
+- Step 38b ✓ — `ProductListing.tsx`: removed `SITE_ORIGIN = ... ?? ''` fallback; replaced with `SITE_URL` (raw `VITE_SITE_URL` env var, `undefined` when absent) and `listingUrl = SITE_URL ? SITE_URL + '/nicotine-pouches' : undefined`; `canonical` passes `listingUrl` (omitted when `undefined`); breadcrumb `item` fields are spread-conditional (`...(SITE_URL && { item })`) so no empty-string URLs are emitted. Build clean.
+
 ## 2026-03-13 (session 4 — Claude Code)
 
 - Step 35 ✓ — `ProductListing.tsx`: `isError` added to `useCatalogProducts()` destructure; explicit error branch inserted between loading skeleton and products/empty-state; toolbar count text guarded on `isError`.
