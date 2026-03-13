@@ -127,6 +127,9 @@ Deno.serve(async (req) => {
         const result = await response.json().catch(() => ({}));
         console.log(JSON.stringify({ requestId, event: "nyehandel_push_response", orderId: order.id, status: response.status }));
         nyehandelOrderId = String(result?.id ?? result?.order_id ?? "").trim() || null;
+        if (!nyehandelOrderId) {
+          lastError = `attempt_${attempt}_${response.status}:missing_order_id_in_response`;
+        }
         break;
       }
 
@@ -140,7 +143,7 @@ Deno.serve(async (req) => {
     await new Promise((resolve) => setTimeout(resolve, attempt * 300));
   }
 
-  if (!nyehandelOrderId && lastError) {
+  if (!nyehandelOrderId) {
     await adminClient
       .from("orders")
       .update({
