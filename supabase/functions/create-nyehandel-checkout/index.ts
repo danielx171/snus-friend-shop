@@ -12,13 +12,10 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-const VALID_SHIPPING_METHODS = [
-  "UPS Standard EU",
-  "UPS Express Saver EU",
-  "DHL Economy Select (Non Eu)",
-  "DHL Express",
-  "UPS Express Saver",
-] as const;
+/** In-memory cache for shipping method names fetched from Nyehandel */
+let cachedShippingMethods: string[] = [];
+let cachedShippingMethodsAt = 0;
+const SHIPPING_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -54,6 +51,7 @@ interface CheckoutRequest {
   customer: CheckoutCustomer;
   billing_address: CheckoutAddress;
   shipping_method: string;
+  idempotency_key?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -67,9 +65,50 @@ function jsonResponse(body: unknown, status = 200): Response {
   });
 }
 
+/**
+ * Fetch valid shipping method names from Nyehandel `GET /shipping-methods`.
+ * Results are cached in memory for SHIPPING_CACHE_TTL_MS.
+ */
+async function fetchShippingMethods(
+  baseUrl: string,
+  token: string,
+  xIdentifier: string,
+): Promise<string[]> {
+  const now = Date.now();
+  if (cachedShippingMethods.length > 0 && now - cachedShippingMethodsAt < SHIPPING_CACHE_TTL_MS) {
+    return cachedShippingMethods;
+  }
+
+  const response = await fetch(`${baseUrl}/shipping-methods`, {
+    headers: {
+      Accept: "application/json",
+      "X-identifier": xIdentifier,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`shipping_methods_fetch_failed:${response.status}`);
+  }
+
+  const json = (await response.json()) as { data?: Array<{ name?: string }> };
+  const names = (json?.data ?? [])
+    .map((m) => (typeof m.name === "string" ? m.name.trim() : ""))
+    .filter((n) => n.length > 0);
+
+  if (names.length === 0) {
+    throw new Error("shipping_methods_empty_response");
+  }
+
+  cachedShippingMethods = names;
+  cachedShippingMethodsAt = now;
+  return names;
+}
+
 function validatePayload(
   body: unknown,
   requestId: string,
+  validShippingMethods: string[],
 ): { ok: true; data: CheckoutRequest } | { ok: false; response: Response } {
   const b = body as Record<string, unknown>;
 
@@ -150,23 +189,29 @@ function validatePayload(
     };
   }
 
-  // shipping_method
+  // shipping_method — validated against live Nyehandel shipping methods
   if (
     typeof b.shipping_method !== "string" ||
-    !VALID_SHIPPING_METHODS.includes(b.shipping_method as typeof VALID_SHIPPING_METHODS[number])
+    !validShippingMethods.includes(b.shipping_method)
   ) {
     return {
       ok: false,
       response: jsonResponse(
         {
           error: "invalid_shipping_method",
-          message: `Must be one of: ${VALID_SHIPPING_METHODS.join(", ")}`,
+          message: `Must be one of: ${validShippingMethods.join(", ")}`,
           requestId,
         },
         400,
       ),
     };
   }
+
+  // idempotency_key — optional, client-generated UUID to prevent duplicate orders
+  const idempotencyKey =
+    typeof b.idempotency_key === "string" && b.idempotency_key.trim()
+      ? b.idempotency_key.trim()
+      : undefined;
 
   return {
     ok: true,
@@ -175,6 +220,7 @@ function validatePayload(
       customer: cust as unknown as CheckoutCustomer,
       billing_address: addr as unknown as CheckoutAddress,
       shipping_method: b.shipping_method as string,
+      idempotency_key: idempotencyKey,
     },
   };
 }
@@ -209,6 +255,16 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "missing_nyehandel_token", requestId }, 500);
   }
 
+  /* ---------- fetch valid shipping methods from Nyehandel ---------- */
+
+  let validShippingMethods: string[];
+  try {
+    validShippingMethods = await fetchShippingMethods(nyehandelBaseUrl, nyehandelToken, nyehandelXIdentifier);
+  } catch (err) {
+    console.error(JSON.stringify({ requestId, event: "shipping_methods_fetch_error", error: String(err) }));
+    return jsonResponse({ error: "shipping_methods_unavailable", requestId }, 502);
+  }
+
   /* ---------- parse + validate body ---------- */
 
   let rawBody: unknown;
@@ -218,9 +274,32 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "invalid_json", requestId }, 400);
   }
 
-  const validation = validatePayload(rawBody, requestId);
+  const validation = validatePayload(rawBody, requestId, validShippingMethods);
   if (!validation.ok) return validation.response;
-  const { items, customer, billing_address, shipping_method } = validation.data;
+  const { items, customer, billing_address, shipping_method, idempotency_key } = validation.data;
+
+  /* ---------- idempotency check ---------- */
+
+  const adminClient = createClient(supabaseUrl, serviceRoleKey);
+
+  if (idempotency_key) {
+    const { data: existing } = await adminClient
+      .from("orders")
+      .select("id, nyehandel_order_id, nyehandel_prefix")
+      .eq("idempotency_key", idempotency_key)
+      .maybeSingle();
+
+    if (existing) {
+      return jsonResponse({
+        ok: true,
+        idempotent: true,
+        orderId: existing.id,
+        nyehandelOrderId: existing.nyehandel_order_id,
+        prefix: existing.nyehandel_prefix,
+        requestId,
+      });
+    }
+  }
 
   /* ---------- build Nyehandel POST /orders/simple payload ---------- */
 
@@ -347,29 +426,33 @@ Deno.serve(async (req) => {
 
   /* ---------- persist order in Supabase ---------- */
 
-  const adminClient = createClient(supabaseUrl, serviceRoleKey);
+  const orderInsert: Record<string, unknown> = {
+    nyehandel_order_id: nyehandelOrderId,
+    nyehandel_prefix: nyehandelPrefix,
+    checkout_status: "pending",
+    customer_email: customer.email,
+    currency: "EUR",
+    total_price: 0, // Nyehandel owns pricing — no price from our side
+    line_items_snapshot: items,
+    customer_metadata: {
+      firstname: customer.firstname,
+      lastname: customer.lastname,
+    },
+    shipping_address: {
+      ...billing_address,
+      firstname: customer.firstname,
+      lastname: customer.lastname,
+    },
+    nyehandel_sync_status: "synced",
+  };
+
+  if (idempotency_key) {
+    orderInsert.idempotency_key = idempotency_key;
+  }
 
   const { data: insertedOrder, error: insertError } = await adminClient
     .from("orders")
-    .insert({
-      nyehandel_order_id: nyehandelOrderId,
-      nyehandel_prefix: nyehandelPrefix,
-      checkout_status: "pending",
-      customer_email: customer.email,
-      currency: "EUR",
-      total_price: 0, // Nyehandel owns pricing — no price from our side
-      line_items_snapshot: items,
-      customer_metadata: {
-        firstname: customer.firstname,
-        lastname: customer.lastname,
-      },
-      shipping_address: {
-        ...billing_address,
-        firstname: customer.firstname,
-        lastname: customer.lastname,
-      },
-      nyehandel_sync_status: "synced",
-    })
+    .insert(orderInsert)
     .select("id")
     .single();
 
@@ -382,7 +465,24 @@ Deno.serve(async (req) => {
         nyehandelOrderId,
       }),
     );
-    // The Nyehandel order was already created — log for manual reconciliation
+
+    // Audit trail: Nyehandel order exists but local insert failed — ops can reconcile
+    await adminClient.from("webhook_inbox").insert({
+      provider: "nyehandel",
+      topic: "orphan_order",
+      status: "received",
+      payload: {
+        nyehandelOrderId,
+        nyehandelPrefix,
+        customerEmail: customer.email,
+        insertError: insertError?.message ?? "unknown",
+        requestId,
+      },
+      received_at: new Date().toISOString(),
+    }).catch(() => {
+      // Best-effort — the console.error above already logs the critical info
+    });
+
     return jsonResponse(
       {
         error: "order_persistence_failed",

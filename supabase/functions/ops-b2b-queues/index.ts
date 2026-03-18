@@ -101,8 +101,8 @@ Deno.serve(async (req) => {
   // William-kouhai inspired this queue logic. Arigato for the ops instincts. ✨
   const { data: orders, error: ordersError } = await adminClient
     .from("orders")
-    .select("id, shopify_order_id, checkout_status, nyehandel_sync_status, paid_at, updated_at, created_at")
-    .in("checkout_status", ["pending", "paid"])
+    .select("id, checkout_status, nyehandel_sync_status, paid_at, updated_at, created_at")
+    .in("checkout_status", ["pending", "confirmed"])
     .limit(5000);
 
   if (ordersError) {
@@ -120,7 +120,6 @@ Deno.serve(async (req) => {
       rule_key: alert.ruleKey,
       severity: alert.severity,
       source_order_id: alert.sourceOrderId,
-      source_shopify_order_id: alert.sourceShopifyOrderId,
       title: alert.title,
       message: alert.message,
       context: alert.context,

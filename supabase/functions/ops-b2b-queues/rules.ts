@@ -4,7 +4,6 @@ export const SHIPPING_DELAY_DAYS = 2;
 
 export type OrderCandidate = {
   id: string;
-  shopify_order_id: string | null;
   checkout_status: string;
   nyehandel_sync_status: string;
   paid_at: string | null;
@@ -19,7 +18,6 @@ export type GeneratedAlert = {
   ruleKey: AlertRuleKey;
   severity: AlertSeverity;
   sourceOrderId: string;
-  sourceShopifyOrderId: string | null;
   title: string;
   message: string;
   context: Record<string, unknown>;
@@ -66,7 +64,6 @@ export function deriveUnpaidDeadlineAlerts(
       ruleKey: "unpaid_deadline",
       severity,
       sourceOrderId: order.id,
-      sourceShopifyOrderId: order.shopify_order_id,
       title: "Unpaid deadline approaching",
       message: `Order has ${daysRemaining} day(s) left in the ${PAYMENT_WINDOW_DAYS}-day payment window.`,
       context: {
@@ -89,7 +86,7 @@ export function deriveDeliverableDelayAlerts(
 
   for (const order of orders) {
     const eligible =
-      order.checkout_status === "paid" &&
+      order.checkout_status === "confirmed" &&
       (order.nyehandel_sync_status === "pending" || order.nyehandel_sync_status === "failed");
 
     if (!eligible) continue;
@@ -106,7 +103,6 @@ export function deriveDeliverableDelayAlerts(
       ruleKey: "deliverable_delay",
       severity,
       sourceOrderId: order.id,
-      sourceShopifyOrderId: order.shopify_order_id,
       title: "Deliverable delay detected",
       message: `Paid order has waited ${daysWaiting} day(s) without successful Nyehandel sync.`,
       context: {

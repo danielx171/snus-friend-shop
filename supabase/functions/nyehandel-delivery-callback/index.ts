@@ -69,18 +69,28 @@ Deno.serve(async (req) => {
     return jsonOk({ ok: false, error: "body_read_error", requestId });
   }
 
-  // Log full raw body on every call — payload shape from Nyehandel is not documented
-  console.log(JSON.stringify({ requestId, event: "delivery_callback_received", rawBody }));
-
   try {
     if (rawBody.trim()) {
       body = JSON.parse(rawBody) as Record<string, unknown>;
     }
   } catch {
-    console.error(JSON.stringify({ requestId, event: "delivery_callback_invalid_json", rawBody }));
-    // Still return 200 — we stored raw body above, Nyehandel doesn't need to retry
+    console.error(JSON.stringify({
+      requestId,
+      event: "delivery_callback_invalid_json",
+      bodyByteLength: rawBody.length,
+    }));
+    // Still return 200 — Nyehandel doesn't need to retry; raw body persisted in webhook_inbox below
     return jsonOk({ ok: false, error: "invalid_json", requestId });
   }
+
+  // Log structured metadata only — raw payload is persisted in webhook_inbox for audit
+  const topLevelKeys = Object.keys(body);
+  console.log(JSON.stringify({
+    requestId,
+    event: "delivery_callback_received",
+    bodyByteLength: rawBody.length,
+    topLevelKeys,
+  }));
 
   /* ---------- store in webhook_inbox for audit ---------- */
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
@@ -107,7 +117,7 @@ Deno.serve(async (req) => {
     null;
 
   if (!nyehandelOrderId) {
-    console.error(JSON.stringify({ requestId, event: "delivery_callback_no_order_id", body }));
+    console.error(JSON.stringify({ requestId, event: "delivery_callback_no_order_id", topLevelKeys }));
     return jsonOk({ ok: false, error: "no_order_id_in_payload", requestId });
   }
 

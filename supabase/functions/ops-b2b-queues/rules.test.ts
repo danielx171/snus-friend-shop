@@ -1,59 +1,154 @@
-declare const Deno: {
-  test: (name: string, fn: () => void | Promise<void>) => void;
-};
-
+import { describe, expect, it } from "vitest";
 import {
-  deriveDeliverableDelayAlerts,
   deriveUnpaidDeadlineAlerts,
+  deriveDeliverableDelayAlerts,
+  PAYMENT_WINDOW_DAYS,
+  SHIPPING_DELAY_DAYS,
   type OrderCandidate,
-} from "./rules.ts";
+} from "./rules";
 
-function assertEquals<T>(actual: T, expected: T): void {
-  if (actual !== expected) {
-    throw new Error(`Assertion failed: expected ${String(expected)}, got ${String(actual)}`);
-  }
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                            */
+/* ------------------------------------------------------------------ */
+
+function daysAgo(n: number, from: Date = new Date("2026-03-18T12:00:00Z")): string {
+  const d = new Date(from);
+  d.setUTCDate(d.getUTCDate() - n);
+  return d.toISOString();
 }
 
-Deno.test("flags deliverable-delay alert for paid order waiting >= 2 days", () => {
-  const now = new Date("2026-03-12T12:00:00Z");
-  const orders: OrderCandidate[] = [
-    {
-      id: "order-1",
-      shopify_order_id: "1001",
-      checkout_status: "paid",
-      nyehandel_sync_status: "pending",
-      paid_at: "2026-03-09T10:00:00Z",
-      updated_at: "2026-03-10T10:00:00Z",
-      created_at: "2026-03-09T09:00:00Z",
-    },
-  ];
+const NOW = new Date("2026-03-18T12:00:00Z");
 
-  const alerts = deriveDeliverableDelayAlerts(orders, now);
+function makeOrder(overrides: Partial<OrderCandidate> = {}): OrderCandidate {
+  return {
+    id: "order-1",
+    checkout_status: "pending",
+    nyehandel_sync_status: "synced",
+    paid_at: null,
+    updated_at: daysAgo(0),
+    created_at: daysAgo(0),
+    ...overrides,
+  };
+}
 
-  assertEquals(alerts.length, 1);
-  assertEquals(alerts[0].ruleKey, "deliverable_delay");
-  assertEquals(alerts[0].severity, "medium");
-  assertEquals(alerts[0].sourceOrderId, "order-1");
+/* ------------------------------------------------------------------ */
+/*  deriveUnpaidDeadlineAlerts                                         */
+/* ------------------------------------------------------------------ */
+
+describe("deriveUnpaidDeadlineAlerts", () => {
+  it("returns no alerts for a fresh pending order", () => {
+    const order = makeOrder({ updated_at: daysAgo(0) });
+    const alerts = deriveUnpaidDeadlineAlerts([order], NOW);
+    expect(alerts).toHaveLength(0);
+  });
+
+  it("returns an alert when payment window is within threshold", () => {
+    // 5 days elapsed → 2 days remaining (within 3-day threshold)
+    const order = makeOrder({ updated_at: daysAgo(5) });
+    const alerts = deriveUnpaidDeadlineAlerts([order], NOW);
+    expect(alerts).toHaveLength(1);
+    expect(alerts[0].ruleKey).toBe("unpaid_deadline");
+    expect(alerts[0].severity).toBe("medium");
+    expect(alerts[0].sourceOrderId).toBe("order-1");
+  });
+
+  it("returns high severity with 1 day remaining", () => {
+    // 6 days elapsed → 1 day remaining
+    const order = makeOrder({ updated_at: daysAgo(6) });
+    const alerts = deriveUnpaidDeadlineAlerts([order], NOW);
+    expect(alerts).toHaveLength(1);
+    expect(alerts[0].severity).toBe("high");
+  });
+
+  it("returns no alert when deadline has passed (0 days remaining)", () => {
+    const order = makeOrder({ updated_at: daysAgo(PAYMENT_WINDOW_DAYS) });
+    const alerts = deriveUnpaidDeadlineAlerts([order], NOW);
+    expect(alerts).toHaveLength(0);
+  });
+
+  it("ignores non-pending orders", () => {
+    const order = makeOrder({
+      checkout_status: "confirmed",
+      updated_at: daysAgo(5),
+    });
+    const alerts = deriveUnpaidDeadlineAlerts([order], NOW);
+    expect(alerts).toHaveLength(0);
+  });
+
+  it("does not include sourceShopifyOrderId in alert shape", () => {
+    const order = makeOrder({ updated_at: daysAgo(5) });
+    const alerts = deriveUnpaidDeadlineAlerts([order], NOW);
+    expect(alerts).toHaveLength(1);
+    expect("sourceShopifyOrderId" in alerts[0]).toBe(false);
+  });
 });
 
-Deno.test("flags unpaid-deadline alert when order is within 3 days of payment window", () => {
-  const now = new Date("2026-03-12T12:00:00Z");
-  const orders: OrderCandidate[] = [
-    {
-      id: "order-2",
-      shopify_order_id: "1002",
-      checkout_status: "pending",
+/* ------------------------------------------------------------------ */
+/*  deriveDeliverableDelayAlerts                                       */
+/* ------------------------------------------------------------------ */
+
+describe("deriveDeliverableDelayAlerts", () => {
+  it("returns no alerts for a confirmed+synced order", () => {
+    const order = makeOrder({
+      checkout_status: "confirmed",
+      nyehandel_sync_status: "synced",
+      paid_at: daysAgo(5),
+    });
+    const alerts = deriveDeliverableDelayAlerts([order], NOW);
+    expect(alerts).toHaveLength(0);
+  });
+
+  it("returns an alert for a confirmed+failed order past delay threshold", () => {
+    const order = makeOrder({
+      checkout_status: "confirmed",
+      nyehandel_sync_status: "failed",
+      paid_at: daysAgo(SHIPPING_DELAY_DAYS + 1),
+    });
+    const alerts = deriveDeliverableDelayAlerts([order], NOW);
+    expect(alerts).toHaveLength(1);
+    expect(alerts[0].ruleKey).toBe("deliverable_delay");
+    expect(alerts[0].severity).toBe("medium");
+  });
+
+  it("returns high severity after 7+ days waiting", () => {
+    const order = makeOrder({
+      checkout_status: "confirmed",
       nyehandel_sync_status: "pending",
-      paid_at: null,
-      updated_at: "2026-03-08T09:00:00Z",
-      created_at: "2026-03-08T08:00:00Z",
-    },
-  ];
+      paid_at: daysAgo(8),
+    });
+    const alerts = deriveDeliverableDelayAlerts([order], NOW);
+    expect(alerts).toHaveLength(1);
+    expect(alerts[0].severity).toBe("high");
+  });
 
-  const alerts = deriveUnpaidDeadlineAlerts(orders, now);
+  it("ignores pending orders (not yet confirmed)", () => {
+    const order = makeOrder({
+      checkout_status: "pending",
+      nyehandel_sync_status: "failed",
+      paid_at: daysAgo(5),
+    });
+    const alerts = deriveDeliverableDelayAlerts([order], NOW);
+    expect(alerts).toHaveLength(0);
+  });
 
-  assertEquals(alerts.length, 1);
-  assertEquals(alerts[0].ruleKey, "unpaid_deadline");
-  assertEquals(alerts[0].severity, "low");
-  assertEquals(alerts[0].sourceOrderId, "order-2");
+  it("ignores the old 'paid' status — no longer valid", () => {
+    const order = makeOrder({
+      checkout_status: "paid" as string,
+      nyehandel_sync_status: "failed",
+      paid_at: daysAgo(5),
+    });
+    const alerts = deriveDeliverableDelayAlerts([order], NOW);
+    expect(alerts).toHaveLength(0);
+  });
+
+  it("does not include sourceShopifyOrderId in alert shape", () => {
+    const order = makeOrder({
+      checkout_status: "confirmed",
+      nyehandel_sync_status: "failed",
+      paid_at: daysAgo(5),
+    });
+    const alerts = deriveDeliverableDelayAlerts([order], NOW);
+    expect(alerts).toHaveLength(1);
+    expect("sourceShopifyOrderId" in alerts[0]).toBe(false);
+  });
 });
