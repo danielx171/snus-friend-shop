@@ -16,13 +16,17 @@ CREATE TABLE IF NOT EXISTS public.orders (
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Endast administratörer kan läsa/skriva allt
-CREATE POLICY "Admins have full access to orders" 
-ON public.orders 
-FOR ALL 
-TO authenticated 
-USING (
-  (SELECT (raw_user_meta_data->>'is_admin')::boolean FROM auth.users WHERE id = auth.uid()) = true
-);
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='orders' AND policyname='Admins have full access to orders') THEN
+    CREATE POLICY "Admins have full access to orders"
+    ON public.orders
+    FOR ALL
+    TO authenticated
+    USING (
+      (SELECT (raw_user_meta_data->>'is_admin')::boolean FROM auth.users WHERE id = auth.uid()) = true
+    );
+  END IF;
+END $$;
 
 -- Index för snabbare sökning på Shopify ID
 CREATE INDEX IF NOT EXISTS idx_orders_shopify_id ON public.orders(shopify_order_id);
