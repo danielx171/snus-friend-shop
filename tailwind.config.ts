@@ -76,6 +76,24 @@ export default {
   				'0%, 100%': { transform: 'rotate(-3deg)' },
   				'50%': { transform: 'rotate(3deg)' }
   			},
+  			'cart-item-in': {
+  				'0%': { opacity: '0', transform: 'translateY(8px)' },
+  				'100%': { opacity: '1', transform: 'translateY(0)' }
+  			},
+  			'cart-item-out': {
+  				'0%': { opacity: '1', transform: 'translateX(0)' },
+  				'100%': { opacity: '0', transform: 'translateX(100%)' }
+  			},
+  			'btn-spring': {
+  				'0%': { transform: 'scale(1)' },
+  				'40%': { transform: 'scale(0.85)' },
+  				'70%': { transform: 'scale(1.1)' },
+  				'100%': { transform: 'scale(1)' }
+  			},
+  			'number-flip': {
+  				'0%': { opacity: '0', transform: 'translateY(-6px)' },
+  				'100%': { opacity: '1', transform: 'translateY(0)' }
+  			},
   			'hero-fade-in': {
   				'0%': { opacity: '0', transform: 'translateY(8px)' },
   				'100%': { opacity: '1', transform: 'translateY(0)' }
