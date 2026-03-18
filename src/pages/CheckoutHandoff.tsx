@@ -25,10 +25,6 @@ import { supabase } from '@/integrations/supabase/client';
 
 /* ── Types ── */
 
-interface ShippingMethodsResponse {
-  methods: string[];
-}
-
 interface CheckoutResponse {
   ok: boolean;
   orderId: string;
@@ -43,6 +39,27 @@ interface VariantRow {
   pack_size: number;
   product_id: string;
 }
+
+/* ── Shipping methods from nicbud.com Nyehandel admin ── */
+
+const SHIPPING_OPTIONS = [
+  { name: 'UPS Standard EU', price: 8.2, label: 'UPS Standard EU — \u20AC8.20' },
+  { name: 'UPS Express Saver EU', price: 17.9, label: 'UPS Express Saver EU — \u20AC17.90' },
+  { name: 'DHL Economy Select (Non Eu)', price: 9.9, label: 'DHL Economy Select (Non Eu) — \u20AC9.90' },
+  { name: 'DHL Express', price: 0, label: 'DHL Express — Free' },
+  { name: 'UPS Express Saver', price: 0, label: 'UPS Express Saver — Free' },
+] as const;
+
+const COUNTRY_OPTIONS = [
+  { value: 'GB', label: 'United Kingdom' },
+  { value: 'SE', label: 'Sweden' },
+  { value: 'DE', label: 'Germany' },
+  { value: 'DK', label: 'Denmark' },
+  { value: 'NO', label: 'Norway' },
+  { value: 'FI', label: 'Finland' },
+  { value: 'NL', label: 'Netherlands' },
+  { value: 'BE', label: 'Belgium' },
+] as const;
 
 /* ── Component ── */
 
@@ -73,13 +90,15 @@ export default function CheckoutHandoff() {
     postcode: '',
     city: '',
     country: 'GB',
-    shipping_method: '',
+    shipping_method: SHIPPING_OPTIONS[0].name,
   });
 
-  const [shippingMethods, setShippingMethods] = useState<string[]>([]);
-  const [shippingLoading, setShippingLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [skuMap, setSkuMap] = useState<Map<string, string> | null>(null);
+  const [skuLoading, setSkuLoading] = useState(true);
+  const [skuError, setSkuError] = useState(false);
 
   /* ── Prefill email from auth session ── */
   useEffect(() => {
@@ -91,78 +110,76 @@ export default function CheckoutHandoff() {
     });
   }, []);
 
-  /* ── Fetch shipping methods ── */
+  /* ── Resolve SKUs on mount ── */
   useEffect(() => {
+    if (items.length === 0) {
+      setSkuLoading(false);
+      return;
+    }
+
     let cancelled = false;
     (async () => {
       try {
-        const result = await apiFetch<ShippingMethodsResponse>('get-shipping-methods');
-        if (!cancelled && result.methods?.length) {
-          setShippingMethods(result.methods);
-          setForm((prev) => ({
-            ...prev,
-            shipping_method: prev.shipping_method || result.methods[0],
-          }));
+        const productIds = [...new Set(items.map((i) => i.product.id))];
+        const { data: variants, error: variantsError } = await supabase
+          .from('product_variants')
+          .select('sku, pack_size, product_id')
+          .in('product_id', productIds);
+
+        if (cancelled) return;
+
+        if (variantsError || !variants) {
+          setSkuError(true);
+          setSkuLoading(false);
+          return;
         }
+
+        const map = new Map<string, string>();
+        for (const v of variants as VariantRow[]) {
+          if (v.sku) {
+            map.set(`${v.product_id}:${v.pack_size}`, v.sku);
+          }
+        }
+        setSkuMap(map);
       } catch {
-        // Shipping methods unavailable — form will show error on submit
+        if (!cancelled) setSkuError(true);
       } finally {
-        if (!cancelled) setShippingLoading(false);
+        if (!cancelled) setSkuLoading(false);
       }
     })();
     return () => { cancelled = true; };
-  }, []);
+  }, [items]);
 
   /* ── Idempotency key — stable per mount ── */
   const idempotencyKey = useMemo(() => crypto.randomUUID(), []);
 
-  /* ── Resolve SKUs from product_variants ── */
-  async function resolveSkus(): Promise<Array<{
-    sku: string;
-    quantity: number;
-    product_name: string;
-    pack_label: string;
-    unit_price: number;
-  }>> {
-    const productIds = [...new Set(items.map((i) => i.product.id))];
-
-    const { data: variants, error: variantsError } = await supabase
-      .from('product_variants')
-      .select('sku, pack_size, product_id')
-      .in('product_id', productIds);
-
-    if (variantsError || !variants) {
-      throw new Error('Failed to resolve product SKUs');
-    }
-
-    const variantMap = new Map<string, string>();
-    for (const v of variants as VariantRow[]) {
-      if (v.sku) {
-        variantMap.set(`${v.product_id}:${v.pack_size}`, v.sku);
-      }
-    }
-
-    const resolved = [];
-    for (const item of items) {
+  /* ── Check if all cart items have SKUs ── */
+  const missingSkus = useMemo(() => {
+    if (!skuMap || skuLoading) return false;
+    return items.some((item) => {
       const packCount = packSizeMultipliers[item.packSize];
       const key = `${item.product.id}:${packCount}`;
-      const sku = variantMap.get(key);
-      if (!sku) {
-        throw new Error(`No SKU found for ${item.product.name} (${item.packSize})`);
-      }
-      resolved.push({
-        sku,
-        quantity: item.quantity,
-        product_name: item.product.name,
-        pack_label: `${packCount} ${packCount === 1 ? 'can' : 'cans'}`,
-        unit_price: item.product.prices[item.packSize],
-      });
-    }
-
-    return resolved;
-  }
+      return !skuMap.get(key);
+    });
+  }, [items, skuMap, skuLoading]);
 
   /* ── Form validation ── */
+  function validateForm(): boolean {
+    const errors: Record<string, string> = {};
+
+    if (!form.email.includes('@')) errors.email = 'Valid email is required';
+    if (!form.firstname.trim()) errors.firstname = 'First name is required';
+    if (!form.lastname.trim()) errors.lastname = 'Last name is required';
+    if (!form.address.trim()) errors.address = 'Address is required';
+    if (!form.postcode.trim()) errors.postcode = 'Postcode is required';
+    if (!form.city.trim()) errors.city = 'City is required';
+    if (!form.country.trim()) errors.country = 'Country is required';
+    if (!form.shipping_method) errors.shipping_method = 'Shipping method is required';
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   function isFormValid(): boolean {
     return (
       form.email.includes('@') &&
@@ -179,13 +196,26 @@ export default function CheckoutHandoff() {
   /* ── Submit ── */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isFormValid() || submitting) return;
+    if (!validateForm() || submitting || !skuMap) return;
 
     setSubmitting(true);
     setError(null);
 
     try {
-      const checkoutItems = await resolveSkus();
+      // Map cart items to checkout items with SKUs
+      const checkoutItems = items.map((item) => {
+        const packCount = packSizeMultipliers[item.packSize];
+        const key = `${item.product.id}:${packCount}`;
+        const sku = skuMap.get(key);
+        if (!sku) throw new Error(`No SKU found for ${item.product.name} (${item.packSize})`);
+        return {
+          sku,
+          quantity: item.quantity,
+          product_name: item.product.name,
+          pack_label: `${packCount} ${packCount === 1 ? 'can' : 'cans'}`,
+          unit_price: item.product.prices[item.packSize],
+        };
+      });
 
       const result = await apiFetch<CheckoutResponse>('create-nyehandel-checkout', {
         method: 'POST',
@@ -210,7 +240,9 @@ export default function CheckoutHandoff() {
       });
 
       if (result.ok && result.orderId) {
-        navigate(`/order-confirmation/${result.orderId}`);
+        navigate(`/order-confirmation/${result.orderId}`, {
+          state: { email: form.email },
+        });
       } else {
         setError('Order creation failed. Please try again.');
       }
@@ -225,6 +257,14 @@ export default function CheckoutHandoff() {
   /* ── Update form field ── */
   function updateField(field: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
+    // Clear field error on change
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }
   }
 
   /* ── Empty cart ── */
@@ -245,6 +285,8 @@ export default function CheckoutHandoff() {
       </>
     );
   }
+
+  const canSubmit = isFormValid() && !submitting && !missingSkus && !skuError && !skuLoading;
 
   return (
     <>
@@ -281,10 +323,10 @@ export default function CheckoutHandoff() {
                   </CardContent>
                 </Card>
 
-                {/* Customer Details */}
+                {/* Contact */}
                 <Card>
                   <CardContent className="p-6 space-y-4">
-                    <h2 className="text-lg font-semibold text-foreground">Customer Details</h2>
+                    <h2 className="text-lg font-semibold text-foreground">Contact</h2>
 
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
@@ -296,7 +338,17 @@ export default function CheckoutHandoff() {
                         onChange={(e) => updateField('email', e.target.value)}
                         required
                       />
+                      {fieldErrors.email && (
+                        <p className="text-xs text-destructive">{fieldErrors.email}</p>
+                      )}
                     </div>
+                  </CardContent>
+                </Card>
+
+                {/* Delivery Address */}
+                <Card>
+                  <CardContent className="p-6 space-y-4">
+                    <h2 className="text-lg font-semibold text-foreground">Delivery Address</h2>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
@@ -308,6 +360,9 @@ export default function CheckoutHandoff() {
                           onChange={(e) => updateField('firstname', e.target.value)}
                           required
                         />
+                        {fieldErrors.firstname && (
+                          <p className="text-xs text-destructive">{fieldErrors.firstname}</p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastname">Last name</Label>
@@ -318,15 +373,11 @@ export default function CheckoutHandoff() {
                           onChange={(e) => updateField('lastname', e.target.value)}
                           required
                         />
+                        {fieldErrors.lastname && (
+                          <p className="text-xs text-destructive">{fieldErrors.lastname}</p>
+                        )}
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-
-                {/* Shipping Address */}
-                <Card>
-                  <CardContent className="p-6 space-y-4">
-                    <h2 className="text-lg font-semibold text-foreground">Shipping Address</h2>
 
                     <div className="space-y-2">
                       <Label htmlFor="address">Address</Label>
@@ -337,6 +388,9 @@ export default function CheckoutHandoff() {
                         onChange={(e) => updateField('address', e.target.value)}
                         required
                       />
+                      {fieldErrors.address && (
+                        <p className="text-xs text-destructive">{fieldErrors.address}</p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -349,6 +403,9 @@ export default function CheckoutHandoff() {
                           onChange={(e) => updateField('postcode', e.target.value)}
                           required
                         />
+                        {fieldErrors.postcode && (
+                          <p className="text-xs text-destructive">{fieldErrors.postcode}</p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="city">City</Label>
@@ -359,22 +416,32 @@ export default function CheckoutHandoff() {
                           onChange={(e) => updateField('city', e.target.value)}
                           required
                         />
+                        {fieldErrors.city && (
+                          <p className="text-xs text-destructive">{fieldErrors.city}</p>
+                        )}
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="country">Country</Label>
-                      <Input
-                        id="country"
-                        placeholder="Country code (e.g. GB)"
+                      <Select
                         value={form.country}
-                        onChange={(e) => updateField('country', e.target.value.toUpperCase().slice(0, 2))}
-                        maxLength={2}
-                        required
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        2-letter country code (GB, SE, DE, etc.)
-                      </p>
+                        onValueChange={(v) => updateField('country', v)}
+                      >
+                        <SelectTrigger id="country">
+                          <SelectValue placeholder="Select country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {COUNTRY_OPTIONS.map((c) => (
+                            <SelectItem key={c.value} value={c.value}>
+                              {c.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {fieldErrors.country && (
+                        <p className="text-xs text-destructive">{fieldErrors.country}</p>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -384,31 +451,23 @@ export default function CheckoutHandoff() {
                   <CardContent className="p-6 space-y-4">
                     <h2 className="text-lg font-semibold text-foreground">Shipping Method</h2>
 
-                    {shippingLoading ? (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Loading shipping options...
-                      </div>
-                    ) : shippingMethods.length === 0 ? (
-                      <p className="text-sm text-destructive">
-                        Shipping methods are temporarily unavailable. Please try again later.
-                      </p>
-                    ) : (
-                      <Select
-                        value={form.shipping_method}
-                        onValueChange={(v) => updateField('shipping_method', v)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select shipping method" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {shippingMethods.map((method) => (
-                            <SelectItem key={method} value={method}>
-                              {method}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                    <Select
+                      value={form.shipping_method}
+                      onValueChange={(v) => updateField('shipping_method', v)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select shipping method" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {SHIPPING_OPTIONS.map((method) => (
+                          <SelectItem key={method.name} value={method.name}>
+                            {method.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {fieldErrors.shipping_method && (
+                      <p className="text-xs text-destructive">{fieldErrors.shipping_method}</p>
                     )}
                   </CardContent>
                 </Card>
@@ -479,21 +538,34 @@ export default function CheckoutHandoff() {
                       </div>
                     )}
 
-                    <Button
-                      type="submit"
-                      size="lg"
-                      className="w-full mt-6"
-                      disabled={submitting || !isFormValid() || shippingMethods.length === 0}
-                    >
-                      {submitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Placing order...
-                        </>
-                      ) : (
-                        'Place Order'
-                      )}
-                    </Button>
+                    {skuLoading ? (
+                      <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Loading...
+                      </div>
+                    ) : (missingSkus || skuError) ? (
+                      <div className="mt-6 rounded-md bg-destructive/10 border border-destructive/30 p-3">
+                        <p className="text-sm text-destructive">
+                          Some items are unavailable for checkout. Please remove them to continue.
+                        </p>
+                      </div>
+                    ) : (
+                      <Button
+                        type="submit"
+                        size="lg"
+                        className="w-full mt-6"
+                        disabled={!canSubmit}
+                      >
+                        {submitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Placing order...
+                          </>
+                        ) : (
+                          'Place Order'
+                        )}
+                      </Button>
+                    )}
 
                     <p className="text-xs text-muted-foreground text-center mt-2">
                       Payment is handled securely by our fulfillment partner.
