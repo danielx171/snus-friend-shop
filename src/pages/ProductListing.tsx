@@ -183,7 +183,10 @@ export default function ProductListing() {
                   {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
                 </div>
               ) : paginatedProducts.length > 0 ? (
-                <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div
+                  className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 transition-opacity duration-100"
+                  style={{ opacity: gridVisible ? 1 : 0 }}
+                >
                   {paginatedProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
