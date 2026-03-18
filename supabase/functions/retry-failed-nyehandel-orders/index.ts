@@ -52,7 +52,7 @@ Deno.serve(async (req) => {
   const { data: failedOrders, error: fetchError } = await adminClient
     .from("orders")
     .select("id")
-    .eq("checkout_status", "paid")
+    .eq("checkout_status", "confirmed")
     .eq("nyehandel_sync_status", "failed")
     .order("updated_at", { ascending: true })
     .limit(50);
