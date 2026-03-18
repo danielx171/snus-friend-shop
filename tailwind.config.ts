@@ -102,6 +102,10 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'cart-item-in': 'cart-item-in 0.2s ease-out both',
+  			'cart-item-out': 'cart-item-out 0.2s ease-in both',
+  			'btn-spring': 'btn-spring 0.2s ease-out',
+  			'number-flip': 'number-flip 0.2s ease-out',
   			'hero-sway': 'hero-sway 6s ease-in-out infinite',
   			'hero-fade-in': 'hero-fade-in 0.8s ease-out 0.3s both'
   		},
