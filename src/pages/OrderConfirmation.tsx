@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, useLocation, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Check, Package, Truck, MapPin, Home, ArrowRight, Copy, Loader2 } from '
 import { formatPrice } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { apiFetch } from '@/lib/api';
 import { useCart } from '@/context/CartContext';
 
 /* ── Types ── */
@@ -135,9 +136,26 @@ const timelineSteps = [
 
 /* ── Component ── */
 
+/* ── Edge function response shape ── */
+
+interface OrderConfirmationResponse {
+  ok: boolean;
+  order: {
+    id: string;
+    created_at: string;
+    total_price: number;
+    currency: string;
+    checkout_status: string;
+    line_items_snapshot: unknown;
+    shipping_address: unknown;
+  };
+  error?: string;
+}
+
 export default function OrderConfirmation() {
   const { orderId: paramOrderId } = useParams<{ orderId: string }>();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const orderId = paramOrderId ?? searchParams.get('orderId') ?? undefined;
 
   const [state, setState] = useState<PageState>({ kind: 'loading' });
@@ -147,7 +165,7 @@ export default function OrderConfirmation() {
   const { clearCart } = useCart();
   const cartCleared = useRef(false);
 
-  /* ── Fetch order ── */
+  /* ── Fetch order via server-side edge function ── */
   useEffect(() => {
     if (!orderId) {
       setState({ kind: 'no-id' });
@@ -157,51 +175,59 @@ export default function OrderConfirmation() {
     let cancelled = false;
 
     (async () => {
-      // Try authenticated lookup first; fall back to public lookup by ID
-      const { data: { session } } = await supabase.auth.getSession();
-      if (cancelled) return;
+      // Resolve email: navigation state (from checkout) > auth session
+      const navEmail = (location.state as { email?: string } | null)?.email;
+      let email = typeof navEmail === 'string' ? navEmail.trim() : '';
 
-      let query = supabase
-        .from('orders')
-        .select('id, created_at, total_price, currency, line_items_snapshot, shipping_address')
-        .eq('id', orderId);
-
-      // Scope to customer email if logged in — allows RLS filtering
-      const customerEmail = session?.user?.email;
-      if (customerEmail) {
-        query = query.eq('customer_email', customerEmail);
+      if (!email) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (cancelled) return;
+        email = session?.user?.email ?? '';
       }
 
-      const { data, error } = await query.maybeSingle();
-
-      if (cancelled) return;
-
-      if (error) {
-        setState({ kind: 'error', message: error.message });
+      if (!email) {
+        setState({ kind: 'not-auth' });
         return;
       }
-      if (!data) {
+
+      try {
+        const result = await apiFetch<OrderConfirmationResponse>(
+          'get-order-confirmation',
+          {
+            method: 'POST',
+            body: { orderId, email },
+          },
+        );
+
+        if (cancelled) return;
+
+        if (!result.ok || !result.order) {
+          setState({ kind: 'not-found' });
+          return;
+        }
+
+        const { order } = result;
+        setState({
+          kind: 'ok',
+          orderId: order.id,
+          date: new Date(order.created_at).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          }),
+          items: normalizeLineItems(order.line_items_snapshot),
+          total: typeof order.total_price === 'number' ? order.total_price : 0,
+          currency: typeof order.currency === 'string' ? order.currency : 'SEK',
+          address: normalizeAddress(order.shipping_address),
+        });
+      } catch {
+        if (cancelled) return;
         setState({ kind: 'not-found' });
-        return;
       }
-
-      setState({
-        kind: 'ok',
-        orderId: data.id,
-        date: new Date(data.created_at).toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        }),
-        items: normalizeLineItems(data.line_items_snapshot),
-        total: typeof data.total_price === 'number' ? data.total_price : 0,
-        currency: typeof data.currency === 'string' ? data.currency : 'SEK',
-        address: normalizeAddress(data.shipping_address),
-      });
     })();
 
     return () => { cancelled = true; };
-  }, [orderId]);
+  }, [orderId, location.state]);
 
   /* ── Clear cart once on success ── */
   useEffect(() => {
