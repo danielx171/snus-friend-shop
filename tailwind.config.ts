@@ -76,6 +76,24 @@ export default {
   				'0%, 100%': { transform: 'rotate(-3deg)' },
   				'50%': { transform: 'rotate(3deg)' }
   			},
+  			'cart-item-in': {
+  				'0%': { opacity: '0', transform: 'translateY(8px)' },
+  				'100%': { opacity: '1', transform: 'translateY(0)' }
+  			},
+  			'cart-item-out': {
+  				'0%': { opacity: '1', transform: 'translateX(0)' },
+  				'100%': { opacity: '0', transform: 'translateX(100%)' }
+  			},
+  			'btn-spring': {
+  				'0%': { transform: 'scale(1)' },
+  				'40%': { transform: 'scale(0.85)' },
+  				'70%': { transform: 'scale(1.1)' },
+  				'100%': { transform: 'scale(1)' }
+  			},
+  			'number-flip': {
+  				'0%': { opacity: '0', transform: 'translateY(-6px)' },
+  				'100%': { opacity: '1', transform: 'translateY(0)' }
+  			},
   			'hero-fade-in': {
   				'0%': { opacity: '0', transform: 'translateY(8px)' },
   				'100%': { opacity: '1', transform: 'translateY(0)' }
@@ -84,6 +102,10 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'cart-item-in': 'cart-item-in 0.2s ease-out both',
+  			'cart-item-out': 'cart-item-out 0.2s ease-in both',
+  			'btn-spring': 'btn-spring 0.2s ease-out',
+  			'number-flip': 'number-flip 0.2s ease-out',
   			'hero-sway': 'hero-sway 6s ease-in-out infinite',
   			'hero-fade-in': 'hero-fade-in 0.8s ease-out 0.3s both'
   		},
