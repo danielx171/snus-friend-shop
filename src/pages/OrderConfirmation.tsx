@@ -54,6 +54,8 @@ function normalizeLineItems(snapshot: unknown): LineItem[] {
         ? r.product_name
         : typeof r.name === 'string'
         ? r.name
+        : typeof r.sku === 'string'
+        ? r.sku
         : 'Product';
     const qty =
       typeof r.quantity === 'number'
@@ -62,7 +64,9 @@ function normalizeLineItems(snapshot: unknown): LineItem[] {
         ? r.qty
         : 1;
     const packLabel =
-      typeof r.pack_size === 'string'
+      typeof r.pack_label === 'string'
+        ? r.pack_label
+        : typeof r.pack_size === 'string'
         ? r.pack_size
         : typeof r.packLabel === 'string'
         ? r.packLabel
@@ -80,10 +84,16 @@ function normalizeLineItems(snapshot: unknown): LineItem[] {
 function normalizeAddress(raw: unknown): Address | null {
   if (!raw || typeof raw !== 'object') return null;
   const r = raw as Record<string, unknown>;
+
+  // Handle both Nyehandel-style (firstname/lastname) and legacy (first_name/name) shapes
   const firstName =
-    typeof r.first_name === 'string' ? r.first_name : '';
+    typeof r.firstname === 'string' ? r.firstname
+    : typeof r.first_name === 'string' ? r.first_name
+    : '';
   const lastName =
-    typeof r.last_name === 'string' ? r.last_name : '';
+    typeof r.lastname === 'string' ? r.lastname
+    : typeof r.last_name === 'string' ? r.last_name
+    : '';
   const fullName =
     typeof r.name === 'string'
       ? r.name
@@ -91,13 +101,15 @@ function normalizeAddress(raw: unknown): Address | null {
   if (!fullName) return null;
 
   const line1 =
-    typeof r.address1 === 'string'
-      ? r.address1
-      : typeof r.line1 === 'string'
-      ? r.line1
-      : '';
+    typeof r.address === 'string' ? r.address
+    : typeof r.address1 === 'string' ? r.address1
+    : typeof r.line1 === 'string' ? r.line1
+    : '';
   const city = typeof r.city === 'string' ? r.city : '';
-  const zip = typeof r.zip === 'string' ? r.zip : '';
+  const zip =
+    typeof r.postcode === 'string' ? r.postcode
+    : typeof r.zip === 'string' ? r.zip
+    : '';
   const line2 =
     typeof r.line2 === 'string'
       ? r.line2
@@ -145,21 +157,22 @@ export default function OrderConfirmation() {
     let cancelled = false;
 
     (async () => {
+      // Try authenticated lookup first; fall back to public lookup by ID
       const { data: { session } } = await supabase.auth.getSession();
       if (cancelled) return;
 
-      const customerEmail = session?.user.email;
-      if (!customerEmail) {
-        setState({ kind: 'not-auth' });
-        return;
-      }
-
-      const { data, error } = await supabase
+      let query = supabase
         .from('orders')
         .select('id, created_at, total_price, currency, line_items_snapshot, shipping_address')
-        .eq('id', orderId)
-        .eq('customer_email', customerEmail)
-        .maybeSingle();
+        .eq('id', orderId);
+
+      // Scope to customer email if logged in — allows RLS filtering
+      const customerEmail = session?.user?.email;
+      if (customerEmail) {
+        query = query.eq('customer_email', customerEmail);
+      }
+
+      const { data, error } = await query.maybeSingle();
 
       if (cancelled) return;
 

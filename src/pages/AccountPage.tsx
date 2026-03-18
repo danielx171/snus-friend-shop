@@ -38,10 +38,11 @@ function toDisplayStatus(
   checkoutStatus: string,
   nyehandelSyncStatus: string,
 ): DisplayStatus {
-  if (checkoutStatus === 'cancelled' || checkoutStatus === 'failed') return 'cancelled';
+  if (checkoutStatus === 'cancelled') return 'cancelled';
+  if (checkoutStatus === 'shipped') return 'fulfilled';
   if (checkoutStatus === 'pending') return 'pending';
-  // paid
-  if (nyehandelSyncStatus === 'synced') return 'fulfilled';
+  // confirmed
+  if (nyehandelSyncStatus === 'synced') return 'processing';
   return 'processing';
 }
 

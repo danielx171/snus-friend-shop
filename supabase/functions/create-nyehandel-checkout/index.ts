@@ -31,6 +31,10 @@ const corsHeaders = {
 interface CheckoutItem {
   sku: string;
   quantity: number;
+  /** Display fields — persisted in line_items_snapshot for order confirmation UI */
+  product_name?: string;
+  pack_label?: string;
+  unit_price?: number;
 }
 
 interface CheckoutCustomer {
@@ -52,6 +56,10 @@ interface CheckoutRequest {
   billing_address: CheckoutAddress;
   shipping_method: string;
   idempotency_key?: string;
+  /** Client-computed display total — persisted for order confirmation UI */
+  display_total?: number;
+  /** Currency code for the display total */
+  display_currency?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -213,6 +221,9 @@ function validatePayload(
       ? b.idempotency_key.trim()
       : undefined;
 
+  const displayTotal = typeof b.display_total === "number" ? b.display_total : undefined;
+  const displayCurrency = typeof b.display_currency === "string" ? b.display_currency : undefined;
+
   return {
     ok: true,
     data: {
@@ -221,6 +232,8 @@ function validatePayload(
       billing_address: addr as unknown as CheckoutAddress,
       shipping_method: b.shipping_method as string,
       idempotency_key: idempotencyKey,
+      display_total: displayTotal,
+      display_currency: displayCurrency,
     },
   };
 }
@@ -276,7 +289,7 @@ Deno.serve(async (req) => {
 
   const validation = validatePayload(rawBody, requestId, validShippingMethods);
   if (!validation.ok) return validation.response;
-  const { items, customer, billing_address, shipping_method, idempotency_key } = validation.data;
+  const { items, customer, billing_address, shipping_method, idempotency_key, display_total, display_currency } = validation.data;
 
   /* ---------- idempotency check ---------- */
 
@@ -431,12 +444,13 @@ Deno.serve(async (req) => {
     nyehandel_prefix: nyehandelPrefix,
     checkout_status: "pending",
     customer_email: customer.email,
-    currency: "EUR",
-    total_price: 0, // Nyehandel owns pricing — no price from our side
-    line_items_snapshot: items,
+    currency: display_currency ?? "EUR",
+    total_price: display_total ?? 0,
+    line_items_snapshot: items, // includes display fields (product_name, pack_label, unit_price)
     customer_metadata: {
       firstname: customer.firstname,
       lastname: customer.lastname,
+      shipping_method,
     },
     shipping_address: {
       ...billing_address,
