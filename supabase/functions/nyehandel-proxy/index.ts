@@ -79,7 +79,7 @@ Deno.serve(async (req) => {
 
   // Read server-side Nyehandel token
   const nyehandelToken = Deno.env.get('NYEHANDEL_API_TOKEN');
-  const nyehandelBaseUrl = Deno.env.get('NYEHANDEL_API_URL') || 'https://api.nyehandel.se/v1';
+  const nyehandelBaseUrl = Deno.env.get('NYEHANDEL_API_URL') || 'https://api.nyehandel.se/api/v2';
 
   if (!nyehandelToken) {
     return new Response(
@@ -94,6 +94,7 @@ Deno.serve(async (req) => {
       headers: {
         'Authorization': `Bearer ${nyehandelToken}`,
         'Accept': 'application/json',
+        'X-identifier': Deno.env.get('NYEHANDEL_X_IDENTIFIER') ?? '',
       },
     });
 

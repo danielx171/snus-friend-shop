@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
 
   try {
     const nyehandelToken = Deno.env.get('NYEHANDEL_API_TOKEN');
-    const nyehandelBaseUrl = Deno.env.get('NYEHANDEL_API_URL') || 'https://api.nyehandel.se/v1';
+    const nyehandelBaseUrl = Deno.env.get('NYEHANDEL_API_URL') || 'https://api.nyehandel.se/api/v2';
 
     if (!nyehandelToken) {
       // No external API configured – mark run as failed
@@ -81,7 +81,11 @@ Deno.serve(async (req) => {
 
     const resource = syncType === 'catalog' ? 'products' : 'inventory';
     const resp = await fetch(`${nyehandelBaseUrl}/${resource}`, {
-      headers: { 'Authorization': `Bearer ${nyehandelToken}`, 'Accept': 'application/json' },
+      headers: {
+        'Authorization': `Bearer ${nyehandelToken}`,
+        'Accept': 'application/json',
+        'X-identifier': Deno.env.get('NYEHANDEL_X_IDENTIFIER') ?? '',
+      },
     });
 
     if (!resp.ok) {

@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
   }
 
   const nyehandelToken = Deno.env.get("NYEHANDEL_API_TOKEN");
-  const nyehandelBaseUrl = Deno.env.get("NYEHANDEL_API_URL") || "https://api.nyehandel.se/v1";
+  const nyehandelBaseUrl = Deno.env.get("NYEHANDEL_API_URL") || "https://api.nyehandel.se/api/v2";
   if (!nyehandelToken) {
     return jsonResponse({ error: "missing_nyehandel_token", requestId }, 500);
   }
@@ -118,6 +118,8 @@ Deno.serve(async (req) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-identifier": Deno.env.get("NYEHANDEL_X_IDENTIFIER") ?? "",
           Authorization: `Bearer ${nyehandelToken}`,
         },
         body: JSON.stringify(payload),

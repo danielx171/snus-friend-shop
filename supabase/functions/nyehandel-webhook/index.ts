@@ -99,17 +99,24 @@ Deno.serve(async (req) => {
       // Determine sync type
       const syncType = topic.startsWith("inventory") ? "inventory" : "catalog";
 
-      // Call sync-nyehandel edge function (fire & forget with service role)
+      // Record sync run and fire actual sync call
       try {
-        const syncUrl = `${supabaseUrl}/functions/v1/sync-nyehandel?type=${syncType}`;
-        // We use a service-role based approach: create a temporary admin session
-        // For now, just record that a sync was queued
         await adminClient.from("sync_runs").insert({
           type: syncType,
           status: "running",
           started_at: new Date().toISOString(),
           error_details: { triggered_by: `webhook:${webhook.id}` },
         });
+
+        const syncUrl = `${supabaseUrl}/functions/v1/sync-nyehandel?type=${syncType}`;
+        fetch(syncUrl, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${serviceRoleKey}`,
+            "apikey": serviceRoleKey,
+          },
+        }).catch((e) => console.error("sync trigger failed:", e));
+
         syncTriggered = true;
       } catch (e) {
         console.error("Failed to queue sync:", e);
