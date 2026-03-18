@@ -35,3 +35,6 @@ verify_jwt = false
 
 [functions.create-nyehandel-checkout]
 verify_jwt = false
+
+[functions.nyehandel-delivery-callback]
+verify_jwt = false
