@@ -84,63 +84,69 @@ export type Database = {
       }
       orders: {
         Row: {
-          checkout_status: 'pending' | 'paid' | 'failed' | 'cancelled'
+          checkout_status: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
           created_at: string
           currency: string
           customer_email: string | null
           customer_metadata: Json
+          delivery_callback_received_at: string | null
           id: string
           idempotency_key: string | null
           last_sync_error: string | null
           line_items_snapshot: Json
           nyehandel_order_id: string | null
           nyehandel_order_status: string | null
+          nyehandel_prefix: string | null
           nyehandel_sync_status: 'pending' | 'synced' | 'failed'
           paid_at: string | null
           shipping_address: Json
-          shopify_checkout_id: string | null
-          shopify_order_id: string | null
           total_price: number
+          tracking_id: string | null
+          tracking_url: string | null
           updated_at: string
         }
         Insert: {
-          checkout_status?: 'pending' | 'paid' | 'failed' | 'cancelled'
+          checkout_status?: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
           created_at?: string
           currency?: string
           customer_email?: string | null
           customer_metadata?: Json
+          delivery_callback_received_at?: string | null
           id?: string
           idempotency_key?: string | null
           last_sync_error?: string | null
           line_items_snapshot?: Json
           nyehandel_order_id?: string | null
           nyehandel_order_status?: string | null
+          nyehandel_prefix?: string | null
           nyehandel_sync_status?: 'pending' | 'synced' | 'failed'
           paid_at?: string | null
           shipping_address?: Json
-          shopify_checkout_id?: string | null
-          shopify_order_id?: string | null
           total_price: number
+          tracking_id?: string | null
+          tracking_url?: string | null
           updated_at?: string
         }
         Update: {
-          checkout_status?: 'pending' | 'paid' | 'failed' | 'cancelled'
+          checkout_status?: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
           created_at?: string
           currency?: string
           customer_email?: string | null
           customer_metadata?: Json
+          delivery_callback_received_at?: string | null
           id?: string
           idempotency_key?: string | null
           last_sync_error?: string | null
           line_items_snapshot?: Json
           nyehandel_order_id?: string | null
           nyehandel_order_status?: string | null
+          nyehandel_prefix?: string | null
           nyehandel_sync_status?: 'pending' | 'synced' | 'failed'
           paid_at?: string | null
           shipping_address?: Json
-          shopify_checkout_id?: string | null
-          shopify_order_id?: string | null
           total_price?: number
+          tracking_id?: string | null
+          tracking_url?: string | null
           updated_at?: string
         }
         Relationships: []
