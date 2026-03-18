@@ -160,7 +160,6 @@ export type Database = {
           pack_size: number
           price: number
           product_id: string
-          shopify_variant_id: string | null
           sku: string | null
           updated_at: string
         }
@@ -172,7 +171,6 @@ export type Database = {
           pack_size: number
           price: number
           product_id: string
-          shopify_variant_id?: string | null
           sku?: string | null
           updated_at?: string
         }
@@ -184,7 +182,6 @@ export type Database = {
           pack_size?: number
           price?: number
           product_id?: string
-          shopify_variant_id?: string | null
           sku?: string | null
           updated_at?: string
         }
@@ -558,7 +555,7 @@ export interface DbProduct {
   created_at: string;
   updated_at: string;
   brands: { id: string; slug: string; name: string; manufacturer: string | null } | null;
-  product_variants: { pack_size: number; price: number; sku: string | null; shopify_variant_id: string | null }[];
+  product_variants: { pack_size: number; price: number; sku: string | null }[];
 }
 
 export const Constants = {

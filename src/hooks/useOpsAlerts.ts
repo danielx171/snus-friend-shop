@@ -10,7 +10,7 @@ export function useOpsAlerts() {
     queryFn: async (): Promise<OpsAlert[]> => {
       const { data, error } = await supabase
         .from('ops_alerts')
-        .select('id, alert_date, rule_key, severity, status, source_order_id, source_shopify_order_id, title, message, context, created_at, resolved_at')
+        .select('id, alert_date, rule_key, severity, status, source_order_id, title, message, context, created_at, resolved_at')
         .eq('status', 'open')
         .order('alert_date', { ascending: false })
         .order('created_at', { ascending: false })
@@ -25,7 +25,6 @@ export function useOpsAlerts() {
         severity: r.severity,
         status: r.status,
         sourceOrderId: r.source_order_id,
-        sourceShopifyOrderId: r.source_shopify_order_id,
         title: r.title,
         message: r.message,
         context: r.context ?? {},

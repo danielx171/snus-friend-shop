@@ -1,4 +1,4 @@
-export type WebhookProvider = 'shopify' | 'nyehandel';
+export type WebhookProvider = 'nyehandel';
 export type WebhookStatus = 'received' | 'processed' | 'failed';
 
 export interface WebhookEvent {
@@ -35,7 +35,6 @@ export interface OpsAlert {
   severity: AlertSeverity;
   status: AlertStatus;
   sourceOrderId: string;
-  sourceShopifyOrderId: string | null;
   title: string;
   message: string;
   context: Record<string, unknown>;
@@ -48,7 +47,6 @@ export type SkuMappingStatus = 'mapped' | 'missing' | 'conflict';
 export interface SkuMapping {
   id: string;
   nyehandelSku: string;
-  shopifySku: string | null;
   productName: string;
   status: SkuMappingStatus;
   lastVerified: string;

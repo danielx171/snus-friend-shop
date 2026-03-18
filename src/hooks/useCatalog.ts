@@ -8,13 +8,9 @@ export type { DbProduct };
 /** Convert DB product row to the frontend Product shape. */
 function toProduct(row: DbProduct): MockProduct {
   const pricesMap: Record<string, number> = {};
-  const shopifyVariantIds: Partial<Record<string, string>> = {};
 
   for (const v of row.product_variants ?? []) {
     pricesMap[`pack${v.pack_size}`] = Number(v.price);
-    if (v.shopify_variant_id) {
-      shopifyVariantIds[`pack${v.pack_size}`] = v.shopify_variant_id;
-    }
   }
 
   return {
@@ -39,7 +35,6 @@ function toProduct(row: DbProduct): MockProduct {
       pack30: pricesMap['pack30'] ?? 0,
     },
     manufacturer: row.manufacturer ?? row.brands?.manufacturer ?? '',
-    shopifyVariantIds: Object.keys(shopifyVariantIds).length > 0 ? shopifyVariantIds : undefined,
   };
 }
 
@@ -49,7 +44,7 @@ export function useCatalogProducts() {
     queryFn: async (): Promise<MockProduct[]> => {
       const { data, error } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, shopify_variant_id)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
         .eq('is_active', true)
         .order('name');
 
@@ -71,7 +66,7 @@ export function useCatalogProduct(id: string | undefined) {
       // Try UUID lookup first
       const { data, error } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, shopify_variant_id)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
         .eq('id', id)
         .maybeSingle();
 
@@ -81,7 +76,7 @@ export function useCatalogProduct(id: string | undefined) {
       // Fallback: try slug
       const { data: slugData, error: slugError } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, shopify_variant_id)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
         .eq('slug', id)
         .maybeSingle();
 
