@@ -1,37 +1,64 @@
 # Current Priorities
 
-Last updated: 2026-03-13
+Last updated: 2026-03-18
 
-This file is the short "what matters right now" view for AI tools and humans.
-Use it together with `ROADMAP.md` and `PROJECT_STATE.md`.
+## What changed this session
 
-## Completed this session (2026-03-13)
+- Step 25 ✓ — **UNBLOCKED AND COMPLETE**
+  - Nyehandel API read in full (all endpoints, all sections)
+  - `NYEHANDEL_API.md` updated: all open questions answered
+  - `NYEHANDEL_API_REFERENCE.md` created: full technical reference (485 lines)
+  - `NYEHANDEL_API.md` — Step 25 exit criteria all met ✅
+  - Both files committed to `dev` branch
 
-- Step 31 ✓ — `LoginPage.tsx` and `RegisterPage.tsx` wired to real Supabase auth (`signInWithPassword`, `signUp`, redirect on success, email confirmation state)
-- Step 32 ✓ — `AccountPage.tsx` wired to real session (`getSession` + `onAuthStateChange`), real orders query by `customer_email`, real sign-out via `useNavigate`
-- Step 33 ✓ — `OrderConfirmation.tsx` reads real order from DB by `orderId` URL param + session email guard; `clearCart()` on success; discriminated union states; defensive JSON normalisers
-- Step 34 ✓ — `UpdatePasswordPage` at `/update-password` handles Supabase recovery callback; recovery context gated on URL hash; `updateUser({ password })` called only after confirmed recovery state; manually verified end-to-end
-- Shopify cleanup ✓ — deleted `create-shopify-checkout`, `shopify-webhook`, `simulate-shopify-order.ts`; removed dead `opsWebhookInbox` edge-function call; `WebhookInbox.tsx` now queries `webhook_inbox` table directly; `config.toml`, `DEPLOYMENT_CHECKLIST.md`, `.env.example` all updated
-- Nyehandel secrets ✓ — `NYEHANDEL_API_TOKEN` and `NYEHANDEL_X_IDENTIFIER` set in Supabase
-- `vite.config.ts` ✓ — `lovable-tagger` removed (was causing dev-server stack overflow)
-- Step 35 ✓ — `ProductListing.tsx` now distinguishes loading / query error / zero filtered results; error state shown explicitly instead of falling through to empty-state
-- Step 36 ✓ — `ProductDetail.tsx` now distinguishes loading / query error / not found; unused `mockProducts` import removed; hardcoded star score removed (neutral `★ {ratings}` display); related-products heading fixed (`detail.aboutBrand` key → `"More from {brand}"`)
-- Step 37 ✓ — `DbProduct` moved from `useCatalog.ts` to `src/integrations/supabase/types.ts`; re-exported from hook for backwards compat; build clean
-- Step 38 ✓ — `manualChunks` added to `vite.config.ts`; single 874 kB chunk split into vendor (301 kB), entry (270 kB), supabase (167 kB), radix (111 kB), icons (25 kB); chunk-size warning gone
-- Step 38b ✓ — `window.location.origin/href` removed from `ProductListing.tsx` render; replaced with `SITE_URL`/`listingUrl` constants derived from `VITE_SITE_URL`; canonical and breadcrumb `item` fields omitted when env var is absent (no invalid empty-string URLs emitted); build clean
+- `NYLOGISTIK_REFERENCE.md` created — all 16 help center articles read and documented.
+  Key finding: Nylogistik is a desktop warehouse app, not an API. No direct integration
+  needed. Connection is via `delivery_callback_url` on `POST /orders/simple`.
 
-## Active sequence
+- `SYSTEM_BOUNDARIES.md` updated — removed William collaboration references.
+  Project is currently solo. Pipedrive/WhatsApp/Cowork are future scope, separate system.
 
-1. **Step 25** (BLOCKED) — Waiting for Nyehandel API reply from CEO. Findings go in `NYEHANDEL_API.md`.
+## Active sequence — Steps 26–29 are now unblocked
+
+### Step 26 — Design checkout flow + schema migration
+- Remove Shopify-specific columns from `orders` table
+  (`shopify_order_id`, `shopify_cart_id`, idempotency fields)
+- Add Nyehandel-specific columns: `nyehandel_order_id`, `nyehandel_prefix`,
+  `delivery_callback_received_at`, `tracking_id`, `tracking_url`
+- Write forward-only migration in `supabase/migrations/`
+- Update `src/integrations/supabase/types.ts`
+
+### Step 27 — Write `create-nyehandel-checkout` edge function
+- Calls `POST /orders/simple` on Nyehandel API
+- Payload: SKUs from cart, customer info, shipping method name (from `GET /shipping-methods`)
+- Returns Nyehandel order ID + prefix to frontend
+- Persists order row in Supabase with status `pending`
+- No payment session — Nyehandel owns payment entirely
+
+### Step 28 — Replace `shopify-webhook` with Nyehandel delivery callback
+- New edge function at `/functions/nyehandel-delivery-callback`
+- Receives tracking data from Nylogistik when order ships
+- Updates order row: `tracking_id`, `tracking_url`, `status → shipped`
+- Set as `delivery_callback_url` in `POST /orders/simple`
+
+### Step 29 — Update `push-order-to-nyehandel`
+- Remove `external_order_id: order.shopify_order_id ?? order.id` — use internal UUID only
+- Fix `line_items` mapping — currently Shopify format, needs Nyehandel format
+  (SKU + quantity, no prices — Nyehandel uses its own pricing)
+- Fix customer payload — add `firstname`, `lastname` (currently missing)
+- Remove CORS `"*"` (internal function only)
 
 ## What not to do
 
-- Do not build the new checkout flow (Steps 27–29) until Step 25 is answered.
-- Do not add new Shopify-first checkout behavior.
-- Do not move order or fulfillment logic into the frontend.
-- Do not edit `src/lib/cart-utils.ts` without explicit permission.
-- Do not touch Pipedrive, WhatsApp, or Cowork automation.
+- Do not add any Shopify-specific code
+- Do not implement Pipedrive, WhatsApp, or Cowork in this repo
+- Do not move order or fulfilment logic into the frontend
+- Do not edit `src/lib/cart-utils.ts` without explicit permission
+- Do not hardcode shipping method names — always fetch from `GET /shipping-methods`
 
-## Done signals for the current phase
+## Key reference files
 
-- Nyehandel payment capabilities documented with endpoints, auth model, and callback strategy.
+- `NYEHANDEL_API_REFERENCE.md` — full API reference, every endpoint
+- `NYEHANDEL_API.md` — Step 25 investigation answers, checkout flow design
+- `NYLOGISTIK_REFERENCE.md` — warehouse/shipping system reference
+- `ROADMAP.md` — delivery sequence, Steps 26–40 detail
