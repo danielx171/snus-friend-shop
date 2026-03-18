@@ -42,13 +42,13 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md hover:border-primary/30 border-border/30 rounded-2xl bg-card/80 backdrop-blur-sm">
+    <Card className="group relative overflow-hidden rounded-2xl border-border/30 bg-card/80 backdrop-blur-sm transition-[transform,box-shadow] duration-200 ease-out hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/8 hover:border-primary/30">
       <Link to={`/product/${product.id}`}>
         <div className="relative aspect-square overflow-hidden bg-muted/20">
           <img
             src={product.image}
             alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-105"
             loading="lazy"
           />
           {/* Badges */}
@@ -113,7 +113,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   key={size}
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedPack(size); }}
                   className={cn(
-                    'rounded-lg px-2 py-1 text-[10px] font-medium transition-all shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                    'rounded-lg px-2 py-1 text-[10px] font-medium transition-all duration-150 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                     selectedPack === size
                       ? 'bg-primary text-primary-foreground glow-primary'
                       : 'bg-muted/30 text-muted-foreground hover:bg-muted/50 border border-border/30'
@@ -137,16 +137,18 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-[10px] text-muted-foreground">Earn {Math.floor(currentPrice * 10)} points</span>
           </div>
 
-          {/* CTA */}
-          <Button
-            onClick={handleAddToCart}
-            className="w-full gap-2 rounded-xl text-sm glow-primary hover:shadow-md transition-all focus-visible:ring-2 focus-visible:ring-ring"
-            size="sm"
-          >
-            <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
-            <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
-            <span className="sm:hidden">{t('product.buy')}</span>
-          </Button>
+          {/* CTA — hidden by default, slides up on card hover */}
+          <div className="translate-y-2 opacity-0 transition-[transform,opacity] duration-200 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+            <Button
+              onClick={handleAddToCart}
+              className="w-full gap-2 rounded-xl text-sm hover:shadow-md transition-shadow duration-150 focus-visible:ring-2 focus-visible:ring-ring"
+              size="sm"
+            >
+              <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
+              <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
+              <span className="sm:hidden">{t('product.buy')}</span>
+            </Button>
+          </div>
         </CardContent>
       </Link>
     </Card>
