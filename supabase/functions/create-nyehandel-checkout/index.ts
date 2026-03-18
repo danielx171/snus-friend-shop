@@ -12,10 +12,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-/** In-memory cache for shipping method names fetched from Nyehandel */
-let cachedShippingMethods: string[] = [];
-let cachedShippingMethodsAt = 0;
-const SHIPPING_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+/** Validated shipping methods from nicbud.com Nyehandel admin */
+const VALID_SHIPPING_METHODS = [
+  "UPS Standard EU",
+  "UPS Express Saver EU",
+  "DHL Economy Select (Non Eu)",
+  "DHL Express",
+  "UPS Express Saver",
+];
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -73,50 +77,9 @@ function jsonResponse(body: unknown, status = 200): Response {
   });
 }
 
-/**
- * Fetch valid shipping method names from Nyehandel `GET /shipping-methods`.
- * Results are cached in memory for SHIPPING_CACHE_TTL_MS.
- */
-async function fetchShippingMethods(
-  baseUrl: string,
-  token: string,
-  xIdentifier: string,
-): Promise<string[]> {
-  const now = Date.now();
-  if (cachedShippingMethods.length > 0 && now - cachedShippingMethodsAt < SHIPPING_CACHE_TTL_MS) {
-    return cachedShippingMethods;
-  }
-
-  const response = await fetch(`${baseUrl}/shipping-methods`, {
-    headers: {
-      Accept: "application/json",
-      "X-identifier": xIdentifier,
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`shipping_methods_fetch_failed:${response.status}`);
-  }
-
-  const json = (await response.json()) as { data?: Array<{ name?: string }> };
-  const names = (json?.data ?? [])
-    .map((m) => (typeof m.name === "string" ? m.name.trim() : ""))
-    .filter((n) => n.length > 0);
-
-  if (names.length === 0) {
-    throw new Error("shipping_methods_empty_response");
-  }
-
-  cachedShippingMethods = names;
-  cachedShippingMethodsAt = now;
-  return names;
-}
-
 function validatePayload(
   body: unknown,
   requestId: string,
-  validShippingMethods: string[],
 ): { ok: true; data: CheckoutRequest } | { ok: false; response: Response } {
   const b = body as Record<string, unknown>;
 
@@ -197,17 +160,17 @@ function validatePayload(
     };
   }
 
-  // shipping_method — validated against live Nyehandel shipping methods
+  // shipping_method — validated against known Nyehandel shipping methods
   if (
     typeof b.shipping_method !== "string" ||
-    !validShippingMethods.includes(b.shipping_method)
+    !VALID_SHIPPING_METHODS.includes(b.shipping_method)
   ) {
     return {
       ok: false,
       response: jsonResponse(
         {
           error: "invalid_shipping_method",
-          message: `Must be one of: ${validShippingMethods.join(", ")}`,
+          message: `Must be one of: ${VALID_SHIPPING_METHODS.join(", ")}`,
           requestId,
         },
         400,
@@ -268,16 +231,6 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "missing_nyehandel_token", requestId }, 500);
   }
 
-  /* ---------- fetch valid shipping methods from Nyehandel ---------- */
-
-  let validShippingMethods: string[];
-  try {
-    validShippingMethods = await fetchShippingMethods(nyehandelBaseUrl, nyehandelToken, nyehandelXIdentifier);
-  } catch (err) {
-    console.error(JSON.stringify({ requestId, event: "shipping_methods_fetch_error", error: String(err) }));
-    return jsonResponse({ error: "shipping_methods_unavailable", requestId }, 502);
-  }
-
   /* ---------- parse + validate body ---------- */
 
   let rawBody: unknown;
@@ -287,7 +240,7 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "invalid_json", requestId }, 400);
   }
 
-  const validation = validatePayload(rawBody, requestId, validShippingMethods);
+  const validation = validatePayload(rawBody, requestId);
   if (!validation.ok) return validation.response;
   const { items, customer, billing_address, shipping_method, idempotency_key, display_total, display_currency } = validation.data;
 
