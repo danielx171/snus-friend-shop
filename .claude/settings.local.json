@@ -5,7 +5,11 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:api.github.com)",
       "Bash(curl -s \"https://raw.githubusercontent.com/msitarzewski/agency-agents/main/engineering/engineering-frontend-developer.md\")",
-      "Bash(curl -s \"https://raw.githubusercontent.com/msitarzewski/agency-agents/main/design/design-brand-guardian.md\")"
+      "Bash(curl -s \"https://raw.githubusercontent.com/msitarzewski/agency-agents/main/design/design-brand-guardian.md\")",
+      "Bash(git -C /mnt/c/Projects/snus-friend-shop log --oneline -15)",
+      "Bash(git -C /mnt/c/Projects/snus-friend-shop log --oneline dev..origin/main 2>/dev/null; echo \"---\"; git -C /mnt/c/Projects/snus-friend-shop log --oneline origin/main..dev 2>/dev/null | head -20)",
+      "Bash(git -C /mnt/c/Projects/snus-friend-shop rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo \"no upstream set\")",
+      "Bash(git -C /mnt/c/Projects/snus-friend-shop log --oneline origin/dev..dev 2>/dev/null | wc -l)"
     ]
   }
 }
