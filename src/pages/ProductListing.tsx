@@ -43,6 +43,15 @@ export default function ProductListing() {
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [gridVisible, setGridVisible] = useState(true);
+
+  // Fade grid out/in when filters or sort change
+  const filterKey = JSON.stringify(filters) + sortBy + currentPage;
+  useEffect(() => {
+    setGridVisible(false);
+    const t = setTimeout(() => setGridVisible(true), 100);
+    return () => clearTimeout(t);
+  }, [filterKey]);
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
