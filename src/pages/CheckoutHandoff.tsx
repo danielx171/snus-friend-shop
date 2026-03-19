@@ -110,7 +110,7 @@ export default function CheckoutHandoff() {
     });
   }, []);
 
-  /* ── Resolve SKUs on mount ── */
+  /* ── Resolve SKUs on mount — each product has one SKU ── */
   useEffect(() => {
     if (items.length === 0) {
       setSkuLoading(false);
@@ -134,10 +134,11 @@ export default function CheckoutHandoff() {
           return;
         }
 
+        // Map product_id → SKU (one SKU per product from Nyehandel)
         const map = new Map<string, string>();
         for (const v of variants as VariantRow[]) {
-          if (v.sku) {
-            map.set(`${v.product_id}:${v.pack_size}`, v.sku);
+          if (v.sku && !map.has(v.product_id)) {
+            map.set(v.product_id, v.sku);
           }
         }
         setSkuMap(map);
@@ -156,11 +157,7 @@ export default function CheckoutHandoff() {
   /* ── Check if all cart items have SKUs ── */
   const missingSkus = useMemo(() => {
     if (!skuMap || skuLoading) return false;
-    return items.some((item) => {
-      const packCount = packSizeMultipliers[item.packSize];
-      const key = `${item.product.id}:${packCount}`;
-      return !skuMap.get(key);
-    });
+    return items.some((item) => !skuMap.has(item.product.id));
   }, [items, skuMap, skuLoading]);
 
   /* ── Form validation ── */
@@ -203,14 +200,14 @@ export default function CheckoutHandoff() {
 
     try {
       // Map cart items to checkout items with SKUs
+      // Each product has one SKU; pack size becomes a quantity multiplier
       const checkoutItems = items.map((item) => {
         const packCount = packSizeMultipliers[item.packSize];
-        const key = `${item.product.id}:${packCount}`;
-        const sku = skuMap.get(key);
-        if (!sku) throw new Error(`No SKU found for ${item.product.name} (${item.packSize})`);
+        const sku = skuMap.get(item.product.id);
+        if (!sku) throw new Error(`No SKU found for ${item.product.name}`);
         return {
           sku,
-          quantity: item.quantity,
+          quantity: item.quantity * packCount, // e.g. 2x pack3 = 6 cans
           product_name: item.product.name,
           pack_label: `${packCount} ${packCount === 1 ? 'can' : 'cans'}`,
           unit_price: item.product.prices[item.packSize],

@@ -5,13 +5,42 @@ import type { DbProduct } from '@/integrations/supabase/types';
 
 export type { DbProduct };
 
+/**
+ * Volume discount multipliers per can.
+ * pack1 = full price, pack3 = 5% off per can, etc.
+ * Adjust these to change the volume discount tiers.
+ */
+const PACK_DISCOUNT: Record<string, number> = {
+  pack1: 1.0,
+  pack3: 0.95,
+  pack5: 0.90,
+  pack10: 0.85,
+  pack30: 0.80,
+};
+
+const PACK_QUANTITIES: Record<string, number> = {
+  pack1: 1,
+  pack3: 3,
+  pack5: 5,
+  pack10: 10,
+  pack30: 30,
+};
+
 /** Convert DB product row to the frontend Product shape. */
 function toProduct(row: DbProduct): MockProduct {
-  const pricesMap: Record<string, number> = {};
+  // Find the base per-can price from pack_size=1 variant (or first variant)
+  const variants = row.product_variants ?? [];
+  const baseVariant = variants.find((v) => v.pack_size === 1) ?? variants[0];
+  const basePricePerCan = baseVariant ? Number(baseVariant.price) : 0;
 
-  for (const v of row.product_variants ?? []) {
-    pricesMap[`pack${v.pack_size}`] = Number(v.price);
-  }
+  // Compute pack prices: quantity × per-can price × discount
+  const prices = {
+    pack1: Math.round(basePricePerCan * PACK_QUANTITIES.pack1 * PACK_DISCOUNT.pack1 * 100) / 100,
+    pack3: Math.round(basePricePerCan * PACK_QUANTITIES.pack3 * PACK_DISCOUNT.pack3 * 100) / 100,
+    pack5: Math.round(basePricePerCan * PACK_QUANTITIES.pack5 * PACK_DISCOUNT.pack5 * 100) / 100,
+    pack10: Math.round(basePricePerCan * PACK_QUANTITIES.pack10 * PACK_DISCOUNT.pack10 * 100) / 100,
+    pack30: Math.round(basePricePerCan * PACK_QUANTITIES.pack30 * PACK_DISCOUNT.pack30 * 100) / 100,
+  };
 
   return {
     id: row.id,
@@ -27,13 +56,7 @@ function toProduct(row: DbProduct): MockProduct {
     image: row.image_url ?? '',
     ratings: row.ratings,
     badgeKeys: (row.badge_keys ?? []) as MockProduct['badgeKeys'],
-    prices: {
-      pack1: pricesMap['pack1'] ?? 0,
-      pack3: pricesMap['pack3'] ?? 0,
-      pack5: pricesMap['pack5'] ?? 0,
-      pack10: pricesMap['pack10'] ?? 0,
-      pack30: pricesMap['pack30'] ?? 0,
-    },
+    prices,
     manufacturer: row.manufacturer ?? row.brands?.manufacturer ?? '',
   };
 }

@@ -154,9 +154,11 @@ export type Database = {
       product_variants: {
         Row: {
           created_at: string
+          gtin: string | null
           id: string
           is_checkout_enabled: boolean
           is_default: boolean
+          nyehandel_variant_id: string | null
           pack_size: number
           price: number
           product_id: string
@@ -165,9 +167,11 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          gtin?: string | null
           id?: string
           is_checkout_enabled?: boolean
           is_default?: boolean
+          nyehandel_variant_id?: string | null
           pack_size: number
           price: number
           product_id: string
@@ -176,9 +180,11 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          gtin?: string | null
           id?: string
           is_checkout_enabled?: boolean
           is_default?: boolean
+          nyehandel_variant_id?: string | null
           pack_size?: number
           price?: number
           product_id?: string
