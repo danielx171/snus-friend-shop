@@ -22,6 +22,7 @@ import { getCartTotals } from '@/lib/cart-utils';
 import { SEO } from '@/components/seo/SEO';
 import { apiFetch } from '@/lib/api';
 import { supabase } from '@/integrations/supabase/client';
+import { PREVIEW_MODE } from '@/config/brand';
 
 /* ── Types ── */
 
@@ -262,6 +263,31 @@ export default function CheckoutHandoff() {
         return next;
       });
     }
+  }
+
+  /* ── Preview mode gate ── */
+  if (PREVIEW_MODE) {
+    return (
+      <>
+        <SEO title={`Checkout | SnusFriend`} description="Store coming soon" />
+        <Layout showNicotineWarning={false}>
+          <div className="container py-16 flex justify-center">
+            <Card className="max-w-md w-full">
+              <CardContent className="p-8 text-center space-y-3">
+                <ShoppingBag className="mx-auto h-12 w-12 text-muted-foreground" />
+                <h1 className="text-xl font-bold text-foreground">This store is coming soon.</h1>
+                <p className="text-muted-foreground">
+                  Browsing is enabled — purchases are not yet active.
+                </p>
+                <Button variant="outline" asChild className="mt-2">
+                  <Link to="/nicotine-pouches">Continue browsing</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </Layout>
+      </>
+    );
   }
 
   /* ── Empty cart ── */
