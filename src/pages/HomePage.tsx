@@ -1,6 +1,5 @@
 import { Layout } from '@/components/layout/Layout';
 import { HeroBanner } from '@/components/home/HeroBanner';
-import { PromoBanners } from '@/components/home/PromoBanners';
 import { CategoryShortcuts } from '@/components/home/CategoryShortcuts';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { TrustBar } from '@/components/home/TrustBar';
@@ -33,7 +32,6 @@ export default function HomePage() {
       <Layout showNicotineWarning={true}>
         <AgeGate />
         <HeroBanner />
-        <PromoBanners />
         <CategoryShortcuts />
         <TrustBar />
         
