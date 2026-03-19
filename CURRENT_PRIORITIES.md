@@ -2,51 +2,44 @@
 
 Last updated: 2026-03-18
 
-## What changed this session
+## Completed today (2026-03-18)
 
-- Step 25 ✓ — **UNBLOCKED AND COMPLETE**
-  - Nyehandel API read in full (all endpoints, all sections)
-  - `NYEHANDEL_API.md` updated: all open questions answered
-  - `NYEHANDEL_API_REFERENCE.md` created: full technical reference (485 lines)
-  - `NYEHANDEL_API.md` — Step 25 exit criteria all met ✅
-  - Both files committed to `dev` branch
+- Steps 26-30 ✅ committed and deployed
+- All 11 DB migrations applied to Supabase ✅
+- All edge functions deployed (14 total) ✅
+- Supabase secrets updated with NordicPouch API credentials ✅
+- Store config env vars added:
+    STORE_ORDER_PREFIX = SF
+    STORE_CURRENCY = EUR
+    STORE_LOCALE = en-gb
+    STORE_PAYMENT_METHOD = Nets Easy Checkout
+- Shopify fully removed from codebase ✅
+- Codebase refactored for multi-brand template ✅
 
-- `NYLOGISTIK_REFERENCE.md` created — all 16 help center articles read and documented.
-  Key finding: Nylogistik is a desktop warehouse app, not an API. No direct integration
-  needed. Connection is via `delivery_callback_url` on `POST /orders/simple`.
+## Architecture confirmed
 
-- `SYSTEM_BOUNDARIES.md` updated — removed William collaboration references.
-  Project is currently solo. Pipedrive/WhatsApp/Cowork are future scope, separate system.
+- snus-friend-shop connects to NordicPouch Nyehandel account
+- SKU numbers must match NordicPouch's Nyehandel SKUs exactly
+- Payment = Nets Easy Checkout via Nyehandel
+- Warehouse = NordicPouch/Nyehandel
+- No separate Nyehandel store needed (€250 not required)
 
-## Active sequence — Steps 26–29 are now unblocked
+## What's blocking UAT right now
 
-### Step 26 — Design checkout flow + schema migration
-- Remove Shopify-specific columns from `orders` table
-  (`shopify_order_id`, `shopify_cart_id`, idempotency fields)
-- Add Nyehandel-specific columns: `nyehandel_order_id`, `nyehandel_prefix`,
-  `delivery_callback_received_at`, `tracking_id`, `tracking_url`
-- Write forward-only migration in `supabase/migrations/`
-- Update `src/integrations/supabase/types.ts`
+1. Catalog sync not yet run — 0 products in DB
+   → Run sync-nyehandel once API token is confirmed working
+2. API token returns 401 — needs correct NordicPouch token
+   → Update NYEHANDEL_API_TOKEN in Supabase secrets
 
-### Step 27 — Write `create-nyehandel-checkout` edge function
-- Calls `POST /orders/simple` on Nyehandel API
-- Payload: SKUs from cart, customer info, shipping method name (from `GET /shipping-methods`)
-- Returns Nyehandel order ID + prefix to frontend
-- Persists order row in Supabase with status `pending`
-- No payment session — Nyehandel owns payment entirely
+## Next steps in order
 
-### Step 28 — Replace `shopify-webhook` with Nyehandel delivery callback
-- New edge function at `/functions/nyehandel-delivery-callback`
-- Receives tracking data from Nylogistik when order ships
-- Updates order row: `tracking_id`, `tracking_url`, `status → shipped`
-- Set as `delivery_callback_url` in `POST /orders/simple`
-
-### Step 29 — Update `push-order-to-nyehandel`
-- Remove `external_order_id: order.shopify_order_id ?? order.id` — use internal UUID only
-- Fix `line_items` mapping — currently Shopify format, needs Nyehandel format
-  (SKU + quantity, no prices — Nyehandel uses its own pricing)
-- Fix customer payload — add `firstname`, `lastname` (currently missing)
-- Remove CORS `"*"` (internal function only)
+1. Confirm NYEHANDEL_API_TOKEN works (test with healthcheck)
+2. Run sync-nyehandel to populate products
+3. Place one test order end to end (Step 39 UAT)
+4. Fix any issues found
+5. Deploy frontend (see hosting section)
+6. Merge dev → main
+7. Go live
 
 ## What not to do
 
@@ -54,7 +47,6 @@ Last updated: 2026-03-18
 - Do not implement Pipedrive, WhatsApp, or Cowork in this repo
 - Do not move order or fulfilment logic into the frontend
 - Do not edit `src/lib/cart-utils.ts` without explicit permission
-- Do not hardcode shipping method names — always fetch from `GET /shipping-methods`
 
 ## Key reference files
 
