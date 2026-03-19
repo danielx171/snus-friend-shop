@@ -36,11 +36,6 @@ export function ProductSchema({ product, selectedPackSize }: ProductSchemaProps)
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.5',
-      reviewCount: product.ratings.toString(),
-    },
   };
 
   const breadcrumbJsonLd = {

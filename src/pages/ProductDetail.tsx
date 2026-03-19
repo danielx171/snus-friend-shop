@@ -13,7 +13,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from '@/components/ui/accordion';
 import {
-  ChevronLeft, Star, ShoppingCart, Check, Truck, Package,
+  ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { AgeGate } from '@/components/compliance/AgeGate';

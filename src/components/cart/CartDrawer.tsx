@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/context/CartContext';
 import { Minus, Plus, Trash2, ShoppingBag, Truck } from 'lucide-react';
-import { packSizeMultipliers } from '@/data/products';
+import { packSizeMultipliers, PackSize } from '@/data/products';
 import { Link } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -82,7 +82,7 @@ export function CartDrawer() {
       const key = `${productId}-${packSize}`;
       setRemovingKeys((prev) => new Set(prev).add(key));
       setTimeout(() => {
-        removeFromCart(productId, packSize as any);
+        removeFromCart(productId, packSize as PackSize);
         setRemovingKeys((prev) => {
           const next = new Set(prev);
           next.delete(key);

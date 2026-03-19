@@ -48,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="group relative overflow-hidden rounded-2xl border-border/30 bg-card/80 backdrop-blur-sm transition-[transform,box-shadow] duration-200 ease-out hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/8 hover:border-primary/30">
+    <Card className="group relative overflow-hidden rounded-2xl border-border/30 bg-card/80 backdrop-blur-sm transition-[transform,box-shadow] duration-200 ease-out hover:scale-[1.02] hover:shadow-[0_8px_30px_hsl(30_40%_50%/0.08)] hover:border-primary/30">
       <Link to={`/product/${product.id}`}>
         <div className="relative aspect-square overflow-hidden bg-muted/20">
           {product.image ? (

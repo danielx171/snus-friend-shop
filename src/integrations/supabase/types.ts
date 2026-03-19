@@ -369,7 +369,7 @@ export type Database = {
           id: string
           payload: Json
           processed_at: string | null
-          provider: 'shopify' | 'nyehandel'
+          provider: 'nyehandel'
           received_at: string
           status: 'received' | 'processed' | 'failed'
           topic: string
@@ -380,7 +380,7 @@ export type Database = {
           id?: string
           payload?: Json
           processed_at?: string | null
-          provider: 'shopify' | 'nyehandel'
+          provider: 'nyehandel'
           received_at?: string
           status?: 'received' | 'processed' | 'failed'
           topic: string
@@ -391,7 +391,7 @@ export type Database = {
           id?: string
           payload?: Json
           processed_at?: string | null
-          provider?: 'shopify' | 'nyehandel'
+          provider?: 'nyehandel'
           received_at?: string
           status?: 'received' | 'processed' | 'failed'
           topic?: string

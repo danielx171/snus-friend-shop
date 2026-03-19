@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { brandDirectory } from '@/data/brands';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface SearchResult {
   type: 'product' | 'brand';
@@ -27,8 +28,8 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
   const [activeIndex, setActiveIndex] = useState(-1);
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
   const { data: allProducts = [] } = useCatalogProducts();
+  const { formatPrice } = useTranslation();
 
   const results = useMemo<SearchResult[]>(() => {
     if (query.length < 2) return [];
@@ -41,7 +42,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
         type: 'product',
         id: p.id,
         name: p.name,
-        subtitle: `${p.brand} · £${p.prices.pack1.toFixed(2)}`,
+        subtitle: `${p.brand} · ${formatPrice(p.prices.pack1)}`,
         image: p.image,
         href: `/product/${p.id}`,
       }));
@@ -178,7 +179,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
                     )}
                   >
                     {result.image && (
-                      <img src={result.image} alt="" className="h-10 w-10 rounded-lg object-cover shrink-0" />
+                      <img src={result.image} alt={result.name} className="h-10 w-10 rounded-lg object-cover shrink-0" />
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-foreground truncate">{result.name}</p>

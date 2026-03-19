@@ -89,4 +89,4 @@ export const flavorKeys: FlavorKey[] = [
 export const strengthKeys: StrengthKey[] = ['normal', 'strong', 'extraStrong', 'ultraStrong'];
 export const formatKeys: FormatKey[] = ['slim', 'mini', 'original', 'large'];
 
-// Mock products array removed — all product data now comes from the Shopify Storefront API via useCatalogProducts().
+// Mock products array removed — all product data now comes from Supabase via useCatalogProducts().
