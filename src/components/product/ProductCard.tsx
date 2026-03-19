@@ -78,24 +78,18 @@ export function ProductCard({ product }: ProductCardProps) {
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">{product.name}</h3>
           </div>
 
-          {/* Strength + Flavor */}
-          <div className="mb-2.5 flex items-center gap-2 min-w-0">
-            <div className="flex gap-0.5 shrink-0" aria-label={`Strength: ${translateStrength(product.strengthKey)}`}>
-              {[1, 2, 3, 4].map((level) => (
-                <div
-                  key={level}
-                  className={cn(
-                    'h-1.5 w-3.5 rounded-full transition-colors',
-                    level <= strengthLevel
-                      ? strengthLevel >= 4 ? 'bg-destructive' :
-                        strengthLevel >= 3 ? 'bg-chart-1' :
-                        strengthLevel >= 2 ? 'bg-chart-5' : 'bg-muted-foreground'
-                      : 'bg-muted/40'
-                  )}
-                />
-              ))}
-            </div>
-            <span className="text-[10px] text-muted-foreground truncate">{translateStrength(product.strengthKey)}</span>
+          {/* Strength indicator */}
+          <div className="mb-2.5 flex items-center gap-1.5 min-w-0">
+            <span
+              className={cn(
+                'inline-block h-2 w-2 rounded-full shrink-0',
+                product.strengthKey === 'normal' && 'bg-green-500',
+                product.strengthKey === 'strong' && 'bg-yellow-500',
+                product.strengthKey === 'extraStrong' && 'bg-[hsl(var(--chart-4))]',
+                product.strengthKey === 'ultraStrong' && 'bg-red-500',
+              )}
+            />
+            <span className="text-[11px] text-muted-foreground truncate">{translateStrength(product.strengthKey)}</span>
           </div>
 
           {/* Rating */}

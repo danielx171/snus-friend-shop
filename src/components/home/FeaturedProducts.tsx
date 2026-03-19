@@ -22,7 +22,12 @@ export function FeaturedProducts({
 }: FeaturedProductsProps) {
   const { t } = useTranslation();
   const { data: products = [], isLoading } = useCatalogProducts();
-  const filteredProducts = products.filter(filterFn).slice(0, limit);
+  const filtered = products.filter(filterFn);
+  // If the filter yields nothing, fall back to the first N products so the section isn't empty
+  const filteredProducts = (filtered.length > 0 ? filtered : products).slice(0, limit);
+
+  // Hide the entire section when there's truly no data (not loading, zero products)
+  if (!isLoading && products.length === 0) return null;
 
   return (
     <section className="py-12 md:py-16">

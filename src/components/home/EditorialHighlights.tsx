@@ -44,7 +44,7 @@ export function EditorialHighlights() {
               className="group rounded-2xl glass-panel overflow-hidden hover:border-primary/25 transition-all duration-300"
             >
               <div className={`h-40 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
-                <span className="text-5xl group-hover:scale-110 transition-transform duration-300">{item.image}</span>
+                <item.icon className="h-12 w-12 text-primary group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
               </div>
               <div className="p-6">
                 <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">
