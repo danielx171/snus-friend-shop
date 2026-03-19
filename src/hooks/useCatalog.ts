@@ -33,6 +33,14 @@ const PACK_QUANTITIES: Record<string, number> = {
   pack30: 30,
 };
 
+/** Mirror of the sync edge-function thresholds — keep in sync with sync-nyehandel/index.ts */
+function deriveStrengthKey(mgPerPouch: number): MockProduct['strengthKey'] {
+  if (mgPerPouch <= 6) return 'normal';
+  if (mgPerPouch <= 12) return 'strong';
+  if (mgPerPouch <= 20) return 'extraStrong';
+  return 'ultraStrong';
+}
+
 /** Convert DB product row to the frontend Product shape. */
 function toProduct(row: DbProduct): MockProduct {
   // Find the base per-can price from pack_size=1 variant (or first variant)
@@ -57,7 +65,7 @@ function toProduct(row: DbProduct): MockProduct {
     brand: row.brands?.name ?? '',
     categoryKey: (row.category_key as MockProduct['categoryKey']) ?? 'nicotinePouches',
     flavorKey: row.flavor_key as MockProduct['flavorKey'],
-    strengthKey: row.strength_key as MockProduct['strengthKey'],
+    strengthKey: deriveStrengthKey(Number(row.nicotine_mg)),
     formatKey: row.format_key as MockProduct['formatKey'],
     nicotineContent: Number(row.nicotine_mg),
     portionsPerCan: row.portions_per_can,

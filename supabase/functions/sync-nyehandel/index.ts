@@ -72,12 +72,15 @@ function toFlavorKey(spec: string | null): string {
   return 'mint'; // default
 }
 
-/** Map nicotine mg/pouch to our strength_key enum */
+/** Map nicotine mg/pouch to our strength_key enum.
+ *  Industry-standard thresholds for nicotine pouches:
+ *  Normal ≤6 mg, Strong ≤12 mg, Extra Strong ≤20 mg, Ultra Strong >20 mg.
+ */
 function toStrengthKey(mgPerPouch: number | null): string {
   if (mgPerPouch == null) return 'normal';
-  if (mgPerPouch <= 4) return 'normal';
-  if (mgPerPouch <= 8) return 'strong';
-  if (mgPerPouch <= 12) return 'extraStrong';
+  if (mgPerPouch <= 6) return 'normal';
+  if (mgPerPouch <= 12) return 'strong';
+  if (mgPerPouch <= 20) return 'extraStrong';
   return 'ultraStrong';
 }
 

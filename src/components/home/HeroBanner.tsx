@@ -14,6 +14,8 @@ interface HeroSlide {
   cta: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
   bgColor: string;
+  /** Optional MP4/WebM URL — plays as a looping muted video background instead of bgColor */
+  videoSrc?: string;
 }
 
 const SLIDES: HeroSlide[] = [
@@ -55,7 +57,12 @@ export function HeroBanner() {
     0
   );
 
-  const showcaseProducts = products.slice(0, 4);
+  const SHOWCASE_SIZE = 4;
+  // Each slide shows a different group of products from the catalog
+  const showcaseStart = activeSlide * SHOWCASE_SIZE;
+  const showcaseProducts = products.length >= SHOWCASE_SIZE
+    ? products.slice(showcaseStart, showcaseStart + SHOWCASE_SIZE)
+    : products.slice(0, SHOWCASE_SIZE);
 
   const goToSlide = useCallback((index: number) => {
     setActiveSlide(index);
@@ -87,6 +94,24 @@ export function HeroBanner() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
+      {/* Optional video background — only rendered when videoSrc is set on a slide */}
+      {SLIDES.map((s, i) =>
+        s.videoSrc ? (
+          <video
+            key={i}
+            src={s.videoSrc}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className={cn(
+              'absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-700',
+              i === activeSlide ? 'opacity-100' : 'opacity-0'
+            )}
+          />
+        ) : null
+      )}
+
       {/* Subtle warm radial glow */}
       <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-[hsl(var(--chart-4)/0.06)] blur-[120px] pointer-events-none" />
 
