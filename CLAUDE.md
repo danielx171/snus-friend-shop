@@ -91,13 +91,13 @@ change app-facing tables, update `types.ts` in the same task.
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-03-18)
+## Where Things Stand (as of 2026-03-19)
 
-- Steps 1–24: Complete (Shopify-era, now superseded by architecture pivot)
-- Steps 31–38b: Complete (auth, product pages, bundle splitting)
-- **Step 25: Complete** — Nyehandel API fully investigated and documented
-- **Steps 26–29: Next** — Nyehandel-first checkout build
-- Steps 39–40: UAT + security review (after 26–29)
+- Steps 26–29: ✅ Done (sync rewrite, catalog sync, Shopify removed, useCatalog wired to Supabase)
+- Step 39: 🔴 Next — place one test order end-to-end
+  POST create-nyehandel-checkout with real SKU (e.g. "771")
+  Verify order in Nyehandel admin + Supabase orders table
+- Steps 40+: UAT sign-off, Vercel deploy, merge dev → main, go live
 
 ## Project Docs
 
