@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Product, PackSize, packSizeMultipliers, BadgeKey } from '@/data/products';
+import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey } from '@/data/products';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,6 +8,16 @@ import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
+
+const flavorGradients: Partial<Record<FlavorKey, string>> = {
+  mint: 'from-emerald-400 to-green-600',
+  berry: 'from-purple-400 to-fuchsia-600',
+  citrus: 'from-orange-300 to-amber-500',
+  fruit: 'from-orange-300 to-amber-500',
+  coffee: 'from-amber-700 to-stone-800',
+  cola: 'from-amber-700 to-stone-800',
+};
+const defaultGradient = 'from-slate-300 to-slate-500';
 
 interface ProductCardProps {
   product: Product;
@@ -41,12 +51,18 @@ export function ProductCard({ product }: ProductCardProps) {
     <Card className="group relative overflow-hidden rounded-2xl border-border/30 bg-card/80 backdrop-blur-sm transition-[transform,box-shadow] duration-200 ease-out hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/8 hover:border-primary/30">
       <Link to={`/product/${product.id}`}>
         <div className="relative aspect-square overflow-hidden bg-muted/20">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-105"
-            loading="lazy"
-          />
+          {product.image ? (
+            <img
+              src={product.image}
+              alt={product.name}
+              className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-105"
+              loading="lazy"
+            />
+          ) : (
+            <div className={cn('h-full w-full bg-gradient-to-br flex items-center justify-center', flavorGradients[product.flavorKey] ?? defaultGradient)}>
+              <span className="text-white/80 font-bold text-lg text-center px-4 drop-shadow">{product.name}</span>
+            </div>
+          )}
           {/* Badges */}
           {displayBadges.length > 0 && (
             <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">

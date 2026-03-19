@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { PackSize, packSizeMultipliers } from '@/data/products';
+import { PackSize, packSizeMultipliers, FlavorKey } from '@/data/products';
 import { useCatalogProducts, useCatalogProduct } from '@/hooks/useCatalog';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,16 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { ProductSchema } from '@/components/seo/ProductSchema';
 import { ProductCard } from '@/components/product/ProductCard';
 import { PDPSkeleton } from '@/components/product/PDPSkeleton';
+
+const flavorGradients: Partial<Record<FlavorKey, string>> = {
+  mint: 'from-emerald-400 to-green-600',
+  berry: 'from-purple-400 to-fuchsia-600',
+  citrus: 'from-orange-300 to-amber-500',
+  fruit: 'from-orange-300 to-amber-500',
+  coffee: 'from-amber-700 to-stone-800',
+  cola: 'from-amber-700 to-stone-800',
+};
+const defaultGradient = 'from-slate-300 to-slate-500';
 
 const packSizes: PackSize[] = ['pack1', 'pack5', 'pack10', 'pack30'];
 
@@ -107,7 +117,13 @@ export default function ProductDetail() {
             <div className="sticky top-32">
               <Card className="overflow-hidden rounded-3xl border-border/30 bg-card/80 backdrop-blur-sm">
                 <div className="relative aspect-square bg-muted/20">
-                  <img src={product.image} alt={product.name} className="h-full w-full object-cover" loading="eager" />
+                  {product.image ? (
+                    <img src={product.image} alt={product.name} className="h-full w-full object-cover" loading="eager" />
+                  ) : (
+                    <div className={cn('h-full w-full bg-gradient-to-br flex items-center justify-center', flavorGradients[product.flavorKey] ?? defaultGradient)}>
+                      <span className="text-white/80 font-bold text-2xl text-center px-6 drop-shadow">{product.name}</span>
+                    </div>
+                  )}
                   <div className="absolute left-4 top-4 flex flex-wrap gap-2">
                     {product.badgeKeys.slice(0, 2).map((badge) => (
                       <Badge
