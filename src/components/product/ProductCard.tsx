@@ -90,18 +90,30 @@ export function ProductCard({ product }: ProductCardProps) {
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">{product.name}</h3>
           </div>
 
-          {/* Strength indicator */}
-          <div className="mb-2.5 flex items-center gap-1.5 min-w-0">
-            <span
-              className={cn(
-                'inline-block h-2 w-2 rounded-full shrink-0',
+          {/* Attribute pills */}
+          <div className="mb-2.5 flex flex-wrap gap-1">
+            <span className={cn(
+              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium border',
+              product.strengthKey === 'normal' && 'bg-green-500/10 text-green-700 border-green-500/20',
+              product.strengthKey === 'strong' && 'bg-yellow-500/10 text-yellow-700 border-yellow-500/20',
+              product.strengthKey === 'extraStrong' && 'bg-[hsl(var(--chart-4)/0.1)] text-[hsl(var(--chart-4))] border-[hsl(var(--chart-4)/0.2)]',
+              product.strengthKey === 'ultraStrong' && 'bg-red-500/10 text-red-700 border-red-500/20',
+            )}>
+              <span className={cn(
+                'h-1.5 w-1.5 rounded-full shrink-0',
                 product.strengthKey === 'normal' && 'bg-green-500',
                 product.strengthKey === 'strong' && 'bg-yellow-500',
                 product.strengthKey === 'extraStrong' && 'bg-[hsl(var(--chart-4))]',
                 product.strengthKey === 'ultraStrong' && 'bg-red-500',
-              )}
-            />
-            <span className="text-[11px] text-muted-foreground truncate">{translateStrength(product.strengthKey)}</span>
+              )} />
+              {translateStrength(product.strengthKey)}
+            </span>
+            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-muted/40 text-muted-foreground border border-border/30">
+              {translateFlavor(product.flavorKey)}
+            </span>
+            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-muted/40 text-muted-foreground border border-border/30">
+              {product.nicotineContent}mg
+            </span>
           </div>
 
           {/* Rating */}

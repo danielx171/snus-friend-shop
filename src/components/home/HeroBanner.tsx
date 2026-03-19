@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Truck, Star, Shield } from 'lucide-react';
+import { ArrowRight, Truck, Star, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
 import { useCatalogProducts } from '@/hooks/useCatalog';
@@ -59,6 +59,14 @@ export function HeroBanner() {
 
   const goToSlide = useCallback((index: number) => {
     setActiveSlide(index);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setActiveSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+  }, []);
+
+  const nextSlide = useCallback(() => {
+    setActiveSlide((prev) => (prev + 1) % SLIDES.length);
   }, []);
 
   // Auto-rotate
@@ -161,21 +169,39 @@ export function HeroBanner() {
               </div>
             </div>
 
-            {/* Dot indicators */}
-            <div className="flex items-center gap-2.5 pt-2">
-              {SLIDES.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goToSlide(i)}
-                  aria-label={`Go to slide ${i + 1}`}
-                  className={cn(
-                    'rounded-full transition-all duration-300',
-                    i === activeSlide
-                      ? 'w-8 h-2.5 bg-[hsl(var(--chart-4))]'
-                      : 'w-2.5 h-2.5 bg-[hsl(220_10%_70%/0.4)] hover:bg-[hsl(220_10%_60%/0.6)]'
-                  )}
-                />
-              ))}
+            {/* Slide controls — arrows + dot indicators */}
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                onClick={prevSlide}
+                aria-label="Previous slide"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-[hsl(220_15%_30%/0.2)] bg-white/60 text-[hsl(220_20%_15%)] backdrop-blur-sm transition-all duration-150 hover:border-[hsl(var(--chart-4)/0.4)] hover:bg-white/80 hover:text-[hsl(var(--chart-4))]"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+
+              <div className="flex items-center gap-2">
+                {SLIDES.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goToSlide(i)}
+                    aria-label={`Go to slide ${i + 1}`}
+                    className={cn(
+                      'rounded-full transition-all duration-300',
+                      i === activeSlide
+                        ? 'w-8 h-2.5 bg-[hsl(var(--chart-4))]'
+                        : 'w-2.5 h-2.5 bg-[hsl(220_10%_70%/0.4)] hover:bg-[hsl(220_10%_60%/0.6)]'
+                    )}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={nextSlide}
+                aria-label="Next slide"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-[hsl(220_15%_30%/0.2)] bg-white/60 text-[hsl(220_20%_15%)] backdrop-blur-sm transition-all duration-150 hover:border-[hsl(var(--chart-4)/0.4)] hover:bg-white/80 hover:text-[hsl(var(--chart-4))]"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
@@ -187,16 +213,16 @@ export function HeroBanner() {
                   <Link
                     key={product.id}
                     to={`/product/${product.id}`}
-                    className={`rounded-3xl glass-panel p-5 hover:border-primary/20 transition-all duration-300 ${i % 2 !== 0 ? 'mt-10' : ''}`}
+                    className="rounded-3xl glass-panel p-5 hover:border-primary/20 transition-all duration-300 flex flex-col items-center text-center"
                   >
-                    <div className="h-28 rounded-2xl bg-gradient-to-br from-primary/12 to-primary/4 flex items-center justify-center mb-4 overflow-hidden">
+                    <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/8 to-primary/3 flex items-center justify-center mb-4 overflow-hidden shrink-0">
                       {product.image ? (
-                        <img src={product.image} alt={product.name} className="h-full w-full object-cover rounded-2xl" loading="lazy" />
+                        <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
                       ) : (
-                        <span className="text-white/80 font-bold text-center px-3 drop-shadow">{product.name}</span>
+                        <span className="text-white/80 font-bold text-center px-3 drop-shadow text-sm">{product.name}</span>
                       )}
                     </div>
-                    <p className="font-semibold text-foreground truncate">{product.name}</p>
+                    <p className="font-semibold text-foreground truncate w-full">{product.name}</p>
                     <p className="text-sm text-muted-foreground mt-1">{t('products.from')} {formatPrice(product.prices.pack1)}/{t('cart.can')}</p>
                   </Link>
                 ))}
