@@ -15,9 +15,6 @@ interface ProductCardProps {
 
 const cardPackSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10'];
 
-const strengthLevels: Record<Product['strengthKey'], number> = {
-  'normal': 1, 'strong': 2, 'extraStrong': 3, 'ultraStrong': 4,
-};
 
 const badgePriority: BadgeKey[] = ['new', 'newPrice', 'popular'];
 
