@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-03-19
+Last updated: 2026-03-19 evening
 
 ## Completed today (2026-03-19)
 
@@ -8,19 +8,20 @@ Last updated: 2026-03-19
 - All DB migrations applied to Supabase ✅
 - All edge functions deployed ✅
 - Supabase secrets updated with NordicPouch API credentials ✅
-- Store config env vars set:
-    STORE_ORDER_PREFIX = SF
-    STORE_CURRENCY = EUR
-    STORE_LOCALE = en-gb
-    STORE_PAYMENT_METHOD = Nets Easy Checkout
-- Shopify fully removed from codebase ✅
+- Shopify fully removed from codebase (incl. `src/lib/shopify.ts` deleted) ✅
 - Codebase refactored for multi-brand template ✅
 - Catalog fully synced: **734 products, 2,196 variants, 91 brands** across 45 pages ✅
 - `useCatalog.ts` wired to Supabase (no mock data) ✅
 - Multi-pack pricing model confirmed: pack1/3/5/10/30 computed from base price ✅
 - `CheckoutHandoff.tsx` SKU resolution fixed (product_id → SKU, quantity × packCount) ✅
-- Shopify dead types removed from src/ (opsMock, SkuMappings, useOpsData, types.ts) ✅
+- Preview mode: dismissible amber banner + checkout gate (`VITE_PREVIEW_MODE=true`) ✅
+- Two Lovable publishes merged into dev (animations + light hero/bestsellers fix) ✅
+- Flavor-based gradient image fallback in `ProductCard.tsx` + `ProductDetail.tsx` ✅
+- Shipping method names updated to NordicPouch account names ✅
+- `vercel.json` SPA rewrite created ✅
+- `OrderConfirmation.tsx` already wired to real Supabase data ✅
 - Build passes clean ✅
+- `dev` and `main` in sync ✅
 
 ## Architecture confirmed
 
@@ -29,17 +30,22 @@ Last updated: 2026-03-19
 - Volume discounts computed in useCatalog.ts (5%/10%/15%/20% off per-can price)
 - Payment = Nets Easy Checkout via Nyehandel
 - Warehouse = NordicPouch/Nyehandel (Nylogistik)
-- No separate Nyehandel store needed (€250 not required)
+
+## BLOCKER — CEO decision required
+
+Nyehandel account has all shipping/payment method names blank ("").
+API-based orders (`POST /orders/simple`) fail with 422 for every name tried.
+Two options:
+  A. Name the shipping + payment methods in Nyehandel admin → unblocks current checkout flow
+  B. Switch to Nyehandel hosted checkout (redirect to Nyehandel-hosted payment page)
 
 ## Next steps in order
 
-1. Place one test order end to end (Step 39 UAT)
-   - POST create-nyehandel-checkout with a real NordicPouch SKU (e.g. "771")
-   - Verify order appears in Nyehandel admin + Supabase orders table
-2. Fix any issues found during test order
-3. Deploy frontend (Vercel — see DEPLOYMENT_CHECKLIST.md)
-4. Merge dev → main
-5. Go live
+1. **CEO decides**: API order flow vs hosted checkout (see BLOCKER above)
+2. If (A): name methods in Nyehandel admin → place test order → verify in admin + Supabase
+3. If (B): build hosted checkout redirect in `CheckoutHandoff.tsx`
+4. Deploy frontend to Vercel (can happen in parallel — see DEPLOYMENT_CHECKLIST.md)
+5. UAT sign-off → go live
 
 ## What not to do
 

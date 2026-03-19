@@ -1,16 +1,21 @@
 # Project State
 
-Date: 2026-03-19 (end of day)
-Branch: `dev`
+Date: 2026-03-19 (evening)
+Branch: `dev` (in sync with `main`)
 
-## Status: Feature complete, catalog live, pending UAT test order
+## Status: Feature complete, catalog live — blocked on Nyehandel method names
 
 All Steps 26-40 code is written and deployed.
 734 real products synced from Nyehandel (NordicPouch catalog).
 Frontend reads products from Supabase — no mock data.
-Blocked only on:
-  1. Step 39 UAT: place one real test order via create-nyehandel-checkout
-  2. Frontend deploy to Vercel
+Preview mode live (dismissible banner + checkout gate).
+
+Blocked on:
+  1. **Step 39 UAT**: Nyehandel account (NordicPouch) has ALL shipping and payment
+     method names set to blank (""). The API rejects every non-empty name.
+     CEO must either: (a) name the methods in Nyehandel admin, or (b) confirm
+     the store will use Nyehandel hosted checkout (redirect) instead of API orders.
+  2. Frontend deploy to Vercel (can be done in parallel)
 
 ## Multi-brand template architecture
 

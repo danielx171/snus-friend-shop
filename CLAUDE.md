@@ -91,13 +91,17 @@ change app-facing tables, update `types.ts` in the same task.
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-03-19)
+## Where Things Stand (as of 2026-03-19 evening)
 
 - Steps 26–29: ✅ Done (sync rewrite, catalog sync, Shopify removed, useCatalog wired to Supabase)
-- Step 39: 🔴 Next — place one test order end-to-end
-  POST create-nyehandel-checkout with real SKU (e.g. "771")
-  Verify order in Nyehandel admin + Supabase orders table
-- Steps 40+: UAT sign-off, Vercel deploy, merge dev → main, go live
+- Preview mode: ✅ Dismissible banner + checkout gate (`VITE_PREVIEW_MODE=true`)
+- Lovable merges: ✅ Two publishes merged (animations + light hero/bestsellers fix)
+- Image fallback: ✅ Flavor-based gradients when `product.image` is null
+- Shipping names: ✅ Updated to NordicPouch account names in edge function + frontend
+- Step 39 UAT: 🔴 BLOCKED — Nyehandel account has all shipping/payment method names blank.
+  CEO must name the methods in Nyehandel admin before API orders are possible.
+  Fallback option: use Nyehandel hosted checkout (redirect flow) instead of API.
+- Steps 40+: UAT sign-off, Vercel deploy, go live
 
 ## Project Docs
 
