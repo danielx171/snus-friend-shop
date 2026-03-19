@@ -1,21 +1,30 @@
 # Project State
 
-Date: 2026-03-18 (end of day)
-Branch: `dev` — 51 commits ahead of main
+Date: 2026-03-19 (end of day)
+Branch: `dev`
 
-## Status: Feature complete, pending UAT
+## Status: Feature complete, catalog live, pending UAT test order
 
 All Steps 26-40 code is written and deployed.
+734 real products synced from Nyehandel (NordicPouch catalog).
+Frontend reads products from Supabase — no mock data.
 Blocked only on:
-  1. Correct API token in Supabase secrets
-  2. Catalog sync to populate products
-  3. Step 39 UAT test order
+  1. Step 39 UAT: place one real test order via create-nyehandel-checkout
+  2. Frontend deploy to Vercel
 
 ## Multi-brand template architecture
 
 The codebase is now a reusable template.
 To launch a new brand, only 8 Supabase secrets
 need changing. See DEPLOYMENT_CHECKLIST.md.
+
+## Catalog snapshot (2026-03-19)
+
+- 734 products synced
+- 2,196 variants (one per product)
+- 91 brands
+- 45 pages @ 50 products/page
+- ~17 minor API errors (products missing name/id on Nyehandel side)
 
 ---
 

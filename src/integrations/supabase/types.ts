@@ -282,7 +282,6 @@ export type Database = {
           last_verified: string
           nyehandel_sku: string
           product_name: string
-          shopify_sku: string | null
           status: 'mapped' | 'missing' | 'conflict'
         }
         Insert: {
@@ -291,7 +290,6 @@ export type Database = {
           last_verified?: string
           nyehandel_sku: string
           product_name: string
-          shopify_sku?: string | null
           status?: 'mapped' | 'missing' | 'conflict'
         }
         Update: {
@@ -300,7 +298,6 @@ export type Database = {
           last_verified?: string
           nyehandel_sku?: string
           product_name?: string
-          shopify_sku?: string | null
           status?: 'mapped' | 'missing' | 'conflict'
         }
         Relationships: []

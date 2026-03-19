@@ -33,7 +33,6 @@ export default function SkuMappings() {
         const q = search.toLowerCase();
         return (
           m.nyehandelSku.toLowerCase().includes(q) ||
-          (m.shopifySku?.toLowerCase().includes(q) ?? false) ||
           m.productName.toLowerCase().includes(q)
         );
       }
@@ -49,9 +48,9 @@ export default function SkuMappings() {
   };
 
   const buildCsv = useCallback(() => {
-    const header = 'productName,nyehandelSku,shopifySku,status,lastVerified';
+    const header = 'productName,nyehandelSku,status,lastVerified';
     const rows = filtered.map((m) =>
-      [m.productName, m.nyehandelSku, m.shopifySku ?? '', m.status, m.lastVerified]
+      [m.productName, m.nyehandelSku, m.status, m.lastVerified]
         .map(csvEscape)
         .join(',')
     );
@@ -89,7 +88,7 @@ export default function SkuMappings() {
     <Layout showNicotineWarning={false}>
       <SEO
         title="SKU Mappings | Ops · SnusFriend"
-        description="SKU mapping status between Nyehandel and Shopify"
+        description="Nyehandel SKU mapping status"
         metaRobots="noindex,nofollow"
       />
 
@@ -102,7 +101,7 @@ export default function SkuMappings() {
             </Button>
             <div>
               <h1 className="text-2xl font-bold text-foreground">SKU Mappings</h1>
-              <p className="text-sm text-muted-foreground">Nyehandel - Shopify SKU mapping status</p>
+              <p className="text-sm text-muted-foreground">Nyehandel SKU mapping status</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -174,7 +173,6 @@ export default function SkuMappings() {
                   <TableRow>
                     <TableHead>Product</TableHead>
                     <TableHead>Nyehandel SKU</TableHead>
-                    <TableHead>Shopify SKU</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Verified</TableHead>
                   </TableRow>
@@ -186,7 +184,6 @@ export default function SkuMappings() {
                       <TableRow key={m.id} className="transition-colors">
                         <TableCell className="font-medium">{m.productName}</TableCell>
                         <TableCell className="font-mono text-xs">{m.nyehandelSku}</TableCell>
-                        <TableCell className="font-mono text-xs">{m.shopifySku ?? <span className="text-muted-foreground italic">—</span>}</TableCell>
                         <TableCell>
                           <Badge variant={cfg.variant} className="text-xs gap-1">
                             {cfg.label}
@@ -200,7 +197,7 @@ export default function SkuMappings() {
                   })}
                   {filtered.length === 0 && !isLoading && (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                      <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                         No mappings match your filters.
                       </TableCell>
                     </TableRow>

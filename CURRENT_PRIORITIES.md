@@ -1,45 +1,45 @@
 # Current Priorities
 
-Last updated: 2026-03-18
+Last updated: 2026-03-19
 
-## Completed today (2026-03-18)
+## Completed today (2026-03-19)
 
 - Steps 26-30 ✅ committed and deployed
-- All 11 DB migrations applied to Supabase ✅
-- All edge functions deployed (14 total) ✅
+- All DB migrations applied to Supabase ✅
+- All edge functions deployed ✅
 - Supabase secrets updated with NordicPouch API credentials ✅
-- Store config env vars added:
+- Store config env vars set:
     STORE_ORDER_PREFIX = SF
     STORE_CURRENCY = EUR
     STORE_LOCALE = en-gb
     STORE_PAYMENT_METHOD = Nets Easy Checkout
 - Shopify fully removed from codebase ✅
 - Codebase refactored for multi-brand template ✅
+- Catalog fully synced: **734 products, 2,196 variants, 91 brands** across 45 pages ✅
+- `useCatalog.ts` wired to Supabase (no mock data) ✅
+- Multi-pack pricing model confirmed: pack1/3/5/10/30 computed from base price ✅
+- `CheckoutHandoff.tsx` SKU resolution fixed (product_id → SKU, quantity × packCount) ✅
+- Shopify dead types removed from src/ (opsMock, SkuMappings, useOpsData, types.ts) ✅
+- Build passes clean ✅
 
 ## Architecture confirmed
 
 - snus-friend-shop connects to NordicPouch Nyehandel account
-- SKU numbers must match NordicPouch's Nyehandel SKUs exactly
+- One SKU per product; pack sizes = quantity multipliers (1, 3, 5, 10, 30 cans)
+- Volume discounts computed in useCatalog.ts (5%/10%/15%/20% off per-can price)
 - Payment = Nets Easy Checkout via Nyehandel
-- Warehouse = NordicPouch/Nyehandel
+- Warehouse = NordicPouch/Nyehandel (Nylogistik)
 - No separate Nyehandel store needed (€250 not required)
-
-## What's blocking UAT right now
-
-1. Catalog sync not yet run — 0 products in DB
-   → Run sync-nyehandel once API token is confirmed working
-2. API token returns 401 — needs correct NordicPouch token
-   → Update NYEHANDEL_API_TOKEN in Supabase secrets
 
 ## Next steps in order
 
-1. Confirm NYEHANDEL_API_TOKEN works (test with healthcheck)
-2. Run sync-nyehandel to populate products
-3. Place one test order end to end (Step 39 UAT)
-4. Fix any issues found
-5. Deploy frontend (see hosting section)
-6. Merge dev → main
-7. Go live
+1. Place one test order end to end (Step 39 UAT)
+   - POST create-nyehandel-checkout with a real NordicPouch SKU (e.g. "771")
+   - Verify order appears in Nyehandel admin + Supabase orders table
+2. Fix any issues found during test order
+3. Deploy frontend (Vercel — see DEPLOYMENT_CHECKLIST.md)
+4. Merge dev → main
+5. Go live
 
 ## What not to do
 

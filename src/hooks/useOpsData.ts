@@ -69,7 +69,6 @@ export function useSkuMappings() {
       return (data ?? []).map((m: any) => ({
         id: m.id,
         nyehandelSku: m.nyehandel_sku,
-        shopifySku: m.shopify_sku,
         productName: m.product_name,
         status: m.status as SkuMapping['status'],
         lastVerified: m.last_verified,
