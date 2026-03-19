@@ -1,13 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Zap, Flame, Leaf, Star, Percent, Sparkles } from 'lucide-react';
+import { Gauge, BicepsFlexed, CircleDot, Trophy, Tag, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const categories = [
-  { id: 'all', icon: Leaf, label: 'All Pouches', href: '/nicotine-pouches' },
-  { id: 'strong', icon: Flame, label: 'Strong', href: '/nicotine-pouches?strength=strong' },
-  { id: 'extra-strong', icon: Zap, label: 'Extra Strong', href: '/nicotine-pouches?strength=extraStrong' },
-  { id: 'bestsellers', icon: Star, label: 'Bestsellers', href: '/nicotine-pouches?badge=popular' },
-  { id: 'offers', icon: Percent, label: 'Offers', href: '/nicotine-pouches?badge=newPrice' },
+  { id: 'all', icon: CircleDot, label: 'All Pouches', href: '/nicotine-pouches' },
+  { id: 'strong', icon: Gauge, label: 'Strong', href: '/nicotine-pouches?strength=strong' },
+  { id: 'extra-strong', icon: BicepsFlexed, label: 'Extra Strong', href: '/nicotine-pouches?strength=extraStrong' },
+  { id: 'bestsellers', icon: Trophy, label: 'Bestsellers', href: '/nicotine-pouches?badge=popular' },
+  { id: 'offers', icon: Tag, label: 'Offers', href: '/nicotine-pouches?badge=newPrice' },
   { id: 'new', icon: Sparkles, label: 'New', href: '/nicotine-pouches?badge=new' },
 ];
 

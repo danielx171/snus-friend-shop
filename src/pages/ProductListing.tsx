@@ -22,6 +22,9 @@ const ITEMS_PER_PAGE = 12;
 const SITE_URL = import.meta.env.VITE_SITE_URL as string | undefined;
 const listingUrl = SITE_URL ? SITE_URL + '/nicotine-pouches' : undefined;
 
+/** Brands boosted to the top of the "Most Popular" sort, in display order. */
+const FEATURED_BRANDS = ['VELO', 'Sting', 'ZYN', 'LOOP'];
+
 const urlBadgeToKey: Record<string, BadgeKey> = { 'new': 'new', 'newPrice': 'newPrice', 'popular': 'popular', 'limited': 'limited' };
 const urlStrengthToKey: Record<string, StrengthKey> = { 'normal': 'normal', 'strong': 'strong', 'extraStrong': 'extraStrong', 'ultraStrong': 'ultraStrong' };
 const badgeLabels: Record<BadgeKey, string> = { new: 'New Arrivals', newPrice: 'Special Offers', popular: 'Bestsellers', limited: 'Limited Edition' };
@@ -69,7 +72,16 @@ export default function ProductListing() {
   const sortedProducts = useMemo(() => {
     const sorted = [...filteredProducts];
     switch (sortBy) {
-      case 'popularity': return sorted.sort((a, b) => b.ratings - a.ratings);
+      case 'popularity': return sorted.sort((a, b) => {
+        const aIdx = FEATURED_BRANDS.indexOf(a.brand);
+        const bIdx = FEATURED_BRANDS.indexOf(b.brand);
+        const aFeat = aIdx !== -1;
+        const bFeat = bIdx !== -1;
+        if (aFeat && !bFeat) return -1;
+        if (!aFeat && bFeat) return 1;
+        if (aFeat && bFeat) return aIdx - bIdx;
+        return b.ratings - a.ratings;
+      });
       case 'newest': return sorted.sort((a, b) => a.badgeKeys.includes('new') ? -1 : b.badgeKeys.includes('new') ? 1 : 0);
       case 'oldest': return sorted.sort((a, b) => a.badgeKeys.includes('new') ? 1 : b.badgeKeys.includes('new') ? -1 : 0);
       case 'name-asc': return sorted.sort((a, b) => a.name.localeCompare(b.name));

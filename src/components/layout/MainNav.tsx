@@ -23,7 +23,7 @@ export function MainNav() {
   }));
 
   return (
-    <nav className="hidden lg:block border-b border-border/20 bg-card/40 backdrop-blur-sm">
+    <nav className="hidden lg:block relative z-40 border-b border-border/20 bg-card/40 backdrop-blur-sm">
       <div className="container">
         <NavigationMenu>
           <NavigationMenuList className="gap-0">
