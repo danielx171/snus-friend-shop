@@ -88,11 +88,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return convertFromGBP(gbpPrice, market);
   };
 
-  const formatPrice = (gbpPrice: number, decimals: number = 2): string => {
-    const converted = convertFromGBP(gbpPrice, market);
+  const formatPrice = (eurPrice: number, decimals: number = 2): string => {
+    const converted = convertFromGBP(eurPrice, market);
     const formatted = formatMarketPrice(converted, market, decimals);
-    // For non-GBP markets, prefix with ≈ to signal approximation
-    if (market.currencyCode !== 'GBP') {
+    // For non-EUR markets, prefix with ≈ to signal approximation
+    if (market.currencyCode !== 'EUR') {
       return `≈ ${formatted}`;
     }
     return formatted;

@@ -30,7 +30,7 @@ export function ProductSchema({ product, selectedPackSize }: ProductSchemaProps)
     offers: {
       '@type': 'Offer',
       url: productUrl,
-      priceCurrency: 'GBP',
+      priceCurrency: 'EUR',
       price: price.toFixed(2),
       priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       availability: 'https://schema.org/InStock',
@@ -73,7 +73,7 @@ export function ProductSchema({ product, selectedPackSize }: ProductSchemaProps)
   return (
     <SEO
       title={`${product.name} | ${product.brand} | SnusFriend`}
-      description={`Buy ${product.name} by ${product.brand}. From £${unitPrice.toFixed(2)}/can. ${product.nicotineContent}mg nicotine, ${product.portionsPerCan} pouches. Fast UK delivery.`}
+      description={`Buy ${product.name} by ${product.brand}. From €${unitPrice.toFixed(2)}/can. ${product.nicotineContent}mg nicotine, ${product.portionsPerCan} pouches. Fast EU delivery.`}
       canonical={productUrl}
       ogType="product"
       jsonLd={combinedJsonLd}

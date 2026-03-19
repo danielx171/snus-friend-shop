@@ -25,7 +25,10 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const FREE_SHIPPING_THRESHOLD = 25; // £25 for UK
+// Free shipping threshold is market-dependent — see src/lib/market.ts
+// This hardcoded value is only used for the cart drawer's progress bar
+// when no market context is available. The real threshold comes from market config.
+const FREE_SHIPPING_THRESHOLD = 29; // €29 for default EUR market
 
 const STORAGE_KEY = 'snusfriend_cart';
 

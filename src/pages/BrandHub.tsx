@@ -59,8 +59,8 @@ export default function BrandHub() {
   return (
     <>
       <SEO
-        title={`${brand.name} Nicotine Pouches | Buy Online | SnusFriend UK`}
-        description={`Buy ${brand.name} nicotine pouches online at SnusFriend. ${brand.tagline} Free UK delivery over £25. Subscribe & save 10%.`}
+        title={`${brand.name} Nicotine Pouches | Buy Online | SnusFriend`}
+        description={`Buy ${brand.name} nicotine pouches online at SnusFriend. ${brand.tagline} Free delivery on orders over €29.`}
         canonical={canonicalUrl}
         jsonLd={[faqJsonLd, breadcrumbJsonLd]}
       />

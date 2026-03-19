@@ -6,6 +6,13 @@ import type { DbProduct } from '@/integrations/supabase/types';
 export type { DbProduct };
 
 /**
+ * Retail markup on wholesale (Nyehandel) price.
+ * Wholesale ~€3.29/can → retail ~€5.10/can at 1.55×.
+ * Adjust this to change the margin. Set to 1.0 to sell at wholesale.
+ */
+const RETAIL_MARKUP = 1.55;
+
+/**
  * Volume discount multipliers per can.
  * pack1 = full price, pack3 = 5% off per can, etc.
  * Adjust these to change the volume discount tiers.
@@ -29,9 +36,11 @@ const PACK_QUANTITIES: Record<string, number> = {
 /** Convert DB product row to the frontend Product shape. */
 function toProduct(row: DbProduct): MockProduct {
   // Find the base per-can price from pack_size=1 variant (or first variant)
+  // Apply retail markup — Nyehandel prices are wholesale
   const variants = row.product_variants ?? [];
   const baseVariant = variants.find((v) => v.pack_size === 1) ?? variants[0];
-  const basePricePerCan = baseVariant ? Number(baseVariant.price) : 0;
+  const wholesalePrice = baseVariant ? Number(baseVariant.price) : 0;
+  const basePricePerCan = +(wholesalePrice * RETAIL_MARKUP).toFixed(2);
 
   // Compute pack prices: quantity × per-can price × discount
   const prices = {

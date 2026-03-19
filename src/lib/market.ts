@@ -1,6 +1,10 @@
 /**
  * Market configuration — single source of truth for locale, currency, and shipping.
  * Language selection drives market automatically.
+ *
+ * BASE CURRENCY: EUR — all product prices from Supabase/Nyehandel are in EUR.
+ * rateFromGBP is kept as the field name for backward-compat with cart-utils.ts
+ * but it actually means "rate from EUR" (1 EUR = X local currency).
  */
 
 export interface MarketConfig {
@@ -14,18 +18,22 @@ export interface MarketConfig {
   shippingCost: number;
   /** Label shown next to tax line (e.g. "VAT", "MwSt.") — pulled from i18n */
   showTaxRate: boolean;
-  /** Exchange rate FROM GBP (1 GBP = X local currency) */
+  /**
+   * Exchange rate FROM base currency (EUR).
+   * Named rateFromGBP for backward-compat — it means 1 EUR = X local currency.
+   * EUR markets = 1.0, GBP ≈ 0.86, SEK ≈ 11.6, etc.
+   */
   rateFromGBP: number;
 }
 
 /** Map language codes → market configs */
 const marketsByLang: Record<string, MarketConfig> = {
-  // UK / English
+  // English — default market uses EUR since Nyehandel charges EUR
   en: {
-    currencyCode: 'GBP',
-    locale: 'en-GB',
-    freeShippingThreshold: 25,
-    shippingCost: 3.99,
+    currencyCode: 'EUR',
+    locale: 'en-IE',
+    freeShippingThreshold: 29,
+    shippingCost: 4.99,
     showTaxRate: false,
     rateFromGBP: 1,
   },
@@ -36,7 +44,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 349,
     shippingCost: 49,
     showTaxRate: true,
-    rateFromGBP: 13.5,
+    rateFromGBP: 11.63,
   },
   // Germany (EUR)
   de: {
@@ -45,7 +53,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 29,
     shippingCost: 4.99,
     showTaxRate: true,
-    rateFromGBP: 1.16,
+    rateFromGBP: 1,
   },
   // France (EUR)
   fr: {
@@ -54,7 +62,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 29,
     shippingCost: 4.99,
     showTaxRate: false,
-    rateFromGBP: 1.16,
+    rateFromGBP: 1,
   },
   // Spain (EUR)
   es: {
@@ -63,7 +71,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 29,
     shippingCost: 4.99,
     showTaxRate: false,
-    rateFromGBP: 1.16,
+    rateFromGBP: 1,
   },
   // Italy (EUR)
   it: {
@@ -72,7 +80,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 29,
     shippingCost: 4.99,
     showTaxRate: false,
-    rateFromGBP: 1.16,
+    rateFromGBP: 1,
   },
   // Netherlands (EUR)
   nl: {
@@ -81,7 +89,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 29,
     shippingCost: 4.99,
     showTaxRate: false,
-    rateFromGBP: 1.16,
+    rateFromGBP: 1,
   },
   // Portugal (EUR)
   pt: {
@@ -90,7 +98,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 29,
     shippingCost: 4.99,
     showTaxRate: false,
-    rateFromGBP: 1.16,
+    rateFromGBP: 1,
   },
   // Poland
   pl: {
@@ -99,7 +107,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 119,
     shippingCost: 19.99,
     showTaxRate: false,
-    rateFromGBP: 5.13,
+    rateFromGBP: 4.42,
   },
   // Czech Republic
   cs: {
@@ -108,7 +116,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 699,
     shippingCost: 99,
     showTaxRate: false,
-    rateFromGBP: 29.1,
+    rateFromGBP: 25.09,
   },
   // Denmark
   da: {
@@ -117,7 +125,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 199,
     shippingCost: 39,
     showTaxRate: false,
-    rateFromGBP: 8.65,
+    rateFromGBP: 7.46,
   },
   // Norway
   no: {
@@ -126,7 +134,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 299,
     shippingCost: 49,
     showTaxRate: false,
-    rateFromGBP: 13.4,
+    rateFromGBP: 11.55,
   },
   // Turkey
   tr: {
@@ -135,7 +143,7 @@ const marketsByLang: Record<string, MarketConfig> = {
     freeShippingThreshold: 999,
     shippingCost: 149,
     showTaxRate: false,
-    rateFromGBP: 40.5,
+    rateFromGBP: 34.91,
   },
 };
 
@@ -148,22 +156,22 @@ eurLangs.forEach(code => {
     freeShippingThreshold: 29,
     shippingCost: 4.99,
     showTaxRate: false,
-    rateFromGBP: 1.16,
+    rateFromGBP: 1,
   };
 });
 
 // Non-EUR European currencies with sensible defaults
 const otherMarkets: Record<string, Partial<MarketConfig> & { currencyCode: string; rateFromGBP: number }> = {
-  hu: { currencyCode: 'HUF', rateFromGBP: 452, freeShippingThreshold: 9999, shippingCost: 1499 },
-  ro: { currencyCode: 'RON', rateFromGBP: 5.8, freeShippingThreshold: 149, shippingCost: 24.99 },
-  bg: { currencyCode: 'BGN', rateFromGBP: 2.27, freeShippingThreshold: 59, shippingCost: 9.99 },
-  is: { currencyCode: 'ISK', rateFromGBP: 173, freeShippingThreshold: 4999, shippingCost: 799 },
-  uk: { currencyCode: 'UAH', rateFromGBP: 52, freeShippingThreshold: 1299, shippingCost: 199 },
-  sr: { currencyCode: 'RSD', rateFromGBP: 136, freeShippingThreshold: 3499, shippingCost: 499 },
-  bs: { currencyCode: 'BAM', rateFromGBP: 2.27, freeShippingThreshold: 59, shippingCost: 9.99 },
-  mk: { currencyCode: 'MKD', rateFromGBP: 71.5, freeShippingThreshold: 1799, shippingCost: 299 },
-  sq: { currencyCode: 'ALL', rateFromGBP: 118, freeShippingThreshold: 2999, shippingCost: 499 },
-  be: { currencyCode: 'BYN', rateFromGBP: 4.19, freeShippingThreshold: 99, shippingCost: 14.99 },
+  hu: { currencyCode: 'HUF', rateFromGBP: 390, freeShippingThreshold: 9999, shippingCost: 1499 },
+  ro: { currencyCode: 'RON', rateFromGBP: 5.0, freeShippingThreshold: 149, shippingCost: 24.99 },
+  bg: { currencyCode: 'BGN', rateFromGBP: 1.96, freeShippingThreshold: 59, shippingCost: 9.99 },
+  is: { currencyCode: 'ISK', rateFromGBP: 149, freeShippingThreshold: 4999, shippingCost: 799 },
+  uk: { currencyCode: 'UAH', rateFromGBP: 44.8, freeShippingThreshold: 1299, shippingCost: 199 },
+  sr: { currencyCode: 'RSD', rateFromGBP: 117, freeShippingThreshold: 3499, shippingCost: 499 },
+  bs: { currencyCode: 'BAM', rateFromGBP: 1.96, freeShippingThreshold: 59, shippingCost: 9.99 },
+  mk: { currencyCode: 'MKD', rateFromGBP: 61.6, freeShippingThreshold: 1799, shippingCost: 299 },
+  sq: { currencyCode: 'ALL', rateFromGBP: 102, freeShippingThreshold: 2999, shippingCost: 499 },
+  be: { currencyCode: 'BYN', rateFromGBP: 3.61, freeShippingThreshold: 99, shippingCost: 14.99 },
 };
 
 Object.entries(otherMarkets).forEach(([code, config]) => {
@@ -177,7 +185,7 @@ Object.entries(otherMarkets).forEach(([code, config]) => {
   };
 });
 
-/** Default market (English / GBP) */
+/** Default market (English / EUR) */
 const defaultMarket = marketsByLang.en;
 
 /** Get market config for a given language code */
@@ -186,11 +194,11 @@ export function getMarketForLanguage(langCode: string): MarketConfig {
 }
 
 /**
- * Convert a GBP price to the market's local currency.
- * Returns the raw number (not formatted).
+ * Convert a base currency (EUR) price to the market's local currency.
+ * Named convertFromGBP for backward-compat — base currency is EUR.
  */
-export function convertFromGBP(gbpAmount: number, market: MarketConfig): number {
-  return gbpAmount * market.rateFromGBP;
+export function convertFromGBP(eurAmount: number, market: MarketConfig): number {
+  return eurAmount * market.rateFromGBP;
 }
 
 /**

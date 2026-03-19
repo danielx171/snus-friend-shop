@@ -96,8 +96,8 @@ export default function ProductListing() {
   const activeFilterCount = filters.brands.length + filters.strengths.length + filters.flavors.length + filters.formats.length;
   const pageTitle = badgeKeyFilter ? badgeLabels[badgeKeyFilter] : brandFilter ? brandFilter : 'Nicotine Pouches';
   const pageDescription = badgeKeyFilter
-    ? `Shop our ${badgeLabels[badgeKeyFilter].toLowerCase()} nicotine pouches. Free UK delivery over £25.`
-    : `Browse our complete range of nicotine pouches. Free UK delivery over £25.`;
+    ? `Shop our ${badgeLabels[badgeKeyFilter].toLowerCase()} nicotine pouches. Free delivery on orders over €29.`
+    : `Browse our complete range of nicotine pouches. Free delivery on orders over €29.`;
 
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
@@ -111,7 +111,7 @@ export default function ProductListing() {
   return (
     <>
       <SEO
-        title={`${pageTitle} | SnusFriend UK`}
+        title={`${pageTitle} | SnusFriend`}
         description={pageDescription}
         canonical={listingUrl}
         jsonLd={breadcrumbJsonLd}

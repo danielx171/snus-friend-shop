@@ -70,17 +70,25 @@ export default function CheckoutHandoff() {
   const { t, formatPrice, market } = useTranslation();
   const navigate = useNavigate();
 
-  const { subtotal, shipping, finalTotal, freeShipping, progress } = getCartTotals(
+  // Find the selected shipping option's price (in EUR)
+  const selectedShippingOption = SHIPPING_OPTIONS.find(o => o.name === form.shipping_method) ?? SHIPPING_OPTIONS[0];
+  const shippingPriceEUR = selectedShippingOption.price;
+
+  const { subtotal, freeShipping, progress } = getCartTotals(
     items,
     market,
   );
+
+  // Use the actual selected shipping cost instead of the generic market.shippingCost
+  const shippingCost = freeShipping ? 0 : shippingPriceEUR;
+  const finalTotal = subtotal + shippingCost;
 
   const localSubtotal = subtotal * market.rateFromGBP;
   const amountToFreeShipping = Math.max(0, market.freeShippingThreshold - localSubtotal);
   const shippingProgress = progress;
 
   const formatLocalAmount = (amount: number): string => {
-    return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
+    return formatMarketPrice(amount, market, market.currencyCode === 'EUR' ? 2 : 0);
   };
 
   /* ── Form state ── */
@@ -539,12 +547,12 @@ export default function CheckoutHandoff() {
                         <span className="font-medium">{formatPrice(subtotal)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">{t('cart.delivery')}</span>
+                        <span className="text-muted-foreground">{t('cart.delivery')} ({selectedShippingOption.name})</span>
                         <span className="font-medium">
                           {freeShipping ? (
                             <span className="text-primary">{t('cart.free')}</span>
                           ) : (
-                            formatPrice(shipping)
+                            formatPrice(shippingCost)
                           )}
                         </span>
                       </div>
