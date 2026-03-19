@@ -85,12 +85,14 @@ export function HeroBanner() {
           <div className="relative hidden lg:flex items-center justify-center">
             <div className="relative">
               {/* Glow behind the can */}
-              <div className="absolute inset-0 scale-75 rounded-full bg-[hsl(var(--chart-4)/0.12)] blur-[60px]" />
-              <img
-                src={productImage}
-                alt="Premium nicotine pouch can"
-                className="relative w-72 h-72 object-cover rounded-3xl animate-hero-sway"
-              />
+              <div className="absolute inset-0 scale-90 rounded-full bg-[hsl(var(--chart-4)/0.15)] blur-[80px]" />
+              <div className="relative w-80 h-80 rounded-full overflow-hidden animate-hero-sway shadow-[0_20px_60px_-10px_rgba(0,0,0,0.5),0_0_40px_hsl(var(--chart-4)/0.15)]">
+                <img
+                  src={productImage}
+                  alt="Premium nicotine pouch can"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
