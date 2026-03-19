@@ -1,12 +1,12 @@
 import { Layout } from '@/components/layout/Layout';
-import { useCart, SubscriptionFrequency } from '@/context/CartContext';
+import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+// Select removed — subscription feature not yet implemented
 import { Link } from 'react-router-dom';
-import { Minus, Plus, Trash2, ShoppingBag, Truck, ArrowRight, RefreshCw } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, Truck, ArrowRight } from 'lucide-react';
 import { packSizeMultipliers } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { useCatalogProducts } from '@/hooks/useCatalog';
@@ -21,7 +21,6 @@ export default function CartPage() {
     totalItems,
     updateQuantity,
     removeFromCart,
-    updateSubscription,
   } = useCart();
   const { t, formatPrice, market } = useTranslation();
 
@@ -128,11 +127,17 @@ export default function CartPage() {
                       <div className="flex gap-4">
                         {/* Product Image */}
                         <Link to={`/product/${item.product.id}`} className="shrink-0">
-                          <img
-                            src={item.product.image}
-                            alt={item.product.name}
-                            className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-xl"
-                          />
+                          {item.product.image ? (
+                            <img
+                              src={item.product.image}
+                              alt={item.product.name}
+                              className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-xl"
+                            />
+                          ) : (
+                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center">
+                              <span className="text-[10px] text-center text-muted-foreground px-1 line-clamp-2">{item.product.name}</span>
+                            </div>
+                          )}
                         </Link>
 
                         {/* Product Info */}
@@ -156,36 +161,6 @@ export default function CartPage() {
                               </p>
                             </div>
                           </div>
-
-                          {/* Subscription Badge */}
-                          {item.isSubscription && (
-                            <div className="mt-2 flex items-center gap-2 flex-wrap">
-                              <Badge variant="secondary" className="gap-1">
-                                <RefreshCw className="h-3 w-3" />
-                                {t('cart.subscription')}
-                              </Badge>
-                              <Select
-                                value={item.subscriptionFrequency}
-                                onValueChange={(value) =>
-                                  updateSubscription(
-                                    item.product.id,
-                                    item.packSize,
-                                    true,
-                                    value as SubscriptionFrequency
-                                  )
-                                }
-                              >
-                                <SelectTrigger className="h-7 w-auto text-xs">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="14days">{t('cart.freq.14days')}</SelectItem>
-                                  <SelectItem value="1month">{t('cart.freq.1month')}</SelectItem>
-                                  <SelectItem value="2months">{t('cart.freq.2months')}</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          )}
 
                           {/* Quantity Controls */}
                           <div className="mt-3 flex items-center justify-between">

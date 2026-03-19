@@ -3,7 +3,7 @@ import { Separator } from '@/components/ui/separator';
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/20 bg-card/30">
+    <footer className="border-t border-border/20 bg-card/30 bg-[hsl(30_15%_50%/0.03)]">
       <div className="container py-16">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="space-y-4">

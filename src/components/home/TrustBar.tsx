@@ -14,7 +14,7 @@ export function TrustBar() {
   const freeShippingFormatted = formatMarketPrice(market.freeShippingThreshold, market, 0);
 
   return (
-    <section className="border-y border-border/20 glass-panel">
+    <section className="border-y border-border/20 glass-panel bg-[hsl(30_20%_50%/0.04)]">
       <div className="container py-5">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {trustItems.map((item) => {

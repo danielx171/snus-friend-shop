@@ -14,7 +14,7 @@ export function UtilityBar() {
   const freeShippingFormatted = formatMarketPrice(
     market.freeShippingThreshold,
     market,
-    market.currencyCode === 'GBP' ? 0 : 0
+    0
   );
 
   return (
