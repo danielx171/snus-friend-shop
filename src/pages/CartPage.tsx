@@ -7,8 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Link } from 'react-router-dom';
 import { Minus, Plus, Trash2, ShoppingBag, Truck, ArrowRight, RefreshCw } from 'lucide-react';
-import { packSizeMultipliers, products } from '@/data/products';
+import { packSizeMultipliers } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SEO } from '@/components/seo/SEO';
 import { formatMarketPrice } from '@/lib/market';
@@ -37,9 +38,10 @@ export default function CartPage() {
     return formatMarketPrice(amount, market, market.currencyCode === 'GBP' ? 2 : 0);
   };
 
-  // Get recommended products (different from cart items)
+  // Get recommended products from catalog (different from cart items)
+  const { data: catalogProducts = [] } = useCatalogProducts();
   const cartProductIds = new Set(items.map(item => item.product.id));
-  const recommendedProducts = products
+  const recommendedProducts = catalogProducts
     .filter(p => !cartProductIds.has(p.id))
     .slice(0, 4);
 

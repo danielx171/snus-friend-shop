@@ -3,8 +3,9 @@ import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { AgeGate } from '@/components/compliance/AgeGate';
 import { getBrandBySlug } from '@/data/brands';
-import { products } from '@/data/products';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
+import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
@@ -20,10 +21,11 @@ const TOP_PRODUCTS_LIMIT = 4;
 export default function BrandHub() {
   const { brandSlug } = useParams<{ brandSlug: string }>();
   const brand = brandSlug ? getBrandBySlug(brandSlug) : undefined;
+  const { data: allProducts = [], isLoading: productsLoading } = useCatalogProducts();
 
   if (!brand) return <NotFound />;
 
-  const brandProducts = products.filter((p) => p.brand === brand.name);
+  const brandProducts = allProducts.filter((p) => p.brand === brand.name);
   const topProducts = [...brandProducts]
     .sort((a, b) => b.ratings - a.ratings)
     .slice(0, TOP_PRODUCTS_LIMIT);
@@ -115,9 +117,12 @@ export default function BrandHub() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {topProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+              {productsLoading
+                ? Array.from({ length: TOP_PRODUCTS_LIMIT }).map((_, i) => <ProductCardSkeleton key={i} />)
+                : topProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))
+              }
             </div>
 
             {brandProducts.length > TOP_PRODUCTS_LIMIT && (

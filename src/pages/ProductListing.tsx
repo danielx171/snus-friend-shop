@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { BadgeKey, StrengthKey } from '@/data/products';
 import { useCatalogProducts } from '@/hooks/useCatalog';
@@ -45,6 +45,15 @@ export default function ProductListing() {
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [gridVisible, setGridVisible] = useState(true);
+
+  // Fade grid out/in when filters or sort change
+  const filterKey = JSON.stringify(filters) + sortBy + currentPage;
+  useEffect(() => {
+    setGridVisible(false);
+    const t = setTimeout(() => setGridVisible(true), 100);
+    return () => clearTimeout(t);
+  }, [filterKey]);
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
@@ -181,7 +190,10 @@ export default function ProductListing() {
                   <p className="text-sm text-muted-foreground">There was a problem fetching the catalog. Please refresh the page.</p>
                 </div>
               ) : paginatedProducts.length > 0 ? (
-                <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div
+                  className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 transition-opacity duration-100"
+                  style={{ opacity: gridVisible ? 1 : 0 }}
+                >
                   {paginatedProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}

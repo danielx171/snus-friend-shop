@@ -76,8 +76,8 @@ export default function ProductDetail() {
   const displayPrice = purchaseMode === 'subscribe' ? subscriptionPrice : currentPrice;
   const displayPricePerCan = purchaseMode === 'subscribe' ? subscriptionPricePerCan : pricePerCan;
 
-  const productDescription = t(product.descriptionKey) !== product.descriptionKey 
-    ? t(product.descriptionKey) 
+  const productDescription = t(product.descriptionKey) !== product.descriptionKey
+    ? t(product.descriptionKey)
     : t('detail.genericDescription', { name: product.name, brand: product.brand });
 
   const relatedProducts = allProducts
@@ -92,7 +92,7 @@ export default function ProductDetail() {
     <Layout showNicotineWarning={false}>
       <ProductSchema product={product} selectedPackSize={selectedPack} />
       <AgeGate />
-      
+
       <div className="container py-10">
         <nav className="mb-8">
           <Link to="/nicotine-pouches" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -149,8 +149,9 @@ export default function ProductDetail() {
               <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 break-words tracking-tight">{product.name}</h1>
               <div className="flex items-center gap-3 flex-wrap">
                 <div className="flex items-center gap-0.5">
-                  <Star className="h-4 w-4 fill-primary text-primary" />
-                  <span className="ml-2 text-sm text-muted-foreground">{product.ratings}</span>
+                  {[1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-primary text-primary" />)}
+                  <Star className="h-4 w-4 text-muted/40" />
+                  <span className="ml-2 text-sm text-muted-foreground">({product.ratings} reviews)</span>
                 </div>
               </div>
             </div>
@@ -203,7 +204,7 @@ export default function ProductDetail() {
                   const perCan = (purchaseMode === 'subscribe' ? subPrice : price) / packSizeMultipliers[size];
                   const isSelected = selectedPack === size;
                   const packCount = packSizeMultipliers[size];
-                  
+
                   return (
                     <Label
                       key={size}

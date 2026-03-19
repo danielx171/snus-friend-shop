@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRight, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { products as allProducts } from '@/data/products';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { brandDirectory } from '@/data/brands';
 import { cn } from '@/lib/utils';
 
@@ -28,6 +28,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const { data: allProducts = [] } = useCatalogProducts();
 
   const results = useMemo<SearchResult[]>(() => {
     if (query.length < 2) return [];
@@ -57,7 +58,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
       }));
 
     return [...productResults, ...brandResults];
-  }, [query]);
+  }, [query, allProducts]);
 
   useEffect(() => {
     setIsOpen(results.length > 0 || query.length >= 2);

@@ -3,14 +3,10 @@ import { ArrowRight } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { brandDirectory } from '@/data/brands';
-import { products } from '@/data/products';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-
-function getProductCount(brandName: string): number {
-  return products.filter((p) => p.brand === brandName).length;
-}
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -22,6 +18,9 @@ const breadcrumbJsonLd = {
 };
 
 export default function BrandsIndex() {
+  const { data: allProducts = [] } = useCatalogProducts();
+  const getProductCount = (brandName: string) => allProducts.filter(p => p.brand === brandName).length;
+
   return (
     <Layout>
       <SEO
