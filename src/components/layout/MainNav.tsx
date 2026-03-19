@@ -26,7 +26,7 @@ export function MainNav() {
     <nav className="hidden lg:block relative z-40 border-b border-border/20 bg-card/40 backdrop-blur-sm">
       <div className="container">
         <NavigationMenu>
-          <NavigationMenuList className="gap-0">
+          <NavigationMenuList className="gap-0 w-full justify-between">
             <NavigationMenuItem>
               <NavigationMenuTrigger className="h-11 rounded-none bg-transparent hover:bg-primary/8 data-[state=open]:bg-primary/8 text-sm font-medium text-foreground hover:text-primary data-[state=open]:text-primary">
                 Nicotine Pouches

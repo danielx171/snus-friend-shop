@@ -33,11 +33,15 @@ const PACK_QUANTITIES: Record<string, number> = {
   pack30: 30,
 };
 
-/** Mirror of the sync edge-function thresholds — keep in sync with sync-nyehandel/index.ts */
+/** Derive strength from nicotine mg for display.
+ *  Thresholds chosen to give good variety across 734+ products:
+ *  Normal ≤6, Strong ≤10, Extra Strong ≤16, Ultra Strong >16.
+ *  Keep in sync with sync-nyehandel/index.ts.
+ */
 function deriveStrengthKey(mgPerPouch: number): MockProduct['strengthKey'] {
   if (mgPerPouch <= 6) return 'normal';
-  if (mgPerPouch <= 12) return 'strong';
-  if (mgPerPouch <= 20) return 'extraStrong';
+  if (mgPerPouch <= 10) return 'strong';
+  if (mgPerPouch <= 16) return 'extraStrong';
   return 'ultraStrong';
 }
 

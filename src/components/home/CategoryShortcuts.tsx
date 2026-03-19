@@ -16,9 +16,9 @@ export function CategoryShortcuts() {
   const currentPath = location.pathname + location.search;
 
   function isSelected(href: string) {
-    if (href === '/nicotine-pouches') {
-      return currentPath === '/' || currentPath === '/nicotine-pouches';
-    }
+    // Don't highlight any category on the homepage
+    if (currentPath === '/') return false;
+    if (href === '/nicotine-pouches') return currentPath === '/nicotine-pouches';
     return currentPath === href;
   }
 
@@ -26,7 +26,7 @@ export function CategoryShortcuts() {
     <section className="py-8 border-b border-border/20 bg-card/20">
       <div className="container">
         <div
-          className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide"
+          className="flex justify-center gap-4 overflow-x-auto pb-2 scrollbar-hide"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {categories.map((category) => {
@@ -43,8 +43,8 @@ export function CategoryShortcuts() {
                   className={cn(
                     'flex h-14 w-14 items-center justify-center rounded-2xl border transition-all duration-150',
                     selected
-                      ? 'bg-[hsl(var(--chart-4))] border-[hsl(var(--chart-4))] shadow-[0_0_16px_hsl(var(--chart-4)/0.3)]'
-                      : 'bg-muted/40 border-border/30 group-hover:bg-[hsl(var(--chart-4)/0.5)] group-hover:border-[hsl(var(--chart-4)/0.5)]'
+                      ? 'bg-primary border-primary shadow-[0_0_16px_hsl(var(--primary)/0.3)]'
+                      : 'bg-muted/40 border-border/30 group-hover:bg-primary/50 group-hover:border-primary/50'
                   )}
                 >
                   <Icon
@@ -59,7 +59,7 @@ export function CategoryShortcuts() {
                 <span
                   className={cn(
                     'text-xs font-medium text-center whitespace-nowrap transition-colors duration-150',
-                    selected ? 'text-[hsl(var(--chart-4))]' : 'text-foreground'
+                    selected ? 'text-primary' : 'text-foreground'
                   )}
                 >
                   {category.label}

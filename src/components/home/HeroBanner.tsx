@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Star, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -57,12 +57,16 @@ export function HeroBanner() {
     0
   );
 
-  const SHOWCASE_SIZE = 4;
-  // Each slide shows a different group of products from the catalog
-  const showcaseStart = activeSlide * SHOWCASE_SIZE;
-  const showcaseProducts = products.length >= SHOWCASE_SIZE
-    ? products.slice(showcaseStart, showcaseStart + SHOWCASE_SIZE)
-    : products.slice(0, SHOWCASE_SIZE);
+  // Showcase: prioritize STNG slide 1, Loop slide 2, VELO slide 3, then fill with others
+  const SHOWCASE_BRANDS = ['STNG', 'Loop', 'VELO'];
+  const showcaseProducts = useMemo(() => {
+    const brandName = SHOWCASE_BRANDS[activeSlide % SHOWCASE_BRANDS.length];
+    const brandProducts = products.filter((p) => p.brand === brandName);
+    if (brandProducts.length >= 4) return brandProducts.slice(0, 4);
+    // Fill remaining slots from other products
+    const others = products.filter((p) => p.brand !== brandName);
+    return [...brandProducts, ...others].slice(0, 4);
+  }, [products, activeSlide]);
 
   const goToSlide = useCallback((index: number) => {
     setActiveSlide(index);

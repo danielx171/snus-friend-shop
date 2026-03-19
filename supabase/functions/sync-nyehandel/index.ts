@@ -73,14 +73,15 @@ function toFlavorKey(spec: string | null): string {
 }
 
 /** Map nicotine mg/pouch to our strength_key enum.
- *  Industry-standard thresholds for nicotine pouches:
- *  Normal ≤6 mg, Strong ≤12 mg, Extra Strong ≤20 mg, Ultra Strong >20 mg.
+ *  Thresholds tuned for good variety across product catalog:
+ *  Normal ≤6 mg, Strong ≤10 mg, Extra Strong ≤16 mg, Ultra Strong >16 mg.
+ *  Keep in sync with src/hooks/useCatalog.ts deriveStrengthKey.
  */
 function toStrengthKey(mgPerPouch: number | null): string {
   if (mgPerPouch == null) return 'normal';
   if (mgPerPouch <= 6) return 'normal';
-  if (mgPerPouch <= 12) return 'strong';
-  if (mgPerPouch <= 20) return 'extraStrong';
+  if (mgPerPouch <= 10) return 'strong';
+  if (mgPerPouch <= 16) return 'extraStrong';
   return 'ultraStrong';
 }
 

@@ -1,4 +1,5 @@
 import { ShoppingCart, Search, Menu, User } from 'lucide-react';
+import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
@@ -28,9 +29,7 @@ export function Header() {
       <div className="container flex h-[72px] items-center justify-between gap-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 shrink-0">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg glow-primary">
-            SF
-          </div>
+          <Logo size={38} className="text-primary" />
           <span className="hidden sm:block text-xl font-semibold text-foreground tracking-tight">
             SnusFriend
           </span>
