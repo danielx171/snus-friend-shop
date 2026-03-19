@@ -32,6 +32,7 @@ export function Footer() {
               title: 'Information',
               links: [
                 { to: '/about', label: 'About Us' },
+                { to: '/membership', label: 'Members Club' },
                 { to: '/terms', label: 'Terms & Conditions' },
                 { to: '/privacy', label: 'Privacy Policy' },
                 { to: '/cookies', label: 'Cookie Policy' },

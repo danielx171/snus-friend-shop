@@ -3,6 +3,7 @@ import { HeroBanner } from '@/components/home/HeroBanner';
 import { CategoryShortcuts } from '@/components/home/CategoryShortcuts';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { TrustBar } from '@/components/home/TrustBar';
+import { MembersClub } from '@/components/home/MembersClub';
 import { WhySnusFriends } from '@/components/home/WhySnusFriends';
 import { EditorialHighlights } from '@/components/home/EditorialHighlights';
 import { AgeGate } from '@/components/compliance/AgeGate';
@@ -52,6 +53,8 @@ export default function HomePage() {
             viewAllHref="/nicotine-pouches?badge=newPrice"
           />
         </div>
+
+        <MembersClub />
 
         <WhySnusFriends />
         

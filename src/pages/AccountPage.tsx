@@ -20,7 +20,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { EmptyState } from '@/components/ui/states/EmptyState';
-import { Package, MapPin, Settings, LogOut } from 'lucide-react';
+import { Package, MapPin, Settings, LogOut, Crown } from 'lucide-react';
+import { MembershipAccountTab } from '@/components/account/MembershipAccountTab';
 import { SEO } from '@/components/seo/SEO';
 import { formatPrice } from '@/lib/currency';
 import { cn } from '@/lib/utils';
@@ -140,11 +141,16 @@ export default function AccountPage() {
           </div>
 
           <Tabs defaultValue="orders" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid h-11 rounded-xl bg-muted/20 border border-border/20 p-1">
+            <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid h-11 rounded-xl bg-muted/20 border border-border/20 p-1">
               <TabsTrigger value="orders" className="gap-2 rounded-lg text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
                 <Package className="h-4 w-4" />
                 <span className="hidden sm:inline">Order History</span>
                 <span className="sm:hidden">Orders</span>
+              </TabsTrigger>
+              <TabsTrigger value="membership" className="gap-2 rounded-lg text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
+                <Crown className="h-4 w-4" />
+                <span className="hidden sm:inline">Membership</span>
+                <span className="sm:hidden">Club</span>
               </TabsTrigger>
               <TabsTrigger value="addresses" className="gap-2 rounded-lg text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
                 <MapPin className="h-4 w-4" />
@@ -243,6 +249,11 @@ export default function AccountPage() {
                   )}
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            {/* ── Membership ── */}
+            <TabsContent value="membership">
+              <MembershipAccountTab />
             </TabsContent>
 
             {/* ── Saved Addresses ── */}

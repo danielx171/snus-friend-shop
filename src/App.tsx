@@ -22,6 +22,7 @@ import InfoPage from "./pages/InfoPage";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
+import MembershipPage from "./pages/MembershipPage";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import OpsLogin from "./pages/ops/OpsLogin";
 import OpsDashboard from "./pages/ops/OpsDashboard";
@@ -95,6 +96,7 @@ const App = () => (
               <Route path="/order-confirmation" element={<OrderConfirmation />} />
               <Route path="/brands" element={<BrandsIndex />} />
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
+              <Route path="/membership" element={<MembershipPage />} />
               {/* Info / legal pages — placeholder content, needs real copy before go-live */}
               <Route path="/contact" element={<InfoPage title="Contact Us" />} />
               <Route path="/faq" element={<InfoPage title="Frequently Asked Questions" />} />
