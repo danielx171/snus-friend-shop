@@ -2,8 +2,58 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Content-Type': 'application/json',
 };
+
+/* ------------------------------------------------------------------ */
+/*  Types                                                              */
+/* ------------------------------------------------------------------ */
+
+interface NyehandelVariant {
+  id?: number;
+  sku?: string;
+  gtin?: string;
+  stock?: number;
+  weight?: number;
+  prices?: Array<{ price?: number; currency_id?: number; tier?: number }>;
+  options?: Array<{ type?: string; value?: string }>;
+}
+
+interface NyehandelProduct {
+  id?: number;
+  name?: string;
+  status?: string;
+  vat_rate?: number;
+  variants?: NyehandelVariant[];
+  categories?: unknown[];
+  brand_name?: string;
+  images?: Array<{ url?: string }>;
+}
+
+interface NyehandelPaginatedResponse {
+  data?: NyehandelProduct[];
+  meta?: { current_page?: number; last_page?: number; total?: number };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                            */
+/* ------------------------------------------------------------------ */
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function jsonResponse(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), { status, headers: corsHeaders });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Main handler                                                       */
+/* ------------------------------------------------------------------ */
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -14,10 +64,10 @@ Deno.serve(async (req) => {
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
 
-  // Auth check – caller must be admin
+  /* ---------- auth: caller must be admin ---------- */
   const authHeader = req.headers.get('Authorization');
   if (!authHeader?.startsWith('Bearer ')) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
+    return jsonResponse({ error: 'Unauthorized' }, 401);
   }
 
   const userClient = createClient(supabaseUrl, supabaseAnonKey, {
@@ -26,7 +76,7 @@ Deno.serve(async (req) => {
   const token = authHeader.replace('Bearer ', '');
   const { data: userData, error: authError } = await userClient.auth.getUser(token);
   if (authError || !userData?.user) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders });
+    return jsonResponse({ error: 'Unauthorized' }, 401);
   }
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
@@ -38,211 +88,265 @@ Deno.serve(async (req) => {
     .maybeSingle();
 
   if (!roleData) {
-    return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    return jsonResponse({ error: 'Forbidden' }, 403);
   }
 
-  // Parse sync type from query
-  const url = new URL(req.url);
-  const syncType = url.searchParams.get('type') || 'catalog'; // catalog | inventory
+  /* ---------- env ---------- */
+  const nyehandelToken = Deno.env.get('NYEHANDEL_API_TOKEN');
+  const nyehandelBaseUrl =
+    Deno.env.get('NYEHANDEL_API_BASE_URL') ||
+    Deno.env.get('NYEHANDEL_API_URL') ||
+    'https://api.nyehandel.se/api/v2';
+  const nyehandelXIdentifier = Deno.env.get('NYEHANDEL_X_IDENTIFIER') ?? '';
 
-  // Create sync run record
+  if (!nyehandelToken) {
+    return jsonResponse({ error: 'nyehandel_not_configured', message: 'NYEHANDEL_API_TOKEN not set' }, 503);
+  }
+
+  /* ---------- create sync run record ---------- */
   const startTime = Date.now();
   const { data: syncRun, error: insertError } = await adminClient
     .from('sync_runs')
-    .insert({ type: syncType, status: 'running', started_at: new Date().toISOString() })
+    .insert({ type: 'catalog', status: 'running', started_at: new Date().toISOString() })
     .select('id')
     .single();
 
   if (insertError || !syncRun) {
-    return new Response(JSON.stringify({ error: 'Failed to create sync run', details: insertError?.message }), {
-      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return jsonResponse({ error: 'Failed to create sync run', details: insertError?.message }, 500);
   }
 
   const syncRunId = syncRun.id;
+  let totalProducts = 0;
+  let totalVariants = 0;
+  let errors = 0;
+  const errorDetails: string[] = [];
 
   try {
-    const nyehandelToken = Deno.env.get('NYEHANDEL_API_TOKEN');
-    const nyehandelBaseUrl = Deno.env.get('NYEHANDEL_API_URL') || 'https://api.nyehandel.se/api/v2';
+    /* ---------- paginated fetch from Nyehandel ---------- */
+    let currentPage = 1;
+    let lastPage = 1;
+    const allProducts: NyehandelProduct[] = [];
 
-    if (!nyehandelToken) {
-      // No external API configured – mark run as failed
-      await adminClient.from('sync_runs').update({
-        status: 'failed',
-        completed_at: new Date().toISOString(),
-        duration_ms: Date.now() - startTime,
-        error_details: { message: 'NYEHANDEL_API_TOKEN not configured' },
-      }).eq('id', syncRunId);
+    while (currentPage <= lastPage) {
+      console.log(`sync-nyehandel: fetching page ${currentPage}/${lastPage}...`);
 
-      return new Response(JSON.stringify({ error: 'nyehandel_not_configured', syncRunId }), {
-        status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      const resp = await fetch(
+        `${nyehandelBaseUrl}/products?page=${currentPage}&per_page=100`,
+        {
+          headers: {
+            Authorization: `Bearer ${nyehandelToken}`,
+            Accept: 'application/json',
+            'X-identifier': nyehandelXIdentifier,
+          },
+        },
+      );
+
+      if (!resp.ok) {
+        const errText = await resp.text().catch(() => '');
+        throw new Error(`Nyehandel API returned ${resp.status}: ${errText.slice(0, 300)}`);
+      }
+
+      const body = (await resp.json()) as NyehandelPaginatedResponse;
+      const products = body.data ?? (Array.isArray(body) ? (body as NyehandelProduct[]) : []);
+      allProducts.push(...products);
+
+      // Update pagination info from meta
+      if (body.meta) {
+        lastPage = body.meta.last_page ?? 1;
+      }
+
+      currentPage++;
     }
 
-    const resource = syncType === 'catalog' ? 'products' : 'inventory';
-    const resp = await fetch(`${nyehandelBaseUrl}/${resource}`, {
-      headers: {
-        'Authorization': `Bearer ${nyehandelToken}`,
-        'Accept': 'application/json',
-        'X-identifier': Deno.env.get('NYEHANDEL_X_IDENTIFIER') ?? '',
-      },
-    });
+    console.log(`sync-nyehandel: fetched ${allProducts.length} products across ${lastPage} page(s)`);
 
-    if (!resp.ok) {
-      await adminClient.from('sync_runs').update({
-        status: 'failed',
-        completed_at: new Date().toISOString(),
-        duration_ms: Date.now() - startTime,
-        error_details: { message: `Nyehandel API returned ${resp.status}` },
-      }).eq('id', syncRunId);
+    /* ---------- process each product ---------- */
+    for (const product of allProducts) {
+      try {
+        if (!product.id || !product.name) {
+          errors++;
+          errorDetails.push(`Skipping product with missing id or name`);
+          continue;
+        }
 
-      return new Response(JSON.stringify({ error: 'upstream_error', status: resp.status, syncRunId }), {
-        status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+        const nyehandelId = String(product.id);
+        const productSlug = slugify(product.name) || `product-${nyehandelId}`;
 
-    const body = await resp.json();
-    const items = Array.isArray(body) ? body : (body.data ?? []);
-    let processed = 0;
-    let errors = 0;
-    const errorDetails: string[] = [];
+        // Upsert brand
+        const brandName = product.brand_name || 'Unknown';
+        const brandSlug = slugify(brandName) || 'unknown';
+        const { data: brand } = await adminClient
+          .from('brands')
+          .upsert({ slug: brandSlug, name: brandName }, { onConflict: 'slug' })
+          .select('id')
+          .single();
 
-    if (syncType === 'catalog') {
-      for (const item of items) {
-        try {
-          // Upsert brand
-          const brandSlug = (item.brand || 'unknown').toLowerCase().replace(/[^a-z0-9]+/g, '-');
-          const { data: brand } = await adminClient
-            .from('brands')
-            .upsert({ slug: brandSlug, name: item.brand || 'Unknown', manufacturer: item.manufacturer }, { onConflict: 'slug' })
+        if (!brand) {
+          errors++;
+          errorDetails.push(`Brand upsert failed for: ${brandName}`);
+          continue;
+        }
+
+        // Upsert product
+        const imageUrl = product.images?.[0]?.url ?? null;
+        const isActive = product.status === 'published';
+
+        const { data: upsertedProduct, error: prodErr } = await adminClient
+          .from('products')
+          .upsert(
+            {
+              nyehandel_id: nyehandelId,
+              brand_id: brand.id,
+              slug: productSlug,
+              name: product.name,
+              image_url: imageUrl,
+              is_active: isActive,
+              flavor_key: 'mint',
+              strength_key: 'normal',
+              format_key: 'slim',
+            },
+            { onConflict: 'nyehandel_id' },
+          )
+          .select('id')
+          .single();
+
+        if (prodErr || !upsertedProduct) {
+          // Slug conflict — try with nyehandel_id suffix
+          const { data: retryProduct, error: retryErr } = await adminClient
+            .from('products')
+            .upsert(
+              {
+                nyehandel_id: nyehandelId,
+                brand_id: brand.id,
+                slug: `${productSlug}-${nyehandelId}`,
+                name: product.name,
+                image_url: imageUrl,
+                is_active: isActive,
+                flavor_key: 'mint',
+                strength_key: 'normal',
+                format_key: 'slim',
+              },
+              { onConflict: 'nyehandel_id' },
+            )
             .select('id')
             .single();
 
-          if (!brand) { errors++; continue; }
-
-          const productSlug = (item.name || `product-${item.id}`).toLowerCase().replace(/[^a-z0-9]+/g, '-');
-          const { error: prodErr } = await adminClient.from('products').upsert({
-            nyehandel_id: String(item.id || item.product_id || item.sku),
-            brand_id: brand.id,
-            slug: productSlug,
-            name: item.name || 'Unnamed',
-            flavor_key: item.flavor || item.flavor_key || 'mint',
-            strength_key: item.strength || item.strength_key || 'normal',
-            format_key: item.format || item.format_key || 'slim',
-            nicotine_mg: item.nicotine_mg ?? item.nicotine ?? 0,
-            portions_per_can: item.portions_per_can ?? item.portions ?? 20,
-            image_url: item.image_url || item.image || null,
-            manufacturer: item.manufacturer,
-            badge_keys: item.badges || item.badge_keys || [],
-            is_active: item.is_active !== false,
-          }, { onConflict: 'nyehandel_id' });
-
-          if (prodErr) {
-            // Fallback: try upsert on slug
-            await adminClient.from('products').upsert({
-              nyehandel_id: String(item.id || item.product_id || item.sku),
-              brand_id: brand.id,
-              slug: productSlug + '-' + Date.now(),
-              name: item.name || 'Unnamed',
-              flavor_key: item.flavor || item.flavor_key || 'mint',
-              strength_key: item.strength || item.strength_key || 'normal',
-              format_key: item.format || item.format_key || 'slim',
-              nicotine_mg: item.nicotine_mg ?? item.nicotine ?? 0,
-              portions_per_can: item.portions_per_can ?? item.portions ?? 20,
-              image_url: item.image_url || item.image || null,
-              manufacturer: item.manufacturer,
-              badge_keys: item.badges || item.badge_keys || [],
-              is_active: item.is_active !== false,
-            }, { onConflict: 'slug' });
-          }
-
-          // Upsert variant prices if present
-          if (item.prices && typeof item.prices === 'object') {
-            for (const [packKey, price] of Object.entries(item.prices)) {
-              const packSize = parseInt(packKey.replace('pack', ''), 10);
-              if (!isNaN(packSize) && typeof price === 'number') {
-                // Get product id
-                const { data: prod } = await adminClient.from('products').select('id').eq('nyehandel_id', String(item.id || item.product_id || item.sku)).single();
-                if (prod) {
-                  await adminClient.from('product_variants').upsert({
-                    product_id: prod.id,
-                    pack_size: packSize,
-                    price,
-                    sku: item.sku ? `${item.sku}-${packSize}` : null,
-                  }, { onConflict: 'product_id,pack_size' });
-                }
-              }
-            }
-          }
-
-          processed++;
-        } catch (e) {
-          errors++;
-          errorDetails.push(String(e));
-        }
-      }
-    } else {
-      // Inventory sync
-      for (const item of items) {
-        try {
-          const sku = item.sku || item.variant_sku;
-          if (!sku) { errors++; continue; }
-          
-          const { data: variant } = await adminClient
-            .from('product_variants')
-            .select('id')
-            .eq('sku', sku)
-            .maybeSingle();
-
-          if (variant) {
-            await adminClient.from('inventory').upsert({
-              variant_id: variant.id,
-              quantity: item.quantity ?? item.available ?? 0,
-              warehouse: item.warehouse || item.location || 'default',
-            }, { onConflict: 'variant_id' });
-            processed++;
-          } else {
+          if (retryErr || !retryProduct) {
             errors++;
-            errorDetails.push(`No variant for SKU: ${sku}`);
+            errorDetails.push(`Product upsert failed: ${product.name} — ${retryErr?.message ?? prodErr?.message}`);
+            continue;
           }
-        } catch (e) {
-          errors++;
-          errorDetails.push(String(e));
+
+          // Process variants for the retry product
+          await processVariants(adminClient, retryProduct.id, product.variants ?? []);
+          totalProducts++;
+          totalVariants += (product.variants ?? []).length;
+          continue;
         }
+
+        // Process variants
+        await processVariants(adminClient, upsertedProduct.id, product.variants ?? []);
+        totalProducts++;
+        totalVariants += (product.variants ?? []).length;
+      } catch (e) {
+        errors++;
+        errorDetails.push(`Product ${product.name ?? product.id}: ${String(e)}`);
       }
     }
 
-    const finalStatus = errors === 0 ? 'success' : (processed > 0 ? 'partial' : 'failed');
+    /* ---------- finalize sync run ---------- */
+    const finalStatus = errors === 0 ? 'success' : totalProducts > 0 ? 'partial' : 'failed';
     const durationMs = Date.now() - startTime;
 
-    await adminClient.from('sync_runs').update({
-      status: finalStatus,
-      completed_at: new Date().toISOString(),
-      duration_ms: durationMs,
-      items_processed: processed,
-      errors,
-      error_details: errorDetails.length > 0 ? errorDetails.slice(0, 20) : null,
-    }).eq('id', syncRunId);
+    await adminClient
+      .from('sync_runs')
+      .update({
+        status: finalStatus,
+        completed_at: new Date().toISOString(),
+        duration_ms: durationMs,
+        items_processed: totalProducts,
+        errors,
+        error_details: errorDetails.length > 0 ? errorDetails.slice(0, 50) : null,
+      })
+      .eq('id', syncRunId);
 
-    return new Response(JSON.stringify({
+    console.log(
+      `sync-nyehandel: done — ${totalProducts} products, ${totalVariants} variants, ${errors} errors, ${durationMs}ms`,
+    );
+
+    return jsonResponse({
       syncRunId,
       status: finalStatus,
-      itemsProcessed: processed,
+      productsProcessed: totalProducts,
+      variantsProcessed: totalVariants,
       errors,
+      errorDetails: errorDetails.slice(0, 20),
       durationMs,
-    }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-
-  } catch (err) {
-    console.error('Sync error:', err);
-    await adminClient.from('sync_runs').update({
-      status: 'failed',
-      completed_at: new Date().toISOString(),
-      duration_ms: Date.now() - startTime,
-      error_details: { message: String(err) },
-    }).eq('id', syncRunId);
-
-    return new Response(JSON.stringify({ error: 'sync_failed', syncRunId }), {
-      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
+  } catch (err) {
+    console.error('sync-nyehandel fatal error:', err);
+    await adminClient
+      .from('sync_runs')
+      .update({
+        status: 'failed',
+        completed_at: new Date().toISOString(),
+        duration_ms: Date.now() - startTime,
+        error_details: { message: String(err) },
+      })
+      .eq('id', syncRunId);
+
+    return jsonResponse({ error: 'sync_failed', message: String(err), syncRunId }, 500);
   }
 });
+
+/* ------------------------------------------------------------------ */
+/*  Variant processing                                                 */
+/* ------------------------------------------------------------------ */
+
+async function processVariants(
+  adminClient: ReturnType<typeof createClient>,
+  productId: string,
+  variants: NyehandelVariant[],
+): Promise<void> {
+  for (let i = 0; i < variants.length; i++) {
+    const variant = variants[i];
+    if (!variant.sku) continue;
+
+    const price = variant.prices?.[0]?.price ?? 0;
+    // Nyehandel prices are in lowest currency unit (e.g. 4900 = 49.00)
+    const priceDecimal = price / 100;
+
+    const variantData: Record<string, unknown> = {
+      product_id: productId,
+      sku: variant.sku,
+      price: priceDecimal,
+      is_default: i === 0,
+      pack_size: 1, // Nyehandel variants don't use pack_size; default to 1
+      gtin: variant.gtin ?? null,
+      nyehandel_variant_id: variant.id != null ? String(variant.id) : null,
+    };
+
+    // Upsert by SKU (unique constraint)
+    await adminClient.from('product_variants').upsert(variantData, { onConflict: 'sku' });
+
+    // Upsert inventory
+    if (variant.stock != null) {
+      const { data: variantRow } = await adminClient
+        .from('product_variants')
+        .select('id')
+        .eq('sku', variant.sku)
+        .maybeSingle();
+
+      if (variantRow) {
+        await adminClient.from('inventory').upsert(
+          {
+            variant_id: variantRow.id,
+            quantity: variant.stock,
+            warehouse: 'nordicpouch',
+          },
+          { onConflict: 'variant_id' },
+        );
+      }
+    }
+  }
+}

@@ -1,21 +1,20 @@
--- Skapa tabellen för ordrar
+-- Create orders table (originally with Shopify columns, now superseded by 20260318000000)
+-- This migration is kept for history; the table already exists.
+
 CREATE TABLE IF NOT EXISTS public.orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    shopify_order_id TEXT UNIQUE,
     customer_email TEXT,
-    total_price NUMERIC(10, 2) NOT NULL,
+    total_price NUMERIC(10, 2) NOT NULL DEFAULT 0,
     currency TEXT NOT NULL DEFAULT 'GBP',
-    nyehandel_sync_status TEXT NOT NULL DEFAULT 'pending' CHECK (nyehandel_sync_status IN ('pending', 'synced', 'failed')),
-    nyehandel_order_id TEXT, -- ID:t vi får tillbaka från 3PL
-    last_sync_error TEXT,    -- För att kunna se vad som gick fel vid 3PL-push
+    nyehandel_sync_status TEXT NOT NULL DEFAULT 'pending',
+    nyehandel_order_id TEXT,
+    last_sync_error TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Aktivera RLS (Row Level Security)
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
--- Policy: Endast administratörer kan läsa/skriva allt
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='orders' AND policyname='Admins have full access to orders') THEN
     CREATE POLICY "Admins have full access to orders"
@@ -27,6 +26,3 @@ DO $$ BEGIN
     );
   END IF;
 END $$;
-
--- Index för snabbare sökning på Shopify ID
-CREATE INDEX IF NOT EXISTS idx_orders_shopify_id ON public.orders(shopify_order_id);
