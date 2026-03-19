@@ -374,19 +374,108 @@
     border: 1px solid hsl(35 15% 84% / 0.7);
   }
 
-  /* === Velo glass — deep navy, ghost borders at 15% === */
+  /* === Velo glass — solid deep navy, ghost borders 15% === */
   .velo .glass-panel {
-    background: hsl(220 80% 16% / 0.6);
+    background: hsl(220 80% 14% / 0.88);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid hsl(220 60% 40% / 0.15);
   }
 
   .velo .glass-panel-strong {
-    background: hsl(220 80% 16% / 0.8);
+    background: hsl(220 80% 14% / 0.94);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid hsl(220 60% 40% / 0.15);
+  }
+
+  /* === Velo overrides — solid surfaces, consistent navy === */
+
+  /* Header: solid navy, no glass */
+  .velo header.sticky {
+    background: hsl(220 100% 8%) !important;
+    border-color: hsl(220 60% 30% / 0.15) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Sub-nav: solid dark navy */
+  .velo header.sticky + nav,
+  .velo nav.border-b {
+    background: hsl(220 100% 10%) !important;
+    border-color: hsl(220 60% 30% / 0.15) !important;
+  }
+
+  /* Hero: override warm cream slide backgrounds */
+  .velo .grain[style] {
+    background-color: hsl(220 100% 10%) !important;
+  }
+
+  /* Hero text: override hardcoded warm/dark colors for navy bg */
+  .velo .grain .font-serif {
+    color: hsl(210 30% 95%) !important;
+  }
+  .velo .grain p {
+    color: hsl(215 25% 70%) !important;
+  }
+  /* Trust pill: navy-tinted instead of warm beige */
+  .velo .grain .rounded-full[class*="border-[hsl(30"] {
+    background: hsl(220 60% 20% / 0.5) !important;
+    border-color: hsl(220 60% 40% / 0.2) !important;
+    color: hsl(210 30% 90%) !important;
+  }
+  /* Secondary CTA on hero */
+  .velo .grain .border-\[hsl\(220_15\%_30\%\/0\.2\)\] {
+    border-color: hsl(220 60% 40% / 0.3) !important;
+    color: hsl(210 30% 90%) !important;
+  }
+  .velo .grain .text-\[hsl\(220_10\%_45\%\)\] {
+    color: hsl(215 25% 70%) !important;
+  }
+  .velo .grain .text-\[hsl\(220_20\%_15\%\)\] {
+    color: hsl(210 30% 95%) !important;
+  }
+  /* Trust signals below hero text */
+  .velo .grain .text-\[hsl\(220_10\%_45\%\)\] span {
+    color: hsl(215 25% 75%) !important;
+  }
+  /* Arrow buttons */
+  .velo .grain button[class*="bg-white"] {
+    background: hsl(220 60% 20% / 0.5) !important;
+    border-color: hsl(220 60% 40% / 0.2) !important;
+    color: hsl(210 30% 90%) !important;
+  }
+
+  /* Kill warm-tinted section backgrounds */
+  .velo section[class*="bg-[hsl(30"] {
+    background: transparent !important;
+  }
+  .velo .bg-card\/20 {
+    background: hsl(220 80% 10% / 0.3) !important;
+  }
+  .velo .bg-card\/30 {
+    background: hsl(220 80% 10% / 0.4) !important;
+  }
+
+  /* Product card: solid dark surface */
+  .velo .product-card {
+    background: hsl(220 60% 14%) !important;
+    border-color: hsl(220 60% 30% / 0.15) !important;
+    backdrop-filter: none !important;
+  }
+  .velo .product-card:hover {
+    border-color: hsl(218 100% 27% / 0.4) !important;
+    box-shadow: 0 8px 30px hsl(220 80% 15% / 0.4) !important;
+  }
+
+  /* Product image area: solid dark */
+  .velo .product-card-image {
+    background: hsl(220 80% 8%) !important;
+  }
+
+  /* Featured section: navy tint instead of warm */
+  .velo .featured-section {
+    background: hsl(220 80% 10% / 0.3) !important;
   }
 
   /* Scrollbar hide */
