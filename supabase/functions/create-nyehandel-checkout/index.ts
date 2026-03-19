@@ -12,13 +12,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-/** Validated shipping methods from nicbud.com Nyehandel admin */
+/** Validated shipping methods from NordicPouch Nyehandel admin */
 const VALID_SHIPPING_METHODS = [
-  "UPS Standard EU",
-  "UPS Express Saver EU",
-  "DHL Economy Select (Non Eu)",
-  "DHL Express",
+  "UPS Standard",
   "UPS Express Saver",
+  "DHL Economy (Non EU)",
+  "DHL Express (Non EU)",
+  "DHL Express EU",
+  "DHL Economy EU",
 ];
 
 const corsHeaders = {

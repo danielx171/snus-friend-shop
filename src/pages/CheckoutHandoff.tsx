@@ -41,14 +41,15 @@ interface VariantRow {
   product_id: string;
 }
 
-/* ── Shipping methods from nicbud.com Nyehandel admin ── */
+/* ── Shipping methods from NordicPouch Nyehandel admin ── */
 
 const SHIPPING_OPTIONS = [
-  { name: 'UPS Standard EU', price: 8.2, label: 'UPS Standard EU — \u20AC8.20' },
-  { name: 'UPS Express Saver EU', price: 17.9, label: 'UPS Express Saver EU — \u20AC17.90' },
-  { name: 'DHL Economy Select (Non Eu)', price: 9.9, label: 'DHL Economy Select (Non Eu) — \u20AC9.90' },
-  { name: 'DHL Express', price: 0, label: 'DHL Express — Free' },
-  { name: 'UPS Express Saver', price: 0, label: 'UPS Express Saver — Free' },
+  { name: 'UPS Standard', price: 8.2, label: 'UPS Standard — €8.20' },
+  { name: 'UPS Express Saver', price: 17.9, label: 'UPS Express Saver — €17.90' },
+  { name: 'DHL Economy (Non EU)', price: 9.9, label: 'DHL Economy (Non EU) — €9.90' },
+  { name: 'DHL Express (Non EU)', price: 14.9, label: 'DHL Express (Non EU) — €14.90' },
+  { name: 'DHL Express EU', price: 12.9, label: 'DHL Express EU — €12.90' },
+  { name: 'DHL Economy EU', price: 7.9, label: 'DHL Economy EU — €7.90' },
 ] as const;
 
 const COUNTRY_OPTIONS = [
