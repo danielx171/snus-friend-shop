@@ -18,6 +18,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import UpdatePasswordPage from "./pages/UpdatePasswordPage";
 import SearchResults from "./pages/SearchResults";
 import NotFound from "./pages/NotFound";
+import InfoPage from "./pages/InfoPage";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
@@ -94,6 +95,16 @@ const App = () => (
               <Route path="/order-confirmation" element={<OrderConfirmation />} />
               <Route path="/brands" element={<BrandsIndex />} />
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
+              {/* Info / legal pages — placeholder content, needs real copy before go-live */}
+              <Route path="/contact" element={<InfoPage title="Contact Us" />} />
+              <Route path="/faq" element={<InfoPage title="Frequently Asked Questions" />} />
+              <Route path="/shipping" element={<InfoPage title="Shipping Information" />} />
+              <Route path="/returns" element={<InfoPage title="Returns & Refunds" />} />
+              <Route path="/about" element={<InfoPage title="About SnusFriend" />} />
+              <Route path="/terms" element={<InfoPage title="Terms & Conditions" legalWarning />} />
+              <Route path="/privacy" element={<InfoPage title="Privacy Policy" legalWarning />} />
+              <Route path="/cookies" element={<InfoPage title="Cookie Policy" legalWarning />} />
+
               <Route path="/ops/login" element={<OpsLogin />} />
               <Route path="/ops" element={<OpsAuthGuard><OpsDashboard /></OpsAuthGuard>} />
               <Route path="/ops/webhooks" element={<OpsAuthGuard><WebhookInbox /></OpsAuthGuard>} />
