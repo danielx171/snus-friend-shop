@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -214,6 +216,78 @@
 
     --glow-primary: 0 0 20px hsl(28 80% 44% / 0.15), 0 0 40px hsl(28 80% 44% / 0.07);
   }
+
+  /* ═══════════════════════════════════════════════════════
+     THEME D — Velo
+     Deep navy, electric blue, clinical sharp edges.
+     Space Grotesk headlines, Plus Jakarta Sans body.
+     ═══════════════════════════════════════════════════════ */
+  .velo {
+    --background: 220 100% 12%;
+    --foreground: 210 30% 95%;
+
+    --card: 220 80% 16%;
+    --card-foreground: 210 30% 95%;
+
+    --popover: 220 80% 18%;
+    --popover-foreground: 210 30% 95%;
+
+    --primary: 218 100% 27%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 60% 20%;
+    --secondary-foreground: 210 30% 90%;
+
+    --muted: 220 50% 22%;
+    --muted-foreground: 215 25% 58%;
+
+    --accent: 57 100% 48%;
+    --accent-foreground: 220 100% 12%;
+
+    --destructive: 0 80% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 74 78% 66%;
+    --success-foreground: 220 100% 12%;
+    --info: 218 100% 27%;
+
+    --border: 220 60% 30% / 0.15;
+    --input: 220 60% 30%;
+    --ring: 57 100% 48%;
+
+    --radius: 0.25rem;
+
+    --sidebar-background: 220 100% 10%;
+    --sidebar-foreground: 210 30% 95%;
+    --sidebar-primary: 218 100% 27%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 60% 20%;
+    --sidebar-accent-foreground: 210 30% 90%;
+    --sidebar-border: 220 60% 30%;
+    --sidebar-ring: 57 100% 48%;
+
+    --chart-1: 218 100% 27%;
+    --chart-2: 74 78% 66%;
+    --chart-3: 57 100% 48%;
+    --chart-4: 57 100% 48%;
+    --chart-5: 200 80% 55%;
+
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-serif: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Blue-tinted ambient shadows */
+    --shadow-2xs: 0 1px 2px 0px hsl(220 80% 20% / 0.25);
+    --shadow-xs: 0 1px 3px 0px hsl(220 80% 20% / 0.30);
+    --shadow-sm: 0 2px 6px 0px hsl(220 80% 20% / 0.30), 0 1px 2px -1px hsl(220 80% 20% / 0.25);
+    --shadow: 0 4px 12px 0px hsl(220 80% 20% / 0.30), 0 2px 4px -1px hsl(220 80% 20% / 0.25);
+    --shadow-md: 0 6px 16px 0px hsl(220 80% 20% / 0.30), 0 3px 6px -1px hsl(220 80% 20% / 0.25);
+    --shadow-lg: 0 10px 24px 0px hsl(220 80% 20% / 0.40), 0 4px 8px -1px hsl(220 80% 20% / 0.25);
+    --shadow-xl: 0 16px 40px 0px hsl(220 80% 20% / 0.40), 0 8px 16px -1px hsl(220 80% 20% / 0.25);
+    --shadow-2xl: 0 24px 50px 0px hsl(220 80% 20% / 0.50);
+
+    --glow-primary: 0 0 20px hsl(218 100% 27% / 0.30), 0 0 40px hsl(218 100% 27% / 0.15);
+  }
 }
 
 @layer base {
@@ -231,6 +305,19 @@
   .editorial h3 {
     font-family: var(--font-serif);
     letter-spacing: -0.02em;
+  }
+
+  /* Velo theme — Space Grotesk 800 headings, Plus Jakarta Sans body */
+  .velo {
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .velo h1,
+  .velo h2,
+  .velo h3 {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.04em;
   }
 }
 
@@ -285,6 +372,21 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid hsl(35 15% 84% / 0.7);
+  }
+
+  /* === Velo glass — deep navy, ghost borders at 15% === */
+  .velo .glass-panel {
+    background: hsl(220 80% 16% / 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(220 60% 40% / 0.15);
+  }
+
+  .velo .glass-panel-strong {
+    background: hsl(220 80% 16% / 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(220 60% 40% / 0.15);
   }
 
   /* Scrollbar hide */

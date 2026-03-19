@@ -1,4 +1,4 @@
-import { Moon, Sun, Palette } from 'lucide-react';
+import { Moon, Sun, Palette, Zap } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +13,7 @@ const themes = [
   { value: 'dark', label: 'Dark Premium', icon: Moon },
   { value: 'light', label: 'Light Glacier', icon: Sun },
   { value: 'editorial', label: 'Editorial Luxury', icon: Palette },
+  { value: 'velo', label: 'Velo', icon: Zap },
 ] as const;
 
 export function ThemeToggle() {
