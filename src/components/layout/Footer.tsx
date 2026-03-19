@@ -14,7 +14,7 @@ export function Footer() {
               <span className="text-xl font-semibold text-foreground">SnusFriend</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Your trusted source for premium nicotine pouches. Fast UK delivery and excellent customer service.
+              Your trusted source for premium nicotine pouches. Fast EU delivery and excellent customer service.
             </p>
           </div>
 
@@ -37,15 +37,14 @@ export function Footer() {
                 { to: '/cookies', label: 'Cookie Policy' },
               ],
             },
-            {
-              title: 'Follow Us',
-              links: [
-                { to: '#', label: 'Instagram' },
-                { to: '#', label: 'Facebook' },
-                { to: '#', label: 'TikTok' },
-                { to: '#', label: 'Twitter' },
-              ],
-            },
+            // Social links — add real URLs when accounts are created
+            // {
+            //   title: 'Follow Us',
+            //   links: [
+            //     { to: 'https://instagram.com/snusfriend', label: 'Instagram' },
+            //     { to: 'https://facebook.com/snusfriend', label: 'Facebook' },
+            //   ],
+            // },
           ].map((section) => (
             <div key={section.title}>
               <h3 className="font-semibold text-foreground mb-5 text-sm uppercase tracking-wider">{section.title}</h3>
@@ -66,7 +65,7 @@ export function Footer() {
 
         {/* Payment badges row */}
         <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
-          {['Visa', 'Mastercard', 'Klarna', 'PayPal', 'Apple Pay'].map((badge) => (
+          {['Visa', 'Mastercard'].map((badge) => (
             <div key={badge} className="px-3 py-1.5 rounded-lg bg-muted/20 border border-border/20 text-xs text-muted-foreground font-medium">
               {badge}
             </div>
@@ -74,14 +73,9 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-4">
-            <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} SnusFriend. All rights reserved.
-            </p>
-            <Link to="/ops" className="text-xs text-muted-foreground/40 hover:text-primary transition-colors">
-              Ops
-            </Link>
-          </div>
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} SnusFriend. All rights reserved.
+          </p>
           <p className="text-xs text-muted-foreground">
             ⚠️ This product contains nicotine. Nicotine is an addictive chemical.
           </p>

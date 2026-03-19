@@ -1,14 +1,10 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { Product, PackSize } from '@/data/products';
 
-export type SubscriptionFrequency = 'once' | '14days' | '1month' | '2months';
-
 export interface CartItem {
   product: Product;
   packSize: PackSize;
   quantity: number;
-  isSubscription: boolean;
-  subscriptionFrequency?: SubscriptionFrequency;
 }
 
 interface CartContextType {
@@ -16,10 +12,9 @@ interface CartContextType {
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
-  addToCart: (product: Product, packSize: PackSize, quantity?: number, isSubscription?: boolean, subscriptionFrequency?: SubscriptionFrequency) => void;
+  addToCart: (product: Product, packSize: PackSize, quantity?: number) => void;
   removeFromCart: (productId: string, packSize: PackSize) => void;
   updateQuantity: (productId: string, packSize: PackSize, quantity: number) => void;
-  updateSubscription: (productId: string, packSize: PackSize, isSubscription: boolean, frequency?: SubscriptionFrequency) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
@@ -70,8 +65,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     product: Product,
     packSize: PackSize,
     quantity = 1,
-    isSubscription = false,
-    subscriptionFrequency: SubscriptionFrequency = '1month'
   ) => {
     setItems((prev) => {
       const existingIndex = prev.findIndex(
@@ -83,19 +76,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         updated[existingIndex] = {
           ...updated[existingIndex],
           quantity: updated[existingIndex].quantity + quantity,
-          isSubscription,
-          subscriptionFrequency: isSubscription ? subscriptionFrequency : undefined,
         };
         return updated;
       }
 
-      return [...prev, {
-        product,
-        packSize,
-        quantity,
-        isSubscription,
-        subscriptionFrequency: isSubscription ? subscriptionFrequency : undefined,
-      }];
+      return [...prev, { product, packSize, quantity }];
     });
     setIsOpen(true);
   }, []);
@@ -124,23 +109,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [removeFromCart]
   );
 
-  const updateSubscription = useCallback(
-    (productId: string, packSize: PackSize, isSubscription: boolean, frequency?: SubscriptionFrequency) => {
-      setItems((prev) =>
-        prev.map((item) =>
-          item.product.id === productId && item.packSize === packSize
-            ? {
-                ...item,
-                isSubscription,
-                subscriptionFrequency: isSubscription ? (frequency || '1month') : undefined,
-              }
-            : item
-        )
-      );
-    },
-    []
-  );
-
   const clearCart = useCallback(() => setItems([]), []);
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -163,7 +131,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         addToCart,
         removeFromCart,
         updateQuantity,
-        updateSubscription,
         clearCart,
         totalItems,
         totalPrice,

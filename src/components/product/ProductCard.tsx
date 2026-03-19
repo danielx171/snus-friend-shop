@@ -3,7 +3,7 @@ import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey } from '@/d
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Star, ShoppingCart, Award } from 'lucide-react';
+import { Star, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -137,24 +137,16 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-xs text-muted-foreground shrink-0">{formatPriceWithUnit(pricePerCan)}</span>
           </div>
 
-          {/* Loyalty pill */}
-          <div className="mb-3 flex items-center gap-1.5">
-            <Award className="h-3 w-3 text-primary shrink-0" />
-            <span className="text-[10px] text-muted-foreground">Earn {Math.floor(currentPrice * 10)} points</span>
-          </div>
-
-          {/* CTA — hidden by default, slides up on card hover */}
-          <div className="translate-y-2 opacity-0 transition-[transform,opacity] duration-200 ease-out group-hover:translate-y-0 group-hover:opacity-100">
-            <Button
-              onClick={handleAddToCart}
-              className="w-full gap-2 rounded-xl text-sm hover:shadow-md transition-shadow duration-150 focus-visible:ring-2 focus-visible:ring-ring"
-              size="sm"
-            >
-              <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
-              <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
-              <span className="sm:hidden">{t('product.buy')}</span>
-            </Button>
-          </div>
+          {/* CTA */}
+          <Button
+            onClick={handleAddToCart}
+            className="w-full gap-2 rounded-xl text-sm hover:shadow-md transition-shadow duration-150 focus-visible:ring-2 focus-visible:ring-ring"
+            size="sm"
+          >
+            <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
+            <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
+            <span className="sm:hidden">{t('product.buy')}</span>
+          </Button>
         </CardContent>
       </Link>
     </Card>

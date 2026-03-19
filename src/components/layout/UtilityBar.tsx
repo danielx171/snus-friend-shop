@@ -27,11 +27,11 @@ export function UtilityBar() {
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <CreditCard className="h-3 w-3 text-primary" />
-            <span>{t('trust.klarna')}</span>
+            <span>Secure checkout</span>
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Star className="h-3 w-3 fill-primary text-primary" />
-            <span>{t('trust.trustpilot')}</span>
+            <span>91 brands</span>
           </div>
         </div>
 

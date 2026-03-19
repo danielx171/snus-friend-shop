@@ -1,17 +1,22 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Truck, Star, RefreshCw, Award } from 'lucide-react';
+import { ArrowRight, Truck, Star, Shield } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
+import { useCatalogProducts } from '@/hooks/useCatalog';
 
 export function HeroBanner() {
   const { t, market, formatPrice } = useTranslation();
+  const { data: products = [] } = useCatalogProducts();
 
   const freeShippingFormatted = formatMarketPrice(
     market.freeShippingThreshold,
     market,
     0
   );
+
+  // Show first 4 products from real catalog
+  const showcaseProducts = products.slice(0, 4);
 
   return (
     <section className="relative overflow-hidden bg-[#FAF8F5] grain">
@@ -47,12 +52,12 @@ export function HeroBanner() {
                 <span>{t('trust.freeShipping', { amount: freeShippingFormatted })}</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <RefreshCw className="h-4 w-4 text-[hsl(var(--chart-4))]" />
-                <span>{t('product.subscribe')} & Save 10%</span>
+                <Shield className="h-4 w-4 text-[hsl(var(--chart-4))]" />
+                <span>Secure checkout</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Award className="h-4 w-4 text-[hsl(var(--chart-4))]" />
-                <span>Earn loyalty points</span>
+                <Star className="h-4 w-4 text-[hsl(var(--chart-4))]" />
+                <span>91 brands available</span>
               </div>
             </div>
 
@@ -82,25 +87,32 @@ export function HeroBanner() {
 
           {/* Product showcase */}
           <div className="relative hidden lg:block">
-            <div className="relative grid grid-cols-2 gap-5">
-              {[
-                { emoji: '🧊', name: 'ZYN Cool Mint', price: 3.49, gradient: 'from-primary/12 to-primary/4' },
-                { emoji: '🍃', name: 'VELO Ice Cool', price: 2.99, gradient: 'from-chart-2/12 to-chart-2/4' },
-                { emoji: '🍋', name: 'ON! Citrus', price: 2.49, gradient: 'from-chart-4/15 to-chart-4/5' },
-                { emoji: '🫐', name: 'LOOP Berry', price: 3.19, gradient: 'from-chart-3/10 to-chart-3/4' },
-              ].map((item, i) => (
-                <div
-                  key={item.name}
-                  className={`rounded-3xl glass-panel p-5 hover:border-primary/20 transition-all duration-300 ${i % 2 !== 0 ? 'mt-10' : ''}`}
-                >
-                  <div className={`h-28 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center mb-4`}>
-                    <span className="text-4xl">{item.emoji}</span>
-                  </div>
-                  <p className="font-semibold text-foreground">{item.name}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{t('products.from')} {formatPrice(item.price)}/{t('cart.can')}</p>
-                </div>
-              ))}
-            </div>
+            {showcaseProducts.length > 0 ? (
+              <div className="relative grid grid-cols-2 gap-5">
+                {showcaseProducts.map((product, i) => (
+                  <Link
+                    key={product.id}
+                    to={`/product/${product.id}`}
+                    className={`rounded-3xl glass-panel p-5 hover:border-primary/20 transition-all duration-300 ${i % 2 !== 0 ? 'mt-10' : ''}`}
+                  >
+                    <div className="h-28 rounded-2xl bg-gradient-to-br from-primary/12 to-primary/4 flex items-center justify-center mb-4 overflow-hidden">
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} className="h-full w-full object-cover rounded-2xl" loading="lazy" />
+                      ) : (
+                        <span className="text-white/80 font-bold text-center px-3 drop-shadow">{product.name}</span>
+                      )}
+                    </div>
+                    <p className="font-semibold text-foreground truncate">{product.name}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t('products.from')} {formatPrice(product.prices.pack1)}/{t('cart.can')}</p>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-3xl glass-panel p-12 text-center">
+                <p className="text-lg font-semibold text-foreground mb-2">700+ products</p>
+                <p className="text-muted-foreground">Browse our full collection of nicotine pouches</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,20 +1,15 @@
-import { Shield, Truck, Star, RefreshCw, Award, Heart } from 'lucide-react';
+import { Shield, Truck, Package, Heart } from 'lucide-react';
 
 const reasons = [
   {
-    icon: Star,
-    title: 'Trusted by thousands',
-    description: 'Over 10,000 happy customers across the UK and EU. Rated 4.8★ on Trustpilot.',
+    icon: Package,
+    title: '700+ products',
+    description: 'Browse 91 brands and over 700 nicotine pouch products — one of the largest selections in Europe.',
   },
   {
     icon: Truck,
-    title: 'Lightning-fast delivery',
-    description: 'Same-day dispatch on orders placed before 2pm. Free delivery over £25.',
-  },
-  {
-    icon: Award,
-    title: 'Earn loyalty points',
-    description: 'Every purchase earns you points towards exclusive discounts and free products.',
+    title: 'Fast EU shipping',
+    description: 'We ship across the EU and UK with DHL and UPS. Choose economy or express at checkout.',
   },
   {
     icon: Shield,
@@ -22,14 +17,9 @@ const reasons = [
     description: 'We only stock genuine products from authorised distributors. No fakes, ever.',
   },
   {
-    icon: RefreshCw,
-    title: 'Subscribe & save 10%',
-    description: 'Set up a subscription and save 10% on every order. Pause or cancel anytime.',
-  },
-  {
     icon: Heart,
-    title: 'Expert customer care',
-    description: 'Our UK-based team is here to help with product advice and any questions.',
+    title: 'Customer care',
+    description: 'Our team is here to help with product advice and any questions you might have.',
   },
 ];
 

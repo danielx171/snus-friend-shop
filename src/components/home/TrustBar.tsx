@@ -1,12 +1,12 @@
-import { Truck, Shield, Star, RefreshCw } from 'lucide-react';
+import { Truck, Shield, Star, Package } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
 
 const trustItems = [
   { icon: Truck, labelKey: 'trust.freeShipping' },
-  { icon: Shield, labelKey: 'trust.klarna' },
-  { icon: Star, labelKey: 'trust.trustpilot' },
-  { icon: RefreshCw, labelKey: 'trust.easyReturns', fallback: 'Easy returns' },
+  { icon: Shield, labelKey: '', fallback: 'Secure checkout' },
+  { icon: Star, labelKey: '', fallback: '91 brands' },
+  { icon: Package, labelKey: '', fallback: 'Fast EU shipping' },
 ];
 
 export function TrustBar() {
@@ -21,7 +21,7 @@ export function TrustBar() {
             const Icon = item.icon;
             const label = item.labelKey === 'trust.freeShipping'
               ? t(item.labelKey, { amount: freeShippingFormatted })
-              : item.fallback ? item.fallback : t(item.labelKey);
+              : item.fallback || t(item.labelKey);
             return (
               <div key={item.labelKey} className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/15">

@@ -8,17 +8,14 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '@/components/ui/select';
+// Tabs, Select removed — subscription feature not yet implemented
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from '@/components/ui/accordion';
 import {
-  ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw,
+  ChevronLeft, Star, ShoppingCart, Check, Truck, Package,
 } from 'lucide-react';
-import { useCart, SubscriptionFrequency } from '@/context/CartContext';
+import { useCart } from '@/context/CartContext';
 import { AgeGate } from '@/components/compliance/AgeGate';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -44,8 +41,6 @@ export default function ProductDetail() {
   const { data: allProducts = [] } = useCatalogProducts();
   const { addToCart } = useCart();
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
-  const [purchaseMode, setPurchaseMode] = useState<'once' | 'subscribe'>('once');
-  const [subscriptionFrequency, setSubscriptionFrequency] = useState<SubscriptionFrequency>('1month');
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateFormat, translateBadge, translateCategory } = useTranslation();
 
   if (isLoading) {
@@ -81,10 +76,6 @@ export default function ProductDetail() {
 
   const currentPrice = product.prices[selectedPack];
   const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
-  const subscriptionPrice = Math.round(currentPrice * 0.9 * 100) / 100;
-  const subscriptionPricePerCan = subscriptionPrice / packSizeMultipliers[selectedPack];
-  const displayPrice = purchaseMode === 'subscribe' ? subscriptionPrice : currentPrice;
-  const displayPricePerCan = purchaseMode === 'subscribe' ? subscriptionPricePerCan : pricePerCan;
 
   const productDescription = t(product.descriptionKey) !== product.descriptionKey
     ? t(product.descriptionKey)
@@ -95,7 +86,7 @@ export default function ProductDetail() {
     .slice(0, 4);
 
   const handleAddToCart = () => {
-    addToCart(product, selectedPack, 1, purchaseMode === 'subscribe', purchaseMode === 'subscribe' ? subscriptionFrequency : undefined);
+    addToCart(product, selectedPack);
   };
 
   return (
@@ -182,42 +173,13 @@ export default function ProductDetail() {
 
             <p className="text-muted-foreground leading-relaxed text-[15px]">{productDescription}</p>
 
-            {/* Buy Once / Subscribe */}
-            <div>
-              <Tabs value={purchaseMode} onValueChange={(v) => setPurchaseMode(v as 'once' | 'subscribe')}>
-                <TabsList className="grid w-full grid-cols-2 h-13 rounded-2xl bg-muted/20 p-1 border border-border/20">
-                  <TabsTrigger value="once" className="text-sm h-11 rounded-xl data-[state=active]:bg-card data-[state=active]:shadow-xs">Buy once</TabsTrigger>
-                  <TabsTrigger value="subscribe" className="text-sm h-11 rounded-xl data-[state=active]:bg-card data-[state=active]:shadow-xs gap-1.5">
-                    <RefreshCw className="h-3.5 w-3.5" />
-                    Subscribe & Save 10%
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-
-              {purchaseMode === 'subscribe' && (
-                <div className="mt-4 p-5 rounded-2xl bg-primary/5 border border-primary/15">
-                  <Label className="text-sm font-medium mb-2.5 block">Delivery frequency</Label>
-                  <Select value={subscriptionFrequency} onValueChange={(v) => setSubscriptionFrequency(v as SubscriptionFrequency)}>
-                    <SelectTrigger className="w-full rounded-xl border-border/30"><SelectValue /></SelectTrigger>
-                    <SelectContent className="glass-panel-strong">
-                      <SelectItem value="14days">Every 14 days</SelectItem>
-                      <SelectItem value="1month">Every month</SelectItem>
-                      <SelectItem value="2months">Every 2 months</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <p className="text-xs text-muted-foreground mt-2.5">Cancel or pause anytime. Free delivery on all subscriptions.</p>
-                </div>
-              )}
-            </div>
-
             {/* Pack Size */}
             <div>
               <h3 className="text-sm font-medium text-foreground mb-3.5">Select pack size</h3>
               <RadioGroup value={selectedPack} onValueChange={(v) => setSelectedPack(v as PackSize)} className="grid grid-cols-2 gap-3">
                 {packSizes.map((size) => {
                   const price = product.prices[size];
-                  const subPrice = Math.round(price * 0.9 * 100) / 100;
-                  const perCan = (purchaseMode === 'subscribe' ? subPrice : price) / packSizeMultipliers[size];
+                  const perCan = price / packSizeMultipliers[size];
                   const isSelected = selectedPack === size;
                   const packCount = packSizeMultipliers[size];
 
@@ -234,7 +196,7 @@ export default function ProductDetail() {
                     >
                       <RadioGroupItem value={size} id={`pack-${size}`} className="sr-only" />
                       <span className="font-bold text-lg text-foreground">{packCount} {packCount === 1 ? 'can' : 'cans'}</span>
-                      <span className="text-xl font-bold text-primary mt-1">{formatPrice(purchaseMode === 'subscribe' ? subPrice : price)}</span>
+                      <span className="text-xl font-bold text-primary mt-1">{formatPrice(price)}</span>
                       <span className="text-xs text-muted-foreground mt-0.5">{formatPrice(perCan)}/can</span>
                       {isSelected && <Check className="h-4 w-4 text-primary mt-2" />}
                     </Label>
@@ -245,15 +207,14 @@ export default function ProductDetail() {
 
             {/* Price */}
             <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-foreground">{formatPrice(displayPrice)}</span>
-              {purchaseMode === 'subscribe' && <span className="text-lg text-muted-foreground line-through">{formatPrice(currentPrice)}</span>}
-              <span className="text-sm text-muted-foreground">({formatPrice(displayPricePerCan)}/can)</span>
+              <span className="text-3xl font-bold text-foreground">{formatPrice(currentPrice)}</span>
+              <span className="text-sm text-muted-foreground">({formatPrice(pricePerCan)}/can)</span>
             </div>
 
             {/* CTA */}
             <Button size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow" onClick={handleAddToCart}>
               <ShoppingCart className="h-5 w-5" />
-              {purchaseMode === 'subscribe' ? 'Subscribe' : 'Add to Cart'}
+              {t('product.addToCart')}
             </Button>
           </div>
         </div>
@@ -323,15 +284,14 @@ export default function ProductDetail() {
       <div className="fixed bottom-0 left-0 right-0 border-t border-border/20 glass-panel-strong p-4 lg:hidden z-40">
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
-            <span className="text-2xl font-bold text-foreground">{formatPrice(displayPrice)}</span>
+            <span className="text-2xl font-bold text-foreground">{formatPrice(currentPrice)}</span>
             <span className="block text-xs text-muted-foreground truncate">
-              {formatPrice(displayPricePerCan)}/{t('cart.can')}
-              {purchaseMode === 'subscribe' && ' • Subscribe'}
+              {formatPrice(pricePerCan)}/{t('cart.can')}
             </span>
           </div>
           <Button size="lg" className="gap-2 rounded-2xl shrink-0 glow-primary" onClick={handleAddToCart}>
             <ShoppingCart className="h-5 w-5" />
-            {purchaseMode === 'subscribe' ? t('product.subscribe') : t('product.addToCart')}
+            {t('product.addToCart')}
           </Button>
         </div>
       </div>
