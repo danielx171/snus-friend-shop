@@ -29,7 +29,6 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const currentPrice = product.prices[selectedPack];
   const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
-  const strengthLevel = strengthLevels[product.strengthKey];
   const displayBadges = getDisplayBadges(product.badgeKeys);
 
   const handleAddToCart = (e: React.MouseEvent) => {
