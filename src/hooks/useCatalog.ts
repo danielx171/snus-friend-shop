@@ -100,6 +100,7 @@ export function useCatalogProduct(id: string | undefined) {
         .from('products')
         .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
         .eq('id', id)
+        .eq('is_active', true)
         .maybeSingle();
 
       if (error) throw new Error(error.message);
@@ -110,6 +111,7 @@ export function useCatalogProduct(id: string | undefined) {
         .from('products')
         .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
         .eq('slug', id)
+        .eq('is_active', true)
         .maybeSingle();
 
       if (slugError) throw new Error(slugError.message);

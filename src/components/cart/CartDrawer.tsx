@@ -168,7 +168,13 @@ export function CartDrawer() {
                       style={!isRemoving ? { animationDelay: `${index * 50}ms` } : undefined}
                     >
                       <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-muted/30">
-                        <img src={item.product.image} alt={item.product.name} className="h-full w-full object-cover" />
+                        {item.product.image ? (
+                          <img src={item.product.image} alt={item.product.name} className="h-full w-full object-cover" />
+                        ) : (
+                          <div className="h-full w-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                            <span className="text-[8px] text-muted-foreground text-center px-0.5 line-clamp-2">{item.product.name}</span>
+                          </div>
+                        )}
                       </div>
                       <div className="flex flex-1 flex-col">
                         <div className="flex items-start justify-between">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey } from '@/data/products';
+import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey, RETAIL_PACK_SIZES } from '@/data/products';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -23,7 +23,7 @@ interface ProductCardProps {
   product: Product;
 }
 
-const cardPackSizes: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10'];
+const cardPackSizes = RETAIL_PACK_SIZES;
 
 
 const badgePriority: BadgeKey[] = ['new', 'newPrice', 'popular'];

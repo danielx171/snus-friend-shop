@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { PackSize, packSizeMultipliers, FlavorKey } from '@/data/products';
+import { PackSize, packSizeMultipliers, FlavorKey, RETAIL_PACK_SIZES } from '@/data/products';
 import { useCatalogProducts, useCatalogProduct } from '@/hooks/useCatalog';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -33,7 +33,7 @@ const flavorGradients: Partial<Record<FlavorKey, string>> = {
 };
 const defaultGradient = 'from-slate-300 to-slate-500';
 
-const packSizes: PackSize[] = ['pack1', 'pack5', 'pack10', 'pack30'];
+const packSizes = RETAIL_PACK_SIZES;
 
 export default function ProductDetail() {
   const { id } = useParams();

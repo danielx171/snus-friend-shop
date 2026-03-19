@@ -515,11 +515,17 @@ export default function CheckoutHandoff() {
                       <Card key={`${item.product.id}-${item.packSize}`}>
                         <CardContent className="p-4">
                           <div className="flex gap-4">
-                            <img
-                              src={item.product.image}
-                              alt={item.product.name}
-                              className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-xl shrink-0"
-                            />
+                            {item.product.image ? (
+                              <img
+                                src={item.product.image}
+                                alt={item.product.name}
+                                className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-xl shrink-0"
+                              />
+                            ) : (
+                              <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl shrink-0 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                                <span className="text-xs text-muted-foreground text-center px-1 line-clamp-2">{item.product.name}</span>
+                              </div>
+                            )}
                             <div className="flex-1 min-w-0">
                               <p className="font-semibold text-foreground line-clamp-1">{item.product.name}</p>
                               <p className="text-sm text-muted-foreground">

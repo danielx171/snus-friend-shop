@@ -57,6 +57,9 @@ export const packSizeMultipliers: Record<PackSize, number> = {
   pack30: 30,
 };
 
+/** Standard retail pack sizes shown to customers */
+export const RETAIL_PACK_SIZES: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10'];
+
 export const brands = [
   'ZYN',
   'VELO',
