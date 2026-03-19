@@ -1,26 +1,26 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Leaf, Zap, Sparkles } from 'lucide-react';
 
 const highlights = [
   {
     title: 'Flavor Guide',
     blurb: 'From icy mint to tropical fruit — discover your perfect pouch flavor with our curated guide.',
     href: '/nicotine-pouches',
-    image: '🍃',
+    icon: Leaf,
     gradient: 'from-primary/15 to-chart-3/10',
   },
   {
     title: 'Strength Guide',
     blurb: 'Whether you\'re a beginner or a veteran, find the right nicotine strength for your lifestyle.',
     href: '/nicotine-pouches?strength=strong',
-    image: '⚡',
+    icon: Zap,
     gradient: 'from-chart-4/15 to-chart-1/10',
   },
   {
     title: 'New Drops',
     blurb: 'Fresh arrivals from ZYN, VELO, and more. Be the first to try the latest releases.',
     href: '/nicotine-pouches?badge=new',
-    image: '✨',
+    icon: Sparkles,
     gradient: 'from-chart-2/15 to-primary/10',
   },
 ];
