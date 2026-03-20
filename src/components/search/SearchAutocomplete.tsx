@@ -6,6 +6,7 @@ import { useCatalogProducts } from '@/hooks/useCatalog';
 import { brandDirectory } from '@/data/brands';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
+import { matchesQuery } from '@/lib/search';
 
 interface SearchResult {
   type: 'product' | 'brand';
@@ -37,7 +38,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
     const q = query.toLowerCase();
 
     const productResults: SearchResult[] = allProducts
-      .filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q))
+      .filter(p => matchesQuery(p, q))
       .slice(0, 5)
       .map(p => ({
         type: 'product',

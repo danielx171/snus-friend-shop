@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { brandDirectory } from '@/data/brands';
+import { scoreProduct, matchesQuery } from '@/lib/search';
 import { Layout } from '@/components/layout/Layout';
 import { ProductCard } from '@/components/product/ProductCard';
 import { EmptyState } from '@/components/ui/states/EmptyState';
@@ -25,11 +26,15 @@ export default function SearchResults() {
   const results = useMemo(() => {
     if (!query.trim()) return [];
     const q = query.toLowerCase();
-    return allProducts.filter(p =>
-      p.name.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q) ||
-      p.flavorKey.toLowerCase().includes(q)
-    );
+    return allProducts
+      .filter(p => matchesQuery(p, q))
+      .map(p => ({ product: p, score: scoreProduct(p, q) }))
+      .sort((a, b) => {
+        const stockA = typeof a.product.stock === 'number' && a.product.stock === 0 ? -5 : 0;
+        const stockB = typeof b.product.stock === 'number' && b.product.stock === 0 ? -5 : 0;
+        return (b.score + stockB) - (a.score + stockA);
+      })
+      .map(({ product }) => product);
   }, [query, allProducts]);
 
   const matchedBrands = useMemo(() => {
