@@ -19,12 +19,12 @@ export function useSnusPoints(userId: string | null) {
       if (!userId) return { balance: 0, lifetimeEarned: 0, transactions: [] };
 
       const [balanceRes, txRes] = await Promise.all([
-        supabase
+        (supabase as any)
           .from('points_balances')
           .select('balance, lifetime_earned')
           .eq('user_id', userId)
           .maybeSingle(),
-        supabase
+        (supabase as any)
           .from('points_transactions')
           .select('id, points, reason, created_at')
           .eq('user_id', userId)
