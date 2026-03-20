@@ -14,6 +14,7 @@ import {
 import { TIERS, SNUSPOINTS, MEMBERSHIP_FAQ } from '@/data/membership';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const SITE_URL = import.meta.env.VITE_SITE_URL as string | undefined;
 
@@ -32,12 +33,24 @@ const merchPlaceholders = [
 
 export default function MembershipPage() {
   const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleWaitlist = (e: React.FormEvent) => {
+  const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    toast.success('Thanks! We\'ll notify you when memberships launch.');
-    setEmail('');
+    if (!email.trim() || submitting) return;
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke('save-waitlist-email', {
+        body: { email: email.trim(), source: 'membership' },
+      });
+      if (error) throw error;
+      toast.success('You\'re on the list! We\'ll notify you when memberships launch.');
+      setEmail('');
+    } catch {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -303,8 +316,8 @@ export default function MembershipPage() {
                 className="rounded-xl flex-1"
                 required
               />
-              <Button type="submit" className="rounded-xl bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)] hover:bg-[hsl(var(--chart-4)/0.9)] shrink-0">
-                Join Waitlist
+              <Button type="submit" disabled={submitting} className="rounded-xl bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)] hover:bg-[hsl(var(--chart-4)/0.9)] shrink-0">
+                {submitting ? 'Saving…' : 'Join Waitlist'}
               </Button>
             </form>
           </div>

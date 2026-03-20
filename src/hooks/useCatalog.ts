@@ -68,6 +68,13 @@ function toProduct(row: DbProduct): MockProduct {
     ? +(Number(row.compare_price) * RETAIL_MARKUP).toFixed(2)
     : undefined;
 
+  // Sum stock across all variants (each variant has one inventory row)
+  const stock = variants.reduce((sum, v) => {
+    const inv = v.inventory;
+    const qty = Array.isArray(inv) && inv.length > 0 ? inv[0].quantity : 0;
+    return sum + qty;
+  }, 0);
+
   return {
     id: row.id,
     name: row.name,
@@ -81,6 +88,7 @@ function toProduct(row: DbProduct): MockProduct {
     descriptionKey: row.description_key ?? '',
     description: row.description ?? undefined,
     comparePrice,
+    stock,
     image: row.image_url ?? '',
     ratings: row.ratings,
     badgeKeys: (row.badge_keys ?? []) as MockProduct['badgeKeys'],
@@ -95,7 +103,7 @@ export function useCatalogProducts() {
     queryFn: async (): Promise<MockProduct[]> => {
       const { data, error } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, inventory(quantity))')
         .eq('is_active', true)
         .order('name');
 

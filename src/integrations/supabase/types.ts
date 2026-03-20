@@ -560,7 +560,7 @@ export interface DbProduct {
   created_at: string;
   updated_at: string;
   brands: { id: string; slug: string; name: string; manufacturer: string | null } | null;
-  product_variants: { pack_size: number; price: number; sku: string | null }[];
+  product_variants: { pack_size: number; price: number; sku: string | null; inventory?: { quantity: number }[] | null }[];
 }
 
 export const Constants = {

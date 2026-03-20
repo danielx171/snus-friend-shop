@@ -36,6 +36,7 @@ export interface Product {
   descriptionKey: string; // Translation key for description
   description?: string;   // Real product description text from Nyehandel (takes priority over descriptionKey)
   comparePrice?: number;  // Retail MSRP/compare price per can (for strikethrough display)
+  stock?: number;         // Total units in stock (0 = out of stock, undefined = unknown)
   image: string;
   ratings: number;
   badgeKeys: BadgeKey[];

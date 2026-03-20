@@ -3,11 +3,13 @@ import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey, RETAIL_PAC
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Star, ShoppingCart } from 'lucide-react';
+import { Star, ShoppingCart, PackageX } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
+
+const LOW_STOCK_THRESHOLD = 20;
 
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-400 to-green-600',
@@ -25,7 +27,6 @@ interface ProductCardProps {
 
 const cardPackSizes = RETAIL_PACK_SIZES;
 
-
 const badgePriority: BadgeKey[] = ['new', 'newPrice', 'popular'];
 
 function getDisplayBadges(badges: BadgeKey[]): BadgeKey[] {
@@ -41,21 +42,31 @@ export function ProductCard({ product }: ProductCardProps) {
   const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
   const displayBadges = getDisplayBadges(product.badgeKeys);
 
+  const isOutOfStock = typeof product.stock === 'number' && product.stock === 0;
+  const isLowStock = typeof product.stock === 'number' && product.stock > 0 && product.stock <= LOW_STOCK_THRESHOLD;
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (isOutOfStock) return;
     addToCart(product, selectedPack);
   };
 
   return (
-    <Card className="product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/80 backdrop-blur-sm transition-[transform,box-shadow] duration-200 ease-out hover:scale-[1.02] hover:shadow-[0_8px_30px_hsl(30_40%_50%/0.08)] hover:border-primary/30">
+    <Card className={cn(
+      'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/80 backdrop-blur-sm transition-[transform,box-shadow] duration-200 ease-out hover:scale-[1.02] hover:shadow-[0_8px_30px_hsl(30_40%_50%/0.08)] hover:border-primary/30',
+      isOutOfStock && 'opacity-70'
+    )}>
       <Link to={`/product/${product.id}`}>
         <div className="product-card-image relative aspect-square overflow-hidden bg-muted/20">
           {product.image ? (
             <img
               src={product.image}
               alt={product.name}
-              className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-105"
+              className={cn(
+                'h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-105',
+                isOutOfStock && 'grayscale'
+              )}
               loading="lazy"
             />
           ) : (
@@ -63,24 +74,36 @@ export function ProductCard({ product }: ProductCardProps) {
               <span className="text-white/80 font-bold text-lg text-center px-4 drop-shadow">{product.name}</span>
             </div>
           )}
-          {/* Badges */}
-          {displayBadges.length > 0 && (
-            <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-              {displayBadges.map((badge) => (
-                <Badge
-                  key={badge}
-                  className={cn(
-                    'text-[10px] font-semibold rounded-full px-2.5 py-0.5 shadow-xs border-0',
-                    badge === 'new' && 'bg-chart-2 text-primary-foreground',
-                    badge === 'newPrice' && 'bg-primary text-primary-foreground',
-                    badge === 'popular' && 'bg-card/90 text-foreground border border-border/40'
-                  )}
-                >
-                  {translateBadge(badge)}
-                </Badge>
-              ))}
-            </div>
-          )}
+
+          {/* Stock / product badges — out of stock takes priority */}
+          <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+            {isOutOfStock ? (
+              <Badge className="text-[10px] font-semibold rounded-full px-2.5 py-0.5 shadow-xs border-0 bg-destructive/90 text-destructive-foreground">
+                Out of Stock
+              </Badge>
+            ) : (
+              <>
+                {isLowStock && (
+                  <Badge className="text-[10px] font-semibold rounded-full px-2.5 py-0.5 shadow-xs border border-amber-500/30 bg-amber-500/10 text-amber-700">
+                    Low Stock
+                  </Badge>
+                )}
+                {displayBadges.map((badge) => (
+                  <Badge
+                    key={badge}
+                    className={cn(
+                      'text-[10px] font-semibold rounded-full px-2.5 py-0.5 shadow-xs border-0',
+                      badge === 'new' && 'bg-chart-2 text-primary-foreground',
+                      badge === 'newPrice' && 'bg-primary text-primary-foreground',
+                      badge === 'popular' && 'bg-card/90 text-foreground border border-border/40'
+                    )}
+                  >
+                    {translateBadge(badge)}
+                  </Badge>
+                ))}
+              </>
+            )}
+          </div>
         </div>
 
         <CardContent className="p-4">
@@ -130,11 +153,13 @@ export function ProductCard({ product }: ProductCardProps) {
                 <button
                   key={size}
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedPack(size); }}
+                  disabled={isOutOfStock}
                   className={cn(
                     'rounded-lg px-2 py-1 text-[10px] font-medium transition-all duration-150 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                     selectedPack === size
                       ? 'bg-primary text-primary-foreground glow-primary'
-                      : 'bg-muted/30 text-muted-foreground hover:bg-muted/50 border border-border/30'
+                      : 'bg-muted/30 text-muted-foreground hover:bg-muted/50 border border-border/30',
+                    isOutOfStock && 'pointer-events-none'
                   )}
                 >
                   {t(`pack.${packNum}`)}
@@ -157,15 +182,27 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* CTA */}
-          <Button
-            onClick={handleAddToCart}
-            className="w-full gap-2 rounded-xl text-sm hover:shadow-md transition-shadow duration-150 focus-visible:ring-2 focus-visible:ring-ring"
-            size="sm"
-          >
-            <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
-            <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
-            <span className="sm:hidden">{t('product.buy')}</span>
-          </Button>
+          {isOutOfStock ? (
+            <Button
+              disabled
+              variant="outline"
+              className="w-full gap-2 rounded-xl text-sm opacity-60 cursor-not-allowed"
+              size="sm"
+            >
+              <PackageX className="h-3.5 w-3.5 shrink-0" />
+              Out of Stock
+            </Button>
+          ) : (
+            <Button
+              onClick={handleAddToCart}
+              className="w-full gap-2 rounded-xl text-sm hover:shadow-md transition-shadow duration-150 focus-visible:ring-2 focus-visible:ring-ring"
+              size="sm"
+            >
+              <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
+              <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
+              <span className="sm:hidden">{t('product.buy')}</span>
+            </Button>
+          )}
         </CardContent>
       </Link>
     </Card>
