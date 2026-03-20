@@ -303,8 +303,8 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
             )
           ) : (
             <motion.div
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              variants={ctaVariants}
+              transition={hoverTransition}
             >
             <Button
               onClick={handleAddToCart}
