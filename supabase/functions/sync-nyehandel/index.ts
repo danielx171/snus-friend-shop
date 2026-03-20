@@ -132,42 +132,49 @@ Deno.serve(async (req) => {
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
 
-  /* ---------- auth: caller must be admin or service role ---------- */
-  const authHeader = req.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return jsonResponse({ error: 'Unauthorized' }, 401);
-  }
-
-  const token = authHeader.replace('Bearer ', '');
+  /* ---------- auth: cron secret, service role, or admin user ---------- */
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
 
-  // Service role JWT allows internal/CLI invocations without a user JWT
-  // Decode payload (no signature verification needed — Supabase gateway already verified it)
-  const isServiceRole = (() => {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload?.role === 'service_role';
-    } catch { return false; }
-  })();
+  // Allow pg_cron / scheduled calls via x-cron-secret header
+  const syncCronSecret = Deno.env.get('SYNC_CRON_SECRET');
+  const callerCronSecret = req.headers.get('x-cron-secret');
+  const cronAuthed = !!(syncCronSecret && callerCronSecret && callerCronSecret === syncCronSecret);
 
-  if (!isServiceRole) {
-    const userClient = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: userData, error: authError } = await userClient.auth.getUser(token);
-    if (authError || !userData?.user) {
+  if (!cronAuthed) {
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
       return jsonResponse({ error: 'Unauthorized' }, 401);
     }
 
-    const { data: roleData } = await adminClient
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', userData.user.id)
-      .eq('role', 'admin')
-      .maybeSingle();
+    const token = authHeader.replace('Bearer ', '');
 
-    if (!roleData) {
-      return jsonResponse({ error: 'Forbidden' }, 403);
+    // Service role JWT allows internal/CLI invocations without a user JWT
+    const isServiceRole = (() => {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload?.role === 'service_role';
+      } catch { return false; }
+    })();
+
+    if (!isServiceRole) {
+      const userClient = createClient(supabaseUrl, supabaseAnonKey, {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data: userData, error: authError } = await userClient.auth.getUser(token);
+      if (authError || !userData?.user) {
+        return jsonResponse({ error: 'Unauthorized' }, 401);
+      }
+
+      const { data: roleData } = await adminClient
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userData.user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (!roleData) {
+        return jsonResponse({ error: 'Forbidden' }, 403);
+      }
     }
   }
 
@@ -351,6 +358,14 @@ Deno.serve(async (req) => {
           errorDetails.push(`Product upsert resolved null: ${product.name}`);
           continue;
         }
+
+        // Compute and write badge_keys
+        const POPULAR_BRANDS = ['VELO', 'ZYN', 'Loop', 'Skruf', 'ON!', 'Lyft', 'Nordic Spirit', 'STNG', 'Velo', 'Zyn'];
+        const badgeKeys: string[] = [];
+        if (comparePriceDecimal && comparePriceDecimal > 0) badgeKeys.push('newPrice');
+        if (POPULAR_BRANDS.includes(brandName)) badgeKeys.push('popular');
+        if (!existing) badgeKeys.push('new');
+        await adminClient.from('products').update({ badge_keys: badgeKeys }).eq('id', upsertedProduct.id);
 
         // Process variants
         await processVariants(adminClient, upsertedProduct.id, product.variants ?? []);

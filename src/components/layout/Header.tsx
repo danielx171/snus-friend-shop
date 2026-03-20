@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
-import { ThemeToggle } from './ThemeToggle';
 import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
 
 export function Header() {
@@ -58,8 +57,6 @@ export function Header() {
             </Link>
           </Button>
 
-          <ThemeToggle />
-          
           <Button
             variant="ghost"
             className="relative rounded-xl h-10 gap-2 px-3 text-muted-foreground hover:text-primary"

@@ -25,8 +25,8 @@ export default function HomePage() {
   return (
     <>
       <SEO
-        title="SnusFriend | Premium Nicotine Pouches | Free UK Delivery"
-        description="Shop the UK's best selection of nicotine pouches from top brands like ZYN, VELO, and more. Free delivery over £25. Subscribe and save 10%."
+        title="SnusFriend | Premium Nicotine Pouches | Free EU Delivery"
+        description="Shop 700+ nicotine pouches from 91 leading brands — ZYN, VELO, Loop and more. Free EU delivery. Fast shipping."
         canonical={window.location.origin + '/'}
         jsonLd={jsonLd}
       />
@@ -36,23 +36,21 @@ export default function HomePage() {
         <CategoryShortcuts />
         <TrustBar />
         
-        {/* TODO: replace brand filter with badge=popular once badges are seeded */}
         <FeaturedProducts
           title="Bestsellers"
-          filterFn={(p) => p.brand === 'VELO'}
+          filterFn={(p) => p.badgeKeys.includes('popular')}
           limit={4}
-          viewAllHref="/nicotine-pouches?brand=VELO"
+          viewAllHref="/nicotine-pouches?badge=popular"
         />
 
         <EditorialHighlights />
 
         <div className="border-y border-border/10 bg-card/20">
-          {/* TODO: replace brand filter with badge=newPrice once offers are seeded */}
           <FeaturedProducts
             title="Special Offers"
-            filterFn={(p) => p.brand === 'CUBA'}
+            filterFn={(p) => p.badgeKeys.includes('newPrice')}
             limit={4}
-            viewAllHref="/nicotine-pouches?brand=CUBA"
+            viewAllHref="/nicotine-pouches?badge=newPrice"
           />
         </div>
 
@@ -60,12 +58,11 @@ export default function HomePage() {
 
         <WhySnusFriends />
 
-        {/* TODO: replace brand filter with badge=new once new-arrivals logic is live */}
         <FeaturedProducts
           title="New Arrivals"
-          filterFn={(p) => p.brand === 'Skruf'}
+          filterFn={(p) => p.badgeKeys.includes('new')}
           limit={4}
-          viewAllHref="/nicotine-pouches?brand=Skruf"
+          viewAllHref="/nicotine-pouches?badge=new"
         />
       </Layout>
     </>

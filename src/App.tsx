@@ -67,9 +67,9 @@ const App = () => (
   !hasSupabaseEnv ? <MissingApiKeysScreen /> :
   <ThemeProvider
     attribute="class"
-    defaultTheme="dark"
+    defaultTheme="velo"
     enableSystem={false}
-    themes={['dark', 'light', 'editorial', 'velo']}
+    themes={['velo']}
   >
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
