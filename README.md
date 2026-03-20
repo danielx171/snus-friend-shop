@@ -9,7 +9,7 @@ Headless storefront with a React/Vite frontend and Supabase backend.
 - Core rule: checkout, order, and Nyehandel logic belong in `supabase/functions/`
 - Current roadmap status: the project is migrating from a legacy Shopify-first checkout flow toward a Nyehandel-first checkout flow
 
-When docs disagree, treat `ROADMAP.md` and `PROJECT_STATE.md` as the source of truth.
+When docs disagree, treat `ROADMAP.md` and `CURRENT_PRIORITIES.md` as the source of truth.
 
 ## Critical boundaries
 
@@ -53,12 +53,12 @@ These files are the recommended AI and collaborator context pack:
 - `PROJECT_STATE.md`: latest session status
 - `CURRENT_PRIORITIES.md`: short list of what matters now
 - `SYSTEM_BOUNDARIES.md`: compact rule summary
-- `ACTIVE_RISKS.md`: live blockers and drift risks
 - `NYEHANDEL_API.md`: Step 25 research log
+- `NYEHANDEL_API_REFERENCE.md`: full Nyehandel API reference
 - `DEPLOYMENT_CHECKLIST.md`: env and deploy requirements
 
 ## Notes for contributors
 
 - Keep diffs scoped and avoid unrelated refactors.
 - Use TypeScript and functional React components.
-- For major features or refactors, update `ROADMAP.md` and `CHANGELOG.md/CHANGELOG.md`.
+- For major features or refactors, update `ROADMAP.md` and `CURRENT_PRIORITIES.md`.

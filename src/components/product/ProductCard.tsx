@@ -3,9 +3,10 @@ import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey, RETAIL_PAC
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Star, ShoppingCart, PackageX } from 'lucide-react';
+import { Star, ShoppingCart, PackageX, Bell } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
+import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -35,6 +36,8 @@ function getDisplayBadges(badges: BadgeKey[]): BadgeKey[] {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack1');
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const { addToCart } = useCart();
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateBadge } = useTranslation();
 
@@ -50,6 +53,22 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     if (isOutOfStock) return;
     addToCart(product, selectedPack);
+  };
+
+  const handleNotifyMe = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!notifyEmail || !notifyEmail.includes('@')) return;
+    setNotifyStatus('sending');
+    try {
+      await apiFetch('save-waitlist-email', {
+        method: 'POST',
+        body: { email: notifyEmail, source: `restock-${product.id}` },
+      });
+      setNotifyStatus('sent');
+    } catch {
+      setNotifyStatus('error');
+    }
   };
 
   return (
@@ -183,15 +202,34 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {/* CTA */}
           {isOutOfStock ? (
-            <Button
-              disabled
-              variant="outline"
-              className="w-full gap-2 rounded-xl text-sm opacity-60 cursor-not-allowed"
-              size="sm"
-            >
-              <PackageX className="h-3.5 w-3.5 shrink-0" />
-              Out of Stock
-            </Button>
+            <div className="space-y-2" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+              {notifyStatus === 'sent' ? (
+                <div className="flex items-center gap-1.5 rounded-xl border border-primary/30 bg-primary/5 p-2">
+                  <Bell className="h-3.5 w-3.5 text-primary shrink-0" />
+                  <span className="text-xs text-foreground">We'll email you when it's back!</span>
+                </div>
+              ) : (
+                <div className="flex gap-1.5">
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={notifyEmail}
+                    onChange={(e) => setNotifyEmail(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleNotifyMe(e as unknown as React.MouseEvent)}
+                    className="flex-1 min-w-0 rounded-xl border border-border/30 bg-background px-2.5 py-1.5 text-xs placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <Button
+                    onClick={handleNotifyMe}
+                    disabled={notifyStatus === 'sending' || !notifyEmail.includes('@')}
+                    size="sm"
+                    className="rounded-xl text-xs gap-1 shrink-0"
+                  >
+                    <Bell className="h-3 w-3" />
+                    Notify
+                  </Button>
+                </div>
+              )}
+            </div>
           ) : (
             <Button
               onClick={handleAddToCart}

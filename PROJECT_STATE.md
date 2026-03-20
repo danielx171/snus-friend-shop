@@ -88,4 +88,4 @@ Retries:
 
 ## Tiebreaker
 
-When docs disagree: `ROADMAP.md` and `PROJECT_STATE.md` win.
+When docs disagree: `ROADMAP.md` and `CURRENT_PRIORITIES.md` win.

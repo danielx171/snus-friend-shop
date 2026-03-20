@@ -125,7 +125,7 @@ export function useCatalogProduct(id: string | undefined) {
       // Try UUID lookup first
       const { data, error } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, inventory(quantity))')
         .eq('id', id)
         .eq('is_active', true)
         .maybeSingle();
@@ -136,7 +136,7 @@ export function useCatalogProduct(id: string | undefined) {
       // Fallback: try slug
       const { data: slugData, error: slugError } = await supabase
         .from('products')
-        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku)')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, inventory(quantity))')
         .eq('slug', id)
         .eq('is_active', true)
         .maybeSingle();

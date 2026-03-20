@@ -115,5 +115,4 @@ Read before complex work; update when done:
 | `AGENTS.md` | Extended coding rules for agentic tools |
 | `NYEHANDEL_API_REFERENCE.md` | Full Nyehandel API reference — read before any order/checkout work |
 | `NYEHANDEL_API.md` | Step 25 investigation log — checkout flow design decisions |
-| `NYLOGISTIK_REFERENCE.md` | Nylogistik warehouse/shipping reference |
 | `DEPLOYMENT_CHECKLIST.md` | Required secrets and deploy order |

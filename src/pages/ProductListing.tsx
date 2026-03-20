@@ -71,8 +71,10 @@ export default function ProductListing() {
 
   const sortedProducts = useMemo(() => {
     const sorted = [...filteredProducts];
+
+    // Primary sort by user selection
     switch (sortBy) {
-      case 'popularity': return sorted.sort((a, b) => {
+      case 'popularity': sorted.sort((a, b) => {
         const aIdx = FEATURED_BRANDS.indexOf(a.brand);
         const bIdx = FEATURED_BRANDS.indexOf(b.brand);
         const aFeat = aIdx !== -1;
@@ -81,15 +83,19 @@ export default function ProductListing() {
         if (!aFeat && bFeat) return 1;
         if (aFeat && bFeat) return aIdx - bIdx;
         return b.ratings - a.ratings;
-      });
-      case 'newest': return sorted.sort((a, b) => a.badgeKeys.includes('new') ? -1 : b.badgeKeys.includes('new') ? 1 : 0);
-      case 'oldest': return sorted.sort((a, b) => a.badgeKeys.includes('new') ? 1 : b.badgeKeys.includes('new') ? -1 : 0);
-      case 'name-asc': return sorted.sort((a, b) => a.name.localeCompare(b.name));
-      case 'name-desc': return sorted.sort((a, b) => b.name.localeCompare(a.name));
-      case 'price-asc': return sorted.sort((a, b) => a.prices.pack1 - b.prices.pack1);
-      case 'price-desc': return sorted.sort((a, b) => b.prices.pack1 - a.prices.pack1);
-      default: return sorted;
+      }); break;
+      case 'newest': sorted.sort((a, b) => a.badgeKeys.includes('new') ? -1 : b.badgeKeys.includes('new') ? 1 : 0); break;
+      case 'oldest': sorted.sort((a, b) => a.badgeKeys.includes('new') ? 1 : b.badgeKeys.includes('new') ? -1 : 0); break;
+      case 'name-asc': sorted.sort((a, b) => a.name.localeCompare(b.name)); break;
+      case 'name-desc': sorted.sort((a, b) => b.name.localeCompare(a.name)); break;
+      case 'price-asc': sorted.sort((a, b) => a.prices.pack1 - b.prices.pack1); break;
+      case 'price-desc': sorted.sort((a, b) => b.prices.pack1 - a.prices.pack1); break;
     }
+
+    // Push out-of-stock products to the end (stable — preserves sort within each group)
+    const inStock = sorted.filter(p => typeof p.stock !== 'number' || p.stock > 0);
+    const outOfStock = sorted.filter(p => typeof p.stock === 'number' && p.stock === 0);
+    return [...inStock, ...outOfStock];
   }, [filteredProducts, sortBy]);
 
   const totalPages = Math.ceil(sortedProducts.length / ITEMS_PER_PAGE);

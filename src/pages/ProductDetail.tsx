@@ -13,7 +13,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from '@/components/ui/accordion';
 import {
-  ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw,
+  ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw, PackageX, Bell,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { AgeGate } from '@/components/compliance/AgeGate';
@@ -22,6 +22,8 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { ProductSchema } from '@/components/seo/ProductSchema';
 import { ProductCard } from '@/components/product/ProductCard';
 import { PDPSkeleton } from '@/components/product/PDPSkeleton';
+import { Input } from '@/components/ui/input';
+import { apiFetch } from '@/lib/api';
 
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-400 to-green-600',
@@ -41,6 +43,8 @@ export default function ProductDetail() {
   const { data: allProducts = [] } = useCatalogProducts();
   const { addToCart } = useCart();
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateFormat, translateBadge, translateCategory } = useTranslation();
 
   if (isLoading) {
@@ -85,8 +89,25 @@ export default function ProductDetail() {
     .filter(p => p.brand === product.brand && p.id !== product.id)
     .slice(0, 4);
 
+  const isOutOfStock = typeof product.stock === 'number' && product.stock === 0;
+
   const handleAddToCart = () => {
+    if (isOutOfStock) return;
     addToCart(product, selectedPack);
+  };
+
+  const handleNotifyMe = async () => {
+    if (!notifyEmail || !notifyEmail.includes('@')) return;
+    setNotifyStatus('sending');
+    try {
+      await apiFetch('save-waitlist-email', {
+        method: 'POST',
+        body: { email: notifyEmail, source: `restock-${product.id}` },
+      });
+      setNotifyStatus('sent');
+    } catch {
+      setNotifyStatus('error');
+    }
   };
 
   return (
@@ -212,10 +233,50 @@ export default function ProductDetail() {
             </div>
 
             {/* CTA */}
-            <Button size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow" onClick={handleAddToCart}>
-              <ShoppingCart className="h-5 w-5" />
-              {t('product.addToCart')}
-            </Button>
+            {isOutOfStock ? (
+              <div className="space-y-4">
+                <Button disabled variant="outline" size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg opacity-60 cursor-not-allowed">
+                  <PackageX className="h-5 w-5" />
+                  Out of Stock
+                </Button>
+                {notifyStatus === 'sent' ? (
+                  <div className="flex items-center gap-2 rounded-2xl border border-primary/30 bg-primary/5 p-4">
+                    <Bell className="h-5 w-5 text-primary shrink-0" />
+                    <p className="text-sm text-foreground">We'll notify you when this product is back in stock.</p>
+                  </div>
+                ) : (
+                  <div className="rounded-2xl border border-border/30 glass-panel p-4 space-y-3">
+                    <p className="text-sm text-muted-foreground">Get notified when this product is back in stock:</p>
+                    <div className="flex gap-2">
+                      <Input
+                        type="email"
+                        placeholder="your@email.com"
+                        value={notifyEmail}
+                        onChange={(e) => setNotifyEmail(e.target.value)}
+                        className="rounded-xl"
+                        onKeyDown={(e) => e.key === 'Enter' && handleNotifyMe()}
+                      />
+                      <Button
+                        onClick={handleNotifyMe}
+                        disabled={notifyStatus === 'sending' || !notifyEmail.includes('@')}
+                        className="rounded-xl shrink-0 gap-2"
+                      >
+                        <Bell className="h-4 w-4" />
+                        {notifyStatus === 'sending' ? 'Saving...' : 'Notify Me'}
+                      </Button>
+                    </div>
+                    {notifyStatus === 'error' && (
+                      <p className="text-xs text-destructive">Something went wrong. Please try again.</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Button size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow" onClick={handleAddToCart}>
+                <ShoppingCart className="h-5 w-5" />
+                {t('product.addToCart')}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -281,20 +342,22 @@ export default function ProductDetail() {
       </div>
 
       {/* Mobile sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-border/20 glass-panel-strong p-4 lg:hidden z-40">
-        <div className="flex items-center justify-between gap-4">
-          <div className="min-w-0">
-            <span className="text-2xl font-bold text-foreground">{formatPrice(currentPrice)}</span>
-            <span className="block text-xs text-muted-foreground truncate">
-              {formatPrice(pricePerCan)}/{t('cart.can')}
-            </span>
+      {!isOutOfStock && (
+        <div className="fixed bottom-0 left-0 right-0 border-t border-border/20 glass-panel-strong p-4 lg:hidden z-40">
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <span className="text-2xl font-bold text-foreground">{formatPrice(currentPrice)}</span>
+              <span className="block text-xs text-muted-foreground truncate">
+                {formatPrice(pricePerCan)}/{t('cart.can')}
+              </span>
+            </div>
+            <Button size="lg" className="gap-2 rounded-2xl shrink-0 glow-primary" onClick={handleAddToCart}>
+              <ShoppingCart className="h-5 w-5" />
+              {t('product.addToCart')}
+            </Button>
           </div>
-          <Button size="lg" className="gap-2 rounded-2xl shrink-0 glow-primary" onClick={handleAddToCart}>
-            <ShoppingCart className="h-5 w-5" />
-            {t('product.addToCart')}
-          </Button>
         </div>
-      </div>
+      )}
     </Layout>
   );
 }

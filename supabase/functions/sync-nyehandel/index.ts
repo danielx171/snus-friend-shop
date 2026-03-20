@@ -468,8 +468,9 @@ async function processVariants(
       variantId = inserted?.id ?? null;
     }
 
-    // Upsert inventory
-    if (variant.stock != null && variantId) {
+    // Upsert inventory (default to 0 when Nyehandel returns null/undefined stock)
+    if (variantId) {
+      const qty = variant.stock ?? 0;
       // Check if inventory row exists
       const { data: existingInv } = await adminClient
         .from('inventory')
@@ -480,12 +481,12 @@ async function processVariants(
       if (existingInv) {
         await adminClient
           .from('inventory')
-          .update({ quantity: variant.stock, warehouse: 'nordicpouch' })
+          .update({ quantity: qty, warehouse: 'nordicpouch' })
           .eq('id', existingInv.id);
       } else {
         await adminClient
           .from('inventory')
-          .insert({ variant_id: variantId, quantity: variant.stock, warehouse: 'nordicpouch' });
+          .insert({ variant_id: variantId, quantity: qty, warehouse: 'nordicpouch' });
       }
     }
   }

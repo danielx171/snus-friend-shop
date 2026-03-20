@@ -1,6 +1,6 @@
 # Headless Shopify -> Nyehandel Roadmap
 
-Next session start order: Step 25.
+Next session start order: Step 39 (UAT) — blocked on Nyehandel shipping/payment method naming.
 
 - [x] Step 01: Add `shopify_variant_id` to the product variant source of truth (DB column in `product_variants` or dedicated mapping table), backfill all sellable variants, and enforce non-null for variants that can be checked out.
 - [x] Step 02: Regenerate Supabase types so `src/integrations/supabase/types.ts` includes the latest schema (`orders` and variant Shopify mapping fields).
@@ -26,7 +26,7 @@ Next session start order: Step 25.
 - [x] Step 22: Add deployment/env checklist: Shopify API token, Shopify webhook secret, Nyehandel API token/base URL, Supabase service role key, and function-level JWT policies.
 - [x] Step 23: Security hardening pass before go-live: lock down internal function auth (`push-order-to-nyehandel`, `retry-failed-nyehandel-orders`), enforce webhook shop-domain allowlist, and remove any unnecessary public surface.
 - [x] Step 24: Run end-to-end UAT in this order: create checkout from frontend -> complete payment in Shopify test mode -> verify `orders` row -> verify Nyehandel order push -> verify status transition to `synced`. *(Completed against Shopify-first flow 2026-03-12. Functions deleted 2026-03-13. See `UAT_PREFLIGHT.md` (archived). Full UAT re-run required as Step 39 once Nyehandel-first flow is live.)*
-- [ ] Step 25: ~~Remove remaining mock/placeholder checkout code paths~~ **BLOCKED — see Architecture Shift below.**
+- [x] Step 25: ~~Remove remaining mock/placeholder checkout code paths~~ Nyehandel API investigated — documented in `NYEHANDEL_API.md`.
 
 ---
 
@@ -58,12 +58,12 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 
 ## Steg 25–40: Nyehandel-first checkout + real auth
 
-- [ ] Step 25: **BLOCKED** Undersök Nyehandel payment API — endpoints, auth, betalningsflöde, callback/webhook-mekanism. Dokumentera i `NYEHANDEL_API.md`.
-- [ ] Step 26: Design nytt checkout-flöde baserat på Nyehandel API-fynd. Uppdatera `orders`-schema om nya fält behövs.
-- [ ] Step 27: Skriv om `create-shopify-checkout` → ny edge function `create-nyehandel-checkout`. Ta bort Shopify Storefront API-anropet, ersätt med Nyehandel payment session-skapande.
-- [ ] Step 28: Ta bort `shopify-webhook` edge function. Implementera Nyehandel callback/webhook-handler om Nyehandel stöder det, annars polling via cron.
-- [ ] Step 29: Uppdatera `push-order-to-nyehandel`: byt `external_order_id` från `shopify_order_id` till intern UUID. Rensa Shopify-specifika fält ur payload.
-- [ ] Step 30: Uppdatera `CheckoutHandoff.tsx`: ta bort `resolveShopifyVariantId` 3-vägs-fallback. Ersätt med direkt access på `product.shopifyVariantIds[packSize]` (nu korrekt populerat från DB).
+- [x] Step 25: Undersök Nyehandel payment API — endpoints, auth, betalningsflöde, callback/webhook-mekanism. Dokumenterat i `NYEHANDEL_API.md`.
+- [x] Step 26: Design nytt checkout-flöde baserat på Nyehandel API-fynd. `orders`-schema uppdaterat med Nyehandel-fält.
+- [x] Step 27: `create-nyehandel-checkout` edge function implementerad. Shopify Storefront API borttaget.
+- [x] Step 28: `shopify-webhook` borttagen. `nyehandel-delivery-callback` och `nyehandel-webhook` implementerade.
+- [x] Step 29: `push-order-to-nyehandel` uppdaterad — Shopify-beroenden borttagna, använder intern UUID.
+- [x] Step 30: `CheckoutHandoff.tsx` omskriven — SKU-resolution direkt från Supabase, inga Shopify-varianter.
 - [x] Step 31: Implementera riktig Supabase-auth i `LoginPage.tsx` (`signInWithPassword`) och `RegisterPage.tsx` (`signUp`). Lägg till `useNavigate`-redirect efter lyckad auth.
 - [x] Step 32: Koppla `AccountPage.tsx` till riktig data: ta bort `isLoggedIn = useState(true)`, hämta session via `supabase.auth.getUser()`, hämta orders från `orders`-tabellen per `customer_email`.
 - [x] Step 33: Koppla `OrderConfirmation.tsx` till riktig data: läs `orderId` från URL-param, hämta order från DB, rensa kundvagnen via `clearCart()` efter bekräftad order.

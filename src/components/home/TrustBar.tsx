@@ -3,10 +3,10 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
 
 const trustItems = [
-  { icon: Truck, labelKey: 'trust.freeShipping' },
-  { icon: Shield, labelKey: '', fallback: 'Secure checkout' },
-  { icon: Star, labelKey: '', fallback: '91 brands' },
-  { icon: Package, labelKey: '', fallback: 'Fast EU shipping' },
+  { id: 'free-shipping', icon: Truck, labelKey: 'trust.freeShipping' },
+  { id: 'secure-checkout', icon: Shield, labelKey: '', fallback: 'Secure checkout' },
+  { id: 'brands', icon: Star, labelKey: '', fallback: '91 brands' },
+  { id: 'fast-shipping', icon: Package, labelKey: '', fallback: 'Fast EU shipping' },
 ];
 
 export function TrustBar() {
@@ -23,7 +23,7 @@ export function TrustBar() {
               ? t(item.labelKey, { amount: freeShippingFormatted })
               : item.fallback || t(item.labelKey);
             return (
-              <div key={item.labelKey} className="flex items-center gap-3">
+              <div key={item.id} className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/15">
                   <Icon className="h-5 w-5 text-primary" />
                 </div>
