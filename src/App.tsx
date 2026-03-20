@@ -7,6 +7,7 @@ import { lazy, Suspense } from "react";
 import { CartProvider } from "@/context/CartContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "next-themes";
+import { CookieConsentProvider } from "@/hooks/useCookieConsent";
 import HomePage from "./pages/HomePage";
 import ProductListing from "./pages/ProductListing";
 import ProductDetail from "./pages/ProductDetail";
@@ -79,10 +80,11 @@ const App = () => (
     <TooltipProvider>
       <LanguageProvider>
         <CartProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <Routes>
+          <CookieConsentProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/produkter" element={<ProductListing />} />
               <Route path="/nicotine-pouches" element={<ProductListing />} />
@@ -183,7 +185,8 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <CookieConsent />
-          </BrowserRouter>
+            </BrowserRouter>
+          </CookieConsentProvider>
         </CartProvider>
       </LanguageProvider>
     </TooltipProvider>
