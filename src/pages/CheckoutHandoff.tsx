@@ -70,6 +70,18 @@ export default function CheckoutHandoff() {
   const { t, formatPrice, market } = useTranslation();
   const navigate = useNavigate();
 
+  /* ── Form state ── */
+  const [form, setForm] = useState({
+    email: '',
+    firstname: '',
+    lastname: '',
+    address: '',
+    postcode: '',
+    city: '',
+    country: 'GB',
+    shipping_method: SHIPPING_OPTIONS[0].name,
+  });
+
   // Find the selected shipping option's price (in EUR)
   const selectedShippingOption = SHIPPING_OPTIONS.find(o => o.name === form.shipping_method) ?? SHIPPING_OPTIONS[0];
   const shippingPriceEUR = selectedShippingOption.price;
@@ -90,18 +102,6 @@ export default function CheckoutHandoff() {
   const formatLocalAmount = (amount: number): string => {
     return formatMarketPrice(amount, market, market.currencyCode === 'EUR' ? 2 : 0);
   };
-
-  /* ── Form state ── */
-  const [form, setForm] = useState({
-    email: '',
-    firstname: '',
-    lastname: '',
-    address: '',
-    postcode: '',
-    city: '',
-    country: 'GB',
-    shipping_method: SHIPPING_OPTIONS[0].name,
-  });
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);

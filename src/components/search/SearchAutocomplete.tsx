@@ -28,6 +28,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
   const [activeIndex, setActiveIndex] = useState(-1);
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const { data: allProducts = [] } = useCatalogProducts();
   const { formatPrice } = useTranslation();
 
