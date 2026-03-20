@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
+import { motion } from 'framer-motion';
 
 const LOW_STOCK_THRESHOLD = 20;
 
