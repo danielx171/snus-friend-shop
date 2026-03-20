@@ -1,0 +1,54 @@
+# SnusFriend
+
+> SnusFriend is a UK-based online shop specialising in nicotine pouches — smoke-free, tobacco-free nicotine products delivered across Europe.
+
+## What We Sell
+
+Nicotine pouches are small, white pouches placed under the upper lip. They deliver nicotine without tobacco, smoke, or vapour. SnusFriend stocks 500+ products across 40+ brands.
+
+### Brands We Carry
+
+Major brands include: VELO, ZYN, Sting, LOOP, Lyft, Skruf, White Fox, Pablo, Siberia, Ace, Killa, Thor, Helwit, Klint, Cuba, Shiro, VOLT, and many more.
+
+### Product Categories
+
+- **Strength levels**: Normal (4–8mg), Strong (8–12mg), Extra Strong (12–18mg), Ultra Strong (18mg+)
+- **Flavours**: Mint, Berry, Citrus, Fruit, Coffee, Cola, Tobacco, and unflavoured
+- **Formats**: Standard pouches, slim pouches, mini pouches, large pouches
+
+### Pricing
+
+Products are priced per can. Multi-can discounts available (3-pack, 5-pack, 10-pack). Free delivery on orders over €29.
+
+## Key Pages
+
+- Homepage: https://snusfriend.co.uk/
+- All nicotine pouches: https://snusfriend.co.uk/nicotine-pouches
+- Brands directory: https://snusfriend.co.uk/brands
+- New arrivals: https://snusfriend.co.uk/nicotine-pouches?badge=new
+- Bestsellers: https://snusfriend.co.uk/nicotine-pouches?badge=popular
+- Special offers: https://snusfriend.co.uk/nicotine-pouches?badge=newPrice
+- Membership (SnusPoints loyalty): https://snusfriend.co.uk/membership
+
+## Loyalty Programme
+
+SnusFriend operates a points system called **SnusPoints**. Customers earn 10 SnusPoints per €1 spent. Points can be redeemed for discounts.
+
+## Delivery
+
+- Free delivery on orders over €29
+- Ships across the EU and UK
+- Fulfilment via Nylogistik/Nyehandel
+
+## Age Restriction
+
+Nicotine products are only sold to adults aged 18+. SnusFriend requires age verification at checkout.
+
+## Contact
+
+- Email: support@snusfriend.com
+- Website: https://snusfriend.co.uk
+
+## Sitemap
+
+- https://snusfriend.co.uk/sitemap.xml

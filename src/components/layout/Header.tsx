@@ -1,18 +1,33 @@
-import { ShoppingCart, Search, Menu, User } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, Coins } from 'lucide-react';
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
+import { supabase } from '@/integrations/supabase/client';
+import { useSnusPoints } from '@/hooks/useSnusPoints';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { formatPrice } = useTranslation();
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUserId(data.session?.user?.id ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const { data: pointsData } = useSnusPoints(userId);
 
   const navLinks = [
     { href: '/nicotine-pouches', label: 'Nicotine Pouches' },
@@ -50,6 +65,16 @@ export function Header() {
           >
             <Search className="h-5 w-5" />
           </Button>
+
+          {userId && pointsData && (
+            <Link
+              to="/membership"
+              className="hidden md:flex items-center gap-1.5 rounded-xl bg-primary/8 px-3 h-9 text-sm font-medium text-primary hover:bg-primary/12 transition-colors"
+            >
+              <Coins className="h-4 w-4" />
+              <span>{pointsData.balance} SP</span>
+            </Link>
+          )}
 
           <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-10 w-10 text-muted-foreground hover:text-primary" asChild>
             <Link to="/account" aria-label="Account">
@@ -104,6 +129,16 @@ export function Header() {
                     <User className="h-4 w-4 mr-2.5" />
                     My Account
                   </Link>
+                  {userId && pointsData && (
+                    <Link
+                      to="/membership"
+                      className="flex items-center rounded-xl px-4 py-3.5 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Coins className="h-4 w-4 mr-2.5" />
+                      {pointsData.balance} SnusPoints
+                    </Link>
+                  )}
                 </nav>
               </div>
             </SheetContent>

@@ -257,7 +257,9 @@ export type Database = {
           badge_keys: string[]
           brand_id: string
           category_key: string
+          compare_price: number | null
           created_at: string
+          description: string | null
           description_key: string | null
           flavor_key: string
           format_key: string
@@ -278,7 +280,9 @@ export type Database = {
           badge_keys?: string[]
           brand_id: string
           category_key?: string
+          compare_price?: number | null
           created_at?: string
+          description?: string | null
           description_key?: string | null
           flavor_key: string
           format_key: string
@@ -299,7 +303,9 @@ export type Database = {
           badge_keys?: string[]
           brand_id?: string
           category_key?: string
+          compare_price?: number | null
           created_at?: string
+          description?: string | null
           description_key?: string | null
           flavor_key?: string
           format_key?: string
@@ -446,6 +452,89 @@ export type Database = {
           received_at?: string
           status?: 'received' | 'processed' | 'failed'
           topic?: string
+        }
+        Relationships: []
+      }
+      ops_alerts: {
+        Row: {
+          id: string
+          alert_type: string
+          status: 'open' | 'resolved'
+          source_order_id: string | null
+          title: string
+          body: Json
+          created_at: string
+          updated_at: string
+          resolved_at: string | null
+        }
+        Insert: {
+          id?: string
+          alert_type: string
+          status?: 'open' | 'resolved'
+          source_order_id?: string | null
+          title: string
+          body?: Json
+          created_at?: string
+          updated_at?: string
+          resolved_at?: string | null
+        }
+        Update: {
+          id?: string
+          alert_type?: string
+          status?: 'open' | 'resolved'
+          source_order_id?: string | null
+          title?: string
+          body?: Json
+          created_at?: string
+          updated_at?: string
+          resolved_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ops_alerts_source_order_id_fkey"
+            columns: ["source_order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      waitlist_emails: {
+        Row: {
+          id: string
+          email: string
+          source: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          email: string
+          source: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          source?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      sync_config: {
+        Row: {
+          key: string
+          value: string
+          updated_at: string
+        }
+        Insert: {
+          key: string
+          value: string
+          updated_at?: string
+        }
+        Update: {
+          key?: string
+          value?: string
+          updated_at?: string
         }
         Relationships: []
       }

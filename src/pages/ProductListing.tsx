@@ -14,11 +14,10 @@ import {
 } from '@/components/ui/select';
 import { Filter } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
-import { AgeGate } from '@/components/compliance/AgeGate';
 import { SEO } from '@/components/seo/SEO';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 20;
 const SITE_URL = import.meta.env.VITE_SITE_URL as string | undefined;
 const listingUrl = SITE_URL ? SITE_URL + '/nicotine-pouches' : undefined;
 
@@ -141,8 +140,6 @@ export default function ProductListing() {
         metaRobots={activeFilterCount > 1 ? 'noindex,follow' : undefined}
       />
       <Layout showNicotineWarning={false}>
-        <AgeGate />
-
         <div className="container py-8 lg:py-10">
           {/* Page header */}
           <div className="mb-8">
@@ -204,8 +201,8 @@ export default function ProductListing() {
 
               {/* Product grid */}
               {isLoading ? (
-                <div className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                  {Array.from({ length: 10 }).map((_, i) => <ProductCardSkeleton key={i} variant="compact" />)}
                 </div>
               ) : isError ? (
                 <div className="py-20 text-center">
@@ -214,11 +211,11 @@ export default function ProductListing() {
                 </div>
               ) : paginatedProducts.length > 0 ? (
                 <div
-                  className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 transition-opacity duration-100"
+                  className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 transition-opacity duration-100"
                   style={{ opacity: gridVisible ? 1 : 0 }}
                 >
                   {paginatedProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCard key={product.id} product={product} variant="compact" />
                   ))}
                 </div>
               ) : (
