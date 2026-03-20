@@ -1,9 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
+// @ts-ignore: Deno file import
+import { corsHeaders as baseCors } from "../_shared/cors.ts";
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-nyehandel-signature, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  ...baseCors,
+  "Access-Control-Allow-Headers": baseCors["Access-Control-Allow-Headers"] +
+    ", x-nyehandel-signature, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 // Topics that should trigger a sync

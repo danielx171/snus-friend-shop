@@ -15,11 +15,8 @@ import {
   type OrderCandidate,
 } from "./rules.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cron-secret",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+// @ts-ignore: Deno file import
+import { corsHeaders } from "../_shared/cors.ts";
 
 type OpsAlertRow = {
   id: string;

@@ -9,12 +9,8 @@ declare const Deno: {
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-};
+// @ts-ignore: Deno file import
+import { corsHeaders } from "../_shared/cors.ts";
 
 /** In-memory cache — avoids hitting Nyehandel on every page load */
 let cachedMethods: string[] = [];

@@ -7,6 +7,8 @@ declare const Deno: {
 
 // @ts-ignore: Deno URL import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// @ts-ignore: Deno file import
+import { corsHeaders } from "../_shared/cors.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -43,7 +45,7 @@ Deno.serve(async (req) => {
 
   // CORS preflight — Nyehandel shouldn't send OPTIONS but handle it anyway
   if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204 });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   // Always return 200 to Nyehandel — never 4xx/5xx which could trigger retries
