@@ -62,16 +62,21 @@ This is a **headless B2C nicotine pouch shop** built on:
   source of truth for all Nyehandel integration work. Read them before touching
   any order/checkout/fulfilment code.
 
-## Where things stand (as of 2026-03-20)
+## Where things stand (as of 2026-03-20 evening)
 
-**Steps 26-29: Done** — Nyehandel-first checkout flow implemented, Shopify fully removed,
-catalog synced (734 products, 2,196 variants, 91 brands), useCatalog wired to Supabase.
+**Steps 26-38: Done** — Nyehandel-first checkout flow implemented, Shopify fully removed,
+catalog synced (731 products, 139 brands), useCatalog wired to Supabase, auth pages wired,
+preview mode live, badge seeding, Velo theme lock, pg_cron auto-sync all complete.
 
-**Steps 30-38: Done** — CheckoutHandoff rewritten, auth pages wired, preview mode live,
-badge seeding, Velo theme lock, pg_cron auto-sync all complete. Build passes clean.
+**UX overhaul: Done** — Compact product cards, enhanced search with filters + pagination,
+SnusPoints header badge, Account Settings form, real info page content, SEO/GEO files.
+
+**Infrastructure: Done** — All Supabase Vault secrets set, sync_config populated,
+delivery webhook registered in NordicPouch, types.ts synced with schema.
 
 **Step 39 UAT: BLOCKED** — Nyehandel account has all shipping/payment method names blank.
 CEO must name the methods in Nyehandel admin before API orders are possible.
 Fallback option: use Nyehandel hosted checkout (redirect flow) instead of API.
 
-**Remaining:** Step 39 (UAT), Step 40 (security review), Vercel deploy, go live.
+**Remaining:** Step 39 (UAT), Step 40 (security review), Vercel deploy, go live,
+solicitor sign-off on legal pages.

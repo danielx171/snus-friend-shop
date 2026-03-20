@@ -2,6 +2,19 @@
 
 Next session start order: Step 39 (UAT) — blocked on Nyehandel shipping/payment method naming.
 
+## UX & Infrastructure (completed 2026-03-20)
+
+- [x] Compact ProductCard variant (`variant: 'compact'`) — 3:2 image, icon-only CTA, denser grid
+- [x] Enhanced SearchResults — full filter sidebar, mobile Sheet, pagination (20/page), sort options
+- [x] Shared search scoring (`src/lib/search.ts`) — tiered relevance + OOS penalty
+- [x] Header SnusPoints badge — auth detection, desktop + mobile, links to /membership
+- [x] Account Settings form — wired to Supabase auth (first name, last name, phone)
+- [x] Real info page content — FAQ, Contact, Shipping, Returns, About (inline JSX)
+- [x] SEO: robots.txt (AI crawlers + private route blocks), llms.txt (GEO), dynamic sitemap (731 products, 139 brands)
+- [x] types.ts synced — added ops_alerts, waitlist_emails, sync_config + product description/compare_price
+- [x] .env.example updated with all secrets and sync_config seed instructions
+- [x] Supabase Vault secrets configured, sync_config populated, delivery webhook registered
+
 - [x] Step 01: Add `shopify_variant_id` to the product variant source of truth (DB column in `product_variants` or dedicated mapping table), backfill all sellable variants, and enforce non-null for variants that can be checked out.
 - [x] Step 02: Regenerate Supabase types so `src/integrations/supabase/types.ts` includes the latest schema (`orders` and variant Shopify mapping fields).
 - [x] Step 03: Add `[functions.create-shopify-checkout]` in `supabase/config.toml` with explicit `verify_jwt` policy (keep public checkout callable while still validating payload server-side).

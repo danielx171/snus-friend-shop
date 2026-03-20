@@ -47,12 +47,12 @@ Backend: Supabase (already hosted)
 - [x] Set `NYEHANDEL_WEBHOOK_SECRET` for `nyehandel-webhook` (`x-api-key` validation).
 - [x] Set `INTERNAL_FUNCTIONS_SECRET` for internal function-to-function auth (`push-order-to-nyehandel`, `retry-failed-nyehandel-orders`).
 - [x] Set `RETRY_FAILED_ORDERS_SECRET` and pass `x-cron-secret` for retry invocations.
-- [ ] Set `SYNC_CRON_SECRET` for pg_cron auto-sync authentication.
-- [ ] Set `DELIVERY_WEBHOOK_SECRET` for delivery callback webhook auth.
+- [x] Set `SYNC_CRON_SECRET` for pg_cron auto-sync authentication.
+- [x] Set `DELIVERY_WEBHOOK_SECRET` for delivery callback webhook auth.
 - [ ] Set `ALLOWED_ORIGIN` to production domain for checkout CORS lock.
-- [ ] Set `OPS_ALERTS_CRON_SECRET` and pass `x-cron-secret` for `ops-b2b-queues` invocations.
-- [ ] Store Vault secrets for scheduler: `SUPABASE_FUNCTIONS_BASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `RETRY_FAILED_ORDERS_SECRET`.
-- [ ] Store Vault secret for nightly ops queue scheduler: `OPS_ALERTS_CRON_SECRET`.
+- [x] Set `OPS_ALERTS_CRON_SECRET` and pass `x-cron-secret` for `ops-b2b-queues` invocations.
+- [x] Store Vault secrets for scheduler: `SUPABASE_FUNCTIONS_BASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `RETRY_FAILED_ORDERS_SECRET`.
+- [x] Store Vault secret for nightly ops queue scheduler: `OPS_ALERTS_CRON_SECRET`.
 - [x] Confirm `supabase/config.toml` has explicit entries for all 14 functions.
 - [x] Deploy DB migrations in order.
 - [x] Deploy Edge Functions.
@@ -60,6 +60,26 @@ Backend: Supabase (already hosted)
 
 ## Database Configuration
 
-- [ ] Populate the `sync_config` table with `supabase_project_url` (your Supabase project URL)
+- [x] Populate the `sync_config` table with `supabase_project_url` (your Supabase project URL)
   and `sync_cron_secret` (must match the `SYNC_CRON_SECRET` secret above). This table drives
   pg_cron auto-sync scheduling.
+
+## Nyehandel Webhooks
+
+- [x] Register delivery callback URL in NordicPouch admin pointing to
+  `/functions/v1/nyehandel-delivery-callback` with `DELIVERY_WEBHOOK_SECRET` as auth token.
+
+## SEO / Indexing
+
+- [x] `public/robots.txt` — AI crawler permissions, disallow private routes, sitemap pointer.
+- [x] `public/llms.txt` — GEO file for AI/LLM indexing.
+- [x] `public/sitemap.xml` — dynamic generation via `bun run sitemap` (731 products, 139 brands).
+
+## Pre-Launch (remaining)
+
+- [ ] Set `ALLOWED_ORIGIN` to production domain (currently wildcard `*`).
+- [ ] CEO names shipping + payment methods in Nyehandel admin (BLOCKER for API orders).
+- [ ] Solicitor sign-off on Terms, Privacy, Cookie pages.
+- [ ] Place and verify test order end-to-end (Step 39 UAT).
+- [ ] Security review: CORS lock, RLS policies, OWASP check (Step 40).
+- [ ] Deploy frontend to Vercel, configure env vars, go live.

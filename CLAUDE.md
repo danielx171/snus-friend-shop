@@ -12,6 +12,7 @@ bun run test         # Run all Vitest tests once
 bun run test -- src/test/example.test.ts   # Scoped test file
 bunx vitest run "src/**/*checkout*.test.ts"
 bun run test -- -t "test name substring"
+bun run sitemap      # Regenerate public/sitemap.xml from live catalog
 ```
 
 Test environment is `jsdom`; setup file is `src/test/setup.ts`. Deno is not installed,
@@ -91,16 +92,19 @@ change app-facing tables, update `types.ts` in the same task.
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-03-19 evening)
+## Where Things Stand (as of 2026-03-20 evening)
 
-- Steps 26–29: ✅ Done (sync rewrite, catalog sync, Shopify removed, useCatalog wired to Supabase)
-- Preview mode: ✅ Dismissible banner + checkout gate (`VITE_PREVIEW_MODE=true`)
-- Lovable merges: ✅ Two publishes merged (animations + light hero/bestsellers fix)
-- Image fallback: ✅ Flavor-based gradients when `product.image` is null
-- Shipping names: ✅ Updated to NordicPouch account names in edge function + frontend
+- Steps 26–38: ✅ Done (checkout, catalog sync, auth, preview mode, badge seeding, pg_cron)
+- UX overhaul: ✅ Compact cards, search filters + pagination, header SnusPoints badge
+- Account: ✅ Settings form wired to Supabase auth, Change Password linked
+- Info pages: ✅ Real content for FAQ, Contact, Shipping, Returns, About
+- SEO/GEO: ✅ robots.txt, llms.txt, dynamic sitemap (731 products, 139 brands)
+- Infrastructure: ✅ Vault secrets set, sync_config populated, delivery webhook registered
+- Types: ✅ types.ts synced with schema (ops_alerts, waitlist_emails, sync_config added)
 - Step 39 UAT: 🔴 BLOCKED — Nyehandel account has all shipping/payment method names blank.
   CEO must name the methods in Nyehandel admin before API orders are possible.
   Fallback option: use Nyehandel hosted checkout (redirect flow) instead of API.
+- Legal pages: 🟡 Waiting on solicitor sign-off (Terms, Privacy, Cookies)
 - Steps 40+: UAT sign-off, Vercel deploy, go live
 
 ## Project Docs
