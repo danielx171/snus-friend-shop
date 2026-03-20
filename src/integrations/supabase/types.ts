@@ -82,83 +82,11 @@ export type Database = {
           },
         ]
       }
-      orders: {
-        Row: {
-          checkout_status: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
-          created_at: string
-          currency: string
-          customer_email: string | null
-          customer_metadata: Json
-          delivery_callback_received_at: string | null
-          id: string
-          idempotency_key: string | null
-          last_sync_error: string | null
-          line_items_snapshot: Json
-          nyehandel_order_id: string | null
-          nyehandel_order_status: string | null
-          nyehandel_prefix: string | null
-          nyehandel_sync_status: 'pending' | 'synced' | 'failed'
-          paid_at: string | null
-          shipping_address: Json
-          total_price: number
-          tracking_id: string | null
-          tracking_url: string | null
-          updated_at: string
-        }
-        Insert: {
-          checkout_status?: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
-          created_at?: string
-          currency?: string
-          customer_email?: string | null
-          customer_metadata?: Json
-          delivery_callback_received_at?: string | null
-          id?: string
-          idempotency_key?: string | null
-          last_sync_error?: string | null
-          line_items_snapshot?: Json
-          nyehandel_order_id?: string | null
-          nyehandel_order_status?: string | null
-          nyehandel_prefix?: string | null
-          nyehandel_sync_status?: 'pending' | 'synced' | 'failed'
-          paid_at?: string | null
-          shipping_address?: Json
-          total_price: number
-          tracking_id?: string | null
-          tracking_url?: string | null
-          updated_at?: string
-        }
-        Update: {
-          checkout_status?: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
-          created_at?: string
-          currency?: string
-          customer_email?: string | null
-          customer_metadata?: Json
-          delivery_callback_received_at?: string | null
-          id?: string
-          idempotency_key?: string | null
-          last_sync_error?: string | null
-          line_items_snapshot?: Json
-          nyehandel_order_id?: string | null
-          nyehandel_order_status?: string | null
-          nyehandel_prefix?: string | null
-          nyehandel_sync_status?: 'pending' | 'synced' | 'failed'
-          paid_at?: string | null
-          shipping_address?: Json
-          total_price?: number
-          tracking_id?: string | null
-          tracking_url?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       product_variants: {
         Row: {
           created_at: string
-          gtin: string | null
           id: string
-          is_checkout_enabled: boolean
           is_default: boolean
-          nyehandel_variant_id: string | null
           pack_size: number
           price: number
           product_id: string
@@ -167,11 +95,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          gtin?: string | null
           id?: string
-          is_checkout_enabled?: boolean
           is_default?: boolean
-          nyehandel_variant_id?: string | null
           pack_size: number
           price: number
           product_id: string
@@ -180,11 +105,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          gtin?: string | null
           id?: string
-          is_checkout_enabled?: boolean
           is_default?: boolean
-          nyehandel_variant_id?: string | null
           pack_size?: number
           price?: number
           product_id?: string
@@ -282,7 +204,8 @@ export type Database = {
           last_verified: string
           nyehandel_sku: string
           product_name: string
-          status: 'mapped' | 'missing' | 'conflict'
+          shopify_sku: string | null
+          status: string
         }
         Insert: {
           created_at?: string
@@ -290,7 +213,8 @@ export type Database = {
           last_verified?: string
           nyehandel_sku: string
           product_name: string
-          status?: 'mapped' | 'missing' | 'conflict'
+          shopify_sku?: string | null
+          status?: string
         }
         Update: {
           created_at?: string
@@ -298,7 +222,8 @@ export type Database = {
           last_verified?: string
           nyehandel_sku?: string
           product_name?: string
-          status?: 'mapped' | 'missing' | 'conflict'
+          shopify_sku?: string | null
+          status?: string
         }
         Relationships: []
       }
@@ -312,8 +237,8 @@ export type Database = {
           id: string
           items_processed: number
           started_at: string
-          status: 'success' | 'partial' | 'failed' | 'running'
-          type: 'catalog' | 'inventory'
+          status: string
+          type: string
         }
         Insert: {
           completed_at?: string | null
@@ -324,8 +249,8 @@ export type Database = {
           id?: string
           items_processed?: number
           started_at?: string
-          status?: 'success' | 'partial' | 'failed' | 'running'
-          type: 'catalog' | 'inventory'
+          status?: string
+          type: string
         }
         Update: {
           completed_at?: string | null
@@ -336,8 +261,8 @@ export type Database = {
           id?: string
           items_processed?: number
           started_at?: string
-          status?: 'success' | 'partial' | 'failed' | 'running'
-          type?: 'catalog' | 'inventory'
+          status?: string
+          type?: string
         }
         Relationships: []
       }
@@ -369,9 +294,9 @@ export type Database = {
           id: string
           payload: Json
           processed_at: string | null
-          provider: 'nyehandel'
+          provider: string
           received_at: string
-          status: 'received' | 'processed' | 'failed'
+          status: string
           topic: string
         }
         Insert: {
@@ -380,9 +305,9 @@ export type Database = {
           id?: string
           payload?: Json
           processed_at?: string | null
-          provider: 'nyehandel'
+          provider: string
           received_at?: string
-          status?: 'received' | 'processed' | 'failed'
+          status?: string
           topic: string
         }
         Update: {
@@ -391,9 +316,9 @@ export type Database = {
           id?: string
           payload?: Json
           processed_at?: string | null
-          provider?: 'nyehandel'
+          provider?: string
           received_at?: string
-          status?: 'received' | 'processed' | 'failed'
+          status?: string
           topic?: string
         }
         Relationships: []
@@ -536,32 +461,6 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-
-export interface DbProduct {
-  id: string;
-  brand_id: string;
-  slug: string;
-  name: string;
-  description_key: string | null;
-  description: string | null;
-  compare_price: number | null;
-  category_key: string;
-  flavor_key: string;
-  strength_key: string;
-  format_key: string;
-  nicotine_mg: number;
-  portions_per_can: number;
-  image_url: string | null;
-  ratings: number;
-  badge_keys: string[];
-  manufacturer: string | null;
-  is_active: boolean;
-  nyehandel_id: string | null;
-  created_at: string;
-  updated_at: string;
-  brands: { id: string; slug: string; name: string; manufacturer: string | null } | null;
-  product_variants: { pack_size: number; price: number; sku: string | null; inventory?: { quantity: number }[] | null }[];
-}
 
 export const Constants = {
   public: {
