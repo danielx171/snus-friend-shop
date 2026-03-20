@@ -292,9 +292,13 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
               </div>
             )
           ) : (
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
             <Button
               onClick={handleAddToCart}
-              className={cn('w-full rounded-xl font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:ring-ring', isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm')}
+              className={cn('w-full rounded-xl font-medium transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-ring', isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm')}
               size="sm"
             >
               <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
@@ -307,9 +311,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
                 </>
               )}
             </Button>
+            </motion.div>
           )}
         </CardContent>
       </Link>
     </Card>
+    </motion.div>
   );
 }
