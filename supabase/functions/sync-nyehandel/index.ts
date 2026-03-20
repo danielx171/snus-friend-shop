@@ -117,6 +117,8 @@ function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: corsHeaders });
 }
 
+
+
 /* ------------------------------------------------------------------ */
 /*  Main handler                                                       */
 /* ------------------------------------------------------------------ */
@@ -181,11 +183,10 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: 'nyehandel_not_configured', message: 'NYEHANDEL_API_TOKEN not set' }, 503);
   }
 
-  /* ---------- optional page param for single-page sync ---------- */
+  /* ---------- page param — always single-page to stay within worker limits ---------- */
   const url = new URL(req.url);
   const requestedPage = url.searchParams.get('page');
-  const singlePageMode = requestedPage != null;
-  const startPage = singlePageMode ? Math.max(1, parseInt(requestedPage, 10) || 1) : 1;
+  const startPage = Math.max(1, parseInt(requestedPage ?? '1', 10) || 1);
 
   /* ---------- create sync run record ---------- */
   const startTime = Date.now();
@@ -206,40 +207,34 @@ Deno.serve(async (req) => {
   const errorDetails: string[] = [];
 
   try {
-    /* ---------- paginated fetch + process from Nyehandel ---------- */
-    let currentPage = startPage;
-    let lastPage = startPage; // will be updated from API meta
+    /* ---------- fetch single page from Nyehandel ---------- */
+    console.log(`sync-nyehandel: fetching page ${startPage}...`);
 
-    while (currentPage <= lastPage) {
-      console.log(`sync-nyehandel: fetching page ${currentPage}...`);
-
-      const resp = await fetch(
-        `${nyehandelBaseUrl}/products?page=${currentPage}&per_page=50`,
-        {
-          headers: {
-            Authorization: `Bearer ${nyehandelToken}`,
-            Accept: 'application/json',
-            'X-identifier': nyehandelXIdentifier,
-          },
+    const resp = await fetch(
+      `${nyehandelBaseUrl}/products?page=${startPage}&per_page=25`,
+      {
+        headers: {
+          Authorization: `Bearer ${nyehandelToken}`,
+          Accept: 'application/json',
+          'X-identifier': nyehandelXIdentifier,
         },
-      );
+      },
+    );
 
-      if (!resp.ok) {
-        const errText = await resp.text().catch(() => '');
-        throw new Error(`Nyehandel API returned ${resp.status}: ${errText.slice(0, 300)}`);
-      }
+    if (!resp.ok) {
+      const errText = await resp.text().catch(() => '');
+      throw new Error(`Nyehandel API returned ${resp.status}: ${errText.slice(0, 300)}`);
+    }
 
-      const body = (await resp.json()) as NyehandelPaginatedResponse;
-      const products = body.data ?? (Array.isArray(body) ? (body as NyehandelProduct[]) : []);
+    const body = (await resp.json()) as NyehandelPaginatedResponse;
+    const products = body.data ?? (Array.isArray(body) ? (body as NyehandelProduct[]) : []);
+    const lastPage = body.meta?.last_page ?? 1;
+    const totalItems = body.meta?.total ?? 0;
 
-      if (body.meta) {
-        lastPage = body.meta.last_page ?? 1;
-      }
+    console.log(`sync-nyehandel: page ${startPage}/${lastPage} — ${products.length} products (${totalItems} total)`);
 
-      console.log(`sync-nyehandel: page ${currentPage}/${lastPage} — ${products.length} products`);
-
-      /* ---------- process products from this page immediately ---------- */
-      for (const product of products) {
+    /* ---------- process products on this page ---------- */
+    for (const product of products) {
       try {
         if (!product.id || !product.name) {
           errors++;
@@ -365,12 +360,7 @@ Deno.serve(async (req) => {
         errors++;
         errorDetails.push(`Product ${product.name ?? product.id}: ${String(e)}`);
       }
-    } // end for products on this page
-
-      // In single-page mode, stop after one page
-      if (singlePageMode) break;
-      currentPage++;
-    } // end while pages
+    } // end for products
 
     /* ---------- finalize sync run ---------- */
     const finalStatus = errors === 0 ? 'success' : totalProducts > 0 ? 'partial' : 'failed';
@@ -389,7 +379,7 @@ Deno.serve(async (req) => {
       .eq('id', syncRunId);
 
     console.log(
-      `sync-nyehandel: done — ${totalProducts} products, ${totalVariants} variants, ${errors} errors, ${durationMs}ms`,
+      `sync-nyehandel: page ${startPage}/${lastPage} done — ${totalProducts} products, ${totalVariants} variants, ${errors} errors, ${durationMs}ms`,
     );
 
     return jsonResponse({
@@ -400,9 +390,10 @@ Deno.serve(async (req) => {
       errors,
       errorDetails: errorDetails.slice(0, 20),
       durationMs,
-      page: singlePageMode ? startPage : undefined,
+      page: startPage,
       lastPage,
-      nextPage: singlePageMode && startPage < lastPage ? startPage + 1 : undefined,
+      totalItems,
+      nextPage: startPage < lastPage ? startPage + 1 : null,
     });
   } catch (err) {
     console.error('sync-nyehandel fatal error:', err);
