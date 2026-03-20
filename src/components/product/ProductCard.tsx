@@ -86,8 +86,15 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   };
 
   return (
+    <motion.div
+      whileHover={{
+        y: -2,
+        boxShadow: '0 12px 40px hsl(0 0% 0% / 0.22)',
+      }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+    >
     <Card className={cn(
-      'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-[0_8px_32px_hsl(0_0%_0%/0.18)] hover:border-border/60',
+      'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-colors duration-200',
       isOutOfStock && 'opacity-60'
     )}>
       <Link to={`/product/${product.id}`}>
@@ -96,12 +103,21 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
           'product-card-image relative overflow-hidden bg-gradient-to-br',
           flavorGradients[product.flavorKey] ?? defaultGradient
         )} style={{ aspectRatio: isCompact ? '3/2' : '1' }}>
+          <motion.div
+            className="h-full w-full"
+            whileHover={{
+              scale: 1.06,
+              rotate: 6,
+              filter: `drop-shadow(0 0 18px ${glowColor}55)`,
+            }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
           {product.image ? (
             <img
               src={product.image}
               alt={product.name}
               className={cn(
-                'h-full w-full object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-110',
+                'h-full w-full object-contain p-4',
                 isOutOfStock && 'grayscale opacity-60'
               )}
               loading="lazy"
@@ -116,6 +132,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
               </span>
             </div>
           )}
+          </motion.div>
 
           {/* Thin colored accent line at bottom of image */}
           {accentColor && !isOutOfStock && (
