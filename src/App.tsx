@@ -25,6 +25,7 @@ import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
 import MembershipPage from "./pages/MembershipPage";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
+import { CookieConsent } from "@/components/cookie/CookieConsent";
 
 // Lazy-load ops pages — they are admin-only and rarely visited
 const OpsLogin = lazy(() => import("./pages/ops/OpsLogin"));
@@ -181,6 +182,7 @@ const App = () => (
 
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <CookieConsent />
           </BrowserRouter>
         </CartProvider>
       </LanguageProvider>
