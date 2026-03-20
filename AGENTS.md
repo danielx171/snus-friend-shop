@@ -3,7 +3,7 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 
 ## Project Snapshot
 - Stack: React + Vite + TypeScript + Tailwind + shadcn/ui + Supabase.
-- Architecture: Nyehandel-first storefront + Supabase Edge Functions. Shopify checkout is being removed as part of an active migration — see ROADMAP.md for transition state.
+- Architecture: Nyehandel-first storefront + Supabase Edge Functions. Shopify has been fully removed.
 - Core rule: checkout/order/Nyehandel flows belong in `supabase/functions/`.
 - Current toolchain supports npm scripts, but team standard is Bun-first.
 
@@ -14,7 +14,7 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 
 ## Onboarding Runbook (After `init`)
 - Step 1: Run `init`/startup context load, then immediately check repo state (`git status`) and do not revert unrelated changes.
-- Step 2: Read in this order: `.cursorrules` -> `AGENTS.md` -> `ROADMAP.md` -> `NYEHANDEL_API_SYNC.md`.
+- Step 2: Read in this order: `.cursorrules` -> `AGENTS.md` -> `ROADMAP.md` -> `SYSTEM_BOUNDARIES.md`.
 - Step 3: Confirm hard boundaries before coding: checkout/order/Nyehandel logic in `supabase/functions/`, and never edit `src/lib/cart-utils.ts` without explicit permission.
 - Step 4: Identify task surface first (frontend page, edge function, migration, or ops tooling) and keep changes in that boundary.
 - Step 5: Validate environment assumptions (required env vars/secrets, function auth expectations in `supabase/config.toml`, migration dependencies).
@@ -25,19 +25,20 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 ## Mandatory Constraints From `.cursorrules`
 - Keep all order logic, checkout sessions, and Nyehandel integration in `supabase/functions/`.
 - Never edit `src/lib/cart-utils.ts` without explicit permission.
-- Follow boundaries in `NYEHANDEL_API_SYNC.md` when touching shared integration areas.
+- Follow boundaries in `SYSTEM_BOUNDARIES.md` when touching shared integration areas.
 - Do not implement or alter Pipedrive, WhatsApp, or Cowork automation code.
 - Never hardcode keys or expose real customer data.
 - Use TypeScript + functional React components + shadcn UI patterns.
 - Read `ROADMAP.md` before complex work and update it when tasks are completed.
 - For major refactors/features, update `CHANGELOG.md` (and `EOD_REPORT.md` if requested).
 
-## Collaboration Boundaries (`NYEHANDEL_API_SYNC.md`)
+## Collaboration Boundaries
 - Daniel ownership: B2C storefront and frontend scope.
 - William ownership: B2B automation scope.
 - Daniel should not touch Pipedrive/WhatsApp/Cowork automation.
 - William should not touch React frontend implementation.
 - Shared Nyehandel API logic is allowed in agreed boundaries.
+- See `SYSTEM_BOUNDARIES.md` for full architecture rules.
 
 ## Cross-Repo Integration Protocol
 - When reviewing William's remote repository, work in an isolated review branch (for example `granskning-*`), not on `dev`.
@@ -106,7 +107,7 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 - Utilities/API helpers: `src/lib/`
 - Edge Functions: `supabase/functions/<function-name>/index.ts`
 - Migrations: `supabase/migrations/`
-- Operational docs: `ROADMAP.md`, `DEPLOYMENT_CHECKLIST.md`, `NYEHANDEL_API_SYNC.md`
+- Operational docs: `ROADMAP.md`, `DEPLOYMENT_CHECKLIST.md`, `SYSTEM_BOUNDARIES.md`
 
 ## Code Style Guidelines
 

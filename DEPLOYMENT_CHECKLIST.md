@@ -24,6 +24,9 @@ Backend: Supabase (already hosted)
 | STORE_CURRENCY | EUR | ISO currency code |
 | STORE_LOCALE | en-gb | Nyehandel locale string |
 | STORE_PAYMENT_METHOD | Nets Easy Checkout | Exact name from Nyehandel admin |
+| SYNC_CRON_SECRET | any strong string | Auth for pg_cron auto-sync invocations |
+| DELIVERY_WEBHOOK_SECRET | any strong string | Auth for delivery callback webhook |
+| ALLOWED_ORIGIN | https://yourdomain.com | CORS lock for checkout (production domain) |
 
 ## To spin up a new brand
 
@@ -44,6 +47,9 @@ Backend: Supabase (already hosted)
 - [x] Set `NYEHANDEL_WEBHOOK_SECRET` for `nyehandel-webhook` (`x-api-key` validation).
 - [x] Set `INTERNAL_FUNCTIONS_SECRET` for internal function-to-function auth (`push-order-to-nyehandel`, `retry-failed-nyehandel-orders`).
 - [x] Set `RETRY_FAILED_ORDERS_SECRET` and pass `x-cron-secret` for retry invocations.
+- [ ] Set `SYNC_CRON_SECRET` for pg_cron auto-sync authentication.
+- [ ] Set `DELIVERY_WEBHOOK_SECRET` for delivery callback webhook auth.
+- [ ] Set `ALLOWED_ORIGIN` to production domain for checkout CORS lock.
 - [ ] Set `OPS_ALERTS_CRON_SECRET` and pass `x-cron-secret` for `ops-b2b-queues` invocations.
 - [ ] Store Vault secrets for scheduler: `SUPABASE_FUNCTIONS_BASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `RETRY_FAILED_ORDERS_SECRET`.
 - [ ] Store Vault secret for nightly ops queue scheduler: `OPS_ALERTS_CRON_SECRET`.
@@ -51,3 +57,9 @@ Backend: Supabase (already hosted)
 - [x] Deploy DB migrations in order.
 - [x] Deploy Edge Functions.
 - [x] Register Nyehandel webhook URL pointing to `/functions/v1/nyehandel-webhook`.
+
+## Database Configuration
+
+- [ ] Populate the `sync_config` table with `supabase_project_url` (your Supabase project URL)
+  and `sync_cron_secret` (must match the `SYNC_CRON_SECRET` secret above). This table drives
+  pg_cron auto-sync scheduling.

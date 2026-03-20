@@ -22,8 +22,12 @@ const VALID_SHIPPING_METHODS = [
   "DHL Economy EU",
 ];
 
+// In production, set ALLOWED_ORIGIN to your domain (e.g. "https://nordicpouch.com")
+// to prevent cross-origin order creation. Defaults to "*" for local dev.
+const allowedOrigin = Deno.env.get("ALLOWED_ORIGIN") || "*";
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigin,
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -337,18 +341,19 @@ Deno.serve(async (req) => {
 
   if (!nyehandelResponse.ok) {
     const errText = await nyehandelResponse.text().catch(() => "");
+    // Log full upstream error server-side for debugging — never expose to client
     console.error(
       JSON.stringify({
         requestId,
         event: "nyehandel_checkout_rejected",
         status: nyehandelResponse.status,
+        upstreamBody: errText,
       }),
     );
     return jsonResponse(
       {
         error: "nyehandel_order_creation_failed",
         status: nyehandelResponse.status,
-        details: errText,
         requestId,
       },
       502,

@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-03-19 evening
+Last updated: 2026-03-20
 
 ## Completed today (2026-03-19)
 
@@ -56,7 +56,7 @@ Two options:
 
 ## Key reference files
 
-- `NYEHANDEL_API_REFERENCE.md` — full API reference, every endpoint
+- `NYEHANDEL_API_REFERENCE.md` — full API reference, every endpoint (includes logistics)
 - `NYEHANDEL_API.md` — Step 25 investigation answers, checkout flow design
-- `NYLOGISTIK_REFERENCE.md` — warehouse/shipping system reference
 - `ROADMAP.md` — delivery sequence, Steps 26–40 detail
+- `SYSTEM_BOUNDARIES.md` — architecture rules and ownership

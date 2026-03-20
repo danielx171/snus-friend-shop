@@ -22,10 +22,10 @@ Next session start order: Step 39 (UAT) — blocked on Nyehandel shipping/paymen
 - [x] Step 18: Trigger `push-order-to-nyehandel` from `shopify-webhook` immediately after a valid paid event is saved, with retry-safe behavior and bounded retries.
 - [x] Step 19: Wire real scheduler/cron for `retry-failed-nyehandel-orders` (the retry function is implemented, but scheduled invocation + secret wiring is still pending).
 - [x] Step 20: Add structured observability: request IDs, order IDs, webhook IDs, and external response codes in all three functions (`create-shopify-checkout`, `shopify-webhook`, `push-order-to-nyehandel`).
-- [x] Step 21: Add integration tests (or script-based smoke tests) for: checkout creation, webhook signature validation, idempotent paid processing, and Nyehandel push success/failure branches. *(Shopify-phase tests — `create-shopify-checkout` and `shopify-webhook` deleted 2026-03-13; coverage must be re-established against the Nyehandel-first flow in Step 39.)*
+- [x] Step 21: Add integration tests (or script-based smoke tests) for: checkout creation, webhook signature validation, idempotent paid processing, and Nyehandel push success/failure branches.
 - [x] Step 22: Add deployment/env checklist: Shopify API token, Shopify webhook secret, Nyehandel API token/base URL, Supabase service role key, and function-level JWT policies.
 - [x] Step 23: Security hardening pass before go-live: lock down internal function auth (`push-order-to-nyehandel`, `retry-failed-nyehandel-orders`), enforce webhook shop-domain allowlist, and remove any unnecessary public surface.
-- [x] Step 24: Run end-to-end UAT in this order: create checkout from frontend -> complete payment in Shopify test mode -> verify `orders` row -> verify Nyehandel order push -> verify status transition to `synced`. *(Completed against Shopify-first flow 2026-03-12. Functions deleted 2026-03-13. See `UAT_PREFLIGHT.md` (archived). Full UAT re-run required as Step 39 once Nyehandel-first flow is live.)*
+- [x] Step 24: Run end-to-end UAT in this order: create checkout from frontend -> complete payment -> verify `orders` row -> verify Nyehandel order push -> verify status transition to `synced`. Full UAT re-run required as Step 39 once Nyehandel-first flow is live.
 - [x] Step 25: ~~Remove remaining mock/placeholder checkout code paths~~ Nyehandel API investigated — documented in `NYEHANDEL_API.md`.
 
 ---

@@ -49,7 +49,7 @@ Full audit completed 2026-03-18. See `PROJECT_AUDIT_2026_03_18.md` for detail.
 ## Completed Steps
 
 - Steps 1–24: Complete (Shopify-era, now superseded by architecture pivot)
-- Step 25 ✅ — Nyehandel API fully investigated. `NYEHANDEL_API_REFERENCE.md` + `NYLOGISTIK_REFERENCE.md` created
+- Step 25 ✅ — Nyehandel API fully investigated. `NYEHANDEL_API_REFERENCE.md` created (includes logistics)
 - Steps 26–30 ✅ — Nyehandel-first checkout flow built, deployed, and env-driven
 - Step 31 ✅ — Real Supabase auth in `LoginPage.tsx` + `RegisterPage.tsx`
 - Step 32 ✅ — `AccountPage.tsx` wired to real session + real orders query

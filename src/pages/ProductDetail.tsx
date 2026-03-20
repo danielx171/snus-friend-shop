@@ -175,13 +175,15 @@ export default function ProductDetail() {
             <div>
               <p className="text-sm text-muted-foreground uppercase tracking-widest mb-1.5">{product.brand}</p>
               <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 break-words tracking-tight">{product.name}</h1>
-              <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex items-center gap-0.5">
-                  {[1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-primary text-primary" />)}
-                  <Star className="h-4 w-4 text-muted/40" />
-                  <span className="ml-2 text-sm text-muted-foreground">({product.ratings} reviews)</span>
+              {product.ratings > 0 && (
+                <div className="flex items-center gap-3 flex-wrap">
+                  <div className="flex items-center gap-0.5">
+                    {[1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-primary text-primary" />)}
+                    <Star className="h-4 w-4 text-muted/40" />
+                    <span className="ml-2 text-sm text-muted-foreground">({product.ratings} reviews)</span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-2">

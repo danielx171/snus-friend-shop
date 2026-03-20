@@ -1,6 +1,6 @@
 # System Boundaries
 
-Last updated: 2026-03-18
+Last updated: 2026-03-20
 
 This is the compact rule file for planning and implementation.
 
@@ -40,7 +40,7 @@ This is a **headless B2C nicotine pouch shop** built on:
 | System | Role | Integration status |
 |--------|------|--------------------|
 | Nyehandel | Commerce platform, payment, order management | Active — see `NYEHANDEL_API_REFERENCE.md` |
-| Nylogistik | Warehouse + shipping (built into Nyehandel) | Active — see `NYLOGISTIK_REFERENCE.md` |
+| Nylogistik | Warehouse + shipping (built into Nyehandel) | Active — covered in `NYEHANDEL_API_REFERENCE.md` |
 | Supabase | Database + Edge Functions + Auth | Active |
 
 ## External systems — future scope (not started)
@@ -62,12 +62,16 @@ This is a **headless B2C nicotine pouch shop** built on:
   source of truth for all Nyehandel integration work. Read them before touching
   any order/checkout/fulfilment code.
 
-## Where things stand (as of 2026-03-18)
+## Where things stand (as of 2026-03-20)
 
-**Step 25 is complete** — Nyehandel payment API fully investigated and documented.
+**Steps 26-29: Done** — Nyehandel-first checkout flow implemented, Shopify fully removed,
+catalog synced (734 products, 2,196 variants, 91 brands), useCatalog wired to Supabase.
 
-**Next steps are 26–29:**
-- Step 26: Design Nyehandel-first checkout flow, update `orders` schema
-- Step 27: Write `create-nyehandel-checkout` edge function
-- Step 28: Replace `shopify-webhook` with Nyehandel delivery callback handler
-- Step 29: Update `push-order-to-nyehandel` to remove Shopify references
+**Steps 30-38: Done** — CheckoutHandoff rewritten, auth pages wired, preview mode live,
+badge seeding, Velo theme lock, pg_cron auto-sync all complete. Build passes clean.
+
+**Step 39 UAT: BLOCKED** — Nyehandel account has all shipping/payment method names blank.
+CEO must name the methods in Nyehandel admin before API orders are possible.
+Fallback option: use Nyehandel hosted checkout (redirect flow) instead of API.
+
+**Remaining:** Step 39 (UAT), Step 40 (security review), Vercel deploy, go live.

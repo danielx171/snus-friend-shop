@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import { CartProvider } from "@/context/CartContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "next-themes";
@@ -24,12 +25,14 @@ import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
 import MembershipPage from "./pages/MembershipPage";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
-import OpsLogin from "./pages/ops/OpsLogin";
-import OpsDashboard from "./pages/ops/OpsDashboard";
-import WebhookInbox from "./pages/ops/WebhookInbox";
-import SyncStatus from "./pages/ops/SyncStatus";
-import SkuMappings from "./pages/ops/SkuMappings";
-import OpsUsers from "./pages/ops/OpsUsers";
+
+// Lazy-load ops pages — they are admin-only and rarely visited
+const OpsLogin = lazy(() => import("./pages/ops/OpsLogin"));
+const OpsDashboard = lazy(() => import("./pages/ops/OpsDashboard"));
+const WebhookInbox = lazy(() => import("./pages/ops/WebhookInbox"));
+const SyncStatus = lazy(() => import("./pages/ops/SyncStatus"));
+const SkuMappings = lazy(() => import("./pages/ops/SkuMappings"));
+const OpsUsers = lazy(() => import("./pages/ops/OpsUsers"));
 import { hasSupabaseEnv, missingSupabaseEnvVars } from "@/integrations/supabase/client";
 
 const queryClient = new QueryClient({
@@ -107,12 +110,12 @@ const App = () => (
               <Route path="/privacy" element={<InfoPage title="Privacy Policy" legalWarning />} />
               <Route path="/cookies" element={<InfoPage title="Cookie Policy" legalWarning />} />
 
-              <Route path="/ops/login" element={<OpsLogin />} />
-              <Route path="/ops" element={<OpsAuthGuard><OpsDashboard /></OpsAuthGuard>} />
-              <Route path="/ops/webhooks" element={<OpsAuthGuard><WebhookInbox /></OpsAuthGuard>} />
-              <Route path="/ops/sync" element={<OpsAuthGuard><SyncStatus /></OpsAuthGuard>} />
-              <Route path="/ops/mappings" element={<OpsAuthGuard><SkuMappings /></OpsAuthGuard>} />
-              <Route path="/ops/users" element={<OpsAuthGuard><OpsUsers /></OpsAuthGuard>} />
+              <Route path="/ops/login" element={<Suspense><OpsLogin /></Suspense>} />
+              <Route path="/ops" element={<Suspense><OpsAuthGuard><OpsDashboard /></OpsAuthGuard></Suspense>} />
+              <Route path="/ops/webhooks" element={<Suspense><OpsAuthGuard><WebhookInbox /></OpsAuthGuard></Suspense>} />
+              <Route path="/ops/sync" element={<Suspense><OpsAuthGuard><SyncStatus /></OpsAuthGuard></Suspense>} />
+              <Route path="/ops/mappings" element={<Suspense><OpsAuthGuard><SkuMappings /></OpsAuthGuard></Suspense>} />
+              <Route path="/ops/users" element={<Suspense><OpsAuthGuard><OpsUsers /></OpsAuthGuard></Suspense>} />
 
               <Route path="/mappings" element={<Navigate to="/ops/mappings" replace />} />
 

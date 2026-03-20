@@ -58,6 +58,11 @@ export default function ProductListing() {
     return () => clearTimeout(t);
   }, [filterKey]);
 
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       if (badgeKeyFilter && !product.badgeKeys.includes(badgeKeyFilter)) return false;

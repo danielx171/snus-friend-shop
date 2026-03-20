@@ -148,13 +148,9 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
 
-    // Service role JWT allows internal/CLI invocations without a user JWT
-    const isServiceRole = (() => {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload?.role === 'service_role';
-      } catch { return false; }
-    })();
+    // Compare raw token against the actual service role key — never decode JWT payload
+    // as that skips signature verification and can be forged.
+    const isServiceRole = token === serviceRoleKey;
 
     if (!isServiceRole) {
       const userClient = createClient(supabaseUrl, supabaseAnonKey, {

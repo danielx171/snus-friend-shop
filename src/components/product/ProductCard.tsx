@@ -65,9 +65,9 @@ export function ProductCard({ product }: ProductCardProps) {
     addToCart(product, selectedPack);
   };
 
-  const handleNotifyMe = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleNotifyMe = async (e?: React.SyntheticEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     if (!notifyEmail || !notifyEmail.includes('@')) return;
     setNotifyStatus('sending');
     try {
@@ -236,7 +236,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     placeholder="your@email.com"
                     value={notifyEmail}
                     onChange={(e) => setNotifyEmail(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleNotifyMe(e as unknown as React.MouseEvent)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleNotifyMe(e); }}
                     className="flex-1 min-w-0 rounded-xl border border-border/30 bg-background/80 px-2.5 py-1.5 text-xs placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary"
                   />
                   <Button

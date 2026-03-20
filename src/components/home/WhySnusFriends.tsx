@@ -25,7 +25,7 @@ const reasons = [
 
 export function WhySnusFriends() {
   return (
-    <section className="py-16 md:py-20 bg-[hsl(30_20%_50%/0.04)]">
+    <section className="py-16 md:py-20 bg-muted/5">
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-foreground tracking-tight mb-3">
@@ -36,7 +36,7 @@ export function WhySnusFriends() {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {reasons.map((reason) => {
             const Icon = reason.icon;
             return (

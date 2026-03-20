@@ -7,7 +7,7 @@ Headless storefront with a React/Vite frontend and Supabase backend.
 - Frontend: React + Vite + TypeScript + Tailwind + shadcn/ui
 - Backend: Supabase Postgres + Edge Functions
 - Core rule: checkout, order, and Nyehandel logic belong in `supabase/functions/`
-- Current roadmap status: the project is migrating from a legacy Shopify-first checkout flow toward a Nyehandel-first checkout flow
+- Current roadmap status: Nyehandel-first checkout flow is implemented; Shopify has been fully removed
 
 When docs disagree, treat `ROADMAP.md` and `CURRENT_PRIORITIES.md` as the source of truth.
 
@@ -15,7 +15,7 @@ When docs disagree, treat `ROADMAP.md` and `CURRENT_PRIORITIES.md` as the source
 
 - Never edit `src/lib/cart-utils.ts` without explicit permission.
 - Do not implement or modify Pipedrive, WhatsApp, or Cowork automation.
-- Follow `NYEHANDEL_API_SYNC.md` collaboration boundaries.
+- Follow `SYSTEM_BOUNDARIES.md` collaboration boundaries.
 - Never commit secrets or customer data.
 
 ## Package manager policy

@@ -442,11 +442,7 @@
     color: hsl(210 30% 90%) !important;
   }
 
-  /* Kill warm-tinted section backgrounds */
-  .velo section[class*="bg-[hsl(30"] {
-    background: transparent !important;
-  }
-  .velo .bg-card\/20 {
+.velo .bg-card\/20 {
     background: hsl(220 80% 10% / 0.3) !important;
   }
   .velo .bg-card\/30 {

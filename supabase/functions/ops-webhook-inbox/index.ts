@@ -12,7 +12,7 @@ function json(status: number, body: unknown) {
   });
 }
 
-async function requireAdmin(admin: any, token: string) {
+async function requireAdmin(admin: ReturnType<typeof createClient>, token: string) {
   const { data: userData, error: userErr } = await admin.auth.getUser(token);
   if (userErr || !userData?.user) return { ok: false as const, status: 401, body: { error: 'unauthorized' } };
 

@@ -49,6 +49,26 @@ Deno.serve(async (req) => {
   // Always return 200 to Nyehandel — never 4xx/5xx which could trigger retries
   // All issues are logged and returned in the response body for debugging
 
+  /* ---------- webhook secret auth ---------- */
+  // Nyehandel should include this secret in the x-webhook-secret header.
+  // Configure DELIVERY_WEBHOOK_SECRET in Supabase secrets and provide it to
+  // Nyehandel (e.g. as a query param on the callback URL they store).
+  // If the env var is not set, requests are allowed through for backwards compat.
+  const webhookSecret = Deno.env.get("DELIVERY_WEBHOOK_SECRET");
+  const callerSecret = req.headers.get("x-webhook-secret");
+
+  if (webhookSecret) {
+    if (callerSecret !== webhookSecret) {
+      console.error(JSON.stringify({ requestId, event: "delivery_callback_auth_failed" }));
+      return new Response(JSON.stringify({ ok: false, error: "unauthorized", requestId }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+  } else {
+    console.warn(JSON.stringify({ requestId, event: "delivery_callback_no_secret_configured", warning: "DELIVERY_WEBHOOK_SECRET not set — accepting all requests" }));
+  }
+
   /* ---------- env ---------- */
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -95,17 +115,19 @@ Deno.serve(async (req) => {
   /* ---------- store in webhook_inbox for audit ---------- */
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
 
-  await adminClient.from("webhook_inbox").insert({
+  const { data: inboxRow, error: inboxInsertError } = await adminClient.from("webhook_inbox").insert({
     provider: "nyehandel",
     topic: "delivery_callback",
     status: "received",
     payload: body,
     received_at: new Date().toISOString(),
-  }).then(({ error }) => {
-    if (error) {
-      console.error(JSON.stringify({ requestId, event: "delivery_callback_inbox_insert_failed", error: error.message }));
-    }
-  });
+  }).select("id").single();
+
+  if (inboxInsertError) {
+    console.error(JSON.stringify({ requestId, event: "delivery_callback_inbox_insert_failed", error: inboxInsertError.message }));
+  }
+
+  const inboxRowId = inboxRow?.id ?? null;
 
   /* ---------- extract nyehandel_order_id ---------- */
   // Try multiple possible field paths since payload shape is undocumented
@@ -184,14 +206,14 @@ Deno.serve(async (req) => {
   }
 
   /* ---------- also mark webhook_inbox as processed ---------- */
-  await adminClient
-    .from("webhook_inbox")
-    .update({ status: "processed", processed_at: new Date().toISOString() })
-    .eq("provider", "nyehandel")
-    .eq("topic", "delivery_callback")
-    .is("processed_at", null)
-    .order("received_at", { ascending: false })
-    .limit(1);
+  // Use the specific row id from our insert to avoid a race condition where
+  // concurrent callbacks could mark each other's rows as processed.
+  if (inboxRowId) {
+    await adminClient
+      .from("webhook_inbox")
+      .update({ status: "processed", processed_at: new Date().toISOString() })
+      .eq("id", inboxRowId);
+  }
 
   console.log(JSON.stringify({
     requestId,

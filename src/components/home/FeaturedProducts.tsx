@@ -30,7 +30,7 @@ export function FeaturedProducts({
   if (!isLoading && products.length === 0) return null;
 
   return (
-    <section className="featured-section py-12 md:py-16 bg-[hsl(30_20%_50%/0.03)]">
+    <section className="featured-section py-12 md:py-16 bg-muted/5">
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-foreground tracking-tight">{title}</h2>
