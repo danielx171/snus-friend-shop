@@ -62,6 +62,20 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const accentColor = flavorAccents[product.flavorKey];
   const glowColor = accentColor ?? 'hsl(var(--primary))';
 
+  const cardVariants = {
+    rest: { y: 0, boxShadow: '0 0 0 hsl(0 0% 0% / 0)' },
+    hover: { y: -2, boxShadow: '0 12px 40px hsl(0 0% 0% / 0.22)' },
+  };
+  const imageVariants = {
+    rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
+    hover: { scale: 1.06, rotate: 6, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
+  };
+  const ctaVariants = {
+    rest: { y: 0 },
+    hover: { y: -4 },
+  };
+  const hoverTransition = { duration: 0.2, ease: 'easeOut' } as const;
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -87,11 +101,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
 
   return (
     <motion.div
-      whileHover={{
-        y: -2,
-        boxShadow: '0 12px 40px hsl(0 0% 0% / 0.22)',
-      }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      variants={cardVariants}
+      transition={hoverTransition}
     >
     <Card className={cn(
       'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-colors duration-200',
@@ -105,12 +119,8 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
         )} style={{ aspectRatio: isCompact ? '3/2' : '1' }}>
           <motion.div
             className="h-full w-full"
-            whileHover={{
-              scale: 1.06,
-              rotate: 6,
-              filter: `drop-shadow(0 0 18px ${glowColor}55)`,
-            }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            variants={imageVariants}
+            transition={hoverTransition}
           >
           {product.image ? (
             <img
@@ -293,8 +303,8 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
             )
           ) : (
             <motion.div
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              variants={ctaVariants}
+              transition={hoverTransition}
             >
             <Button
               onClick={handleAddToCart}
