@@ -4,6 +4,7 @@ import { Layout } from '@/components/layout/Layout';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -106,6 +107,7 @@ export default function CheckoutHandoff() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [ageVerified, setAgeVerified] = useState(false);
   const [skuMap, setSkuMap] = useState<Map<string, string> | null>(null);
   const [skuLoading, setSkuLoading] = useState(true);
   const [skuError, setSkuError] = useState(false);
@@ -318,7 +320,7 @@ export default function CheckoutHandoff() {
     );
   }
 
-  const canSubmit = isFormValid() && !submitting && !missingSkus && !skuError && !skuLoading;
+  const canSubmit = isFormValid() && ageVerified && !submitting && !missingSkus && !skuError && !skuLoading;
 
   return (
     <>
@@ -567,7 +569,6 @@ export default function CheckoutHandoff() {
                         <span className="font-bold">{t('cart.total')}</span>
                         <span className="font-bold">{formatPrice(finalTotal)}</span>
                       </div>
-                      <p className="text-xs text-muted-foreground">{t('cart.includingVat')}</p>
                     </div>
 
                     {error && (
@@ -588,21 +589,52 @@ export default function CheckoutHandoff() {
                         </p>
                       </div>
                     ) : (
-                      <Button
-                        type="submit"
-                        size="lg"
-                        className="w-full mt-6"
-                        disabled={!canSubmit}
-                      >
-                        {submitting ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Placing order...
-                          </>
-                        ) : (
-                          'Place Order'
-                        )}
-                      </Button>
+                      <>
+                        <div className="flex items-start gap-3 mt-6">
+                          <Checkbox
+                            id="age-verify"
+                            checked={ageVerified}
+                            onCheckedChange={(checked) => setAgeVerified(checked === true)}
+                            className="mt-0.5"
+                          />
+                          <label htmlFor="age-verify" className="text-sm text-muted-foreground leading-tight cursor-pointer">
+                            I confirm I am 18 years or older and eligible to purchase nicotine products.
+                          </label>
+                        </div>
+
+                        <div className="mt-4 space-y-1 text-xs text-muted-foreground">
+                          <p>All prices include VAT where applicable.</p>
+                          <p>
+                            You have 14 days from delivery to withdraw from this purchase.{' '}
+                            <Link to="/returns" className="underline hover:text-foreground">
+                              Returns &amp; refunds policy
+                            </Link>
+                          </p>
+                          <p>Estimated delivery: 3-10 business days.</p>
+                          <p>
+                            By placing this order you accept our{' '}
+                            <Link to="/terms" className="underline hover:text-foreground">
+                              terms &amp; conditions
+                            </Link>.
+                          </p>
+                        </div>
+
+                        <Button
+                          type="submit"
+                          size="lg"
+                          className="w-full mt-6"
+                          disabled={!canSubmit}
+                        >
+                          {submitting ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Placing order...
+                            </>
+                          ) : (
+                            'Place Order'
+                          )}
+                        </Button>
+                      </>
                     )}
 
                     <p className="text-xs text-muted-foreground text-center mt-2">
