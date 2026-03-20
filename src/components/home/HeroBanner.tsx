@@ -106,7 +106,7 @@ export function HeroBanner() {
             </div>
 
             {/* Crossfade text container */}
-            <div className="relative min-h-[240px] sm:min-h-[220px]">
+            <div className="relative min-h-[240px] sm:min-h-[220px] overflow-hidden">
               {SLIDES.map((s, i) => (
                 <div
                   key={i}
@@ -152,7 +152,7 @@ export function HeroBanner() {
                         asChild
                         variant="outline"
                         size="lg"
-                        className="rounded-2xl h-12 px-7 border-border/40 hover:border-primary/40 transition-all duration-200"
+                        className="rounded-2xl h-12 px-7 border-border/60 bg-card/60 backdrop-blur-sm hover:bg-card hover:border-border transition-all duration-200 text-foreground"
                       >
                         <Link to={s.secondaryCta.href}>
                           {s.secondaryCta.label}
@@ -220,54 +220,36 @@ export function HeroBanner() {
             {showcaseProducts.length > 0 ? (
               <>
                 {/* Desktop: 2×2 grid */}
-                <div className="hidden lg:grid grid-cols-2 gap-4">
+                <div className="hidden lg:grid grid-cols-2 gap-3">
                   {showcaseProducts.map((product, i) => (
                     <Link
                       key={product.id}
                       to={`/product/${product.id}`}
-                      className={cn(
-                        'group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm p-4 hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5',
-                        i === 0 && 'lg:col-span-2'
-                      )}
+                      className="group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm overflow-hidden hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
                     >
-                      {i === 0 ? (
-                        /* Featured product — wide card */
-                        <div className="flex items-center gap-4">
-                          <div className="w-24 h-24 rounded-xl overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
-                            {product.image ? (
-                              <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
-                            ) : (
-                              <span className="text-muted-foreground font-bold text-xs text-center px-2">{product.brand}</span>
-                            )}
+                      {/* Product image — full bleed, square */}
+                      <div className="aspect-square w-full overflow-hidden bg-muted/20">
+                        {product.image ? (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center p-4">
+                            <span className="font-bold text-sm text-center leading-snug text-muted-foreground">{product.brand}</span>
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{product.brand}</p>
-                            <p className="font-semibold text-foreground leading-snug line-clamp-2">{product.name}</p>
-                            <p className="text-sm mt-1.5" style={{ color: slide.accentColor }}>
-                              {t('products.from')} {formatPrice(product.prices.pack1)}/{t('cart.can')}
-                            </p>
-                          </div>
-                          <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all shrink-0" />
-                        </div>
-                      ) : (
-                        /* Regular product — square card */
-                        <div className="flex flex-col items-center text-center gap-3">
-                          <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted/30 flex items-center justify-center">
-                            {product.image ? (
-                              <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
-                            ) : (
-                              <span className="text-muted-foreground font-bold text-[9px] text-center px-1">{product.brand}</span>
-                            )}
-                          </div>
-                          <div className="min-w-0 w-full">
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
-                            <p className="font-medium text-foreground text-xs leading-snug line-clamp-2 mt-0.5">{product.name}</p>
-                            <p className="text-[10px] mt-1" style={{ color: slide.accentColor }}>
-                              {formatPrice(product.prices.pack1)}/{t('cart.can')}
-                            </p>
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
+                      {/* Info overlay */}
+                      <div className="p-3">
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
+                        <p className="font-semibold text-foreground text-xs leading-snug line-clamp-1 mt-0.5">{product.name}</p>
+                        <p className="text-xs mt-1 font-medium" style={{ color: slide.accentColor }}>
+                          {formatPrice(product.prices.pack1)}/{t('cart.can')}
+                        </p>
+                      </div>
                     </Link>
                   ))}
                 </div>

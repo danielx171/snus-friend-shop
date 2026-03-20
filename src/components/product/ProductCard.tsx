@@ -3,7 +3,7 @@ import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey, RETAIL_PAC
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Star, ShoppingCart, Bell } from 'lucide-react';
+import { ShoppingCart, Bell } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '@/lib/api';
@@ -183,12 +183,6 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-muted/30 text-muted-foreground border border-border/20">
               {product.nicotineContent}mg
             </span>
-          </div>
-
-          {/* Rating */}
-          <div className="mb-3 flex items-center gap-1">
-            <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))] shrink-0" />
-            <span className="text-[10px] text-muted-foreground">({product.ratings})</span>
           </div>
 
           {/* Pack sizes */}

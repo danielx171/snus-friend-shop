@@ -12,9 +12,11 @@ import { brands as brandsList } from '@/data/products';
 
 export function MainNav() {
   const categories = [
-    { title: 'All Nicotine Pouches', href: '/nicotine-pouches', description: 'Browse our complete range of nicotine pouches' },
-    { title: 'Nicotine-Free', href: '/nicotine-pouches?strength=normal', description: 'Pouches with lower nicotine content' },
-    { title: 'Caffeine Pouches', href: '/nicotine-pouches', description: 'Energy-boosting caffeine pouches' },
+    { title: 'All Nicotine Pouches', href: '/nicotine-pouches', description: 'Browse our complete range of 700+ nicotine pouches' },
+    { title: 'Mild (≤6mg)', href: '/nicotine-pouches?strength=normal', description: 'Lower strength — great for new users' },
+    { title: 'Strong (7–10mg)', href: '/nicotine-pouches?strength=strong', description: 'A step up for experienced users' },
+    { title: 'Extra Strong (11–16mg)', href: '/nicotine-pouches?strength=extraStrong', description: 'High strength pouches from top brands' },
+    { title: 'Ultra Strong (17mg+)', href: '/nicotine-pouches?strength=ultraStrong', description: 'Maximum strength for seasoned users' },
   ];
 
   const brands = brandsList.slice(0, 8).map(name => ({
@@ -32,7 +34,7 @@ export function MainNav() {
                 Nicotine Pouches
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-[420px] gap-1.5 p-4 md:w-[520px] md:grid-cols-2 glass-panel-strong rounded-xl">
+                <ul className="grid w-[460px] gap-1.5 p-4 glass-panel-strong rounded-xl">
                   {categories.map((category) => (
                     <li key={category.title}>
                       <NavigationMenuLink asChild>
@@ -73,11 +75,10 @@ export function MainNav() {
             </NavigationMenuItem>
 
             {[
-              { href: '/nicotine-pouches?badge=newPrice', label: '99p Picks', highlight: true },
-              { href: '/nicotine-pouches?badge=new', label: 'New' },
+              { href: '/nicotine-pouches?badge=new', label: 'New Arrivals' },
               { href: '/nicotine-pouches?badge=popular', label: 'Bestsellers' },
-              { href: '/nicotine-pouches?badge=newPrice', label: 'Offers' },
-              { href: '/brands', label: 'Brands' },
+              { href: '/nicotine-pouches?badge=newPrice', label: 'Offers', highlight: true },
+              { href: '/brands', label: 'All Brands' },
               { href: '/membership', label: 'Members Club', highlight: true },
             ].map((item) => (
               <NavigationMenuItem key={item.label}>
