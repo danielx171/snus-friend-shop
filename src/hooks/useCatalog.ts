@@ -68,12 +68,12 @@ function toProduct(row: DbProduct): MockProduct {
     ? +(Number(row.compare_price) * RETAIL_MARKUP).toFixed(2)
     : undefined;
 
-  // Sum stock across all variants (each variant has one inventory row)
-  const stock = variants.reduce((sum, v) => {
-    const inv = v.inventory;
-    const qty = Array.isArray(inv) && inv.length > 0 ? inv[0].quantity : 0;
-    return sum + qty;
-  }, 0);
+  // Sum stock across variants. Only count variants that have an actual inventory row.
+  // If no inventory rows exist at all → undefined (unknown). Only 0 when rows exist but qty is 0.
+  const knownQtys = variants
+    .map(v => { const inv = v.inventory; return Array.isArray(inv) && inv.length > 0 ? inv[0].quantity : null; })
+    .filter((q): q is number => q !== null);
+  const stock: number | undefined = knownQtys.length > 0 ? knownQtys.reduce((a, b) => a + b, 0) : undefined;
 
   return {
     id: row.id,
