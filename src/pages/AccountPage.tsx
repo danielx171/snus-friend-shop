@@ -60,10 +60,21 @@ type OrderRow = {
 export default function AccountPage() {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null | undefined>(undefined);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [saveError, setSaveError] = useState('');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null);
+      const u = data.session?.user ?? null;
+      setUser(u);
+      if (u) {
+        setFirstName((u.user_metadata?.first_name as string | undefined) ?? '');
+        setLastName((u.user_metadata?.last_name as string | undefined) ?? '');
+        setPhone((u.user_metadata?.phone as string | undefined) ?? '');
+      }
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'TOKEN_REFRESHED') return;
@@ -71,6 +82,21 @@ export default function AccountPage() {
     });
     return () => subscription.unsubscribe();
   }, []);
+
+  const handleSaveProfile = async () => {
+    setSaveStatus('saving');
+    setSaveError('');
+    const { error } = await supabase.auth.updateUser({
+      data: { first_name: firstName, last_name: lastName, phone },
+    });
+    if (error) {
+      setSaveStatus('error');
+      setSaveError(error.message);
+    } else {
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    }
+  };
 
   const { data: orders = [], isLoading: ordersLoading } = useQuery({
     queryKey: ['account-orders', user?.email],
@@ -120,8 +146,6 @@ export default function AccountPage() {
     );
   }
 
-  const firstName = (user.user_metadata?.first_name as string | undefined) ?? '';
-  const lastName = (user.user_metadata?.last_name as string | undefined) ?? '';
   const displayName = firstName || (user.email?.split('@')[0] ?? 'there');
 
   return (
@@ -285,22 +309,25 @@ export default function AccountPage() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label>First name</Label>
-                        <Input placeholder="First name" defaultValue={firstName} />
+                        <Input placeholder="First name" value={firstName} onChange={e => setFirstName(e.target.value)} />
                       </div>
                       <div className="space-y-2">
                         <Label>Last name</Label>
-                        <Input placeholder="Last name" defaultValue={lastName} />
+                        <Input placeholder="Last name" value={lastName} onChange={e => setLastName(e.target.value)} />
                       </div>
                       <div className="space-y-2 sm:col-span-2">
                         <Label>Email</Label>
-                        <Input type="email" defaultValue={user.email ?? ''} disabled />
+                        <Input type="email" value={user.email ?? ''} disabled />
                       </div>
                       <div className="space-y-2 sm:col-span-2">
                         <Label>Phone (optional)</Label>
-                        <Input type="tel" placeholder="+44 7000 000000" />
+                        <Input type="tel" placeholder="+44 7000 000000" value={phone} onChange={e => setPhone(e.target.value)} />
                       </div>
                     </div>
-                    <Button>Save Changes</Button>
+                    <Button onClick={handleSaveProfile} disabled={saveStatus === 'saving'}>
+                      {saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? 'Saved!' : 'Save Changes'}
+                    </Button>
+                    {saveStatus === 'error' && <p className="text-xs text-destructive mt-1">{saveError}</p>}
                   </CardContent>
                 </Card>
 
@@ -313,7 +340,7 @@ export default function AccountPage() {
                     <div className="space-y-2">
                       <h3 className="text-sm font-medium text-foreground">Change Password</h3>
                       <p className="text-xs text-muted-foreground">Update your password to keep your account secure.</p>
-                      <Button variant="outline" size="sm">Change Password</Button>
+                      <Button variant="outline" size="sm" onClick={() => navigate('/update-password')}>Change Password</Button>
                     </div>
                     <Separator className="bg-border/20" />
                     <div className="space-y-2">
