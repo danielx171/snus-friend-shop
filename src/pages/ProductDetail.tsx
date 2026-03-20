@@ -116,9 +116,9 @@ export default function ProductDetail() {
   };
 
   return (
+    <AgeGate>
     <Layout showNicotineWarning={false}>
       <ProductSchema product={product} selectedPackSize={selectedPack} />
-      <AgeGate />
 
       <div className="container py-10">
         <nav className="mb-8">
