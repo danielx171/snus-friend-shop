@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PackSize, packSizeMultipliers, FlavorKey, RETAIL_PACK_SIZES } from '@/data/products';
 import { useCatalogProducts, useCatalogProduct } from '@/hooks/useCatalog';
@@ -39,6 +39,11 @@ const packSizes = RETAIL_PACK_SIZES;
 
 export default function ProductDetail() {
   const { id } = useParams();
+
+  // Scroll to top when navigating to a new product
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [id]);
   const { data: product, isLoading, isError } = useCatalogProduct(id);
   const { data: allProducts = [] } = useCatalogProducts();
   const { addToCart } = useCart();

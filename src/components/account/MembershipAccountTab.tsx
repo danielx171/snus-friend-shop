@@ -2,16 +2,19 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, Gift, ArrowRight, Coins, Check } from 'lucide-react';
+import { Crown, ArrowRight, Coins, Check } from 'lucide-react';
 import { TIERS, SNUSPOINTS, type MembershipTier } from '@/data/membership';
 import { cn } from '@/lib/utils';
+import { useSnusPoints } from '@/hooks/useSnusPoints';
 
 interface MembershipAccountTabProps {
+  userId?: string | null;
   tier?: MembershipTier | null;
-  points?: number;
 }
 
-export function MembershipAccountTab({ tier = null, points = 0 }: MembershipAccountTabProps) {
+export function MembershipAccountTab({ userId = null, tier = null }: MembershipAccountTabProps) {
+  const { data: pointsData } = useSnusPoints(userId);
+  const points = pointsData?.balance ?? 0;
   const progress = Math.min((points / SNUSPOINTS.freeTrialCost) * 100, 100);
   const pointsRemaining = Math.max(SNUSPOINTS.freeTrialCost - points, 0);
 
@@ -84,7 +87,7 @@ export function MembershipAccountTab({ tier = null, points = 0 }: MembershipAcco
                 <Crown className="h-5 w-5 text-[hsl(var(--chart-4))]" />
               </div>
               <div>
-                <h3 className="font-semibold text-foreground">Join the SnusFriend Club</h3>
+                <h3 className="font-semibold text-foreground">Join the Snus Family Club</h3>
                 <p className="text-xs text-muted-foreground">Monthly mystery boxes & exclusive perks</p>
               </div>
             </div>

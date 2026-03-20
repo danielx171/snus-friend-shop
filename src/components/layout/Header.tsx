@@ -20,7 +20,7 @@ export function Header() {
     { href: '/nicotine-pouches?badge=newPrice', label: 'Offers' },
     { href: '/nicotine-pouches?badge=new', label: 'New' },
     { href: '/nicotine-pouches?badge=popular', label: 'Bestsellers' },
-    { href: '/membership', label: 'Members Club' },
+    { href: '/membership', label: 'Snus Family' },
   ];
 
   return (

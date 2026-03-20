@@ -19,7 +19,7 @@ export function MembersClub() {
             Earn {SNUSPOINTS.displayName} on every order
           </div>
           <h2 className="text-3xl font-bold text-foreground tracking-tight">
-            SnusFriend Club
+            Snus Family Club
           </h2>
           <p className="text-muted-foreground mt-2 max-w-lg mx-auto">
             Monthly mystery boxes, exclusive discounts, and vendor merchandise — unlock the full SnusFriend experience.
@@ -116,7 +116,7 @@ export function MembersClub() {
             to="/membership"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
-            Learn more about the SnusFriend Club
+            Learn more about the Snus Family Club
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>

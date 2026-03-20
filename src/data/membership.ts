@@ -83,8 +83,8 @@ export const SNUSPOINTS = {
 
 export const MEMBERSHIP_FAQ: { question: string; answer: string }[] = [
   {
-    question: 'What is the SnusFriend Club?',
-    answer: 'The SnusFriend Club is our membership program. Members receive a monthly mystery box of curated nicotine pouches, exclusive discounts on all orders, and early access to new products.',
+    question: 'What is the Snus Family Club?',
+    answer: 'The Snus Family Club is our membership program. Members receive a monthly mystery box of curated nicotine pouches, exclusive discounts on all orders, and early access to new products.',
   },
   {
     question: 'What\'s in the mystery box?',

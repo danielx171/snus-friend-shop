@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
@@ -15,6 +15,7 @@ import { TIERS, SNUSPOINTS, MEMBERSHIP_FAQ } from '@/data/membership';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { useSnusPoints } from '@/hooks/useSnusPoints';
 
 const SITE_URL = import.meta.env.VITE_SITE_URL as string | undefined;
 
@@ -34,6 +35,19 @@ const merchPlaceholders = [
 export default function MembershipPage() {
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUserId(data.session?.user?.id ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const { data: pointsData } = useSnusPoints(userId);
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,8 +70,8 @@ export default function MembershipPage() {
   return (
     <>
       <SEO
-        title="SnusFriend Club — Membership & Mystery Boxes | SnusFriend"
-        description="Join the SnusFriend Club for monthly mystery boxes of premium nicotine pouches, exclusive discounts, and VIP vendor merchandise. Earn SnusPoints on every order."
+        title="Snus Family Club — Membership & Mystery Boxes | SnusFriend"
+        description="Join the Snus Family Club for monthly mystery boxes of premium nicotine pouches, exclusive discounts, and VIP vendor merchandise. Earn SnusPoints on every order."
         canonical={SITE_URL ? SITE_URL + '/membership' : undefined}
       />
       <Layout showNicotineWarning={false}>
@@ -70,7 +84,7 @@ export default function MembershipPage() {
               Exclusive membership
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08]">
-              <span className="block font-serif text-[hsl(220_20%_15%)]">SnusFriend Club</span>
+              <span className="block font-serif text-[hsl(220_20%_15%)]">Snus Family Club</span>
               <span className="block text-[hsl(var(--chart-4))] text-[0.8em] mt-2">
                 Your monthly pouch surprise
               </span>
@@ -256,19 +270,35 @@ export default function MembershipPage() {
               ))}
             </div>
 
-            {/* Progress bar mockup */}
-            <div className="max-w-md mx-auto rounded-2xl glass-panel p-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-foreground">Your SnusPoints</span>
-                <span className="text-sm text-muted-foreground">350 / {SNUSPOINTS.freeTrialCost}</span>
-              </div>
-              <div className="h-3 rounded-full bg-muted/40 overflow-hidden">
-                <div className="h-full rounded-full bg-[hsl(var(--chart-2))] transition-all duration-500" style={{ width: '70%' }} />
-              </div>
-              <p className="text-xs text-muted-foreground mt-2 text-center">
-                150 more points until your free mystery box month!
-              </p>
-            </div>
+            {/* Points progress */}
+            {(() => {
+              const pts = pointsData?.balance ?? 0;
+              const pct = Math.min((pts / SNUSPOINTS.freeTrialCost) * 100, 100);
+              const remaining = Math.max(SNUSPOINTS.freeTrialCost - pts, 0);
+              return (
+                <div className="max-w-md mx-auto rounded-2xl glass-panel p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-foreground">
+                      {userId ? 'Your SnusPoints' : 'SnusPoints Example'}
+                    </span>
+                    <span className="text-sm text-muted-foreground">{pts} / {SNUSPOINTS.freeTrialCost}</span>
+                  </div>
+                  <div className="h-3 rounded-full bg-muted/40 overflow-hidden">
+                    <div className="h-full rounded-full bg-[hsl(var(--chart-2))] transition-all duration-500" style={{ width: `${pct}%` }} />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
+                    {remaining > 0
+                      ? `${remaining} more points until your free mystery box month!`
+                      : 'You have enough points to redeem a free mystery box month!'}
+                  </p>
+                  {!userId && (
+                    <p className="text-xs text-muted-foreground mt-1 text-center">
+                      <Link to="/login" className="text-primary hover:underline">Sign in</Link> to see your balance.
+                    </p>
+                  )}
+                </div>
+              );
+            })()}
           </div>
         </section>
 

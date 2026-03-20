@@ -104,6 +104,7 @@ export type Database = {
           tracking_id: string | null
           tracking_url: string | null
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           checkout_status?: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
@@ -126,6 +127,7 @@ export type Database = {
           tracking_id?: string | null
           tracking_url?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           checkout_status?: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
@@ -148,6 +150,55 @@ export type Database = {
           tracking_id?: string | null
           tracking_url?: string | null
           updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      points_balances: {
+        Row: {
+          user_id: string
+          balance: number
+          lifetime_earned: number
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          balance?: number
+          lifetime_earned?: number
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          balance?: number
+          lifetime_earned?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      points_transactions: {
+        Row: {
+          id: string
+          user_id: string
+          order_id: string | null
+          points: number
+          reason: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          order_id?: string | null
+          points: number
+          reason: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          order_id?: string | null
+          points?: number
+          reason?: string
+          created_at?: string
         }
         Relationships: []
       }
