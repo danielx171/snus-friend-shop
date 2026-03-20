@@ -60,6 +60,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const isOutOfStock = typeof product.stock === 'number' && product.stock === 0;
   const isLowStock = typeof product.stock === 'number' && product.stock > 0 && product.stock <= LOW_STOCK_THRESHOLD;
   const accentColor = flavorAccents[product.flavorKey];
+  const glowColor = accentColor ?? 'hsl(var(--primary))';
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
