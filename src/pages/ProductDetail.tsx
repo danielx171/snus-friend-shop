@@ -77,9 +77,9 @@ export default function ProductDetail() {
   const currentPrice = product.prices[selectedPack];
   const pricePerCan = currentPrice / packSizeMultipliers[selectedPack];
 
-  const productDescription = t(product.descriptionKey) !== product.descriptionKey
-    ? t(product.descriptionKey)
-    : t('detail.genericDescription', { name: product.name, brand: product.brand });
+  const productDescription = product.description
+    || (t(product.descriptionKey) !== product.descriptionKey ? t(product.descriptionKey) : null)
+    || t('detail.genericDescription', { name: product.name, brand: product.brand });
 
   const relatedProducts = allProducts
     .filter(p => p.brand === product.brand && p.id !== product.id)

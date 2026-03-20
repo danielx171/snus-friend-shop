@@ -63,6 +63,11 @@ function toProduct(row: DbProduct): MockProduct {
     pack30: Math.round(basePricePerCan * PACK_QUANTITIES.pack30 * PACK_DISCOUNT.pack30 * 100) / 100,
   };
 
+  // Apply retail markup to compare/MSRP price so it's ready for display
+  const comparePrice = row.compare_price
+    ? +(Number(row.compare_price) * RETAIL_MARKUP).toFixed(2)
+    : undefined;
+
   return {
     id: row.id,
     name: row.name,
@@ -74,6 +79,8 @@ function toProduct(row: DbProduct): MockProduct {
     nicotineContent: Number(row.nicotine_mg),
     portionsPerCan: row.portions_per_can,
     descriptionKey: row.description_key ?? '',
+    description: row.description ?? undefined,
+    comparePrice,
     image: row.image_url ?? '',
     ratings: row.ratings,
     badgeKeys: (row.badge_keys ?? []) as MockProduct['badgeKeys'],

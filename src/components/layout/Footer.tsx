@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
+import { Logo } from './Logo';
 
 export function Footer() {
   return (
@@ -8,9 +9,7 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-4">
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg glow-primary">
-                SF
-              </div>
+              <Logo size={38} className="text-primary" />
               <span className="text-xl font-semibold text-foreground">SnusFriend</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">

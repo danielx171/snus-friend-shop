@@ -16,7 +16,7 @@ interface NyehandelVariant {
   gtin?: string;
   stock?: number;
   weight?: number;
-  prices?: Array<{ price?: number; currency_id?: number; tier?: number }>;
+  prices?: Array<{ price?: number; compare_price?: number; currency_id?: number; tier?: number }>;
   options?: Array<{ type?: string; value?: string }>;
 }
 
@@ -32,6 +32,10 @@ interface NyehandelProduct {
   brand?: { id?: number; name?: string };
   images?: Array<{ url?: string }>;
   specifications?: Array<{ key?: string; value?: string }>;
+  /** Product description fields — prefer short_description > description > meta_description */
+  short_description?: string;
+  description?: string;
+  meta_description?: string;
 }
 
 interface NyehandelPaginatedResponse {
@@ -95,6 +99,20 @@ function toFormatKey(spec: string | null): string {
   return 'slim'; // default
 }
 
+/** Strip HTML tags and collapse whitespace for use in plain-text description fields */
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 1000);
+}
+
+/** Map Facts_Type spec to our category_key enum */
+function toCategoryKey(spec: string | null): string {
+  if (!spec) return 'nicotinePouches';
+  const lower = spec.toLowerCase();
+  if (lower.includes('nicotine free') || lower.includes('nicotine-free')) return 'nicotineFree';
+  if (lower.includes('energy')) return 'energyPouches';
+  return 'nicotinePouches';
+}
+
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: corsHeaders });
 }
@@ -112,31 +130,43 @@ Deno.serve(async (req) => {
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
 
-  /* ---------- auth: caller must be admin ---------- */
+  /* ---------- auth: caller must be admin or service role ---------- */
   const authHeader = req.headers.get('Authorization');
   if (!authHeader?.startsWith('Bearer ')) {
     return jsonResponse({ error: 'Unauthorized' }, 401);
   }
 
-  const userClient = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: authHeader } },
-  });
   const token = authHeader.replace('Bearer ', '');
-  const { data: userData, error: authError } = await userClient.auth.getUser(token);
-  if (authError || !userData?.user) {
-    return jsonResponse({ error: 'Unauthorized' }, 401);
-  }
-
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
-  const { data: roleData } = await adminClient
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userData.user.id)
-    .eq('role', 'admin')
-    .maybeSingle();
 
-  if (!roleData) {
-    return jsonResponse({ error: 'Forbidden' }, 403);
+  // Service role JWT allows internal/CLI invocations without a user JWT
+  // Decode payload (no signature verification needed — Supabase gateway already verified it)
+  const isServiceRole = (() => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload?.role === 'service_role';
+    } catch { return false; }
+  })();
+
+  if (!isServiceRole) {
+    const userClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data: userData, error: authError } = await userClient.auth.getUser(token);
+    if (authError || !userData?.user) {
+      return jsonResponse({ error: 'Unauthorized' }, 401);
+    }
+
+    const { data: roleData } = await adminClient
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userData.user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (!roleData) {
+      return jsonResponse({ error: 'Forbidden' }, 403);
+    }
   }
 
   /* ---------- env ---------- */
@@ -243,6 +273,21 @@ Deno.serve(async (req) => {
         const nicotineMg = nicotineMgStr ? parseFloat(nicotineMgStr) : 0;
         const portionsStr = getSpec(specs, 'Number of Portions');
         const portions = portionsStr ? parseInt(portionsStr, 10) : 20;
+        const typeSpec = getSpec(specs, 'Type');
+
+        // Description: prefer short_description (clean text) over HTML description or meta_description
+        const rawDescription = product.short_description
+          || (product.description ? stripHtml(product.description) : null)
+          || product.meta_description
+          || null;
+        // Strip any residual HTML and discard obvious boilerplate (e.g. expiry-date-only strings)
+        const description = rawDescription && rawDescription.length > 20 ? rawDescription : null;
+
+        // Compare/MSRP price from first variant's first price tier (wholesale, frontend applies markup)
+        const firstVariantCompare = product.variants?.[0]?.prices?.[0]?.compare_price ?? 0;
+        const comparePriceDecimal = firstVariantCompare > 0
+          ? +(firstVariantCompare / 100).toFixed(4)
+          : null;
 
         // Upsert product
         const imageUrl = product.images?.[0]?.url ?? null;
@@ -256,8 +301,11 @@ Deno.serve(async (req) => {
           flavor_key: toFlavorKey(flavorSpec),
           strength_key: toStrengthKey(nicotineMg),
           format_key: toFormatKey(formatSpec),
+          category_key: toCategoryKey(typeSpec),
           nicotine_mg: nicotineMg,
           portions_per_can: portions || 20,
+          description,
+          compare_price: comparePriceDecimal,
         };
 
         // Check if product already exists by nyehandel_id

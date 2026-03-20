@@ -21,7 +21,7 @@ export type FlavorKey = 'mint' | 'fruit' | 'berry' | 'citrus' | 'licorice' | 'co
 export type StrengthKey = 'normal' | 'strong' | 'extraStrong' | 'ultraStrong';
 export type FormatKey = 'slim' | 'mini' | 'original' | 'large';
 export type BadgeKey = 'newPrice' | 'new' | 'popular' | 'limited';
-export type CategoryKey = 'nicotinePouches';
+export type CategoryKey = 'nicotinePouches' | 'nicotineFree' | 'energyPouches';
 
 export interface Product {
   id: string;
@@ -34,6 +34,8 @@ export interface Product {
   nicotineContent: number; // mg per portion
   portionsPerCan: number;
   descriptionKey: string; // Translation key for description
+  description?: string;   // Real product description text from Nyehandel (takes priority over descriptionKey)
+  comparePrice?: number;  // Retail MSRP/compare price per can (for strikethrough display)
   image: string;
   ratings: number;
   badgeKeys: BadgeKey[];

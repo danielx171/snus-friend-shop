@@ -146,7 +146,14 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Price block */}
           <div className="mb-3.5 flex items-baseline justify-between gap-2 min-w-0">
             <span className="text-lg font-bold text-foreground truncate">{formatPrice(currentPrice)}</span>
-            <span className="text-xs text-muted-foreground shrink-0">{formatPriceWithUnit(pricePerCan)}</span>
+            <div className="flex flex-col items-end shrink-0">
+              <span className="text-xs text-muted-foreground">{formatPriceWithUnit(pricePerCan)}</span>
+              {product.comparePrice && product.comparePrice > pricePerCan && (
+                <span className="text-[10px] text-muted-foreground/50 line-through">
+                  {formatPrice(product.comparePrice)}/can
+                </span>
+              )}
+            </div>
           </div>
 
           {/* CTA */}

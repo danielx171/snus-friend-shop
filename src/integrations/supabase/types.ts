@@ -543,6 +543,8 @@ export interface DbProduct {
   slug: string;
   name: string;
   description_key: string | null;
+  description: string | null;
+  compare_price: number | null;
   category_key: string;
   flavor_key: string;
   strength_key: string;

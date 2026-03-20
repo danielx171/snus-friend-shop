@@ -36,33 +36,36 @@ export default function HomePage() {
         <CategoryShortcuts />
         <TrustBar />
         
+        {/* TODO: replace brand filter with badge=popular once badges are seeded */}
         <FeaturedProducts
           title="Bestsellers"
-          filterFn={(p) => p.badgeKeys.includes('popular')}
+          filterFn={(p) => p.brand === 'VELO'}
           limit={4}
-          viewAllHref="/nicotine-pouches?badge=popular"
+          viewAllHref="/nicotine-pouches?brand=VELO"
         />
 
         <EditorialHighlights />
-        
+
         <div className="border-y border-border/10 bg-card/20">
+          {/* TODO: replace brand filter with badge=newPrice once offers are seeded */}
           <FeaturedProducts
             title="Special Offers"
-            filterFn={(p) => p.badgeKeys.includes('newPrice')}
+            filterFn={(p) => p.brand === 'CUBA'}
             limit={4}
-            viewAllHref="/nicotine-pouches?badge=newPrice"
+            viewAllHref="/nicotine-pouches?brand=CUBA"
           />
         </div>
 
         <MembersClub />
 
         <WhySnusFriends />
-        
+
+        {/* TODO: replace brand filter with badge=new once new-arrivals logic is live */}
         <FeaturedProducts
           title="New Arrivals"
-          filterFn={(p) => p.badgeKeys.includes('new')}
+          filterFn={(p) => p.brand === 'Skruf'}
           limit={4}
-          viewAllHref="/nicotine-pouches?badge=new"
+          viewAllHref="/nicotine-pouches?brand=Skruf"
         />
       </Layout>
     </>
