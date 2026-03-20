@@ -8,7 +8,7 @@ Tech Stack: React, Vite, TypeScript, Tailwind CSS, Shadcn UI, and Supabase.
 
 ## Collaboration & Boundaries (CRITICAL)
 - We share this repository with another developer (William) who builds backend CLI tools in the `william-automation/` folder.
-- When working on 3PL or Nyehandel integration, STRICTLY follow the boundaries defined in `NYEHANDEL_API_SYNC.md`.
+- When working on 3PL or Nyehandel integration, STRICTLY follow the boundaries defined in `SYSTEM_BOUNDARIES.md`.
 - You must NEVER write or alter code for Pipedrive, WhatsApp, or Cowork browser automation. 
 - NEVER hardcode API keys or expose real customer data (CSV/Excel files). Always assume keys come from `.env` or Supabase Secrets.
 
