@@ -100,12 +100,72 @@ const App = () => (
               <Route path="/brands" element={<BrandsIndex />} />
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
               <Route path="/membership" element={<MembershipPage />} />
-              {/* Info / legal pages — placeholder content, needs real copy before go-live */}
-              <Route path="/contact" element={<InfoPage title="Contact Us" />} />
-              <Route path="/faq" element={<InfoPage title="Frequently Asked Questions" />} />
-              <Route path="/shipping" element={<InfoPage title="Shipping Information" />} />
-              <Route path="/returns" element={<InfoPage title="Returns & Refunds" />} />
-              <Route path="/about" element={<InfoPage title="About SnusFriend" />} />
+              {/* Info pages */}
+              <Route path="/contact" element={<InfoPage title="Contact Us" content={<>
+                <p>We're here to help. Reach us at <a href="mailto:support@snusfriend.com" className="text-primary hover:underline">support@snusfriend.com</a> and we'll get back to you within 24 hours on business days.</p>
+                <p>For order-related queries, please include your order ID in the subject line so we can look into it faster.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Business enquiries</h2>
+                <p>For wholesale, partnerships, or brand enquiries, please also reach us at the address above with "Business" in the subject line.</p>
+              </>} />} />
+              <Route path="/faq" element={<InfoPage title="Frequently Asked Questions" content={<>
+                <h2 className="text-foreground font-semibold text-lg">What are nicotine pouches?</h2>
+                <p>Nicotine pouches are small, white pouches placed under your upper lip. They deliver nicotine without tobacco, smoke, or vapour — making them a discreet, smoke-free alternative.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Are nicotine pouches legal in the UK?</h2>
+                <p>Yes. Nicotine pouches are legal in the UK and regulated as consumer nicotine products. They do not contain tobacco, so they fall outside tobacco product legislation.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">What strength should I choose?</h2>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li><strong>Normal (4–8mg)</strong> — good starting point if you're new to pouches</li>
+                  <li><strong>Strong (8–12mg)</strong> — suitable for regular users</li>
+                  <li><strong>Extra Strong (12–18mg)</strong> — for experienced users wanting a stronger hit</li>
+                  <li><strong>Ultra Strong (18mg+)</strong> — very high strength, not recommended for beginners</li>
+                </ul>
+                <h2 className="text-foreground font-semibold text-lg mt-6">How long does delivery take?</h2>
+                <p>Standard delivery takes 3–5 business days. Orders placed before 2pm on business days are dispatched the same day.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Do you ship to my country?</h2>
+                <p>We ship to the UK and most EU countries. At checkout you'll see the countries we currently deliver to.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">How do I get free delivery?</h2>
+                <p>Free delivery is available on all orders over €29. Orders below this threshold attract a standard shipping fee shown at checkout.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">What is SnusPoints?</h2>
+                <p>SnusPoints is our loyalty programme. You earn 10 SnusPoints for every €1 spent. Points can be redeemed for discounts on future orders. Sign up for a free account to start earning.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">What is the minimum age to buy?</h2>
+                <p>You must be 18 or over to purchase nicotine products from SnusFriend. Age verification is required at checkout.</p>
+              </>} />} />
+              <Route path="/shipping" element={<InfoPage title="Shipping Information" content={<>
+                <h2 className="text-foreground font-semibold text-lg">Free delivery</h2>
+                <p>All orders over €29 qualify for free standard delivery. No discount code needed — it's applied automatically at checkout.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Delivery times</h2>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Standard delivery: 3–5 business days</li>
+                  <li>Orders placed before 2pm on business days are dispatched the same day</li>
+                  <li>Orders placed after 2pm or on weekends are dispatched the next business day</li>
+                </ul>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Tracking</h2>
+                <p>Once your order ships, you'll receive an email with your tracking number. You can also view your tracking status in your account under Order History.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Where do you ship?</h2>
+                <p>We ship to the UK and most EU countries. The full list of supported countries is shown at checkout. We use Nylogistik for all fulfilment.</p>
+              </>} />} />
+              <Route path="/returns" element={<InfoPage title="Returns & Refunds" content={<>
+                <h2 className="text-foreground font-semibold text-lg">Return window</h2>
+                <p>You have 14 days from the date of delivery to request a return. Products must be unopened and in their original packaging.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">How to return</h2>
+                <p>Email <a href="mailto:support@snusfriend.com" className="text-primary hover:underline">support@snusfriend.com</a> with your order ID and the reason for your return. We'll send you return instructions within 1 business day.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Refunds</h2>
+                <p>Once we receive and inspect the returned items, your refund will be processed within 5–7 business days to your original payment method.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Return shipping costs</h2>
+                <p>If an item is faulty, damaged, or incorrect, we cover the return shipping cost. For change-of-mind returns, the buyer is responsible for return shipping.</p>
+              </>} />} />
+              <Route path="/about" element={<InfoPage title="About SnusFriend" content={<>
+                <p>SnusFriend was founded to make the best Scandinavian nicotine pouches accessible across the UK and Europe. We believe in giving smokers a genuinely better alternative — one that's smoke-free, tobacco-free, and actually enjoyable.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Our range</h2>
+                <p>We stock 500+ products from 40+ top brands including VELO, ZYN, Sting, LOOP, Lyft, Skruf, White Fox, Pablo, and many more. New products are added regularly as we expand our catalogue.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">SnusPoints loyalty</h2>
+                <p>Every purchase earns you SnusPoints — 10 points per €1 spent. Points accumulate in your account and can be redeemed for discounts. Create a free account to start earning.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Delivery</h2>
+                <p>We ship across the UK and EU with free delivery on orders over €29. All orders are fulfilled by Nylogistik for fast, reliable dispatch.</p>
+                <h2 className="text-foreground font-semibold text-lg mt-6">Get in touch</h2>
+                <p>Questions? Email us at <a href="mailto:support@snusfriend.com" className="text-primary hover:underline">support@snusfriend.com</a>.</p>
+              </>} />} />
+              {/* Legal pages — need solicitor sign-off before go-live */}
               <Route path="/terms" element={<InfoPage title="Terms & Conditions" legalWarning />} />
               <Route path="/privacy" element={<InfoPage title="Privacy Policy" legalWarning />} />
               <Route path="/cookies" element={<InfoPage title="Cookie Policy" legalWarning />} />
