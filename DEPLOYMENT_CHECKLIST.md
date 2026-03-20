@@ -75,6 +75,14 @@ Backend: Supabase (already hosted)
 - [x] `public/llms.txt` — GEO file for AI/LLM indexing.
 - [x] `public/sitemap.xml` — dynamic generation via `bun run sitemap` (731 products, 139 brands).
 
+## Uptime Monitoring
+
+- [ ] Sign up for UptimeRobot (free tier) or similar
+- [ ] Add monitor: Supabase healthcheck endpoint (5-min interval)
+- [ ] Add monitor: Vercel production URL (10-min interval)
+- [ ] Configure email alerts to ops team
+- [ ] Verify alerts fire on test outage
+
 ## Pre-Launch (remaining)
 
 - [ ] Set `ALLOWED_ORIGIN` to production domain (currently wildcard `*`).
