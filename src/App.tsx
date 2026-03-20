@@ -33,7 +33,6 @@ const WebhookInbox = lazy(() => import("./pages/ops/WebhookInbox"));
 const SyncStatus = lazy(() => import("./pages/ops/SyncStatus"));
 const SkuMappings = lazy(() => import("./pages/ops/SkuMappings"));
 const OpsUsers = lazy(() => import("./pages/ops/OpsUsers"));
-import { AgeGate } from "@/components/compliance/AgeGate";
 import { hasSupabaseEnv, missingSupabaseEnvVars } from "@/integrations/supabase/client";
 
 const queryClient = new QueryClient({
@@ -75,13 +74,12 @@ const App = () => (
     enableSystem={false}
     themes={['velo']}
   >
-    <AgeGate>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <LanguageProvider>
-            <CartProvider>
-              <Toaster />
-              <Sonner />
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <LanguageProvider>
+        <CartProvider>
+          <Toaster />
+          <Sonner />
           <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -124,11 +122,10 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-            </CartProvider>
-          </LanguageProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </AgeGate>
+        </CartProvider>
+      </LanguageProvider>
+    </TooltipProvider>
+  </QueryClientProvider>
   </ThemeProvider>
 );
 

@@ -253,7 +253,7 @@ export default function AccountPage() {
 
             {/* ── Membership ── */}
             <TabsContent value="membership">
-              <MembershipAccountTab userId={user?.id} />
+              <MembershipAccountTab />
             </TabsContent>
 
             {/* ── Saved Addresses ── */}
