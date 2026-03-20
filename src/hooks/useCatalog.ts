@@ -1,9 +1,35 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Product as MockProduct } from '@/data/products';
-import type { DbProduct } from '@/integrations/supabase/types';
 
-export type { DbProduct };
+/** Shape returned by the joined products query (not in generated types). */
+export interface DbProduct {
+  id: string;
+  name: string;
+  slug: string;
+  brand_id: string;
+  category_key: string;
+  flavor_key: string;
+  format_key: string;
+  strength_key: string;
+  nicotine_mg: number;
+  portions_per_can: number;
+  description_key: string | null;
+  description?: string | null;
+  compare_price?: number | null;
+  image_url: string | null;
+  is_active: boolean;
+  manufacturer: string | null;
+  ratings: number;
+  badge_keys: string[];
+  brands?: { id: string; slug: string; name: string; manufacturer: string | null } | null;
+  product_variants?: Array<{
+    pack_size: number;
+    price: number;
+    sku: string | null;
+    inventory?: Array<{ quantity: number }>;
+  }>;
+}
 
 /**
  * Retail markup on wholesale (Nyehandel) price.

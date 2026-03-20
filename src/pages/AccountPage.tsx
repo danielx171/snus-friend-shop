@@ -101,7 +101,7 @@ export default function AccountPage() {
   const { data: orders = [], isLoading: ordersLoading } = useQuery({
     queryKey: ['account-orders', user?.email],
     queryFn: async (): Promise<OrderRow[]> => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('orders')
         .select('id, created_at, checkout_status, nyehandel_sync_status, total_price, currency, line_items_snapshot')
         .eq('customer_email', user!.email!)
