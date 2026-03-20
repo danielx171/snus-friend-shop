@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, useInView, animate } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Button } from '@/components/ui/button';
