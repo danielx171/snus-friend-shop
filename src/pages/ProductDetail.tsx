@@ -366,5 +366,6 @@ export default function ProductDetail() {
         </div>
       )}
     </Layout>
+    </AgeGate>
   );
 }
