@@ -82,134 +82,11 @@ export type Database = {
           },
         ]
       }
-      orders: {
-        Row: {
-          checkout_status: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
-          created_at: string
-          currency: string
-          customer_email: string | null
-          customer_metadata: Json
-          delivery_callback_received_at: string | null
-          id: string
-          idempotency_key: string | null
-          last_sync_error: string | null
-          line_items_snapshot: Json
-          nyehandel_order_id: string | null
-          nyehandel_order_status: string | null
-          nyehandel_prefix: string | null
-          nyehandel_sync_status: 'pending' | 'synced' | 'failed'
-          paid_at: string | null
-          shipping_address: Json
-          total_price: number
-          tracking_id: string | null
-          tracking_url: string | null
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: {
-          checkout_status?: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
-          created_at?: string
-          currency?: string
-          customer_email?: string | null
-          customer_metadata?: Json
-          delivery_callback_received_at?: string | null
-          id?: string
-          idempotency_key?: string | null
-          last_sync_error?: string | null
-          line_items_snapshot?: Json
-          nyehandel_order_id?: string | null
-          nyehandel_order_status?: string | null
-          nyehandel_prefix?: string | null
-          nyehandel_sync_status?: 'pending' | 'synced' | 'failed'
-          paid_at?: string | null
-          shipping_address?: Json
-          total_price: number
-          tracking_id?: string | null
-          tracking_url?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Update: {
-          checkout_status?: 'pending' | 'confirmed' | 'shipped' | 'cancelled'
-          created_at?: string
-          currency?: string
-          customer_email?: string | null
-          customer_metadata?: Json
-          delivery_callback_received_at?: string | null
-          id?: string
-          idempotency_key?: string | null
-          last_sync_error?: string | null
-          line_items_snapshot?: Json
-          nyehandel_order_id?: string | null
-          nyehandel_order_status?: string | null
-          nyehandel_prefix?: string | null
-          nyehandel_sync_status?: 'pending' | 'synced' | 'failed'
-          paid_at?: string | null
-          shipping_address?: Json
-          total_price?: number
-          tracking_id?: string | null
-          tracking_url?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      points_balances: {
-        Row: {
-          user_id: string
-          balance: number
-          lifetime_earned: number
-          updated_at: string
-        }
-        Insert: {
-          user_id: string
-          balance?: number
-          lifetime_earned?: number
-          updated_at?: string
-        }
-        Update: {
-          user_id?: string
-          balance?: number
-          lifetime_earned?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      points_transactions: {
-        Row: {
-          id: string
-          user_id: string
-          order_id: string | null
-          points: number
-          reason: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          order_id?: string | null
-          points: number
-          reason: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          order_id?: string | null
-          points?: number
-          reason?: string
-          created_at?: string
-        }
-        Relationships: []
-      }
       product_variants: {
         Row: {
           created_at: string
-          gtin: string | null
           id: string
-          is_checkout_enabled: boolean
           is_default: boolean
-          nyehandel_variant_id: string | null
           pack_size: number
           price: number
           product_id: string
@@ -218,11 +95,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          gtin?: string | null
           id?: string
-          is_checkout_enabled?: boolean
           is_default?: boolean
-          nyehandel_variant_id?: string | null
           pack_size: number
           price: number
           product_id: string
@@ -231,11 +105,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          gtin?: string | null
           id?: string
-          is_checkout_enabled?: boolean
           is_default?: boolean
-          nyehandel_variant_id?: string | null
           pack_size?: number
           price?: number
           product_id?: string
@@ -257,9 +128,7 @@ export type Database = {
           badge_keys: string[]
           brand_id: string
           category_key: string
-          compare_price: number | null
           created_at: string
-          description: string | null
           description_key: string | null
           flavor_key: string
           format_key: string
@@ -280,9 +149,7 @@ export type Database = {
           badge_keys?: string[]
           brand_id: string
           category_key?: string
-          compare_price?: number | null
           created_at?: string
-          description?: string | null
           description_key?: string | null
           flavor_key: string
           format_key: string
@@ -303,9 +170,7 @@ export type Database = {
           badge_keys?: string[]
           brand_id?: string
           category_key?: string
-          compare_price?: number | null
           created_at?: string
-          description?: string | null
           description_key?: string | null
           flavor_key?: string
           format_key?: string
@@ -339,7 +204,8 @@ export type Database = {
           last_verified: string
           nyehandel_sku: string
           product_name: string
-          status: 'mapped' | 'missing' | 'conflict'
+          shopify_sku: string | null
+          status: string
         }
         Insert: {
           created_at?: string
@@ -347,7 +213,8 @@ export type Database = {
           last_verified?: string
           nyehandel_sku: string
           product_name: string
-          status?: 'mapped' | 'missing' | 'conflict'
+          shopify_sku?: string | null
+          status?: string
         }
         Update: {
           created_at?: string
@@ -355,7 +222,8 @@ export type Database = {
           last_verified?: string
           nyehandel_sku?: string
           product_name?: string
-          status?: 'mapped' | 'missing' | 'conflict'
+          shopify_sku?: string | null
+          status?: string
         }
         Relationships: []
       }
@@ -369,8 +237,8 @@ export type Database = {
           id: string
           items_processed: number
           started_at: string
-          status: 'success' | 'partial' | 'failed' | 'running'
-          type: 'catalog' | 'inventory'
+          status: string
+          type: string
         }
         Insert: {
           completed_at?: string | null
@@ -381,8 +249,8 @@ export type Database = {
           id?: string
           items_processed?: number
           started_at?: string
-          status?: 'success' | 'partial' | 'failed' | 'running'
-          type: 'catalog' | 'inventory'
+          status?: string
+          type: string
         }
         Update: {
           completed_at?: string | null
@@ -393,8 +261,8 @@ export type Database = {
           id?: string
           items_processed?: number
           started_at?: string
-          status?: 'success' | 'partial' | 'failed' | 'running'
-          type?: 'catalog' | 'inventory'
+          status?: string
+          type?: string
         }
         Relationships: []
       }
@@ -426,9 +294,9 @@ export type Database = {
           id: string
           payload: Json
           processed_at: string | null
-          provider: 'nyehandel'
+          provider: string
           received_at: string
-          status: 'received' | 'processed' | 'failed'
+          status: string
           topic: string
         }
         Insert: {
@@ -437,9 +305,9 @@ export type Database = {
           id?: string
           payload?: Json
           processed_at?: string | null
-          provider: 'nyehandel'
+          provider: string
           received_at?: string
-          status?: 'received' | 'processed' | 'failed'
+          status?: string
           topic: string
         }
         Update: {
@@ -448,93 +316,10 @@ export type Database = {
           id?: string
           payload?: Json
           processed_at?: string | null
-          provider?: 'nyehandel'
+          provider?: string
           received_at?: string
-          status?: 'received' | 'processed' | 'failed'
+          status?: string
           topic?: string
-        }
-        Relationships: []
-      }
-      ops_alerts: {
-        Row: {
-          id: string
-          alert_type: string
-          status: 'open' | 'resolved'
-          source_order_id: string | null
-          title: string
-          body: Json
-          created_at: string
-          updated_at: string
-          resolved_at: string | null
-        }
-        Insert: {
-          id?: string
-          alert_type: string
-          status?: 'open' | 'resolved'
-          source_order_id?: string | null
-          title: string
-          body?: Json
-          created_at?: string
-          updated_at?: string
-          resolved_at?: string | null
-        }
-        Update: {
-          id?: string
-          alert_type?: string
-          status?: 'open' | 'resolved'
-          source_order_id?: string | null
-          title?: string
-          body?: Json
-          created_at?: string
-          updated_at?: string
-          resolved_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ops_alerts_source_order_id_fkey"
-            columns: ["source_order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      waitlist_emails: {
-        Row: {
-          id: string
-          email: string
-          source: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          email: string
-          source: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          email?: string
-          source?: string
-          created_at?: string
-        }
-        Relationships: []
-      }
-      sync_config: {
-        Row: {
-          key: string
-          value: string
-          updated_at: string
-        }
-        Insert: {
-          key: string
-          value: string
-          updated_at?: string
-        }
-        Update: {
-          key?: string
-          value?: string
-          updated_at?: string
         }
         Relationships: []
       }
@@ -676,32 +461,6 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-
-export interface DbProduct {
-  id: string;
-  brand_id: string;
-  slug: string;
-  name: string;
-  description_key: string | null;
-  description: string | null;
-  compare_price: number | null;
-  category_key: string;
-  flavor_key: string;
-  strength_key: string;
-  format_key: string;
-  nicotine_mg: number;
-  portions_per_can: number;
-  image_url: string | null;
-  ratings: number;
-  badge_keys: string[];
-  manufacturer: string | null;
-  is_active: boolean;
-  nyehandel_id: string | null;
-  created_at: string;
-  updated_at: string;
-  brands: { id: string; slug: string; name: string; manufacturer: string | null } | null;
-  product_variants: { pack_size: number; price: number; sku: string | null; inventory?: { quantity: number }[] | null }[];
-}
 
 export const Constants = {
   public: {
