@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Truck, Star, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Truck, Star, Shield, ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
 import { useCatalogProducts } from '@/hooks/useCatalog';
@@ -13,33 +13,35 @@ interface HeroSlide {
   description: string;
   cta: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
-  bgColor: string;
-  /** Optional MP4/WebM URL — plays as a looping muted video background instead of bgColor */
-  videoSrc?: string;
+  accentColor: string;
+  brandFilter: string;
 }
 
 const SLIDES: HeroSlide[] = [
   {
-    title: 'Premium Nicotine Pouches',
-    subtitle: 'Fast delivery',
-    description: 'Discover our wide range of quality products from leading brands',
+    title: 'Premium Nicotine\nPouches',
+    subtitle: 'Free EU delivery',
+    description: 'Discover 700+ products from 91 leading brands — delivered fast',
     cta: { label: 'Explore Products', href: '/nicotine-pouches' },
-    secondaryCta: { label: 'New Price', href: '/nicotine-pouches?badge=newPrice' },
-    bgColor: '#FAF8F5',
+    secondaryCta: { label: 'Special Offers', href: '/nicotine-pouches?badge=newPrice' },
+    accentColor: 'hsl(var(--chart-4))',
+    brandFilter: 'STNG',
   },
   {
     title: 'New Arrivals',
     subtitle: 'Fresh flavors weekly',
     description: 'Be the first to try the latest nicotine pouches from top brands',
     cta: { label: 'Shop New', href: '/nicotine-pouches?badge=new' },
-    bgColor: '#F5F8FA',
+    accentColor: 'hsl(var(--chart-2))',
+    brandFilter: 'Loop',
   },
   {
     title: 'Bestsellers',
     subtitle: 'Customer favorites',
     description: 'Our most loved pouches — tried, tested and recommended',
     cta: { label: 'Shop Bestsellers', href: '/nicotine-pouches?badge=popular' },
-    bgColor: '#F8F5F0',
+    accentColor: 'hsl(var(--primary))',
+    brandFilter: 'VELO',
   },
 ];
 
@@ -57,30 +59,18 @@ export function HeroBanner() {
     0
   );
 
-  // Showcase: prioritize STNG slide 1, Loop slide 2, VELO slide 3, then fill with others
-  const SHOWCASE_BRANDS = ['STNG', 'Loop', 'VELO'];
   const showcaseProducts = useMemo(() => {
-    const brandName = SHOWCASE_BRANDS[activeSlide % SHOWCASE_BRANDS.length];
-    const brandProducts = products.filter((p) => p.brand === brandName);
+    const brandName = SLIDES[activeSlide % SLIDES.length].brandFilter;
+    const brandProducts = products.filter((p) => p.brand === brandName && (typeof p.stock !== 'number' || p.stock > 0));
     if (brandProducts.length >= 4) return brandProducts.slice(0, 4);
-    // Fill remaining slots from other products
-    const others = products.filter((p) => p.brand !== brandName);
+    const others = products.filter((p) => p.brand !== brandName && (typeof p.stock !== 'number' || p.stock > 0));
     return [...brandProducts, ...others].slice(0, 4);
   }, [products, activeSlide]);
 
-  const goToSlide = useCallback((index: number) => {
-    setActiveSlide(index);
-  }, []);
+  const goToSlide = useCallback((index: number) => { setActiveSlide(index); }, []);
+  const prevSlide = useCallback(() => { setActiveSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length); }, []);
+  const nextSlide = useCallback(() => { setActiveSlide((prev) => (prev + 1) % SLIDES.length); }, []);
 
-  const prevSlide = useCallback(() => {
-    setActiveSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
-  }, []);
-
-  const nextSlide = useCallback(() => {
-    setActiveSlide((prev) => (prev + 1) % SLIDES.length);
-  }, []);
-
-  // Auto-rotate
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
@@ -93,72 +83,64 @@ export function HeroBanner() {
 
   return (
     <section
-      className="relative overflow-hidden grain transition-colors duration-700"
-      style={{ backgroundColor: slide.bgColor }}
+      className="relative overflow-hidden bg-background border-b border-border/20"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Optional video background — only rendered when videoSrc is set on a slide */}
-      {SLIDES.map((s, i) =>
-        s.videoSrc ? (
-          <video
-            key={i}
-            src={s.videoSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className={cn(
-              'absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-700',
-              i === activeSlide ? 'opacity-100' : 'opacity-0'
-            )}
-          />
-        ) : null
-      )}
+      {/* Ambient glow blobs */}
+      <div
+        className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.07] blur-[130px] pointer-events-none transition-all duration-1000"
+        style={{ background: slide.accentColor }}
+      />
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
 
-      {/* Subtle warm radial glow */}
-      <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-[hsl(var(--chart-4)/0.06)] blur-[120px] pointer-events-none" />
+      <div className="container py-14 md:py-20 lg:py-24 relative">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
 
-      <div className="container py-16 md:py-24 lg:py-28 relative">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           {/* Left — slide content */}
-          <div className="space-y-8">
+          <div className="space-y-7">
             {/* Trust pill */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(30_10%_70%/0.4)] bg-[hsl(30_20%_92%)] text-[hsl(220_15%_30%)] text-sm font-medium">
-              <Star className="h-3.5 w-3.5 fill-current" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
+              <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
               {t('trust.trustpilot')}
             </div>
 
             {/* Crossfade text container */}
-            <div className="relative min-h-[280px] sm:min-h-[260px]">
+            <div className="relative min-h-[240px] sm:min-h-[220px]">
               {SLIDES.map((s, i) => (
                 <div
                   key={i}
                   className={cn(
-                    'transition-all duration-700 ease-in-out',
+                    'transition-all duration-600 ease-in-out',
                     i === activeSlide
                       ? 'opacity-100 translate-y-0'
                       : 'opacity-0 translate-y-2 pointer-events-none absolute inset-0'
                   )}
                 >
-                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl leading-[1.08]">
-                    <span className="block font-serif text-[hsl(220_20%_15%)]">
-                      {s.title}
-                    </span>
-                    <span className="block text-[hsl(var(--chart-4))] text-[1.1em] mt-2">
+                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl leading-[1.08] text-foreground">
+                    {s.title.split('\n').map((line, idx) => (
+                      <span key={idx} className={cn('block', idx === 1 && 'text-foreground')}>
+                        {line}
+                      </span>
+                    ))}
+                    <span
+                      className="block text-[0.8em] mt-2 font-semibold"
+                      style={{ color: s.accentColor }}
+                    >
                       {s.subtitle}
                     </span>
                   </h1>
 
-                  <p className="max-w-lg text-lg text-[hsl(220_10%_45%)] leading-relaxed mt-6">
+                  <p className="max-w-lg text-base text-muted-foreground leading-relaxed mt-5">
                     {s.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-4 pt-6">
+                  <div className="flex flex-wrap gap-3 pt-5">
                     <Button
                       asChild
                       size="lg"
-                      className="gap-2.5 rounded-2xl h-13 px-8 bg-[hsl(var(--chart-4))] text-white font-semibold hover:bg-[hsl(var(--chart-4)/0.9)] hover:shadow-[0_0_24px_hsl(var(--chart-4)/0.4)] transition-all duration-200"
+                      className="gap-2 rounded-2xl h-12 px-7 font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+                      style={{ backgroundColor: s.accentColor, color: 'white' }}
                     >
                       <Link to={s.cta.href}>
                         {s.cta.label}
@@ -170,7 +152,7 @@ export function HeroBanner() {
                         asChild
                         variant="outline"
                         size="lg"
-                        className="rounded-2xl h-13 px-8 border-[hsl(220_15%_30%/0.2)] text-[hsl(220_20%_15%)] hover:border-[hsl(var(--chart-4)/0.4)] hover:text-[hsl(var(--chart-4))] transition-all duration-200 bg-transparent"
+                        className="rounded-2xl h-12 px-7 border-border/40 hover:border-primary/40 transition-all duration-200"
                       >
                         <Link to={s.secondaryCta.href}>
                           {s.secondaryCta.label}
@@ -182,28 +164,28 @@ export function HeroBanner() {
               ))}
             </div>
 
-            {/* Micro trust signals — persistent across slides */}
-            <div className="flex flex-wrap gap-6 text-sm text-[hsl(220_10%_45%)]">
-              <div className="flex items-center gap-2.5">
-                <Truck className="h-4 w-4 text-[hsl(var(--chart-4))]" />
+            {/* Trust signals */}
+            <div className="flex flex-wrap gap-5 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Truck className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
                 <span>{t('trust.freeShipping', { amount: freeShippingFormatted })}</span>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Shield className="h-4 w-4 text-[hsl(var(--chart-4))]" />
+              <div className="flex items-center gap-2">
+                <Shield className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
                 <span>Secure checkout</span>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Star className="h-4 w-4 text-[hsl(var(--chart-4))]" />
+              <div className="flex items-center gap-2">
+                <Package className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
                 <span>91 brands available</span>
               </div>
             </div>
 
-            {/* Slide controls — arrows + dot indicators */}
-            <div className="flex items-center gap-3 pt-2">
+            {/* Slide controls */}
+            <div className="flex items-center gap-3 pt-1">
               <button
                 onClick={prevSlide}
                 aria-label="Previous slide"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[hsl(220_15%_30%/0.2)] bg-white/60 text-[hsl(220_20%_15%)] backdrop-blur-sm transition-all duration-150 hover:border-[hsl(var(--chart-4)/0.4)] hover:bg-white/80 hover:text-[hsl(var(--chart-4))]"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-border/40 bg-card/60 text-muted-foreground backdrop-blur-sm transition-all duration-150 hover:border-border hover:text-foreground"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -214,12 +196,11 @@ export function HeroBanner() {
                     key={i}
                     onClick={() => goToSlide(i)}
                     aria-label={`Go to slide ${i + 1}`}
-                    className={cn(
-                      'rounded-full transition-all duration-300',
-                      i === activeSlide
-                        ? 'w-8 h-2.5 bg-[hsl(var(--chart-4))]'
-                        : 'w-2.5 h-2.5 bg-[hsl(220_10%_70%/0.4)] hover:bg-[hsl(220_10%_60%/0.6)]'
-                    )}
+                    className="rounded-full transition-all duration-300"
+                    style={i === activeSlide
+                      ? { width: '2rem', height: '0.5rem', backgroundColor: slide.accentColor }
+                      : { width: '0.5rem', height: '0.5rem', backgroundColor: 'hsl(var(--border))' }
+                    }
                   />
                 ))}
               </div>
@@ -227,39 +208,98 @@ export function HeroBanner() {
               <button
                 onClick={nextSlide}
                 aria-label="Next slide"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[hsl(220_15%_30%/0.2)] bg-white/60 text-[hsl(220_20%_15%)] backdrop-blur-sm transition-all duration-150 hover:border-[hsl(var(--chart-4)/0.4)] hover:bg-white/80 hover:text-[hsl(var(--chart-4))]"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-border/40 bg-card/60 text-muted-foreground backdrop-blur-sm transition-all duration-150 hover:border-border hover:text-foreground"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          {/* Right — Product showcase (persistent) */}
-          <div className="relative hidden lg:block">
+          {/* Right — Product showcase */}
+          <div className="relative">
             {showcaseProducts.length > 0 ? (
-              <div className="relative grid grid-cols-2 gap-5">
-                {showcaseProducts.map((product, i) => (
-                  <Link
-                    key={product.id}
-                    to={`/product/${product.id}`}
-                    className="rounded-3xl glass-panel p-5 hover:border-primary/20 transition-all duration-300 flex flex-col items-center text-center"
-                  >
-                    <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/8 to-primary/3 flex items-center justify-center mb-4 overflow-hidden shrink-0">
-                      {product.image ? (
-                        <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
-                      ) : (
-                        <span className="text-white/80 font-bold text-center px-3 drop-shadow text-sm">{product.name}</span>
+              <>
+                {/* Desktop: 2×2 grid */}
+                <div className="hidden lg:grid grid-cols-2 gap-4">
+                  {showcaseProducts.map((product, i) => (
+                    <Link
+                      key={product.id}
+                      to={`/product/${product.id}`}
+                      className={cn(
+                        'group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm p-4 hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5',
+                        i === 0 && 'lg:col-span-2'
                       )}
-                    </div>
-                    <p className="font-semibold text-foreground truncate w-full">{product.name}</p>
-                    <p className="text-sm text-muted-foreground mt-1">{t('products.from')} {formatPrice(product.prices.pack1)}/{t('cart.can')}</p>
-                  </Link>
-                ))}
-              </div>
+                    >
+                      {i === 0 ? (
+                        /* Featured product — wide card */
+                        <div className="flex items-center gap-4">
+                          <div className="w-24 h-24 rounded-xl overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
+                            {product.image ? (
+                              <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
+                            ) : (
+                              <span className="text-muted-foreground font-bold text-xs text-center px-2">{product.brand}</span>
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{product.brand}</p>
+                            <p className="font-semibold text-foreground leading-snug line-clamp-2">{product.name}</p>
+                            <p className="text-sm mt-1.5" style={{ color: slide.accentColor }}>
+                              {t('products.from')} {formatPrice(product.prices.pack1)}/{t('cart.can')}
+                            </p>
+                          </div>
+                          <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all shrink-0" />
+                        </div>
+                      ) : (
+                        /* Regular product — square card */
+                        <div className="flex flex-col items-center text-center gap-3">
+                          <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted/30 flex items-center justify-center">
+                            {product.image ? (
+                              <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
+                            ) : (
+                              <span className="text-muted-foreground font-bold text-[9px] text-center px-1">{product.brand}</span>
+                            )}
+                          </div>
+                          <div className="min-w-0 w-full">
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
+                            <p className="font-medium text-foreground text-xs leading-snug line-clamp-2 mt-0.5">{product.name}</p>
+                            <p className="text-[10px] mt-1" style={{ color: slide.accentColor }}>
+                              {formatPrice(product.prices.pack1)}/{t('cart.can')}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Mobile: horizontal scroll row */}
+                <div className="flex lg:hidden gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+                  {showcaseProducts.map((product) => (
+                    <Link
+                      key={product.id}
+                      to={`/product/${product.id}`}
+                      className="flex-none w-32 rounded-2xl border border-border/30 bg-card/80 p-3 hover:border-border/60 transition-all duration-200"
+                    >
+                      <div className="w-full aspect-square rounded-xl overflow-hidden bg-muted/30 flex items-center justify-center mb-2">
+                        {product.image ? (
+                          <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
+                        ) : (
+                          <span className="text-muted-foreground font-bold text-[9px] text-center px-1">{product.brand}</span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
+                      <p className="font-medium text-foreground text-xs leading-snug line-clamp-2 mt-0.5">{product.name}</p>
+                      <p className="text-[10px] mt-1" style={{ color: slide.accentColor }}>
+                        {formatPrice(product.prices.pack1)}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </>
             ) : (
-              <div className="rounded-3xl glass-panel p-12 text-center">
+              <div className="rounded-2xl border border-border/30 bg-card/80 p-12 text-center">
                 <p className="text-lg font-semibold text-foreground mb-2">700+ products</p>
-                <p className="text-muted-foreground">Browse our full collection of nicotine pouches</p>
+                <p className="text-muted-foreground text-sm">Browse our full collection of nicotine pouches</p>
               </div>
             )}
           </div>
