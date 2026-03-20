@@ -1,8 +1,19 @@
 # Current Priorities
 
-Last updated: 2026-03-20
+Last updated: 2026-03-21
 
-## Completed today (2026-03-20)
+## Completed today (2026-03-21)
+
+### Launch Readiness Sprint (from Cowork infrastructure audit)
+- Webhook 401 fix: diagnosed `nyehandel-webhook` returning 401 because NordicPouch wasn't sending `x-api-key` header. Daniel added it in NordicPouch admin.
+- GDPR cookie consent banner: `CookieConsentContext` + `CookieConsent` component with "Necessary Only" / "Accept All" buttons, links to /cookies
+- Age verification checkbox at checkout: Radix `Checkbox` with 18+ confirmation, blocks submit
+- EU consumer rights disclosures at checkout: VAT notice, 14-day withdrawal, delivery estimate, T&C link
+- CORS lockdown: shared `_shared/cors.ts` helper with `ALLOWED_ORIGIN` env var across all 14 edge functions
+- Uptime monitoring checklist added to `DEPLOYMENT_CHECKLIST.md`
+- Fixed preview port mismatch (launch.json 8082 → 8080 to match vite.config.ts)
+
+## Completed (2026-03-20)
 
 ### Catalog UX Overhaul
 - Compact ProductCard variant (`variant: 'compact'`) — 3:2 image, icon-only CTA, no pack-size selector
