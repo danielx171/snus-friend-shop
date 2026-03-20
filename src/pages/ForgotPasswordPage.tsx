@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { KeyRound, Mail, ArrowLeft, Check } from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
 import { supabase } from '@/integrations/supabase/client';
+import { SITE_URL } from '@/config/brand';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -21,7 +22,7 @@ export default function ForgotPasswordPage() {
     setAuthError(null);
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/update-password`,
+      redirectTo: `${SITE_URL}/update-password`,
     });
 
     setIsLoading(false);

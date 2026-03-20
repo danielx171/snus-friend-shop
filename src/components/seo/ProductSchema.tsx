@@ -1,5 +1,6 @@
 import { Product, PackSize, packSizeMultipliers } from '@/data/products';
 import { SEO } from './SEO';
+import { SITE_URL } from '@/config/brand';
 
 interface ProductSchemaProps {
   product: Product;
@@ -7,7 +8,7 @@ interface ProductSchemaProps {
 }
 
 export function ProductSchema({ product, selectedPackSize }: ProductSchemaProps) {
-  const baseUrl = window.location.origin;
+  const baseUrl = SITE_URL;
   const productUrl = `${baseUrl}/product/${product.id}`;
   const price = product.prices[selectedPackSize];
   const packCount = packSizeMultipliers[selectedPackSize];

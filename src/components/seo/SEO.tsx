@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { SITE_URL } from '@/config/brand';
 
 interface SEOProps {
   title: string;
@@ -71,7 +72,7 @@ export function SEO({
     // Canonical
     const resolvedCanonical = canonical
       ? cleanCanonical(canonical)
-      : cleanCanonical(window.location.href);
+      : cleanCanonical(SITE_URL + window.location.pathname + window.location.search);
     setLink('canonical', resolvedCanonical);
 
     // Open Graph

@@ -249,9 +249,20 @@ Deno.serve(async (req) => {
   if (!validation.ok) return validation.response;
   const { items, customer, billing_address, shipping_method, idempotency_key, display_total, display_currency } = validation.data;
 
-  /* ---------- idempotency check ---------- */
+  /* ---------- resolve optional user_id (for SnusPoints) ---------- */
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
+
+  let userId: string | null = null;
+  const authHeader = req.headers.get("authorization");
+  if (authHeader?.startsWith("Bearer ")) {
+    const { data: { user } } = await adminClient.auth.getUser(
+      authHeader.replace("Bearer ", ""),
+    );
+    if (user?.id) userId = user.id;
+  }
+
+  /* ---------- idempotency check ---------- */
 
   if (idempotency_key) {
     const { data: existing } = await adminClient
@@ -418,6 +429,10 @@ Deno.serve(async (req) => {
     },
     nyehandel_sync_status: "synced",
   };
+
+  if (userId) {
+    orderInsert.user_id = userId;
+  }
 
   if (idempotency_key) {
     orderInsert.idempotency_key = idempotency_key;

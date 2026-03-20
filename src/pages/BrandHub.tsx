@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
-import { AgeGate } from '@/components/compliance/AgeGate';
 import { getBrandBySlug } from '@/data/brands';
+import { SITE_URL } from '@/config/brand';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
@@ -30,7 +30,7 @@ export default function BrandHub() {
     .sort((a, b) => b.ratings - a.ratings)
     .slice(0, TOP_PRODUCTS_LIMIT);
 
-  const baseUrl = window.location.origin;
+  const baseUrl = SITE_URL;
   const canonicalUrl = `${baseUrl}/brand/${brand.slug}`;
 
   const faqJsonLd = {
@@ -65,8 +65,6 @@ export default function BrandHub() {
         jsonLd={[faqJsonLd, breadcrumbJsonLd]}
       />
       <Layout showNicotineWarning={false}>
-        <AgeGate />
-
         {/* Hero */}
         <section className="bg-gradient-to-br from-primary/10 via-accent/5 to-background py-12 lg:py-16">
           <div className="container">

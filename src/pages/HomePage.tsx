@@ -6,18 +6,18 @@ import { TrustBar } from '@/components/home/TrustBar';
 import { MembersClub } from '@/components/home/MembersClub';
 import { WhySnusFriends } from '@/components/home/WhySnusFriends';
 import { EditorialHighlights } from '@/components/home/EditorialHighlights';
-import { AgeGate } from '@/components/compliance/AgeGate';
 import { SEO } from '@/components/seo/SEO';
+import { SITE_URL } from '@/config/brand';
 
 export default function HomePage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'SnusFriend',
-    url: window.location.origin,
+    url: SITE_URL,
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${window.location.origin}/nicotine-pouches?search={search_term_string}`,
+      target: `${SITE_URL}/nicotine-pouches?search={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
   };
@@ -27,11 +27,10 @@ export default function HomePage() {
       <SEO
         title="SnusFriend | Premium Nicotine Pouches | Free EU Delivery"
         description="Shop 700+ nicotine pouches from 91 leading brands — ZYN, VELO, Loop and more. Free EU delivery. Fast shipping."
-        canonical={window.location.origin + '/'}
+        canonical={SITE_URL + '/'}
         jsonLd={jsonLd}
       />
       <Layout showNicotineWarning={true}>
-        <AgeGate />
         <HeroBanner />
         <CategoryShortcuts />
         <TrustBar />
