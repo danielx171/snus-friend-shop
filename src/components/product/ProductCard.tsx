@@ -386,6 +386,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               </AnimatePresence>
             </Button>
             </motion.div>
+            </motion.div>
           )}
         </CardContent>
       </Link>
