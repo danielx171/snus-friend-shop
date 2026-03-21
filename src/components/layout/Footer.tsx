@@ -79,9 +79,9 @@ function FooterLink({ to, label }: { to: string; label: string }) {
     <li>
       <Link
         to={to}
-        className="group inline-flex items-center gap-0 text-muted-foreground hover:text-foreground transition-colors duration-150"
+        className="group inline-flex items-center gap-0 text-muted-foreground hover:text-[hsl(var(--chart-4))] transition-colors duration-200"
       >
-        <span className="inline-block w-0 group-hover:w-2.5 h-1 rounded-full bg-accent transition-all duration-150 mr-0 group-hover:mr-2 opacity-0 group-hover:opacity-100" />
+        <span className="inline-block w-0 group-hover:w-2.5 h-1 rounded-full bg-[hsl(var(--chart-4))] transition-all duration-200 mr-0 group-hover:mr-2 opacity-0 group-hover:opacity-100" />
         {label}
       </Link>
     </li>
