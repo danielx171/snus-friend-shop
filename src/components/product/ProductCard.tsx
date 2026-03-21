@@ -153,11 +153,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
           )}
           </motion.div>
 
-          {/* Thin colored accent line at bottom of image */}
-          {accentColor && !isOutOfStock && (
+          {/* Strength-coded accent line at bottom of image */}
+          {!isOutOfStock && (
             <div
-              className="absolute bottom-0 left-0 right-0 h-0.5 opacity-50"
-              style={{ backgroundColor: accentColor }}
+              className="absolute bottom-0 left-0 right-0 h-[2px]"
+              style={{ backgroundColor: strengthColor }}
             />
           )}
 
