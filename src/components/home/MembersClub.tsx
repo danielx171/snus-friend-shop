@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, Coins } from 'lucide-react';
+import { ArrowRight, Check, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TIERS, SNUSPOINTS } from '@/data/membership';
 import { cn } from '@/lib/utils';
@@ -8,15 +8,22 @@ import { motion } from 'framer-motion';
 export function MembersClub() {
   return (
     <section className="relative py-16 md:py-20 overflow-hidden grain">
-      {/* Warm background */}
-      <div className="absolute inset-0 pointer-events-none" />
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-[hsl(var(--chart-4)/0.06)] blur-[120px] pointer-events-none" />
+      {/* Radial gradient from top-center */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(60,40,100,0.12), transparent)' }}
+      />
+      {/* Blurred accent circle top-right */}
+      <div
+        className="absolute -top-12 -right-12 w-[200px] h-[200px] rounded-full pointer-events-none"
+        style={{ background: 'hsl(var(--accent))', opacity: 0.04, filter: 'blur(80px)' }}
+      />
 
       <div className="container relative">
         {/* Section heading */}
         <div className="mb-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--chart-4)/0.3)] bg-[hsl(var(--chart-4)/0.08)] text-sm font-medium text-[hsl(var(--chart-4))] mb-4">
-            <Coins className="h-3.5 w-3.5" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/20 bg-accent/10 text-xs font-medium text-accent mb-4">
+            <Sparkles className="h-3.5 w-3.5" />
             Earn {SNUSPOINTS.displayName} on every order
           </div>
           <motion.h2
@@ -55,15 +62,21 @@ export function MembersClub() {
               >
                 <div
                   className={cn(
-                    'relative rounded-2xl glass-panel overflow-hidden transition-all duration-300 hover:scale-[1.02]',
-                    isVip && tier.accentBorder,
-                    isVip && tier.glowClass
+                    'relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02]',
+                    isVip
+                      ? 'bg-card/80 border-2 border-accent/30'
+                      : 'bg-card/70 border border-white/[0.08]'
                   )}
+                  style={isVip ? {
+                    backgroundImage: 'linear-gradient(135deg, transparent 40%, hsl(var(--accent) / 0.04) 60%, transparent 80%)',
+                    backgroundSize: '300% 300%',
+                    animation: 'shimmer-sweep 5s ease-in-out infinite',
+                  } : undefined}
                 >
                   {/* Gradient header */}
                   <div className={cn('h-32 bg-gradient-to-br flex flex-col items-center justify-center gap-2 relative', tier.gradientClass)}>
                     {isVip && (
-                      <span className="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)]">
+                      <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-accent text-accent-foreground z-10">
                         Most Popular
                       </span>
                     )}
@@ -75,7 +88,7 @@ export function MembersClub() {
                   </div>
 
                   {/* Body */}
-                  <div className="p-6">
+                  <div className={cn('p-8', isVip && 'pt-10')}>
                     {/* Price */}
                     <div className="flex items-baseline gap-1 mb-1">
                       <span className="text-3xl font-bold text-foreground">{tier.price}</span>
@@ -89,14 +102,14 @@ export function MembersClub() {
                     <ul className="space-y-2.5 mb-6">
                       {tier.perks.slice(0, 4).map((perk) => (
                         <li key={perk} className="flex items-start gap-2.5 text-sm text-foreground">
-                          <Check className={cn('h-4 w-4 shrink-0 mt-0.5', tier.accentText)} />
+                          <Check className="h-3.5 w-3.5 shrink-0 mt-0.5 text-accent" />
                           {perk}
                         </li>
                       ))}
                     </ul>
 
                     {/* CTA */}
-                    <Button asChild variant={isVip ? 'default' : 'outline'} className={cn('w-full rounded-xl', isVip && 'bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)] hover:bg-[hsl(var(--chart-4)/0.9)]')}>
+                    <Button asChild variant={isVip ? 'default' : 'outline'} className={cn('w-full rounded-xl', isVip && 'bg-accent text-accent-foreground hover:bg-accent/90')}>
                       <Link to="/membership">
                         Join Waitlist
                         <ArrowRight className="h-4 w-4 ml-1.5" />
@@ -109,26 +122,54 @@ export function MembersClub() {
           })}
         </div>
 
-        {/* SnusPoints callout */}
-        <div className="max-w-3xl mx-auto">
+        {/* SnusPoints callout with progress bar */}
+        <motion.div
+          className="max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
           <Link
             to="/membership#points"
-            className="flex items-center gap-4 rounded-2xl glass-panel p-5 hover:border-[hsl(var(--chart-2)/0.3)] transition-all duration-200 group"
+            className="block rounded-2xl bg-accent/[0.06] border border-accent/15 p-6 hover:bg-accent/[0.08] transition-all duration-200 group"
           >
-            <div className="h-10 w-10 rounded-full bg-[hsl(var(--chart-2))] flex items-center justify-center shrink-0">
-              <Coins className="h-5 w-5 text-white" />
+            <div className="flex items-center gap-4 mb-4">
+              <div className="h-10 w-10 rounded-full bg-accent/15 flex items-center justify-center shrink-0">
+                <Sparkles className="h-5 w-5 text-accent" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-foreground text-sm">
+                  Earn {SNUSPOINTS.displayName} on every order
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {SNUSPOINTS.pointsPerEuro} points per €1 spent — redeem {SNUSPOINTS.freeTrialCost} points for a free mystery box month!
+                </p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 group-hover:translate-x-1 transition-transform" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-foreground text-sm">
-                Earn {SNUSPOINTS.displayName} on every order
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {SNUSPOINTS.pointsPerEuro} points per €1 spent — redeem {SNUSPOINTS.freeTrialCost} points for a free mystery box month!
+
+            {/* Progress bar */}
+            <div>
+              <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
+                <span className="font-medium text-accent">340 pts</span>
+                <span>500 pts</span>
+              </div>
+              <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full bg-accent"
+                  initial={{ width: '0%' }}
+                  whileInView={{ width: '68%' }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 1.5, ease: 'easeOut' }}
+                />
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-1.5">
+                Shop €50 worth of pouches and you're already here!
               </p>
             </div>
-            <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </div>
+        </motion.div>
 
         {/* Learn more link */}
         <div className="text-center mt-8">
@@ -141,6 +182,14 @@ export function MembersClub() {
           </Link>
         </div>
       </div>
+
+      {/* Shimmer animation */}
+      <style>{`
+        @keyframes shimmer-sweep {
+          0%, 100% { background-position: 200% 200%; }
+          50% { background-position: -100% -100%; }
+        }
+      `}</style>
     </section>
   );
 }
