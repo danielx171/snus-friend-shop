@@ -229,9 +229,9 @@ export default function MembershipPage() {
 
             <div className="grid gap-6 md:grid-cols-3 max-w-3xl mx-auto">
               {mysteryBoxFeatures.map((feature) => (
-                <div key={feature.title} className="rounded-2xl glass-panel p-6 text-center">
-                  <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-[hsl(var(--chart-4)/0.15)] to-[hsl(var(--chart-4)/0.05)] flex items-center justify-center mb-4">
-                    <feature.icon className="h-7 w-7 text-[hsl(var(--chart-4))]" />
+                <div key={feature.title} className="group rounded-2xl glass-panel p-6 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_32px_hsl(0_0%_0%/0.2)]">
+                  <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-[hsl(var(--chart-4)/0.15)] to-[hsl(var(--chart-4)/0.05)] flex items-center justify-center mb-4 transition-all duration-200 group-hover:shadow-[0_0_16px_rgba(216,237,98,0.4)]">
+                    <feature.icon className="h-7 w-7 text-[hsl(var(--chart-4))] transition-transform duration-200 group-hover:scale-[1.15]" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">{feature.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
