@@ -78,10 +78,10 @@ export function EditorialHighlights() {
 
                 {/* Content */}
                 <div className="relative z-10 flex h-full flex-col justify-end p-6">
-                  <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold text-lg text-white mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{item.blurb}</p>
+                  <p className="text-sm text-gray-300 leading-relaxed mb-4">{item.blurb}</p>
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
                   </span>
