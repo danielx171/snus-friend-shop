@@ -60,7 +60,7 @@
     --chart-1: 174 90% 50%;
     --chart-2: 260 80% 65%;
     --chart-3: 330 80% 60%;
-    --chart-4: 45 90% 55%;
+    --chart-4: 65 80% 62%;
     --chart-5: 200 85% 55%;
 
     --sidebar: 220 16% 6%;
@@ -241,7 +241,7 @@
     --muted: 220 50% 22%;
     --muted-foreground: 215 25% 58%;
 
-    --accent: 57 100% 48%;
+    --accent: 65 80% 62%;
     --accent-foreground: 220 100% 12%;
 
     --destructive: 0 80% 55%;
@@ -253,7 +253,7 @@
 
     --border: 220 60% 30% / 0.15;
     --input: 220 60% 30%;
-    --ring: 57 100% 48%;
+    --ring: 65 80% 62%;
 
     --radius: 0.25rem;
 
@@ -264,12 +264,12 @@
     --sidebar-accent: 220 60% 20%;
     --sidebar-accent-foreground: 210 30% 90%;
     --sidebar-border: 220 60% 30%;
-    --sidebar-ring: 57 100% 48%;
+    --sidebar-ring: 65 80% 62%;
 
     --chart-1: 218 100% 27%;
     --chart-2: 74 78% 66%;
-    --chart-3: 57 100% 48%;
-    --chart-4: 57 100% 48%;
+    --chart-3: 65 80% 62%;
+    --chart-4: 65 80% 62%;
     --chart-5: 200 80% 55%;
 
     --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

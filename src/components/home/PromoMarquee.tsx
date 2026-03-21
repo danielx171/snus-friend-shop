@@ -15,7 +15,7 @@ function MarqueeTrack() {
       {ITEMS.map((item, i) => (
         <span key={i} className="flex items-center whitespace-nowrap">
           <span>{item}</span>
-          <span className="mx-4 text-[#D8ED62] text-lg select-none">{SEPARATOR}</span>
+          <span className="mx-4 text-[hsl(var(--chart-4))] text-lg select-none">{SEPARATOR}</span>
         </span>
       ))}
     </div>
