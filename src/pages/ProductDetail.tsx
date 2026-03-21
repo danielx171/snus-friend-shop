@@ -302,6 +302,36 @@ export default function ProductDetail() {
               </AnimatePresence>
             </div>
 
+            {/* SnusPoints earn indicator */}
+            {!isOutOfStock && (
+              <div className="flex items-center gap-2">
+                <Star className="h-3.5 w-3.5 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))] shrink-0" />
+                <span className="text-sm font-medium text-[hsl(var(--chart-4))]">
+                  Earn{' '}
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={selectedPack}
+                      className="inline-block"
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.3, ease: easeOut }}
+                    >
+                      {Math.round(currentPrice * 10)}
+                    </motion.span>
+                  </AnimatePresence>
+                  {' '}SnusPoints with this purchase
+                </span>
+                <Link
+                  to="/membership#points"
+                  className="group relative"
+                  title="10 pts per €1 spent. 500 pts = free mystery box month!"
+                >
+                  <Info className="h-3.5 w-3.5 text-muted-foreground hover:text-[hsl(var(--chart-4))] transition-colors" />
+                </Link>
+              </div>
+            )}
+
             {/* 7. CTA */}
             {isOutOfStock ? (
               <div className="space-y-4">

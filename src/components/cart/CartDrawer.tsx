@@ -235,6 +235,12 @@ export function CartDrawer() {
                   <AnimatedTotal value={formatPrice(finalTotal)} />
                 </div>
                 <p className="text-xs text-muted-foreground">{t('cart.includingVat')}</p>
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))] shrink-0" />
+                  <span className="text-xs font-medium text-[hsl(var(--chart-4))]">
+                    You'll earn {Math.round(subtotal * 10)} pts with this order
+                  </span>
+                </div>
               </div>
               <Button asChild className="mt-3 w-full rounded-xl glow-primary" size="default">
                 <Link to="/cart" onClick={closeCart}>{t('cart.checkout')}</Link>
