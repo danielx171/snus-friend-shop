@@ -148,7 +148,7 @@ Deno.serve(async (req: Request) => {
 
       const { error: txnError } = await admin
         .from('points_transactions')
-        .insert({ user_id: userId, delta: pts, reason: `spin_wheel:${prizeKey}` });
+        .insert({ user_id: userId, points: pts, reason: `spin_wheel:${prizeKey}` });
 
       if (txnError) {
         console.error('points_transactions insert error', { error: txnError, requestId });
@@ -237,7 +237,7 @@ Deno.serve(async (req: Request) => {
 
         await admin
           .from('points_transactions')
-          .insert({ user_id: userId, delta: 25, reason: 'spin_wheel:free_can_fallback' });
+          .insert({ user_id: userId, points: 25, reason: 'spin_wheel:free_can_fallback' });
 
         const { data: currentBal } = await admin
           .from('points_balances')
