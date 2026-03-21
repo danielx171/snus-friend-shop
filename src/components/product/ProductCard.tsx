@@ -13,6 +13,14 @@ import { motion } from 'framer-motion';
 
 const LOW_STOCK_THRESHOLD = 20;
 
+const strengthColors: Record<string, string> = {
+  normal: '#4ade80',
+  mild: '#4ade80',
+  strong: '#facc15',
+  extraStrong: '#f97316',
+  ultraStrong: '#ef4444',
+};
+
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-500/20 to-green-600/10',
   berry: 'from-purple-500/20 to-fuchsia-600/10',
