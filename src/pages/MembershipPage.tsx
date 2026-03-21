@@ -399,8 +399,8 @@ export default function MembershipPage() {
                 <motion.div
                   className="h-full rounded-full relative"
                   style={{
-                    background: 'linear-gradient(90deg, hsl(var(--chart-2)), #D8ED62)',
-                    boxShadow: '0 0 12px #D8ED6266, 0 0 4px #D8ED6244',
+                    background: 'linear-gradient(90deg, hsl(var(--chart-2)), hsl(var(--chart-4)))',
+                    boxShadow: '0 0 12px hsl(65 80% 62% / 0.4), 0 0 4px hsl(65 80% 62% / 0.25)',
                   }}
                   initial={{ width: '0%' }}
                   animate={barInView ? { width: `${displayPct}%` } : { width: '0%' }}
