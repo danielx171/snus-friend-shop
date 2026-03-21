@@ -19,12 +19,24 @@ export function MembersClub() {
             <Coins className="h-3.5 w-3.5" />
             Earn {SNUSPOINTS.displayName} on every order
           </div>
-          <h2 className="text-3xl font-bold text-foreground tracking-tight">
+          <motion.h2
+            className="text-3xl font-bold text-foreground tracking-tight"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
             Snus Family Club
-          </h2>
-          <p className="text-muted-foreground mt-2 max-w-lg mx-auto">
+          </motion.h2>
+          <motion.p
+            className="text-muted-foreground mt-2 max-w-lg mx-auto"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+          >
             Monthly mystery boxes, exclusive discounts, and vendor merchandise — unlock the full SnusFriend experience.
-          </p>
+          </motion.p>
         </div>
 
         {/* Tier cards */}
