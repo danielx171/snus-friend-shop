@@ -89,8 +89,9 @@ export function MainNav() {
                 <Link
                   to={item.href}
                   className={cn(
-                    'inline-flex h-11 items-center justify-center px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/8 rounded-none',
-                    item.highlight ? 'text-accent' : 'text-foreground hover:text-primary'
+                    'relative inline-flex h-11 items-center justify-center px-4 py-2 text-sm font-medium transition-all duration-200 rounded-none',
+                    'after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:w-0 after:bg-primary after:rounded-full after:transition-all after:duration-200 hover:after:w-3/4',
+                    item.highlight ? 'text-accent hover:text-white' : 'text-foreground hover:text-white'
                   )}
                 >
                   {item.label}

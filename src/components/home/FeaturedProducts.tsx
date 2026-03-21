@@ -41,10 +41,10 @@ export function FeaturedProducts({
           >
             {title}
           </motion.h2>
-          <Button asChild variant="ghost" className="gap-1.5 text-accent hover:text-accent/80 hover:bg-accent/8">
+          <Button asChild variant="ghost" className="gap-1.5 text-accent hover:text-white hover:bg-accent/8 transition-all duration-200 group/viewall">
             <Link to={viewAllHref}>
               {t('products.viewAll')}
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/viewall:translate-x-1" />
             </Link>
           </Button>
         </div>

@@ -109,7 +109,7 @@ export function MembersClub() {
                     </ul>
 
                     {/* CTA */}
-                    <Button asChild variant={isVip ? 'default' : 'outline'} className={cn('w-full rounded-xl', isVip && 'bg-accent text-accent-foreground hover:bg-accent/90')}>
+                    <Button asChild variant={isVip ? 'default' : 'outline'} className={cn('w-full rounded-xl transition-all duration-200 hover:scale-[1.02] hover:brightness-110', isVip && 'bg-accent text-accent-foreground')}>
                       <Link to="/membership">
                         Join Waitlist
                         <ArrowRight className="h-4 w-4 ml-1.5" />
