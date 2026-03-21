@@ -47,3 +47,6 @@ verify_jwt = false
 
 [functions.save-waitlist-email]
 verify_jwt = false
+
+[functions.spin-wheel]
+verify_jwt = false

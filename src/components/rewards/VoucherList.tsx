@@ -43,6 +43,25 @@ function statusBadge(status: Voucher['status']) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Derive human-readable label from voucher type + value            */
+/* ------------------------------------------------------------------ */
+
+function voucherLabel(voucher: Voucher): string {
+  switch (voucher.type) {
+    case 'discount_pct': {
+      const pct = typeof voucher.value?.percent === 'number' ? voucher.value.percent : '?';
+      return `${pct}% Off Voucher`;
+    }
+    case 'free_product':
+      return 'Free Can';
+    case 'free_month':
+      return 'Free Month!';
+    default:
+      return 'Reward Voucher';
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /*  Props                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -66,10 +85,10 @@ const VoucherCard = React.memo(function VoucherCard({
   onClaim: (id: string) => void;
 }) {
   const inactive = voucher.status !== 'active';
-  const Icon = voucher.type === 'discount' ? Percent : Package;
+  const Icon = voucher.type === 'discount_pct' ? Percent : Package;
 
   const handleAction = useCallback(() => {
-    if (voucher.type === 'discount') {
+    if (voucher.type === 'discount_pct') {
       onApply(voucher.id);
     } else {
       onClaim(voucher.id);
@@ -83,8 +102,8 @@ const VoucherCard = React.memo(function VoucherCard({
         <div
           className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
           style={{
-            backgroundColor: voucher.type === 'discount' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
-            color: voucher.type === 'discount' ? '#10b981' : '#ef4444',
+            backgroundColor: voucher.type === 'discount_pct' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
+            color: voucher.type === 'discount_pct' ? '#10b981' : '#ef4444',
           }}
         >
           <Icon className="h-5 w-5" />
@@ -92,7 +111,7 @@ const VoucherCard = React.memo(function VoucherCard({
 
         {/* Details */}
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-sm truncate">{voucher.label}</p>
+          <p className="font-semibold text-sm truncate">{voucherLabel(voucher)}</p>
           {voucher.status === 'active' && (
             <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
               <Clock className="h-3 w-3" />
@@ -106,11 +125,11 @@ const VoucherCard = React.memo(function VoucherCard({
         {voucher.status === 'active' && (
           <Button
             size="sm"
-            variant={voucher.type === 'discount' ? 'default' : 'secondary'}
+            variant={voucher.type === 'discount_pct' ? 'default' : 'secondary'}
             onClick={handleAction}
             className="flex-shrink-0"
           >
-            {voucher.type === 'discount' ? 'Apply' : 'Claim'}
+            {voucher.type === 'discount_pct' ? 'Apply' : 'Claim'}
           </Button>
         )}
       </CardContent>

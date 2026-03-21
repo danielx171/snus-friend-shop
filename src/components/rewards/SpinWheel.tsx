@@ -17,14 +17,14 @@ interface Segment {
 }
 
 const SEGMENTS: Segment[] = [
-  { key: 'points_50', label: '50 Points', shortLabel: '50', bg: '#0d2847', color: '#22d3ee', Icon: Coins },
-  { key: 'discount_5', label: '5% Off', shortLabel: '5%', bg: '#111d3a', color: '#10b981', Icon: Percent },
-  { key: 'points_100', label: '100 Points', shortLabel: '100', bg: '#0d2847', color: '#22d3ee', Icon: Star },
-  { key: 'free_can', label: 'Free Can', shortLabel: 'Free', bg: '#1a0d2e', color: '#ef4444', Icon: Package },
-  { key: 'points_25', label: '25 Points', shortLabel: '25', bg: '#111d3a', color: '#22d3ee', Icon: Zap },
-  { key: 'discount_10', label: '10% Off', shortLabel: '10%', bg: '#0d2847', color: '#10b981', Icon: Gift },
-  { key: 'points_75', label: '75 Points', shortLabel: '75', bg: '#111d3a', color: '#22d3ee', Icon: Heart },
-  { key: 'jackpot', label: 'Jackpot!', shortLabel: 'JP', bg: '#1a1505', color: '#fbbf24', Icon: Trophy },
+  { key: 'points_5',      label: '5 Points',    shortLabel: '5',    bg: '#0d2847', color: '#22d3ee', Icon: Coins },
+  { key: 'points_10',     label: '10 Points',   shortLabel: '10',   bg: '#111d3a', color: '#22d3ee', Icon: Coins },
+  { key: 'voucher_15pct', label: '15% Off',     shortLabel: '15%',  bg: '#0d2847', color: '#10b981', Icon: Percent },
+  { key: 'points_25',     label: '25 Points',   shortLabel: '25',   bg: '#111d3a', color: '#22d3ee', Icon: Zap },
+  { key: 'points_5b',     label: '5 Points',    shortLabel: '5',    bg: '#0d2847', color: '#22d3ee', Icon: Coins },
+  { key: 'free_can',      label: 'Free Can',    shortLabel: 'Free', bg: '#1a0d2e', color: '#ef4444', Icon: Gift },
+  { key: 'points_50',     label: '50 Points',   shortLabel: '50',   bg: '#111d3a', color: '#22d3ee', Icon: Star },
+  { key: 'free_month',    label: 'Free Month!', shortLabel: 'JP',   bg: '#1a1505', color: '#fbbf24', Icon: Trophy },
 ];
 
 const SEGMENT_COUNT = SEGMENTS.length;

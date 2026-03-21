@@ -158,32 +158,21 @@ Deno.serve(async (req: Request) => {
         );
       }
 
-      const { error: balError } = await admin
+      const { data: currentBal } = await admin
         .from('points_balances')
-        .upsert(
-          { user_id: userId, balance: pts },
-          { onConflict: 'user_id' }
-        );
+        .select('balance')
+        .eq('user_id', userId)
+        .maybeSingle();
 
-      if (balError) {
-        // If upsert doesn't auto-increment, do it via RPC or raw update
-        // Fallback: read current balance, then update
-        const { data: currentBal } = await admin
+      if (currentBal) {
+        await admin
           .from('points_balances')
-          .select('balance')
-          .eq('user_id', userId)
-          .single();
-
-        if (currentBal) {
-          await admin
-            .from('points_balances')
-            .update({ balance: currentBal.balance + pts })
-            .eq('user_id', userId);
-        } else {
-          await admin
-            .from('points_balances')
-            .insert({ user_id: userId, balance: pts });
-        }
+          .update({ balance: currentBal.balance + pts })
+          .eq('user_id', userId);
+      } else {
+        await admin
+          .from('points_balances')
+          .insert({ user_id: userId, balance: pts });
       }
     } else if (prizeKey === 'voucher_15pct') {
       const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();

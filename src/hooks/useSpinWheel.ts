@@ -2,22 +2,24 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { apiFetch } from '@/lib/api';
 
+export interface PrizeDisplay {
+  icon: string;
+  title: string;
+  description: string;
+  type: 'points' | 'voucher' | 'jackpot';
+}
+
 export interface SpinResult {
   prize_key: string;
-  prize_label: string;
-  prize_type: 'points' | 'discount' | 'free_product' | 'jackpot' | 'nothing';
-  value: number;
+  prize_display: PrizeDisplay;
   voucher_id?: string;
+  points_awarded?: number;
 }
 
 function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-/**
- * Check if the current user already spun today.
- * Returns true when a spin record exists for today's date.
- */
 export function useSpinStatus(userId: string | null) {
   return useQuery({
     queryKey: ['spin-status', userId, todayISO()],
@@ -43,10 +45,6 @@ export function useSpinStatus(userId: string | null) {
   });
 }
 
-/**
- * Mutation that calls the spin-wheel edge function.
- * Invalidates spin status + points queries on success.
- */
 export function useSpinWheel() {
   const queryClient = useQueryClient();
 

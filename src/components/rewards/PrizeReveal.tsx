@@ -7,15 +7,10 @@ import { Button } from '@/components/ui/button';
 /*  Types                                                             */
 /* ------------------------------------------------------------------ */
 
-export interface PrizeDisplay {
-  prize_key: string;
-  prize_label: string;
-  prize_type: 'points' | 'discount' | 'free_product' | 'jackpot' | 'nothing';
-  value: number;
-}
+import type { SpinResult } from '@/hooks/useSpinWheel';
 
 interface PrizeRevealProps {
-  prize: PrizeDisplay | null;
+  prize: SpinResult | null;
   onClose: () => void;
 }
 
@@ -25,10 +20,8 @@ interface PrizeRevealProps {
 
 const TYPE_CONFIG: Record<string, { Icon: React.ElementType; glowColor: string; ringColor: string; subtitle: string }> = {
   points: { Icon: Coins, glowColor: '#22d3ee', ringColor: 'rgba(34,211,238,0.3)', subtitle: 'SnusPoints earned!' },
-  discount: { Icon: Percent, glowColor: '#10b981', ringColor: 'rgba(16,185,129,0.3)', subtitle: 'Discount voucher won!' },
-  free_product: { Icon: Package, glowColor: '#ef4444', ringColor: 'rgba(239,68,68,0.3)', subtitle: 'Free product voucher!' },
+  voucher: { Icon: Percent, glowColor: '#a855f7', ringColor: 'rgba(168,85,247,0.3)', subtitle: 'Voucher won!' },
   jackpot: { Icon: Trophy, glowColor: '#fbbf24', ringColor: 'rgba(251,191,36,0.3)', subtitle: 'JACKPOT!' },
-  nothing: { Icon: Coins, glowColor: '#64748b', ringColor: 'rgba(100,116,139,0.3)', subtitle: 'Better luck next time!' },
 };
 
 /* ------------------------------------------------------------------ */
@@ -126,8 +119,9 @@ function Confetti() {
 function PrizeRevealInner({ prize, onClose }: PrizeRevealProps) {
   if (!prize) return null;
 
-  const config = TYPE_CONFIG[prize.prize_type] ?? TYPE_CONFIG.nothing;
-  const showConfetti = prize.prize_type === 'jackpot' || prize.prize_type === 'free_product' || prize.prize_type === 'discount';
+  const prizeType = prize.prize_display?.type ?? 'points';
+  const config = TYPE_CONFIG[prizeType] ?? TYPE_CONFIG.points;
+  const showConfetti = prizeType === 'jackpot' || prizeType === 'voucher';
 
   return (
     <AnimatePresence>
@@ -218,10 +212,10 @@ function PrizeRevealInner({ prize, onClose }: PrizeRevealProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.75 }}
             >
-              {prize.prize_label}
+              {prize.prize_display?.title ?? prize.prize_key}
             </motion.h2>
 
-            {prize.prize_type === 'points' && (
+            {prizeType === 'points' && (
               <motion.p
                 className="text-muted-foreground text-sm mb-6"
                 initial={{ opacity: 0 }}
@@ -232,36 +226,14 @@ function PrizeRevealInner({ prize, onClose }: PrizeRevealProps) {
               </motion.p>
             )}
 
-            {(prize.prize_type === 'discount' || prize.prize_type === 'free_product') && (
+            {(prizeType === 'voucher' || prizeType === 'jackpot') && (
               <motion.p
                 className="text-muted-foreground text-sm mb-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.9 }}
               >
-                Voucher added to your rewards
-              </motion.p>
-            )}
-
-            {prize.prize_type === 'jackpot' && (
-              <motion.p
-                className="text-muted-foreground text-sm mb-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.9 }}
-              >
-                Congratulations! Check your rewards.
-              </motion.p>
-            )}
-
-            {prize.prize_type === 'nothing' && (
-              <motion.p
-                className="text-muted-foreground text-sm mb-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.9 }}
-              >
-                Come back tomorrow for another spin!
+                {prize.prize_display?.description ?? 'Voucher added to your rewards'}
               </motion.p>
             )}
 

@@ -55,7 +55,9 @@ export default defineConfig(() => ({
             },
           },
           {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/functions\/v1\/.*/i,
+            urlPattern: ({ url, request }: { url: URL; request: Request }) =>
+              /^https:\/\/.*\.supabase\.co\/functions\/v1\/.*/.test(url.href) &&
+              request.method === 'GET',
             handler: "NetworkFirst",
             options: {
               cacheName: "supabase-api-cache",
