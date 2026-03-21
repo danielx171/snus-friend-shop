@@ -8,6 +8,10 @@
    Deep charcoal, glassy panels, restrained teal accents
    ═══════════════════════════════════════════════════════ */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     --background: 220 16% 8%;
     --foreground: 210 20% 95%;
