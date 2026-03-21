@@ -225,6 +225,16 @@ export function CartDrawer() {
                   );
                 })}
               </div>
+
+              {/* Upsell nudge — within €5 of free delivery */}
+              {!freeShipping && remainingForFreeShipping > 0 && remainingForFreeShipping <= 5 && (
+                <div className="mt-3 flex items-center gap-2 rounded-lg bg-[hsl(var(--chart-4)/0.12)] border border-[hsl(var(--chart-4)/0.25)] px-3 py-2.5">
+                  <Truck className="h-4 w-4 text-[hsl(var(--chart-4))] shrink-0" />
+                  <span className="text-sm font-medium text-[hsl(var(--chart-4))]">
+                    Add just {formatLocalAmount(remainingForFreeShipping)} more for free delivery!
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="border-t border-border/20 pt-3">
