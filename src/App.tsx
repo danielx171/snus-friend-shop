@@ -29,6 +29,7 @@ import FaqPage from "./pages/FaqPage";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsent } from "@/components/cookie/CookieConsent";
 import { BackToTop } from "@/components/layout/BackToTop";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 
 // Lazy-load ops pages — they are admin-only and rarely visited
 const OpsLogin = lazy(() => import("./pages/ops/OpsLogin"));
@@ -166,6 +167,7 @@ const App = () => (
             </Routes>
             <CookieConsent />
             <BackToTop />
+            <InstallPrompt />
             </BrowserRouter>
           </CookieConsentProvider>
         </CartProvider>

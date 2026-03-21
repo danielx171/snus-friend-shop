@@ -551,3 +551,15 @@
 .atc-press {
   animation: atc-press 150ms ease-out;
 }
+
+/* PWA standalone mode — safe-area insets for notched devices */
+@media (display-mode: standalone) {
+  :root {
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+  }
+  body {
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
+  }
+}
