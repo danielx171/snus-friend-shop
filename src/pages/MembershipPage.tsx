@@ -455,16 +455,21 @@ export default function MembershipPage() {
           .membership-shimmer::after {
             content: '';
             position: absolute;
-            top: 0;
+            top: -50%;
             left: -100%;
             width: 60%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
-            animation: membership-shimmer-sweep 6s ease-in-out infinite;
+            height: 200%;
+            background: linear-gradient(
+              115deg,
+              transparent 20%,
+              rgba(255,255,255,0.08) 50%,
+              transparent 80%
+            );
+            animation: membership-shimmer-sweep 4s ease-in-out infinite;
           }
           @keyframes membership-shimmer-sweep {
-            0%, 100% { left: -60%; }
-            50% { left: 100%; }
+            0% { left: -60%; }
+            100% { left: 120%; }
           }
           .membership-crown-pulse {
             animation: membership-crown-pulse 3s ease-in-out infinite;
@@ -473,9 +478,37 @@ export default function MembershipPage() {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.08); }
           }
+
+          /* Member card: border glow oscillation + hover lift */
           .membership-member-card {
             box-shadow: 0 0 20px rgba(0, 49, 138, 0.5);
+            animation: membership-member-border-glow 3s ease-in-out infinite;
           }
+          @keyframes membership-member-border-glow {
+            0%, 100% { border-color: rgba(255,255,255,0.1); }
+            50% { border-color: rgba(255,255,255,0.2); }
+          }
+          .membership-member-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 49, 138, 0.35), 0 0 24px rgba(0, 49, 138, 0.5);
+          }
+
+          /* VIP card: hover lift + glow + gradient border */
+          .membership-vip-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 30px rgba(244,231,0,0.25), 0 0 20px rgba(251,191,36,0.2);
+            border-color: #fbbf24;
+          }
+
+          /* Most Popular badge pulse */
+          .membership-badge-pulse {
+            animation: membership-badge-glow 2s ease-in-out infinite;
+          }
+          @keyframes membership-badge-glow {
+            0%, 100% { opacity: 0.7; box-shadow: 0 0 8px rgba(244,231,0,0.3); }
+            50% { opacity: 1; box-shadow: 0 0 16px rgba(244,231,0,0.5); }
+          }
+
           .membership-gift-float {
             animation: membership-gift-float 2.5s ease-in-out infinite;
           }
