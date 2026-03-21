@@ -70,7 +70,7 @@ export function HeroBanner() {
 
   /* Mark entrance done after initial stagger completes (~1.3s) */
   useEffect(() => {
-    const t = setTimeout(() => setHasMounted(true), 1400);
+    const t = setTimeout(() => setHasMounted(true), 1100);
     return () => clearTimeout(t);
   }, []);
 
@@ -232,9 +232,9 @@ export function HeroBanner() {
           <div className="space-y-7">
             {/* Trust pill — entrance */}
             <motion.div
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3, ease: easeOut }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0, ease: easeOut }}
             >
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
                 <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
@@ -268,9 +268,7 @@ export function HeroBanner() {
                               animate={{ opacity: 1, y: 0 }}
                               transition={{
                                 duration: isEntrance ? 0.5 : 0.35,
-                                delay: isEntrance
-                                  ? (idx === 0 ? 0.4 : 0.55)
-                                  : SLIDE_LINE_DELAYS[idx] ?? 0,
+                                delay: isEntrance ? 0.2 : SLIDE_LINE_DELAYS[idx] ?? 0,
                                 ease: easeOut,
                               }}
                             >
@@ -280,11 +278,11 @@ export function HeroBanner() {
                           <motion.span
                             className="block text-[0.8em] mt-2 font-semibold"
                             style={{ color: s.accentColor }}
-                            initial={{ opacity: 0, scale: 0.95 }}
+                            initial={{ opacity: 0, scale: 0.96 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{
                               duration: 0.4,
-                              delay: isEntrance ? 0.7 : SLIDE_LINE_DELAYS[2],
+                              delay: isEntrance ? 0.4 : SLIDE_LINE_DELAYS[2],
                               ease: easeOut,
                             }}
                           >
@@ -298,7 +296,7 @@ export function HeroBanner() {
                           animate={{ opacity: 1 }}
                           transition={{
                             duration: 0.4,
-                            delay: isEntrance ? 0.8 : SLIDE_LINE_DELAYS[3],
+                            delay: isEntrance ? 0.5 : SLIDE_LINE_DELAYS[3],
                             ease: easeOut,
                           }}
                         >
@@ -309,11 +307,11 @@ export function HeroBanner() {
 
                         <motion.div
                           className="flex flex-wrap gap-3 pt-5"
-                          initial={{ opacity: 0, y: isEntrance ? 12 : 12 }}
+                          initial={{ opacity: 0, y: 12 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{
                             duration: 0.4,
-                            delay: isEntrance ? 0.9 : SLIDE_LINE_DELAYS[4],
+                            delay: isEntrance ? 0.6 : SLIDE_LINE_DELAYS[4],
                             ease: easeOut,
                           }}
                         >
@@ -353,7 +351,7 @@ export function HeroBanner() {
               className="flex flex-wrap gap-5 text-xs text-muted-foreground"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 1.0, ease: easeOut }}
+              transition={{ duration: 0.3, delay: 0.7, ease: easeOut }}
             >
               <div className="flex items-center gap-2">
                 <Truck className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
@@ -374,7 +372,7 @@ export function HeroBanner() {
               className="flex items-center gap-3 pt-1"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 1.0, ease: easeOut }}
+              transition={{ duration: 0.3, delay: 0.7, ease: easeOut }}
             >
               <button
                 onClick={prevSlide}
@@ -448,7 +446,7 @@ export function HeroBanner() {
                       key={product.id}
                       initial={{ opacity: 0, y: 24, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.5, delay: 0.6 + i * 0.1, ease: easeOut }}
+                      transition={{ duration: 0.5, delay: 0.7 + i * 0.1, ease: easeOut }}
                     >
                       <Link
                         to={`/product/${product.id}`}
@@ -488,7 +486,7 @@ export function HeroBanner() {
                       className="flex-none w-36 snap-start"
                       initial={{ opacity: 0, y: 24, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.5, delay: 0.6 + i * 0.1, ease: easeOut }}
+                      transition={{ duration: 0.5, delay: 0.7 + i * 0.1, ease: easeOut }}
                     >
                       <Link
                         to={`/product/${product.id}`}
