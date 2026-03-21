@@ -284,9 +284,13 @@ export default function MembershipPage() {
               ].map((item, i) => (
                 <motion.div
                   key={item.step}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={stepsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-                  transition={{ duration: 0.35, ease: 'easeOut', delay: i * 0.15 }}
+                  initial={{ opacity: 0, scale: 0.3, y: 20 }}
+                  animate={stepsInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.3, y: 20 }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.34, 1.56, 0.64, 1],
+                    delay: i * 0.15,
+                  }}
                   className="rounded-2xl glass-panel p-6 text-center relative"
                 >
                   <div className="absolute top-3 left-3 h-6 w-6 rounded-full bg-[hsl(var(--chart-2))] text-white text-xs font-bold flex items-center justify-center">
