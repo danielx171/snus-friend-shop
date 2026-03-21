@@ -377,6 +377,24 @@ export type Database = {
         Update: { id?: string; key?: string; value?: string; created_at?: string }
         Relationships: []
       }
+      daily_spins: {
+        Row: { id: string; user_id: string; prize_key: string; prize_value: Json; spin_date: string; spun_at: string }
+        Insert: { id?: string; user_id: string; prize_key: string; prize_value: Json; spin_date?: string; spun_at?: string }
+        Update: { id?: string; user_id?: string; prize_key?: string; prize_value?: Json; spin_date?: string; spun_at?: string }
+        Relationships: []
+      }
+      vouchers: {
+        Row: { id: string; user_id: string; type: string; value: Json; status: string; source: string; expires_at: string; used_at: string | null; created_at: string }
+        Insert: { id?: string; user_id: string; type: string; value: Json; status?: string; source?: string; expires_at: string; used_at?: string | null; created_at?: string }
+        Update: { id?: string; user_id?: string; type?: string; value?: Json; status?: string; source?: string; expires_at?: string; used_at?: string | null; created_at?: string }
+        Relationships: []
+      }
+      spin_config: {
+        Row: { key: string; value: Json; updated_at: string }
+        Insert: { key: string; value: Json; updated_at?: string }
+        Update: { key?: string; value?: Json; updated_at?: string }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

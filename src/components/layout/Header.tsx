@@ -77,6 +77,7 @@ export function Header() {
     { href: '/nicotine-pouches?badge=new', label: 'New' },
     { href: '/nicotine-pouches?badge=popular', label: 'Bestsellers' },
     { href: '/membership', label: 'Snus Family' },
+    { href: '/rewards', label: 'Daily Spin' },
   ];
 
   return (
