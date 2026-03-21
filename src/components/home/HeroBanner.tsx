@@ -246,10 +246,7 @@ export function HeroBanner() {
                   initial={hasMounted ? { opacity: 0, y: 24 } : false}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
-                  transition={hasMounted ? {
-                    enter: { duration: 0.5, ease: easeOut, delay: 0.15 },
-                    exit: { duration: 0.4, ease: easeIn },
-                  } : undefined}
+                  transition={{ duration: 0.45, ease: easeOut }}
                 >
                   {(() => {
                     const s = SLIDES[activeSlide];
