@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 const ITEMS = [
   '🏆 Earn 10 SnusPoints per €1 spent',
   '🎁 500 points = free mystery box month',
@@ -22,9 +24,13 @@ function MarqueeTrack() {
 
 export function PromoMarquee() {
   return (
-    <div
+    <motion.div
       className="overflow-hidden"
       style={{ backgroundColor: 'hsl(var(--primary))' }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       <div className="flex animate-marquee-scroll py-2.5">
         <MarqueeTrack />
@@ -48,6 +54,6 @@ export function PromoMarquee() {
           font-weight: 500;
         }
       `}</style>
-    </div>
+    </motion.div>
   );
 }
