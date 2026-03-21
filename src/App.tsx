@@ -27,6 +27,7 @@ import BrandsIndex from "./pages/BrandsIndex";
 import MembershipPage from "./pages/MembershipPage";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsent } from "@/components/cookie/CookieConsent";
+import { BackToTop } from "@/components/layout/BackToTop";
 
 // Lazy-load ops pages — they are admin-only and rarely visited
 const OpsLogin = lazy(() => import("./pages/ops/OpsLogin"));
