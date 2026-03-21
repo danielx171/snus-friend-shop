@@ -26,7 +26,7 @@ const reasons = [
 
 export function WhySnusFriends() {
   return (
-    <section className="py-16 md:py-20 bg-muted/5">
+    <section className="py-16 md:py-20">
       <div className="container">
         <div className="text-center mb-12">
           <motion.h2

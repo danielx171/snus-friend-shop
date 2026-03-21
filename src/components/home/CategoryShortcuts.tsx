@@ -23,7 +23,7 @@ export function CategoryShortcuts() {
   }
 
   return (
-    <section className="py-8 border-b border-border/20 bg-card/20">
+    <section className="py-8 border-b border-border/20">
       <div className="container">
         <div
           className="flex justify-center gap-4 overflow-x-auto pb-2 scrollbar-hide"
