@@ -1,4 +1,4 @@
-import { ShoppingCart, Search, Menu, User, Coins, Check } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, Coins, Check, Star } from 'lucide-react';
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
@@ -115,15 +115,27 @@ export function Header() {
             <Search className="h-5 w-5" />
           </Button>
 
-          {userId && pointsData && (
+          {/* SnusPoints indicator */}
+          {userId && pointsData ? (
+            <Link
+              to="/membership#points"
+              className="group relative flex items-center gap-1.5 rounded-xl px-2.5 h-10 text-xs font-medium text-[hsl(var(--chart-4))] hover:bg-[hsl(var(--chart-4)/0.08)] transition-colors"
+              title={`${pointsData.balance} / 500 pts — earn ${Math.max(500 - pointsData.balance, 0)} more for a free mystery box!`}
+            >
+              <Star className="h-3.5 w-3.5 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
+              <span>{pointsData.balance}</span>
+              <span className="hidden md:inline">pts</span>
+            </Link>
+          ) : !userId ? (
             <Link
               to="/membership"
-              className="hidden md:flex items-center gap-1.5 rounded-xl bg-primary/8 px-3 h-9 text-sm font-medium text-primary hover:bg-primary/12 transition-colors"
+              className="group relative flex items-center gap-1.5 rounded-xl px-2.5 h-10 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
+              title="Sign in to earn SnusPoints on every order"
             >
-              <Coins className="h-4 w-4" />
-              <span>{pointsData.balance} SP</span>
+              <Star className="h-3.5 w-3.5" />
+              <span className="hidden md:inline">Earn pts</span>
             </Link>
-          )}
+          ) : null}
 
           <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-10 w-10 text-muted-foreground hover:text-primary" asChild>
             <Link to="/account" aria-label="Account">
