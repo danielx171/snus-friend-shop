@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { Logo } from './Logo';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
+import { Mail, Check } from 'lucide-react';
 
 function NewsletterSignup() {
   const [email, setEmail] = useState('');
@@ -32,10 +33,12 @@ function NewsletterSignup() {
   };
 
   const isDisabled = status === 'submitting' || status === 'success' || status === 'duplicate';
+  const showCheck = status === 'success' || status === 'duplicate';
 
   return (
     <div className="text-center max-w-lg mx-auto">
-      <h3 className="text-lg font-semibold text-foreground mb-1.5">Stay in the loop</h3>
+      <Mail className="mx-auto mb-3 h-7 w-7 text-accent" />
+      <h3 className="text-xl font-semibold text-white mb-1.5">Stay in the loop</h3>
       <p className="text-sm text-muted-foreground mb-4">
         New drops, exclusive offers, and pouch tips — straight to your inbox.
       </p>
@@ -46,19 +49,21 @@ function NewsletterSignup() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Your email address"
           required
-          className="flex-1 min-w-0 bg-card/50 border border-border/30 rounded-l-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
+          className="flex-1 min-w-0 bg-card/50 border border-border/30 rounded-l-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-400 focus:shadow-[0_0_8px_rgba(96,165,250,0.3)] transition-all duration-200"
         />
         <button
           type="submit"
           disabled={isDisabled}
           className={cn(
-            'rounded-r-xl px-6 py-3 text-sm font-medium transition-colors whitespace-nowrap',
-            status === 'success' || status === 'duplicate'
+            'rounded-r-xl px-6 py-3 text-sm font-medium transition-all duration-200 whitespace-nowrap',
+            showCheck
               ? 'bg-emerald-500 text-white'
-              : 'bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-60'
+              : 'bg-primary text-primary-foreground hover:brightness-110 disabled:opacity-60'
           )}
         >
-          {status === 'submitting' ? 'Saving…' : status === 'success' ? '✓ Subscribed!' : status === 'duplicate' ? '✓ Already subscribed!' : 'Subscribe'}
+          {status === 'submitting' ? 'Saving…' : showCheck ? (
+            <span className="inline-flex items-center gap-1"><Check className="h-4 w-4" />{status === 'success' ? 'Subscribed!' : 'Already subscribed!'}</span>
+          ) : 'Subscribe'}
         </button>
       </form>
       {status === 'success' && (
