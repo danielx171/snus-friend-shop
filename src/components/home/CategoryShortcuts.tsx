@@ -36,10 +36,10 @@ export function CategoryShortcuts() {
             return (
               <motion.div
                 key={category.id}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.3, delay: index * 0.08, ease: 'easeOut' }}
+                transition={{ duration: 0.35, delay: index * 0.08, ease: 'easeOut' }}
               >
                 <Link
                   to={category.href}

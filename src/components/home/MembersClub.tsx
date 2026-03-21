@@ -55,10 +55,10 @@ export function MembersClub() {
             return (
               <motion.div
                 key={tier.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ type: 'spring', stiffness: 100, damping: 15, delay: isVip ? 0.15 : 0 }}
+                transition={{ duration: 0.5, delay: isVip ? 0.35 : 0.2, ease: 'easeOut' }}
               >
                 <div
                   className={cn(

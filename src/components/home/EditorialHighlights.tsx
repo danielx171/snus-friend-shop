@@ -58,8 +58,8 @@ export function EditorialHighlights() {
           {highlights.map((item, index) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
             >
