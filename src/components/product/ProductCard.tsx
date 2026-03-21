@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
+import { motion } from 'framer-motion';
 
 const LOW_STOCK_THRESHOLD = 20;
 
@@ -59,6 +60,21 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const isOutOfStock = typeof product.stock === 'number' && product.stock === 0;
   const isLowStock = typeof product.stock === 'number' && product.stock > 0 && product.stock <= LOW_STOCK_THRESHOLD;
   const accentColor = flavorAccents[product.flavorKey];
+  const glowColor = accentColor ?? 'hsl(var(--primary))';
+
+  const cardVariants = {
+    rest: { y: 0, boxShadow: '0 0 0 hsl(0 0% 0% / 0)' },
+    hover: { y: -2, boxShadow: '0 12px 40px hsl(0 0% 0% / 0.22)' },
+  };
+  const imageVariants = {
+    rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
+    hover: { scale: 1.06, rotate: 6, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
+  };
+  const ctaVariants = {
+    rest: { y: 0 },
+    hover: { y: -4 },
+  };
+  const hoverTransition = { duration: 0.2, ease: 'easeOut' } as const;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -84,8 +100,15 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   };
 
   return (
+    <motion.div
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      variants={cardVariants}
+      transition={hoverTransition}
+    >
     <Card className={cn(
-      'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-[0_8px_32px_hsl(0_0%_0%/0.18)] hover:border-border/60',
+      'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-colors duration-200',
       isOutOfStock && 'opacity-60'
     )}>
       <Link to={`/product/${product.id}`}>
@@ -94,12 +117,17 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
           'product-card-image relative overflow-hidden bg-gradient-to-br',
           flavorGradients[product.flavorKey] ?? defaultGradient
         )} style={{ aspectRatio: isCompact ? '3/2' : '1' }}>
+          <motion.div
+            className="h-full w-full"
+            variants={imageVariants}
+            transition={hoverTransition}
+          >
           {product.image ? (
             <img
               src={product.image}
               alt={product.name}
               className={cn(
-                'h-full w-full object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-110',
+                'h-full w-full object-contain p-4',
                 isOutOfStock && 'grayscale opacity-60'
               )}
               loading="lazy"
@@ -114,6 +142,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
               </span>
             </div>
           )}
+          </motion.div>
 
           {/* Thin colored accent line at bottom of image */}
           {accentColor && !isOutOfStock && (
@@ -273,9 +302,13 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
               </div>
             )
           ) : (
+            <motion.div
+              variants={ctaVariants}
+              transition={hoverTransition}
+            >
             <Button
               onClick={handleAddToCart}
-              className={cn('w-full rounded-xl font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:ring-ring', isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm')}
+              className={cn('w-full rounded-xl font-medium transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-ring', isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm')}
               size="sm"
             >
               <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
@@ -288,9 +321,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
                 </>
               )}
             </Button>
+            </motion.div>
           )}
         </CardContent>
       </Link>
     </Card>
+    </motion.div>
   );
 }
