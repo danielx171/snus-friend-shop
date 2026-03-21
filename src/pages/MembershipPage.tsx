@@ -276,7 +276,7 @@ export default function MembershipPage() {
             <div className="grid gap-6 md:grid-cols-3 max-w-3xl mx-auto">
               {mysteryBoxFeatures.map((feature) => (
                 <div key={feature.title} className="group rounded-2xl glass-panel p-6 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_32px_hsl(0_0%_0%/0.2)]">
-                  <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-[hsl(var(--chart-4)/0.15)] to-[hsl(var(--chart-4)/0.05)] flex items-center justify-center mb-4 transition-all duration-200 group-hover:shadow-[0_0_16px_rgba(216,237,98,0.4)]">
+                  <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-[hsl(var(--chart-4)/0.15)] to-[hsl(var(--chart-4)/0.05)] flex items-center justify-center mb-4 transition-all duration-200 group-hover:shadow-[0_0_16px_hsl(var(--chart-4)/0.4)]">
                     <feature.icon className="h-7 w-7 text-[hsl(var(--chart-4))] transition-transform duration-200 group-hover:scale-[1.15]" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">{feature.title}</h3>
@@ -399,8 +399,8 @@ export default function MembershipPage() {
                 <motion.div
                   className="h-full rounded-full relative"
                   style={{
-                    background: 'linear-gradient(90deg, hsl(var(--chart-2)), #D8ED62)',
-                    boxShadow: '0 0 12px #D8ED6266, 0 0 4px #D8ED6244',
+                    background: 'linear-gradient(90deg, hsl(var(--chart-2)), hsl(var(--chart-4)))',
+                    boxShadow: '0 0 12px hsl(65 80% 62% / 0.4), 0 0 4px hsl(65 80% 62% / 0.25)',
                   }}
                   initial={{ width: '0%' }}
                   animate={barInView ? { width: `${displayPct}%` } : { width: '0%' }}
@@ -409,8 +409,8 @@ export default function MembershipPage() {
                   <motion.div
                     className="absolute right-0 top-0 h-full w-4 rounded-full"
                     style={{
-                      background: 'radial-gradient(circle at right, #D8ED62, transparent)',
-                      boxShadow: '0 0 14px 4px #D8ED62',
+                      background: 'radial-gradient(circle at right, hsl(var(--chart-4)), transparent)',
+                      boxShadow: '0 0 14px 4px hsl(var(--chart-4))',
                     }}
                     initial={{ opacity: 0.6 }}
                     animate={barInView ? { opacity: [0.6, 1, 0.6] } : { opacity: 0 }}
@@ -552,7 +552,7 @@ export default function MembershipPage() {
             inset: -2px;
             border-radius: inherit;
             padding: 2px;
-            background: conic-gradient(from var(--vip-angle, 0deg), #F4E700, #D8ED62, rgba(255,255,255,0.5), #F4E700);
+            background: conic-gradient(from var(--vip-angle, 0deg), hsl(65 80% 55%), hsl(65 80% 62%), rgba(255,255,255,0.5), hsl(65 80% 55%));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
