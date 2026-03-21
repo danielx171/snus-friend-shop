@@ -85,7 +85,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       return [...prev, { product, packSize, quantity }];
     });
-    setIsOpen(true);
+    // Cart drawer no longer auto-opens — toast notification provides feedback
   }, []);
 
   const removeFromCart = useCallback((productId: string, packSize: PackSize) => {
