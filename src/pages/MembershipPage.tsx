@@ -252,40 +252,80 @@ export default function MembershipPage() {
             </div>
 
             {/* 3-step visual */}
-            <div className="grid gap-6 md:grid-cols-3 max-w-3xl mx-auto mb-10">
-              {[
-                { step: 1, icon: ShoppingCart, title: 'Shop', desc: 'Buy your favorite pouches as usual.' },
-                { step: 2, icon: Coins, title: 'Earn', desc: `Get ${SNUSPOINTS.pointsPerEuro} SnusPoints per €1 spent.` },
-                { step: 3, icon: Gift, title: 'Redeem', desc: `${SNUSPOINTS.freeTrialCost} points = 1 free mystery box month.` },
-              ].map((item) => (
-                <div key={item.step} className="rounded-2xl glass-panel p-6 text-center relative">
-                  <div className="absolute top-3 left-3 h-6 w-6 rounded-full bg-[hsl(var(--chart-2))] text-white text-xs font-bold flex items-center justify-center">
-                    {item.step}
-                  </div>
-                  <div className="mx-auto h-14 w-14 rounded-full bg-[hsl(var(--chart-2)/0.1)] flex items-center justify-center mb-4 mt-2">
-                    <item.icon className="h-6 w-6 text-[hsl(var(--chart-2))]" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+            {(() => {
+              const stepsRef = useRef<HTMLDivElement>(null);
+              const stepsInView = useInView(stepsRef, { once: true, margin: '-60px' });
+              return (
+                <div ref={stepsRef} className="grid gap-6 md:grid-cols-3 max-w-3xl mx-auto mb-10">
+                  {[
+                    { step: 1, icon: ShoppingCart, title: 'Shop', desc: 'Buy your favorite pouches as usual.' },
+                    { step: 2, icon: Coins, title: 'Earn', desc: `Get ${SNUSPOINTS.pointsPerEuro} SnusPoints per €1 spent.` },
+                    { step: 3, icon: Gift, title: 'Redeem', desc: `${SNUSPOINTS.freeTrialCost} points = 1 free mystery box month.` },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={item.step}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={stepsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                      transition={{ duration: 0.35, ease: 'easeOut', delay: i * 0.15 }}
+                      className="rounded-2xl glass-panel p-6 text-center relative"
+                    >
+                      <div className="absolute top-3 left-3 h-6 w-6 rounded-full bg-[hsl(var(--chart-2))] text-white text-xs font-bold flex items-center justify-center">
+                        {item.step}
+                      </div>
+                      <div className="mx-auto h-14 w-14 rounded-full bg-[hsl(var(--chart-2)/0.1)] flex items-center justify-center mb-4 mt-2">
+                        <item.icon className="h-6 w-6 text-[hsl(var(--chart-2))]" />
+                      </div>
+                      <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground">{item.desc}</p>
+                    </motion.div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              );
+            })()}
 
             {/* Points progress */}
             {(() => {
               const pts = pointsData?.balance ?? 0;
               const pct = Math.min((pts / SNUSPOINTS.freeTrialCost) * 100, 100);
               const remaining = Math.max(SNUSPOINTS.freeTrialCost - pts, 0);
+              const barRef = useRef<HTMLDivElement>(null);
+              const barInView = useInView(barRef, { once: true, margin: '-40px' });
+              const counterRef = useRef<HTMLSpanElement>(null);
+              const hasAnimated = useRef(false);
+
+              useEffect(() => {
+                if (barInView && !hasAnimated.current && counterRef.current) {
+                  hasAnimated.current = true;
+                  const controls = animate(0, pts, {
+                    duration: 1,
+                    ease: 'easeOut',
+                    onUpdate(v) {
+                      if (counterRef.current) counterRef.current.textContent = `${Math.round(v)} / ${SNUSPOINTS.freeTrialCost}`;
+                    },
+                  });
+                  return () => controls.stop();
+                }
+              }, [barInView, pts]);
+
               return (
-                <div className="max-w-md mx-auto rounded-2xl glass-panel p-6">
+                <div ref={barRef} className="max-w-md mx-auto rounded-2xl glass-panel p-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-foreground">
                       {userId ? 'Your SnusPoints' : 'SnusPoints Example'}
                     </span>
-                    <span className="text-sm text-muted-foreground">{pts} / {SNUSPOINTS.freeTrialCost}</span>
+                    <span ref={counterRef} className="text-sm text-muted-foreground">0 / {SNUSPOINTS.freeTrialCost}</span>
                   </div>
                   <div className="h-3 rounded-full bg-muted/40 overflow-hidden">
-                    <div className="h-full rounded-full bg-[hsl(var(--chart-2))] transition-all duration-500" style={{ width: `${pct}%` }} />
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{
+                        background: 'linear-gradient(90deg, hsl(var(--chart-2)), #D8ED62)',
+                        boxShadow: '0 0 12px #D8ED6266, 0 0 4px #D8ED6244',
+                      }}
+                      initial={{ width: '0%' }}
+                      animate={barInView ? { width: `${pct}%` } : { width: '0%' }}
+                      transition={{ duration: 1.2, ease: 'easeOut' }}
+                    />
                   </div>
                   <p className="text-xs text-muted-foreground mt-2 text-center">
                     {remaining > 0
