@@ -268,9 +268,7 @@ export function HeroBanner() {
                               animate={{ opacity: 1, y: 0 }}
                               transition={{
                                 duration: isEntrance ? 0.5 : 0.35,
-                                delay: isEntrance
-                                  ? (idx === 0 ? 0.4 : 0.55)
-                                  : SLIDE_LINE_DELAYS[idx] ?? 0,
+                                delay: isEntrance ? 0.2 : SLIDE_LINE_DELAYS[idx] ?? 0,
                                 ease: easeOut,
                               }}
                             >
