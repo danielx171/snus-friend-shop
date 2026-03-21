@@ -372,7 +372,7 @@ export function HeroBanner() {
               className="flex items-center gap-3 pt-1"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 1.0, ease: easeOut }}
+              transition={{ duration: 0.3, delay: 0.7, ease: easeOut }}
             >
               <button
                 onClick={prevSlide}
