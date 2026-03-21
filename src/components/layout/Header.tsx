@@ -179,6 +179,27 @@ export function Header() {
           <SearchAutocomplete onClose={() => setSearchOpen(false)} autoFocus />
         </div>
       )}
+
+      {/* Add-to-cart toast */}
+      <AnimatePresence>
+        {toastData && (
+          <motion.div
+            key={toastData.id}
+            initial={{ opacity: 0, x: 80 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 80 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="fixed bottom-6 right-6 z-[100] flex items-center gap-2.5 rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 shadow-2xl"
+          >
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#22c55e]">
+              <Check className="h-3 w-3 text-white" />
+            </div>
+            <span className="text-sm text-white font-medium max-w-[200px] truncate">
+              {toastData.name} added to cart
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
