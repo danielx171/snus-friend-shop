@@ -46,7 +46,7 @@ export default function HomePage() {
         {/* Trust badges — keep */}
         <TrustBar />
 
-        {/* Bestsellers — solid base navy */}
+        {/* Bestsellers — base navy */}
         <div
           className="border-t border-white/[0.04]"
           style={{ background: 'hsl(220 100% 10%)' }}
@@ -59,10 +59,10 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Explore & Discover — subtle warm radial center glow */}
+        {/* Explore & Discover — slightly lighter navy with radial glow */}
         <div
           className="relative border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 100% 10%)' }}
+          style={{ background: 'hsl(220 80% 12%)' }}
         >
           <div
             className="absolute inset-0 pointer-events-none"
@@ -73,7 +73,7 @@ export default function HomePage() {
           <EditorialHighlights />
         </div>
 
-        {/* Special Offers — back to base navy */}
+        {/* Special Offers — base navy */}
         <div
           className="border-t border-white/[0.04]"
           style={{ background: 'hsl(220 100% 10%)' }}
@@ -86,10 +86,10 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Snus Family Club — premium navy-to-purple gradient */}
+        {/* Snus Family Club — slightly lighter navy with purple gradient */}
         <div
           className="relative border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 100% 10%)' }}
+          style={{ background: 'hsl(220 80% 12%)' }}
         >
           <div
             className="absolute inset-0 pointer-events-none"
@@ -108,10 +108,10 @@ export default function HomePage() {
           <WhySnusFriends />
         </div>
 
-        {/* New Arrivals — matches Bestsellers */}
+        {/* New Arrivals — slightly lighter navy */}
         <div
           className="border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 100% 10%)' }}
+          style={{ background: 'hsl(220 80% 12%)' }}
         >
           <FeaturedProducts
             title="New Arrivals"
