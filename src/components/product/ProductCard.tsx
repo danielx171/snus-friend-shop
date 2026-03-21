@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey, RETAIL_PACK_SIZES } from '@/data/products';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ShoppingCart, Bell } from 'lucide-react';
+import { ShoppingCart, Bell, Check } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const LOW_STOCK_THRESHOLD = 20;
 
