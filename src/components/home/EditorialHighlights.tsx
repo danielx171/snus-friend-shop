@@ -31,19 +31,33 @@ export function EditorialHighlights() {
     <section className="py-16 md:py-20">
       <div className="container">
         <div className="mb-10">
-          <h2 className="text-3xl font-bold text-foreground tracking-tight">Explore & Discover</h2>
-          <p className="text-muted-foreground mt-2 max-w-lg">
+          <motion.h2
+            className="text-3xl font-bold text-foreground tracking-tight"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            Explore & Discover
+          </motion.h2>
+          <motion.p
+            className="text-muted-foreground mt-2 max-w-lg"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+          >
             Curated guides and collections to help you find your perfect nicotine pouch.
-          </p>
+          </motion.p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
           {highlights.map((item, index) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
+              initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
             >
               <Link
