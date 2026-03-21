@@ -234,7 +234,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
               {translateFlavor(product.flavorKey)}
             </span>
             {!isCompact && (
-              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-muted/30 text-muted-foreground border border-border/20">
+              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-transparent text-muted-foreground/60 border border-white/[0.06]">
                 {product.nicotineContent}mg
               </span>
             )}
