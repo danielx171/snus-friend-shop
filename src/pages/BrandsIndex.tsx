@@ -124,6 +124,7 @@ export default function BrandsIndex() {
                   </div>
                 </div>
               </Link>
+              </motion.div>
             );
           })}
         </div>
