@@ -10,7 +10,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from '@/components/ui/accordion';
 import {
-  Crown, Gift, Package, Sparkles, Check, ArrowRight, ShoppingCart, Coins,
+  Crown, Gift, Package, Sparkles, Check, ArrowRight, ShoppingCart, Coins, Star, PartyPopper,
 } from 'lucide-react';
 import { TIERS, SNUSPOINTS, MEMBERSHIP_FAQ } from '@/data/membership';
 import { cn } from '@/lib/utils';
