@@ -457,19 +457,19 @@ export default function MembershipPage() {
             position: absolute;
             top: -50%;
             left: -100%;
-            width: 60%;
+            width: 80px;
             height: 200%;
             background: linear-gradient(
               115deg,
               transparent 20%,
-              rgba(255,255,255,0.08) 50%,
+              rgba(255,255,255,0.06) 50%,
               transparent 80%
             );
-            animation: membership-shimmer-sweep 4s ease-in-out infinite;
+            animation: membership-shimmer-sweep 5s ease-in-out infinite;
           }
           @keyframes membership-shimmer-sweep {
-            0% { left: -60%; }
-            100% { left: 120%; }
+            0% { left: -80px; }
+            100% { left: calc(100% + 80px); }
           }
           .membership-crown-pulse {
             animation: membership-crown-pulse 3s ease-in-out infinite;
@@ -491,6 +491,7 @@ export default function MembershipPage() {
           .membership-member-hover:hover {
             transform: translateY(-4px);
             box-shadow: 0 16px 40px rgba(0, 49, 138, 0.35), 0 0 24px rgba(0, 49, 138, 0.5);
+            border-color: rgba(255,255,255,0.25);
           }
 
           /* VIP card: hover lift + glow + gradient border */
@@ -502,11 +503,11 @@ export default function MembershipPage() {
 
           /* Most Popular badge pulse */
           .membership-badge-pulse {
-            animation: membership-badge-glow 2s ease-in-out infinite;
+            animation: membership-badge-glow 2.5s ease-in-out infinite;
           }
           @keyframes membership-badge-glow {
-            0%, 100% { opacity: 0.7; box-shadow: 0 0 8px rgba(244,231,0,0.3); }
-            50% { opacity: 1; box-shadow: 0 0 16px rgba(244,231,0,0.5); }
+            0%, 100% { box-shadow: none; }
+            50% { box-shadow: 0 0 16px hsl(var(--chart-4) / 0.4); }
           }
 
           .membership-gift-float {
