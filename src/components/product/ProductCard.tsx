@@ -13,6 +13,14 @@ import { motion } from 'framer-motion';
 
 const LOW_STOCK_THRESHOLD = 20;
 
+const strengthColors: Record<string, string> = {
+  normal: '#4ade80',
+  mild: '#4ade80',
+  strong: '#facc15',
+  extraStrong: '#f97316',
+  ultraStrong: '#ef4444',
+};
+
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-500/20 to-green-600/10',
   berry: 'from-purple-500/20 to-fuchsia-600/10',
@@ -61,10 +69,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const isLowStock = typeof product.stock === 'number' && product.stock > 0 && product.stock <= LOW_STOCK_THRESHOLD;
   const accentColor = flavorAccents[product.flavorKey];
   const glowColor = accentColor ?? 'hsl(var(--primary))';
+  const strengthColor = strengthColors[product.strengthKey] ?? strengthColors.normal;
 
   const cardVariants = {
     rest: { y: 0, boxShadow: '0 0 0 hsl(0 0% 0% / 0)' },
-    hover: { y: -2, boxShadow: '0 12px 40px hsl(0 0% 0% / 0.22)' },
+    hover: { y: -2, boxShadow: `0 12px 40px hsl(0 0% 0% / 0.22), 0 0 12px ${strengthColor}40` },
   };
   const imageVariants = {
     rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
@@ -144,11 +153,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
           )}
           </motion.div>
 
-          {/* Thin colored accent line at bottom of image */}
-          {accentColor && !isOutOfStock && (
+          {/* Strength-coded accent line at bottom of image */}
+          {!isOutOfStock && (
             <div
-              className="absolute bottom-0 left-0 right-0 h-0.5 opacity-50"
-              style={{ backgroundColor: accentColor }}
+              className="absolute bottom-0 left-0 right-0 h-[2px]"
+              style={{ backgroundColor: strengthColor }}
             />
           )}
 
