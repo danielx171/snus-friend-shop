@@ -95,8 +95,16 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isOutOfStock) return;
+    if (isOutOfStock || justAdded) return;
     addToCart(product, selectedPack);
+
+    // Flash button to success state
+    if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
+    setJustAdded(true);
+    addedTimerRef.current = setTimeout(() => setJustAdded(false), 1500);
+
+    // Dispatch event for cart icon bounce + toast
+    window.dispatchEvent(new CustomEvent('cart-item-added', { detail: { name: product.name } }));
   };
 
   const handleNotifyMe = async (e?: React.SyntheticEvent) => {
