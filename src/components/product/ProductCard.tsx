@@ -220,18 +220,12 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
 
           {/* Attribute pills */}
           <div className={cn('mb-2.5 flex gap-1', isCompact ? 'flex-nowrap overflow-hidden' : 'flex-wrap')}>
-            <span className={cn(
-              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium border shrink-0',
-              product.strengthKey === 'normal' && 'bg-green-500/10 text-green-400 border-green-500/20',
-              product.strengthKey === 'strong' && 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-              product.strengthKey === 'extraStrong' && 'bg-[hsl(var(--chart-4)/0.12)] text-[hsl(var(--chart-4))] border-[hsl(var(--chart-4)/0.25)]',
-              product.strengthKey === 'ultraStrong' && 'bg-red-500/10 text-red-400 border-red-500/20',
-            )}>
+            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium border shrink-0 bg-accent/10 border-accent/20 text-accent">
               <span className={cn(
                 'h-1.5 w-1.5 rounded-full shrink-0',
                 product.strengthKey === 'normal' && 'bg-green-400',
                 product.strengthKey === 'strong' && 'bg-yellow-400',
-                product.strengthKey === 'extraStrong' && 'bg-[hsl(var(--chart-4))]',
+                product.strengthKey === 'extraStrong' && 'bg-orange-400',
                 product.strengthKey === 'ultraStrong' && 'bg-red-400',
               )} />
               {translateStrength(product.strengthKey)}
