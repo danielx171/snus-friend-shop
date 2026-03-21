@@ -84,10 +84,10 @@ export function Header() {
       className={cn(
         'sticky top-0 z-50 transition-all duration-300 ease-in-out',
         scrolled
-          ? 'border-b border-white/[0.08] backdrop-blur-xl shadow-[0_2px_20px_rgba(0,0,0,0.15)]'
+          ? 'border-b border-white/[0.08] backdrop-blur-lg shadow-[0_2px_20px_rgba(0,0,0,0.15)]'
           : 'border-b border-border/30 glass-panel-strong shadow-none'
       )}
-      style={scrolled ? { backgroundColor: 'rgba(10, 15, 30, 0.82)' } : undefined}
+      style={scrolled ? { backgroundColor: 'rgba(10, 15, 40, 0.8)' } : undefined}
     >
       <div className="container flex h-[72px] items-center justify-between gap-6">
         {/* Logo */}
