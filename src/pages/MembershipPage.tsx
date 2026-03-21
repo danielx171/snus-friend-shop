@@ -415,6 +415,75 @@ export default function MembershipPage() {
             </form>
           </div>
         </section>
+        <style>{`
+          .membership-vip-card {
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            box-shadow: 0 0 20px rgba(244, 231, 0, 0.15);
+            position: relative;
+          }
+          .membership-vip-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            padding: 2px;
+            background: conic-gradient(from var(--vip-angle, 0deg), #F4E700, #D8ED62, rgba(255,255,255,0.5), #F4E700);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: membership-vip-rotate 4s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+          }
+          @property --vip-angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+          }
+          @keyframes membership-vip-rotate {
+            to { --vip-angle: 360deg; }
+          }
+          .membership-shimmer {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 2;
+            border-radius: inherit;
+          }
+          .membership-shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+            animation: membership-shimmer-sweep 6s ease-in-out infinite;
+          }
+          @keyframes membership-shimmer-sweep {
+            0%, 100% { left: -60%; }
+            50% { left: 100%; }
+          }
+          .membership-crown-pulse {
+            animation: membership-crown-pulse 3s ease-in-out infinite;
+          }
+          @keyframes membership-crown-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+          }
+          .membership-member-card {
+            box-shadow: 0 0 20px rgba(0, 49, 138, 0.5);
+          }
+          .membership-gift-float {
+            animation: membership-gift-float 2.5s ease-in-out infinite;
+          }
+          @keyframes membership-gift-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+          }
+        `}</style>
       </Layout>
     </>
   );
