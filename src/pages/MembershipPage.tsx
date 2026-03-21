@@ -313,17 +313,34 @@ export default function MembershipPage() {
                 </span>
                 <span ref={counterRef} className="text-sm text-muted-foreground">0 / {SNUSPOINTS.freeTrialCost}</span>
               </div>
-              <div className="h-3 rounded-full bg-muted/40 overflow-hidden">
+              <div className="h-3 rounded-full bg-muted/40 overflow-hidden relative">
                 <motion.div
-                  className="h-full rounded-full"
+                  className="h-full rounded-full relative"
                   style={{
                     background: 'linear-gradient(90deg, hsl(var(--chart-2)), #D8ED62)',
                     boxShadow: '0 0 12px #D8ED6266, 0 0 4px #D8ED6244',
                   }}
                   initial={{ width: '0%' }}
                   animate={barInView ? { width: `${pct}%` } : { width: '0%' }}
-                  transition={{ duration: 1.2, ease: 'easeOut' }}
-                />
+                  transition={{ duration: 1.4, ease: 'easeOut' }}
+                >
+                  {/* Pulsing glow on leading edge */}
+                  <motion.div
+                    className="absolute right-0 top-0 h-full w-4 rounded-full"
+                    style={{
+                      background: 'radial-gradient(circle at right, #D8ED62, transparent)',
+                      boxShadow: '0 0 14px 4px #D8ED62',
+                    }}
+                    initial={{ opacity: 0.6 }}
+                    animate={barInView ? { opacity: [0.6, 1, 0.6] } : { opacity: 0 }}
+                    transition={{
+                      duration: 2,
+                      ease: 'easeInOut',
+                      repeat: Infinity,
+                      delay: 1.4,
+                    }}
+                  />
+                </motion.div>
               </div>
               <p className="text-xs text-muted-foreground mt-2 text-center">
                 {remaining > 0
