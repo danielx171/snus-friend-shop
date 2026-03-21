@@ -35,7 +35,7 @@ export function EditorialHighlights() {
       <div className="container">
         <div className="mb-10">
           <motion.h2
-            className="text-3xl font-bold text-foreground tracking-tight"
+            className="text-3xl font-bold text-white tracking-tight"
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -44,7 +44,7 @@ export function EditorialHighlights() {
             Explore & Discover
           </motion.h2>
           <motion.p
-            className="text-muted-foreground mt-2 max-w-lg"
+            className="text-gray-400 mt-2 max-w-lg"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -65,10 +65,7 @@ export function EditorialHighlights() {
             >
               <Link
                 to={item.href}
-                className="group relative block h-[280px] rounded-2xl border border-white/[0.06] overflow-hidden transition-all duration-300 hover:border-white/[0.12] hover:-translate-y-1"
-                style={{ background: item.gradient }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = item.gradientHover; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = item.gradient; }}
+                className="group relative block h-[280px] rounded-2xl border border-white/10 bg-white/[0.08] overflow-hidden transition-all duration-200 ease-out hover:border-white/20 hover:-translate-y-0.5"
               >
                 {/* Large emoji watermark */}
                 <span
@@ -81,10 +78,10 @@ export function EditorialHighlights() {
 
                 {/* Content */}
                 <div className="relative z-10 flex h-full flex-col justify-end p-6">
-                  <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold text-lg text-white mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{item.blurb}</p>
+                  <p className="text-sm text-gray-300 leading-relaxed mb-4">{item.blurb}</p>
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
                   </span>
