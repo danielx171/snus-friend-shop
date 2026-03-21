@@ -21,15 +21,6 @@ const strengthColors: Record<string, string> = {
   ultraStrong: '#ef4444',
 };
 
-const flavorGradients: Partial<Record<FlavorKey, string>> = {
-  mint: 'from-emerald-500/20 to-green-600/10',
-  berry: 'from-purple-500/20 to-fuchsia-600/10',
-  citrus: 'from-orange-400/20 to-amber-500/10',
-  fruit: 'from-orange-400/20 to-amber-500/10',
-  coffee: 'from-amber-700/20 to-stone-800/10',
-  cola: 'from-amber-700/20 to-stone-800/10',
-};
-const defaultGradient = 'from-slate-500/10 to-slate-600/5';
 
 const flavorAccents: Partial<Record<FlavorKey, string>> = {
   mint: '#10b981',
@@ -133,15 +124,18 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
       transition={{ ...hoverTransition, ...leaveTransition }}
     >
     <Card className={cn(
-      'product-card relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-[border-color] duration-[220ms] ease-out group-hover:border-border/60',
+      'product-card relative overflow-hidden rounded-2xl border-white/[0.06] bg-card/90 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-[border-color] duration-[220ms] ease-out group-hover:border-white/[0.12]',
       isOutOfStock && 'opacity-60'
     )}>
       <Link to={`/product/${product.id}`} aria-label={product.name}>
         {/* Image area */}
-        <div className={cn(
-          'product-card-image relative overflow-hidden bg-gradient-to-br',
-          flavorGradients[product.flavorKey] ?? defaultGradient
-        )} style={{ aspectRatio: isCompact ? '3/2' : '1' }}>
+        <div
+          className="product-card-image relative overflow-hidden"
+          style={{
+            aspectRatio: isCompact ? '3/2' : '1',
+            background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))',
+          }}
+        >
           <motion.div
             className="h-full w-full"
             variants={imageVariants}
@@ -217,27 +211,21 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
 
           {/* Attribute pills */}
           <div className={cn('mb-2.5 flex gap-1', isCompact ? 'flex-nowrap overflow-hidden' : 'flex-wrap')}>
-            <span className={cn(
-              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium border shrink-0',
-              product.strengthKey === 'normal' && 'bg-green-500/10 text-green-400 border-green-500/20',
-              product.strengthKey === 'strong' && 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-              product.strengthKey === 'extraStrong' && 'bg-[hsl(var(--chart-4)/0.12)] text-[hsl(var(--chart-4))] border-[hsl(var(--chart-4)/0.25)]',
-              product.strengthKey === 'ultraStrong' && 'bg-red-500/10 text-red-400 border-red-500/20',
-            )}>
+            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium border shrink-0 bg-accent/10 border-accent/20 text-accent">
               <span className={cn(
                 'h-1.5 w-1.5 rounded-full shrink-0',
                 product.strengthKey === 'normal' && 'bg-green-400',
                 product.strengthKey === 'strong' && 'bg-yellow-400',
-                product.strengthKey === 'extraStrong' && 'bg-[hsl(var(--chart-4))]',
+                product.strengthKey === 'extraStrong' && 'bg-orange-400',
                 product.strengthKey === 'ultraStrong' && 'bg-red-400',
               )} />
               {translateStrength(product.strengthKey)}
             </span>
-            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-muted/30 text-muted-foreground border border-border/20 shrink-0">
+            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-white/[0.05] text-muted-foreground border border-white/[0.08] shrink-0">
               {translateFlavor(product.flavorKey)}
             </span>
             {!isCompact && (
-              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-muted/30 text-muted-foreground border border-border/20">
+              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-transparent text-muted-foreground/60 border border-white/[0.06]">
                 {product.nicotineContent}mg
               </span>
             )}
