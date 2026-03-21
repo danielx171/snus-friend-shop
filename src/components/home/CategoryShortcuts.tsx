@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Gauge, BicepsFlexed, CircleDot, Trophy, Tag, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 const categories = [
   { id: 'all', icon: CircleDot, label: 'All Pouches', href: '/nicotine-pouches' },
@@ -16,7 +17,6 @@ export function CategoryShortcuts() {
   const currentPath = location.pathname + location.search;
 
   function isSelected(href: string) {
-    // Don't highlight any category on the homepage
     if (currentPath === '/') return false;
     if (href === '/nicotine-pouches') return currentPath === '/nicotine-pouches';
     return currentPath === href;
@@ -29,42 +29,58 @@ export function CategoryShortcuts() {
           className="flex justify-center gap-4 overflow-x-auto pb-2 scrollbar-hide"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
-          {categories.map((category) => {
+          {categories.map((category, index) => {
             const Icon = category.icon;
             const selected = isSelected(category.href);
 
             return (
-              <Link
+              <motion.div
                 key={category.id}
-                to={category.href}
-                className="flex flex-col items-center gap-2.5 rounded-2xl p-4 min-w-[88px] transition-all duration-150 shrink-0 group"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.3, delay: index * 0.08, ease: 'easeOut' }}
               >
-                <div
-                  className={cn(
-                    'flex h-14 w-14 items-center justify-center rounded-2xl border transition-all duration-150',
-                    selected
-                      ? 'bg-primary border-primary shadow-[0_0_16px_hsl(var(--primary)/0.3)]'
-                      : 'bg-muted/40 border-border/30 group-hover:bg-primary/50 group-hover:border-primary/50'
-                  )}
+                <Link
+                  to={category.href}
+                  className="relative flex flex-col items-center gap-2.5 rounded-2xl p-4 min-w-[88px] transition-all duration-150 shrink-0 group"
                 >
-                  <Icon
-                    className={cn(
-                      'h-6 w-6 transition-colors duration-150',
-                      selected
-                        ? 'text-[hsl(220_16%_6%)]'
-                        : 'text-muted-foreground group-hover:text-[hsl(0_0%_100%/0.8)]'
+                  <div className="relative">
+                    {selected && (
+                      <motion.div
+                        layoutId="category-active-bg"
+                        className="absolute inset-0 rounded-2xl bg-[#c8f135]"
+                        transition={{ duration: 0.25, ease: 'easeOut' }}
+                      />
                     )}
-                  />
-                </div>
-                <span
-                  className={cn(
-                    'text-xs font-medium text-center whitespace-nowrap transition-colors duration-150',
-                    selected ? 'text-primary' : 'text-foreground'
-                  )}
-                >
-                  {category.label}
-                </span>
-              </Link>
+                    <div
+                      className={cn(
+                        'relative flex h-14 w-14 items-center justify-center rounded-2xl border transition-all duration-200',
+                        selected
+                          ? 'border-transparent shadow-[0_0_16px_rgba(200,241,53,0.35)]'
+                          : 'bg-muted/40 border-border/30 group-hover:border-white/25'
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          'h-6 w-6 transition-colors duration-150',
+                          selected
+                            ? 'text-zinc-900'
+                            : 'text-muted-foreground group-hover:text-[hsl(0_0%_100%/0.8)]'
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <span
+                    className={cn(
+                      'text-xs font-medium text-center whitespace-nowrap transition-colors duration-200',
+                      selected ? 'text-[#c8f135]' : 'text-foreground'
+                    )}
+                  >
+                    {category.label}
+                  </span>
+                </Link>
+              </motion.div>
             );
           })}
         </div>

@@ -1,20 +1,19 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, X } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Search, ArrowRight, X, ShoppingBag } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { useCatalogProducts } from '@/hooks/useCatalog';
-import { brandDirectory } from '@/data/brands';
+import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
-import { matchesQuery } from '@/lib/search';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface SearchResult {
-  type: 'product' | 'brand';
   id: string;
   name: string;
-  subtitle: string;
-  image?: string;
-  href: string;
+  slug: string;
+  image_url: string | null;
+  brand_name: string;
+  price: number;
 }
 
 interface SearchAutocompleteProps {
@@ -23,90 +22,164 @@ interface SearchAutocompleteProps {
   className?: string;
 }
 
+/** Highlight matching portion of text */
+function HighlightMatch({ text, query }: { text: string; query: string }) {
+  if (!query || query.length < 2) return <>{text}</>;
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, idx)}
+      <span className="font-bold text-foreground">{text.slice(idx, idx + query.length)}</span>
+      {text.slice(idx + query.length)}
+    </>
+  );
+}
+
 export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAutocompleteProps) {
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
-  const { data: allProducts = [] } = useCatalogProducts();
+  const containerRef = useRef<HTMLDivElement>(null);
   const { formatPrice } = useTranslation();
 
-  const results = useMemo<SearchResult[]>(() => {
-    if (query.length < 2) return [];
-    const q = query.toLowerCase();
+  // Debounce query
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
 
-    const productResults: SearchResult[] = allProducts
-      .filter(p => matchesQuery(p, q))
-      .slice(0, 5)
-      .map(p => ({
-        type: 'product',
+  // Fetch from Supabase
+  useEffect(() => {
+    if (debouncedQuery.length < 2) {
+      setResults([]);
+      setIsOpen(false);
+      return;
+    }
+
+    let cancelled = false;
+    setLoading(true);
+
+    (async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, slug, image_url, brand_id')
+        .eq('is_active', true)
+        .ilike('name', `%${debouncedQuery}%`)
+        .limit(6);
+
+      if (cancelled) return;
+
+      if (!data || data.length === 0) {
+        setResults([]);
+        setIsOpen(true);
+        setLoading(false);
+        return;
+      }
+
+      // Fetch brand names + default variant prices
+      const brandIds = [...new Set(data.map((p) => p.brand_id))];
+      const productIds = data.map((p) => p.id);
+
+      const [brandsRes, variantsRes] = await Promise.all([
+        supabase.from('brands').select('id, name').in('id', brandIds),
+        supabase
+          .from('product_variants')
+          .select('product_id, price, is_default')
+          .in('product_id', productIds)
+          .eq('is_default', true),
+      ]);
+
+      if (cancelled) return;
+
+      const brandMap = new Map((brandsRes.data ?? []).map((b) => [b.id, b.name]));
+      const priceMap = new Map((variantsRes.data ?? []).map((v) => [v.product_id, v.price]));
+
+      const mapped: SearchResult[] = data.map((p) => ({
         id: p.id,
         name: p.name,
-        subtitle: `${p.brand} · ${formatPrice(p.prices.pack1)}`,
-        image: p.image,
-        href: `/product/${p.id}`,
+        slug: p.slug,
+        image_url: p.image_url,
+        brand_name: brandMap.get(p.brand_id) ?? '',
+        price: priceMap.get(p.id) ?? 0,
       }));
 
-    const brandResults: SearchResult[] = brandDirectory
-      .filter(b => b.name.toLowerCase().includes(q))
-      .slice(0, 3)
-      .map(b => ({
-        type: 'brand',
-        id: b.slug,
-        name: b.name,
-        subtitle: b.tagline,
-        href: `/brand/${b.slug}`,
-      }));
+      setResults(mapped);
+      setIsOpen(true);
+      setLoading(false);
+    })();
 
-    return [...productResults, ...brandResults];
-  }, [query, allProducts]);
+    return () => { cancelled = true; };
+  }, [debouncedQuery]);
 
+  // Reset active index on results change
+  useEffect(() => { setActiveIndex(-1); }, [results]);
+
+  // Click outside to close
   useEffect(() => {
-    setIsOpen(results.length > 0 || query.length >= 2);
-    setActiveIndex(-1);
-  }, [results, query]);
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+        setIsFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const handleSelect = useCallback((result: SearchResult) => {
-    navigate(result.href);
+    navigate(`/product/${result.id}`);
     setQuery('');
     setIsOpen(false);
+    setIsFocused(false);
     onClose?.();
   }, [navigate, onClose]);
 
-  const handleSubmit = useCallback(() => {
-    if (activeIndex >= 0 && results[activeIndex]) {
-      handleSelect(results[activeIndex]);
-    } else if (query.trim()) {
-      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+  const handleViewAll = useCallback(() => {
+    if (query.trim()) {
+      navigate(`/nicotine-pouches?search=${encodeURIComponent(query.trim())}`);
       setQuery('');
       setIsOpen(false);
+      setIsFocused(false);
       onClose?.();
     }
-  }, [activeIndex, results, query, navigate, handleSelect, onClose]);
+  }, [query, navigate, onClose]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    // total selectable = results.length + 1 (view all link)
+    const totalItems = results.length + (query.trim() ? 1 : 0);
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setActiveIndex(prev => Math.min(prev + 1, results.length - 1));
+        setActiveIndex((prev) => Math.min(prev + 1, totalItems - 1));
         break;
       case 'ArrowUp':
         e.preventDefault();
-        setActiveIndex(prev => Math.max(prev - 1, -1));
+        setActiveIndex((prev) => Math.max(prev - 1, -1));
         break;
       case 'Enter':
         e.preventDefault();
-        handleSubmit();
+        if (activeIndex >= 0 && activeIndex < results.length) {
+          handleSelect(results[activeIndex]);
+        } else {
+          handleViewAll();
+        }
         break;
       case 'Escape':
         setIsOpen(false);
+        setIsFocused(false);
         setQuery('');
         onClose?.();
         break;
     }
-  }, [results.length, handleSubmit, onClose]);
+  }, [results, activeIndex, query, handleSelect, handleViewAll, onClose]);
 
   // Scroll active item into view
   useEffect(() => {
@@ -116,8 +189,10 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
     }
   }, [activeIndex]);
 
+  const showDropdown = isOpen && (debouncedQuery.length >= 2);
+
   return (
-    <div className={cn('relative', className)}>
+    <div ref={containerRef} className={cn('relative', className)}>
       <div className="relative">
         <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -125,19 +200,22 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => results.length > 0 && setIsOpen(true)}
+          onFocus={() => {
+            setIsFocused(true);
+            if (results.length > 0 || debouncedQuery.length >= 2) setIsOpen(true);
+          }}
           placeholder="Search products & brands..."
-          className="w-full pl-11 pr-10 h-11 rounded-2xl bg-muted/30 border-border/40 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
+          className="w-full pl-11 pr-10 h-11 rounded-2xl bg-muted/30 border-border/40 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all duration-200"
           autoFocus={autoFocus}
           role="combobox"
-          aria-expanded={isOpen}
+          aria-expanded={showDropdown}
           aria-controls="search-results"
           aria-activedescendant={activeIndex >= 0 ? `search-item-${activeIndex}` : undefined}
           aria-autocomplete="list"
         />
         {query && (
           <button
-            onClick={() => { setQuery(''); inputRef.current?.focus(); }}
+            onClick={() => { setQuery(''); setResults([]); setIsOpen(false); inputRef.current?.focus(); }}
             className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Clear search"
           >
@@ -146,97 +224,88 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
         )}
       </div>
 
-      {isOpen && (
-        <div
-          id="search-results"
-          ref={listRef}
-          role="listbox"
-          className="absolute top-full left-0 right-0 z-50 mt-2 rounded-2xl border border-border/30 glass-panel-strong shadow-lg overflow-hidden"
-        >
-          {results.length === 0 && query.length >= 2 ? (
-            <div className="p-6 text-center">
-              <p className="text-sm text-muted-foreground">No results for "{query}"</p>
-              <p className="text-xs text-muted-foreground mt-1">Try a different search term</p>
-            </div>
-          ) : (
-            <>
-              {results.some(r => r.type === 'product') && (
-                <div className="px-3 pt-3 pb-1">
-                  <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground px-2">Products</p>
-                </div>
-              )}
-              {results.filter(r => r.type === 'product').map((result, i) => {
-                const globalIdx = results.indexOf(result);
-                return (
-                  <button
+      <AnimatePresence>
+        {showDropdown && (
+          <motion.div
+            id="search-results"
+            ref={listRef}
+            role="listbox"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="absolute top-full left-0 right-0 z-50 mt-2 rounded-xl border border-border/30 bg-card shadow-2xl overflow-hidden"
+          >
+            {results.length === 0 ? (
+              <div className="p-6 text-center">
+                <p className="text-sm text-muted-foreground">No products found for "{debouncedQuery}"</p>
+                <Link
+                  to="/nicotine-pouches"
+                  onClick={() => { setIsOpen(false); setIsFocused(false); onClose?.(); }}
+                  className="text-xs text-primary hover:underline mt-1 inline-block"
+                >
+                  Browse all products →
+                </Link>
+              </div>
+            ) : (
+              <>
+                {results.map((result, i) => (
+                  <motion.button
                     key={result.id}
                     data-search-item
-                    id={`search-item-${globalIdx}`}
+                    id={`search-item-${i}`}
                     role="option"
-                    aria-selected={activeIndex === globalIdx}
+                    aria-selected={activeIndex === i}
                     onClick={() => handleSelect(result)}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.15, ease: 'easeOut', delay: i * 0.03 }}
                     className={cn(
                       'flex items-center gap-3 w-full px-4 py-2.5 text-left transition-colors',
-                      activeIndex === globalIdx ? 'bg-primary/10 text-primary' : 'hover:bg-muted/40'
+                      activeIndex === i ? 'bg-primary/10' : 'hover:bg-muted/40'
                     )}
                   >
-                    {result.image && (
-                      <img src={result.image} alt={result.name} className="h-10 w-10 rounded-lg object-cover shrink-0" />
+                    {result.image_url ? (
+                      <img src={result.image_url} alt="" className="h-10 w-10 rounded-lg object-cover shrink-0" />
+                    ) : (
+                      <div className="h-10 w-10 rounded-lg bg-muted/30 flex items-center justify-center shrink-0">
+                        <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+                      </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{result.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{result.subtitle}</p>
+                      <p className="text-sm text-foreground truncate">
+                        <HighlightMatch text={result.name} query={debouncedQuery} />
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {result.brand_name} · {formatPrice(result.price)}
+                      </p>
                     </div>
                     <ArrowRight className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                  </button>
-                );
-              })}
+                  </motion.button>
+                ))}
 
-              {results.some(r => r.type === 'brand') && (
-                <div className="px-3 pt-3 pb-1 border-t border-border/20">
-                  <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground px-2">Brands</p>
-                </div>
-              )}
-              {results.filter(r => r.type === 'brand').map((result) => {
-                const globalIdx = results.indexOf(result);
-                return (
-                  <button
-                    key={result.id}
-                    data-search-item
-                    id={`search-item-${globalIdx}`}
-                    role="option"
-                    aria-selected={activeIndex === globalIdx}
-                    onClick={() => handleSelect(result)}
-                    className={cn(
-                      'flex items-center gap-3 w-full px-4 py-2.5 text-left transition-colors',
-                      activeIndex === globalIdx ? 'bg-primary/10 text-primary' : 'hover:bg-muted/40'
-                    )}
-                  >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/30 border border-border/20 text-xs font-bold text-muted-foreground shrink-0">
-                      {result.name.slice(0, 2)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{result.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{result.subtitle}</p>
-                    </div>
-                    <ArrowRight className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                  </button>
-                );
-              })}
-
-              {query.trim() && (
-                <button
-                  onClick={handleSubmit}
-                  className="flex items-center gap-2 w-full px-4 py-3 text-sm text-primary font-medium border-t border-border/20 hover:bg-primary/5 transition-colors"
+                <motion.button
+                  data-search-item
+                  id={`search-item-${results.length}`}
+                  role="option"
+                  aria-selected={activeIndex === results.length}
+                  onClick={handleViewAll}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.15, delay: results.length * 0.03 }}
+                  className={cn(
+                    'flex items-center gap-2 w-full px-4 py-3 text-sm font-medium border-t border-border/20 transition-colors',
+                    activeIndex === results.length ? 'bg-primary/10 text-primary' : 'text-primary hover:bg-primary/5'
+                  )}
                 >
                   <Search className="h-4 w-4" />
-                  See all results for "{query}"
-                </button>
-              )}
-            </>
-          )}
-        </div>
-      )}
+                  View all results for "{debouncedQuery}"
+                </motion.button>
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

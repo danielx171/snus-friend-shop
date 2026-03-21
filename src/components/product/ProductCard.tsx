@@ -1,17 +1,25 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey, RETAIL_PACK_SIZES } from '@/data/products';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ShoppingCart, Bell } from 'lucide-react';
+import { ShoppingCart, Bell, Check } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const LOW_STOCK_THRESHOLD = 20;
+
+const strengthColors: Record<string, string> = {
+  normal: '#4ade80',
+  mild: '#4ade80',
+  strong: '#facc15',
+  extraStrong: '#f97316',
+  ultraStrong: '#ef4444',
+};
 
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-500/20 to-green-600/10',
@@ -49,6 +57,8 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack1');
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [justAdded, setJustAdded] = useState(false);
+  const addedTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const { addToCart } = useCart();
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateBadge } = useTranslation();
   const isCompact = variant === 'compact';
@@ -61,26 +71,40 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const isLowStock = typeof product.stock === 'number' && product.stock > 0 && product.stock <= LOW_STOCK_THRESHOLD;
   const accentColor = flavorAccents[product.flavorKey];
   const glowColor = accentColor ?? 'hsl(var(--primary))';
+  const strengthColor = strengthColors[product.strengthKey] ?? strengthColors.normal;
 
   const cardVariants = {
     rest: { y: 0, boxShadow: '0 0 0 hsl(0 0% 0% / 0)' },
-    hover: { y: -2, boxShadow: '0 12px 40px hsl(0 0% 0% / 0.22)' },
+    hover: { y: -6, boxShadow: `0 12px 30px rgba(0,0,0,0.25), 0 0 12px ${strengthColor}40` },
   };
   const imageVariants = {
-    rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
-    hover: { scale: 1.06, rotate: 6, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
+    rest: { scale: 1, filter: 'drop-shadow(0 0 0px transparent)' },
+    hover: { scale: 1.05, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
   };
   const ctaVariants = {
     rest: { y: 0 },
     hover: { y: -4 },
   };
-  const hoverTransition = { duration: 0.2, ease: 'easeOut' } as const;
+  const brandVariants = {
+    rest: { opacity: 0.7 },
+    hover: { opacity: 1 },
+  };
+  const hoverTransition = { duration: 0.22, ease: 'easeOut' } as const;
+  const leaveTransition = { duration: 0.28, ease: 'easeOut' } as const;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isOutOfStock) return;
+    if (isOutOfStock || justAdded) return;
     addToCart(product, selectedPack);
+
+    // Flash button to success state
+    if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
+    setJustAdded(true);
+    addedTimerRef.current = setTimeout(() => setJustAdded(false), 1500);
+
+    // Dispatch event for cart icon bounce + toast
+    window.dispatchEvent(new CustomEvent('cart-item-added', { detail: { name: product.name } }));
   };
 
   const handleNotifyMe = async (e?: React.SyntheticEvent) => {
@@ -101,14 +125,15 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
 
   return (
     <motion.div
+      className="group"
       initial="rest"
       whileHover="hover"
       animate="rest"
       variants={cardVariants}
-      transition={hoverTransition}
+      transition={{ ...hoverTransition, ...leaveTransition }}
     >
     <Card className={cn(
-      'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-colors duration-200',
+      'product-card relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-[border-color] duration-[220ms] ease-out group-hover:border-border/60',
       isOutOfStock && 'opacity-60'
     )}>
       <Link to={`/product/${product.id}`}>
@@ -144,11 +169,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
           )}
           </motion.div>
 
-          {/* Thin colored accent line at bottom of image */}
-          {accentColor && !isOutOfStock && (
+          {/* Strength-coded accent line at bottom of image */}
+          {!isOutOfStock && (
             <div
-              className="absolute bottom-0 left-0 right-0 h-0.5 opacity-50"
-              style={{ backgroundColor: accentColor }}
+              className="absolute bottom-0 left-0 right-0 h-[2px]"
+              style={{ backgroundColor: strengthColor }}
             />
           )}
 
@@ -186,7 +211,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
         <CardContent className={isCompact ? 'p-2.5' : 'p-3.5'}>
           {/* Brand + Name */}
           <div className="mb-2.5 min-w-0">
-            <p className="text-[10px] text-muted-foreground/70 uppercase tracking-widest truncate">{product.brand}</p>
+            <motion.p variants={brandVariants} transition={hoverTransition} className="text-[10px] text-muted-foreground/70 uppercase tracking-widest truncate">{product.brand}</motion.p>
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">{product.name}</h3>
           </div>
 
@@ -308,18 +333,47 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
             >
             <Button
               onClick={handleAddToCart}
-              className={cn('w-full rounded-xl font-medium transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-ring', isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm')}
+              className={cn(
+                'w-full rounded-xl font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:ring-ring hover:brightness-110 hover:scale-[1.03]',
+                isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm',
+                justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white'
+              )}
               size="sm"
             >
-              <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
-              {isCompact ? (
-                <span className="hidden sm:inline truncate">{t('product.buy')}</span>
-              ) : (
-                <>
-                  <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
-                  <span className="sm:hidden">{t('product.buy')}</span>
-                </>
-              )}
+              <AnimatePresence mode="wait" initial={false}>
+                {justAdded ? (
+                  <motion.span
+                    key="check"
+                    className="flex items-center gap-1.5"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <Check className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
+                    <span className="truncate">Added!</span>
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="cart"
+                    className="flex items-center gap-1.5"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
+                    {isCompact ? (
+                      <span className="hidden sm:inline truncate">{t('product.buy')}</span>
+                    ) : (
+                      <>
+                        <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
+                        <span className="sm:hidden">{t('product.buy')}</span>
+                      </>
+                    )}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Button>
             </motion.div>
           )}

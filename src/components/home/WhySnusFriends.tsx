@@ -1,4 +1,5 @@
 import { Shield, Truck, Package, Heart } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const reasons = [
   {
@@ -28,28 +29,47 @@ export function WhySnusFriends() {
     <section className="py-16 md:py-20 bg-muted/5">
       <div className="container">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-foreground tracking-tight mb-3">
+          <motion.h2
+            className="text-3xl font-bold text-foreground tracking-tight mb-3"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
             Why SnusFriend?
-          </h2>
-          <p className="text-muted-foreground max-w-md mx-auto">
+          </motion.h2>
+          <motion.p
+            className="text-muted-foreground max-w-md mx-auto"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+          >
             We make it easy to find and enjoy premium nicotine pouches, delivered fast to your door.
-          </p>
+          </motion.p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {reasons.map((reason) => {
+          {reasons.map((reason, index) => {
             const Icon = reason.icon;
             return (
-              <div
+              <motion.div
                 key={reason.title}
-                className="rounded-2xl glass-panel p-6 hover:border-primary/20 transition-all group"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/15 mb-4 group-hover:glow-primary transition-all">
-                  <Icon className="h-6 w-6 text-primary" />
+                <div
+                  className="rounded-2xl glass-panel p-6 hover:border-primary/20 transition-all group"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/15 mb-4 group-hover:glow-primary transition-all">
+                    <Icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">{reason.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{reason.description}</p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">{reason.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{reason.description}</p>
-              </div>
+              </motion.div>
             );
           })}
         </div>

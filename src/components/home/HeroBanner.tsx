@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Star, Shield, ChevronLeft, ChevronRight, Package } from 'lucide-react';
@@ -47,11 +48,27 @@ const SLIDES: HeroSlide[] = [
 
 const AUTO_ROTATE_MS = 6000;
 
+/* ---- animation helpers ---- */
+const easeOut = [0, 0, 0.2, 1] as const;
+const easeIn = [0.4, 0, 1, 1] as const;
+
+/* Slide heading stagger delays (relative to slide entering) */
+const SLIDE_LINE_DELAYS = [0, 0.1, 0.2, 0.3, 0.35];
+
 export function HeroBanner() {
   const { t, market, formatPrice } = useTranslation();
   const { data: products = [] } = useCatalogProducts();
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<'next' | 'prev'>('next');
+  const progressRef = useRef<HTMLDivElement>(null);
+
+  /* Mark entrance done after initial stagger completes (~1.3s) */
+  useEffect(() => {
+    const t = setTimeout(() => setHasMounted(true), 1400);
+    return () => clearTimeout(t);
+  }, []);
 
   const freeShippingFormatted = formatMarketPrice(
     market.freeShippingThreshold,
@@ -67,19 +84,46 @@ export function HeroBanner() {
     return [...brandProducts, ...others].slice(0, 4);
   }, [products, activeSlide]);
 
-  const goToSlide = useCallback((index: number) => { setActiveSlide(index); }, []);
-  const prevSlide = useCallback(() => { setActiveSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length); }, []);
-  const nextSlide = useCallback(() => { setActiveSlide((prev) => (prev + 1) % SLIDES.length); }, []);
+  const goToSlide = useCallback((index: number) => {
+    setSlideDirection(index > activeSlide ? 'next' : 'prev');
+    setActiveSlide(index);
+  }, [activeSlide]);
 
+  const prevSlide = useCallback(() => {
+    setSlideDirection('prev');
+    setActiveSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+  }, []);
+
+  const nextSlide = useCallback(() => {
+    setSlideDirection('next');
+    setActiveSlide((prev) => (prev + 1) % SLIDES.length);
+  }, []);
+
+  /* Auto-advance + progress bar */
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
+      setSlideDirection('next');
       setActiveSlide((prev) => (prev + 1) % SLIDES.length);
     }, AUTO_ROTATE_MS);
     return () => clearInterval(timer);
-  }, [isPaused]);
+  }, [isPaused, activeSlide]);
 
   const slide = SLIDES[activeSlide];
+
+  /* ---- floating circle data ---- */
+  const floatingCircles = useMemo(() => [
+    { w: 72, left: '8%', bottom: '-10%', dur: '22s', delay: '-3s', lime: false },
+    { w: 56, left: '22%', bottom: '-8%', dur: '18s', delay: '-11s', lime: true },
+    { w: 88, left: '38%', bottom: '-12%', dur: '26s', delay: '-7s', lime: false },
+    { w: 44, left: '52%', bottom: '-6%', dur: '15s', delay: '-1s', lime: true },
+    { w: 64, left: '65%', bottom: '-14%', dur: '24s', delay: '-16s', lime: false },
+    { w: 78, left: '78%', bottom: '-9%', dur: '20s', delay: '-5s', lime: true },
+    { w: 50, left: '90%', bottom: '-7%', dur: '28s', delay: '-20s', lime: false },
+    { w: 60, left: '4%', bottom: '-15%', dur: '17s', delay: '-9s', lime: true },
+    { w: 46, left: '45%', bottom: '-5%', dur: '30s', delay: '-14s', lime: false },
+    { w: 82, left: '58%', bottom: '-11%', dur: '19s', delay: '-2s', lime: true },
+  ], []);
 
   return (
     <section
@@ -87,85 +131,224 @@ export function HeroBanner() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Ambient glow blobs */}
+      {/* ===== BACKGROUND ATMOSPHERE ===== */}
+
+      {/* Floating pouch-can circles — entrance fade only */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        {floatingCircles.map((c, i) => (
+          <motion.div
+            key={i}
+            className={cn('hero-float-circle', c.lime && 'hero-float-lime')}
+            style={{
+              width: c.w,
+              height: c.w,
+              left: c.left,
+              bottom: c.bottom,
+              animationDuration: c.dur,
+              animationDelay: c.delay,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: c.lime ? 0.13 : 0.1 }}
+            transition={{ duration: 0.6, delay: 0.2 + i * 0.05, ease: easeOut }}
+          >
+            <div className={cn('hero-float-inner', c.lime && 'hero-float-inner-lime')} style={{ width: '65%', height: '65%' }} />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Glow blob 1 — navy, top-right — entrance + drift */}
+      <motion.div
+        className="absolute -top-[100px] -right-[100px] w-[600px] h-[600px] rounded-full pointer-events-none z-0"
+        style={{ background: 'rgba(0, 49, 138, 0.25)', filter: 'blur(120px)' }}
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          x: [0, 30, -15, 0],
+          y: [0, -20, 10, 0],
+        }}
+        transition={{
+          opacity: { duration: 0.8, ease: easeOut },
+          scale: { duration: 0.8, ease: easeOut },
+          x: { duration: 15, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' },
+          y: { duration: 15, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' },
+        }}
+      />
+
+      {/* Glow blob 2 — lime, bottom-left — entrance + drift */}
+      <motion.div
+        className="absolute -bottom-[80px] -left-[60px] w-[400px] h-[400px] rounded-full pointer-events-none z-0"
+        style={{ background: 'rgba(216, 237, 98, 0.08)', filter: 'blur(100px)' }}
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          x: [0, -20, 25, 0],
+          y: [0, 15, -20, 0],
+        }}
+        transition={{
+          opacity: { duration: 0.8, ease: easeOut },
+          scale: { duration: 0.8, ease: easeOut },
+          x: { duration: 15, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 3 },
+          y: { duration: 15, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 3 },
+        }}
+      />
+
+      {/* Radial gradient pulse behind heading text */}
+      <motion.div
+        className="absolute top-1/3 left-1/4 w-[500px] h-[400px] rounded-full pointer-events-none z-0"
+        style={{
+          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+        animate={{ opacity: [0, 0.15, 0] }}
+        transition={{ duration: 8, ease: 'easeInOut', repeat: Infinity }}
+      />
+
+      {/* Slide-reactive accent glow */}
       <div
-        className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.07] blur-[130px] pointer-events-none transition-all duration-1000"
+        className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.07] blur-[130px] pointer-events-none transition-all duration-1000 z-0"
         style={{ background: slide.accentColor }}
       />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
 
-      <div className="container py-14 md:py-20 lg:py-24 relative">
+      {/* Subtle grid overlay */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }}
+      />
+
+      {/* ===== CONTENT ===== */}
+      <div className="container py-14 md:py-20 lg:py-24 relative z-[1]">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
 
           {/* Left — slide content */}
           <div className="space-y-7">
-            {/* Trust pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
-              <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
-              {t('trust.trustpilot')}
-            </div>
+            {/* Trust pill — entrance */}
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.3, ease: easeOut }}
+            >
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
+                <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
+                {t('trust.trustpilot')}
+              </div>
+            </motion.div>
 
-            {/* Crossfade text container */}
+            {/* Crossfade text container — AnimatePresence for slide transitions */}
             <div className="relative min-h-[240px] sm:min-h-[220px] overflow-hidden">
-              {SLIDES.map((s, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    'transition-all duration-600 ease-in-out',
-                    i === activeSlide
-                      ? 'opacity-100 translate-y-0'
-                      : 'opacity-0 translate-y-2 pointer-events-none absolute inset-0'
-                  )}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={activeSlide}
+                  initial={hasMounted ? { opacity: 0, y: 24 } : false}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.45, ease: easeOut }}
                 >
-                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl leading-[1.08] text-foreground">
-                    {s.title.split('\n').map((line, idx) => (
-                      <span key={idx} className={cn('block', idx === 1 && 'text-foreground')}>
-                        {line}
-                      </span>
-                    ))}
-                    <span
-                      className="block text-[0.8em] mt-2 font-semibold"
-                      style={{ color: s.accentColor }}
-                    >
-                      {s.subtitle}
-                    </span>
-                  </h1>
+                  {(() => {
+                    const s = SLIDES[activeSlide];
+                    const lines = s.title.split('\n');
+                    /* On first mount, use entrance delays; on slide change, use stagger delays */
+                    const isEntrance = !hasMounted;
+                    return (
+                      <>
+                        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl leading-[1.08] text-foreground">
+                          {lines.map((line, idx) => (
+                            <motion.span
+                              key={`${activeSlide}-line-${idx}`}
+                              className="block"
+                              initial={{ opacity: 0, y: isEntrance ? 20 : 12 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                duration: isEntrance ? 0.5 : 0.35,
+                                delay: isEntrance
+                                  ? (idx === 0 ? 0.4 : 0.55)
+                                  : SLIDE_LINE_DELAYS[idx] ?? 0,
+                                ease: easeOut,
+                              }}
+                            >
+                              {line}
+                            </motion.span>
+                          ))}
+                          <motion.span
+                            className="block text-[0.8em] mt-2 font-semibold"
+                            style={{ color: s.accentColor }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{
+                              duration: 0.4,
+                              delay: isEntrance ? 0.7 : SLIDE_LINE_DELAYS[2],
+                              ease: easeOut,
+                            }}
+                          >
+                            {s.subtitle}
+                          </motion.span>
+                        </h1>
 
-                  <p className="max-w-lg text-base text-muted-foreground leading-relaxed mt-5">
-                    {s.description}
-                  </p>
+                        <motion.p
+                          className="max-w-lg text-base text-muted-foreground leading-relaxed mt-5"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{
+                            duration: 0.4,
+                            delay: isEntrance ? 0.8 : SLIDE_LINE_DELAYS[3],
+                            ease: easeOut,
+                          }}
+                        >
+                          {s.description}
+                        </motion.p>
 
-                  <div className="flex flex-wrap gap-3 pt-5">
-                    <Button
-                      asChild
-                      size="lg"
-                      className="gap-2 rounded-2xl h-12 px-7 font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
-                      style={{ backgroundColor: s.accentColor, color: 'white' }}
-                    >
-                      <Link to={s.cta.href}>
-                        {s.cta.label}
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
-                    </Button>
-                    {s.secondaryCta && (
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="lg"
-                        className="rounded-2xl h-12 px-7 border-border/60 bg-card/60 backdrop-blur-sm hover:bg-card hover:border-border transition-all duration-200 text-foreground"
-                      >
-                        <Link to={s.secondaryCta.href}>
-                          {s.secondaryCta.label}
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              ))}
+                        <motion.div
+                          className="flex flex-wrap gap-3 pt-5"
+                          initial={{ opacity: 0, y: isEntrance ? 12 : 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            duration: 0.4,
+                            delay: isEntrance ? 0.9 : SLIDE_LINE_DELAYS[4],
+                            ease: easeOut,
+                          }}
+                        >
+                          <Button
+                            asChild
+                            size="lg"
+                            className="gap-2 rounded-2xl h-12 px-7 font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+                            style={{ backgroundColor: s.accentColor, color: 'white' }}
+                          >
+                            <Link to={s.cta.href}>
+                              {s.cta.label}
+                              <ArrowRight className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                          {s.secondaryCta && (
+                            <Button
+                              asChild
+                              variant="outline"
+                              size="lg"
+                              className="rounded-2xl h-12 px-7 border-border/60 bg-card/60 backdrop-blur-sm hover:bg-card hover:border-border transition-all duration-200 text-foreground"
+                            >
+                              <Link to={s.secondaryCta.href}>
+                                {s.secondaryCta.label}
+                              </Link>
+                            </Button>
+                          )}
+                        </motion.div>
+                      </>
+                    );
+                  })()}
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            {/* Trust signals */}
-            <div className="flex flex-wrap gap-5 text-xs text-muted-foreground">
+            {/* Trust signals — entrance */}
+            <motion.div
+              className="flex flex-wrap gap-5 text-xs text-muted-foreground"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 1.0, ease: easeOut }}
+            >
               <div className="flex items-center gap-2">
                 <Truck className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
                 <span>{t('trust.freeShipping', { amount: freeShippingFormatted })}</span>
@@ -178,10 +361,15 @@ export function HeroBanner() {
                 <Package className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
                 <span>91 brands available</span>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Slide controls */}
-            <div className="flex items-center gap-3 pt-1">
+            {/* Slide controls — entrance */}
+            <motion.div
+              className="flex items-center gap-3 pt-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 1.0, ease: easeOut }}
+            >
               <button
                 onClick={prevSlide}
                 aria-label="Previous slide"
@@ -196,12 +384,36 @@ export function HeroBanner() {
                     key={i}
                     onClick={() => goToSlide(i)}
                     aria-label={`Go to slide ${i + 1}`}
-                    className="rounded-full transition-all duration-300"
+                    className="relative rounded-full overflow-hidden transition-all duration-300"
                     style={i === activeSlide
-                      ? { width: '2rem', height: '0.5rem', backgroundColor: slide.accentColor }
+                      ? { width: '1.5rem', height: '0.5rem', backgroundColor: 'hsl(var(--border))' }
                       : { width: '0.5rem', height: '0.5rem', backgroundColor: 'hsl(var(--border))' }
                     }
-                  />
+                  >
+                    {/* Active dot: animated width pill with progress fill */}
+                    {i === activeSlide && (
+                      <>
+                        <motion.div
+                          className="absolute inset-0 rounded-full"
+                          style={{ backgroundColor: slide.accentColor }}
+                          layoutId="hero-dot-active"
+                          transition={{ duration: 0.3, type: 'spring', stiffness: 300, damping: 25 }}
+                        />
+                        {/* Progress fill line */}
+                        <motion.div
+                          className="absolute inset-y-0 left-0 rounded-full"
+                          style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+                          initial={{ width: '0%' }}
+                          animate={{ width: isPaused ? undefined : '100%' }}
+                          transition={{
+                            duration: AUTO_ROTATE_MS / 1000,
+                            ease: 'linear',
+                          }}
+                          key={`progress-${activeSlide}-${isPaused}`}
+                        />
+                      </>
+                    )}
+                  </button>
                 ))}
               </div>
 
@@ -212,7 +424,7 @@ export function HeroBanner() {
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
-            </div>
+            </motion.div>
           </div>
 
           {/* Right — Product showcase */}
@@ -222,59 +434,70 @@ export function HeroBanner() {
                 {/* Desktop: 2×2 grid */}
                 <div className="hidden lg:grid grid-cols-2 gap-3">
                   {showcaseProducts.map((product, i) => (
-                    <Link
+                    <motion.div
                       key={product.id}
-                      to={`/product/${product.id}`}
-                      className="group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm overflow-hidden hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
+                      initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ duration: 0.5, delay: 0.6 + i * 0.1, ease: easeOut }}
                     >
-                      {/* Product image — full bleed, square */}
-                      <div className="aspect-square w-full overflow-hidden bg-muted/20">
-                        {product.image ? (
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center p-4">
-                            <span className="font-bold text-sm text-center leading-snug text-muted-foreground">{product.brand}</span>
-                          </div>
-                        )}
-                      </div>
-                      {/* Info overlay */}
-                      <div className="p-3">
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
-                        <p className="font-semibold text-foreground text-xs leading-snug line-clamp-1 mt-0.5">{product.name}</p>
-                        <p className="text-xs mt-1 font-medium" style={{ color: slide.accentColor }}>
-                          {formatPrice(product.prices.pack1)}/{t('cart.can')}
-                        </p>
-                      </div>
-                    </Link>
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm overflow-hidden hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 block"
+                      >
+                        <div className="aspect-square w-full overflow-hidden bg-muted/20">
+                          {product.image ? (
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center p-4">
+                              <span className="font-bold text-sm text-center leading-snug text-muted-foreground">{product.brand}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-3">
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
+                          <p className="font-semibold text-foreground text-xs leading-snug line-clamp-1 mt-0.5">{product.name}</p>
+                          <p className="text-xs mt-1 font-medium" style={{ color: slide.accentColor }}>
+                            {formatPrice(product.prices.pack1)}/{t('cart.can')}
+                          </p>
+                        </div>
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
 
                 {/* Mobile: horizontal scroll row */}
                 <div className="flex lg:hidden gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
-                  {showcaseProducts.map((product) => (
-                    <Link
+                  {showcaseProducts.map((product, i) => (
+                    <motion.div
                       key={product.id}
-                      to={`/product/${product.id}`}
-                      className="flex-none w-32 rounded-2xl border border-border/30 bg-card/80 p-3 hover:border-border/60 transition-all duration-200"
+                      className="flex-none w-32"
+                      initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ duration: 0.5, delay: 0.6 + i * 0.1, ease: easeOut }}
                     >
-                      <div className="w-full aspect-square rounded-xl overflow-hidden bg-muted/30 flex items-center justify-center mb-2">
-                        {product.image ? (
-                          <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
-                        ) : (
-                          <span className="text-muted-foreground font-bold text-[9px] text-center px-1">{product.brand}</span>
-                        )}
-                      </div>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
-                      <p className="font-medium text-foreground text-xs leading-snug line-clamp-2 mt-0.5">{product.name}</p>
-                      <p className="text-[10px] mt-1" style={{ color: slide.accentColor }}>
-                        {formatPrice(product.prices.pack1)}
-                      </p>
-                    </Link>
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="rounded-2xl border border-border/30 bg-card/80 p-3 hover:border-border/60 transition-all duration-200 block"
+                      >
+                        <div className="w-full aspect-square rounded-xl overflow-hidden bg-muted/30 flex items-center justify-center mb-2">
+                          {product.image ? (
+                            <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
+                          ) : (
+                            <span className="text-muted-foreground font-bold text-[9px] text-center px-1">{product.brand}</span>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
+                        <p className="font-medium text-foreground text-xs leading-snug line-clamp-2 mt-0.5">{product.name}</p>
+                        <p className="text-[10px] mt-1" style={{ color: slide.accentColor }}>
+                          {formatPrice(product.prices.pack1)}
+                        </p>
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
               </>
@@ -287,6 +510,37 @@ export function HeroBanner() {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes hero-float-up {
+          0% { transform: translateY(0) translateX(0); }
+          25% { transform: translateY(-30vh) translateX(12px); }
+          50% { transform: translateY(-60vh) translateX(-8px); }
+          75% { transform: translateY(-90vh) translateX(15px); }
+          100% { transform: translateY(-120vh) translateX(0); }
+        }
+        .hero-float-circle {
+          position: absolute;
+          border-radius: 50%;
+          border: 1px solid rgba(212, 237, 98, 0.2);
+          background: rgba(0, 49, 138, 0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: hero-float-up linear infinite;
+        }
+        .hero-float-lime {
+          background: rgba(216, 237, 98, 0.07);
+        }
+        .hero-float-inner {
+          border-radius: 50%;
+          border: 1px solid rgba(212, 237, 98, 0.16);
+          background: rgba(0, 49, 138, 0.06);
+        }
+        .hero-float-inner-lime {
+          background: rgba(216, 237, 98, 0.05);
+        }
+      `}</style>
     </section>
   );
 }

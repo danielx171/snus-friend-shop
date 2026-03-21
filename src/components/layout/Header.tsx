@@ -1,19 +1,23 @@
-import { ShoppingCart, Search, Menu, User, Coins } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, Coins, Check, Star } from 'lucide-react';
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
 import { supabase } from '@/integrations/supabase/client';
 import { useSnusPoints } from '@/hooks/useSnusPoints';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [cartBounce, setCartBounce] = useState(false);
+  const [toastData, setToastData] = useState<{ name: string; id: number } | null>(null);
   const { formatPrice } = useTranslation();
   const [userId, setUserId] = useState<string | null>(null);
 
@@ -25,6 +29,43 @@ export function Header() {
       setUserId(session?.user?.id ?? null);
     });
     return () => subscription.unsubscribe();
+  }, []);
+
+  // Listen for add-to-cart events for bounce + toast
+  const handleCartItemAdded = useCallback((e: Event) => {
+    const name = (e as CustomEvent).detail?.name ?? 'Item';
+    setCartBounce(true);
+    setTimeout(() => setCartBounce(false), 300);
+    setToastData({ name, id: Date.now() });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('cart-item-added', handleCartItemAdded);
+    return () => window.removeEventListener('cart-item-added', handleCartItemAdded);
+  }, [handleCartItemAdded]);
+
+  // Auto-dismiss toast
+  useEffect(() => {
+    if (!toastData) return;
+    const timer = setTimeout(() => setToastData(null), 3000);
+    return () => clearTimeout(timer);
+  }, [toastData]);
+
+  // Scroll-aware header style
+  const [scrolled, setScrolled] = useState(false);
+  const rafRef = useRef(0);
+  useEffect(() => {
+    const onScroll = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 60);
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   const { data: pointsData } = useSnusPoints(userId);
@@ -39,7 +80,15 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/30 glass-panel-strong">
+    <header
+      className={cn(
+        'sticky top-0 z-50 transition-all duration-300 ease-in-out',
+        scrolled
+          ? 'border-b border-white/[0.08] backdrop-blur-xl shadow-[0_2px_20px_rgba(0,0,0,0.15)]'
+          : 'border-b border-border/30 glass-panel-strong shadow-none'
+      )}
+      style={scrolled ? { backgroundColor: 'rgba(10, 15, 30, 0.82)' } : undefined}
+    >
       <div className="container flex h-[72px] items-center justify-between gap-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 shrink-0">
@@ -66,15 +115,27 @@ export function Header() {
             <Search className="h-5 w-5" />
           </Button>
 
-          {userId && pointsData && (
+          {/* SnusPoints indicator */}
+          {userId && pointsData ? (
+            <Link
+              to="/membership#points"
+              className="group relative flex items-center gap-1.5 rounded-xl px-2.5 h-10 text-xs font-medium text-[hsl(var(--chart-4))] hover:bg-[hsl(var(--chart-4)/0.08)] transition-colors"
+              title={`${pointsData.balance} / 500 pts — earn ${Math.max(500 - pointsData.balance, 0)} more for a free mystery box!`}
+            >
+              <Star className="h-3.5 w-3.5 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
+              <span>{pointsData.balance}</span>
+              <span className="hidden md:inline">pts</span>
+            </Link>
+          ) : !userId ? (
             <Link
               to="/membership"
-              className="hidden md:flex items-center gap-1.5 rounded-xl bg-primary/8 px-3 h-9 text-sm font-medium text-primary hover:bg-primary/12 transition-colors"
+              className="group relative flex items-center gap-1.5 rounded-xl px-2.5 h-10 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
+              title="Sign in to earn SnusPoints on every order"
             >
-              <Coins className="h-4 w-4" />
-              <span>{pointsData.balance} SP</span>
+              <Star className="h-3.5 w-3.5" />
+              <span className="hidden md:inline">Earn pts</span>
             </Link>
-          )}
+          ) : null}
 
           <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-10 w-10 text-muted-foreground hover:text-primary" asChild>
             <Link to="/account" aria-label="Account">
@@ -88,7 +149,12 @@ export function Header() {
             onClick={openCart}
             aria-label={`Cart with ${totalItems} items`}
           >
-            <ShoppingCart className="h-5 w-5" />
+            <motion.div
+              animate={cartBounce ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+            >
+              <ShoppingCart className="h-5 w-5" />
+            </motion.div>
             {totalItems > 0 && (
               <>
                 <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground glow-primary">
@@ -151,6 +217,27 @@ export function Header() {
           <SearchAutocomplete onClose={() => setSearchOpen(false)} autoFocus />
         </div>
       )}
+
+      {/* Add-to-cart toast */}
+      <AnimatePresence>
+        {toastData && (
+          <motion.div
+            key={toastData.id}
+            initial={{ opacity: 0, x: 80 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 80 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="fixed bottom-6 right-6 z-[100] flex items-center gap-2.5 rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 shadow-2xl"
+          >
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#22c55e]">
+              <Check className="h-3 w-3 text-white" />
+            </div>
+            <span className="text-sm text-white font-medium max-w-[200px] truncate">
+              {toastData.name} added to cart
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

@@ -8,6 +8,10 @@
    Deep charcoal, glassy panels, restrained teal accents
    ═══════════════════════════════════════════════════════ */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     --background: 220 16% 8%;
     --foreground: 210 20% 95%;
@@ -493,4 +497,23 @@
     background-repeat: repeat;
     background-size: 256px 256px;
   }
+}
+
+/* Cart progress bar pulse glow at 80-99% */
+@keyframes cart-progress-glow {
+  0%, 100% { box-shadow: 0 0 6px hsl(var(--chart-4) / 0.3); }
+  50% { box-shadow: 0 0 14px hsl(var(--chart-4) / 0.5); }
+}
+.cart-progress-pulse {
+  animation: cart-progress-glow 1.5s ease-in-out infinite;
+}
+
+/* Free delivery celebration pop */
+@keyframes cart-free-pop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.cart-free-delivery-pop {
+  animation: cart-free-pop 0.4s ease-out;
 }
