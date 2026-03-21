@@ -251,22 +251,36 @@ export default function ProductDetail() {
                   const perCan = price / packSizeMultipliers[size];
                   const isSelected = selectedPack === size;
                   const packCount = packSizeMultipliers[size];
+                  const singlePrice = product.prices.pack1;
+                  const savings = singlePrice * packCount - price;
+                  const savingsPct = Math.round((savings / (singlePrice * packCount)) * 100);
+                  const isBestValue = size === 'pack10';
 
                   return (
                     <Label
                       key={size}
                       htmlFor={`pack-${size}`}
                       className={cn(
-                        'flex flex-col items-center justify-center rounded-2xl border-2 p-5 cursor-pointer transition-all duration-200 text-center',
+                        'flex flex-col items-center justify-center rounded-2xl border-2 p-5 cursor-pointer transition-all duration-200 text-center relative',
                         isSelected
                           ? 'border-primary bg-primary/5 glow-primary'
                           : 'border-border/30 hover:border-primary/30 bg-card/60'
                       )}
                     >
                       <RadioGroupItem value={size} id={`pack-${size}`} className="sr-only" />
+                      {isBestValue && (
+                        <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-xs font-medium text-[hsl(var(--chart-4))] bg-[hsl(var(--chart-4)/0.1)] rounded-full px-2 py-0.5 whitespace-nowrap">
+                          Best value
+                        </span>
+                      )}
                       <span className="font-bold text-lg text-foreground">{packCount} {packCount === 1 ? 'can' : 'cans'}</span>
                       <span className="text-xl font-bold text-primary mt-1">{formatPrice(price)}</span>
                       <span className="text-xs text-muted-foreground mt-0.5">{formatPrice(perCan)}/can</span>
+                      {savings > 0.01 && (
+                        <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 rounded-full px-2 py-0.5 mt-1.5">
+                          Save {savingsPct}%
+                        </span>
+                      )}
                       {isSelected && <Check className="h-4 w-4 text-primary mt-2" />}
                     </Label>
                   );
