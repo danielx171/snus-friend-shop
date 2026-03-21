@@ -43,29 +43,38 @@ export function CategoryShortcuts() {
               >
                 <Link
                   to={category.href}
-                  className="flex flex-col items-center gap-2.5 rounded-2xl p-4 min-w-[88px] transition-all duration-150 shrink-0 group"
+                  className="relative flex flex-col items-center gap-2.5 rounded-2xl p-4 min-w-[88px] transition-all duration-150 shrink-0 group"
                 >
-                  <div
-                    className={cn(
-                      'flex h-14 w-14 items-center justify-center rounded-2xl border transition-all duration-150',
-                      selected
-                        ? 'bg-primary border-primary shadow-[0_0_16px_hsl(var(--primary)/0.3)]'
-                        : 'bg-muted/40 border-border/30 group-hover:bg-primary/50 group-hover:border-primary/50'
+                  <div className="relative">
+                    {selected && (
+                      <motion.div
+                        layoutId="category-active-bg"
+                        className="absolute inset-0 rounded-2xl bg-[#c8f135]"
+                        transition={{ duration: 0.25, ease: 'easeOut' }}
+                      />
                     )}
-                  >
-                    <Icon
+                    <div
                       className={cn(
-                        'h-6 w-6 transition-colors duration-150',
+                        'relative flex h-14 w-14 items-center justify-center rounded-2xl border transition-all duration-200',
                         selected
-                          ? 'text-[hsl(220_16%_6%)]'
-                          : 'text-muted-foreground group-hover:text-[hsl(0_0%_100%/0.8)]'
+                          ? 'border-transparent shadow-[0_0_16px_rgba(200,241,53,0.35)]'
+                          : 'bg-muted/40 border-border/30 group-hover:border-white/25'
                       )}
-                    />
+                    >
+                      <Icon
+                        className={cn(
+                          'h-6 w-6 transition-colors duration-150',
+                          selected
+                            ? 'text-zinc-900'
+                            : 'text-muted-foreground group-hover:text-[hsl(0_0%_100%/0.8)]'
+                        )}
+                      />
+                    </div>
                   </div>
                   <span
                     className={cn(
-                      'text-xs font-medium text-center whitespace-nowrap transition-colors duration-150',
-                      selected ? 'text-primary' : 'text-foreground'
+                      'text-xs font-medium text-center whitespace-nowrap transition-colors duration-200',
+                      selected ? 'text-[#c8f135]' : 'text-foreground'
                     )}
                   >
                     {category.label}
