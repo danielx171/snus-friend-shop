@@ -6,6 +6,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { UtilityBar } from './UtilityBar';
 import { MainNav } from './MainNav';
+import { ScrollProgress } from './ScrollProgress';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { NicotineWarning } from '@/components/compliance/NicotineWarning';
 import { PREVIEW_MODE } from '@/config/brand';
