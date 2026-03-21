@@ -13,6 +13,22 @@ Last updated: 2026-03-21
 - Uptime monitoring checklist added to `DEPLOYMENT_CHECKLIST.md`
 - Fixed preview port mismatch (launch.json 8082 → 8080 to match vite.config.ts)
 
+### Security & Accessibility (overnight sprint)
+- Supabase RLS: enabled on sync_config, consolidated duplicate admin ALL policies into per-command
+- Fixed mutable search_path on sync trigger functions
+- Lighthouse a11y 100: contrast fixes (nav, hero CTA, featured links), ARIA labels, touch targets
+- Documented leaked password protection toggle in DEPLOYMENT_CHECKLIST.md
+
+### Dynamic Brands UX Overhaul
+- `useBrands()` hook: fetches all 139+ brands from Supabase with product counts, groups by letter
+- MainNav: dynamic brand dropdown from `useBrands().topBrands` instead of hardcoded 10
+- ProductFilters: dynamic brand list with search input and show more/less toggle
+- ProductListing: featured brands from DB instead of static array
+- BrandsIndex: redesigned with featured brands grid, A-Z directory, search, brand cards with accent colors
+- BrandHub: fully dynamic pages from DB data instead of static overrides
+- Search scoring: brand-name boost in `search.ts`
+- Renamed `brands.ts` → `brand-overrides.ts` (curated metadata only, not data source)
+
 ## Completed (2026-03-20)
 
 ### Catalog UX Overhaul
