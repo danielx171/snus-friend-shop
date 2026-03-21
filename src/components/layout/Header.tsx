@@ -15,6 +15,8 @@ export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [cartBounce, setCartBounce] = useState(false);
+  const [toastData, setToastData] = useState<{ name: string; id: number } | null>(null);
   const { formatPrice } = useTranslation();
   const [userId, setUserId] = useState<string | null>(null);
 
