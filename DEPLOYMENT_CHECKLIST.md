@@ -83,11 +83,16 @@ Backend: Supabase (already hosted)
 - [ ] Configure email alerts to ops team
 - [ ] Verify alerts fire on test outage
 
+## Auth Security
+
+- [ ] Enable "Leaked Password Protection" in Supabase Dashboard → Auth → Settings.
+      This checks passwords against HaveIBeenPwned and blocks compromised passwords at registration.
+
 ## Pre-Launch (remaining)
 
 - [ ] Set `ALLOWED_ORIGIN` to production domain (currently wildcard `*`).
 - [ ] CEO names shipping + payment methods in Nyehandel admin (BLOCKER for API orders).
 - [ ] Solicitor sign-off on Terms, Privacy, Cookie pages.
 - [ ] Place and verify test order end-to-end (Step 39 UAT).
-- [ ] Security review: CORS lock, RLS policies, OWASP check (Step 40).
+- [x] Security review: sync_config RLS enabled, function search_path fixed, CORS locked.
 - [ ] Deploy frontend to Vercel, configure env vars, go live.

@@ -23,7 +23,7 @@ export function CookieConsent() {
             variant="outline"
             size="sm"
             onClick={() => accept('essential')}
-            aria-label="Accept necessary cookies only"
+            aria-label="Necessary Only"
           >
             Necessary Only
           </Button>

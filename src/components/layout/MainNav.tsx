@@ -86,7 +86,7 @@ export function MainNav() {
                   to={item.href}
                   className={cn(
                     'inline-flex h-11 items-center justify-center px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/8 rounded-none',
-                    item.highlight ? 'text-primary' : 'text-foreground hover:text-primary'
+                    item.highlight ? 'text-accent' : 'text-foreground hover:text-primary'
                   )}
                 >
                   {item.label}

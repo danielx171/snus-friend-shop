@@ -384,12 +384,15 @@ export function HeroBanner() {
                     key={i}
                     onClick={() => goToSlide(i)}
                     aria-label={`Go to slide ${i + 1}`}
-                    className="relative rounded-full overflow-hidden transition-all duration-300"
-                    style={i === activeSlide
-                      ? { width: '1.5rem', height: '0.5rem', backgroundColor: 'hsl(var(--border))' }
-                      : { width: '0.5rem', height: '0.5rem', backgroundColor: 'hsl(var(--border))' }
-                    }
+                    className="relative min-w-6 min-h-6 flex items-center justify-center"
                   >
+                    <span
+                      className="relative rounded-full overflow-hidden transition-all duration-300"
+                      style={i === activeSlide
+                        ? { width: '1.5rem', height: '0.5rem', backgroundColor: 'hsl(var(--border))' }
+                        : { width: '0.5rem', height: '0.5rem', backgroundColor: 'hsl(var(--border))' }
+                      }
+                    >
                     {/* Active dot: animated width pill with progress fill */}
                     {i === activeSlide && (
                       <>
@@ -413,6 +416,7 @@ export function HeroBanner() {
                         />
                       </>
                     )}
+                    </span>
                   </button>
                 ))}
               </div>

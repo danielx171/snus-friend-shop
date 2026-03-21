@@ -38,7 +38,7 @@ export function ProductFilters({ filters, onFilterChange, onClose, isMobile = fa
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-lg text-foreground tracking-tight">{t('filter.title')}</h2>
         {isMobile && onClose && (
-          <Button variant="ghost" size="icon" onClick={onClose} className="rounded-xl hover:text-primary">
+          <Button variant="ghost" size="icon" onClick={onClose} className="rounded-xl hover:text-primary" aria-label="Close filters">
             <X className="h-5 w-5" />
           </Button>
         )}

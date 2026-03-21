@@ -136,7 +136,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
       'product-card relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-[border-color] duration-[220ms] ease-out group-hover:border-border/60',
       isOutOfStock && 'opacity-60'
     )}>
-      <Link to={`/product/${product.id}`}>
+      <Link to={`/product/${product.id}`} aria-label={product.name}>
         {/* Image area */}
         <div className={cn(
           'product-card-image relative overflow-hidden bg-gradient-to-br',
