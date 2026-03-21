@@ -289,31 +289,50 @@ export default function ProductDetail() {
             </motion.div>
 
             {/* Price with animated transition */}
-            <div className="flex items-baseline gap-3 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={selectedPack}
-                  className="text-3xl font-bold text-foreground"
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.2, ease: easeOut }}
-                >
-                  {formatPrice(currentPrice)}
-                </motion.span>
-              </AnimatePresence>
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={`per-${selectedPack}`}
-                  className="text-sm text-muted-foreground"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  ({formatPrice(pricePerCan)}/can)
-                </motion.span>
-              </AnimatePresence>
+            <div>
+              <div className="flex items-baseline gap-3 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={selectedPack}
+                    className="text-3xl font-bold text-foreground"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.2, ease: easeOut }}
+                  >
+                    {formatPrice(currentPrice)}
+                  </motion.span>
+                </AnimatePresence>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={`per-${selectedPack}`}
+                    className="text-sm text-muted-foreground"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    ({formatPrice(pricePerCan)}/can)
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+              {(() => {
+                const bulkSavings = product.prices.pack1 * packSizeMultipliers[selectedPack] - currentPrice;
+                return bulkSavings > 0.01 ? (
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={`savings-${selectedPack}`}
+                      className="text-sm text-emerald-400 mt-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      You save {formatPrice(bulkSavings)} compared to buying {packSizeMultipliers[selectedPack]} single cans
+                    </motion.p>
+                  </AnimatePresence>
+                ) : null;
+              })()}
             </div>
 
             {/* SnusPoints earn indicator */}
