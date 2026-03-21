@@ -7,9 +7,8 @@ import { formatMarketPrice } from '@/lib/market';
 import { useBrands } from '@/hooks/useBrands';
 
 export function UtilityBar() {
-  const { totalItems, totalPrice } = useCart();
+  const { totalItems, totalPrice, openCart } = useCart();
   const { t, formatPrice, market } = useTranslation();
-  const { openCart } = useCart();
   const { brands } = useBrands();
   const brandCount = brands.length || 91;
 
