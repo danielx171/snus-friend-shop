@@ -62,7 +62,7 @@ export default function BrandsIndex() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {brandDirectory.map((brand) => {
+          {brandDirectory.map((brand, index) => {
             const count = getProductCount(brand.name);
             const accent = brandAccents[brand.slug] ?? '220 10% 50%';
 
