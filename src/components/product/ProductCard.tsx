@@ -332,18 +332,47 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
             >
             <Button
               onClick={handleAddToCart}
-              className={cn('w-full rounded-xl font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:ring-ring hover:brightness-110 hover:scale-[1.03]', isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm')}
+              className={cn(
+                'w-full rounded-xl font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:ring-ring hover:brightness-110 hover:scale-[1.03]',
+                isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm',
+                justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white'
+              )}
               size="sm"
             >
-              <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
-              {isCompact ? (
-                <span className="hidden sm:inline truncate">{t('product.buy')}</span>
-              ) : (
-                <>
-                  <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
-                  <span className="sm:hidden">{t('product.buy')}</span>
-                </>
-              )}
+              <AnimatePresence mode="wait" initial={false}>
+                {justAdded ? (
+                  <motion.span
+                    key="check"
+                    className="flex items-center gap-1.5"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <Check className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
+                    <span className="truncate">Added!</span>
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="cart"
+                    className="flex items-center gap-1.5"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
+                    {isCompact ? (
+                      <span className="hidden sm:inline truncate">{t('product.buy')}</span>
+                    ) : (
+                      <>
+                        <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
+                        <span className="sm:hidden">{t('product.buy')}</span>
+                      </>
+                    )}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Button>
             </motion.div>
           )}

@@ -111,7 +111,12 @@ export function Header() {
             onClick={openCart}
             aria-label={`Cart with ${totalItems} items`}
           >
-            <ShoppingCart className="h-5 w-5" />
+            <motion.div
+              animate={cartBounce ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+            >
+              <ShoppingCart className="h-5 w-5" />
+            </motion.div>
             {totalItems > 0 && (
               <>
                 <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground glow-primary">
