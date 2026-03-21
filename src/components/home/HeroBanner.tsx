@@ -446,7 +446,7 @@ export function HeroBanner() {
                       key={product.id}
                       initial={{ opacity: 0, y: 24, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.5, delay: 0.6 + i * 0.1, ease: easeOut }}
+                      transition={{ duration: 0.5, delay: 0.7 + i * 0.1, ease: easeOut }}
                     >
                       <Link
                         to={`/product/${product.id}`}
