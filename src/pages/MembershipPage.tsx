@@ -38,6 +38,13 @@ export default function MembershipPage() {
   const [submitting, setSubmitting] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
 
+  const stepsRef = useRef<HTMLDivElement>(null);
+  const stepsInView = useInView(stepsRef, { once: true, margin: '-60px' });
+  const barRef = useRef<HTMLDivElement>(null);
+  const barInView = useInView(barRef, { once: true, margin: '-40px' });
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const hasAnimatedCounter = useRef(false);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setUserId(data.session?.user?.id ?? null);
@@ -49,6 +56,23 @@ export default function MembershipPage() {
   }, []);
 
   const { data: pointsData } = useSnusPoints(userId);
+  const pts = pointsData?.balance ?? 0;
+  const pct = Math.min((pts / SNUSPOINTS.freeTrialCost) * 100, 100);
+  const remaining = Math.max(SNUSPOINTS.freeTrialCost - pts, 0);
+
+  useEffect(() => {
+    if (barInView && !hasAnimatedCounter.current && counterRef.current) {
+      hasAnimatedCounter.current = true;
+      const controls = animate(0, pts, {
+        duration: 1,
+        ease: 'easeOut',
+        onUpdate(v) {
+          if (counterRef.current) counterRef.current.textContent = `${Math.round(v)} / ${SNUSPOINTS.freeTrialCost}`;
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [barInView, pts]);
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
