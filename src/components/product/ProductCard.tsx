@@ -21,15 +21,6 @@ const strengthColors: Record<string, string> = {
   ultraStrong: '#ef4444',
 };
 
-const flavorGradients: Partial<Record<FlavorKey, string>> = {
-  mint: 'from-emerald-500/20 to-green-600/10',
-  berry: 'from-purple-500/20 to-fuchsia-600/10',
-  citrus: 'from-orange-400/20 to-amber-500/10',
-  fruit: 'from-orange-400/20 to-amber-500/10',
-  coffee: 'from-amber-700/20 to-stone-800/10',
-  cola: 'from-amber-700/20 to-stone-800/10',
-};
-const defaultGradient = 'from-slate-500/10 to-slate-600/5';
 
 const flavorAccents: Partial<Record<FlavorKey, string>> = {
   mint: '#10b981',
