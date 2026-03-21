@@ -10,7 +10,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from '@/components/ui/accordion';
 import {
-  Crown, Gift, Package, Sparkles, Check, ArrowRight, ShoppingCart, Coins,
+  Crown, Gift, Package, Sparkles, Check, ArrowRight, ShoppingCart, Coins, Star,
 } from 'lucide-react';
 import { TIERS, SNUSPOINTS, MEMBERSHIP_FAQ } from '@/data/membership';
 import { cn } from '@/lib/utils';
@@ -32,6 +32,48 @@ const merchPlaceholders = [
   { label: 'Accessories', gradient: 'from-[hsl(var(--chart-2)/0.15)] to-[hsl(var(--chart-2)/0.05)]' },
   { label: 'Collector items', gradient: 'from-[hsl(var(--chart-1)/0.15)] to-[hsl(var(--chart-1)/0.05)]' },
 ];
+
+/* Small helper: animated count-up for step cards */
+function StepCounter({ inView, target, label, delay }: { inView: boolean; target: number; label: string; delay: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const hasRun = useRef(false);
+  useEffect(() => {
+    if (inView && !hasRun.current && ref.current) {
+      hasRun.current = true;
+      const controls = animate(0, target, {
+        duration: 0.8,
+        ease: 'easeOut',
+        delay,
+        onUpdate(v) { if (ref.current) ref.current.textContent = `${Math.round(v)} ${label}`; },
+      });
+      return () => controls.stop();
+    }
+  }, [inView, target, label, delay]);
+  return <p className="text-sm font-semibold text-[hsl(var(--chart-2))]"><span ref={ref}>0 {label}</span></p>;
+}
+
+/* Confetti-like floating dots for celebration */
+function ConfettiDots() {
+  const dots = Array.from({ length: 12 }, (_, i) => i);
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {dots.map((i) => (
+        <motion.div
+          key={i}
+          className="absolute h-1.5 w-1.5 rounded-full"
+          style={{
+            left: `${8 + (i / 12) * 84}%`,
+            top: `${20 + Math.sin(i * 1.3) * 30}%`,
+            backgroundColor: i % 3 === 0 ? 'hsl(var(--chart-2))' : i % 3 === 1 ? 'hsl(var(--chart-4))' : 'hsl(var(--primary))',
+          }}
+          initial={{ opacity: 0, y: 10, scale: 0 }}
+          animate={{ opacity: [0, 1, 0.6], y: [10, -8, -4], scale: [0, 1.2, 0.8] }}
+          transition={{ duration: 2, ease: 'easeOut', repeat: Infinity, delay: i * 0.15 }}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function MembershipPage() {
   const [email, setEmail] = useState('');
@@ -60,11 +102,15 @@ export default function MembershipPage() {
   const pct = Math.min((pts / SNUSPOINTS.freeTrialCost) * 100, 100);
   const remaining = Math.max(SNUSPOINTS.freeTrialCost - pts, 0);
 
+  // For logged-out users, demo animates to 340; for logged-in, use real balance
+  const displayTarget = userId ? pts : 340;
+  const displayPct = Math.min((displayTarget / SNUSPOINTS.freeTrialCost) * 100, 100);
+
   useEffect(() => {
     if (barInView && !hasAnimatedCounter.current && counterRef.current) {
       hasAnimatedCounter.current = true;
-      const controls = animate(0, pts, {
-        duration: 1,
+      const controls = animate(0, displayTarget, {
+        duration: userId ? 1.5 : 2,
         ease: 'easeOut',
         onUpdate(v) {
           if (counterRef.current) counterRef.current.textContent = `${Math.round(v)} / ${SNUSPOINTS.freeTrialCost}`;
@@ -72,7 +118,7 @@ export default function MembershipPage() {
       });
       return () => controls.stop();
     }
-  }, [barInView, pts]);
+  }, [barInView, displayTarget, userId]);
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -284,45 +330,72 @@ export default function MembershipPage() {
               </p>
             </div>
 
-            {/* 3-step visual */}
-            <div ref={stepsRef} className="grid gap-6 md:grid-cols-3 max-w-3xl mx-auto mb-10">
-              {[
-                { step: 1, icon: ShoppingCart, title: 'Shop', desc: 'Buy your favorite pouches as usual.' },
-                { step: 2, icon: Coins, title: 'Earn', desc: `Get ${SNUSPOINTS.pointsPerEuro} SnusPoints per €1 spent.` },
-                { step: 3, icon: Gift, title: 'Redeem', desc: `${SNUSPOINTS.freeTrialCost} points = 1 free mystery box month.` },
-              ].map((item, i) => (
+            {/* 3-step visual with connecting line */}
+            <div ref={stepsRef} className="relative max-w-3xl mx-auto mb-10">
+              {/* Connecting line that draws itself */}
+              <div className="hidden md:block absolute top-[4.5rem] left-[16.67%] right-[16.67%] h-[2px] z-0">
                 <motion.div
-                  key={item.step}
-                  initial={{ opacity: 0, scale: 0.3, y: 20 }}
-                  animate={stepsInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.3, y: 20 }}
-                  transition={{
-                    duration: 0.5,
-                    ease: [0.34, 1.56, 0.64, 1],
-                    delay: i * 0.15,
-                  }}
-                  className="rounded-2xl glass-panel p-6 text-center relative"
-                >
-                  <div className="absolute top-3 left-3 h-6 w-6 rounded-full bg-[hsl(var(--chart-2))] text-white text-xs font-bold flex items-center justify-center">
-                    {item.step}
-                  </div>
-                  <div className="mx-auto h-14 w-14 rounded-full bg-[hsl(var(--chart-2)/0.1)] flex items-center justify-center mb-4 mt-2">
-                    <item.icon className="h-6 w-6 text-[hsl(var(--chart-2))]" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </motion.div>
-              ))}
+                  className="h-full bg-gradient-to-r from-[hsl(var(--chart-2))] via-[hsl(var(--chart-2)/0.6)] to-[hsl(var(--chart-2))]"
+                  initial={{ scaleX: 0 }}
+                  animate={stepsInView ? { scaleX: 1 } : { scaleX: 0 }}
+                  transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+                  style={{ transformOrigin: 'left' }}
+                />
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-3 relative z-10">
+                {[
+                  { step: 1, icon: ShoppingCart, title: 'Shop', desc: 'Buy your favorite pouches as usual.', countTo: null, countLabel: null },
+                  { step: 2, icon: Coins, title: 'Earn', desc: 'Points credited on every order.', countTo: 10, countLabel: 'pts / €1' },
+                  { step: 3, icon: Gift, title: 'Redeem', desc: 'Free mystery box month!', countTo: 500, countLabel: 'pts' },
+                ].map((item, i) => (
+                  <motion.div
+                    key={item.step}
+                    initial={{ opacity: 0, scale: 0.3, y: 20 }}
+                    animate={stepsInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.3, y: 20 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.34, 1.56, 0.64, 1],
+                      delay: i * 0.3,
+                    }}
+                    className="rounded-2xl glass-panel p-6 text-center relative"
+                  >
+                    <div className="absolute top-3 left-3 h-6 w-6 rounded-full bg-[hsl(var(--chart-2))] text-white text-xs font-bold flex items-center justify-center">
+                      {item.step}
+                    </div>
+                    <div className="mx-auto h-14 w-14 rounded-full bg-[hsl(var(--chart-2)/0.1)] flex items-center justify-center mb-4 mt-2">
+                      <item.icon className="h-6 w-6 text-[hsl(var(--chart-2))]" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                    {item.countTo !== null ? (
+                      <StepCounter inView={stepsInView} target={item.countTo} label={item.countLabel!} delay={i * 0.3 + 0.4} />
+                    ) : (
+                      <p className="text-sm text-muted-foreground">{item.desc}</p>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
-            {/* Points progress */}
+            {/* Points progress — enhanced */}
             <div ref={barRef} className="max-w-md mx-auto rounded-2xl glass-panel p-6">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-foreground">
-                  {userId ? 'Your SnusPoints' : 'SnusPoints Example'}
+                  {userId ? 'Your SnusPoints' : 'SnusPoints Demo'}
                 </span>
                 <span ref={counterRef} className="text-sm text-muted-foreground">0 / {SNUSPOINTS.freeTrialCost}</span>
               </div>
+
+              {/* Progress bar */}
               <div className="h-3 rounded-full bg-muted/40 overflow-hidden relative">
+                {/* Milestone markers */}
+                {[100, 250, 500].map((m) => (
+                  <div
+                    key={m}
+                    className="absolute top-0 h-full w-[2px] bg-border/40 z-10"
+                    style={{ left: `${(m / SNUSPOINTS.freeTrialCost) * 100}%` }}
+                  />
+                ))}
                 <motion.div
                   className="h-full rounded-full relative"
                   style={{
@@ -330,10 +403,9 @@ export default function MembershipPage() {
                     boxShadow: '0 0 12px #D8ED6266, 0 0 4px #D8ED6244',
                   }}
                   initial={{ width: '0%' }}
-                  animate={barInView ? { width: `${pct}%` } : { width: '0%' }}
-                  transition={{ duration: 1.4, ease: 'easeOut' }}
+                  animate={barInView ? { width: `${displayPct}%` } : { width: '0%' }}
+                  transition={{ duration: userId ? 1.5 : 2, ease: 'easeOut' }}
                 >
-                  {/* Pulsing glow on leading edge */}
                   <motion.div
                     className="absolute right-0 top-0 h-full w-4 rounded-full"
                     style={{
@@ -346,20 +418,72 @@ export default function MembershipPage() {
                       duration: 2,
                       ease: 'easeInOut',
                       repeat: Infinity,
-                      delay: 1.4,
+                      delay: userId ? 1.5 : 2,
                     }}
                   />
                 </motion.div>
               </div>
-              <p className="text-xs text-muted-foreground mt-2 text-center">
-                {remaining > 0
-                  ? `${remaining} more points until your free mystery box month!`
-                  : 'You have enough points to redeem a free mystery box month!'}
-              </p>
-              {!userId && (
-                <p className="text-xs text-muted-foreground mt-1 text-center">
-                  <Link to="/login" className="text-primary hover:underline">Sign in</Link> to see your balance.
-                </p>
+
+              {/* Milestone labels */}
+              <div className="relative h-6 mt-1">
+                {[
+                  { value: 100, icon: Star },
+                  { value: 250, icon: Sparkles },
+                  { value: 500, icon: Gift },
+                ].map((m) => {
+                  const passed = displayTarget >= m.value;
+                  const MIcon = m.icon;
+                  return (
+                    <div
+                      key={m.value}
+                      className="absolute -translate-x-1/2 flex flex-col items-center"
+                      style={{ left: `${(m.value / SNUSPOINTS.freeTrialCost) * 100}%` }}
+                    >
+                      <span className={cn(
+                        'text-[10px] font-medium flex items-center gap-0.5',
+                        passed ? 'text-[hsl(var(--chart-2))]' : 'text-muted-foreground/60'
+                      )}>
+                        {userId && passed ? (
+                          <Check className="h-3 w-3" />
+                        ) : m.value === 500 ? (
+                          <span>🎁</span>
+                        ) : (
+                          <MIcon className="h-3 w-3" />
+                        )}
+                        {m.value}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Status text */}
+              {userId ? (
+                displayTarget >= SNUSPOINTS.freeTrialCost ? (
+                  /* Celebration state */
+                  <div className="mt-3 text-center relative overflow-hidden rounded-xl bg-[hsl(var(--chart-2)/0.08)] border border-[hsl(var(--chart-2)/0.2)] p-4">
+                    <ConfettiDots />
+                    <p className="text-sm font-semibold text-[hsl(var(--chart-2))] mb-2 relative z-10">
+                      🎉 You've earned a free mystery box month!
+                    </p>
+                    <Button disabled size="sm" className="rounded-xl bg-[hsl(var(--chart-2))] text-white relative z-10">
+                      Redeem your free month <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
+                    You're <span className="font-semibold text-foreground">{remaining}</span> points from a free mystery box month!
+                  </p>
+                )
+              ) : (
+                <div className="mt-3 text-center space-y-1.5">
+                  <p className="text-xs text-muted-foreground">
+                    Shop <span className="font-semibold text-foreground">€34</span> worth of pouches and you're already here! →
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    <Link to="/login" className="text-primary hover:underline font-medium">Sign in</Link> to track your real balance.
+                  </p>
+                </div>
               )}
             </div>
           </div>
