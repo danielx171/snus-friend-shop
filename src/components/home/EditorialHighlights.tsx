@@ -35,7 +35,7 @@ export function EditorialHighlights() {
       <div className="container">
         <div className="mb-10">
           <motion.h2
-            className="text-3xl font-bold text-foreground tracking-tight"
+            className="text-3xl font-bold text-white tracking-tight"
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -44,7 +44,7 @@ export function EditorialHighlights() {
             Explore & Discover
           </motion.h2>
           <motion.p
-            className="text-muted-foreground mt-2 max-w-lg"
+            className="text-gray-400 mt-2 max-w-lg"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
