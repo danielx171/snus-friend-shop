@@ -554,9 +554,25 @@ export default function ProductDetail() {
                 {formatPrice(pricePerCan)}/{t('cart.can')}
               </span>
             </div>
-            <Button size="lg" className="gap-2 rounded-2xl shrink-0 glow-primary" onClick={handleAddToCart}>
-              <ShoppingCart className="h-5 w-5" />
-              {t('product.addToCart')}
+            <Button
+              size="lg"
+              className={cn(
+                'gap-2 rounded-2xl shrink-0 glow-primary',
+                justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white atc-press'
+              )}
+              onClick={handleAddToCart}
+            >
+              {justAdded ? (
+                <>
+                  <Check className="h-5 w-5" />
+                  Added!
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-5 w-5" />
+                  {t('product.addToCart')}
+                </>
+              )}
             </Button>
           </div>
         </div>
