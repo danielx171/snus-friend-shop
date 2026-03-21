@@ -144,8 +144,18 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
             background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))',
           }}
         >
+          {/* Radial glow behind can on hover */}
           <motion.div
-            className="h-full w-full"
+            className="absolute inset-0 pointer-events-none"
+            variants={imageGlowVariants}
+            transition={hoverTransition}
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(100,140,255,0.15), transparent 70%)',
+              filter: 'blur(20px)',
+            }}
+          />
+          <motion.div
+            className="h-full w-full relative z-10"
             variants={imageVariants}
             transition={hoverTransition}
           >
