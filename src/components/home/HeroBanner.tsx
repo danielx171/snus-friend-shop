@@ -232,9 +232,9 @@ export function HeroBanner() {
           <div className="space-y-7">
             {/* Trust pill — entrance */}
             <motion.div
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3, ease: easeOut }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0, ease: easeOut }}
             >
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
                 <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
