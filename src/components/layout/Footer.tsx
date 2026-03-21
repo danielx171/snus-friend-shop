@@ -1,11 +1,87 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Logo } from './Logo';
+import { supabase } from '@/integrations/supabase/client';
+import { cn } from '@/lib/utils';
+
+function NewsletterSignup() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'duplicate' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = email.trim();
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return;
+
+    setStatus('submitting');
+    const { error } = await (supabase as any)
+      .from('newsletter_subscribers')
+      .insert({ email: trimmed });
+
+    if (error) {
+      if (error.code === '23505') {
+        setStatus('duplicate');
+      } else {
+        setStatus('error');
+      }
+    } else {
+      setStatus('success');
+    }
+    setTimeout(() => setStatus('idle'), 3000);
+  };
+
+  const isDisabled = status === 'submitting' || status === 'success' || status === 'duplicate';
+
+  return (
+    <div className="text-center max-w-lg mx-auto">
+      <h3 className="text-lg font-semibold text-foreground mb-1.5">Stay in the loop</h3>
+      <p className="text-sm text-muted-foreground mb-4">
+        New drops, exclusive offers, and pouch tips — straight to your inbox.
+      </p>
+      <form onSubmit={handleSubmit} className="flex">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Your email address"
+          required
+          className="flex-1 min-w-0 bg-card/50 border border-border/30 rounded-l-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
+        />
+        <button
+          type="submit"
+          disabled={isDisabled}
+          className={cn(
+            'rounded-r-xl px-6 py-3 text-sm font-medium transition-colors whitespace-nowrap',
+            status === 'success' || status === 'duplicate'
+              ? 'bg-emerald-500 text-white'
+              : 'bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-60'
+          )}
+        >
+          {status === 'submitting' ? 'Saving…' : status === 'success' ? '✓ Subscribed!' : status === 'duplicate' ? '✓ Already subscribed!' : 'Subscribe'}
+        </button>
+      </form>
+      {status === 'success' && (
+        <p className="text-xs text-emerald-400 mt-2">Welcome to the family! Check your inbox.</p>
+      )}
+      {status === 'duplicate' && (
+        <p className="text-xs text-muted-foreground mt-2">You're already subscribed — we've got you!</p>
+      )}
+      {status === 'error' && (
+        <p className="text-xs text-destructive mt-2">Something went wrong. Please try again.</p>
+      )}
+    </div>
+  );
+}
 
 export function Footer() {
   return (
     <footer className="border-t border-border/20 bg-card/30 bg-muted/5">
       <div className="container py-16">
+        {/* Newsletter */}
+        <NewsletterSignup />
+        <Separator className="my-10 bg-border/30" />
+
         <div className="grid gap-10 md:grid-cols-4">
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-3">
@@ -37,14 +113,6 @@ export function Footer() {
                 { to: '/cookies', label: 'Cookie Policy' },
               ],
             },
-            // Social links — add real URLs when accounts are created
-            // {
-            //   title: 'Follow Us',
-            //   links: [
-            //     { to: 'https://instagram.com/snusfriend', label: 'Instagram' },
-            //     { to: 'https://facebook.com/snusfriend', label: 'Facebook' },
-            //   ],
-            // },
           ].map((section) => (
             <div key={section.title}>
               <h3 className="font-semibold text-foreground mb-5 text-sm uppercase tracking-wider">{section.title}</h3>
