@@ -112,29 +112,7 @@ const App = () => (
                 <h2 className="text-foreground font-semibold text-lg mt-6">Business enquiries</h2>
                 <p>For wholesale, partnerships, or brand enquiries, please also reach us at the address above with "Business" in the subject line.</p>
               </>} />} />
-              <Route path="/faq" element={<InfoPage title="Frequently Asked Questions" content={<>
-                <h2 className="text-foreground font-semibold text-lg">What are nicotine pouches?</h2>
-                <p>Nicotine pouches are small, white pouches placed under your upper lip. They deliver nicotine without tobacco, smoke, or vapour — making them a discreet, smoke-free alternative.</p>
-                <h2 className="text-foreground font-semibold text-lg mt-6">Are nicotine pouches legal in the UK?</h2>
-                <p>Yes. Nicotine pouches are legal in the UK and regulated as consumer nicotine products. They do not contain tobacco, so they fall outside tobacco product legislation.</p>
-                <h2 className="text-foreground font-semibold text-lg mt-6">What strength should I choose?</h2>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li><strong>Normal (4–8mg)</strong> — good starting point if you're new to pouches</li>
-                  <li><strong>Strong (8–12mg)</strong> — suitable for regular users</li>
-                  <li><strong>Extra Strong (12–18mg)</strong> — for experienced users wanting a stronger hit</li>
-                  <li><strong>Ultra Strong (18mg+)</strong> — very high strength, not recommended for beginners</li>
-                </ul>
-                <h2 className="text-foreground font-semibold text-lg mt-6">How long does delivery take?</h2>
-                <p>Standard delivery takes 3–5 business days. Orders placed before 2pm on business days are dispatched the same day.</p>
-                <h2 className="text-foreground font-semibold text-lg mt-6">Do you ship to my country?</h2>
-                <p>We ship to the UK and most EU countries. At checkout you'll see the countries we currently deliver to.</p>
-                <h2 className="text-foreground font-semibold text-lg mt-6">How do I get free delivery?</h2>
-                <p>Free delivery is available on all orders over €29. Orders below this threshold attract a standard shipping fee shown at checkout.</p>
-                <h2 className="text-foreground font-semibold text-lg mt-6">What is SnusPoints?</h2>
-                <p>SnusPoints is our loyalty programme. You earn 10 SnusPoints for every €1 spent. Points can be redeemed for discounts on future orders. Sign up for a free account to start earning.</p>
-                <h2 className="text-foreground font-semibold text-lg mt-6">What is the minimum age to buy?</h2>
-                <p>You must be 18 or over to purchase nicotine products from SnusFriend. Age verification is required at checkout.</p>
-              </>} />} />
+              <Route path="/faq" element={<FaqPage />} />
               <Route path="/shipping" element={<InfoPage title="Shipping Information" content={<>
                 <h2 className="text-foreground font-semibold text-lg">Free delivery</h2>
                 <p>All orders over €29 qualify for free standard delivery. No discount code needed — it's applied automatically at checkout.</p>
