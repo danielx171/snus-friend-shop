@@ -88,12 +88,56 @@ export function HeroBanner() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
+      {/* Floating pouch-can circles */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        {/* Circle 1 — blue, 72px */}
+        <div className="hero-float-circle" style={{ width: 72, height: 72, left: '8%', bottom: '-10%', animationDuration: '22s', animationDelay: '-3s' }}>
+          <div className="hero-float-inner" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 2 — lime, 56px */}
+        <div className="hero-float-circle hero-float-lime" style={{ width: 56, height: 56, left: '22%', bottom: '-8%', animationDuration: '18s', animationDelay: '-11s' }}>
+          <div className="hero-float-inner hero-float-inner-lime" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 3 — blue, 88px */}
+        <div className="hero-float-circle" style={{ width: 88, height: 88, left: '38%', bottom: '-12%', animationDuration: '26s', animationDelay: '-7s' }}>
+          <div className="hero-float-inner" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 4 — lime, 44px */}
+        <div className="hero-float-circle hero-float-lime" style={{ width: 44, height: 44, left: '52%', bottom: '-6%', animationDuration: '15s', animationDelay: '-1s' }}>
+          <div className="hero-float-inner hero-float-inner-lime" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 5 — blue, 64px */}
+        <div className="hero-float-circle" style={{ width: 64, height: 64, left: '65%', bottom: '-14%', animationDuration: '24s', animationDelay: '-16s' }}>
+          <div className="hero-float-inner" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 6 — lime, 78px */}
+        <div className="hero-float-circle hero-float-lime" style={{ width: 78, height: 78, left: '78%', bottom: '-9%', animationDuration: '20s', animationDelay: '-5s' }}>
+          <div className="hero-float-inner hero-float-inner-lime" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 7 — blue, 50px */}
+        <div className="hero-float-circle" style={{ width: 50, height: 50, left: '90%', bottom: '-7%', animationDuration: '28s', animationDelay: '-20s' }}>
+          <div className="hero-float-inner" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 8 — lime, 60px */}
+        <div className="hero-float-circle hero-float-lime" style={{ width: 60, height: 60, left: '4%', bottom: '-15%', animationDuration: '17s', animationDelay: '-9s' }}>
+          <div className="hero-float-inner hero-float-inner-lime" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 9 — blue, 46px */}
+        <div className="hero-float-circle" style={{ width: 46, height: 46, left: '45%', bottom: '-5%', animationDuration: '30s', animationDelay: '-14s' }}>
+          <div className="hero-float-inner" style={{ width: '65%', height: '65%' }} />
+        </div>
+        {/* Circle 10 — lime, 82px */}
+        <div className="hero-float-circle hero-float-lime" style={{ width: 82, height: 82, left: '58%', bottom: '-11%', animationDuration: '19s', animationDelay: '-2s' }}>
+          <div className="hero-float-inner hero-float-inner-lime" style={{ width: '65%', height: '65%' }} />
+        </div>
+      </div>
+
       {/* Ambient glow blobs */}
       <div
-        className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.07] blur-[130px] pointer-events-none transition-all duration-1000"
+        className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.07] blur-[130px] pointer-events-none transition-all duration-1000 z-0"
         style={{ background: slide.accentColor }}
       />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px] pointer-events-none z-0" />
 
       <div className="container py-14 md:py-20 lg:py-24 relative">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
