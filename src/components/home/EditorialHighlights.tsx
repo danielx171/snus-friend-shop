@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Leaf, Zap, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const highlights = [
@@ -7,22 +7,25 @@ const highlights = [
     title: 'Flavor Guide',
     blurb: 'From icy mint to tropical fruit — discover your perfect pouch flavor with our curated guide.',
     href: '/nicotine-pouches',
-    icon: Leaf,
-    gradient: 'from-primary/15 to-chart-3/10',
+    emoji: '🍃',
+    gradient: 'linear-gradient(135deg, hsl(220 100% 10%) 0%, rgba(40,80,60,0.3) 100%)',
+    gradientHover: 'linear-gradient(135deg, hsl(220 100% 12%) 0%, rgba(40,80,60,0.45) 100%)',
   },
   {
     title: 'Strength Guide',
-    blurb: 'Whether you\'re a beginner or a veteran, find the right nicotine strength for your lifestyle.',
+    blurb: "Whether you're a beginner or a veteran, find the right nicotine strength for your lifestyle.",
     href: '/nicotine-pouches?strength=strong',
-    icon: Zap,
-    gradient: 'from-chart-4/15 to-chart-1/10',
+    emoji: '⚡',
+    gradient: 'linear-gradient(135deg, hsl(220 100% 10%) 0%, rgba(80,60,30,0.3) 100%)',
+    gradientHover: 'linear-gradient(135deg, hsl(220 100% 12%) 0%, rgba(80,60,30,0.45) 100%)',
   },
   {
     title: 'New Drops',
     blurb: 'Fresh arrivals from ZYN, VELO, and more. Be the first to try the latest releases.',
     href: '/nicotine-pouches?badge=new',
-    icon: Sparkles,
-    gradient: 'from-chart-2/15 to-primary/10',
+    emoji: '✨',
+    gradient: 'linear-gradient(135deg, hsl(220 100% 10%) 0%, rgba(30,50,100,0.3) 100%)',
+    gradientHover: 'linear-gradient(135deg, hsl(220 100% 12%) 0%, rgba(30,50,100,0.45) 100%)',
   },
 ];
 
@@ -62,19 +65,28 @@ export function EditorialHighlights() {
             >
               <Link
                 to={item.href}
-                className="group rounded-2xl glass-panel overflow-hidden hover:border-primary/25 transition-all duration-300 block"
+                className="group relative block h-[280px] rounded-2xl border border-white/[0.06] overflow-hidden transition-all duration-300 hover:border-white/[0.12] hover:-translate-y-1"
+                style={{ background: item.gradient }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = item.gradientHover; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = item.gradient; }}
               >
-                <div className={`h-40 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
-                  <item.icon className="h-12 w-12 text-primary group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
-                </div>
-                <div className="p-6">
+                {/* Large emoji watermark */}
+                <span
+                  className="pointer-events-none absolute -top-2 -right-2 select-none"
+                  style={{ fontSize: 120, opacity: 0.08, transform: 'rotate(-15deg)' }}
+                  aria-hidden="true"
+                >
+                  {item.emoji}
+                </span>
+
+                {/* Content */}
+                <div className="relative z-10 flex h-full flex-col justify-end p-6">
                   <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-4">{item.blurb}</p>
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                    Read more
-                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
                   </span>
                 </div>
               </Link>

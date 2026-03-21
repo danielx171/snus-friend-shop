@@ -74,81 +74,100 @@ function NewsletterSignup() {
   );
 }
 
+function FooterLink({ to, label }: { to: string; label: string }) {
+  return (
+    <li>
+      <Link
+        to={to}
+        className="group inline-flex items-center gap-0 text-muted-foreground hover:text-foreground transition-colors duration-150"
+      >
+        <span className="inline-block w-0 group-hover:w-2.5 h-1 rounded-full bg-accent transition-all duration-150 mr-0 group-hover:mr-2 opacity-0 group-hover:opacity-100" />
+        {label}
+      </Link>
+    </li>
+  );
+}
+
 export function Footer() {
   return (
-    <footer className="border-t border-border/20 bg-card/30 bg-muted/5">
-      <div className="container py-16">
-        {/* Newsletter */}
-        <NewsletterSignup />
-        <Separator className="my-10 bg-border/30" />
+    <>
+      {/* Gradient fade transition */}
+      <div
+        className="h-[60px] pointer-events-none"
+        style={{ background: 'linear-gradient(to bottom, transparent, hsl(var(--card) / 0.3))' }}
+      />
+      <footer className="border-t border-white/[0.04] bg-card/30 bg-muted/5">
+        <div className="container py-16">
+          {/* Newsletter */}
+          <NewsletterSignup />
+          <Separator className="my-10 bg-border/30" />
 
-        <div className="grid gap-10 md:grid-cols-4">
-          <div className="space-y-4">
-            <Link to="/" className="flex items-center gap-3">
-              <Logo size={38} className="text-primary" />
-              <span className="text-xl font-semibold text-foreground">SnusFriend</span>
-            </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Your trusted source for premium nicotine pouches. Fast EU delivery and excellent customer service.
-            </p>
+          <div className="grid gap-10 md:grid-cols-4">
+            <div className="space-y-4">
+              <Link to="/" className="flex items-center gap-3">
+                <Logo size={38} className="text-primary" />
+                <span className="text-[22px] font-semibold text-foreground" style={{ letterSpacing: '0.02em' }}>SnusFriend</span>
+              </Link>
+              <p className="text-sm text-muted-foreground/60 leading-relaxed max-w-xs">
+                Your trusted source for premium nicotine pouches. Fast EU delivery and excellent customer service.
+              </p>
+            </div>
+
+            {[
+              {
+                title: 'Customer Service',
+                links: [
+                  { to: '/contact', label: 'Contact Us' },
+                  { to: '/faq', label: 'FAQ' },
+                  { to: '/shipping', label: 'Shipping Information' },
+                  { to: '/returns', label: 'Returns & Refunds' },
+                ],
+              },
+              {
+                title: 'Information',
+                links: [
+                  { to: '/about', label: 'About Us' },
+                  { to: '/membership', label: 'Snus Family' },
+                  { to: '/terms', label: 'Terms & Conditions' },
+                  { to: '/privacy', label: 'Privacy Policy' },
+                  { to: '/cookies', label: 'Cookie Policy' },
+                ],
+              },
+            ].map((section) => (
+              <div key={section.title}>
+                <h3 className="font-semibold text-foreground mb-5 text-sm uppercase tracking-wider">{section.title}</h3>
+                <ul className="space-y-3 text-sm">
+                  {section.links.map((link) => (
+                    <FooterLink key={link.label} to={link.to} label={link.label} />
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
 
-          {[
-            {
-              title: 'Customer Service',
-              links: [
-                { to: '/contact', label: 'Contact Us' },
-                { to: '/faq', label: 'FAQ' },
-                { to: '/shipping', label: 'Shipping Information' },
-                { to: '/returns', label: 'Returns & Refunds' },
-              ],
-            },
-            {
-              title: 'Information',
-              links: [
-                { to: '/about', label: 'About Us' },
-                { to: '/membership', label: 'Snus Family' },
-                { to: '/terms', label: 'Terms & Conditions' },
-                { to: '/privacy', label: 'Privacy Policy' },
-                { to: '/cookies', label: 'Cookie Policy' },
-              ],
-            },
-          ].map((section) => (
-            <div key={section.title}>
-              <h3 className="font-semibold text-foreground mb-5 text-sm uppercase tracking-wider">{section.title}</h3>
-              <ul className="space-y-3 text-sm">
-                {section.links.map((link) => (
-                  <li key={link.label}>
-                    <Link to={link.to} className="text-muted-foreground hover:text-primary transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          <Separator className="my-10 bg-border/30" />
+
+          {/* Payment badges row */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+            {['Visa', 'Mastercard'].map((badge) => (
+              <div key={badge} className="px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.04] text-xs text-muted-foreground font-medium">
+                {badge}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} SnusFriend. All rights reserved.
+            </p>
+            <div className="bg-amber-500/[0.06] border border-amber-500/10 rounded-lg px-4 py-2">
+              <p className="text-xs text-amber-400/80">
+                ⚠️ This product contains nicotine. Nicotine is an addictive chemical.
+              </p>
             </div>
-          ))}
+          </div>
         </div>
-
-        <Separator className="my-10 bg-border/30" />
-
-        {/* Payment badges row */}
-        <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
-          {['Visa', 'Mastercard'].map((badge) => (
-            <div key={badge} className="px-3 py-1.5 rounded-lg bg-muted/20 border border-border/20 text-xs text-muted-foreground font-medium">
-              {badge}
-            </div>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} SnusFriend. All rights reserved.
-          </p>
-          <p className="text-xs text-muted-foreground">
-            ⚠️ This product contains nicotine. Nicotine is an addictive chemical.
-          </p>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }
