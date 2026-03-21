@@ -307,11 +307,11 @@ export function HeroBanner() {
 
                         <motion.div
                           className="flex flex-wrap gap-3 pt-5"
-                          initial={{ opacity: 0, y: isEntrance ? 12 : 12 }}
+                          initial={{ opacity: 0, y: 12 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{
                             duration: 0.4,
-                            delay: isEntrance ? 0.9 : SLIDE_LINE_DELAYS[4],
+                            delay: isEntrance ? 0.6 : SLIDE_LINE_DELAYS[4],
                             ease: easeOut,
                           }}
                         >
