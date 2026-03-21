@@ -491,6 +491,7 @@ export default function MembershipPage() {
           .membership-member-hover:hover {
             transform: translateY(-4px);
             box-shadow: 0 16px 40px rgba(0, 49, 138, 0.35), 0 0 24px rgba(0, 49, 138, 0.5);
+            border-color: rgba(255,255,255,0.25);
           }
 
           /* VIP card: hover lift + glow + gradient border */
