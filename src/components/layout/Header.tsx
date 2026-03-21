@@ -10,6 +10,7 @@ import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
 import { supabase } from '@/integrations/supabase/client';
 import { useSnusPoints } from '@/hooks/useSnusPoints';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
