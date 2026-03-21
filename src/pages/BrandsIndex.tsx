@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { brandDirectory } from '@/data/brands';
@@ -61,17 +62,23 @@ export default function BrandsIndex() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {brandDirectory.map((brand) => {
+          {brandDirectory.map((brand, index) => {
             const count = getProductCount(brand.name);
             const accent = brandAccents[brand.slug] ?? '220 10% 50%';
 
             return (
-              <Link
+              <motion.div
                 key={brand.slug}
-                to={`/brand/${brand.slug}`}
-                className="group block"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.4, delay: index * 0.07, ease: 'easeOut' }}
               >
-                <div className="relative h-full overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5">
+              <Link
+                to={`/brand/${brand.slug}`}
+                className="group block h-full"
+              >
+                <div className="relative h-full overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-200 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 hover:border-[hsl(0_0%_100%/0.3)]">
                   {/* Left accent bar */}
                   <div
                     className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-2xl transition-all duration-200 group-hover:w-2"
@@ -117,6 +124,7 @@ export default function BrandsIndex() {
                   </div>
                 </div>
               </Link>
+              </motion.div>
             );
           })}
         </div>
