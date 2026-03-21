@@ -517,3 +517,27 @@
 .cart-free-delivery-pop {
   animation: cart-free-pop 0.4s ease-out;
 }
+
+/* PDP product image — entrance animation */
+@keyframes pdp-entrance {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.pdp-image-entrance {
+  animation: pdp-entrance 0.5s ease-out both;
+}
+
+/* PDP product image — hover spin (CSS only) */
+@keyframes pdp-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.pdp-image-hover {
+  animation: pdp-spin 10s linear infinite;
+  animation-play-state: paused;
+}
+@media (hover: hover) {
+  .group\/img:hover .pdp-image-hover {
+    animation-play-state: running;
+  }
+}

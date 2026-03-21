@@ -136,10 +136,8 @@ export default function ProductDetail() {
           <div className="order-1">
             <div className="sticky top-32">
               {/* 1. Product image entrance */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.97 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, ease: easeOut }}
+              <div
+                className="pdp-image-entrance"
               >
                 <Card className="overflow-hidden rounded-2xl border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.2)] bg-transparent">
                   <div
@@ -150,12 +148,12 @@ export default function ProductDetail() {
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="h-full w-full object-cover transition-transform duration-300 ease-out md:group-hover/img:scale-105"
-                        style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }}
+                        className="h-full w-full object-cover pdp-image-hover"
+                        style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))', boxShadow: '0 0 40px rgba(80, 120, 255, 0.15)' }}
                         loading="eager"
                       />
                     ) : (
-                      <div className={cn('h-full w-full bg-gradient-to-br flex items-center justify-center transition-all duration-300 ease-out md:group-hover/img:brightness-110', flavorGradients[product.flavorKey] ?? defaultGradient)}>
+                      <div className={cn('h-full w-full bg-gradient-to-br flex items-center justify-center', flavorGradients[product.flavorKey] ?? defaultGradient)}>
                         <span className="text-white/80 font-bold text-2xl text-center px-6 drop-shadow">{product.name}</span>
                       </div>
                     )}
@@ -183,7 +181,7 @@ export default function ProductDetail() {
                   <span className="block w-1.5 h-1.5 rounded-full bg-white/20" />
                   <span className="block w-1.5 h-1.5 rounded-full bg-white/20" />
                 </div>
-              </motion.div>
+              </div>
 
               {/* 2. Trust badges */}
               <motion.div
