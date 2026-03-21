@@ -30,6 +30,26 @@ export function Header() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Listen for add-to-cart events for bounce + toast
+  const handleCartItemAdded = useCallback((e: Event) => {
+    const name = (e as CustomEvent).detail?.name ?? 'Item';
+    setCartBounce(true);
+    setTimeout(() => setCartBounce(false), 300);
+    setToastData({ name, id: Date.now() });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('cart-item-added', handleCartItemAdded);
+    return () => window.removeEventListener('cart-item-added', handleCartItemAdded);
+  }, [handleCartItemAdded]);
+
+  // Auto-dismiss toast
+  useEffect(() => {
+    if (!toastData) return;
+    const timer = setTimeout(() => setToastData(null), 3000);
+    return () => clearTimeout(timer);
+  }, [toastData]);
+
   const { data: pointsData } = useSnusPoints(userId);
 
   const navLinks = [
