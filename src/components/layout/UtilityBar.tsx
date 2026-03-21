@@ -10,7 +10,7 @@ export function UtilityBar() {
   const { totalItems, totalPrice } = useCart();
   const { t, formatPrice, market } = useTranslation();
   const { openCart } = useCart();
-  const { data: brands = [] } = useBrands();
+  const { brands } = useBrands();
   const brandCount = brands.length || 91;
 
   const freeShippingFormatted = formatMarketPrice(

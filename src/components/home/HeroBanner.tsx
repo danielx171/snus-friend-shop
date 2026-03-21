@@ -59,7 +59,7 @@ const SLIDE_LINE_DELAYS = [0, 0.1, 0.2, 0.3, 0.35];
 export function HeroBanner() {
   const { t, market, formatPrice } = useTranslation();
   const { data: products = [] } = useCatalogProducts();
-  const { data: brands = [] } = useBrands();
+  const { brands } = useBrands();
   const brandCount = brands.length || 91;
   const productCount = products.length || 700;
   const [activeSlide, setActiveSlide] = useState(0);
