@@ -351,7 +351,7 @@ export function HeroBanner() {
               className="flex flex-wrap gap-5 text-xs text-muted-foreground"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 1.0, ease: easeOut }}
+              transition={{ duration: 0.3, delay: 0.7, ease: easeOut }}
             >
               <div className="flex items-center gap-2">
                 <Truck className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
