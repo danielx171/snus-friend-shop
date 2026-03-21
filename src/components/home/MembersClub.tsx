@@ -64,8 +64,8 @@ export function MembersClub() {
                   className={cn(
                     'relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02]',
                     isVip
-                      ? 'bg-card/80 border-2 border-accent/30'
-                      : 'bg-card/70 border border-white/[0.08]'
+                      ? 'bg-card/80 border-2 border-[hsl(var(--chart-4)/0.4)] shadow-[0_0_24px_hsl(var(--chart-4)/0.08)]'
+                      : 'bg-card/70 border border-white/[0.15] shadow-[0_0_16px_rgba(255,255,255,0.03)]'
                   )}
                   style={isVip ? {
                     backgroundImage: 'linear-gradient(135deg, transparent 40%, hsl(var(--accent) / 0.04) 60%, transparent 80%)',
