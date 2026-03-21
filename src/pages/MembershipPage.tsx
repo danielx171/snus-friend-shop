@@ -457,19 +457,19 @@ export default function MembershipPage() {
             position: absolute;
             top: -50%;
             left: -100%;
-            width: 60%;
+            width: 80px;
             height: 200%;
             background: linear-gradient(
               115deg,
               transparent 20%,
-              rgba(255,255,255,0.08) 50%,
+              rgba(255,255,255,0.06) 50%,
               transparent 80%
             );
-            animation: membership-shimmer-sweep 4s ease-in-out infinite;
+            animation: membership-shimmer-sweep 5s ease-in-out infinite;
           }
           @keyframes membership-shimmer-sweep {
-            0% { left: -60%; }
-            100% { left: 120%; }
+            0% { left: -80px; }
+            100% { left: calc(100% + 80px); }
           }
           .membership-crown-pulse {
             animation: membership-crown-pulse 3s ease-in-out infinite;
