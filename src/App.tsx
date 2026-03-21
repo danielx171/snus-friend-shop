@@ -7,7 +7,7 @@ import { lazy, Suspense } from "react";
 import { CartProvider } from "@/context/CartContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "next-themes";
-import { CookieConsentProvider } from "@/hooks/useCookieConsent";
+import { CookieConsentProvider } from "@/context/CookieConsentContext";
 import HomePage from "./pages/HomePage";
 import ProductListing from "./pages/ProductListing";
 import ProductDetail from "./pages/ProductDetail";
