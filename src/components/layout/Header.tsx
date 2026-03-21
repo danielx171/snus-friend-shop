@@ -79,7 +79,15 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/30 glass-panel-strong">
+    <header
+      className={cn(
+        'sticky top-0 z-50 transition-all duration-300 ease-in-out',
+        scrolled
+          ? 'border-b border-white/[0.08] backdrop-blur-lg'
+          : 'border-b border-border/30 glass-panel-strong'
+      )}
+      style={scrolled ? { backgroundColor: 'rgba(10, 15, 30, 0.85)' } : undefined}
+    >
       <div className="container flex h-[72px] items-center justify-between gap-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 shrink-0">
