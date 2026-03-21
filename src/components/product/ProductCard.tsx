@@ -69,10 +69,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const isLowStock = typeof product.stock === 'number' && product.stock > 0 && product.stock <= LOW_STOCK_THRESHOLD;
   const accentColor = flavorAccents[product.flavorKey];
   const glowColor = accentColor ?? 'hsl(var(--primary))';
+  const strengthColor = strengthColors[product.strengthKey] ?? strengthColors.normal;
 
   const cardVariants = {
     rest: { y: 0, boxShadow: '0 0 0 hsl(0 0% 0% / 0)' },
-    hover: { y: -2, boxShadow: '0 12px 40px hsl(0 0% 0% / 0.22)' },
+    hover: { y: -2, boxShadow: `0 12px 40px hsl(0 0% 0% / 0.22), 0 0 12px ${strengthColor}40` },
   };
   const imageVariants = {
     rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
