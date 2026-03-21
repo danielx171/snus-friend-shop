@@ -6,8 +6,8 @@ interface LogoProps {
 }
 
 /**
- * SnusFriend logo — a stylized pouch can viewed from above.
- * The outer ring represents the can lid, the inner shapes suggest pouches.
+ * SnusFriend logo — a stylised top-down view of an open nicotine pouch tin.
+ * Circle with 3D lid-open shadow on the left, three pouch pill shapes inside.
  */
 export function Logo({ className, size = 40 }: LogoProps) {
   return (
@@ -20,18 +20,24 @@ export function Logo({ className, size = 40 }: LogoProps) {
       className={cn('shrink-0', className)}
       aria-label="SnusFriend"
     >
-      {/* Can lid — outer ring */}
-      <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="2.5" opacity="0.9" />
-      {/* Inner ring — lid edge detail */}
-      <circle cx="20" cy="20" r="13" stroke="currentColor" strokeWidth="1.2" opacity="0.4" />
-      {/* Pouch shape 1 — left */}
-      <ellipse cx="15" cy="19" rx="4.5" ry="6" fill="currentColor" opacity="0.25" transform="rotate(-15 15 19)" />
-      {/* Pouch shape 2 — right */}
-      <ellipse cx="25" cy="19" rx="4.5" ry="6" fill="currentColor" opacity="0.25" transform="rotate(15 25 19)" />
-      {/* Center dot — brand mark */}
-      <circle cx="20" cy="20" r="2.5" fill="currentColor" opacity="0.8" />
-      {/* Lid snap indicator — small tab */}
-      <rect x="18" y="3" width="4" height="3" rx="1.5" fill="currentColor" opacity="0.5" />
+      {/* 3D depth shadow — left edge of the tin */}
+      <circle cx="19" cy="21" r="17" fill="#0d1f33" opacity="0.25" />
+      {/* Tin body */}
+      <circle cx="20" cy="20" r="17" fill="#0f1a2e" />
+      {/* Tin rim */}
+      <circle cx="20" cy="20" r="17" stroke="#1e3a5f" strokeWidth="2" />
+      {/* Inner rim detail */}
+      <circle cx="20" cy="20" r="13.5" stroke="#1e3a5f" strokeWidth="0.8" opacity="0.35" />
+
+      {/* Pouch 1 — center-top */}
+      <rect x="17" y="9" width="6" height="11" rx="3" fill="#c9a84c" opacity="0.85" transform="rotate(0 20 14.5)" />
+      {/* Pouch 2 — bottom-left */}
+      <rect x="17" y="9" width="6" height="11" rx="3" fill="#c9a84c" opacity="0.7" transform="rotate(-35 20 20)" />
+      {/* Pouch 3 — bottom-right */}
+      <rect x="17" y="9" width="6" height="11" rx="3" fill="#c9a84c" opacity="0.7" transform="rotate(35 20 20)" />
+
+      {/* Subtle highlight on tin rim — top-right */}
+      <path d="M30 8a17 17 0 0 1 4 7" stroke="white" strokeWidth="1" opacity="0.08" strokeLinecap="round" />
     </svg>
   );
 }
