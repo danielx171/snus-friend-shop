@@ -113,7 +113,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               filter: 'blur(20px)',
             }}
           />
-          <div className="h-full w-full relative z-10 transition-transform duration-[250ms] ease-out group-hover:scale-[1.05] group-hover:rotate-[10deg]">
+          <div className="h-full w-full relative z-10 transition-transform duration-[250ms] ease-out group-hover:scale-[1.05]">
           {product.image ? (
             <img
               src={product.image}

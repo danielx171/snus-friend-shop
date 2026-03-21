@@ -569,6 +569,19 @@
   animation: skeleton-shimmer 1.8s ease-in-out infinite;
 }
 
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee-scroll {
+    animation: none !important;
+  }
+}
+
 /* PWA standalone mode — safe-area insets for notched devices */
 @media (display-mode: standalone) {
   :root {
