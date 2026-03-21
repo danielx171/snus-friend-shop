@@ -1,14 +1,15 @@
-import { ShoppingCart, Search, Menu, User, Coins } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, Coins, Check } from 'lucide-react';
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
 import { supabase } from '@/integrations/supabase/client';
 import { useSnusPoints } from '@/hooks/useSnusPoints';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
