@@ -75,11 +75,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
 
   const cardVariants = {
     rest: { y: 0, boxShadow: '0 0 0 hsl(0 0% 0% / 0)' },
-    hover: { y: -4, boxShadow: `0 12px 40px hsl(0 0% 0% / 0.22), 0 0 12px ${strengthColor}40` },
+    hover: { y: -6, boxShadow: `0 12px 30px rgba(0,0,0,0.25), 0 0 12px ${strengthColor}40` },
   };
   const imageVariants = {
-    rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
-    hover: { scale: 1.06, rotate: 3, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
+    rest: { scale: 1, filter: 'drop-shadow(0 0 0px transparent)' },
+    hover: { scale: 1.05, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
   };
   const ctaVariants = {
     rest: { y: 0 },
@@ -89,8 +89,8 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
     rest: { opacity: 0.7 },
     hover: { opacity: 1 },
   };
-  const hoverTransition = { duration: 0.2, ease: 'easeOut' } as const;
-  const leaveTransition = { duration: 0.25, ease: 'easeOut' } as const;
+  const hoverTransition = { duration: 0.22, ease: 'easeOut' } as const;
+  const leaveTransition = { duration: 0.28, ease: 'easeOut' } as const;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
