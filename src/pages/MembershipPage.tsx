@@ -503,11 +503,11 @@ export default function MembershipPage() {
 
           /* Most Popular badge pulse */
           .membership-badge-pulse {
-            animation: membership-badge-glow 2s ease-in-out infinite;
+            animation: membership-badge-glow 2.5s ease-in-out infinite;
           }
           @keyframes membership-badge-glow {
-            0%, 100% { opacity: 0.7; box-shadow: 0 0 8px rgba(244,231,0,0.3); }
-            50% { opacity: 1; box-shadow: 0 0 16px rgba(244,231,0,0.5); }
+            0%, 100% { box-shadow: none; }
+            50% { box-shadow: 0 0 16px hsl(var(--chart-4) / 0.4); }
           }
 
           .membership-gift-float {
