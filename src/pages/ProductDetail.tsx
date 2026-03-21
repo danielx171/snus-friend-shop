@@ -141,12 +141,21 @@ export default function ProductDetail() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, ease: easeOut }}
               >
-                <Card className="overflow-hidden rounded-3xl border-border/30 bg-card/80 backdrop-blur-sm">
-                  <div className="relative aspect-square bg-muted/20">
+                <Card className="overflow-hidden rounded-2xl border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.2)] bg-transparent">
+                  <div
+                    className="relative aspect-square group/img"
+                    style={{ background: 'radial-gradient(circle at 50% 40%, rgba(40,60,100,0.3), rgba(15,25,55,0.15))' }}
+                  >
                     {product.image ? (
-                      <img src={product.image} alt={product.name} className="h-full w-full object-cover" loading="eager" />
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="h-full w-full object-cover transition-transform duration-300 ease-out md:group-hover/img:scale-105"
+                        style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }}
+                        loading="eager"
+                      />
                     ) : (
-                      <div className={cn('h-full w-full bg-gradient-to-br flex items-center justify-center', flavorGradients[product.flavorKey] ?? defaultGradient)}>
+                      <div className={cn('h-full w-full bg-gradient-to-br flex items-center justify-center transition-all duration-300 ease-out md:group-hover/img:brightness-110', flavorGradients[product.flavorKey] ?? defaultGradient)}>
                         <span className="text-white/80 font-bold text-2xl text-center px-6 drop-shadow">{product.name}</span>
                       </div>
                     )}
@@ -168,6 +177,12 @@ export default function ProductDetail() {
                     </div>
                   </div>
                 </Card>
+                {/* Gallery dot indicators */}
+                <div className="flex items-center justify-center gap-2 mt-4">
+                  <span className="block w-2 h-2 rounded-full bg-accent" style={{ width: 8 }} />
+                  <span className="block w-1.5 h-1.5 rounded-full bg-white/20" />
+                  <span className="block w-1.5 h-1.5 rounded-full bg-white/20" />
+                </div>
               </motion.div>
 
               {/* 2. Trust badges */}
