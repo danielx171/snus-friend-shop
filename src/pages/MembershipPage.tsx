@@ -552,7 +552,7 @@ export default function MembershipPage() {
             inset: -2px;
             border-radius: inherit;
             padding: 2px;
-            background: conic-gradient(from var(--vip-angle, 0deg), #F4E700, #D8ED62, rgba(255,255,255,0.5), #F4E700);
+            background: conic-gradient(from var(--vip-angle, 0deg), hsl(65 80% 55%), hsl(65 80% 62%), rgba(255,255,255,0.5), hsl(65 80% 55%));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
