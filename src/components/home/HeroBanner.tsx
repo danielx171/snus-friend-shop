@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Star, Shield, ChevronLeft, ChevronRight, Package } from 'lucide-react';
@@ -98,7 +99,13 @@ export function HeroBanner() {
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
 
           {/* Left — slide content */}
-          <div className="space-y-7">
+          <motion.div
+            className="space-y-7"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+          >
             {/* Trust pill */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
               <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
@@ -213,7 +220,7 @@ export function HeroBanner() {
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right — Product showcase */}
           <div className="relative">

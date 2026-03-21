@@ -1,4 +1,5 @@
 import { Shield, Truck, Package, Heart } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const reasons = [
   {
@@ -37,19 +38,26 @@ export function WhySnusFriends() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {reasons.map((reason) => {
+          {reasons.map((reason, index) => {
             const Icon = reason.icon;
             return (
-              <div
+              <motion.div
                 key={reason.title}
-                className="rounded-2xl glass-panel p-6 hover:border-primary/20 transition-all group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.4, delay: index * 0.08, ease: 'easeOut' }}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/15 mb-4 group-hover:glow-primary transition-all">
-                  <Icon className="h-6 w-6 text-primary" />
+                <div
+                  className="rounded-2xl glass-panel p-6 hover:border-primary/20 transition-all group"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/15 mb-4 group-hover:glow-primary transition-all">
+                    <Icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">{reason.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{reason.description}</p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">{reason.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{reason.description}</p>
-              </div>
+              </motion.div>
             );
           })}
         </div>
