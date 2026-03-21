@@ -276,27 +276,40 @@ export default function ProductDetail() {
                       key={size}
                       htmlFor={`pack-${size}`}
                       className={cn(
-                        'flex flex-col items-center justify-center rounded-2xl border-2 p-5 cursor-pointer transition-all duration-200 text-center relative',
+                        'flex flex-col items-center justify-center rounded-xl border-2 px-4 py-3 cursor-pointer transition-all duration-150 text-center relative',
                         isSelected
-                          ? 'border-primary bg-primary/5 glow-primary'
-                          : 'border-border/30 hover:border-primary/30 bg-card/60'
+                          ? 'border-accent bg-accent/[0.08] text-foreground'
+                          : 'border-white/[0.08] bg-transparent text-muted-foreground hover:border-white/20 hover:bg-white/[0.03]'
                       )}
                     >
                       <RadioGroupItem value={size} id={`pack-${size}`} className="sr-only" />
+                      {/* Animated check icon */}
+                      <AnimatePresence>
+                        {isSelected && (
+                          <motion.span
+                            className="absolute top-2 right-2 text-accent"
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                            transition={{ type: 'spring', stiffness: 500, damping: 25, duration: 0.2 }}
+                          >
+                            <Check className="h-3.5 w-3.5" />
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
                       {isBestValue && (
-                        <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-xs font-medium text-[hsl(var(--chart-4))] bg-[hsl(var(--chart-4)/0.1)] rounded-full px-2 py-0.5 whitespace-nowrap">
+                        <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[10px] font-medium text-accent bg-accent/15 rounded-full px-2 py-0.5 whitespace-nowrap">
                           Best value
                         </span>
                       )}
                       <span className="font-bold text-lg text-foreground">{packCount} {packCount === 1 ? 'can' : 'cans'}</span>
-                      <span className="text-xl font-bold text-primary mt-1">{formatPrice(price)}</span>
+                      <span className="text-xl font-bold text-accent mt-1">{formatPrice(price)}</span>
                       <span className="text-xs text-muted-foreground mt-0.5">{formatPrice(perCan)}/can</span>
                       {savings > 0.01 && (
                         <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 rounded-full px-2 py-0.5 mt-1.5">
                           Save {savingsPct}%
                         </span>
                       )}
-                      {isSelected && <Check className="h-4 w-4 text-primary mt-2" />}
                     </Label>
                   );
                 })}
