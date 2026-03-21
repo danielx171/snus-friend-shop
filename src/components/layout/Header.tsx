@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
 import { supabase } from '@/integrations/supabase/client';
