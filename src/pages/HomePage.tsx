@@ -32,21 +32,52 @@ export default function HomePage() {
         jsonLd={jsonLd}
       />
       <Layout showNicotineWarning={true}>
+        {/* Hero — keeps own bg */}
         <HeroBanner />
+
+        {/* Marquee — keeps own bg */}
         <PromoMarquee />
-        <CategoryShortcuts />
+
+        {/* Category filter — slightly lighter navy */}
+        <div style={{ background: 'rgba(15, 35, 75, 0.5)' }} className="border-t border-white/[0.04]">
+          <CategoryShortcuts />
+        </div>
+
+        {/* Trust badges — keep */}
         <TrustBar />
-        
-        <FeaturedProducts
-          title="Bestsellers"
-          filterFn={(p) => p.badgeKeys.includes('popular')}
-          limit={4}
-          viewAllHref="/nicotine-pouches?badge=popular"
-        />
 
-        <EditorialHighlights />
+        {/* Bestsellers — solid base navy */}
+        <div
+          className="border-t border-white/[0.04]"
+          style={{ background: 'hsl(220 100% 10%)' }}
+        >
+          <FeaturedProducts
+            title="Bestsellers"
+            filterFn={(p) => p.badgeKeys.includes('popular')}
+            limit={4}
+            viewAllHref="/nicotine-pouches?badge=popular"
+          />
+        </div>
 
-        <div className="border-y border-border/10 bg-card/20">
+        {/* Explore & Discover — subtle warm radial center glow */}
+        <div
+          className="relative border-t border-white/[0.04]"
+          style={{ background: 'hsl(220 100% 10%)' }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(50, 80, 150, 0.08), transparent)',
+            }}
+          />
+          <EditorialHighlights />
+        </div>
+
+        {/* Special Offers — back to base navy */}
+        <div
+          className="border-t border-white/[0.04]"
+          style={{ background: 'hsl(220 100% 10%)' }}
+        >
           <FeaturedProducts
             title="Special Offers"
             filterFn={(p) => p.badgeKeys.includes('newPrice')}
@@ -55,16 +86,40 @@ export default function HomePage() {
           />
         </div>
 
-        <MembersClub />
+        {/* Snus Family Club — premium navy-to-purple gradient */}
+        <div
+          className="relative border-t border-white/[0.04]"
+          style={{ background: 'hsl(220 100% 10%)' }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(180deg, transparent 0%, rgba(30, 20, 60, 0.3) 60%, rgba(30, 20, 60, 0.3) 100%)',
+            }}
+          />
+          <MembersClub />
+        </div>
 
-        <WhySnusFriends />
+        {/* Why SnusFriend — base navy */}
+        <div
+          className="border-t border-white/[0.04]"
+          style={{ background: 'hsl(220 100% 10%)' }}
+        >
+          <WhySnusFriends />
+        </div>
 
-        <FeaturedProducts
-          title="New Arrivals"
-          filterFn={(p) => p.badgeKeys.includes('new')}
-          limit={4}
-          viewAllHref="/nicotine-pouches?badge=new"
-        />
+        {/* New Arrivals — matches Bestsellers */}
+        <div
+          className="border-t border-white/[0.04]"
+          style={{ background: 'hsl(220 100% 10%)' }}
+        >
+          <FeaturedProducts
+            title="New Arrivals"
+            filterFn={(p) => p.badgeKeys.includes('new')}
+            limit={4}
+            viewAllHref="/nicotine-pouches?badge=new"
+          />
+        </div>
       </Layout>
     </>
   );

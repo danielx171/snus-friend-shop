@@ -29,7 +29,7 @@ export function FeaturedProducts({
   if (!isLoading && products.length === 0) return null;
 
   return (
-    <section className="featured-section py-12 md:py-16 bg-muted/5">
+    <section className="featured-section py-12 md:py-16">
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <motion.h2
