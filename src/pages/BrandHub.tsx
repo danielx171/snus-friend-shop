@@ -1,7 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
-import { getBrandBySlug } from '@/data/brands';
+import { useBrands, brandAccentColor } from '@/hooks/useBrands';
+import { brandDirectory } from '@/data/brand-overrides';
 import { SITE_URL } from '@/config/brand';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
@@ -13,59 +14,77 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { ArrowRight, Package } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import NotFound from './NotFound';
-
-const TOP_PRODUCTS_LIMIT = 4;
 
 export default function BrandHub() {
   const { brandSlug } = useParams<{ brandSlug: string }>();
-  const brand = brandSlug ? getBrandBySlug(brandSlug) : undefined;
+  const { brands, isLoading: brandsLoading } = useBrands();
   const { data: allProducts = [], isLoading: productsLoading } = useCatalogProducts();
 
-  if (!brand) return <NotFound />;
+  const brand = brandSlug ? brands.find(b => b.slug === brandSlug) : undefined;
+  const override = brandSlug ? brandDirectory.find(b => b.slug === brandSlug) : undefined;
 
-  const brandProducts = allProducts.filter((p) => p.brand === brand.name);
-  const topProducts = [...brandProducts]
-    .sort((a, b) => b.ratings - a.ratings)
-    .slice(0, TOP_PRODUCTS_LIMIT);
+  if (!brandsLoading && !brand) return <NotFound />;
+  if (brandsLoading) {
+    return (
+      <Layout>
+        <div className="container py-12">
+          <div className="h-8 w-48 bg-muted animate-pulse rounded mb-4" />
+          <div className="h-4 w-96 bg-muted animate-pulse rounded" />
+        </div>
+      </Layout>
+    );
+  }
+
+  const brandName = brand!.name;
+  const brandProducts = allProducts.filter((p) => p.brand === brandName);
+  const sortedProducts = [...brandProducts].sort((a, b) => b.ratings - a.ratings);
+  const accent = brandAccentColor(brandName);
+  const manufacturer = brand!.manufacturer ?? override?.manufacturer;
+  const tagline = override?.tagline;
+  const description = override?.description ?? `Explore ${brand!.productCount} ${brandName} nicotine pouches at SnusFriend.`;
+  const faqs = override?.faqs;
 
   const baseUrl = SITE_URL;
-  const canonicalUrl = `${baseUrl}/brand/${brand.slug}`;
+  const canonicalUrl = `${baseUrl}/brand/${brand!.slug}`;
 
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: brand.faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
+  const jsonLdItems: object[] = [];
 
-  const breadcrumbJsonLd = {
+  if (faqs?.length) {
+    jsonLdItems.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+    });
+  }
+
+  jsonLdItems.push({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: baseUrl },
       { '@type': 'ListItem', position: 2, name: 'Nicotine Pouches', item: `${baseUrl}/nicotine-pouches` },
-      { '@type': 'ListItem', position: 3, name: brand.name, item: canonicalUrl },
+      { '@type': 'ListItem', position: 3, name: brandName, item: canonicalUrl },
     ],
-  };
+  });
 
   return (
     <>
       <SEO
-        title={`${brand.name} Nicotine Pouches | Buy Online | SnusFriend`}
-        description={`Buy ${brand.name} nicotine pouches online at SnusFriend. ${brand.tagline} Free delivery on orders over €29.`}
+        title={`${brandName} Nicotine Pouches | Buy Online | SnusFriend`}
+        description={`Buy ${brandName} nicotine pouches online at SnusFriend. ${tagline ?? `${brand!.productCount} products available.`} Free delivery on orders over €29.`}
         canonical={canonicalUrl}
-        jsonLd={[faqJsonLd, breadcrumbJsonLd]}
+        jsonLd={jsonLdItems}
       />
       <Layout showNicotineWarning={false}>
-        {/* Hero */}
         <section className="bg-gradient-to-br from-primary/10 via-accent/5 to-background py-12 lg:py-16">
           <div className="container">
             <nav className="mb-4 text-xs text-muted-foreground" aria-label="Breadcrumb">
@@ -74,41 +93,49 @@ export default function BrandHub() {
                 <li>/</li>
                 <li><Link to="/nicotine-pouches" className="hover:text-foreground transition-colors">Nicotine Pouches</Link></li>
                 <li>/</li>
-                <li className="text-foreground font-medium">{brand.name}</li>
+                <li className="text-foreground font-medium">{brandName}</li>
               </ol>
             </nav>
 
             <div className="flex items-start gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-card border border-border shadow-sm">
-                <Package className="h-7 w-7 text-primary" />
+              <div
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-white font-bold text-xl"
+                style={{ backgroundColor: accent }}
+              >
+                {brandName.charAt(0)}
               </div>
               <div>
-                <h1 className="text-3xl lg:text-4xl font-bold text-foreground">{brand.name}</h1>
-                <p className="text-muted-foreground mt-1 text-sm lg:text-base italic">{brand.tagline}</p>
+                <h1 className="text-3xl lg:text-4xl font-bold text-foreground">{brandName}</h1>
+                {tagline && (
+                  <p className="text-muted-foreground mt-1 text-sm lg:text-base italic">{tagline}</p>
+                )}
               </div>
             </div>
 
             <p className="mt-6 max-w-2xl text-sm lg:text-base text-muted-foreground leading-relaxed">
-              {brand.description}
+              {description}
             </p>
 
             <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-              <span>Manufactured by <strong className="text-foreground">{brand.manufacturer}</strong></span>
-              <span>·</span>
+              {manufacturer && (
+                <>
+                  <span>Manufactured by <strong className="text-foreground">{manufacturer}</strong></span>
+                  <span>·</span>
+                </>
+              )}
               <span>{brandProducts.length} product{brandProducts.length !== 1 ? 's' : ''} available</span>
             </div>
           </div>
         </section>
 
-        {/* Top Products */}
-        {topProducts.length > 0 && (
+        {sortedProducts.length > 0 && (
           <section className="container py-10">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-xl lg:text-2xl font-bold text-foreground">
-                Top {brand.name} Products
+                {brandName} Products
               </h2>
               <Button variant="ghost" size="sm" asChild className="gap-1 text-xs">
-                <Link to={`/nicotine-pouches?brand=${encodeURIComponent(brand.name)}`}>
+                <Link to={`/nicotine-pouches?brand=${encodeURIComponent(brandName)}`}>
                   View all <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </Button>
@@ -116,52 +143,42 @@ export default function BrandHub() {
 
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {productsLoading
-                ? Array.from({ length: TOP_PRODUCTS_LIMIT }).map((_, i) => <ProductCardSkeleton key={i} />)
-                : topProducts.map((product) => (
+                ? Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)
+                : sortedProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))
               }
             </div>
-
-            {brandProducts.length > TOP_PRODUCTS_LIMIT && (
-              <div className="mt-6 text-center">
-                <Button variant="outline" asChild className="rounded-xl">
-                  <Link to={`/nicotine-pouches?brand=${encodeURIComponent(brand.name)}`}>
-                    See all {brandProducts.length} {brand.name} products
-                  </Link>
-                </Button>
-              </div>
-            )}
           </section>
         )}
 
-        {/* FAQ */}
-        <section className="bg-muted/30 py-10">
-          <div className="container max-w-3xl">
-            <h2 className="text-xl lg:text-2xl font-bold text-foreground mb-6">
-              Frequently Asked Questions about {brand.name}
-            </h2>
+        {faqs && faqs.length > 0 && (
+          <section className="bg-muted/30 py-10">
+            <div className="container max-w-3xl">
+              <h2 className="text-xl lg:text-2xl font-bold text-foreground mb-6">
+                Frequently Asked Questions about {brandName}
+              </h2>
 
-            <Accordion type="multiple" className="space-y-2">
-              {brand.faqs.map((faq, i) => (
-                <AccordionItem
-                  key={i}
-                  value={`faq-${i}`}
-                  className="rounded-xl border border-border bg-card px-5"
-                >
-                  <AccordionTrigger className="text-sm font-medium text-foreground hover:no-underline py-4">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm text-muted-foreground pb-4">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </section>
+              <Accordion type="multiple" className="space-y-2">
+                {faqs.map((faq, i) => (
+                  <AccordionItem
+                    key={i}
+                    value={`faq-${i}`}
+                    className="rounded-xl border border-border bg-card px-5"
+                  >
+                    <AccordionTrigger className="text-sm font-medium text-foreground hover:no-underline py-4">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground pb-4">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </section>
+        )}
 
-        {/* Internal link back to PLP */}
         <section className="container py-8 text-center">
           <p className="text-sm text-muted-foreground mb-3">
             Looking for more brands?

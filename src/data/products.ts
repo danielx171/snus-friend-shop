@@ -63,19 +63,6 @@ export const packSizeMultipliers: Record<PackSize, number> = {
 /** Standard retail pack sizes shown to customers */
 export const RETAIL_PACK_SIZES: PackSize[] = ['pack1', 'pack3', 'pack5', 'pack10'];
 
-export const brands = [
-  'ZYN',
-  'VELO',
-  'ON!',
-  'Skruf',
-  'LOOP',
-  'Lyft',
-  'Nordic Spirit',
-  'Siberia',
-  'Pablo',
-  'Killa',
-];
-
 // Language-agnostic flavor keys for filter UI
 export const flavorKeys: FlavorKey[] = [
   'mint',

@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { BadgeKey, StrengthKey } from '@/data/products';
+import { useBrands } from '@/hooks/useBrands';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
@@ -21,9 +22,6 @@ const ITEMS_PER_PAGE = 20;
 const SITE_URL = import.meta.env.VITE_SITE_URL as string | undefined;
 const listingUrl = SITE_URL ? SITE_URL + '/nicotine-pouches' : undefined;
 
-/** Brands boosted to the top of the "Most Popular" sort, in display order. */
-const FEATURED_BRANDS = ['VELO', 'Sting', 'ZYN', 'LOOP'];
-
 const urlBadgeToKey: Record<string, BadgeKey> = { 'new': 'new', 'newPrice': 'newPrice', 'popular': 'popular', 'limited': 'limited' };
 const urlStrengthToKey: Record<string, StrengthKey> = { 'normal': 'normal', 'strong': 'strong', 'extraStrong': 'extraStrong', 'ultraStrong': 'ultraStrong' };
 const badgeLabels: Record<BadgeKey, string> = { new: 'New Arrivals', newPrice: 'Special Offers', popular: 'Bestsellers', limited: 'Limited Edition' };
@@ -31,6 +29,8 @@ const sortLabels: Record<SortOption, string> = { popularity: 'Most Popular', new
 
 export default function ProductListing() {
   const { data: products = [], isLoading, isError } = useCatalogProducts();
+  const { topBrands } = useBrands();
+  const featuredBrandNames = topBrands.slice(0, 6).map(b => b.name);
   const [searchParams] = useSearchParams();
   const badgeFilter = searchParams.get('badge');
   const brandFilter = searchParams.get('brand');
@@ -79,8 +79,8 @@ export default function ProductListing() {
     // Primary sort by user selection
     switch (sortBy) {
       case 'popularity': sorted.sort((a, b) => {
-        const aIdx = FEATURED_BRANDS.indexOf(a.brand);
-        const bIdx = FEATURED_BRANDS.indexOf(b.brand);
+        const aIdx = featuredBrandNames.indexOf(a.brand);
+        const bIdx = featuredBrandNames.indexOf(b.brand);
         const aFeat = aIdx !== -1;
         const bFeat = bIdx !== -1;
         if (aFeat && !bFeat) return -1;
@@ -100,7 +100,7 @@ export default function ProductListing() {
     const inStock = sorted.filter(p => typeof p.stock !== 'number' || p.stock > 0);
     const outOfStock = sorted.filter(p => typeof p.stock === 'number' && p.stock === 0);
     return [...inStock, ...outOfStock];
-  }, [filteredProducts, sortBy]);
+  }, [filteredProducts, sortBy, featuredBrandNames]);
 
   const totalPages = Math.ceil(sortedProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = useMemo(() => {

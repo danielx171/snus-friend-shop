@@ -13,9 +13,10 @@ export function scoreProduct(p: Product, q: string): number {
   const desc = (p.description ?? '').toLowerCase();
 
   if (name === q) return 100;
+  if (brand === q) return 100;
   if (name.startsWith(q)) return 90;
   if (name.includes(q)) return 80;
-  if (brand === q) return 70;
+  if (brand.startsWith(q)) return 75;
   if (brand.includes(q)) return 60;
   if (flavor.includes(q)) return 50;
   if (strength.includes(q)) return 40;

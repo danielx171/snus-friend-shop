@@ -8,9 +8,11 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { brands as brandsList } from '@/data/products';
+import { useBrands } from '@/hooks/useBrands';
 
 export function MainNav() {
+  const { topBrands } = useBrands();
+
   const categories = [
     { title: 'All Nicotine Pouches', href: '/nicotine-pouches', description: 'Browse our complete range of 700+ nicotine pouches' },
     { title: 'Mild (≤6mg)', href: '/nicotine-pouches?strength=normal', description: 'Lower strength — great for new users' },
@@ -19,9 +21,10 @@ export function MainNav() {
     { title: 'Ultra Strong (17mg+)', href: '/nicotine-pouches?strength=ultraStrong', description: 'Maximum strength for seasoned users' },
   ];
 
-  const brands = brandsList.slice(0, 8).map(name => ({
-    name,
-    href: `/nicotine-pouches?brand=${encodeURIComponent(name)}`,
+  const brands = topBrands.slice(0, 8).map(brand => ({
+    name: brand.name,
+    productCount: brand.productCount,
+    href: `/nicotine-pouches?brand=${encodeURIComponent(brand.name)}`,
   }));
 
   return (
@@ -66,6 +69,7 @@ export function MainNav() {
                           className="block select-none rounded-xl px-4 py-2.5 text-sm leading-none no-underline outline-none transition-colors hover:bg-primary/8 hover:text-primary"
                         >
                           {brand.name}
+                          <span className="text-xs text-muted-foreground ml-1">({brand.productCount})</span>
                         </Link>
                       </NavigationMenuLink>
                     </li>

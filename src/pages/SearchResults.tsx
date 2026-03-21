@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useCatalogProducts } from '@/hooks/useCatalog';
-import { brandDirectory } from '@/data/brands';
+import { brandDirectory } from '@/data/brand-overrides';
 import { scoreProduct, matchesQuery } from '@/lib/search';
 import { Layout } from '@/components/layout/Layout';
 import { ProductCard } from '@/components/product/ProductCard';

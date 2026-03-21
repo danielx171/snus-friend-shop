@@ -1,8 +1,11 @@
-import { brands, flavorKeys, strengthKeys, formatKeys, FlavorKey, StrengthKey, FormatKey } from '@/data/products';
+import { useState, useMemo } from 'react';
+import { flavorKeys, strengthKeys, formatKeys, FlavorKey, StrengthKey, FormatKey } from '@/data/products';
+import { useBrands } from '@/hooks/useBrands';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { X } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -22,6 +25,21 @@ interface ProductFiltersProps {
 
 export function ProductFilters({ filters, onFilterChange, onClose, isMobile = false }: ProductFiltersProps) {
   const { t, translateFlavor, translateStrength, translateFormat } = useTranslation();
+  const { brands: allBrands } = useBrands();
+  const [brandSearch, setBrandSearch] = useState('');
+  const [showAllBrands, setShowAllBrands] = useState(false);
+
+  const sortedBrands = useMemo(
+    () => [...allBrands].sort((a, b) => b.productCount - a.productCount),
+    [allBrands],
+  );
+
+  const filteredBrandList = useMemo(() => {
+    const list = brandSearch
+      ? sortedBrands.filter(b => b.name.toLowerCase().includes(brandSearch.toLowerCase()))
+      : sortedBrands;
+    return showAllBrands || brandSearch ? list : list.slice(0, 10);
+  }, [sortedBrands, brandSearch, showAllBrands]);
 
   const toggleFilter = (category: keyof FilterState, value: string) => {
     const current = filters[category] as string[];
@@ -52,8 +70,43 @@ export function ProductFilters({ filters, onFilterChange, onClose, isMobile = fa
 
       <Separator className="bg-border/30" />
 
+      <div>
+        <h3 className="mb-3 font-medium text-sm text-foreground">{t('filter.brand')}</h3>
+        <Input
+          placeholder="Search brands..."
+          className="h-8 text-sm mb-2"
+          value={brandSearch}
+          onChange={(e) => setBrandSearch(e.target.value)}
+        />
+        <div className={`space-y-2.5 ${filteredBrandList.length > 6 ? 'max-h-48 overflow-y-auto' : ''}`}>
+          {filteredBrandList.map((brand) => (
+            <div key={brand.id} className="flex items-center gap-2.5">
+              <Checkbox
+                id={`brands-${brand.name}`}
+                checked={filters.brands.includes(brand.name)}
+                onCheckedChange={() => toggleFilter('brands', brand.name)}
+                className="border-border/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+              />
+              <Label htmlFor={`brands-${brand.name}`} className="text-sm text-foreground cursor-pointer truncate">
+                {brand.name} ({brand.productCount})
+              </Label>
+            </div>
+          ))}
+        </div>
+        {!brandSearch && sortedBrands.length > 10 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-primary text-xs hover:bg-primary/8 mt-2 p-0 h-auto"
+            onClick={() => setShowAllBrands(!showAllBrands)}
+          >
+            {showAllBrands ? 'Show less' : `Show all ${sortedBrands.length} brands`}
+          </Button>
+        )}
+        <Separator className="bg-border/30 mt-6" />
+      </div>
+
       {[
-        { key: 'brands' as const, title: t('filter.brand'), items: brands.map(b => ({ value: b, label: b })) },
         { key: 'strengths' as const, title: t('filter.strength'), items: strengthKeys.map(s => ({ value: s, label: translateStrength(s) })) },
         { key: 'flavors' as const, title: t('filter.flavor'), items: flavorKeys.map(f => ({ value: f, label: translateFlavor(f) })) },
         { key: 'formats' as const, title: t('filter.format'), items: formatKeys.map(f => ({ value: f, label: translateFormat(f) })) },
