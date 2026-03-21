@@ -541,3 +541,13 @@
     animation-play-state: running;
   }
 }
+
+/* Add-to-cart button press animation */
+@keyframes atc-press {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+.atc-press {
+  animation: atc-press 150ms ease-out;
+}
