@@ -50,6 +50,23 @@ export function Header() {
     return () => clearTimeout(timer);
   }, [toastData]);
 
+  // Scroll-aware header style
+  const [scrolled, setScrolled] = useState(false);
+  const rafRef = useRef(0);
+  useEffect(() => {
+    const onScroll = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 60);
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   const { data: pointsData } = useSnusPoints(userId);
 
   const navLinks = [
