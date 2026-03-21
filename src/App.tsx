@@ -25,6 +25,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
 import MembershipPage from "./pages/MembershipPage";
+import FaqPage from "./pages/FaqPage";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsent } from "@/components/cookie/CookieConsent";
 import { BackToTop } from "@/components/layout/BackToTop";
