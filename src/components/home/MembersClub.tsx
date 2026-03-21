@@ -28,19 +28,19 @@ export function MembersClub() {
           </div>
           <motion.h2
             className="text-3xl font-bold text-foreground tracking-tight"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
           >
             Snus Family Club
           </motion.h2>
           <motion.p
             className="text-muted-foreground mt-2 max-w-lg mx-auto"
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+            transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
           >
             Monthly mystery boxes, exclusive discounts, and vendor merchandise — unlock the full SnusFriend experience.
           </motion.p>
