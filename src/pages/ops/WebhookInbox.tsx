@@ -34,8 +34,8 @@ function extractOrderId(payload: Record<string, unknown>): string | null {
   return (
     (payload.order_id as string) ||
     (payload.orderId as string) ||
-    ((payload.data as any)?.order_id as string) ||
-    ((payload.data as any)?.id as string) ||
+    ((payload.data as Record<string, unknown> | undefined)?.order_id as string) ||
+    ((payload.data as Record<string, unknown> | undefined)?.id as string) ||
     null
   );
 }

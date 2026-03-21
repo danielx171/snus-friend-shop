@@ -176,7 +176,7 @@ export default function CheckoutHandoff() {
   function validateForm(): boolean {
     const errors: Record<string, string> = {};
 
-    if (!form.email.includes('@')) errors.email = 'Valid email is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) errors.email = 'Valid email is required';
     if (!form.firstname.trim()) errors.firstname = 'First name is required';
     if (!form.lastname.trim()) errors.lastname = 'Last name is required';
     if (!form.address.trim()) errors.address = 'Address is required';
@@ -191,7 +191,7 @@ export default function CheckoutHandoff() {
 
   function isFormValid(): boolean {
     return (
-      form.email.includes('@') &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()) &&
       form.firstname.trim().length > 0 &&
       form.lastname.trim().length > 0 &&
       form.address.trim().length > 0 &&

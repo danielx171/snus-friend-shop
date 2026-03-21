@@ -9,7 +9,7 @@ import { ProductFilters, FilterState } from '@/components/product/ProductFilters
 import { ActiveFilters } from '@/components/product/ActiveFilters';
 import { PLPEmptyState } from '@/components/product/PLPEmptyState';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
@@ -173,6 +173,7 @@ export default function ProductListing() {
                       </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="w-80 overflow-y-auto glass-panel-strong border-border/30">
+                      <SheetTitle className="sr-only">Filters</SheetTitle>
                       <ProductFilters filters={filters} onFilterChange={handleFilterChange} onClose={() => setMobileFiltersOpen(false)} isMobile />
                     </SheetContent>
                   </Sheet>

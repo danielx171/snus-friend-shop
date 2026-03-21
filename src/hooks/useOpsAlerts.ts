@@ -8,7 +8,7 @@ export function useOpsAlerts() {
   return useQuery({
     queryKey: QUERY_KEY,
     queryFn: async (): Promise<OpsAlert[]> => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('ops_alerts')
         .select('id, alert_date, rule_key, severity, status, source_order_id, title, message, context, created_at, resolved_at')
         .eq('status', 'open')
@@ -41,7 +41,7 @@ export function useResolveAlert() {
 
   return useMutation({
     mutationFn: async (alertId: string) => {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('ops_alerts')
         .update({ status: 'resolved', resolved_at: new Date().toISOString() })
         .eq('id', alertId);

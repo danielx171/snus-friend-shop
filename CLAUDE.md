@@ -92,10 +92,14 @@ change app-facing tables, update `types.ts` in the same task.
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-03-20 evening)
+## Where Things Stand (as of 2026-03-21)
 
 - Steps 26–38: ✅ Done (checkout, catalog sync, auth, preview mode, badge seeding, pg_cron)
 - UX overhaul: ✅ Compact cards, search filters + pagination, header SnusPoints badge
+- Dynamic brands: ✅ useBrands() hook, dynamic nav/filters/listing, all 91+ brands from Supabase
+- Security: ✅ RLS on sync_config, consolidated duplicate policies, mutable search_path fixed
+- Accessibility: ✅ Lighthouse 100 on homepage, touch targets improved
+- Brand overrides: ✅ Rebuilt from NordicPouch CSV with real product data
 - Account: ✅ Settings form wired to Supabase auth, Change Password linked
 - Info pages: ✅ Real content for FAQ, Contact, Shipping, Returns, About
 - SEO/GEO: ✅ robots.txt, llms.txt, dynamic sitemap (731 products, 139 brands)

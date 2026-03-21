@@ -122,6 +122,15 @@ The following areas are ready for visual polish in Lovable (use as visual refere
 - Membership page
 - Mobile navigation and responsive breakpoints
 
+## Technical debt / follow-up
+
+- Postcode/phone format validation (country-aware) needed before go-live
+- SnusPoints redemption is still mock (disabled button) — needs product/business decision
+- Wishlist star icon in header does nothing — implement or remove
+- Account page mocks: saved addresses, email preferences, delete account — implement or remove
+- Discount system only supports hardcoded WELCOME10 — no coupon management UI
+- TypeScript strict mode (`strictNullChecks`, `noImplicitAny`) still disabled in tsconfig
+
 ## What not to do
 
 - Do not add any Shopify-specific code

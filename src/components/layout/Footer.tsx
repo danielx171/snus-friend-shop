@@ -15,7 +15,7 @@ function NewsletterSignup() {
     if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return;
 
     setStatus('submitting');
-    const { error } = await (supabase as any)
+    const { error } = await supabase
       .from('newsletter_subscribers')
       .insert({ email: trimmed });
 

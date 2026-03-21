@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey, RETAIL_PACK_SIZES } from '@/data/products';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -53,7 +53,7 @@ function getDisplayBadges(badges: BadgeKey[]): BadgeKey[] {
   return badgePriority.filter((b) => badges.includes(b)).slice(0, 2);
 }
 
-export function ProductCard({ product, variant = 'default' }: ProductCardProps) {
+function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack1');
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
@@ -92,7 +92,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const hoverTransition = { duration: 0.22, ease: 'easeOut' } as const;
   const leaveTransition = { duration: 0.28, ease: 'easeOut' } as const;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (isOutOfStock || justAdded) return;
@@ -105,12 +105,12 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
 
     // Dispatch event for cart icon bounce + toast
     window.dispatchEvent(new CustomEvent('cart-item-added', { detail: { name: product.name } }));
-  };
+  }, [isOutOfStock, justAdded, addToCart, product, selectedPack]);
 
-  const handleNotifyMe = async (e?: React.SyntheticEvent) => {
+  const handleNotifyMe = useCallback(async (e?: React.SyntheticEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
-    if (!notifyEmail || !notifyEmail.includes('@')) return;
+    if (!notifyEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(notifyEmail.trim())) return;
     setNotifyStatus('sending');
     try {
       await apiFetch('save-waitlist-email', {
@@ -121,7 +121,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
     } catch {
       setNotifyStatus('error');
     }
-  };
+  }, [notifyEmail, product.id]);
 
   return (
     <motion.div
@@ -311,11 +311,11 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
                       value={notifyEmail}
                       onChange={(e) => setNotifyEmail(e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Enter') handleNotifyMe(e); }}
-                      className="flex-1 min-w-0 rounded-xl border border-border/30 bg-background/80 px-2.5 py-1.5 text-xs placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary"
+                      className="flex-1 min-w-0 rounded-xl border border-border/30 bg-background/80 px-2.5 py-1.5 text-xs placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
                     />
                     <Button
                       onClick={handleNotifyMe}
-                      disabled={notifyStatus === 'sending' || !notifyEmail.includes('@')}
+                      disabled={notifyStatus === 'sending' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(notifyEmail.trim())}
                       size="sm"
                       className="rounded-xl text-xs gap-1 shrink-0"
                     >
@@ -383,3 +383,5 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
     </motion.div>
   );
 }
+
+export const ProductCard = React.memo(ProductCardInner);

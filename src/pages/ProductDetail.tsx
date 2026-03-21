@@ -103,7 +103,7 @@ export default function ProductDetail() {
   };
 
   const handleNotifyMe = async () => {
-    if (!notifyEmail || !notifyEmail.includes('@')) return;
+    if (!notifyEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(notifyEmail.trim())) return;
     setNotifyStatus('sending');
     try {
       await apiFetch('save-waitlist-email', {
@@ -391,7 +391,7 @@ export default function ProductDetail() {
                       />
                       <Button
                         onClick={handleNotifyMe}
-                        disabled={notifyStatus === 'sending' || !notifyEmail.includes('@')}
+                        disabled={notifyStatus === 'sending' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(notifyEmail.trim())}
                         className="rounded-xl shrink-0 gap-2"
                       >
                         <Bell className="h-4 w-4" />

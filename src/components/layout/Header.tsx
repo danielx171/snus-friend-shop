@@ -3,7 +3,7 @@ import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
@@ -174,6 +174,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-80 glass-panel-strong border-border/30" aria-label="Navigation menu">
+              <SheetTitle className="sr-only">Navigation menu</SheetTitle>
               <div className="flex flex-col gap-6 pt-6">
                 <SearchAutocomplete onClose={() => setMobileMenuOpen(false)} autoFocus={false} />
                 <nav className="flex flex-col gap-0.5">

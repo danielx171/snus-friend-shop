@@ -44,10 +44,12 @@ function SpringButton({
   children,
   onClick,
   className,
+  'aria-label': ariaLabel,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   className?: string;
+  'aria-label'?: string;
 }) {
   const [spring, setSpring] = useState(false);
 
@@ -63,6 +65,7 @@ function SpringButton({
       size="icon"
       className={cn(className, spring && 'animate-btn-spring')}
       onClick={handleClick}
+      aria-label={ariaLabel}
     >
       {children}
     </Button>
@@ -208,6 +211,7 @@ export function CartDrawer() {
                             <SpringButton
                               className="h-6 w-6 rounded-md border-border/30"
                               onClick={() => updateQuantity(item.product.id, item.packSize, item.quantity - 1)}
+                              aria-label={`Decrease quantity of ${item.product.name}`}
                             >
                               <Minus className="h-3 w-3" />
                             </SpringButton>
@@ -215,6 +219,7 @@ export function CartDrawer() {
                             <SpringButton
                               className="h-6 w-6 rounded-md border-border/30"
                               onClick={() => updateQuantity(item.product.id, item.packSize, item.quantity + 1)}
+                              aria-label={`Increase quantity of ${item.product.name}`}
                             >
                               <Plus className="h-3 w-3" />
                             </SpringButton>
