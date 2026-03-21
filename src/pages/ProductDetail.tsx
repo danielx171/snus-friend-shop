@@ -440,9 +440,25 @@ export default function ProductDetail() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: 0.5, ease: easeOut }}
               >
-                <Button size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow" onClick={handleAddToCart}>
-                  <ShoppingCart className="h-5 w-5" />
-                  {t('product.addToCart')}
+                <Button
+                  size="lg"
+                  className={cn(
+                    'w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow',
+                    justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white atc-press'
+                  )}
+                  onClick={handleAddToCart}
+                >
+                  {justAdded ? (
+                    <>
+                      <Check className="h-5 w-5" />
+                      Added!
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-5 w-5" />
+                      {t('product.addToCart')}
+                    </>
+                  )}
                 </Button>
               </motion.div>
             )}
