@@ -73,17 +73,22 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
 
   const cardVariants = {
     rest: { y: 0, boxShadow: '0 0 0 hsl(0 0% 0% / 0)' },
-    hover: { y: -2, boxShadow: `0 12px 40px hsl(0 0% 0% / 0.22), 0 0 12px ${strengthColor}40` },
+    hover: { y: -4, boxShadow: `0 12px 40px hsl(0 0% 0% / 0.22), 0 0 12px ${strengthColor}40` },
   };
   const imageVariants = {
     rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
-    hover: { scale: 1.06, rotate: 6, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
+    hover: { scale: 1.06, rotate: 3, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
   };
   const ctaVariants = {
     rest: { y: 0 },
     hover: { y: -4 },
   };
+  const brandVariants = {
+    rest: { opacity: 0.7 },
+    hover: { opacity: 1 },
+  };
   const hoverTransition = { duration: 0.2, ease: 'easeOut' } as const;
+  const leaveTransition = { duration: 0.25, ease: 'easeOut' } as const;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -114,7 +119,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
       whileHover="hover"
       animate="rest"
       variants={cardVariants}
-      transition={hoverTransition}
+      transition={{ ...hoverTransition, ...leaveTransition }}
     >
     <Card className={cn(
       'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-colors duration-200',
@@ -195,7 +200,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
         <CardContent className={isCompact ? 'p-2.5' : 'p-3.5'}>
           {/* Brand + Name */}
           <div className="mb-2.5 min-w-0">
-            <p className="text-[10px] text-muted-foreground/70 uppercase tracking-widest truncate">{product.brand}</p>
+            <motion.p variants={brandVariants} transition={hoverTransition} className="text-[10px] text-muted-foreground/70 uppercase tracking-widest truncate">{product.brand}</motion.p>
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">{product.name}</h3>
           </div>
 
@@ -317,7 +322,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
             >
             <Button
               onClick={handleAddToCart}
-              className={cn('w-full rounded-xl font-medium transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-ring', isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm')}
+              className={cn('w-full rounded-xl font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:ring-ring hover:brightness-110 hover:scale-[1.03]', isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm')}
               size="sm"
             >
               <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
