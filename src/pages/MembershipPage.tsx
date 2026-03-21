@@ -409,8 +409,8 @@ export default function MembershipPage() {
                   <motion.div
                     className="absolute right-0 top-0 h-full w-4 rounded-full"
                     style={{
-                      background: 'radial-gradient(circle at right, #D8ED62, transparent)',
-                      boxShadow: '0 0 14px 4px #D8ED62',
+                      background: 'radial-gradient(circle at right, hsl(var(--chart-4)), transparent)',
+                      boxShadow: '0 0 14px 4px hsl(var(--chart-4))',
                     }}
                     initial={{ opacity: 0.6 }}
                     animate={barInView ? { opacity: [0.6, 1, 0.6] } : { opacity: 0 }}
