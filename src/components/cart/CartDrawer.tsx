@@ -3,10 +3,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/context/CartContext';
-import { Minus, Plus, Trash2, ShoppingBag, Truck, Star } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, Truck, Star, Sparkles } from 'lucide-react';
 import { packSizeMultipliers, PackSize } from '@/data/products';
 import { Link } from 'react-router-dom';
-import { Progress } from '@/components/ui/progress';
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
 import { getCartTotals } from '@/lib/cart-utils';
@@ -137,12 +136,23 @@ export function CartDrawer() {
                       {t('cart.freeShippingProgress', { amount: formatLocalAmount(remainingForFreeShipping) })}
                     </span>
                   </div>
-                  <Progress value={shippingProgress} className="h-2" />
+                  {/* Enhanced progress bar */}
+                  <div className="h-2 rounded-full bg-muted/40 overflow-hidden">
+                    <div
+                      className={cn(
+                        'h-full rounded-full transition-all duration-300 ease-out',
+                        shippingProgress < 50 && 'bg-muted-foreground/40',
+                        shippingProgress >= 50 && shippingProgress < 80 && 'bg-amber-400',
+                        shippingProgress >= 80 && shippingProgress < 100 && 'bg-[hsl(var(--chart-4))] cart-progress-pulse',
+                      )}
+                      style={{ width: `${shippingProgress}%` }}
+                    />
+                  </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 text-sm bg-primary/10 border border-primary/15 rounded-xl p-3">
-                  <Truck className="h-4 w-4 text-primary" />
-                  <span className="text-primary font-medium">{t('cart.freeShippingAchieved')}</span>
+                <div className="flex items-center gap-2 text-sm bg-[#22c55e]/10 border border-[#22c55e]/20 rounded-xl p-3 cart-free-delivery-pop">
+                  <Sparkles className="h-4 w-4 text-[#22c55e]" />
+                  <span className="text-[#22c55e] font-medium">🎉 Free delivery unlocked!</span>
                 </div>
               )}
             </div>
@@ -215,6 +225,16 @@ export function CartDrawer() {
                   );
                 })}
               </div>
+
+              {/* Upsell nudge — within €5 of free delivery */}
+              {!freeShipping && remainingForFreeShipping > 0 && remainingForFreeShipping <= 5 && (
+                <div className="mt-3 flex items-center gap-2 rounded-lg bg-[hsl(var(--chart-4)/0.12)] border border-[hsl(var(--chart-4)/0.25)] px-3 py-2.5">
+                  <Truck className="h-4 w-4 text-[hsl(var(--chart-4))] shrink-0" />
+                  <span className="text-sm font-medium text-[hsl(var(--chart-4))]">
+                    Add just {formatLocalAmount(remainingForFreeShipping)} more for free delivery!
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="border-t border-border/20 pt-3">
