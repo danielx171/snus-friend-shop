@@ -349,25 +349,25 @@ export function HeroBanner() {
         .hero-float-circle {
           position: absolute;
           border-radius: 50%;
-          border: 1px solid rgba(212, 237, 98, 0.15);
-          background: rgba(0, 49, 138, 0.05);
-          opacity: 0.06;
+          border: 1px solid rgba(212, 237, 98, 0.2);
+          background: rgba(0, 49, 138, 0.08);
+          opacity: 0.1;
           display: flex;
           align-items: center;
           justify-content: center;
           animation: hero-float-up linear infinite;
         }
         .hero-float-lime {
-          background: rgba(216, 237, 98, 0.04);
-          opacity: 0.07;
+          background: rgba(216, 237, 98, 0.07);
+          opacity: 0.13;
         }
         .hero-float-inner {
           border-radius: 50%;
-          border: 1px solid rgba(212, 237, 98, 0.12);
-          background: rgba(0, 49, 138, 0.04);
+          border: 1px solid rgba(212, 237, 98, 0.16);
+          background: rgba(0, 49, 138, 0.06);
         }
         .hero-float-inner-lime {
-          background: rgba(216, 237, 98, 0.03);
+          background: rgba(216, 237, 98, 0.05);
         }
       `}</style>
     </section>
