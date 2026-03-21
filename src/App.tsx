@@ -186,6 +186,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <CookieConsent />
+            <BackToTop />
             </BrowserRouter>
           </CookieConsentProvider>
         </CartProvider>
