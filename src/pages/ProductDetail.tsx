@@ -181,7 +181,7 @@ export default function ProductDetail() {
                   <span className="block w-1.5 h-1.5 rounded-full bg-white/20" />
                   <span className="block w-1.5 h-1.5 rounded-full bg-white/20" />
                 </div>
-              </motion.div>
+              </div>
 
               {/* 2. Trust badges */}
               <motion.div
