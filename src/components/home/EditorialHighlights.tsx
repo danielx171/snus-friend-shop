@@ -36,10 +36,10 @@ export function EditorialHighlights() {
         <div className="mb-10">
           <motion.h2
             className="text-3xl font-bold text-foreground tracking-tight"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
           >
             Explore & Discover
           </motion.h2>
@@ -58,8 +58,8 @@ export function EditorialHighlights() {
           {highlights.map((item, index) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
             >
