@@ -8,7 +8,7 @@ export function useOpsAlerts() {
   return useQuery({
     queryKey: QUERY_KEY,
     queryFn: async (): Promise<OpsAlert[]> => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('ops_alerts')
         .select('id, alert_date, rule_key, severity, status, source_order_id, title, message, context, created_at, resolved_at')
         .eq('status', 'open')
