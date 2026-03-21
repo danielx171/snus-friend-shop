@@ -65,23 +65,31 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
   const strengthColor = strengthColors[product.strengthKey] ?? strengthColors.normal;
 
   const cardVariants = {
-    rest: { y: 0, boxShadow: '0 0 0 hsl(0 0% 0% / 0)' },
-    hover: { y: -6, boxShadow: `0 12px 30px rgba(0,0,0,0.25), 0 0 12px ${strengthColor}40` },
+    rest: { y: 0, boxShadow: '0 2px 8px rgba(0,0,0,0.12)' },
+    hover: { y: -8, boxShadow: `0 20px 40px rgba(0,0,0,0.35), 0 0 16px ${strengthColor}40` },
   };
   const imageVariants = {
-    rest: { scale: 1, filter: 'drop-shadow(0 0 0px transparent)' },
-    hover: { scale: 1.05, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
+    rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
+    hover: { scale: 1.06, rotate: 12, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
+  };
+  const imageGlowVariants = {
+    rest: { opacity: 0 },
+    hover: { opacity: 1 },
   };
   const ctaVariants = {
     rest: { y: 0 },
     hover: { y: -4 },
   };
+  const ctaStyleVariants = {
+    rest: { filter: 'brightness(1)' },
+    hover: { filter: 'brightness(1.15)' },
+  };
   const brandVariants = {
     rest: { opacity: 0.7 },
     hover: { opacity: 1 },
   };
-  const hoverTransition = { duration: 0.22, ease: 'easeOut' } as const;
-  const leaveTransition = { duration: 0.28, ease: 'easeOut' } as const;
+  const hoverTransition = { duration: 0.25, ease: 'easeOut' } as const;
+  const leaveTransition = { duration: 0.25, ease: 'easeOut' } as const;
 
   const handleAddToCart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
