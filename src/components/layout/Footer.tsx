@@ -101,7 +101,7 @@ export function Footer() {
         className="h-[60px] pointer-events-none"
         style={{ background: 'linear-gradient(to bottom, transparent, hsl(var(--card) / 0.3))' }}
       />
-      <footer className="border-t border-white/[0.04] bg-card/30 bg-muted/5">
+      <footer className="border-t border-white/[0.04]" style={{ background: 'linear-gradient(180deg, hsl(230 40% 12%), hsl(225 30% 14%))' }}>
         <div className="container py-16">
           {/* Newsletter */}
           <NewsletterSignup />
