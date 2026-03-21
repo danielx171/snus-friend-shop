@@ -156,8 +156,8 @@ export default function MembershipPage() {
                       'relative rounded-2xl glass-panel overflow-hidden transition-all duration-300',
                       isVip && tier.accentBorder,
                       isVip && tier.glowClass,
-                      isVip && 'membership-vip-card',
-                      !isVip && 'membership-member-card'
+                      isVip && 'membership-vip-card membership-vip-hover',
+                      !isVip && 'membership-member-card membership-member-hover'
                     )}
                   >
                     {/* VIP shimmer sweep */}
