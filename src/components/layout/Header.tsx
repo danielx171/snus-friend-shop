@@ -1,4 +1,4 @@
-import { ShoppingCart, Search, Menu, User, Coins, Check } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, Coins, Check, Star } from 'lucide-react';
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
