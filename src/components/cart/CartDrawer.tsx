@@ -136,12 +136,23 @@ export function CartDrawer() {
                       {t('cart.freeShippingProgress', { amount: formatLocalAmount(remainingForFreeShipping) })}
                     </span>
                   </div>
-                  <Progress value={shippingProgress} className="h-2" />
+                  {/* Enhanced progress bar */}
+                  <div className="h-2 rounded-full bg-muted/40 overflow-hidden">
+                    <div
+                      className={cn(
+                        'h-full rounded-full transition-all duration-300 ease-out',
+                        shippingProgress < 50 && 'bg-muted-foreground/40',
+                        shippingProgress >= 50 && shippingProgress < 80 && 'bg-amber-400',
+                        shippingProgress >= 80 && shippingProgress < 100 && 'bg-[hsl(var(--chart-4))] cart-progress-pulse',
+                      )}
+                      style={{ width: `${shippingProgress}%` }}
+                    />
+                  </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 text-sm bg-primary/10 border border-primary/15 rounded-xl p-3">
-                  <Truck className="h-4 w-4 text-primary" />
-                  <span className="text-primary font-medium">{t('cart.freeShippingAchieved')}</span>
+                <div className="flex items-center gap-2 text-sm bg-[#22c55e]/10 border border-[#22c55e]/20 rounded-xl p-3 cart-free-delivery-pop">
+                  <Sparkles className="h-4 w-4 text-[#22c55e]" />
+                  <span className="text-[#22c55e] font-medium">🎉 Free delivery unlocked!</span>
                 </div>
               )}
             </div>
