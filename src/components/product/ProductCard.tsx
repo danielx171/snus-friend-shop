@@ -293,7 +293,8 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               className={cn(
                 'w-full rounded-xl font-medium transition-all duration-[250ms] ease-out focus-visible:ring-2 focus-visible:ring-ring group-hover:brightness-110',
                 isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm',
-                justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white'
+                justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white',
+                justAdded && 'atc-press'
               )}
               size="sm"
             >

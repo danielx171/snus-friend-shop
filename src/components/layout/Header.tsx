@@ -47,7 +47,7 @@ export function Header() {
   // Auto-dismiss toast
   useEffect(() => {
     if (!toastData) return;
-    const timer = setTimeout(() => setToastData(null), 3000);
+    const timer = setTimeout(() => setToastData(null), 2500);
     return () => clearTimeout(timer);
   }, [toastData]);
 
@@ -150,7 +150,7 @@ export function Header() {
             aria-label={`Cart with ${totalItems} items`}
           >
             <motion.div
-              animate={cartBounce ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+              animate={cartBounce ? { y: [0, -3, 0] } : { y: 0 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
               <ShoppingCart className="h-5 w-5" />

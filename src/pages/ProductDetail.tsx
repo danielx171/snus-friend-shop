@@ -51,6 +51,7 @@ export default function ProductDetail() {
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [justAdded, setJustAdded] = useState(false);
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateFormat, translateBadge, translateCategory } = useTranslation();
 
   if (isLoading) {
@@ -98,8 +99,11 @@ export default function ProductDetail() {
   const isOutOfStock = typeof product.stock === 'number' && product.stock === 0;
 
   const handleAddToCart = () => {
-    if (isOutOfStock) return;
+    if (isOutOfStock || justAdded) return;
     addToCart(product, selectedPack);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1500);
+    window.dispatchEvent(new CustomEvent('cart-item-added', { detail: { name: product.name } }));
   };
 
   const handleNotifyMe = async () => {
@@ -436,9 +440,25 @@ export default function ProductDetail() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: 0.5, ease: easeOut }}
               >
-                <Button size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow" onClick={handleAddToCart}>
-                  <ShoppingCart className="h-5 w-5" />
-                  {t('product.addToCart')}
+                <Button
+                  size="lg"
+                  className={cn(
+                    'w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow',
+                    justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white atc-press'
+                  )}
+                  onClick={handleAddToCart}
+                >
+                  {justAdded ? (
+                    <>
+                      <Check className="h-5 w-5" />
+                      Added!
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-5 w-5" />
+                      {t('product.addToCart')}
+                    </>
+                  )}
                 </Button>
               </motion.div>
             )}
@@ -534,9 +554,25 @@ export default function ProductDetail() {
                 {formatPrice(pricePerCan)}/{t('cart.can')}
               </span>
             </div>
-            <Button size="lg" className="gap-2 rounded-2xl shrink-0 glow-primary" onClick={handleAddToCart}>
-              <ShoppingCart className="h-5 w-5" />
-              {t('product.addToCart')}
+            <Button
+              size="lg"
+              className={cn(
+                'gap-2 rounded-2xl shrink-0 glow-primary',
+                justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white atc-press'
+              )}
+              onClick={handleAddToCart}
+            >
+              {justAdded ? (
+                <>
+                  <Check className="h-5 w-5" />
+                  Added!
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-5 w-5" />
+                  {t('product.addToCart')}
+                </>
+              )}
             </Button>
           </div>
         </div>
