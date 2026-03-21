@@ -384,7 +384,7 @@ export function HeroBanner() {
                     key={i}
                     onClick={() => goToSlide(i)}
                     aria-label={`Go to slide ${i + 1}`}
-                    className="relative min-w-6 min-h-6 flex items-center justify-center"
+                    className="relative min-w-10 min-h-10 flex items-center justify-center"
                   >
                     <span
                       className="relative rounded-full overflow-hidden transition-all duration-300"
