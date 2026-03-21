@@ -6,6 +6,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { UtilityBar } from './UtilityBar';
 import { MainNav } from './MainNav';
+import { ScrollProgress } from './ScrollProgress';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { NicotineWarning } from '@/components/compliance/NicotineWarning';
 import { PREVIEW_MODE } from '@/config/brand';
@@ -21,6 +22,7 @@ export function Layout({ children, showNicotineWarning = true }: LayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <ScrollProgress />
       {PREVIEW_MODE && !bannerDismissed && (
         <div className="relative bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-sm text-amber-800">
           Preview mode — this site is not yet open for orders
