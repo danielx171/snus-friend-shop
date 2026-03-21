@@ -337,6 +337,10 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               variants={ctaVariants}
               transition={hoverTransition}
             >
+            <motion.div
+              variants={ctaStyleVariants}
+              transition={hoverTransition}
+            >
             <Button
               onClick={handleAddToCart}
               className={cn(
