@@ -57,6 +57,8 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack1');
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [justAdded, setJustAdded] = useState(false);
+  const addedTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const { addToCart } = useCart();
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateBadge } = useTranslation();
   const isCompact = variant === 'compact';
