@@ -138,10 +138,13 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
     )}>
       <Link to={`/product/${product.id}`} aria-label={product.name}>
         {/* Image area */}
-        <div className={cn(
-          'product-card-image relative overflow-hidden bg-gradient-to-br',
-          flavorGradients[product.flavorKey] ?? defaultGradient
-        )} style={{ aspectRatio: isCompact ? '3/2' : '1' }}>
+        <div
+          className="product-card-image relative overflow-hidden"
+          style={{
+            aspectRatio: isCompact ? '3/2' : '1',
+            background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))',
+          }}
+        >
           <motion.div
             className="h-full w-full"
             variants={imageVariants}
