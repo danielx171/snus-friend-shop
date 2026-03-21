@@ -205,10 +205,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
             if (results.length > 0 || debouncedQuery.length >= 2) setIsOpen(true);
           }}
           placeholder="Search products & brands..."
-          className={cn(
-            'pl-11 pr-10 h-11 rounded-2xl bg-muted/30 border-border/40 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all duration-200',
-            isFocused ? 'w-full md:w-[120%] md:-ml-[10%]' : 'w-full'
-          )}
+          className="w-full pl-11 pr-10 h-11 rounded-2xl bg-muted/30 border-border/40 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all duration-200"
           autoFocus={autoFocus}
           role="combobox"
           aria-expanded={showDropdown}
@@ -237,10 +234,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className={cn(
-              'absolute top-full left-0 right-0 z-50 mt-2 rounded-xl border border-border/30 bg-card shadow-2xl overflow-hidden',
-              isFocused && 'md:w-[120%] md:-ml-[10%]'
-            )}
+            className="absolute top-full left-0 right-0 z-50 mt-2 rounded-xl border border-border/30 bg-card shadow-2xl overflow-hidden"
           >
             {results.length === 0 ? (
               <div className="p-6 text-center">
