@@ -70,7 +70,7 @@ export function HeroBanner() {
 
   /* Mark entrance done after initial stagger completes (~1.3s) */
   useEffect(() => {
-    const t = setTimeout(() => setHasMounted(true), 1400);
+    const t = setTimeout(() => setHasMounted(true), 1100);
     return () => clearTimeout(t);
   }, []);
 
