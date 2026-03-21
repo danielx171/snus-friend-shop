@@ -125,6 +125,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
 
   return (
     <motion.div
+      className="group"
       initial="rest"
       whileHover="hover"
       animate="rest"
@@ -132,7 +133,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
       transition={{ ...hoverTransition, ...leaveTransition }}
     >
     <Card className={cn(
-      'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-[border-color] duration-[220ms] ease-out group-hover:border-border/60',
+      'product-card relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-[border-color] duration-[220ms] ease-out group-hover:border-border/60',
       isOutOfStock && 'opacity-60'
     )}>
       <Link to={`/product/${product.id}`}>
