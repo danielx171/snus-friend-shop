@@ -66,14 +66,31 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+/** Detect best matching language from browser's navigator.languages */
+function detectBrowserLanguage(): Language {
+  const browserLangs = navigator.languages ?? [navigator.language ?? 'en'];
+  for (const lang of browserLangs) {
+    // Try exact match first (e.g. "sv-SE" → "sv"), then 2-letter prefix
+    const code = lang.toLowerCase().split('-')[0];
+    const match = europeanLanguages.find((l) => l.code === code);
+    if (match) return match;
+  }
+  return europeanLanguages[1]; // English fallback
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem('snusfriend-language');
     if (saved) {
-      const parsed = JSON.parse(saved);
-      return europeanLanguages.find(l => l.code === parsed.code) || europeanLanguages[1]; // default EN
+      try {
+        const parsed = JSON.parse(saved);
+        return europeanLanguages.find(l => l.code === parsed.code) || europeanLanguages[1];
+      } catch {
+        // ignore malformed saved value
+      }
     }
-    return europeanLanguages[1]; // English as default
+    // First visit — auto-detect from browser
+    return detectBrowserLanguage();
   });
 
   useEffect(() => {

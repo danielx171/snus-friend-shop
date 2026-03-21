@@ -6,6 +6,7 @@ import { ArrowRight, Truck, Star, Shield, ChevronLeft, ChevronRight, Package } f
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
 import { useCatalogProducts } from '@/hooks/useCatalog';
+import { useBrands } from '@/hooks/useBrands';
 import { cn } from '@/lib/utils';
 
 interface HeroSlide {
@@ -22,7 +23,7 @@ const SLIDES: HeroSlide[] = [
   {
     title: 'Premium Nicotine\nPouches',
     subtitle: 'Free EU delivery',
-    description: 'Discover 700+ products from 91 leading brands — delivered fast',
+    description: 'Discover {count}+ products from {brands} leading brands — delivered fast',
     cta: { label: 'Explore Products', href: '/nicotine-pouches' },
     secondaryCta: { label: 'Special Offers', href: '/nicotine-pouches?badge=newPrice' },
     accentColor: 'hsl(var(--chart-4))',
@@ -58,6 +59,9 @@ const SLIDE_LINE_DELAYS = [0, 0.1, 0.2, 0.3, 0.35];
 export function HeroBanner() {
   const { t, market, formatPrice } = useTranslation();
   const { data: products = [] } = useCatalogProducts();
+  const { data: brands = [] } = useBrands();
+  const brandCount = brands.length || 91;
+  const productCount = products.length || 700;
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
@@ -221,8 +225,8 @@ export function HeroBanner() {
       />
 
       {/* ===== CONTENT ===== */}
-      <div className="container py-14 md:py-20 lg:py-24 relative z-[1]">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
+      <div className="container py-8 md:py-16 lg:py-24 relative z-[1]">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
 
           {/* Left — slide content */}
           <div className="space-y-7">
@@ -239,7 +243,7 @@ export function HeroBanner() {
             </motion.div>
 
             {/* Crossfade text container — AnimatePresence for slide transitions */}
-            <div className="relative min-h-[240px] sm:min-h-[220px] overflow-hidden">
+            <div className="relative min-h-[280px] sm:min-h-[260px] lg:min-h-[300px]">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={activeSlide}
@@ -255,7 +259,7 @@ export function HeroBanner() {
                     const isEntrance = !hasMounted;
                     return (
                       <>
-                        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl leading-[1.08] text-foreground">
+                        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-foreground">
                           {lines.map((line, idx) => (
                             <motion.span
                               key={`${activeSlide}-line-${idx}`}
@@ -298,7 +302,9 @@ export function HeroBanner() {
                             ease: easeOut,
                           }}
                         >
-                          {s.description}
+                          {s.description
+                            .replace('{count}', String(productCount))
+                            .replace('{brands}', String(brandCount))}
                         </motion.p>
 
                         <motion.div
@@ -359,7 +365,7 @@ export function HeroBanner() {
               </div>
               <div className="flex items-center gap-2">
                 <Package className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
-                <span>91 brands available</span>
+                <span>{brandCount} brands available</span>
               </div>
             </motion.div>
 
@@ -475,11 +481,11 @@ export function HeroBanner() {
                 </div>
 
                 {/* Mobile: horizontal scroll row */}
-                <div className="flex lg:hidden gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+                <div className="flex lg:hidden gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide snap-x snap-mandatory">
                   {showcaseProducts.map((product, i) => (
                     <motion.div
                       key={product.id}
-                      className="flex-none w-32"
+                      className="flex-none w-36 snap-start"
                       initial={{ opacity: 0, y: 24, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ duration: 0.5, delay: 0.6 + i * 0.1, ease: easeOut }}

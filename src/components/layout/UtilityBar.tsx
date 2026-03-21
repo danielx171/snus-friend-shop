@@ -1,15 +1,17 @@
 import { Star, Truck, CreditCard, User, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
-
 import { useTranslation } from '@/hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { formatMarketPrice } from '@/lib/market';
+import { useBrands } from '@/hooks/useBrands';
 
 export function UtilityBar() {
   const { totalItems, totalPrice } = useCart();
   const { t, formatPrice, market } = useTranslation();
   const { openCart } = useCart();
+  const { data: brands = [] } = useBrands();
+  const brandCount = brands.length || 91;
 
   const freeShippingFormatted = formatMarketPrice(
     market.freeShippingThreshold,
@@ -31,7 +33,7 @@ export function UtilityBar() {
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Star className="h-3 w-3 fill-primary text-primary" />
-            <span>91 brands</span>
+            <span>{brandCount} brands</span>
           </div>
         </div>
 

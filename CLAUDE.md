@@ -22,6 +22,9 @@ so edge function unit tests cannot run locally.
 
 This is a **headless B2C nicotine pouch shop** — Nyehandel-first.
 
+> **IMPORTANT: This is a Vite SPA — NOT Next.js.** Ignore any Next.js-specific suggestions
+> (App Router, Server Components, `middleware.ts`, `proxy.ts`, etc.). All rendering is client-side.
+
 - **Frontend:** React + Vite + TypeScript + Tailwind + shadcn/ui (`src/`)
 - **Backend:** Supabase Edge Functions (`supabase/functions/`)
 - **Database:** Supabase PostgreSQL (`supabase/migrations/`)
@@ -67,6 +70,10 @@ pg_cron 01:15 UTC
 `src/integrations/supabase/types.ts` is manually maintained. When schema migrations
 change app-facing tables, update `types.ts` in the same task.
 
+**Never use `(supabase as any).from(...)`** — add the missing table to `types.ts` instead.
+Tables present: `orders`, `ops_alerts`, `points_balances`, `points_transactions`,
+`waitlist_emails`, `newsletter_subscribers`, `sync_config`, and more.
+
 ### Edge Function conventions
 
 - All functions live in `supabase/functions/<name>/index.ts`
@@ -75,6 +82,29 @@ change app-facing tables, update `types.ts` in the same task.
 - Internal function-to-function calls: `x-internal-function-secret`
 - Cron-triggered functions: `x-cron-secret`
 - Functions return structured JSON errors with machine-readable `error` keys and `requestId`
+
+## UI Conventions
+
+- **SheetContent** always needs `<SheetTitle>` (import from `@/components/ui/sheet`). Use `className="sr-only"` if visually hidden.
+- **Quantity/icon buttons** need `aria-label` describing the action and target item.
+- **Email validation:** use `/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())` — not `.includes('@')`.
+- **Expensive list components** (cards, list items): wrap with `React.memo`; wrap handlers with `useCallback`.
+- **Theme:** The velo theme is in `src/index.css` as CSS custom properties (`--primary`, `--background`, etc.).
+  Inter is the primary font; all spacing/radius tokens come from the theme. Never hardcode colors inline.
+
+## Git / Lovable Workflow
+
+Lovable pushes to `main` frequently. Before pushing:
+
+```bash
+git pull --no-rebase   # merge Lovable's commits first; --rebase will cause conflicts
+git push
+```
+
+Conflict patterns:
+- `src/integrations/supabase/types.ts` → use `--ours` (our version has extra tables Lovable doesn't know about)
+- `src/data/brand-overrides.ts` → use `--ours` (our version has real product data from NordicPouch CSV)
+- Everything else → merge manually, preserving both sides
 
 ## Hard Boundaries
 

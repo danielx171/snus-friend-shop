@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "sitemap": "bun run scripts/generate-sitemap.ts",
+    "images:download": "bun run scripts/download-product-images.ts",
+    "images:upload": "bun run scripts/upload-images-to-supabase.ts",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
