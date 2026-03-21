@@ -139,7 +139,7 @@ export function HeroBanner() {
       />
       <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px] pointer-events-none z-0" />
 
-      <div className="container py-14 md:py-20 lg:py-24 relative">
+      <div className="container py-14 md:py-20 lg:py-24 relative z-[1]">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
 
           {/* Left — slide content */}
