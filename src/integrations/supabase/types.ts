@@ -341,6 +341,42 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: { id: string; customer_email: string; total_price: number; currency: string; checkout_status: string; line_items_snapshot: Json | null; customer_metadata: Json | null; nyehandel_order_id: string | null; nyehandel_status: string | null; nyehandel_sync_status: string | null; tracking_id: string | null; tracking_url: string | null; shipping_method: string | null; payment_method: string | null; user_id: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; customer_email: string; total_price: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; customer_email?: string; total_price?: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
+      ops_alerts: {
+        Row: { id: string; alert_date: string; rule_key: string; severity: string; source_order_id: string | null; title: string; message: string; context: Json | null; status: string; resolved_at: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; alert_date?: string; rule_key: string; severity?: string; source_order_id?: string | null; title: string; message: string; context?: Json | null; status?: string; resolved_at?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; alert_date?: string; rule_key?: string; severity?: string; source_order_id?: string | null; title?: string; message?: string; context?: Json | null; status?: string; resolved_at?: string | null; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
+      points_balances: {
+        Row: { user_id: string; balance: number; lifetime_earned: number; updated_at: string }
+        Insert: { user_id: string; balance?: number; lifetime_earned?: number; updated_at?: string }
+        Update: { user_id?: string; balance?: number; lifetime_earned?: number; updated_at?: string }
+        Relationships: []
+      }
+      points_transactions: {
+        Row: { id: string; user_id: string; order_id: string | null; points: number; reason: string; created_at: string }
+        Insert: { id?: string; user_id: string; order_id?: string | null; points: number; reason: string; created_at?: string }
+        Update: { id?: string; user_id?: string; order_id?: string | null; points?: number; reason?: string; created_at?: string }
+        Relationships: []
+      }
+      waitlist_emails: {
+        Row: { id: string; email: string; source: string | null; created_at: string }
+        Insert: { id?: string; email: string; source?: string | null; created_at?: string }
+        Update: { id?: string; email?: string; source?: string | null; created_at?: string }
+        Relationships: []
+      }
+      sync_config: {
+        Row: { id: string; key: string; value: string; created_at: string }
+        Insert: { id?: string; key: string; value: string; created_at?: string }
+        Update: { id?: string; key?: string; value?: string; created_at?: string }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

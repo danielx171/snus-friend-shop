@@ -1,11 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
-// These tables exist in the DB but aren't in the auto-generated types yet.
-// Use the raw client to query them safely.
-const db = supabase as unknown as {
-  from: (table: string) => ReturnType<typeof supabase.from>;
-};
+// Tables are defined in types.ts — use supabase client directly
 
 export interface SnusPointsData {
   balance: number;
@@ -25,12 +21,12 @@ export function useSnusPoints(userId: string | null) {
       if (!userId) return { balance: 0, lifetimeEarned: 0, transactions: [] };
 
       const [balanceRes, txRes] = await Promise.all([
-        db
+        supabase
           .from('points_balances')
           .select('balance, lifetime_earned')
           .eq('user_id', userId)
           .maybeSingle(),
-        db
+        supabase
           .from('points_transactions')
           .select('id, points, reason, created_at')
           .eq('user_id', userId)
@@ -38,13 +34,10 @@ export function useSnusPoints(userId: string | null) {
           .limit(20),
       ]);
 
-      const bal = balanceRes.data as Record<string, unknown> | null;
-      const txData = txRes.data as Record<string, unknown>[] | null;
-
       return {
-        balance: (bal?.balance as number) ?? 0,
-        lifetimeEarned: (bal?.lifetime_earned as number) ?? 0,
-        transactions: (txData ?? []) as SnusPointsData['transactions'],
+        balance: balanceRes.data?.balance ?? 0,
+        lifetimeEarned: balanceRes.data?.lifetime_earned ?? 0,
+        transactions: (txRes.data ?? []) as SnusPointsData['transactions'],
       };
     },
     enabled: !!userId,

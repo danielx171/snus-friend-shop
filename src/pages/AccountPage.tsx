@@ -98,19 +98,16 @@ export default function AccountPage() {
     }
   };
 
-  const ordersDb = supabase as unknown as {
-    from: (table: string) => ReturnType<typeof supabase.from>;
-  };
   const { data: orders = [], isLoading: ordersLoading } = useQuery({
     queryKey: ['account-orders', user?.email],
     queryFn: async (): Promise<OrderRow[]> => {
-      const { data, error } = await ordersDb
+      const { data, error } = await supabase
         .from('orders')
         .select('id, created_at, checkout_status, nyehandel_sync_status, total_price, currency, line_items_snapshot')
         .eq('customer_email', user!.email!)
         .order('created_at', { ascending: false });
       if (error) throw new Error(error.message);
-      return ((data as unknown[]) ?? []) as OrderRow[];
+      return (data ?? []) as OrderRow[];
     },
     enabled: !!user?.email,
   });
