@@ -7,7 +7,7 @@ interface LogoProps {
 
 /**
  * SnusFriend logo — a stylised top-down view of an open nicotine pouch tin.
- * Circle with 3D lid-open shadow on the left, three pouch pill shapes inside.
+ * Refined circle with clean rim detail and three neatly arranged pouches.
  */
 export function Logo({ className, size = 40 }: LogoProps) {
   return (
@@ -20,24 +20,35 @@ export function Logo({ className, size = 40 }: LogoProps) {
       className={cn('shrink-0', className)}
       aria-label="SnusFriend"
     >
-      {/* 3D depth shadow — left edge of the tin */}
-      <circle cx="19" cy="21" r="17" fill="#0d1f33" opacity="0.25" />
+      {/* Outer shadow for depth */}
+      <circle cx="20" cy="21" r="17.5" fill="hsl(220 60% 8%)" opacity="0.4" />
+
       {/* Tin body */}
-      <circle cx="20" cy="20" r="17" fill="#0f1a2e" />
-      {/* Tin rim */}
-      <circle cx="20" cy="20" r="17" stroke="#1e3a5f" strokeWidth="2" />
-      {/* Inner rim detail */}
-      <circle cx="20" cy="20" r="13.5" stroke="#1e3a5f" strokeWidth="0.8" opacity="0.35" />
+      <circle cx="20" cy="20" r="17" fill="hsl(220 50% 12%)" />
 
-      {/* Pouch 1 — center-top */}
-      <rect x="17" y="9" width="6" height="11" rx="3" fill="#c9a84c" opacity="0.85" transform="rotate(0 20 14.5)" />
-      {/* Pouch 2 — bottom-left */}
-      <rect x="17" y="9" width="6" height="11" rx="3" fill="#c9a84c" opacity="0.7" transform="rotate(-35 20 20)" />
-      {/* Pouch 3 — bottom-right */}
-      <rect x="17" y="9" width="6" height="11" rx="3" fill="#c9a84c" opacity="0.7" transform="rotate(35 20 20)" />
+      {/* Outer rim */}
+      <circle cx="20" cy="20" r="17" stroke="hsl(210 45% 28%)" strokeWidth="1.5" />
 
-      {/* Subtle highlight on tin rim — top-right */}
-      <path d="M30 8a17 17 0 0 1 4 7" stroke="white" strokeWidth="1" opacity="0.08" strokeLinecap="round" />
+      {/* Inner rim */}
+      <circle cx="20" cy="20" r="13" stroke="hsl(210 40% 25%)" strokeWidth="0.7" opacity="0.5" />
+
+      {/* Inner well */}
+      <circle cx="20" cy="20" r="12.5" fill="hsl(220 45% 10%)" opacity="0.6" />
+
+      {/* Pouch 1 — top center */}
+      <rect x="17.5" y="10" width="5" height="10" rx="2.5" fill="hsl(43 55% 54%)" opacity="0.9" />
+
+      {/* Pouch 2 — bottom left */}
+      <rect x="17.5" y="10" width="5" height="10" rx="2.5" fill="hsl(43 55% 54%)" opacity="0.75" transform="rotate(-30 20 20)" />
+
+      {/* Pouch 3 — bottom right */}
+      <rect x="17.5" y="10" width="5" height="10" rx="2.5" fill="hsl(43 55% 54%)" opacity="0.75" transform="rotate(30 20 20)" />
+
+      {/* Subtle top-right rim highlight */}
+      <path d="M29 9a17 17 0 0 1 4.5 6" stroke="white" strokeWidth="0.8" opacity="0.1" strokeLinecap="round" />
+
+      {/* Subtle bottom-left rim shadow */}
+      <path d="M11 31a17 17 0 0 1-4.5-6" stroke="black" strokeWidth="0.8" opacity="0.15" strokeLinecap="round" />
     </svg>
   );
 }
