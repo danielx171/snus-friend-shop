@@ -440,7 +440,6 @@ export default function MembershipPage() {
                 </div>
               )}
             </div>
-            </div>
           </div>
         </section>
 
