@@ -1,6 +1,7 @@
 import { Truck, Shield, Star, Package } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
+import { motion } from 'framer-motion';
 
 const trustItems = [
   { id: 'free-shipping', icon: Truck, labelKey: 'trust.freeShipping' },
@@ -17,18 +18,25 @@ export function TrustBar() {
     <section className="border-y border-border/20 glass-panel bg-muted/5">
       <div className="container py-5">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {trustItems.map((item) => {
+          {trustItems.map((item, index) => {
             const Icon = item.icon;
             const label = item.labelKey === 'trust.freeShipping'
               ? t(item.labelKey, { amount: freeShippingFormatted })
               : item.fallback || t(item.labelKey);
             return (
-              <div key={item.id} className="flex items-center gap-3">
+              <motion.div
+                key={item.id}
+                className="flex items-center gap-3"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.4, delay: index * 0.1, ease: 'easeOut' }}
+              >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/15">
                   <Icon className="h-5 w-5 text-primary" />
                 </div>
                 <span className="text-sm font-medium text-foreground leading-tight">{label}</span>
-              </div>
+              </motion.div>
             );
           })}
         </div>

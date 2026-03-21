@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Leaf, Zap, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const highlights = [
   {
@@ -37,26 +38,33 @@ export function EditorialHighlights() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {highlights.map((item) => (
-            <Link
+          {highlights.map((item, index) => (
+            <motion.div
               key={item.title}
-              to={item.href}
-              className="group rounded-2xl glass-panel overflow-hidden hover:border-primary/25 transition-all duration-300"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
             >
-              <div className={`h-40 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
-                <item.icon className="h-12 w-12 text-primary group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
-              </div>
-              <div className="p-6">
-                <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">{item.blurb}</p>
-                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                  Read more
-                  <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </div>
-            </Link>
+              <Link
+                to={item.href}
+                className="group rounded-2xl glass-panel overflow-hidden hover:border-primary/25 transition-all duration-300 block"
+              >
+                <div className={`h-40 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}>
+                  <item.icon className="h-12 w-12 text-primary group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{item.blurb}</p>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                    Read more
+                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>
