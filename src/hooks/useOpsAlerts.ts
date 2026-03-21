@@ -41,7 +41,7 @@ export function useResolveAlert() {
 
   return useMutation({
     mutationFn: async (alertId: string) => {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('ops_alerts')
         .update({ status: 'resolved', resolved_at: new Date().toISOString() })
         .eq('id', alertId);
