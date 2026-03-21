@@ -278,11 +278,11 @@ export function HeroBanner() {
                           <motion.span
                             className="block text-[0.8em] mt-2 font-semibold"
                             style={{ color: s.accentColor }}
-                            initial={{ opacity: 0, scale: 0.95 }}
+                            initial={{ opacity: 0, scale: 0.96 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{
                               duration: 0.4,
-                              delay: isEntrance ? 0.7 : SLIDE_LINE_DELAYS[2],
+                              delay: isEntrance ? 0.4 : SLIDE_LINE_DELAYS[2],
                               ease: easeOut,
                             }}
                           >
