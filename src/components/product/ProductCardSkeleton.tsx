@@ -8,27 +8,40 @@ interface ProductCardSkeletonProps {
 export function ProductCardSkeleton({ variant = 'default' }: ProductCardSkeletonProps) {
   const isCompact = variant === 'compact';
   return (
-    <Card className="overflow-hidden rounded-2xl border-border/30 bg-card/80 animate-pulse">
-      <Skeleton className="w-full rounded-none bg-muted/20" style={{ aspectRatio: isCompact ? '3/2' : '1' }} />
+    <Card className="overflow-hidden rounded-2xl border-white/[0.06] bg-card/90">
+      {/* Circular image placeholder */}
+      <div
+        className="flex items-center justify-center"
+        style={{ aspectRatio: isCompact ? '3/2' : '1', background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))' }}
+      >
+        <Skeleton className="rounded-full" style={{ width: '60%', height: '60%' }} />
+      </div>
+
       <CardContent className={isCompact ? 'p-2.5 space-y-2' : 'p-4 space-y-3'}>
-        <Skeleton className="h-2.5 w-14 bg-muted/30 rounded-full" />
-        <Skeleton className="h-4 w-3/4 bg-muted/30" />
+        {/* Brand name */}
+        <Skeleton className="h-2.5 w-14 rounded-full" />
+        {/* Product name */}
+        <Skeleton className="h-4 w-3/4 rounded" />
+        {/* Tags */}
         <div className="flex gap-1">
-          <Skeleton className="h-5 w-16 rounded-full bg-muted/30" />
-          <Skeleton className="h-5 w-12 rounded-full bg-muted/30" />
+          <Skeleton className="h-5 w-16 rounded-full" />
+          <Skeleton className="h-5 w-12 rounded-full" />
         </div>
+        {/* Pack sizes */}
         {!isCompact && (
           <div className="flex gap-1.5">
             {[1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} className="h-6 w-10 rounded-lg bg-muted/30" />
+              <Skeleton key={i} className="h-6 w-10 rounded-lg" />
             ))}
           </div>
         )}
+        {/* Price row */}
         <div className="flex justify-between items-baseline">
-          <Skeleton className={isCompact ? 'h-5 w-14 bg-muted/30' : 'h-6 w-16 bg-muted/30'} />
-          <Skeleton className="h-3 w-12 bg-muted/30" />
+          <Skeleton className={isCompact ? 'h-5 w-14 rounded' : 'h-6 w-16 rounded'} />
+          <Skeleton className="h-3 w-12 rounded" />
         </div>
-        <Skeleton className={isCompact ? 'h-8 w-full rounded-xl bg-muted/30' : 'h-9 w-full rounded-xl bg-muted/30'} />
+        {/* CTA button */}
+        <Skeleton className={isCompact ? 'h-8 w-full rounded-xl' : 'h-9 w-full rounded-xl'} />
       </CardContent>
     </Card>
   );
