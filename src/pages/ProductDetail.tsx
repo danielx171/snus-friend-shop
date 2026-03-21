@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-// Tabs, Select removed — subscription feature not yet implemented
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from '@/components/ui/accordion';
@@ -24,6 +23,7 @@ import { ProductCard } from '@/components/product/ProductCard';
 import { PDPSkeleton } from '@/components/product/PDPSkeleton';
 import { Input } from '@/components/ui/input';
 import { apiFetch } from '@/lib/api';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-400 to-green-600',
@@ -37,10 +37,11 @@ const defaultGradient = 'from-slate-300 to-slate-500';
 
 const packSizes = RETAIL_PACK_SIZES;
 
+const easeOut = [0, 0, 0.2, 1] as const;
+
 export default function ProductDetail() {
   const { id } = useParams();
 
-  // Scroll to top when navigating to a new product
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [id]);
@@ -115,6 +116,8 @@ export default function ProductDetail() {
     }
   };
 
+  const tagLabels = [translateFlavor(product.flavorKey), translateFormat(product.formatKey), translateStrength(product.strengthKey), `${product.nicotineContent}mg`];
+
   return (
     <AgeGate>
     <Layout showNicotineWarning={false}>
@@ -132,35 +135,48 @@ export default function ProductDetail() {
           {/* LEFT — Product Image */}
           <div className="order-1">
             <div className="sticky top-32">
-              <Card className="overflow-hidden rounded-3xl border-border/30 bg-card/80 backdrop-blur-sm">
-                <div className="relative aspect-square bg-muted/20">
-                  {product.image ? (
-                    <img src={product.image} alt={product.name} className="h-full w-full object-cover" loading="eager" />
-                  ) : (
-                    <div className={cn('h-full w-full bg-gradient-to-br flex items-center justify-center', flavorGradients[product.flavorKey] ?? defaultGradient)}>
-                      <span className="text-white/80 font-bold text-2xl text-center px-6 drop-shadow">{product.name}</span>
+              {/* 1. Product image entrance */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: easeOut }}
+              >
+                <Card className="overflow-hidden rounded-3xl border-border/30 bg-card/80 backdrop-blur-sm">
+                  <div className="relative aspect-square bg-muted/20">
+                    {product.image ? (
+                      <img src={product.image} alt={product.name} className="h-full w-full object-cover" loading="eager" />
+                    ) : (
+                      <div className={cn('h-full w-full bg-gradient-to-br flex items-center justify-center', flavorGradients[product.flavorKey] ?? defaultGradient)}>
+                        <span className="text-white/80 font-bold text-2xl text-center px-6 drop-shadow">{product.name}</span>
+                      </div>
+                    )}
+                    <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+                      {product.badgeKeys.slice(0, 2).map((badge) => (
+                        <Badge
+                          key={badge}
+                          className={cn(
+                            'text-sm rounded-full px-3.5 py-1 shadow-xs border-0',
+                            badge === 'newPrice' && 'bg-primary text-primary-foreground',
+                            badge === 'new' && 'bg-chart-2 text-primary-foreground',
+                            badge === 'popular' && 'bg-card/90 text-foreground border border-border/40',
+                            badge === 'limited' && 'bg-destructive text-destructive-foreground'
+                          )}
+                        >
+                          {translateBadge(badge)}
+                        </Badge>
+                      ))}
                     </div>
-                  )}
-                  <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-                    {product.badgeKeys.slice(0, 2).map((badge) => (
-                      <Badge
-                        key={badge}
-                        className={cn(
-                          'text-sm rounded-full px-3.5 py-1 shadow-xs border-0',
-                          badge === 'newPrice' && 'bg-primary text-primary-foreground',
-                          badge === 'new' && 'bg-chart-2 text-primary-foreground',
-                          badge === 'popular' && 'bg-card/90 text-foreground border border-border/40',
-                          badge === 'limited' && 'bg-destructive text-destructive-foreground'
-                        )}
-                      >
-                        {translateBadge(badge)}
-                      </Badge>
-                    ))}
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </motion.div>
 
-              <div className="mt-5 grid grid-cols-3 gap-3">
+              {/* 2. Trust badges */}
+              <motion.div
+                className="mt-5 grid grid-cols-3 gap-3"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.2, ease: easeOut }}
+              >
                 {[
                   { icon: Truck, label: 'Free delivery' },
                   { icon: Package, label: 'Fast dispatch' },
@@ -171,13 +187,18 @@ export default function ProductDetail() {
                     <span className="text-xs text-muted-foreground text-center line-clamp-2">{label}</span>
                   </div>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </div>
 
           {/* RIGHT — Product Info */}
           <div className="space-y-7 order-2 min-w-0">
-            <div>
+            {/* 3. Brand + title */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.15, ease: easeOut }}
+            >
               <p className="text-sm text-muted-foreground uppercase tracking-widest mb-1.5">{product.brand}</p>
               <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 break-words tracking-tight">{product.name}</h1>
               {product.ratings > 0 && (
@@ -189,20 +210,40 @@ export default function ProductDetail() {
                   </div>
                 </div>
               )}
-            </div>
+            </motion.div>
 
+            {/* 4. Tags with stagger */}
             <div className="flex flex-wrap gap-2">
-              {[translateFlavor(product.flavorKey), translateFormat(product.formatKey), translateStrength(product.strengthKey), `${product.nicotineContent}mg`].map(label => (
-                <Badge key={label} variant="outline" className="rounded-full px-3.5 py-1.5 border-border/30 text-foreground">
-                  {label}
-                </Badge>
+              {tagLabels.map((label, i) => (
+                <motion.div
+                  key={label}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.3 + i * 0.05, ease: easeOut }}
+                >
+                  <Badge variant="outline" className="rounded-full px-3.5 py-1.5 border-border/30 text-foreground">
+                    {label}
+                  </Badge>
+                </motion.div>
               ))}
             </div>
 
-            <p className="text-muted-foreground leading-relaxed text-[15px]">{productDescription}</p>
+            {/* 5. Description */}
+            <motion.p
+              className="text-muted-foreground leading-relaxed text-[15px]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.35, ease: easeOut }}
+            >
+              {productDescription}
+            </motion.p>
 
-            {/* Pack Size */}
-            <div>
+            {/* 6. Pack Size */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.4, ease: easeOut }}
+            >
               <h3 className="text-sm font-medium text-foreground mb-3.5">Select pack size</h3>
               <RadioGroup value={selectedPack} onValueChange={(v) => setSelectedPack(v as PackSize)} className="grid grid-cols-2 gap-3">
                 {packSizes.map((size) => {
@@ -216,7 +257,7 @@ export default function ProductDetail() {
                       key={size}
                       htmlFor={`pack-${size}`}
                       className={cn(
-                        'flex flex-col items-center justify-center rounded-2xl border-2 p-5 cursor-pointer transition-all text-center',
+                        'flex flex-col items-center justify-center rounded-2xl border-2 p-5 cursor-pointer transition-all duration-200 text-center',
                         isSelected
                           ? 'border-primary bg-primary/5 glow-primary'
                           : 'border-border/30 hover:border-primary/30 bg-card/60'
@@ -231,15 +272,37 @@ export default function ProductDetail() {
                   );
                 })}
               </RadioGroup>
+            </motion.div>
+
+            {/* Price with animated transition */}
+            <div className="flex items-baseline gap-3 overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={selectedPack}
+                  className="text-3xl font-bold text-foreground"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2, ease: easeOut }}
+                >
+                  {formatPrice(currentPrice)}
+                </motion.span>
+              </AnimatePresence>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={`per-${selectedPack}`}
+                  className="text-sm text-muted-foreground"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  ({formatPrice(pricePerCan)}/can)
+                </motion.span>
+              </AnimatePresence>
             </div>
 
-            {/* Price */}
-            <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-foreground">{formatPrice(currentPrice)}</span>
-              <span className="text-sm text-muted-foreground">({formatPrice(pricePerCan)}/can)</span>
-            </div>
-
-            {/* CTA */}
+            {/* 7. CTA */}
             {isOutOfStock ? (
               <div className="space-y-4">
                 <Button disabled variant="outline" size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg opacity-60 cursor-not-allowed">
@@ -279,10 +342,16 @@ export default function ProductDetail() {
                 )}
               </div>
             ) : (
-              <Button size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow" onClick={handleAddToCart}>
-                <ShoppingCart className="h-5 w-5" />
-                {t('product.addToCart')}
-              </Button>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.5, ease: easeOut }}
+              >
+                <Button size="lg" className="w-full gap-2.5 rounded-2xl h-14 text-lg glow-primary hover:shadow-lg transition-shadow" onClick={handleAddToCart}>
+                  <ShoppingCart className="h-5 w-5" />
+                  {t('product.addToCart')}
+                </Button>
+              </motion.div>
             )}
           </div>
         </div>
@@ -292,7 +361,7 @@ export default function ProductDetail() {
           <h2 className="text-xl font-bold text-foreground mb-5 tracking-tight">More information</h2>
           <Accordion type="single" collapsible className="space-y-3">
             <AccordionItem value="specs" className="rounded-2xl border border-border/30 glass-panel px-5">
-              <AccordionTrigger className="text-base font-medium hover:no-underline py-5">Product specifications</AccordionTrigger>
+              <AccordionTrigger className="text-base font-medium hover:no-underline py-5 [&[data-state=open]>svg]:rotate-180 [&>svg]:transition-transform [&>svg]:duration-200">Product specifications</AccordionTrigger>
               <AccordionContent className="pb-5">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   {[
@@ -317,14 +386,14 @@ export default function ProductDetail() {
             </AccordionItem>
 
             <AccordionItem value="about" className="rounded-2xl border border-border/30 glass-panel px-5">
-              <AccordionTrigger className="text-base font-medium hover:no-underline py-5">{t('detail.aboutBrand')} {product.brand}</AccordionTrigger>
+              <AccordionTrigger className="text-base font-medium hover:no-underline py-5 [&[data-state=open]>svg]:rotate-180 [&>svg]:transition-transform [&>svg]:duration-200">{t('detail.aboutBrand')} {product.brand}</AccordionTrigger>
               <AccordionContent className="pb-5">
                 <p className="text-muted-foreground leading-relaxed">{t('detail.brandDescription', { brand: product.brand, manufacturer: product.manufacturer })}</p>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="delivery" className="rounded-2xl border border-border/30 glass-panel px-5">
-              <AccordionTrigger className="text-base font-medium hover:no-underline py-5">{t('detail.deliveryReturns')}</AccordionTrigger>
+              <AccordionTrigger className="text-base font-medium hover:no-underline py-5 [&[data-state=open]>svg]:rotate-180 [&>svg]:transition-transform [&>svg]:duration-200">{t('detail.deliveryReturns')}</AccordionTrigger>
               <AccordionContent className="pb-5">
                 <div className="space-y-3 text-muted-foreground text-sm">
                   <p>• {t('detail.freeShippingThreshold', { amount: formatPrice(25) })}</p>
@@ -337,12 +406,30 @@ export default function ProductDetail() {
           </Accordion>
         </div>
 
-        {/* Related Products */}
+        {/* 8. Related Products */}
         {relatedProducts.length > 0 && (
           <section className="mt-20">
-            <h2 className="text-2xl font-bold text-foreground mb-8 tracking-tight">More from {product.brand}</h2>
+            <motion.h2
+              className="text-2xl font-bold text-foreground mb-8 tracking-tight"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, ease: easeOut }}
+            >
+              More from {product.brand}
+            </motion.h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {relatedProducts.map((p) => <ProductCard key={p.id} product={p} />)}
+              {relatedProducts.map((p, i) => (
+                <motion.div
+                  key={p.id}
+                  initial={{ opacity: 0, y: 32 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: i * 0.08, ease: easeOut }}
+                >
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
             </div>
           </section>
         )}
