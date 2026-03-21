@@ -315,7 +315,7 @@ export function HeroBanner() {
                             asChild
                             size="lg"
                             className="gap-2 rounded-2xl h-12 px-7 font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
-                            style={{ backgroundColor: s.accentColor, color: 'white' }}
+                            style={{ backgroundColor: s.accentColor, color: 'hsl(220 100% 12%)' }}
                           >
                             <Link to={s.cta.href}>
                               {s.cta.label}
