@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { motion } from 'framer-motion';
 import type { Product } from '@/data/products';
 
 interface FeaturedProductsProps {
@@ -23,17 +24,23 @@ export function FeaturedProducts({
   const { t } = useTranslation();
   const { data: products = [], isLoading } = useCatalogProducts();
   const filtered = products.filter(filterFn);
-  // If the filter yields nothing, fall back to the first N products so the section isn't empty
   const filteredProducts = (filtered.length > 0 ? filtered : products).slice(0, limit);
 
-  // Hide the entire section when there's truly no data (not loading, zero products)
   if (!isLoading && products.length === 0) return null;
 
   return (
     <section className="featured-section py-12 md:py-16 bg-muted/5">
       <div className="container">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-foreground tracking-tight">{title}</h2>
+          <motion.h2
+            className="text-2xl font-bold text-foreground tracking-tight"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            {title}
+          </motion.h2>
           <Button asChild variant="ghost" className="gap-1.5 text-primary hover:text-primary/80 hover:bg-primary/8">
             <Link to={viewAllHref}>
               {t('products.viewAll')}
@@ -44,8 +51,16 @@ export function FeaturedProducts({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {isLoading
             ? Array.from({ length: limit }).map((_, i) => <ProductCardSkeleton key={i} />)
-            : filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+            : filteredProducts.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 32 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: index * 0.06, ease: 'easeOut' }}
+                >
+                  <ProductCard product={product} />
+                </motion.div>
               ))
           }
         </div>
