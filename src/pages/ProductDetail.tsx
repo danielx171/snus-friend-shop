@@ -51,6 +51,7 @@ export default function ProductDetail() {
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [justAdded, setJustAdded] = useState(false);
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateFormat, translateBadge, translateCategory } = useTranslation();
 
   if (isLoading) {
