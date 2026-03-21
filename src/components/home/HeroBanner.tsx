@@ -160,18 +160,18 @@ export function HeroBanner() {
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
 
           {/* Left — slide content */}
-          <motion.div
-            className="space-y-7"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-          >
+          <div className="space-y-7">
             {/* Trust pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
-              <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
-              {t('trust.trustpilot')}
-            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
+                <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
+                {t('trust.trustpilot')}
+              </div>
+            </motion.div>
 
             {/* Crossfade text container */}
             <div className="relative min-h-[240px] sm:min-h-[220px] overflow-hidden">
@@ -187,23 +187,42 @@ export function HeroBanner() {
                 >
                   <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl leading-[1.08] text-foreground">
                     {s.title.split('\n').map((line, idx) => (
-                      <span key={idx} className={cn('block', idx === 1 && 'text-foreground')}>
+                      <motion.span
+                        key={idx}
+                        className={cn('block', idx === 1 && 'text-foreground')}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: idx === 0 ? 0.15 : 0.25, ease: 'easeOut' }}
+                      >
                         {line}
-                      </span>
+                      </motion.span>
                     ))}
-                    <span
+                    <motion.span
                       className="block text-[0.8em] mt-2 font-semibold"
                       style={{ color: s.accentColor }}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, delay: 0.4, ease: 'easeOut' }}
                     >
                       {s.subtitle}
-                    </span>
+                    </motion.span>
                   </h1>
 
-                  <p className="max-w-lg text-base text-muted-foreground leading-relaxed mt-5">
+                  <motion.p
+                    className="max-w-lg text-base text-muted-foreground leading-relaxed mt-5"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 0.5, ease: 'easeOut' }}
+                  >
                     {s.description}
-                  </p>
+                  </motion.p>
 
-                  <div className="flex flex-wrap gap-3 pt-5">
+                  <motion.div
+                    className="flex flex-wrap gap-3 pt-5"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.6, ease: 'easeOut' }}
+                  >
                     <Button
                       asChild
                       size="lg"
@@ -227,13 +246,18 @@ export function HeroBanner() {
                         </Link>
                       </Button>
                     )}
-                  </div>
+                  </motion.div>
                 </div>
               ))}
             </div>
 
             {/* Trust signals */}
-            <div className="flex flex-wrap gap-5 text-xs text-muted-foreground">
+            <motion.div
+              className="flex flex-wrap gap-5 text-xs text-muted-foreground"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.5, ease: 'easeOut' }}
+            >
               <div className="flex items-center gap-2">
                 <Truck className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
                 <span>{t('trust.freeShipping', { amount: freeShippingFormatted })}</span>
@@ -246,7 +270,7 @@ export function HeroBanner() {
                 <Package className="h-3.5 w-3.5 shrink-0" style={{ color: slide.accentColor }} />
                 <span>91 brands available</span>
               </div>
-            </div>
+            </motion.div>
 
             {/* Slide controls */}
             <div className="flex items-center gap-3 pt-1">
@@ -281,7 +305,7 @@ export function HeroBanner() {
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right — Product showcase */}
           <div className="relative">
@@ -290,59 +314,72 @@ export function HeroBanner() {
                 {/* Desktop: 2×2 grid */}
                 <div className="hidden lg:grid grid-cols-2 gap-3">
                   {showcaseProducts.map((product, i) => (
-                    <Link
+                    <motion.div
                       key={product.id}
-                      to={`/product/${product.id}`}
-                      className="group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm overflow-hidden hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.7 + i * 0.08, ease: 'easeOut' }}
                     >
-                      {/* Product image — full bleed, square */}
-                      <div className="aspect-square w-full overflow-hidden bg-muted/20">
-                        {product.image ? (
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center p-4">
-                            <span className="font-bold text-sm text-center leading-snug text-muted-foreground">{product.brand}</span>
-                          </div>
-                        )}
-                      </div>
-                      {/* Info overlay */}
-                      <div className="p-3">
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
-                        <p className="font-semibold text-foreground text-xs leading-snug line-clamp-1 mt-0.5">{product.name}</p>
-                        <p className="text-xs mt-1 font-medium" style={{ color: slide.accentColor }}>
-                          {formatPrice(product.prices.pack1)}/{t('cart.can')}
-                        </p>
-                      </div>
-                    </Link>
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm overflow-hidden hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 block"
+                      >
+                        {/* Product image — full bleed, square */}
+                        <div className="aspect-square w-full overflow-hidden bg-muted/20">
+                          {product.image ? (
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center p-4">
+                              <span className="font-bold text-sm text-center leading-snug text-muted-foreground">{product.brand}</span>
+                            </div>
+                          )}
+                        </div>
+                        {/* Info overlay */}
+                        <div className="p-3">
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
+                          <p className="font-semibold text-foreground text-xs leading-snug line-clamp-1 mt-0.5">{product.name}</p>
+                          <p className="text-xs mt-1 font-medium" style={{ color: slide.accentColor }}>
+                            {formatPrice(product.prices.pack1)}/{t('cart.can')}
+                          </p>
+                        </div>
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
 
                 {/* Mobile: horizontal scroll row */}
                 <div className="flex lg:hidden gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
-                  {showcaseProducts.map((product) => (
-                    <Link
+                  {showcaseProducts.map((product, i) => (
+                    <motion.div
                       key={product.id}
-                      to={`/product/${product.id}`}
-                      className="flex-none w-32 rounded-2xl border border-border/30 bg-card/80 p-3 hover:border-border/60 transition-all duration-200"
+                      className="flex-none w-32"
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.7 + i * 0.08, ease: 'easeOut' }}
                     >
-                      <div className="w-full aspect-square rounded-xl overflow-hidden bg-muted/30 flex items-center justify-center mb-2">
-                        {product.image ? (
-                          <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
-                        ) : (
-                          <span className="text-muted-foreground font-bold text-[9px] text-center px-1">{product.brand}</span>
-                        )}
-                      </div>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
-                      <p className="font-medium text-foreground text-xs leading-snug line-clamp-2 mt-0.5">{product.name}</p>
-                      <p className="text-[10px] mt-1" style={{ color: slide.accentColor }}>
-                        {formatPrice(product.prices.pack1)}
-                      </p>
-                    </Link>
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="rounded-2xl border border-border/30 bg-card/80 p-3 hover:border-border/60 transition-all duration-200 block"
+                      >
+                        <div className="w-full aspect-square rounded-xl overflow-hidden bg-muted/30 flex items-center justify-center mb-2">
+                          {product.image ? (
+                            <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
+                          ) : (
+                            <span className="text-muted-foreground font-bold text-[9px] text-center px-1">{product.brand}</span>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{product.brand}</p>
+                        <p className="font-medium text-foreground text-xs leading-snug line-clamp-2 mt-0.5">{product.name}</p>
+                        <p className="text-[10px] mt-1" style={{ color: slide.accentColor }}>
+                          {formatPrice(product.prices.pack1)}
+                        </p>
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
               </>
