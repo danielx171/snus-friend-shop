@@ -58,7 +58,7 @@ export function Header() {
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
-        setScrolled(window.scrollY > 60);
+        setScrolled(window.scrollY > 80);
       });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
