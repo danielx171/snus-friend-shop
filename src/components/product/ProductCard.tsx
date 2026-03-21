@@ -200,7 +200,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
         <CardContent className={isCompact ? 'p-2.5' : 'p-3.5'}>
           {/* Brand + Name */}
           <div className="mb-2.5 min-w-0">
-            <p className="text-[10px] text-muted-foreground/70 uppercase tracking-widest truncate">{product.brand}</p>
+            <motion.p variants={brandVariants} transition={hoverTransition} className="text-[10px] text-muted-foreground/70 uppercase tracking-widest truncate">{product.brand}</motion.p>
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">{product.name}</h3>
           </div>
 
