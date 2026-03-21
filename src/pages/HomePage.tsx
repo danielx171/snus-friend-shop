@@ -33,6 +33,7 @@ export default function HomePage() {
       />
       <Layout showNicotineWarning={true}>
         <HeroBanner />
+        <PromoMarquee />
         <CategoryShortcuts />
         <TrustBar />
         
