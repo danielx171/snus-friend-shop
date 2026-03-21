@@ -99,8 +99,11 @@ export default function ProductDetail() {
   const isOutOfStock = typeof product.stock === 'number' && product.stock === 0;
 
   const handleAddToCart = () => {
-    if (isOutOfStock) return;
+    if (isOutOfStock || justAdded) return;
     addToCart(product, selectedPack);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1500);
+    window.dispatchEvent(new CustomEvent('cart-item-added', { detail: { name: product.name } }));
   };
 
   const handleNotifyMe = async () => {
