@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { UtilityBar } from './UtilityBar';
@@ -15,6 +17,7 @@ interface LayoutProps {
 
 export function Layout({ children, showNicotineWarning = true }: LayoutProps) {
   const [bannerDismissed, setBannerDismissed] = useState(false);
+  const location = useLocation();
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -34,7 +37,23 @@ export function Layout({ children, showNicotineWarning = true }: LayoutProps) {
       <Header />
       <MainNav />
       {showNicotineWarning && <NicotineWarning />}
-      <main className="flex-1">{children}</main>
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={location.pathname}
+          className="flex-1"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            enter: { duration: 0.3, ease: 'easeOut' },
+            exit: { duration: 0.15 },
+            duration: 0.3,
+            ease: 'easeOut',
+          }}
+        >
+          {children}
+        </motion.main>
+      </AnimatePresence>
       <Footer />
       <CartDrawer />
     </div>
