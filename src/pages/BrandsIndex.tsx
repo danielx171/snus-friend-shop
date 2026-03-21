@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
-import { useBrands, brandAccentColor } from '@/hooks/useBrands';
+import { useBrands, brandAccentColor, type Brand } from '@/hooks/useBrands';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
