@@ -4,12 +4,13 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
 import { supabase } from '@/integrations/supabase/client';
 import { useSnusPoints } from '@/hooks/useSnusPoints';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
@@ -50,6 +51,23 @@ export function Header() {
     return () => clearTimeout(timer);
   }, [toastData]);
 
+  // Scroll-aware header style
+  const [scrolled, setScrolled] = useState(false);
+  const rafRef = useRef(0);
+  useEffect(() => {
+    const onScroll = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 60);
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   const { data: pointsData } = useSnusPoints(userId);
 
   const navLinks = [
@@ -62,7 +80,15 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/30 glass-panel-strong">
+    <header
+      className={cn(
+        'sticky top-0 z-50 transition-all duration-300 ease-in-out',
+        scrolled
+          ? 'border-b border-white/[0.08] backdrop-blur-lg'
+          : 'border-b border-border/30 glass-panel-strong'
+      )}
+      style={scrolled ? { backgroundColor: 'rgba(10, 15, 30, 0.85)' } : undefined}
+    >
       <div className="container flex h-[72px] items-center justify-between gap-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 shrink-0">
