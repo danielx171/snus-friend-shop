@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const LOW_STOCK_THRESHOLD = 20;
 
@@ -20,7 +19,6 @@ const strengthColors: Record<string, string> = {
   extraStrong: '#f97316',
   ultraStrong: '#ef4444',
 };
-
 
 const flavorAccents: Partial<Record<FlavorKey, string>> = {
   mint: '#10b981',
@@ -61,35 +59,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
   const isOutOfStock = typeof product.stock === 'number' && product.stock === 0;
   const isLowStock = typeof product.stock === 'number' && product.stock > 0 && product.stock <= LOW_STOCK_THRESHOLD;
   const accentColor = flavorAccents[product.flavorKey];
-  const glowColor = accentColor ?? 'hsl(var(--primary))';
   const strengthColor = strengthColors[product.strengthKey] ?? strengthColors.normal;
-
-  const cardVariants = {
-    rest: { y: 0, boxShadow: '0 2px 8px rgba(0,0,0,0.12)' },
-    hover: { y: -8, boxShadow: `0 20px 40px rgba(0,0,0,0.35), 0 0 16px ${strengthColor}40` },
-  };
-  const imageVariants = {
-    rest: { scale: 1, rotate: 0, filter: 'drop-shadow(0 0 0px transparent)' },
-    hover: { scale: 1.06, rotate: 12, filter: `drop-shadow(0 0 18px ${glowColor}55)` },
-  };
-  const imageGlowVariants = {
-    rest: { opacity: 0 },
-    hover: { opacity: 1 },
-  };
-  const ctaVariants = {
-    rest: { y: 0 },
-    hover: { y: -4 },
-  };
-  const ctaStyleVariants = {
-    rest: { filter: 'brightness(1)' },
-    hover: { filter: 'brightness(1.15)' },
-  };
-  const brandVariants = {
-    rest: { opacity: 0.7 },
-    hover: { opacity: 1 },
-  };
-  const hoverTransition = { duration: 0.25, ease: 'easeOut' } as const;
-  const leaveTransition = { duration: 0.25, ease: 'easeOut' } as const;
 
   const handleAddToCart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -97,12 +67,10 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
     if (isOutOfStock || justAdded) return;
     addToCart(product, selectedPack);
 
-    // Flash button to success state
     if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
     setJustAdded(true);
     addedTimerRef.current = setTimeout(() => setJustAdded(false), 1500);
 
-    // Dispatch event for cart icon bounce + toast
     window.dispatchEvent(new CustomEvent('cart-item-added', { detail: { name: product.name } }));
   }, [isOutOfStock, justAdded, addToCart, product, selectedPack]);
 
@@ -123,16 +91,9 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
   }, [notifyEmail, product.id]);
 
   return (
-    <motion.div
-      className="group"
-      initial="rest"
-      whileHover="hover"
-      animate="rest"
-      variants={cardVariants}
-      transition={{ ...hoverTransition, ...leaveTransition }}
-    >
+    <div className="group">
     <Card className={cn(
-      'product-card relative overflow-hidden rounded-2xl border-white/[0.06] bg-card/90 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-[border-color] duration-[220ms] ease-out group-hover:border-white/[0.12]',
+      'product-card relative overflow-hidden rounded-2xl border-white/[0.06] bg-card/90 backdrop-blur-sm shadow-[0_2px_8px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-[250ms] ease-out group-hover:translate-y-[-4px] group-hover:shadow-[0_16px_40px_rgba(0,0,0,0.3)] group-hover:border-white/[0.12]',
       isOutOfStock && 'opacity-60'
     )}>
       <Link to={`/product/${product.id}`} aria-label={product.name}>
@@ -144,21 +105,15 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
             background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))',
           }}
         >
-          {/* Radial glow behind can on hover */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            variants={imageGlowVariants}
-            transition={hoverTransition}
+          {/* Radial glow behind can — CSS only */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-[250ms] ease-out"
             style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(100,140,255,0.15), transparent 70%)',
+              background: 'radial-gradient(circle at 50% 50%, rgba(100,150,255,0.12), transparent 70%)',
               filter: 'blur(20px)',
             }}
           />
-          <motion.div
-            className="h-full w-full relative z-10"
-            variants={imageVariants}
-            transition={hoverTransition}
-          >
+          <div className="h-full w-full relative z-10 transition-transform duration-[250ms] ease-out group-hover:scale-[1.05] group-hover:rotate-[10deg]">
           {product.image ? (
             <img
               src={product.image}
@@ -179,7 +134,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               </span>
             </div>
           )}
-          </motion.div>
+          </div>
 
           {/* Strength-coded accent line at bottom of image */}
           {!isOutOfStock && (
@@ -223,7 +178,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
         <CardContent className={isCompact ? 'p-2.5' : 'p-3.5'}>
           {/* Brand + Name */}
           <div className="mb-2.5 min-w-0">
-            <motion.p variants={brandVariants} transition={hoverTransition} className="text-[10px] text-muted-foreground/70 uppercase tracking-widest truncate">{product.brand}</motion.p>
+            <p className="text-[10px] text-muted-foreground/70 uppercase tracking-widest truncate transition-opacity duration-[250ms] ease-out group-hover:opacity-100 opacity-70">{product.brand}</p>
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem] mt-0.5">{product.name}</h3>
           </div>
 
@@ -333,65 +288,39 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               </div>
             )
           ) : (
-            <motion.div
-              variants={ctaVariants}
-              transition={hoverTransition}
-            >
-            <motion.div
-              variants={ctaStyleVariants}
-              transition={hoverTransition}
-            >
             <Button
               onClick={handleAddToCart}
               className={cn(
-                'w-full rounded-xl font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:ring-ring hover:brightness-110 hover:scale-[1.03]',
+                'w-full rounded-xl font-medium transition-all duration-[250ms] ease-out focus-visible:ring-2 focus-visible:ring-ring group-hover:brightness-110',
                 isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm',
                 justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white'
               )}
               size="sm"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                {justAdded ? (
-                  <motion.span
-                    key="check"
-                    className="flex items-center gap-1.5"
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.7 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <Check className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
-                    <span className="truncate">Added!</span>
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="cart"
-                    className="flex items-center gap-1.5"
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.7 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
-                    {isCompact ? (
-                      <span className="hidden sm:inline truncate">{t('product.buy')}</span>
-                    ) : (
-                      <>
-                        <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
-                        <span className="sm:hidden">{t('product.buy')}</span>
-                      </>
-                    )}
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              {justAdded ? (
+                <span className="flex items-center gap-1.5">
+                  <Check className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
+                  <span className="truncate">Added!</span>
+                </span>
+              ) : (
+                <span className="flex items-center gap-1.5">
+                  <ShoppingCart className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
+                  {isCompact ? (
+                    <span className="hidden sm:inline truncate">{t('product.buy')}</span>
+                  ) : (
+                    <>
+                      <span className="hidden sm:inline truncate">{t('product.addToCart')}</span>
+                      <span className="sm:hidden">{t('product.buy')}</span>
+                    </>
+                  )}
+                </span>
+              )}
             </Button>
-            </motion.div>
-            </motion.div>
           )}
         </CardContent>
       </Link>
     </Card>
-    </motion.div>
+    </div>
   );
 }
 
