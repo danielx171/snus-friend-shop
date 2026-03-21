@@ -132,12 +132,29 @@ export function HeroBanner() {
         </div>
       </div>
 
-      {/* Ambient glow blobs */}
+      {/* Glow blob 1 — navy, top-right */}
+      <div
+        className="absolute -top-[100px] -right-[100px] w-[600px] h-[600px] rounded-full pointer-events-none z-0"
+        style={{ background: 'rgba(0, 49, 138, 0.25)', filter: 'blur(120px)' }}
+      />
+      {/* Glow blob 2 — lime, bottom-left */}
+      <div
+        className="absolute -bottom-[80px] -left-[60px] w-[400px] h-[400px] rounded-full pointer-events-none z-0"
+        style={{ background: 'rgba(216, 237, 98, 0.08)', filter: 'blur(100px)' }}
+      />
+      {/* Slide-reactive accent glow */}
       <div
         className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.07] blur-[130px] pointer-events-none transition-all duration-1000 z-0"
         style={{ background: slide.accentColor }}
       />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px] pointer-events-none z-0" />
+      {/* Subtle grid overlay */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }}
+      />
 
       <div className="container py-14 md:py-20 lg:py-24 relative z-[1]">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14 items-center">
