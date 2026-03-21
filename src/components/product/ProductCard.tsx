@@ -119,7 +119,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
       whileHover="hover"
       animate="rest"
       variants={cardVariants}
-      transition={hoverTransition}
+      transition={{ ...hoverTransition, ...leaveTransition }}
     >
     <Card className={cn(
       'product-card group relative overflow-hidden rounded-2xl border-border/30 bg-card/90 backdrop-blur-sm transition-colors duration-200',
