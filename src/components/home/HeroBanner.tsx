@@ -338,6 +338,38 @@ export function HeroBanner() {
           </div>
         </div>
       </div>
+      <style>{`
+        @keyframes hero-float-up {
+          0% { transform: translateY(0) translateX(0); }
+          25% { transform: translateY(-30vh) translateX(12px); }
+          50% { transform: translateY(-60vh) translateX(-8px); }
+          75% { transform: translateY(-90vh) translateX(15px); }
+          100% { transform: translateY(-120vh) translateX(0); }
+        }
+        .hero-float-circle {
+          position: absolute;
+          border-radius: 50%;
+          border: 1px solid rgba(212, 237, 98, 0.15);
+          background: rgba(0, 49, 138, 0.05);
+          opacity: 0.06;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: hero-float-up linear infinite;
+        }
+        .hero-float-lime {
+          background: rgba(216, 237, 98, 0.04);
+          opacity: 0.07;
+        }
+        .hero-float-inner {
+          border-radius: 50%;
+          border: 1px solid rgba(212, 237, 98, 0.12);
+          background: rgba(0, 49, 138, 0.04);
+        }
+        .hero-float-inner-lime {
+          background: rgba(216, 237, 98, 0.03);
+        }
+      `}</style>
     </section>
   );
 }
