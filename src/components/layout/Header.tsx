@@ -177,12 +177,12 @@ export function Header() {
               <SheetTitle className="sr-only">Navigation menu</SheetTitle>
               <div className="flex flex-col gap-6 pt-6">
                 <SearchAutocomplete onClose={() => setMobileMenuOpen(false)} autoFocus={false} />
-                <nav className="flex flex-col gap-0.5">
+                <nav className="flex flex-col">
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}
                       to={link.href}
-                      className="flex items-center rounded-xl px-4 py-3.5 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+                      className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-white/5"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {link.label}
@@ -190,7 +190,7 @@ export function Header() {
                   ))}
                   <Link
                     to="/account"
-                    className="flex items-center rounded-xl px-4 py-3.5 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+                    className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-white/5"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <User className="h-4 w-4 mr-2.5" />
