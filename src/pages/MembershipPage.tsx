@@ -155,9 +155,14 @@ export default function MembershipPage() {
                     className={cn(
                       'relative rounded-2xl glass-panel overflow-hidden transition-all duration-300',
                       isVip && tier.accentBorder,
-                      isVip && tier.glowClass
+                      isVip && tier.glowClass,
+                      isVip && 'membership-vip-card',
+                      !isVip && 'membership-member-card'
                     )}
                   >
+                    {/* VIP shimmer sweep */}
+                    {isVip && <div className="membership-shimmer" />}
+
                     {/* Header */}
                     <div className={cn('h-40 bg-gradient-to-br flex flex-col items-center justify-center gap-3 relative', tier.gradientClass)}>
                       {isVip && (
@@ -165,7 +170,11 @@ export default function MembershipPage() {
                           Most Popular
                         </Badge>
                       )}
-                      <div className={cn('h-14 w-14 rounded-full flex items-center justify-center', tier.accentBg)}>
+                      <div className={cn(
+                        'h-14 w-14 rounded-full flex items-center justify-center',
+                        tier.accentBg,
+                        isVip ? 'membership-crown-pulse' : 'membership-gift-float'
+                      )}>
                         <Icon className="h-7 w-7 text-white" />
                       </div>
                       <h3 className={cn('text-2xl font-bold', tier.accentText)}>{tier.name}</h3>
