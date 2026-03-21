@@ -230,7 +230,7 @@ export function ProductCard({ product, variant = 'default' }: ProductCardProps) 
               )} />
               {translateStrength(product.strengthKey)}
             </span>
-            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-muted/30 text-muted-foreground border border-border/20 shrink-0">
+            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium bg-white/[0.05] text-muted-foreground border border-white/[0.08] shrink-0">
               {translateFlavor(product.flavorKey)}
             </span>
             {!isCompact && (
