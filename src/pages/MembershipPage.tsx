@@ -33,6 +33,48 @@ const merchPlaceholders = [
   { label: 'Collector items', gradient: 'from-[hsl(var(--chart-1)/0.15)] to-[hsl(var(--chart-1)/0.05)]' },
 ];
 
+/* Small helper: animated count-up for step cards */
+function StepCounter({ inView, target, label, delay }: { inView: boolean; target: number; label: string; delay: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const hasRun = useRef(false);
+  useEffect(() => {
+    if (inView && !hasRun.current && ref.current) {
+      hasRun.current = true;
+      const controls = animate(0, target, {
+        duration: 0.8,
+        ease: 'easeOut',
+        delay,
+        onUpdate(v) { if (ref.current) ref.current.textContent = `${Math.round(v)} ${label}`; },
+      });
+      return () => controls.stop();
+    }
+  }, [inView, target, label, delay]);
+  return <p className="text-sm font-semibold text-[hsl(var(--chart-2))]"><span ref={ref}>0 {label}</span></p>;
+}
+
+/* Confetti-like floating dots for celebration */
+function ConfettiDots() {
+  const dots = Array.from({ length: 12 }, (_, i) => i);
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {dots.map((i) => (
+        <motion.div
+          key={i}
+          className="absolute h-1.5 w-1.5 rounded-full"
+          style={{
+            left: `${8 + (i / 12) * 84}%`,
+            top: `${20 + Math.sin(i * 1.3) * 30}%`,
+            backgroundColor: i % 3 === 0 ? 'hsl(var(--chart-2))' : i % 3 === 1 ? 'hsl(var(--chart-4))' : 'hsl(var(--primary))',
+          }}
+          initial={{ opacity: 0, y: 10, scale: 0 }}
+          animate={{ opacity: [0, 1, 0.6], y: [10, -8, -4], scale: [0, 1.2, 0.8] }}
+          transition={{ duration: 2, ease: 'easeOut', repeat: Infinity, delay: i * 0.15 }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function MembershipPage() {
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -60,11 +102,15 @@ export default function MembershipPage() {
   const pct = Math.min((pts / SNUSPOINTS.freeTrialCost) * 100, 100);
   const remaining = Math.max(SNUSPOINTS.freeTrialCost - pts, 0);
 
+  // For logged-out users, demo animates to 340; for logged-in, use real balance
+  const displayTarget = userId ? pts : 340;
+  const displayPct = Math.min((displayTarget / SNUSPOINTS.freeTrialCost) * 100, 100);
+
   useEffect(() => {
     if (barInView && !hasAnimatedCounter.current && counterRef.current) {
       hasAnimatedCounter.current = true;
-      const controls = animate(0, pts, {
-        duration: 1,
+      const controls = animate(0, displayTarget, {
+        duration: userId ? 1.5 : 2,
         ease: 'easeOut',
         onUpdate(v) {
           if (counterRef.current) counterRef.current.textContent = `${Math.round(v)} / ${SNUSPOINTS.freeTrialCost}`;
@@ -72,7 +118,7 @@ export default function MembershipPage() {
       });
       return () => controls.stop();
     }
-  }, [barInView, pts]);
+  }, [barInView, displayTarget, userId]);
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
