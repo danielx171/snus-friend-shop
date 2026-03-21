@@ -47,7 +47,7 @@ export function Header() {
   // Auto-dismiss toast
   useEffect(() => {
     if (!toastData) return;
-    const timer = setTimeout(() => setToastData(null), 3000);
+    const timer = setTimeout(() => setToastData(null), 2500);
     return () => clearTimeout(timer);
   }, [toastData]);
 
