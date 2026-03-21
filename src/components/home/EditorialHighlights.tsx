@@ -65,10 +65,7 @@ export function EditorialHighlights() {
             >
               <Link
                 to={item.href}
-                className="group relative block h-[280px] rounded-2xl border border-white/[0.06] overflow-hidden transition-all duration-300 hover:border-white/[0.12] hover:-translate-y-1"
-                style={{ background: item.gradient }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = item.gradientHover; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = item.gradient; }}
+                className="group relative block h-[280px] rounded-2xl border border-white/10 bg-white/[0.08] overflow-hidden transition-all duration-200 ease-out hover:border-white/20 hover:-translate-y-0.5"
               >
                 {/* Large emoji watermark */}
                 <span
