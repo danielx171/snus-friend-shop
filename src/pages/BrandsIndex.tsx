@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
-import { useBrands, brandAccentColor } from '@/hooks/useBrands';
+import { useBrands, brandAccentColor, type Brand } from '@/hooks/useBrands';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -101,13 +101,13 @@ export default function BrandsIndex() {
             <section className="mb-12">
               <h2 className="text-xl font-bold text-foreground mb-4">Featured Brands</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {(isLoading ? Array.from({ length: 12 }) : topBrands).map((brand, index) => {
+                {(isLoading ? Array.from({ length: 12 }) : topBrands).map((brand: unknown, index: number) => {
                   if (isLoading) {
                     return (
                       <div key={index} className="h-48 rounded-2xl border border-border/40 bg-card animate-pulse" />
                     );
                   }
-                  const b = brand!;
+                  const b = brand as Brand;
                   const accent = brandAccentColor(b.name);
 
                   return (
