@@ -166,7 +166,7 @@ export default function MembershipPage() {
                     {/* Header */}
                     <div className={cn('h-40 bg-gradient-to-br flex flex-col items-center justify-center gap-3 relative', tier.gradientClass)}>
                       {isVip && (
-                        <Badge className="absolute top-4 right-4 bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)] border-0 text-[10px] font-semibold">
+                        <Badge className="absolute top-4 right-4 bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)] border-0 text-[10px] font-semibold membership-badge-pulse">
                           Most Popular
                         </Badge>
                       )}
