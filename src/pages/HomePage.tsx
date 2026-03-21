@@ -1,6 +1,7 @@
 import { Layout } from '@/components/layout/Layout';
 import { HeroBanner } from '@/components/home/HeroBanner';
 import { CategoryShortcuts } from '@/components/home/CategoryShortcuts';
+import { PromoMarquee } from '@/components/home/PromoMarquee';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { TrustBar } from '@/components/home/TrustBar';
 import { MembersClub } from '@/components/home/MembersClub';
