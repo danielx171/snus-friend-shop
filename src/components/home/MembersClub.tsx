@@ -9,7 +9,7 @@ export function MembersClub() {
   return (
     <section className="relative py-16 md:py-20 overflow-hidden grain">
       {/* Warm background */}
-      <div className="absolute inset-0 bg-muted/5 pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none" />
       <div className="absolute top-1/2 right-0 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-[hsl(var(--chart-4)/0.06)] blur-[120px] pointer-events-none" />
 
       <div className="container relative">
