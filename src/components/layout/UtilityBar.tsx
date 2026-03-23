@@ -1,4 +1,4 @@
-import { Star, Truck, CreditCard, User, ShoppingCart, Heart } from 'lucide-react';
+import { Star, Truck, CreditCard, User, ShoppingCart, Heart, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
@@ -6,6 +6,7 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { Link } from 'react-router-dom';
 import { formatMarketPrice } from '@/lib/market';
 import { useBrands } from '@/hooks/useBrands';
+import { useTheme } from 'next-themes';
 
 export function UtilityBar() {
   const { totalItems, totalPrice, openCart } = useCart();
@@ -13,6 +14,8 @@ export function UtilityBar() {
   const { t, formatPrice, market } = useTranslation();
   const { brands } = useBrands();
   const brandCount = brands.length || 91;
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === 'velo' || !theme;
 
   const freeShippingFormatted = formatMarketPrice(
     market.freeShippingThreshold,
@@ -44,7 +47,15 @@ export function UtilityBar() {
         </div>
 
         <div className="flex items-center gap-1">
-          
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-9 w-9 p-0 text-muted-foreground hover:text-primary"
+            onClick={() => setTheme(isDark ? 'light' : 'velo')}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+          </Button>
           <Button variant="ghost" size="sm" className="h-9 gap-1 text-[11px] px-2.5 text-muted-foreground hover:text-primary relative" asChild>
             <Link to="/wishlist">
               <Heart className="h-3.5 w-3.5" />

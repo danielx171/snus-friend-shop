@@ -402,6 +402,16 @@ export default function ProductDetail() {
               </div>
             )}
 
+            {/* Stock count */}
+            {typeof product.stock === 'number' && product.stock > 0 && (
+              <p className={cn(
+                'text-sm font-medium',
+                product.stock > 20 ? 'text-emerald-400' : 'text-amber-400'
+              )}>
+                {product.stock > 20 ? `${product.stock} in stock` : `Only ${product.stock} left`}
+              </p>
+            )}
+
             {/* 7. CTA */}
             {isOutOfStock ? (
               <div className="space-y-4">
