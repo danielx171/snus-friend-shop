@@ -68,7 +68,12 @@ Deno.serve(async (req) => {
       });
     }
   } else {
-    console.warn(JSON.stringify({ requestId, event: "delivery_callback_no_secret_configured", warning: "DELIVERY_WEBHOOK_SECRET not set — accepting all requests" }));
+    // Fail closed — reject all requests if secret is not configured
+    console.error(JSON.stringify({ requestId, event: "delivery_callback_no_secret_configured", error: "DELIVERY_WEBHOOK_SECRET not set — rejecting request" }));
+    return new Response(JSON.stringify({ ok: false, error: "server_misconfigured", requestId }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   /* ---------- env ---------- */

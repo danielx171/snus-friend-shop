@@ -21,7 +21,7 @@ Deno.serve(async (req: Request) => {
     const body = await req.json().catch(() => ({}));
     const { email, source = 'membership' } = body as { email?: string; source?: string };
 
-    if (!email || typeof email !== 'string' || !email.includes('@')) {
+    if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       return new Response(
         JSON.stringify({ error: 'invalid_email', requestId }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
