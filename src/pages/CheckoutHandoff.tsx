@@ -280,7 +280,7 @@ export default function CheckoutHandoff() {
   if (PREVIEW_MODE) {
     return (
       <>
-        <SEO title={`Checkout | SnusFriend`} description="Store coming soon" />
+        <SEO title={`Checkout | SnusFriend`} description="Store coming soon" metaRobots="noindex,nofollow" />
         <Layout showNicotineWarning={false}>
           <div className="container py-16 flex justify-center">
             <Card className="max-w-md w-full">
@@ -305,7 +305,7 @@ export default function CheckoutHandoff() {
   if (items.length === 0) {
     return (
       <>
-        <SEO title={`${t('checkout.title')} | SnusFriend`} description={t('checkout.emptyDescription')} />
+        <SEO title={`${t('checkout.title')} | SnusFriend`} description={t('checkout.emptyDescription')} metaRobots="noindex,nofollow" />
         <Layout showNicotineWarning={false}>
           <div className="container py-16 text-center">
             <ShoppingBag className="mx-auto h-16 w-16 text-muted-foreground mb-6" />
@@ -324,7 +324,7 @@ export default function CheckoutHandoff() {
 
   return (
     <>
-      <SEO title={`${t('checkout.title')} | SnusFriend`} description={t('checkout.emptyDescription')} />
+      <SEO title={`${t('checkout.title')} | SnusFriend`} description={t('checkout.emptyDescription')} metaRobots="noindex,nofollow" />
       <Layout showNicotineWarning={false}>
         <div className="container py-8">
           <h1 className="text-3xl font-bold text-foreground mb-8">{t('checkout.title')}</h1>

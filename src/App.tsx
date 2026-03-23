@@ -2,12 +2,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { CartProvider } from "@/context/CartContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "next-themes";
 import { CookieConsentProvider } from "@/context/CookieConsentContext";
+import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import HomePage from "./pages/HomePage";
 import ProductListing from "./pages/ProductListing";
 import ProductDetail from "./pages/ProductDetail";
@@ -31,6 +32,12 @@ import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsent } from "@/components/cookie/CookieConsent";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+
+/** Redirect legacy /produkt/:id to /product/:id (SEO: avoid duplicate content) */
+function ProduktRedirect() {
+  const { id } = useParams<{ id: string }>();
+  return <Navigate to={`/product/${id}`} replace />;
+}
 
 // Lazy-load ops pages — they are admin-only and rarely visited
 const OpsLogin = lazy(() => import("./pages/ops/OpsLogin"));
@@ -87,12 +94,13 @@ const App = () => (
           <CookieConsentProvider>
             <Toaster />
             <Sonner />
+            <OrganizationSchema />
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/produkter" element={<ProductListing />} />
+              <Route path="/produkter" element={<Navigate to="/nicotine-pouches" replace />} />
               <Route path="/nicotine-pouches" element={<ProductListing />} />
-              <Route path="/produkt/:id" element={<ProductDetail />} />
+              <Route path="/produkt/:id" element={<ProduktRedirect />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/search" element={<SearchResults />} />
               <Route path="/cart" element={<CartPage />} />

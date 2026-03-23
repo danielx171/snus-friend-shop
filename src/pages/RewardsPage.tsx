@@ -9,6 +9,7 @@ import { useSnusPoints } from '@/hooks/useSnusPoints';
 import { useSpinWheel, useSpinStatus } from '@/hooks/useSpinWheel';
 import { useVouchers } from '@/hooks/useVouchers';
 import type { SpinResult } from '@/hooks/useSpinWheel';
+import { SEO } from '@/components/seo/SEO';
 import SpinWheel from '@/components/rewards/SpinWheel';
 import PrizeReveal from '@/components/rewards/PrizeReveal';
 import VoucherList from '@/components/rewards/VoucherList';
@@ -68,6 +69,11 @@ export default function RewardsPage() {
   }, [toast]);
 
   return (
+    <>
+      <SEO
+        title="Daily Spin & Rewards | SnusFriend"
+        description="Spin the wheel daily to win SnusPoints, vouchers, and free products. Earn rewards every time you shop at SnusFriend."
+      />
     <Layout>
       <div className="container mx-auto max-w-lg px-4 py-8">
         {/* Points balance strip */}
@@ -135,5 +141,6 @@ export default function RewardsPage() {
       {/* Prize reveal overlay */}
       <PrizeReveal prize={revealedPrize} onClose={handleClosePrize} />
     </Layout>
+    </>
   );
 }

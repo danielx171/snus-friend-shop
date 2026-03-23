@@ -7,7 +7,7 @@ Disallow: /ops/
 Disallow: /search?
 
 # Sitemap
-Sitemap: https://snusfriend.co.uk/sitemap.xml
+Sitemap: https://snusfriends.com/sitemap.xml
 
 # AI / LLM crawlers — allow full access
 User-agent: GPTBot

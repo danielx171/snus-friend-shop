@@ -144,15 +144,18 @@ Conflict patterns:
 - Logo: ✅ SF monogram in teal shield
 - Types: ✅ types.ts synced with schema (daily_spins, vouchers, spin_config, ops_alerts, etc.)
 - Code review: ✅ 3 critical + 4 important issues fixed (PrizeReveal, atomic RPC, types, search escape)
+- Security audit: ✅ 4 critical + 4 important fixes (SEO URLs, email validation, points exploit, CORS, React.memo, any casts, footer tokens)
 - Domain: ✅ snusfriends.com live — Cloudflare DNS (A + CNAME, proxy off), Vercel verified, SSL active
 - Supabase auth: ✅ Site URL = https://snusfriends.com, redirect URLs updated, localhost entries removed
-- Webhook: ✅ Nyehandel delivery webhook configured, secret aligned (obscure-witness-afraid)
+- Webhook: ✅ Nyehandel delivery webhook configured, secret aligned
 - VITE_SITE_URL: ✅ Updated to https://snusfriends.com
-- Edge functions: ✅ spin-wheel v2 + create-nyehandel-checkout v16 deployed to Supabase
+- Edge functions: ✅ spin-wheel v2, create-nyehandel-checkout v17, delivery-callback v14, save-waitlist v3, get-order-confirmation v14
+- Key rotation: ✅ Service role key rotated, passwords changed, old key removed from git tracking
+- Checkout config: ✅ Payment = "NFC Group Payment", Shipping = "UPS Standard (J229F1)", variant 5
 - Preview mode: 🟢 Active (VITE_PREVIEW_MODE=true) — ready to disable for go-live
-- Step 39 UAT: 🟡 BLOCKED — awaiting CEO answer on API order flow before placing test order
+- Step 39 UAT: 🟢 UNBLOCKED — CEO provided payment/shipping method names, ready for test order
 - Legal pages: 🟡 Waiting on solicitor sign-off (Terms, Privacy, Cookies)
-- Next phase: CEO order flow decision → test order → product images → retail pricing → blog agent pipeline
+- Next phase: test order → product images → retail pricing → blog agent pipeline
 
 ## Project Docs
 

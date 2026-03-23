@@ -94,6 +94,16 @@ export default function FaqPage() {
       <SEO
         title="FAQ | SnusFriend"
         description="Frequently asked questions about nicotine pouches, delivery, and SnusPoints at SnusFriend."
+        canonical="https://snusfriends.com/faq"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: [
+            ...aboutPouches.map(q => ({ '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: typeof q.answer === 'string' ? q.answer : q.question === 'What strength should I choose?' ? 'Normal (4-8mg) for beginners, Strong (8-12mg) for regular users, Extra Strong (12-18mg) for experienced users, Ultra Strong (18mg+) for advanced users.' : '' } })),
+            ...ordersDelivery.map(q => ({ '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: typeof q.answer === 'string' ? q.answer : '' } })),
+            ...rewards.map(q => ({ '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: typeof q.answer === 'string' ? q.answer : '' } })),
+          ],
+        }}
       />
       <Layout showNicotineWarning={false}>
         <div className="container py-16">

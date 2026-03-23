@@ -50,6 +50,7 @@ export default function CartPage() {
         <SEO
           title={`${t('cart.title')} | SnusFriend`}
           description={t('cart.emptyDescription')}
+          metaRobots="noindex,follow"
         />
         <Layout showNicotineWarning={false}>
           <div className="container py-16 text-center">
@@ -74,6 +75,7 @@ export default function CartPage() {
       <SEO
         title={`${t('cart.title')} (${totalItems} ${itemLabel}) | SnusFriend`}
         description={t('cart.emptyDescription')}
+        metaRobots="noindex,follow"
       />
       <Layout showNicotineWarning={false}>
         <div className="container py-8">

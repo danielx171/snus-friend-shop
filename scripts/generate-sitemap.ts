@@ -10,7 +10,7 @@ import { createClient } from '@supabase/supabase-js';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 
-const SITE_URL = 'https://snusfriend.co.uk';
+const SITE_URL = 'https://snusfriends.com';
 const OUT = resolve(import.meta.dir, '../public/sitemap.xml');
 
 // Load env — Bun reads .env.local automatically
