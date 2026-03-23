@@ -124,7 +124,7 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
         />
       </div>
 
-      <div className="relative" style={{ width: 424, height: 424 }}>
+      <div className="relative w-full mx-auto" style={{ maxWidth: 424, aspectRatio: '1' }}>
         {/* Pointer triangle at top */}
         <div className="absolute left-1/2 -top-2 z-20 -translate-x-1/2">
           <svg width="28" height="24" viewBox="0 0 28 24">
