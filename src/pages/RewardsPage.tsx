@@ -8,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useSnusPoints } from '@/hooks/useSnusPoints';
 import { useSpinWheel, useSpinStatus } from '@/hooks/useSpinWheel';
 import { useVouchers } from '@/hooks/useVouchers';
-import type { SpinResult, PrizeDisplay } from '@/hooks/useSpinWheel';
+import type { SpinResult } from '@/hooks/useSpinWheel';
 import SpinWheel from '@/components/rewards/SpinWheel';
 import PrizeReveal from '@/components/rewards/PrizeReveal';
 import VoucherList from '@/components/rewards/VoucherList';
@@ -39,7 +39,7 @@ export default function RewardsPage() {
   const hasSpunToday = spinStatus.data === true;
 
   /* ---- Prize reveal ---- */
-  const [revealedPrize, setRevealedPrize] = useState<PrizeDisplay | null>(null);
+  const [revealedPrize, setRevealedPrize] = useState<SpinResult | null>(null);
 
   const handleSpin = useCallback(async (): Promise<SpinResult> => {
     if (!userId) {
@@ -50,12 +50,7 @@ export default function RewardsPage() {
   }, [userId, spinMutation, toast]);
 
   const handlePrizeWon = useCallback((prize: SpinResult) => {
-    setRevealedPrize({
-      prize_key: prize.prize_key,
-      prize_label: prize.prize_label,
-      prize_type: prize.prize_type,
-      value: prize.value,
-    });
+    setRevealedPrize(prize);
   }, []);
 
   const handleClosePrize = useCallback(() => {

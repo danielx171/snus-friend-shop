@@ -346,15 +346,12 @@ export default function AccountPage() {
                     <div className="space-y-2">
                       <h3 className="text-sm font-medium text-foreground">Email Preferences</h3>
                       <p className="text-xs text-muted-foreground">Manage marketing emails and order notifications.</p>
-                      <Button variant="outline" size="sm">Manage Preferences</Button>
+                      <Button variant="outline" size="sm" disabled className="opacity-50">Manage Preferences (Coming Soon)</Button>
                     </div>
                     <Separator className="bg-border/20" />
                     <div className="space-y-2">
-                      <h3 className="text-sm font-medium text-destructive">Delete Account</h3>
-                      <p className="text-xs text-muted-foreground">Permanently remove your account and all associated data.</p>
-                      <Button variant="outline" size="sm" className="border-destructive/30 text-destructive hover:bg-destructive/10">
-                        Delete Account
-                      </Button>
+                      <h3 className="text-sm font-medium text-muted-foreground">Delete Account</h3>
+                      <p className="text-xs text-muted-foreground">Contact support to remove your account and all associated data.</p>
                     </div>
                   </CardContent>
                 </Card>

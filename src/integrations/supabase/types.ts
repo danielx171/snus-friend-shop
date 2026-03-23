@@ -146,7 +146,9 @@ export type Database = {
           badge_keys: string[]
           brand_id: string
           category_key: string
+          compare_price: number | null
           created_at: string
+          description: string | null
           description_key: string | null
           flavor_key: string
           format_key: string
@@ -167,7 +169,9 @@ export type Database = {
           badge_keys?: string[]
           brand_id: string
           category_key?: string
+          compare_price?: number | null
           created_at?: string
+          description?: string | null
           description_key?: string | null
           flavor_key: string
           format_key: string
@@ -188,7 +192,9 @@ export type Database = {
           badge_keys?: string[]
           brand_id?: string
           category_key?: string
+          compare_price?: number | null
           created_at?: string
+          description?: string | null
           description_key?: string | null
           flavor_key?: string
           format_key?: string

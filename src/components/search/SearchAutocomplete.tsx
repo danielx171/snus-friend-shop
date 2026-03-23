@@ -72,7 +72,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
         .from('products')
         .select('id, name, slug, image_url, brand_id')
         .eq('is_active', true)
-        .ilike('name', `%${debouncedQuery}%`)
+        .ilike('name', `%${debouncedQuery.replace(/[%_\\]/g, '\\$&')}%`)
         .limit(6);
 
       if (cancelled) return;
