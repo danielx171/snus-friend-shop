@@ -7,6 +7,7 @@ import { TrustBar } from '@/components/home/TrustBar';
 import { MembersClub } from '@/components/home/MembersClub';
 import { WhySnusFriends } from '@/components/home/WhySnusFriends';
 import { EditorialHighlights } from '@/components/home/EditorialHighlights';
+import { BrandCarousel } from '@/components/home/BrandCarousel';
 import { SEO } from '@/components/seo/SEO';
 import { SITE_URL } from '@/config/brand';
 
@@ -57,6 +58,14 @@ export default function HomePage() {
             limit={4}
             viewAllHref="/nicotine-pouches?badge=popular"
           />
+        </div>
+
+        {/* Discover Brands carousel */}
+        <div
+          className="border-t border-white/[0.04]"
+          style={{ background: 'hsl(220 80% 12%)' }}
+        >
+          <BrandCarousel />
         </div>
 
         {/* Explore & Discover — slightly lighter navy with radial glow */}

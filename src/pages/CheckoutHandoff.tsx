@@ -45,7 +45,7 @@ interface VariantRow {
 /* ── Shipping methods from NordicPouch Nyehandel admin ── */
 
 const SHIPPING_OPTIONS = [
-  { name: 'UPS Standard', price: 8.2, label: 'UPS Standard — €8.20' },
+  { name: 'UPS Standard (J229F1)', price: 8.2, label: 'UPS Standard — €8.20' },
   { name: 'UPS Express Saver', price: 17.9, label: 'UPS Express Saver — €17.90' },
   { name: 'DHL Economy (Non EU)', price: 9.9, label: 'DHL Economy (Non EU) — €9.90' },
   { name: 'DHL Express (Non EU)', price: 14.9, label: 'DHL Express (Non EU) — €14.90' },

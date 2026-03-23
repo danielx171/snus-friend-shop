@@ -49,7 +49,7 @@ export function useBrands() {
   const brands = query.data ?? [];
   const topBrands = [...brands]
     .sort((a, b) => b.productCount - a.productCount)
-    .slice(0, 12);
+    .slice(0, 24);
   const brandsByLetter = groupByLetter(brands);
 
   return {

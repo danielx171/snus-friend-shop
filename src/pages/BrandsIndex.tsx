@@ -100,8 +100,8 @@ export default function BrandsIndex() {
             {/* Featured Brands */}
             <section className="mb-12">
               <h2 className="text-xl font-bold text-foreground mb-4">Featured Brands</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {(isLoading ? Array.from({ length: 12 }) : topBrands).map((brand: unknown, index: number) => {
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-5">
+                {(isLoading ? Array.from({ length: 24 }) : topBrands).map((brand: unknown, index: number) => {
                   if (isLoading) {
                     return (
                       <div key={index} className="h-48 rounded-2xl border border-border/40 bg-card animate-pulse" />
@@ -175,7 +175,8 @@ export default function BrandsIndex() {
             <section>
               <h2 className="text-xl font-bold text-foreground mb-4">All Brands A&#8211;Z</h2>
 
-              <div className="flex flex-wrap gap-1 mb-6">
+              {/* Mobile: horizontal A-Z bar */}
+              <div className="flex flex-wrap gap-1 mb-6 lg:hidden">
                 {ALPHABET.map((letter) => {
                   const hasBrands = !!brandsByLetter[letter]?.length;
                   return hasBrands ? (
@@ -197,27 +198,52 @@ export default function BrandsIndex() {
                 })}
               </div>
 
-              <div className="space-y-6">
-                {ALPHABET.filter((letter) => brandsByLetter[letter]?.length).map((letter) => (
-                  <div key={letter} id={`letter-${letter}`}>
-                    <h3 className="text-lg font-bold text-foreground border-b border-border/40 pb-1 mb-2">
-                      {letter}
-                    </h3>
-                    <ul className="space-y-1">
-                      {brandsByLetter[letter].map((b) => (
-                        <li key={b.id} className="flex items-center justify-between py-1">
-                          <Link
-                            to={`/brand/${b.slug}`}
-                            className="text-sm text-foreground hover:text-[hsl(var(--chart-4))] transition-colors"
-                          >
-                            {b.name}
-                          </Link>
-                          <span className="text-xs text-muted-foreground">{b.productCount}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+              <div className="flex gap-6">
+                {/* Desktop: sticky vertical A-Z sidebar */}
+                <nav className="hidden lg:flex flex-col gap-0.5 sticky top-28 self-start shrink-0" aria-label="Alphabet navigation">
+                  {ALPHABET.map((letter) => {
+                    const hasBrands = !!brandsByLetter[letter]?.length;
+                    return hasBrands ? (
+                      <a
+                        key={letter}
+                        href={`#letter-${letter}`}
+                        className="flex h-7 w-7 items-center justify-center rounded-md text-xs font-semibold text-foreground hover:bg-[hsl(var(--chart-4))] hover:text-white transition-colors"
+                      >
+                        {letter}
+                      </a>
+                    ) : (
+                      <span
+                        key={letter}
+                        className="flex h-7 w-7 items-center justify-center rounded-md text-xs font-semibold text-muted-foreground/30"
+                      >
+                        {letter}
+                      </span>
+                    );
+                  })}
+                </nav>
+
+                <div className="flex-1 space-y-6">
+                  {ALPHABET.filter((letter) => brandsByLetter[letter]?.length).map((letter) => (
+                    <div key={letter} id={`letter-${letter}`}>
+                      <h3 className="text-lg font-bold text-foreground border-b border-border/40 pb-1 mb-2">
+                        {letter}
+                      </h3>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1">
+                        {brandsByLetter[letter].map((b) => (
+                          <li key={b.id} className="flex items-center justify-between py-1.5">
+                            <Link
+                              to={`/brand/${b.slug}`}
+                              className="text-sm text-foreground hover:text-[hsl(var(--chart-4))] transition-colors"
+                            >
+                              {b.name}
+                            </Link>
+                            <span className="text-xs text-muted-foreground">{b.productCount}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               </div>
             </section>
           </>

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { BadgeKey, StrengthKey } from '@/data/products';
 import { useBrands } from '@/hooks/useBrands';
 import { useCatalogProducts } from '@/hooks/useCatalog';
@@ -145,6 +145,33 @@ export default function ProductListing() {
           <div className="mb-8">
             <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2 tracking-tight">{pageTitle}</h1>
             <p className="text-sm text-muted-foreground max-w-lg">{pageDescription}</p>
+          </div>
+
+          {/* Quick-filter tabs */}
+          <div className="mb-6 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {[
+              { label: 'All', href: '/nicotine-pouches', match: (b: string | null, s: string | null) => !b && !s },
+              { label: 'Bestsellers', href: '/nicotine-pouches?badge=popular', match: (b: string | null) => b === 'popular' },
+              { label: 'New Arrivals', href: '/nicotine-pouches?badge=new', match: (b: string | null) => b === 'new' },
+              { label: 'Offers', href: '/nicotine-pouches?badge=newPrice', match: (b: string | null) => b === 'newPrice' },
+              { label: 'Strong', href: '/nicotine-pouches?strength=strong', match: (_b: string | null, s: string | null) => s === 'strong' },
+              { label: 'Extra Strong', href: '/nicotine-pouches?strength=extraStrong', match: (_b: string | null, s: string | null) => s === 'extraStrong' },
+            ].map((tab) => {
+              const isActive = tab.match(badgeFilter, strengthFilter);
+              return (
+                <Link
+                  key={tab.label}
+                  to={tab.href}
+                  className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-primary text-primary-foreground glow-primary'
+                      : 'bg-card border border-border/40 text-muted-foreground hover:text-foreground hover:border-primary/30'
+                  }`}
+                >
+                  {tab.label}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="flex gap-8">

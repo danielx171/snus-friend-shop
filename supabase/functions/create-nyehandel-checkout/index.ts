@@ -16,7 +16,7 @@ import { corsHeaders } from "../_shared/cors.ts";
 
 /** Validated shipping methods from NordicPouch Nyehandel admin */
 const VALID_SHIPPING_METHODS = [
-  "UPS Standard",
+  "UPS Standard (J229F1)",
   "UPS Express Saver",
   "DHL Economy (Non EU)",
   "DHL Express (Non EU)",
@@ -299,7 +299,7 @@ Deno.serve(async (req) => {
       name: shipping_method,
     },
     payment: {
-      name: "Nets Easy Checkout",
+      name: "NFC Group Payment",
     },
     items: items.map((i) => ({
       type: "product" as const,

@@ -159,10 +159,10 @@ Deno.serve(async (req) => {
       country: String(addr.country ?? "GB"),
     },
     shipping: {
-      name: String(meta.shipping_method ?? "UPS Standard EU"),
+      name: String(meta.shipping_method ?? "UPS Standard (J229F1)"),
     },
     payment: {
-      name: "Nets Easy Checkout",
+      name: "NFC Group Payment",
     },
     items,
   };

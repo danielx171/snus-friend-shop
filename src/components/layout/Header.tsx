@@ -71,13 +71,10 @@ export function Header() {
   const { data: pointsData } = useSnusPoints(userId);
 
   const navLinks = [
-    { href: '/nicotine-pouches', label: 'Nicotine Pouches' },
+    { href: '/nicotine-pouches', label: 'Shop' },
     { href: '/brands', label: 'Brands' },
-    { href: '/nicotine-pouches?badge=newPrice', label: 'Offers' },
-    { href: '/nicotine-pouches?badge=new', label: 'New' },
-    { href: '/nicotine-pouches?badge=popular', label: 'Bestsellers' },
+    { href: '/rewards', label: 'Rewards' },
     { href: '/membership', label: 'Snus Family' },
-    { href: '/rewards', label: 'Daily Spin' },
   ];
 
   return (

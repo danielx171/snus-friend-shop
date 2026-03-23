@@ -179,12 +179,69 @@ export default function BrandHub() {
           </section>
         )}
 
+        {/* "Also try" brand suggestions */}
+        {(() => {
+          // Find related brands: same manufacturer first, then random popular brands
+          const otherBrands = brands.filter(b => b.slug !== brandSlug);
+          const sameManufacturer = manufacturer
+            ? otherBrands.filter(b => b.manufacturer === manufacturer)
+            : [];
+          const others = otherBrands
+            .filter(b => b.manufacturer !== manufacturer)
+            .sort((a, b) => b.productCount - a.productCount);
+          const suggestions = [
+            ...sameManufacturer.slice(0, 4),
+            ...others.slice(0, Math.max(0, 4 - sameManufacturer.length)),
+          ].slice(0, 4);
+
+          if (suggestions.length === 0) return null;
+
+          return (
+            <section className="container py-10">
+              <h2 className="text-xl font-bold text-foreground mb-6">
+                Customers who like {brandName} also try&hellip;
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {suggestions.map((b) => {
+                  const bAccent = brandAccentColor(b.name);
+                  return (
+                    <Link
+                      key={b.id}
+                      to={`/brand/${b.slug}`}
+                      className="group block"
+                    >
+                      <div className="relative h-full overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-200 ease-out hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y-1 hover:border-[hsl(0_0%_100%/0.25)]">
+                        <div
+                          className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl"
+                          style={{ backgroundColor: bAccent }}
+                        />
+                        <div className="p-5 pl-5 flex flex-col items-center text-center gap-3">
+                          <div
+                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white font-bold text-sm"
+                            style={{ backgroundColor: bAccent }}
+                          >
+                            {b.name.charAt(0)}
+                          </div>
+                          <h3 className="text-sm font-semibold text-foreground group-hover:text-[hsl(var(--chart-4))] transition-colors">
+                            {b.name}
+                          </h3>
+                          <span className="text-xs text-muted-foreground">{b.productCount} products</span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })()}
+
         <section className="container py-8 text-center">
           <p className="text-sm text-muted-foreground mb-3">
             Looking for more brands?
           </p>
           <Button variant="outline" asChild className="rounded-xl">
-            <Link to="/nicotine-pouches">Browse all nicotine pouches</Link>
+            <Link to="/brands">Explore all brands</Link>
           </Button>
         </section>
       </Layout>
