@@ -18,7 +18,7 @@ async function fetchBrands(): Promise<Brand[]> {
   if (error) throw error;
 
   return (data ?? [])
-    .map((b: any) => ({
+    .map((b: { id: string; name: string; slug: string; manufacturer: string | null; products: Array<{ count: number }> }) => ({
       id: b.id,
       name: b.name,
       slug: b.slug,

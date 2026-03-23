@@ -20,7 +20,7 @@ export function useOpsAlerts() {
 
       if (error) throw new Error(error.message);
 
-      return (data ?? []).map((r: any) => ({
+      return (data ?? []).map((r: { id: string; alert_date: string; rule_key: string; severity: string; status: string; source_order_id: string | null; title: string; message: string; context: Record<string, unknown> | null; created_at: string; resolved_at: string | null }) => ({
         id: r.id,
         alertDate: r.alert_date,
         ruleKey: r.rule_key,

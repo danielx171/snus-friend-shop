@@ -14,7 +14,7 @@ export function useSyncRuns() {
 
       if (error) throw new Error(error.message);
 
-      return (data ?? []).map((r: any) => ({
+      return (data ?? []).map((r: { id: string; type: string; status: string; started_at: string; duration_ms: number | null; items_processed: number | null; errors: unknown }) => ({
         id: r.id,
         type: r.type as SyncRun['type'],
         status: r.status as SyncRun['status'],
@@ -41,7 +41,7 @@ export function useWebhookEvents() {
 
       if (error) throw new Error(error.message);
 
-      return (data ?? []).map((e: any) => ({
+      return (data ?? []).map((e: { id: string; provider: string; topic: string; status: string; attempts: number; received_at: string }) => ({
         eventId: e.id,
         provider: e.provider as WebhookEvent['provider'],
         topic: e.topic,
@@ -66,7 +66,7 @@ export function useSkuMappings() {
 
       if (error) throw new Error(error.message);
 
-      return (data ?? []).map((m: any) => ({
+      return (data ?? []).map((m: { id: string; nyehandel_sku: string; product_name: string; status: string; last_verified: string | null }) => ({
         id: m.id,
         nyehandelSku: m.nyehandel_sku,
         productName: m.product_name,

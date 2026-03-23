@@ -9,12 +9,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
+const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://snusfriends.com';
+
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://snus-friend-shop.lovable.app/' },
-    { '@type': 'ListItem', position: 2, name: 'Brands', item: 'https://snus-friend-shop.lovable.app/brands' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'Brands', item: `${SITE_URL}/brands` },
   ],
 };
 
@@ -35,7 +37,7 @@ export default function BrandsIndex() {
       <SEO
         title="Brands | SnusFriend"
         description="Explore all nicotine pouch brands available at SnusFriend. From ZYN to VELO, find your perfect match."
-        canonical="https://snus-friend-shop.lovable.app/brands"
+        canonical={`${SITE_URL}/brands`}
         jsonLd={breadcrumbJsonLd}
       />
 

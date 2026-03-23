@@ -406,7 +406,7 @@ Deno.serve(async (req) => {
     checkout_status: "pending",
     customer_email: customer.email,
     currency: display_currency ?? "EUR",
-    total_price: display_total ?? 0,
+    total_price: null, // calculated server-side after Nyehandel confirms — never trust client-supplied price
     line_items_snapshot: items, // includes display fields (product_name, pack_label, unit_price)
     customer_metadata: {
       firstname: customer.firstname,

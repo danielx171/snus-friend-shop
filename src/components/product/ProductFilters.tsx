@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { flavorKeys, strengthKeys, formatKeys, FlavorKey, StrengthKey, FormatKey, CategoryKey } from '@/data/products';
 import { useBrands } from '@/hooks/useBrands';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -84,7 +84,7 @@ function FilterSection({
   );
 }
 
-export function ProductFilters({ filters, onFilterChange, onClose, isMobile = false }: ProductFiltersProps) {
+export const ProductFilters = React.memo(function ProductFilters({ filters, onFilterChange, onClose, isMobile = false }: ProductFiltersProps) {
   const { t, translateFlavor, translateStrength, translateFormat } = useTranslation();
   const { brands: allBrands } = useBrands();
   const [brandSearch, setBrandSearch] = useState('');
@@ -325,4 +325,4 @@ export function ProductFilters({ filters, onFilterChange, onClose, isMobile = fa
       )}
     </div>
   );
-}
+});

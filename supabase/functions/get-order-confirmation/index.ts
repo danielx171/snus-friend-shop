@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
   if (!orderId) {
     return jsonResponse({ error: "orderId_required" }, 400);
   }
-  if (!email || !email.includes("@")) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return jsonResponse({ error: "email_required" }, 400);
   }
 

@@ -38,7 +38,7 @@ function NewsletterSignup() {
   return (
     <div className="text-center max-w-lg mx-auto">
       <Mail className="mx-auto mb-3 h-7 w-7 text-accent" />
-      <h3 className="text-xl font-semibold text-white mb-1.5">Stay in the loop</h3>
+      <h3 className="text-xl font-semibold text-foreground mb-1.5">Stay in the loop</h3>
       <p className="text-sm text-muted-foreground mb-4">
         New drops, exclusive offers, and pouch tips — straight to your inbox.
       </p>

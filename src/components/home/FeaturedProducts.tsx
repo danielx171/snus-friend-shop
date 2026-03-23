@@ -1,3 +1,4 @@
+import React from 'react';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
@@ -15,7 +16,7 @@ interface FeaturedProductsProps {
   viewAllHref?: string;
 }
 
-export function FeaturedProducts({
+export const FeaturedProducts = React.memo(function FeaturedProducts({
   title,
   filterFn = () => true,
   limit = 4,
@@ -67,4 +68,4 @@ export function FeaturedProducts({
       </div>
     </section>
   );
-}
+});
