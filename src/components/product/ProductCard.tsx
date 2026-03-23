@@ -93,7 +93,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
   return (
     <div className="group">
     <Card className={cn(
-      'product-card relative overflow-hidden rounded-2xl border-white/[0.06] bg-card/90 backdrop-blur-sm shadow-[0_2px_8px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-[250ms] ease-out group-hover:translate-y-[-4px] group-hover:shadow-[0_16px_40px_rgba(0,0,0,0.3)] group-hover:border-white/[0.12]',
+      'product-card relative overflow-hidden rounded-2xl border-white/[0.06] bg-card/90 backdrop-blur-sm shadow-[0_2px_8px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-300 ease-out group-hover:translate-y-[-2px] group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] group-hover:border-white/[0.10]',
       isOutOfStock && 'opacity-60'
     )}>
       <Link to={`/product/${product.id}`} aria-label={product.name}>
@@ -105,7 +105,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
             background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))',
           }}
         >
-          <div className="h-full w-full relative z-10 transition-transform duration-300 ease-out group-hover:scale-[1.06]">
+          <div className="h-full w-full relative z-10 transition-transform duration-300 ease-out group-hover:scale-[1.03]">
           {product.image ? (
             <img
               src={product.image}

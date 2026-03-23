@@ -126,12 +126,6 @@ export function Header() {
             </Link>
           ) : null}
 
-          <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-10 w-10 text-muted-foreground hover:text-primary" asChild>
-            <Link to="/account" aria-label="Account">
-              <User className="h-5 w-5" />
-            </Link>
-          </Button>
-
           <Button
             variant="ghost"
             className="relative rounded-xl h-10 gap-2 px-3 text-muted-foreground hover:text-primary"
