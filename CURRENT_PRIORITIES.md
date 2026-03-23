@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-03-21
+Last updated: 2026-03-23
 
 ## Completed today (2026-03-21)
 
@@ -91,26 +91,31 @@ Last updated: 2026-03-21
 - snus-friend-shop connects to NordicPouch Nyehandel account
 - One SKU per product; pack sizes = quantity multipliers (1, 3, 5, 10, 30 cans)
 - Volume discounts computed in useCatalog.ts (5%/10%/15%/20% off per-can price)
-- Payment = Nets Easy Checkout via Nyehandel
+- Payment = NFC Group Payment via Nyehandel (was blank — resolved 2026-03-23)
+- Shipping = UPS Standard (J229F1) as primary method
 - Warehouse = NordicPouch/Nyehandel (Nylogistik)
-- 19 migrations, 16 edge functions, 14 database tables
+- 20 migrations, 17 edge functions, 17 database tables
 
-## BLOCKER — CEO decision required
+## Completed 2026-03-23
 
-Nyehandel account has all shipping/payment method names blank ("").
-API-based orders (`POST /orders/simple`) fail with 422 for every name tried.
-Two options:
-  A. Name the shipping + payment methods in Nyehandel admin -> unblocks current checkout flow
-  B. Switch to Nyehandel hosted checkout (redirect to Nyehandel-hosted payment page)
+- ✅ **Nyehandel checkout wired** — payment "NFC Group Payment" + shipping "UPS Standard (J229F1)" configured in both edge functions and frontend
+- ✅ **Rewards system** — daily spin wheel with server-side prize determination, vouchers, SnusPoints, PrizeReveal overlay
+- ✅ **Product badges seeded** — popular (310), newPrice (154), new (60), limited (52) — homepage sections now populated
+- ✅ **Filter system expanded** — 8 types: brand, strength, flavor, format, nicotine mg range, max price, hide out of stock, category
+- ✅ **Navigation simplified** — header from 7→4 links, quick-filter tabs on Shop page, brands dropdown 12 brands + "view all"
+- ✅ **Brand discovery UX** — homepage carousel, "also try" on brand pages, 24 featured brands, sticky A-Z sidebar
+- ✅ **WCAG accessibility** — fixed 4 flavor accent colors (coffee, cola, berry, citrus) to meet AA contrast ratios
+- ✅ **Logo redesigned** — SF monogram in teal shield
+- ✅ **UX polish** — removed card hover rotation (subtle zoom only), removed duplicate login, improved footer visibility
+- ✅ **Code quality** — atomic points balance RPC, proper email validation in checkout, fixed PrizeDisplay import
 
-## Next steps in order
+## Next steps to launch
 
-1. **CEO decides**: API order flow vs hosted checkout (see BLOCKER above)
-2. If (A): name methods in Nyehandel admin -> place test order -> verify in admin + Supabase
-3. If (B): build hosted checkout redirect in `CheckoutHandoff.tsx`
-4. **Solicitor**: sign off on Terms, Privacy, Cookies pages
-5. Deploy frontend to Vercel (can happen in parallel — see DEPLOYMENT_CHECKLIST.md)
-6. UAT sign-off -> go live
+1. **UAT**: Place and verify a real test order end-to-end through Nyehandel
+2. **Custom domain**: Connect production domain (e.g. snusfriend.se) to Vercel
+3. **Custom SMTP**: Set up Resend in Supabase for auth emails (fixes "unsafe" warning)
+4. **Solicitor**: Sign off on Terms, Privacy, Cookie pages
+5. **Go live**: Remove preview mode, final smoke test
 
 ## Ready for Lovable design work
 

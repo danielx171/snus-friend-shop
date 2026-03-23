@@ -115,7 +115,7 @@ function validatePayload(
   if (
     !cust ||
     typeof cust.email !== "string" ||
-    !cust.email.includes("@") ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(cust.email).trim()) ||
     typeof cust.firstname !== "string" ||
     !cust.firstname.trim() ||
     typeof cust.lastname !== "string" ||

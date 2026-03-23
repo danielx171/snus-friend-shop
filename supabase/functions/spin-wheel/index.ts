@@ -158,22 +158,8 @@ Deno.serve(async (req: Request) => {
         );
       }
 
-      const { data: currentBal } = await admin
-        .from('points_balances')
-        .select('balance')
-        .eq('user_id', userId)
-        .maybeSingle();
-
-      if (currentBal) {
-        await admin
-          .from('points_balances')
-          .update({ balance: currentBal.balance + pts })
-          .eq('user_id', userId);
-      } else {
-        await admin
-          .from('points_balances')
-          .insert({ user_id: userId, balance: pts });
-      }
+      // Atomic increment — avoids race condition with concurrent spins
+      await admin.rpc('increment_points_balance', { p_user_id: userId, p_points: pts });
     } else if (prizeKey === 'voucher_15pct') {
       const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
       const { data: voucher, error: vErr } = await admin
@@ -228,22 +214,8 @@ Deno.serve(async (req: Request) => {
           .from('points_transactions')
           .insert({ user_id: userId, points: 25, reason: 'spin_wheel:free_can_fallback' });
 
-        const { data: currentBal } = await admin
-          .from('points_balances')
-          .select('balance')
-          .eq('user_id', userId)
-          .single();
-
-        if (currentBal) {
-          await admin
-            .from('points_balances')
-            .update({ balance: currentBal.balance + 25 })
-            .eq('user_id', userId);
-        } else {
-          await admin
-            .from('points_balances')
-            .insert({ user_id: userId, balance: 25 });
-        }
+        // Atomic increment — avoids race condition
+        await admin.rpc('increment_points_balance', { p_user_id: userId, p_points: 25 });
       }
     } else if (prizeKey === 'free_month') {
       const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();

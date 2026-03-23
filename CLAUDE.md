@@ -122,24 +122,30 @@ Conflict patterns:
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-03-21)
+## Where Things Stand (as of 2026-03-23)
 
 - Steps 26–38: ✅ Done (checkout, catalog sync, auth, preview mode, badge seeding, pg_cron)
-- UX overhaul: ✅ Compact cards, search filters + pagination, header SnusPoints badge
+- Checkout wiring: ✅ Nyehandel payment "NFC Group Payment" + shipping "UPS Standard (J229F1)" configured
+- Rewards system: ✅ Daily spin wheel, server-side prize determination, vouchers, SnusPoints
+- Product badges: ✅ Seeded in Supabase — popular (310), newPrice (154), new (60), limited (52)
+- Filter system: ✅ 8 filters — brand, strength, flavor, format, nicotine mg, price, stock, category
+- Navigation: ✅ Simplified header (Shop/Brands/Rewards/Snus Family), quick-filter tabs on Shop page
+- Brand discovery: ✅ Homepage carousel, "also try" on brand pages, 24 featured brands, sticky A-Z
+- UX overhaul: ✅ Compact cards, subtle zoom hover, search + pagination, WCAG color fixes
 - Dynamic brands: ✅ useBrands() hook, dynamic nav/filters/listing, all 91+ brands from Supabase
 - Security: ✅ RLS on sync_config, consolidated duplicate policies, mutable search_path fixed
-- Accessibility: ✅ Lighthouse 100 on homepage, touch targets improved
+- Accessibility: ✅ WCAG AA color contrast on all flavor/strength accents, Lighthouse 100 homepage
 - Brand overrides: ✅ Rebuilt from NordicPouch CSV with real product data
 - Account: ✅ Settings form wired to Supabase auth, Change Password linked
 - Info pages: ✅ Real content for FAQ, Contact, Shipping, Returns, About
 - SEO/GEO: ✅ robots.txt, llms.txt, dynamic sitemap (731 products, 139 brands)
 - Infrastructure: ✅ Vault secrets set, sync_config populated, delivery webhook registered
-- Types: ✅ types.ts synced with schema (ops_alerts, waitlist_emails, sync_config added)
-- Step 39 UAT: 🔴 BLOCKED — Nyehandel account has all shipping/payment method names blank.
-  CEO must name the methods in Nyehandel admin before API orders are possible.
-  Fallback option: use Nyehandel hosted checkout (redirect flow) instead of API.
+- PWA: ✅ Workbox service worker, manifest, install prompt, offline app shell
+- Logo: ✅ SF monogram in teal shield
+- Types: ✅ types.ts synced with schema (daily_spins, vouchers, spin_config, ops_alerts, etc.)
+- Step 39 UAT: 🟡 IN PROGRESS — checkout wired, needs end-to-end test order placed
 - Legal pages: 🟡 Waiting on solicitor sign-off (Terms, Privacy, Cookies)
-- Steps 40+: UAT sign-off, Vercel deploy, go live
+- Steps 40+: UAT sign-off, custom domain, custom SMTP (Resend), go live
 
 ## Project Docs
 
