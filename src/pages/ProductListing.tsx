@@ -5,7 +5,7 @@ import { useBrands } from '@/hooks/useBrands';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
-import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
+import { ProductFilters, FilterState, EMPTY_FILTERS } from '@/components/product/ProductFilters';
 import { ActiveFilters } from '@/components/product/ActiveFilters';
 import { PLPEmptyState } from '@/components/product/PLPEmptyState';
 import { Button } from '@/components/ui/button';
@@ -40,9 +40,9 @@ export default function ProductListing() {
   const strengthKeyFilter = strengthFilter ? urlStrengthToKey[strengthFilter] : undefined;
 
   const [filters, setFilters] = useState<FilterState>({
+    ...EMPTY_FILTERS,
     brands: brandFilter ? [brandFilter] : [],
     strengths: strengthKeyFilter ? [strengthKeyFilter] : [],
-    flavors: [], formats: [],
   });
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,6 +69,13 @@ export default function ProductListing() {
       if (filters.strengths.length > 0 && !filters.strengths.includes(product.strengthKey)) return false;
       if (filters.flavors.length > 0 && !filters.flavors.includes(product.flavorKey)) return false;
       if (filters.formats.length > 0 && !filters.formats.includes(product.formatKey)) return false;
+      if (filters.categories.length > 0 && !filters.categories.includes(product.categoryKey)) return false;
+      if (filters.nicotineRange) {
+        const [min, max] = filters.nicotineRange;
+        if (product.nicotineContent < min || product.nicotineContent > max) return false;
+      }
+      if (filters.priceMax !== null && product.prices.pack1 > filters.priceMax) return false;
+      if (filters.hideOutOfStock && typeof product.stock === 'number' && product.stock === 0) return false;
       return true;
     });
   }, [products, filters, badgeKeyFilter]);
@@ -109,13 +116,22 @@ export default function ProductListing() {
   }, [sortedProducts, currentPage]);
 
   const handleFilterChange = (newFilters: FilterState) => { setFilters(newFilters); setCurrentPage(1); };
-  const handleRemoveFilter = (category: keyof FilterState, value: string) => {
-    setFilters({ ...filters, [category]: (filters[category] as string[]).filter((v) => v !== value) });
+  const handleRemoveFilter = (category: keyof FilterState, _value: string) => {
+    const current = filters[category];
+    if (Array.isArray(current)) {
+      setFilters({ ...filters, [category]: current.filter((v) => v !== _value) });
+    } else if (category === 'nicotineRange') {
+      setFilters({ ...filters, nicotineRange: null });
+    } else if (category === 'priceMax') {
+      setFilters({ ...filters, priceMax: null });
+    } else if (category === 'hideOutOfStock') {
+      setFilters({ ...filters, hideOutOfStock: false });
+    }
     setCurrentPage(1);
   };
-  const handleClearAll = () => { setFilters({ brands: [], strengths: [], flavors: [], formats: [] }); setCurrentPage(1); };
+  const handleClearAll = () => { setFilters(EMPTY_FILTERS); setCurrentPage(1); };
 
-  const activeFilterCount = filters.brands.length + filters.strengths.length + filters.flavors.length + filters.formats.length;
+  const activeFilterCount = filters.brands.length + filters.strengths.length + filters.flavors.length + filters.formats.length + filters.categories.length + (filters.nicotineRange ? 1 : 0) + (filters.priceMax ? 1 : 0) + (filters.hideOutOfStock ? 1 : 0);
   const pageTitle = badgeKeyFilter ? badgeLabels[badgeKeyFilter] : brandFilter ? brandFilter : 'Nicotine Pouches';
   const pageDescription = badgeKeyFilter
     ? `Shop our ${badgeLabels[badgeKeyFilter].toLowerCase()} nicotine pouches. Free delivery on orders over €29.`

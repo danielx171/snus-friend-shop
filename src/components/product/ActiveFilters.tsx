@@ -1,8 +1,14 @@
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { FilterState } from './ProductFilters';
+import { FilterState, EMPTY_FILTERS } from './ProductFilters';
 import { useTranslation } from '@/hooks/useTranslation';
-import { FlavorKey, StrengthKey, FormatKey } from '@/data/products';
+import { FlavorKey, StrengthKey, FormatKey, CategoryKey } from '@/data/products';
+
+const CATEGORY_LABELS: Record<CategoryKey, string> = {
+  nicotinePouches: 'Nicotine Pouches',
+  nicotineFree: 'Nicotine Free',
+  energyPouches: 'Energy Pouches',
+};
 
 interface ActiveFiltersProps {
   filters: FilterState;
@@ -15,29 +21,14 @@ export function ActiveFilters({ filters, onRemoveFilter, onClearAll }: ActiveFil
 
   const allFilters: { category: keyof FilterState; value: string; label: string }[] = [];
 
-  // Brands stay as-is (proper nouns)
   filters.brands.forEach((v) => allFilters.push({ category: 'brands', value: v, label: v }));
-  
-  // Translate strengths
-  filters.strengths.forEach((v) => allFilters.push({ 
-    category: 'strengths', 
-    value: v, 
-    label: translateStrength(v as StrengthKey) 
-  }));
-  
-  // Translate flavors
-  filters.flavors.forEach((v) => allFilters.push({ 
-    category: 'flavors', 
-    value: v, 
-    label: translateFlavor(v as FlavorKey) 
-  }));
-  
-  // Translate formats
-  filters.formats.forEach((v) => allFilters.push({ 
-    category: 'formats', 
-    value: v, 
-    label: translateFormat(v as FormatKey) 
-  }));
+  filters.strengths.forEach((v) => allFilters.push({ category: 'strengths', value: v, label: translateStrength(v as StrengthKey) }));
+  filters.flavors.forEach((v) => allFilters.push({ category: 'flavors', value: v, label: translateFlavor(v as FlavorKey) }));
+  filters.formats.forEach((v) => allFilters.push({ category: 'formats', value: v, label: translateFormat(v as FormatKey) }));
+  filters.categories.forEach((v) => allFilters.push({ category: 'categories', value: v, label: CATEGORY_LABELS[v as CategoryKey] ?? v }));
+  if (filters.nicotineRange) allFilters.push({ category: 'nicotineRange', value: 'active', label: `${filters.nicotineRange[0]}–${filters.nicotineRange[1]} mg` });
+  if (filters.priceMax !== null) allFilters.push({ category: 'priceMax', value: 'active', label: `≤ €${filters.priceMax}` });
+  if (filters.hideOutOfStock) allFilters.push({ category: 'hideOutOfStock', value: 'active', label: 'In stock only' });
 
   if (allFilters.length === 0) return null;
 
