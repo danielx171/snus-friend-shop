@@ -124,15 +124,6 @@ export function Header() {
               <span>{pointsData.balance}</span>
               <span className="hidden md:inline">pts</span>
             </Link>
-          ) : !userId ? (
-            <Link
-              to="/membership"
-              className="group relative flex items-center gap-1.5 rounded-xl px-2.5 h-10 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
-              title="Sign in to earn SnusPoints on every order"
-            >
-              <Star className="h-3.5 w-3.5" />
-              <span className="hidden md:inline">Earn pts</span>
-            </Link>
           ) : null}
 
           <Button variant="ghost" size="icon" className="hidden md:flex rounded-xl h-10 w-10 text-muted-foreground hover:text-primary" asChild>

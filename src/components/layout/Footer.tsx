@@ -113,7 +113,7 @@ export function Footer() {
                 <Logo size={38} className="text-primary" />
                 <span className="text-[22px] font-semibold text-foreground" style={{ letterSpacing: '0.02em' }}>SnusFriend</span>
               </Link>
-              <p className="text-sm text-muted-foreground/60 leading-relaxed max-w-xs">
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
                 Your trusted source for premium nicotine pouches. Fast EU delivery and excellent customer service.
               </p>
             </div>
@@ -155,7 +155,7 @@ export function Footer() {
           {/* Payment badges row */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
             {['Visa', 'Mastercard'].map((badge) => (
-              <div key={badge} className="px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.04] text-xs text-muted-foreground font-medium">
+              <div key={badge} className="px-3 py-2 rounded-lg bg-white/[0.06] border border-white/[0.08] text-xs text-muted-foreground font-medium">
                 {badge}
               </div>
             ))}

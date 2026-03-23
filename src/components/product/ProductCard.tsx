@@ -105,15 +105,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
             background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))',
           }}
         >
-          {/* Radial glow behind can — CSS only */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-[250ms] ease-out"
-            style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(100,150,255,0.12), transparent 70%)',
-              filter: 'blur(20px)',
-            }}
-          />
-          <div className="h-full w-full relative z-10 transition-transform duration-[250ms] ease-out group-hover:scale-[1.05]">
+          <div className="h-full w-full relative z-10 transition-transform duration-300 ease-out group-hover:scale-[1.06]">
           {product.image ? (
             <img
               src={product.image}
@@ -123,6 +115,8 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
                 isOutOfStock && 'grayscale opacity-60'
               )}
               loading="lazy"
+              decoding="async"
+              style={{ imageRendering: 'auto' }}
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center p-4">

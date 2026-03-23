@@ -21,10 +21,10 @@ export function MainNav() {
     { title: 'Ultra Strong (17mg+)', href: '/nicotine-pouches?strength=ultraStrong', description: 'Maximum strength for seasoned users' },
   ];
 
-  const brands = topBrands.slice(0, 8).map(brand => ({
+  const brands = topBrands.slice(0, 12).map(brand => ({
     name: brand.name,
     productCount: brand.productCount,
-    href: `/nicotine-pouches?brand=${encodeURIComponent(brand.name)}`,
+    href: `/brand/${brand.slug}`,
   }));
 
   return (
@@ -60,39 +60,48 @@ export function MainNav() {
                 Brands
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-[340px] grid-cols-2 gap-0.5 p-4 glass-panel-strong rounded-xl">
-                  {brands.map((brand) => (
-                    <li key={brand.name}>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to={brand.href}
-                          className="block select-none rounded-xl px-4 py-2.5 text-sm leading-none no-underline outline-none transition-colors hover:bg-primary/8 hover:text-primary"
-                        >
-                          {brand.name}
-                          <span className="text-xs text-muted-foreground ml-1">({brand.productCount})</span>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                  ))}
-                </ul>
+                <div className="w-[420px] p-4 glass-panel-strong rounded-xl">
+                  <ul className="grid grid-cols-3 gap-0.5">
+                    {brands.map((brand) => (
+                      <li key={brand.name}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={brand.href}
+                            className="block select-none rounded-xl px-3 py-2.5 text-sm leading-none no-underline outline-none transition-colors hover:bg-primary/8 hover:text-primary"
+                          >
+                            {brand.name}
+                            <span className="text-xs text-muted-foreground ml-1">({brand.productCount})</span>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-2 pt-2 border-t border-border/20">
+                    <NavigationMenuLink asChild>
+                      <Link
+                        to="/brands"
+                        className="block text-center text-xs font-medium text-primary hover:underline py-1"
+                      >
+                        View all {topBrands.length}+ brands →
+                      </Link>
+                    </NavigationMenuLink>
+                  </div>
+                </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
 
             {[
               { href: '/nicotine-pouches?badge=new', label: 'New Arrivals' },
               { href: '/nicotine-pouches?badge=popular', label: 'Bestsellers' },
-              { href: '/nicotine-pouches?badge=newPrice', label: 'Offers', highlight: true },
+              { href: '/nicotine-pouches?badge=newPrice', label: 'Offers' },
               { href: '/brands', label: 'All Brands' },
-              { href: '/membership', label: 'Snus Family', highlight: true },
+              { href: '/rewards', label: 'Rewards' },
+              { href: '/membership', label: 'Snus Family' },
             ].map((item) => (
               <NavigationMenuItem key={item.label}>
                 <Link
                   to={item.href}
-                  className={cn(
-                    'relative inline-flex h-11 items-center justify-center px-4 py-2 text-sm font-medium transition-all duration-200 rounded-none',
-                    'after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:w-0 after:bg-primary after:rounded-full after:transition-all after:duration-200 hover:after:w-3/4',
-                    item.highlight ? 'text-accent hover:text-white' : 'text-foreground hover:text-white'
-                  )}
+                  className="relative inline-flex h-11 items-center justify-center px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-all duration-200 rounded-none after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:w-0 after:bg-primary after:rounded-full after:transition-all after:duration-200 hover:after:w-3/4"
                 >
                   {item.label}
                 </Link>
