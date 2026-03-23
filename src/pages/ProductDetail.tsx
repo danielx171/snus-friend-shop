@@ -24,6 +24,8 @@ import { PDPSkeleton } from '@/components/product/PDPSkeleton';
 import { Input } from '@/components/ui/input';
 import { apiFetch } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
+import { RecentlyViewed } from '@/components/product/RecentlyViewed';
 
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-400 to-green-600',
@@ -48,6 +50,11 @@ export default function ProductDetail() {
   const { data: product, isLoading, isError } = useCatalogProduct(id);
   const { data: allProducts = [] } = useCatalogProducts();
   const { addToCart } = useCart();
+  const { add: addRecentlyViewed } = useRecentlyViewed();
+
+  useEffect(() => {
+    if (product?.id) addRecentlyViewed(product.id);
+  }, [product?.id, addRecentlyViewed]);
   const [selectedPack, setSelectedPack] = useState<PackSize>('pack10');
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
@@ -577,6 +584,7 @@ export default function ProductDetail() {
           </div>
         </div>
       )}
+      <RecentlyViewed excludeId={product?.id} />
     </Layout>
     </AgeGate>
   );

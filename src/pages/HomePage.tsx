@@ -10,6 +10,7 @@ import { EditorialHighlights } from '@/components/home/EditorialHighlights';
 import { BrandCarousel } from '@/components/home/BrandCarousel';
 import { SEO } from '@/components/seo/SEO';
 import { SITE_URL } from '@/config/brand';
+import { RecentlyViewed } from '@/components/product/RecentlyViewed';
 
 export default function HomePage() {
   const jsonLd = {
@@ -129,6 +130,8 @@ export default function HomePage() {
             viewAllHref="/nicotine-pouches?badge=new"
           />
         </div>
+
+        <RecentlyViewed />
       </Layout>
     </>
   );
