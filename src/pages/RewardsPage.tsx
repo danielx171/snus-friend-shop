@@ -69,12 +69,11 @@ export default function RewardsPage() {
   }, [toast]);
 
   return (
-    <>
+    <Layout>
       <SEO
         title="Daily Spin & Rewards | SnusFriend"
         description="Spin the wheel daily to win SnusPoints, vouchers, and free products. Earn rewards every time you shop at SnusFriend."
       />
-    <Layout>
       <div className="container mx-auto max-w-lg px-4 py-8">
         {/* Points balance strip */}
         <div className="flex items-center justify-between rounded-xl bg-card border border-border/40 px-5 py-3 mb-8">
@@ -141,6 +140,5 @@ export default function RewardsPage() {
       {/* Prize reveal overlay */}
       <PrizeReveal prize={revealedPrize} onClose={handleClosePrize} />
     </Layout>
-    </>
   );
 }
