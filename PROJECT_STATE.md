@@ -1,21 +1,30 @@
 # Project State
 
-Date: 2026-03-19 (evening)
-Branch: `dev` (in sync with `main`)
+Date: 2026-03-24
+Branch: `main`
 
-## Status: Feature complete, catalog live — blocked on Nyehandel method names
+## Status: Domain live, preview mode active — blocked on CEO order flow decision
 
-All Steps 26-40 code is written and deployed.
+Site live at **snusfriends.com** and **snus-friend-shop.vercel.app**.
 734 real products synced from Nyehandel (NordicPouch catalog).
 Frontend reads products from Supabase — no mock data.
-Preview mode live (dismissible banner + checkout gate).
+Preview mode active (dismissible banner + checkout gate).
 
 Blocked on:
-  1. **Step 39 UAT**: Nyehandel account (NordicPouch) has ALL shipping and payment
-     method names set to blank (""). The API rejects every non-empty name.
-     CEO must either: (a) name the methods in Nyehandel admin, or (b) confirm
-     the store will use Nyehandel hosted checkout (redirect) instead of API orders.
-  2. Frontend deploy to Vercel (can be done in parallel)
+  1. **Step 39 UAT**: CEO must confirm API order flow is ready before placing test order.
+     Payment method "NFC Group Payment" and shipping "UPS Standard (J229F1)" are wired.
+  2. **Product images**: Need higher quality product photography
+  3. **Retail pricing**: Currently wholesale × 1.55 markup — final pricing TBD
+
+## Domain & Infrastructure (2026-03-24)
+
+- **Domain**: snusfriends.com — Cloudflare DNS (A record + CNAME, proxy OFF)
+- **Vercel**: Both snusfriends.com and snus-friend-shop.vercel.app verified, SSL active
+- **Supabase auth**: Site URL = https://snusfriends.com, redirect URLs updated
+- **Webhook**: Nyehandel delivery callback configured, secret = obscure-witness-afraid
+- **VITE_SITE_URL**: https://snusfriends.com
+- **Edge functions**: All deployed and active (spin-wheel v2, create-nyehandel-checkout v16)
+- **Preview mode**: VITE_PREVIEW_MODE=true (ready to disable for go-live)
 
 ## Multi-brand template architecture
 
@@ -23,52 +32,55 @@ The codebase is now a reusable template.
 To launch a new brand, only 8 Supabase secrets
 need changing. See DEPLOYMENT_CHECKLIST.md.
 
-## Catalog snapshot (2026-03-19)
+## Catalog snapshot (2026-03-24)
 
 - 734 products synced
-- 2,196 variants (one per product)
-- 91 brands
-- 45 pages @ 50 products/page
-- ~17 minor API errors (products missing name/id on Nyehandel side)
+- ~2,200 variants
+- 91+ brands
+- Product badges: popular (310), newPrice (154), new (60), limited (52)
+- 8-filter system: brand, strength, flavor, format, nicotine mg, price, stock, category
 
 ---
 
-Date: 2026-03-18
-Branch: `dev`
+Date: 2026-03-23
+Branch: `main`
+
+## Previous Status — Major feature sprint
+
+- Nyehandel checkout wired (NFC Group Payment + UPS Standard J229F1)
+- Rewards system fully implemented (daily spin, vouchers, SnusPoints)
+- Navigation simplified (7→4 links), quick-filter tabs, brand discovery UX
+- WCAG color accessibility fixed, logo redesigned (SF monogram)
+- Pre-launch code review: 3 critical + 4 important fixes applied
+- Edge functions deployed to Supabase production
+
+---
+
+Date: 2026-03-19
 
 ## Previous Status
 
-The store is **not yet live**. Checkout is intentionally disabled while the
-Nyehandel-first checkout flow is built. All other pages (auth, product listing,
-account, order confirmation) are wired to real data.
-
-Full audit completed 2026-03-18. See `PROJECT_AUDIT_2026_03_18.md` for detail.
+Feature complete, catalog live — blocked on Nyehandel method names (now resolved).
 
 ---
 
 ## Completed Steps
 
 - Steps 1–24: Complete (Shopify-era, now superseded by architecture pivot)
-- Step 25 ✅ — Nyehandel API fully investigated. `NYEHANDEL_API_REFERENCE.md` created (includes logistics)
-- Steps 26–30 ✅ — Nyehandel-first checkout flow built, deployed, and env-driven
-- Step 31 ✅ — Real Supabase auth in `LoginPage.tsx` + `RegisterPage.tsx`
-- Step 32 ✅ — `AccountPage.tsx` wired to real session + real orders query
-- Step 33 ✅ — `OrderConfirmation.tsx` reads real order from DB, clears cart
-- Step 34 ✅ — `UpdatePasswordPage.tsx` handles Supabase recovery flow end-to-end
-- Step 35 ✅ — `ProductListing.tsx` error states handled
-- Step 36 ✅ — `ProductDetail.tsx` error states, mock imports removed
-- Step 37 ✅ — `DbProduct` type moved to `src/integrations/supabase/types.ts`
-- Step 38 ✅ — Bundle split (874kB → 301kB largest chunk)
-- Step 38b ✅ — `window.location.origin` removed from ProductListing render
+- Step 25 ✅ — Nyehandel API fully investigated. `NYEHANDEL_API_REFERENCE.md` created
+- Steps 26–38 ✅ — Nyehandel-first checkout, auth, catalog sync, PWA, badges, cron
+- Step 39 🟡 — UAT in progress (checkout wired, awaiting CEO for test order)
+- Step 40 🟡 — Pre-launch security review partially complete (code review done)
 
 ---
 
 ## Architecture (current)
 
 ```
-Customer → CheckoutHandoff.tsx
-  → POST create-nyehandel-checkout
-  → Nyehandel POST /orders/simple
+Customer → snusfriends.com (Vercel CDN)
+  → CheckoutHandoff.tsx
+  → POST create-nyehandel-checkout (Supabase Edge Function)
+  → Nyehandel POST /orders/simple (NFC Group Payment + UPS Standard J229F1)
   → Order row created in Supabase (status: pending)
   → Nyehandel handles payment + fulfilment
   → Nylogistik ships → delivery_callback_url fires
@@ -79,6 +91,10 @@ Product sync:
   Nyehandel webhook → nyehandel-webhook → sync-nyehandel
   → Products upserted in Supabase by nyehandel_id
   → Frontend reads from Supabase (fast, cached)
+
+Rewards:
+  POST spin-wheel → weighted random prize → atomic points increment
+  → voucher creation → daily_spins unique constraint (one per day)
 
 Retries:
   pg_cron → retry-failed-nyehandel-orders → push-order-to-nyehandel

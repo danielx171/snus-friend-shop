@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-03-23
+Last updated: 2026-03-24
 
 ## Completed today (2026-03-21)
 
@@ -109,13 +109,32 @@ Last updated: 2026-03-23
 - ✅ **UX polish** — removed card hover rotation (subtle zoom only), removed duplicate login, improved footer visibility
 - ✅ **Code quality** — atomic points balance RPC, proper email validation in checkout, fixed PrizeDisplay import
 
-## Next steps to launch
+## Completed 2026-03-24
 
-1. **UAT**: Place and verify a real test order end-to-end through Nyehandel
-2. **Custom domain**: Connect production domain (e.g. snusfriend.se) to Vercel
-3. **Custom SMTP**: Set up Resend in Supabase for auth emails (fixes "unsafe" warning)
-4. **Solicitor**: Sign off on Terms, Privacy, Cookie pages
-5. **Go live**: Remove preview mode, final smoke test
+- ✅ **Domain live** — snusfriends.com configured in Cloudflare (A + CNAME, proxy off, Vercel authorized)
+- ✅ **Both domains valid** — snusfriends.com + snus-friend-shop.vercel.app both serving the site
+- ✅ **Supabase auth updated** — Site URL = https://snusfriends.com, redirect URLs updated, localhost entries removed
+- ✅ **Nyehandel delivery webhook** — configured with secret aligned (obscure-witness-afraid)
+- ✅ **VITE_SITE_URL** — updated to https://snusfriends.com
+- ✅ **Edge functions deployed** — spin-wheel v2 (atomic balance RPC) + create-nyehandel-checkout v16 (proper email validation)
+- ✅ **Pre-launch code review** — 3 critical + 4 important fixes applied and pushed
+
+## Current state
+
+- Site live at snusfriends.com and snus-friend-shop.vercel.app
+- 734 products loading from Supabase
+- Preview mode active (VITE_PREVIEW_MODE=true)
+- Test order blocked — awaiting CEO decision on API order flow
+
+## Next phase
+
+1. **CEO answer on order flow** → place test order through Nyehandel
+2. **Product images** — source higher quality product photography
+3. **Retail pricing** — set final per-can pricing (currently wholesale × 1.55 markup)
+4. **Blog agent pipeline** — automated content generation for SEO
+5. **Multi-brand setup** — template architecture for additional storefronts
+6. **Solicitor**: Sign off on Terms, Privacy, Cookie pages
+7. **Go live**: Remove preview mode, final smoke test
 
 ## Ready for Lovable design work
 

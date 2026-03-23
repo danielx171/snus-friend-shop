@@ -122,7 +122,7 @@ Conflict patterns:
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-03-23)
+## Where Things Stand (as of 2026-03-24)
 
 - Steps 26–38: ✅ Done (checkout, catalog sync, auth, preview mode, badge seeding, pg_cron)
 - Checkout wiring: ✅ Nyehandel payment "NFC Group Payment" + shipping "UPS Standard (J229F1)" configured
@@ -143,9 +143,16 @@ Conflict patterns:
 - PWA: ✅ Workbox service worker, manifest, install prompt, offline app shell
 - Logo: ✅ SF monogram in teal shield
 - Types: ✅ types.ts synced with schema (daily_spins, vouchers, spin_config, ops_alerts, etc.)
-- Step 39 UAT: 🟡 IN PROGRESS — checkout wired, needs end-to-end test order placed
+- Code review: ✅ 3 critical + 4 important issues fixed (PrizeReveal, atomic RPC, types, search escape)
+- Domain: ✅ snusfriends.com live — Cloudflare DNS (A + CNAME, proxy off), Vercel verified, SSL active
+- Supabase auth: ✅ Site URL = https://snusfriends.com, redirect URLs updated, localhost entries removed
+- Webhook: ✅ Nyehandel delivery webhook configured, secret aligned (obscure-witness-afraid)
+- VITE_SITE_URL: ✅ Updated to https://snusfriends.com
+- Edge functions: ✅ spin-wheel v2 + create-nyehandel-checkout v16 deployed to Supabase
+- Preview mode: 🟢 Active (VITE_PREVIEW_MODE=true) — ready to disable for go-live
+- Step 39 UAT: 🟡 BLOCKED — awaiting CEO answer on API order flow before placing test order
 - Legal pages: 🟡 Waiting on solicitor sign-off (Terms, Privacy, Cookies)
-- Steps 40+: UAT sign-off, custom domain, custom SMTP (Resend), go live
+- Next phase: CEO order flow decision → test order → product images → retail pricing → blog agent pipeline
 
 ## Project Docs
 
