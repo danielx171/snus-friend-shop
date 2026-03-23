@@ -3,8 +3,9 @@ import { Product, PackSize, packSizeMultipliers, BadgeKey, FlavorKey, RETAIL_PAC
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ShoppingCart, Bell, Check } from 'lucide-react';
+import { ShoppingCart, Bell, Check, Heart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
@@ -49,6 +50,8 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
   const [justAdded, setJustAdded] = useState(false);
   const addedTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const { addToCart } = useCart();
+  const { has: isWishlisted, toggle: toggleWishlist } = useWishlist();
+  const wishlisted = isWishlisted(product.id);
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateBadge } = useTranslation();
   const isCompact = variant === 'compact';
 
@@ -105,6 +108,18 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
             background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))',
           }}
         >
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product.id); }}
+            className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 transition-all"
+            aria-label={wishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+          >
+            <Heart
+              className={cn(
+                'h-4 w-4 transition-all',
+                wishlisted ? 'fill-current text-red-500 scale-110' : 'text-muted-foreground'
+              )}
+            />
+          </button>
           <div className="h-full w-full relative z-10 transition-transform duration-300 ease-out group-hover:scale-[1.03]">
           {product.image ? (
             <img
@@ -235,6 +250,10 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               )}
             </div>
           </div>
+
+          {typeof product.stock === 'number' && product.stock > LOW_STOCK_THRESHOLD && (
+            <p className="text-xs text-emerald-400 mt-1">{product.stock} in stock</p>
+          )}
 
           {/* CTA */}
           {isOutOfStock ? (

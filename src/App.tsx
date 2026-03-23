@@ -8,6 +8,7 @@ import { CartProvider } from "@/context/CartContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "next-themes";
 import { CookieConsentProvider } from "@/context/CookieConsentContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import HomePage from "./pages/HomePage";
 import ProductListing from "./pages/ProductListing";
@@ -27,6 +28,7 @@ import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
 import MembershipPage from "./pages/MembershipPage";
 import RewardsPage from "./pages/RewardsPage";
+import WishlistPage from "./pages/WishlistPage";
 import FaqPage from "./pages/FaqPage";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsent } from "@/components/cookie/CookieConsent";
@@ -91,6 +93,7 @@ const App = () => (
     <TooltipProvider>
       <LanguageProvider>
         <CartProvider>
+          <WishlistProvider>
           <CookieConsentProvider>
             <Toaster />
             <Sonner />
@@ -116,6 +119,7 @@ const App = () => (
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
               <Route path="/membership" element={<MembershipPage />} />
               <Route path="/rewards" element={<RewardsPage />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
               {/* Info pages */}
               <Route path="/contact" element={<InfoPage title="Contact Us" content={<>
                 <p>We're here to help. Reach us at <a href="mailto:support@snusfriend.com" className="text-primary hover:underline">support@snusfriend.com</a> and we'll get back to you within 24 hours on business days.</p>
@@ -180,6 +184,7 @@ const App = () => (
             <InstallPrompt />
             </BrowserRouter>
           </CookieConsentProvider>
+          </WishlistProvider>
         </CartProvider>
       </LanguageProvider>
     </TooltipProvider>
