@@ -97,7 +97,13 @@ function toProduct(row: DbProduct): MockProduct {
   // Sum stock across variants. Only count variants that have an actual inventory row.
   // If no inventory rows exist at all → undefined (unknown). Only 0 when rows exist but qty is 0.
   const knownQtys = variants
-    .map(v => { const inv = v.inventory; return Array.isArray(inv) && inv.length > 0 ? inv[0].quantity : null; })
+    .map(v => {
+      const inv = v.inventory;
+      // Supabase returns an array for plural relations, but a single object for 1:1
+      if (Array.isArray(inv) && inv.length > 0) return inv[0].quantity;
+      if (inv && typeof inv === 'object' && 'quantity' in inv) return (inv as { quantity: number }).quantity;
+      return null;
+    })
     .filter((q): q is number => q !== null);
   const stock: number | undefined = knownQtys.length > 0 ? knownQtys.reduce((a, b) => a + b, 0) : undefined;
 
