@@ -634,5 +634,5 @@
 }
 
 .easter-wiggle-active {
-  animation: easter-wiggle 2.2s ease-in-out forwards;
+  animation: easter-wiggle 2.5s ease-in-out 2 forwards;
 }
