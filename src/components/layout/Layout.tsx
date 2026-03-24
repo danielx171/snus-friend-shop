@@ -10,6 +10,7 @@ import { ScrollProgress } from './ScrollProgress';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { NicotineWarning } from '@/components/compliance/NicotineWarning';
 import { PREVIEW_MODE } from '@/config/brand';
+import { EasterOverlay } from '@/components/easter/EasterOverlay';
 
 interface LayoutProps {
   children: React.ReactNode;
