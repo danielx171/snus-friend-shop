@@ -205,7 +205,11 @@ function validatePayload(
 
 Deno.serve(async (req) => {
   const requestId = req.headers.get("x-request-id") ?? crypto.randomUUID();
-  _corsHeaders = getCorsHeaders(req.headers.get("origin"));
+  try {
+    _corsHeaders = getCorsHeaders(req.headers.get("origin"));
+  } catch (e) {
+    return new Response(JSON.stringify({ error: "cors_init_failed", detail: String(e) }), { status: 500, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } });
+  }
 
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: _corsHeaders });
@@ -213,6 +217,8 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") {
     return jsonResponse({ error: "method_not_allowed", requestId }, 405);
   }
+
+  try {
 
   /* ---------- env vars ---------- */
 
@@ -340,6 +346,11 @@ Deno.serve(async (req) => {
       event: "nyehandel_checkout_start",
       itemCount: items.length,
       shippingMethod: shipping_method,
+      hasToken: !!nyehandelToken,
+      hasXIdentifier: !!nyehandelXIdentifier && nyehandelXIdentifier.length > 0,
+      xIdentifierLen: nyehandelXIdentifier.length,
+      baseUrl: nyehandelBaseUrl,
+      payload: nyehandelPayload,
     }),
   );
 
@@ -473,21 +484,23 @@ Deno.serve(async (req) => {
     );
 
     // Audit trail: Nyehandel order exists but local insert failed — ops can reconcile
-    await adminClient.from("webhook_inbox").insert({
-      provider: "nyehandel",
-      topic: "orphan_order",
-      status: "received",
-      payload: {
-        nyehandelOrderId,
-        nyehandelPrefix,
-        customerEmail: customer.email,
-        insertError: insertError?.message ?? "unknown",
-        requestId,
-      },
-      received_at: new Date().toISOString(),
-    }).catch(() => {
+    try {
+      await adminClient.from("webhook_inbox").insert({
+        provider: "nyehandel",
+        topic: "orphan_order",
+        status: "received",
+        payload: {
+          nyehandelOrderId,
+          nyehandelPrefix,
+          customerEmail: customer.email,
+          insertError: insertError?.message ?? "unknown",
+          requestId,
+        },
+        received_at: new Date().toISOString(),
+      });
+    } catch {
       // Best-effort — the console.error above already logs the critical info
-    });
+    }
 
     return jsonResponse(
       {
@@ -508,4 +521,12 @@ Deno.serve(async (req) => {
     prefix: nyehandelPrefix,
     requestId,
   });
+
+  } catch (fatalError) {
+    console.error("FATAL_UNHANDLED", String(fatalError), (fatalError as Error)?.stack);
+    return new Response(
+      JSON.stringify({ error: "fatal_unhandled", detail: String(fatalError), stack: (fatalError as Error)?.stack, requestId }),
+      { status: 500, headers: { ..._corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
 });
