@@ -636,3 +636,44 @@
 .easter-wiggle-active {
   animation: easter-wiggle 2.5s ease-in-out 2 forwards;
 }
+
+/* ─── Side bunny wander — left bunny walks up from bottom, collecting eggs ─── */
+/* Positioned at top:0 left:0; animation drives the full transform              */
+@keyframes bunny-wander-left {
+  0%   { transform: translateX(-24px) translateY(72vh) rotate(0deg); }
+  /* near bottom egg — lean in to grab */
+  8%   { transform: translateX(-2px)  translateY(68vh) rotate(-11deg); }
+  14%  { transform: translateX(-24px) translateY(64vh) rotate(0deg); }
+  /* walk up to mid-page egg */
+  32%  { transform: translateX(-24px) translateY(38vh) rotate(0deg); }
+  40%  { transform: translateX(-3px)  translateY(35vh) rotate(-9deg); }
+  46%  { transform: translateX(-24px) translateY(31vh) rotate(0deg); }
+  /* walk up to top egg */
+  65%  { transform: translateX(-24px) translateY(7vh)  rotate(0deg); }
+  72%  { transform: translateX(-4px)  translateY(4vh)  rotate(-12deg); }
+  78%  { transform: translateX(-24px) translateY(7vh)  rotate(0deg); }
+  /* wander back down */
+  100% { transform: translateX(-24px) translateY(72vh) rotate(0deg); }
+}
+
+/* ─── Right bunny starts near top, walks down ─── */
+@keyframes bunny-wander-right {
+  0%   { transform: translateX(24px) translateY(7vh)  rotate(0deg); }
+  8%   { transform: translateX(3px)  translateY(4vh)  rotate(11deg); }
+  14%  { transform: translateX(24px) translateY(8vh)  rotate(0deg); }
+  32%  { transform: translateX(24px) translateY(34vh) rotate(0deg); }
+  40%  { transform: translateX(2px)  translateY(37vh) rotate(9deg); }
+  46%  { transform: translateX(24px) translateY(40vh) rotate(0deg); }
+  65%  { transform: translateX(24px) translateY(66vh) rotate(0deg); }
+  72%  { transform: translateX(4px)  translateY(69vh) rotate(12deg); }
+  78%  { transform: translateX(24px) translateY(66vh) rotate(0deg); }
+  100% { transform: translateX(24px) translateY(7vh)  rotate(0deg); }
+}
+
+.bunny-wander-left {
+  animation: bunny-wander-left 18s ease-in-out infinite;
+}
+.bunny-wander-right {
+  animation: bunny-wander-right 18s ease-in-out infinite;
+  animation-delay: -9s; /* opposite phase so they don't move together */
+}

@@ -84,7 +84,7 @@ function Egg({ color, pattern, size = 64 }: { color: string; pattern: EggPattern
   );
 }
 
-// ─── Bunny peeking from the side ────────────────────────────────────────────
+// ─── Side bunny — full body for wandering ───────────────────────────────────
 function BunnySide({ side, scale = 1 }: { side: 'left' | 'right'; scale?: number }) {
   const flip = side === 'right';
   const w = Math.round(88 * scale);
@@ -116,39 +116,65 @@ function BunnySide({ side, scale = 1 }: { side: 'left' | 'right'; scale?: number
   );
 }
 
-// ─── Bunny ears peeking up from bottom ──────────────────────────────────────
-function BunnyBottom() {
+// ─── Bottom bunny — pops up on hover, shows ears + face ─────────────────────
+// Default: ears only visible (translateY hides the head below viewport bottom)
+// Hover: full face springs up with bounce animation
+function BunnyPopup({ mirrored = false }: { mirrored?: boolean }) {
   return (
-    <svg width="90" height="72" viewBox="0 0 90 72" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="28" cy="30" rx="12" ry="30" fill="#fce4ef" />
-      <ellipse cx="28" cy="30" rx="7" ry="24" fill="#f9b8d4" />
-      <ellipse cx="62" cy="24" rx="12" ry="33" fill="#fce4ef" />
-      <ellipse cx="62" cy="24" rx="7" ry="26" fill="#f9b8d4" />
-      <ellipse cx="45" cy="80" rx="34" ry="22" fill="#fef0f6" />
+    <svg width="96" height="108" viewBox="0 0 96 108" xmlns="http://www.w3.org/2000/svg"
+      style={{ transform: mirrored ? 'scaleX(-1)' : undefined }}>
+      {/* Left ear */}
+      <ellipse cx="28" cy="30" rx="13" ry="28" fill="#fce4ef" />
+      <ellipse cx="28" cy="30" rx="7.5" ry="22" fill="#f9b8d4" />
+      {/* Right ear (slightly taller) */}
+      <ellipse cx="68" cy="23" rx="13" ry="32" fill="#fce4ef" />
+      <ellipse cx="68" cy="23" rx="7.5" ry="25" fill="#f9b8d4" />
+      {/* Head */}
+      <ellipse cx="48" cy="82" rx="38" ry="30" fill="#fef0f6" />
+      {/* Eyes */}
+      <circle cx="35" cy="74" r="6" fill="#2d1a2e" />
+      <circle cx="61" cy="74" r="6" fill="#2d1a2e" />
+      <circle cx="36.5" cy="72.5" r="2.4" fill="white" />
+      <circle cx="62.5" cy="72.5" r="2.4" fill="white" />
+      {/* Nose */}
+      <ellipse cx="48" cy="84" rx="5.5" ry="3.5" fill="#f9a8c9" />
+      {/* Big smile */}
+      <path d="M40,89 Q48,97 56,89" fill="none" stroke="#e87aaa" strokeWidth="2" strokeLinecap="round" />
+      {/* Cheeks */}
+      <circle cx="27" cy="80" r="9" fill="#fbc8dc" opacity="0.42" />
+      <circle cx="69" cy="80" r="9" fill="#fbc8dc" opacity="0.42" />
+      {/* Whiskers left */}
+      <line x1="6"  y1="80" x2="38" y2="82" stroke="#d4a0b8" strokeWidth="1.3" opacity="0.6" />
+      <line x1="5"  y1="86" x2="38" y2="86" stroke="#d4a0b8" strokeWidth="1.3" opacity="0.5" />
+      {/* Whiskers right */}
+      <line x1="58" y1="82" x2="90" y2="80" stroke="#d4a0b8" strokeWidth="1.3" opacity="0.6" />
+      <line x1="58" y1="86" x2="91" y2="86" stroke="#d4a0b8" strokeWidth="1.3" opacity="0.5" />
+      {/* Bow */}
+      <path d="M38,103 Q48,98 58,103 Q48,108 38,103Z" fill="#fda4c8" opacity="0.8" />
+      <circle cx="48" cy="103" r="3.5" fill="#f472b6" />
     </svg>
   );
 }
 
-// ─── Egg layout — half off-screen so they peek from the edge ────────────────
+// ─── Egg layout ─────────────────────────────────────────────────────────────
 const EGG_CONFIGS: {
   top?: string; bottom?: string; left?: string; right?: string;
   rotate: string; color: string; pattern: EggPattern; size: number; mobile: boolean;
 }[] = [
-  // LEFT — half off-screen
-  { top: '96px',    left: '0px',    rotate: '-22deg', color: '#f9a8d4', pattern: 'dots',     size: 72, mobile: true  },
-  { top: '210px',   left: '0px',    rotate: '-14deg', color: '#fbcfe8', pattern: 'checks',   size: 62, mobile: false },
-  { top: '43%',     left: '0px',    rotate: '-10deg', color: '#d8b4fe', pattern: 'flowers',  size: 68, mobile: true  },
-  { top: '62%',     left: '0px',    rotate: '-8deg',  color: '#fcd34d', pattern: 'stripes',  size: 64, mobile: false },
-  { bottom: '120px',left: '0px',    rotate: '-18deg', color: '#6ee7b7', pattern: 'waves',    size: 70, mobile: true  },
-  { bottom: '220px',left: '0px',    rotate: '-12deg', color: '#f0abfc', pattern: 'zigzag',   size: 56, mobile: false },
-
-  // RIGHT — half off-screen
-  { top: '90px',    right: '0px',   rotate: '20deg',  color: '#7dd3fc', pattern: 'stripes',  size: 70, mobile: true  },
-  { top: '200px',   right: '0px',   rotate: '12deg',  color: '#bef264', pattern: 'dots',     size: 60, mobile: false },
-  { top: '41%',     right: '0px',   rotate: '14deg',  color: '#fde68a', pattern: 'zigzag',   size: 66, mobile: true  },
-  { top: '60%',     right: '0px',   rotate: '10deg',  color: '#a5b4fc', pattern: 'waves',    size: 64, mobile: false },
-  { bottom: '116px',right: '0px',   rotate: '22deg',  color: '#fca5a5', pattern: 'diamonds', size: 70, mobile: true  },
-  { bottom: '216px',right: '0px',   rotate: '16deg',  color: '#86efac', pattern: 'checks',   size: 56, mobile: false },
+  // LEFT
+  { top: '96px',    left: '0px', rotate: '-22deg', color: '#f9a8d4', pattern: 'dots',     size: 72, mobile: true  },
+  { top: '210px',   left: '0px', rotate: '-14deg', color: '#fbcfe8', pattern: 'checks',   size: 62, mobile: false },
+  { top: '43%',     left: '0px', rotate: '-10deg', color: '#d8b4fe', pattern: 'flowers',  size: 68, mobile: true  },
+  { top: '62%',     left: '0px', rotate: '-8deg',  color: '#fcd34d', pattern: 'stripes',  size: 64, mobile: false },
+  { bottom: '120px',left: '0px', rotate: '-18deg', color: '#6ee7b7', pattern: 'waves',    size: 70, mobile: true  },
+  { bottom: '220px',left: '0px', rotate: '-12deg', color: '#f0abfc', pattern: 'zigzag',   size: 56, mobile: false },
+  // RIGHT
+  { top: '90px',    right: '0px', rotate: '20deg',  color: '#7dd3fc', pattern: 'stripes',  size: 70, mobile: true  },
+  { top: '200px',   right: '0px', rotate: '12deg',  color: '#bef264', pattern: 'dots',     size: 60, mobile: false },
+  { top: '41%',     right: '0px', rotate: '14deg',  color: '#fde68a', pattern: 'zigzag',   size: 66, mobile: true  },
+  { top: '60%',     right: '0px', rotate: '10deg',  color: '#a5b4fc', pattern: 'waves',    size: 64, mobile: false },
+  { bottom: '116px',right: '0px', rotate: '22deg',  color: '#fca5a5', pattern: 'diamonds', size: 70, mobile: true  },
+  { bottom: '216px',right: '0px', rotate: '16deg',  color: '#86efac', pattern: 'checks',   size: 56, mobile: false },
 ];
 
 // ─── Main overlay ────────────────────────────────────────────────────────────
@@ -161,8 +187,10 @@ export function EasterOverlay() {
   const [showBanner, setShowBanner] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(false);
   const [visible, setVisible] = useState(false);
-  // Key increments on each enable to force CSS animations to restart
   const [animKey, setAnimKey] = useState(0);
+  // Hover state for bottom bunnies
+  const [leftPopped, setLeftPopped] = useState(false);
+  const [rightPopped, setRightPopped] = useState(false);
 
   useEffect(() => {
     if (!enabled) {
@@ -170,13 +198,11 @@ export function EasterOverlay() {
       setBannerVisible(false);
       return;
     }
-
     setShowBanner(true);
-    const fadeIn      = setTimeout(() => setVisible(true), 120);
-    const bannerIn    = setTimeout(() => setBannerVisible(true), 500);
-    const bannerOut   = setTimeout(() => setBannerVisible(false), 6200);
+    const fadeIn       = setTimeout(() => setVisible(true), 120);
+    const bannerIn     = setTimeout(() => setBannerVisible(true), 500);
+    const bannerOut    = setTimeout(() => setBannerVisible(false), 6200);
     const bannerRemove = setTimeout(() => setShowBanner(false), 7400);
-
     return () => {
       clearTimeout(fadeIn);
       clearTimeout(bannerIn);
@@ -189,12 +215,11 @@ export function EasterOverlay() {
     setEnabled(prev => {
       const next = !prev;
       try { localStorage.setItem('easter-overlay', next ? 'on' : 'off'); } catch { /* noop */ }
-      if (next) setAnimKey(k => k + 1); // restart CSS animations on re-enable
+      if (next) setAnimKey(k => k + 1);
       return next;
     });
   }, []);
 
-  // Egg half-width offsets so only ~50% of each egg peeks into the viewport
   const eggOffset = (cfg: typeof EGG_CONFIGS[0]) => {
     const half = -(cfg.size / 2);
     return {
@@ -203,9 +228,18 @@ export function EasterOverlay() {
     };
   };
 
+  // Spring transition: fast spring up, ease-in drop
+  const bunnyTransitionStyle = (popped: boolean) => ({
+    transform: popped ? 'translateY(4px)' : 'translateY(64px)',
+    transition: 'transform 0.45s',
+    transitionTimingFunction: popped
+      ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'  // spring overshoot on the way up
+      : 'cubic-bezier(0.55, 0, 1, 0.45)',     // quick snappy drop on leave
+  });
+
   return (
     <>
-      {/* ── Eggs — two wrappers: outer = position+rotate, inner = wiggle ── */}
+      {/* ── Eggs ── */}
       {EGG_CONFIGS.map((cfg, i) => (
         <div
           key={i}
@@ -225,7 +259,6 @@ export function EasterOverlay() {
           }}
           aria-hidden="true"
         >
-          {/* Inner div: CSS-only wiggle, no React state — fires reliably on mount */}
           <div
             key={animKey}
             className={!reducedMotion ? 'easter-wiggle-active' : ''}
@@ -236,36 +269,57 @@ export function EasterOverlay() {
         </div>
       ))}
 
-      {/* ── Side bunnies (desktop only, ~30% width visible) ── */}
-      <div
-        className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
-        style={{ top: '32%', left: 0, opacity: visible && enabled ? 0.82 : 0, transform: 'translateX(-66px)' }}
-        aria-hidden="true"
-      >
-        <BunnySide side="left" scale={1.05} />
-      </div>
-      <div
-        className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
-        style={{ top: '32%', right: 0, opacity: visible && enabled ? 0.82 : 0, transform: 'translateX(66px)' }}
-        aria-hidden="true"
-      >
-        <BunnySide side="right" scale={1.05} />
-      </div>
+      {/* ── Side bunnies — wander up/down, lean in to "grab" eggs (desktop) ── */}
+      {!reducedMotion && (
+        <>
+          <div
+            className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
+            style={{ top: 0, left: 0, opacity: visible && enabled ? 0.88 : 0 }}
+            aria-hidden="true"
+          >
+            <div className="bunny-wander-left">
+              <BunnySide side="left" scale={1.05} />
+            </div>
+          </div>
+          <div
+            className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
+            style={{ top: 0, right: 0, opacity: visible && enabled ? 0.88 : 0 }}
+            aria-hidden="true"
+          >
+            <div className="bunny-wander-right">
+              <BunnySide side="right" scale={1.05} />
+            </div>
+          </div>
+        </>
+      )}
 
-      {/* ── Bottom-peeking bunny ears (desktop only) ── */}
+      {/* ── Bottom popup bunnies — hidden, hover to pop up (desktop) ── */}
+      {/* Left */}
       <div
-        className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
-        style={{ bottom: 0, left: '7%', opacity: visible && enabled ? 0.75 : 0, transform: 'translateY(28px)' }}
+        className="fixed z-[39] hidden md:block select-none"
+        style={{ bottom: 0, left: '9%', opacity: visible && enabled ? 1 : 0, transition: 'opacity 1s', cursor: 'default', pointerEvents: enabled ? 'auto' : 'none' }}
+        onMouseEnter={() => setLeftPopped(true)}
+        onMouseLeave={() => setLeftPopped(false)}
         aria-hidden="true"
       >
-        <BunnyBottom />
+        {/* Invisible hover zone so user can discover the bunny */}
+        <div style={{ height: '24px', width: '96px', position: 'absolute', bottom: '44px' }} />
+        <div style={bunnyTransitionStyle(leftPopped)}>
+          <BunnyPopup />
+        </div>
       </div>
+      {/* Right */}
       <div
-        className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
-        style={{ bottom: 0, right: '7%', opacity: visible && enabled ? 0.75 : 0, transform: 'translateY(28px) scaleX(-1)' }}
+        className="fixed z-[39] hidden md:block select-none"
+        style={{ bottom: 0, right: '9%', opacity: visible && enabled ? 1 : 0, transition: 'opacity 1s', cursor: 'default', pointerEvents: enabled ? 'auto' : 'none' }}
+        onMouseEnter={() => setRightPopped(true)}
+        onMouseLeave={() => setRightPopped(false)}
         aria-hidden="true"
       >
-        <BunnyBottom />
+        <div style={{ height: '24px', width: '96px', position: 'absolute', bottom: '44px' }} />
+        <div style={bunnyTransitionStyle(rightPopped)}>
+          <BunnyPopup mirrored />
+        </div>
       </div>
 
       {/* ── Happy Easter banner ── */}
@@ -310,12 +364,9 @@ export function EasterOverlay() {
           transition: 'all 0.2s ease',
         }}
         aria-label={enabled ? 'Hide Easter decorations' : 'Show Easter decorations'}
-        title={enabled ? 'Hide Easter theme' : 'Show Easter theme'}
       >
         {enabled ? '🐣' : '🥚'}
-        <span style={{ letterSpacing: '0.03em' }}>
-          Easter {enabled ? 'On' : 'Off'}
-        </span>
+        <span>Easter {enabled ? 'On' : 'Off'}</span>
       </button>
     </>
   );
