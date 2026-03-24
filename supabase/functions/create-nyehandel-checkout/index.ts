@@ -285,7 +285,7 @@ Deno.serve(async (req) => {
   const nyehandelPayload = {
     prefix: "NB",
     currency_iso: "EUR",
-    locale: "en-gb",
+    locale: "sv-se",
     reference: orderRef,
     marking: orderRef,
     delivery_callback_url: deliveryCallbackUrl,
