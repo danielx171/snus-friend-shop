@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -19,7 +19,6 @@ function Egg({ color, pattern, size = 64 }: { color: string; pattern: EggPattern
   const id = `egg-${color.replace('#', '')}-${pattern}-${size}`;
   const w = size;
   const h = Math.round(size * 1.3);
-
   return (
     <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -79,9 +78,7 @@ function Egg({ color, pattern, size = 64 }: { color: string; pattern: EggPattern
           ))}
         </>)}
       </g>
-      {/* Gloss */}
       <ellipse cx={w*.34} cy={h*.26} rx={w*.1} ry={h*.06} fill="white" opacity="0.28" />
-      {/* Border */}
       <ellipse cx={w/2} cy={h/2} rx={w/2-1} ry={h/2-1} fill="none" stroke="white" strokeWidth="1.5" opacity="0.22" />
     </svg>
   );
@@ -95,137 +92,126 @@ function BunnySide({ side, scale = 1 }: { side: 'left' | 'right'; scale?: number
   return (
     <svg width={w} height={h} viewBox="0 0 88 130" xmlns="http://www.w3.org/2000/svg"
       style={{ transform: flip ? 'scaleX(-1)' : undefined }}>
-      {/* Long left ear */}
       <ellipse cx="26" cy="34" rx="11" ry="30" fill="#fce4ef" />
       <ellipse cx="26" cy="34" rx="6" ry="23" fill="#f9b8d4" />
-      {/* Tall right ear (higher) */}
       <ellipse cx="52" cy="27" rx="11" ry="33" fill="#fce4ef" />
       <ellipse cx="52" cy="27" rx="6" ry="26" fill="#f9b8d4" />
-      {/* Head */}
       <ellipse cx="38" cy="88" rx="32" ry="30" fill="#fef0f6" />
-      {/* Eyes */}
       <circle cx="28" cy="82" r="5" fill="#2d1a2e" />
       <circle cx="48" cy="82" r="5" fill="#2d1a2e" />
       <circle cx="29.5" cy="80.5" r="2" fill="white" />
       <circle cx="49.5" cy="80.5" r="2" fill="white" />
-      {/* Nose */}
       <ellipse cx="38" cy="92" rx="5" ry="3.5" fill="#f9a8c9" />
-      {/* Mouth */}
       <path d="M33,96 Q38,101 43,96" fill="none" stroke="#e87aaa" strokeWidth="1.8" strokeLinecap="round" />
-      {/* Cheek blush */}
       <circle cx="22" cy="90" r="7" fill="#fbc8dc" opacity="0.45" />
       <circle cx="54" cy="90" r="7" fill="#fbc8dc" opacity="0.45" />
-      {/* Whiskers L */}
       <line x1="8" y1="89" x2="31" y2="91" stroke="#d4a0b8" strokeWidth="1.2" opacity="0.65" />
       <line x1="6" y1="94" x2="31" y2="94" stroke="#d4a0b8" strokeWidth="1.2" opacity="0.55" />
-      {/* Whiskers R */}
       <line x1="45" y1="91" x2="68" y2="89" stroke="#d4a0b8" strokeWidth="1.2" opacity="0.65" />
       <line x1="45" y1="94" x2="70" y2="94" stroke="#d4a0b8" strokeWidth="1.2" opacity="0.55" />
-      {/* Body */}
       <ellipse cx="38" cy="122" rx="28" ry="16" fill="#fef0f6" />
-      {/* Small bow */}
       <path d="M30,108 Q38,104 46,108 Q38,112 30,108Z" fill="#fda4c8" opacity="0.7" />
       <circle cx="38" cy="108" r="2.5" fill="#f472b6" opacity="0.8" />
     </svg>
   );
 }
 
-// ─── Bunny peeking upward from the bottom edge ──────────────────────────────
-function BunnyBottom({ side }: { side: 'left' | 'right' }) {
-  // Only ears + top of head visible — body hidden below viewport
+// ─── Bunny ears peeking up from bottom ──────────────────────────────────────
+function BunnyBottom() {
   return (
-    <svg width="100" height="90" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
-      {/* Left ear */}
-      <ellipse cx="30" cy="28" rx="13" ry="34" fill="#fce4ef" />
-      <ellipse cx="30" cy="28" rx="7.5" ry="27" fill="#f9b8d4" />
-      {/* Right ear */}
-      <ellipse cx="68" cy="22" rx="13" ry="38" fill="#fce4ef" />
-      <ellipse cx="68" cy="22" rx="7.5" ry="30" fill="#f9b8d4" />
-      {/* Top of head just peeking over */}
-      <ellipse cx="49" cy="92" rx="38" ry="30" fill="#fef0f6" />
-      {/* Forehead tuft */}
-      <ellipse cx="49" cy="70" rx="6" ry="4" fill="#fce4ef" />
-      {/* Eyes barely visible */}
-      <circle cx="38" cy="80" r="4.5" fill="#2d1a2e" />
-      <circle cx="60" cy="80" r="4.5" fill="#2d1a2e" />
-      <circle cx="39.5" cy="78.5" r="1.8" fill="white" />
-      <circle cx="61.5" cy="78.5" r="1.8" fill="white" />
+    <svg width="90" height="72" viewBox="0 0 90 72" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="28" cy="30" rx="12" ry="30" fill="#fce4ef" />
+      <ellipse cx="28" cy="30" rx="7" ry="24" fill="#f9b8d4" />
+      <ellipse cx="62" cy="24" rx="12" ry="33" fill="#fce4ef" />
+      <ellipse cx="62" cy="24" rx="7" ry="26" fill="#f9b8d4" />
+      <ellipse cx="45" cy="80" rx="34" ry="22" fill="#fef0f6" />
     </svg>
   );
 }
 
-// ─── Egg layout ─────────────────────────────────────────────────────────────
+// ─── Egg layout — half off-screen so they peek from the edge ────────────────
 const EGG_CONFIGS: {
   top?: string; bottom?: string; left?: string; right?: string;
   rotate: string; color: string; pattern: EggPattern; size: number; mobile: boolean;
 }[] = [
-  // ── Always visible (mobile + desktop) ──
-  // top-left
-  { top: '82px',    left: '-6px',   rotate: '-22deg', color: '#f9a8d4', pattern: 'dots',     size: 74, mobile: true  },
-  // top-right
-  { top: '76px',    right: '-6px',  rotate: '20deg',  color: '#7dd3fc', pattern: 'stripes',  size: 70, mobile: true  },
-  // bottom-left
-  { bottom: '80px', left: '-4px',   rotate: '-18deg', color: '#6ee7b7', pattern: 'waves',    size: 72, mobile: true  },
-  // bottom-right
-  { bottom: '76px', right: '-4px',  rotate: '22deg',  color: '#fca5a5', pattern: 'diamonds', size: 70, mobile: true  },
-  // mid-left (mobile visible — offset so just edge is seen)
-  { top: '42%',     left: '-8px',   rotate: '-12deg', color: '#d8b4fe', pattern: 'flowers',  size: 68, mobile: true  },
-  // mid-right (mobile visible)
-  { top: '40%',     right: '-8px',  rotate: '14deg',  color: '#fde68a', pattern: 'zigzag',   size: 66, mobile: true  },
+  // LEFT — half off-screen
+  { top: '96px',    left: '0px',    rotate: '-22deg', color: '#f9a8d4', pattern: 'dots',     size: 72, mobile: true  },
+  { top: '210px',   left: '0px',    rotate: '-14deg', color: '#fbcfe8', pattern: 'checks',   size: 62, mobile: false },
+  { top: '43%',     left: '0px',    rotate: '-10deg', color: '#d8b4fe', pattern: 'flowers',  size: 68, mobile: true  },
+  { top: '62%',     left: '0px',    rotate: '-8deg',  color: '#fcd34d', pattern: 'stripes',  size: 64, mobile: false },
+  { bottom: '120px',left: '0px',    rotate: '-18deg', color: '#6ee7b7', pattern: 'waves',    size: 70, mobile: true  },
+  { bottom: '220px',left: '0px',    rotate: '-12deg', color: '#f0abfc', pattern: 'zigzag',   size: 56, mobile: false },
 
-  // ── Desktop-only extras ──
-  // upper-left second egg
-  { top: '160px',   left: '-12px',  rotate: '-8deg',  color: '#fbcfe8', pattern: 'checks',   size: 62, mobile: false },
-  // upper-right second egg
-  { top: '150px',   right: '-12px', rotate: '10deg',  color: '#bef264', pattern: 'dots',     size: 60, mobile: false },
-  // lower-left
-  { top: '68%',     left: '-14px',  rotate: '-6deg',  color: '#fcd34d', pattern: 'stripes',  size: 64, mobile: false },
-  // lower-right
-  { top: '65%',     right: '-14px', rotate: '8deg',   color: '#a5b4fc', pattern: 'waves',    size: 64, mobile: false },
-  // bottom-left second
-  { bottom: '160px',left: '-10px',  rotate: '-16deg', color: '#f0abfc', pattern: 'zigzag',   size: 58, mobile: false },
-  // bottom-right second
-  { bottom: '155px',right: '-10px', rotate: '18deg',  color: '#86efac', pattern: 'checks',   size: 58, mobile: false },
+  // RIGHT — half off-screen
+  { top: '90px',    right: '0px',   rotate: '20deg',  color: '#7dd3fc', pattern: 'stripes',  size: 70, mobile: true  },
+  { top: '200px',   right: '0px',   rotate: '12deg',  color: '#bef264', pattern: 'dots',     size: 60, mobile: false },
+  { top: '41%',     right: '0px',   rotate: '14deg',  color: '#fde68a', pattern: 'zigzag',   size: 66, mobile: true  },
+  { top: '60%',     right: '0px',   rotate: '10deg',  color: '#a5b4fc', pattern: 'waves',    size: 64, mobile: false },
+  { bottom: '116px',right: '0px',   rotate: '22deg',  color: '#fca5a5', pattern: 'diamonds', size: 70, mobile: true  },
+  { bottom: '216px',right: '0px',   rotate: '16deg',  color: '#86efac', pattern: 'checks',   size: 56, mobile: false },
 ];
 
 // ─── Main overlay ────────────────────────────────────────────────────────────
 export function EasterOverlay() {
   const reducedMotion = usePrefersReducedMotion();
-  const [wiggling, setWiggling] = useState(!reducedMotion);
-  const [showBanner, setShowBanner] = useState(true);
+
+  const [enabled, setEnabled] = useState(() => {
+    try { return localStorage.getItem('easter-overlay') !== 'off'; } catch { return true; }
+  });
+  const [showBanner, setShowBanner] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(false);
   const [visible, setVisible] = useState(false);
+  // Key increments on each enable to force CSS animations to restart
+  const [animKey, setAnimKey] = useState(0);
 
   useEffect(() => {
-    // Fade everything in quickly
-    const fadeIn = setTimeout(() => setVisible(true), 150);
-    // Banner appears
-    const bannerIn = setTimeout(() => setBannerVisible(true), 300);
-    // Banner fades out after 6s
-    const bannerOut = setTimeout(() => setBannerVisible(false), 6000);
-    const bannerRemove = setTimeout(() => setShowBanner(false), 7200);
-    // Eggs stop wiggling after 5 seconds
-    const wiggleStop = setTimeout(() => setWiggling(false), 5000);
+    if (!enabled) {
+      setVisible(false);
+      setBannerVisible(false);
+      return;
+    }
+
+    setShowBanner(true);
+    const fadeIn      = setTimeout(() => setVisible(true), 120);
+    const bannerIn    = setTimeout(() => setBannerVisible(true), 500);
+    const bannerOut   = setTimeout(() => setBannerVisible(false), 6200);
+    const bannerRemove = setTimeout(() => setShowBanner(false), 7400);
 
     return () => {
       clearTimeout(fadeIn);
       clearTimeout(bannerIn);
       clearTimeout(bannerOut);
       clearTimeout(bannerRemove);
-      clearTimeout(wiggleStop);
     };
+  }, [enabled]);
+
+  const toggle = useCallback(() => {
+    setEnabled(prev => {
+      const next = !prev;
+      try { localStorage.setItem('easter-overlay', next ? 'on' : 'off'); } catch { /* noop */ }
+      if (next) setAnimKey(k => k + 1); // restart CSS animations on re-enable
+      return next;
+    });
   }, []);
+
+  // Egg half-width offsets so only ~50% of each egg peeks into the viewport
+  const eggOffset = (cfg: typeof EGG_CONFIGS[0]) => {
+    const half = -(cfg.size / 2);
+    return {
+      marginLeft:  cfg.left  !== undefined ? `${half}px` : undefined,
+      marginRight: cfg.right !== undefined ? `${half}px` : undefined,
+    };
+  };
 
   return (
     <>
-      {/* ── Eggs ── */}
+      {/* ── Eggs — two wrappers: outer = position+rotate, inner = wiggle ── */}
       {EGG_CONFIGS.map((cfg, i) => (
         <div
           key={i}
           className={[
-            'fixed pointer-events-none select-none z-[40]',
+            'fixed pointer-events-none select-none z-[38]',
             cfg.mobile ? '' : 'hidden md:block',
-            wiggling ? 'easter-wiggle-active' : '',
             'transition-opacity duration-700',
           ].join(' ')}
           style={{
@@ -233,62 +219,53 @@ export function EasterOverlay() {
             bottom: cfg.bottom,
             left: cfg.left,
             right: cfg.right,
-            opacity: visible ? 1 : 0,
+            ...eggOffset(cfg),
+            opacity: visible && enabled ? 0.72 : 0,
             transform: `rotate(${cfg.rotate})`,
-            animationDelay: wiggling ? `${i * 0.15}s` : undefined,
           }}
           aria-hidden="true"
         >
-          <Egg color={cfg.color} pattern={cfg.pattern} size={cfg.size} />
+          {/* Inner div: CSS-only wiggle, no React state — fires reliably on mount */}
+          <div
+            key={animKey}
+            className={!reducedMotion ? 'easter-wiggle-active' : ''}
+            style={{ animationDelay: `${0.3 + i * 0.12}s` }}
+          >
+            <Egg color={cfg.color} pattern={cfg.pattern} size={cfg.size} />
+          </div>
         </div>
       ))}
 
-      {/* ── Side bunnies (mid-page, desktop) ── */}
+      {/* ── Side bunnies (desktop only, ~30% width visible) ── */}
       <div
-        className="fixed pointer-events-none select-none z-[40] hidden md:block transition-opacity duration-1000"
-        style={{ top: '30%', left: 0, opacity: visible ? 1 : 0, transform: 'translateX(-22px)' }}
+        className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
+        style={{ top: '32%', left: 0, opacity: visible && enabled ? 0.82 : 0, transform: 'translateX(-66px)' }}
         aria-hidden="true"
       >
-        <BunnySide side="left" scale={1.1} />
+        <BunnySide side="left" scale={1.05} />
       </div>
       <div
-        className="fixed pointer-events-none select-none z-[40] hidden md:block transition-opacity duration-1000"
-        style={{ top: '30%', right: 0, opacity: visible ? 1 : 0, transform: 'translateX(22px)' }}
+        className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
+        style={{ top: '32%', right: 0, opacity: visible && enabled ? 0.82 : 0, transform: 'translateX(66px)' }}
         aria-hidden="true"
       >
-        <BunnySide side="right" scale={1.1} />
-      </div>
-
-      {/* ── Bottom-peeking bunnies (corners, desktop) ── */}
-      <div
-        className="fixed pointer-events-none select-none z-[40] hidden md:block transition-opacity duration-1000"
-        style={{ bottom: 0, left: '6%', opacity: visible ? 1 : 0, transform: 'translateY(10px)' }}
-        aria-hidden="true"
-      >
-        <BunnyBottom side="left" />
-      </div>
-      <div
-        className="fixed pointer-events-none select-none z-[40] hidden md:block transition-opacity duration-1000"
-        style={{ bottom: 0, right: '6%', opacity: visible ? 1 : 0, transform: 'translateY(10px) scaleX(-1)' }}
-        aria-hidden="true"
-      >
-        <BunnyBottom side="right" />
+        <BunnySide side="right" scale={1.05} />
       </div>
 
-      {/* ── Mobile side bunnies (smaller, on mobile too) ── */}
+      {/* ── Bottom-peeking bunny ears (desktop only) ── */}
       <div
-        className="fixed pointer-events-none select-none z-[40] md:hidden transition-opacity duration-1000"
-        style={{ top: '55%', left: 0, opacity: visible ? 1 : 0, transform: 'translateX(-28px)' }}
+        className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
+        style={{ bottom: 0, left: '7%', opacity: visible && enabled ? 0.75 : 0, transform: 'translateY(28px)' }}
         aria-hidden="true"
       >
-        <BunnySide side="left" scale={0.72} />
+        <BunnyBottom />
       </div>
       <div
-        className="fixed pointer-events-none select-none z-[40] md:hidden transition-opacity duration-1000"
-        style={{ top: '55%', right: 0, opacity: visible ? 1 : 0, transform: 'translateX(28px)' }}
+        className="fixed pointer-events-none select-none z-[38] hidden md:block transition-opacity duration-1000"
+        style={{ bottom: 0, right: '7%', opacity: visible && enabled ? 0.75 : 0, transform: 'translateY(28px) scaleX(-1)' }}
         aria-hidden="true"
       >
-        <BunnySide side="right" scale={0.72} />
+        <BunnyBottom />
       </div>
 
       {/* ── Happy Easter banner ── */}
@@ -296,24 +273,50 @@ export function EasterOverlay() {
         <div
           className="fixed left-1/2 z-[45] pointer-events-none select-none transition-all duration-700"
           style={{
-            top: '76px',
+            top: '72px',
             opacity: bannerVisible ? 1 : 0,
-            transform: `translateX(-50%) translateY(${bannerVisible ? '0px' : '-14px'})`,
+            transform: `translateX(-50%) translateY(${bannerVisible ? '0px' : '-10px'})`,
           }}
           aria-hidden="true"
         >
           <div
-            className="flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold whitespace-nowrap tracking-wide"
+            className="flex items-center gap-2 rounded-full px-5 py-2 text-[13px] font-bold whitespace-nowrap tracking-wide"
             style={{
-              background: 'linear-gradient(90deg, #fda4af 0%, #fde68a 30%, #86efac 60%, #93c5fd 100%)',
+              background: 'linear-gradient(90deg, #fda4af 0%, #fde68a 35%, #86efac 65%, #93c5fd 100%)',
               color: '#3b1426',
-              boxShadow: '0 4px 24px rgba(253,164,175,0.5), 0 2px 8px rgba(0,0,0,0.08)',
+              boxShadow: '0 4px 20px rgba(253,164,175,0.45), 0 2px 6px rgba(0,0,0,0.08)',
+              border: '2px solid rgba(255,255,255,0.55)',
             }}
           >
-            🐣&nbsp;&nbsp;Happy Easter!&nbsp;&nbsp;🐰
+            🐣&nbsp; Happy Easter! &nbsp;🌸
           </div>
         </div>
       )}
+
+      {/* ── Toggle button ── */}
+      <button
+        onClick={toggle}
+        className="fixed bottom-5 right-5 z-[50] flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-bold tracking-wide cursor-pointer select-none"
+        style={{
+          background: enabled
+            ? 'linear-gradient(135deg, #fda4af 0%, #fde68a 50%, #86efac 100%)'
+            : 'rgba(100,100,120,0.55)',
+          color: enabled ? '#5c1a2e' : '#94a3b8',
+          boxShadow: enabled
+            ? '0 4px 18px rgba(253,164,175,0.45), 0 2px 6px rgba(0,0,0,0.1)'
+            : '0 2px 8px rgba(0,0,0,0.15)',
+          border: `2px solid ${enabled ? 'rgba(255,255,255,0.55)' : 'rgba(148,163,184,0.3)'}`,
+          backdropFilter: 'blur(8px)',
+          transition: 'all 0.2s ease',
+        }}
+        aria-label={enabled ? 'Hide Easter decorations' : 'Show Easter decorations'}
+        title={enabled ? 'Hide Easter theme' : 'Show Easter theme'}
+      >
+        {enabled ? '🐣' : '🥚'}
+        <span style={{ letterSpacing: '0.03em' }}>
+          Easter {enabled ? 'On' : 'Off'}
+        </span>
+      </button>
     </>
   );
 }
