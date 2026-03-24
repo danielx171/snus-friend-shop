@@ -1,4 +1,4 @@
-import { ShoppingCart, Search, Menu, User, Coins, Check, Star } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, Coins, Check, Star, Heart } from 'lucide-react';
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
@@ -9,6 +9,7 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { SearchAutocomplete } from '@/components/search/SearchAutocomplete';
 import { supabase } from '@/integrations/supabase/client';
 import { useSnusPoints } from '@/hooks/useSnusPoints';
+import { useWishlist } from '@/context/WishlistContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -69,6 +70,7 @@ export function Header() {
   }, []);
 
   const { data: pointsData } = useSnusPoints(userId);
+  const { count: wishlistCount } = useWishlist();
 
   const navLinks = [
     { href: '/nicotine-pouches', label: 'Shop' },
@@ -111,6 +113,24 @@ export function Header() {
             aria-label="Search"
           >
             <Search className="h-5 w-5" />
+          </Button>
+
+          {/* Wishlist icon */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative rounded-xl h-10 w-10 text-muted-foreground hover:text-primary hidden sm:flex"
+            asChild
+            aria-label={`Wishlist${wishlistCount > 0 ? ` (${wishlistCount} items)` : ''}`}
+          >
+            <Link to="/wishlist">
+              <Heart className="h-5 w-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground glow-primary">
+                  {wishlistCount > 9 ? '9+' : wishlistCount}
+                </span>
+              )}
+            </Link>
           </Button>
 
           {/* SnusPoints indicator */}
@@ -171,6 +191,19 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
+                  <Link
+                    to="/wishlist"
+                    className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-white/5"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Heart className="h-4 w-4 mr-2.5" />
+                    Wishlist
+                    {wishlistCount > 0 && (
+                      <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+                        {wishlistCount}
+                      </span>
+                    )}
+                  </Link>
                   <Link
                     to="/account"
                     className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-white/5"

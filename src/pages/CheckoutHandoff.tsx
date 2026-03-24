@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { useCart } from '@/context/CartContext';
@@ -24,6 +24,7 @@ import { SEO } from '@/components/seo/SEO';
 import { apiFetch } from '@/lib/api';
 import { supabase } from '@/integrations/supabase/client';
 import { PREVIEW_MODE } from '@/config/brand';
+import CheckoutUpsell, { type UpsellItem } from '@/components/shop/CheckoutUpsell';
 
 /* ── Types ── */
 
@@ -111,6 +112,11 @@ export default function CheckoutHandoff() {
   const [skuMap, setSkuMap] = useState<Map<string, string> | null>(null);
   const [skuLoading, setSkuLoading] = useState(true);
   const [skuError, setSkuError] = useState(false);
+  const [upsellItems, setUpsellItems] = useState<UpsellItem[]>([]);
+
+  const handleUpsellChange = useCallback((items: UpsellItem[]) => {
+    setUpsellItems(items);
+  }, []);
 
   /* ── Prefill email from auth session ── */
   useEffect(() => {
@@ -213,7 +219,7 @@ export default function CheckoutHandoff() {
     try {
       // Map cart items to checkout items with SKUs
       // Each product has one SKU; pack size becomes a quantity multiplier
-      const checkoutItems = items.map((item) => {
+      const cartCheckoutItems = items.map((item) => {
         const packCount = packSizeMultipliers[item.packSize];
         const sku = skuMap.get(item.product.id);
         if (!sku) throw new Error(`No SKU found for ${item.product.name}`);
@@ -225,6 +231,15 @@ export default function CheckoutHandoff() {
           unit_price: item.product.prices[item.packSize],
         };
       });
+
+      const upsellCheckoutItems = upsellItems.map((u) => ({
+        sku: u.sku,
+        quantity: 1,
+        product_name: u.display_name,
+        unit_price: u.price,
+      }));
+
+      const checkoutItems = [...cartCheckoutItems, ...upsellCheckoutItems];
 
       const result = await apiFetch<CheckoutResponse>('create-nyehandel-checkout', {
         method: 'POST',
@@ -505,6 +520,9 @@ export default function CheckoutHandoff() {
                     )}
                   </CardContent>
                 </Card>
+
+                {/* Upsells */}
+                <CheckoutUpsell onUpsellChange={handleUpsellChange} />
 
                 {/* Cart Items (read-only) */}
                 <div className="space-y-4">

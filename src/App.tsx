@@ -29,6 +29,7 @@ import BrandsIndex from "./pages/BrandsIndex";
 import MembershipPage from "./pages/MembershipPage";
 import RewardsPage from "./pages/RewardsPage";
 import WishlistPage from "./pages/WishlistPage";
+import BundleBuilder from "./pages/BundleBuilder";
 import FaqPage from "./pages/FaqPage";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsent } from "@/components/cookie/CookieConsent";
@@ -120,6 +121,7 @@ const App = () => (
               <Route path="/membership" element={<MembershipPage />} />
               <Route path="/rewards" element={<RewardsPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/bundle-builder" element={<BundleBuilder />} />
               {/* Info pages */}
               <Route path="/contact" element={<InfoPage title="Contact Us" content={<>
                 <p>We're here to help. Reach us at <a href="mailto:support@snusfriend.com" className="text-primary hover:underline">support@snusfriend.com</a> and we'll get back to you within 24 hours on business days.</p>

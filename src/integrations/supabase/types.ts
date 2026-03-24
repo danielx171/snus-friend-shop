@@ -621,6 +621,59 @@ export type Database = {
           },
         ]
       }
+      user_wishlists: {
+        Row: {
+          created_at: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_wishlists_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      checkout_upsells: {
+        Row: {
+          active: boolean
+          display_name: string
+          id: string
+          price_override: number
+          sku: string
+          sort_order: number
+        }
+        Insert: {
+          active?: boolean
+          display_name: string
+          id?: string
+          price_override?: number
+          sku: string
+          sort_order?: number
+        }
+        Update: {
+          active?: boolean
+          display_name?: string
+          id?: string
+          price_override?: number
+          sku?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

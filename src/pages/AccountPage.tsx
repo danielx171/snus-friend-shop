@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/table';
 import { EmptyState } from '@/components/ui/states/EmptyState';
 import { Package, MapPin, Settings, LogOut, Crown, UserCircle } from 'lucide-react';
+import ReorderButton from '@/components/shop/ReorderButton';
 import { MembershipAccountTab } from '@/components/account/MembershipAccountTab';
 import { SEO } from '@/components/seo/SEO';
 import { formatPrice } from '@/lib/currency';
@@ -254,6 +255,7 @@ export default function AccountPage() {
                               <TableHead className="text-muted-foreground">Items</TableHead>
                               <TableHead className="text-muted-foreground">Status</TableHead>
                               <TableHead className="text-right text-muted-foreground">Total</TableHead>
+                              <TableHead className="text-muted-foreground" />
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -274,6 +276,9 @@ export default function AccountPage() {
                                   </TableCell>
                                   <TableCell className="text-right text-sm font-medium text-foreground">
                                     {formatPrice(order.total_price)}
+                                  </TableCell>
+                                  <TableCell className="text-right">
+                                    <ReorderButton lineItemsSnapshot={order.line_items_snapshot} />
                                   </TableCell>
                                 </TableRow>
                               );
@@ -300,6 +305,9 @@ export default function AccountPage() {
                               <div className="flex items-center justify-between text-sm">
                                 <span className="text-muted-foreground">{date} &middot; {itemCount} items</span>
                                 <span className="font-medium text-foreground">{formatPrice(order.total_price)}</span>
+                              </div>
+                              <div className="pt-1">
+                                <ReorderButton lineItemsSnapshot={order.line_items_snapshot} />
                               </div>
                             </div>
                           );

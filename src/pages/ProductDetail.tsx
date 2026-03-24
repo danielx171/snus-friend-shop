@@ -27,6 +27,7 @@ import { apiFetch } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { RecentlyViewed } from '@/components/product/RecentlyViewed';
+import { useRecommendations } from '@/hooks/useRecommendations';
 
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-400 to-green-600',
@@ -61,6 +62,7 @@ export default function ProductDetail() {
   const [notifyStatus, setNotifyStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [justAdded, setJustAdded] = useState(false);
   const { t, formatPrice, formatPriceWithUnit, translateFlavor, translateStrength, translateFormat, translateBadge, translateCategory } = useTranslation();
+  const { recommendations } = useRecommendations(product);
 
   if (isLoading) {
     return <Layout><PDPSkeleton /></Layout>;
@@ -538,7 +540,36 @@ export default function ProductDetail() {
           <ProductReviews productId={product.id} />
         </div>
 
-        {/* 9. Related Products */}
+        {/* 9. You might also like */}
+        {recommendations.length > 0 && (
+          <section className="mt-20">
+            <motion.h2
+              className="text-2xl font-bold text-foreground mb-6 tracking-tight"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, ease: easeOut }}
+            >
+              You might also like
+            </motion.h2>
+            <div className="flex gap-5 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-x-visible">
+              {recommendations.map((p, i) => (
+                <motion.div
+                  key={p.id}
+                  className="shrink-0 w-[200px] sm:w-auto"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.4, delay: i * 0.07, ease: easeOut }}
+                >
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 10. Related Products */}
         {relatedProducts.length > 0 && (
           <section className="mt-20">
             <motion.h2
