@@ -360,6 +360,8 @@ Deno.serve(async (req) => {
         error: "nyehandel_order_creation_failed",
         status: nyehandelResponse.status,
         requestId,
+        // TEMPORARY: expose upstream error for debugging — remove before go-live
+        upstream_error: errText,
       },
       502,
     );

@@ -54,14 +54,14 @@ const SHIPPING_OPTIONS = [
 ] as const;
 
 const COUNTRY_OPTIONS = [
-  { value: 'GB', label: 'United Kingdom' },
-  { value: 'SE', label: 'Sweden' },
-  { value: 'DE', label: 'Germany' },
-  { value: 'DK', label: 'Denmark' },
-  { value: 'NO', label: 'Norway' },
-  { value: 'FI', label: 'Finland' },
-  { value: 'NL', label: 'Netherlands' },
-  { value: 'BE', label: 'Belgium' },
+  { value: 'gb', label: 'United Kingdom' },
+  { value: 'se', label: 'Sweden' },
+  { value: 'de', label: 'Germany' },
+  { value: 'dk', label: 'Denmark' },
+  { value: 'no', label: 'Norway' },
+  { value: 'fi', label: 'Finland' },
+  { value: 'nl', label: 'Netherlands' },
+  { value: 'be', label: 'Belgium' },
 ] as const;
 
 /* ── Component ── */
@@ -79,7 +79,7 @@ export default function CheckoutHandoff() {
     address: '',
     postcode: '',
     city: '',
-    country: 'GB',
+    country: 'gb',
     shipping_method: SHIPPING_OPTIONS[0].name,
   });
 
