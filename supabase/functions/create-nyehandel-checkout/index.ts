@@ -285,7 +285,7 @@ Deno.serve(async (req) => {
   const nyehandelPayload = {
     prefix: "NB",
     currency_iso: "EUR",
-    locale: "sv-se",
+    locale: "en-gb",
     reference: orderRef,
     marking: orderRef,
     delivery_callback_url: deliveryCallbackUrl,
@@ -352,6 +352,7 @@ Deno.serve(async (req) => {
         Accept: "application/json",
         "X-identifier": nyehandelXIdentifier,
         Authorization: `Bearer ${nyehandelToken}`,
+        "X-Language": "en",
       },
       body: JSON.stringify(nyehandelPayload),
     });
