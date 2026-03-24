@@ -1,4 +1,4 @@
-import { ShoppingCart, Search, Menu, User, Coins, Check, Star, Heart } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, Coins, Check, Star, Heart, Sun, Moon } from 'lucide-react';
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
@@ -12,6 +12,7 @@ import { useSnusPoints } from '@/hooks/useSnusPoints';
 import { useWishlist } from '@/context/WishlistContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
@@ -71,10 +72,12 @@ export function Header() {
 
   const { data: pointsData } = useSnusPoints(userId);
   const { count: wishlistCount } = useWishlist();
+  const { theme, setTheme } = useTheme();
 
   const navLinks = [
     { href: '/nicotine-pouches', label: 'Shop' },
     { href: '/brands', label: 'Brands' },
+    { href: '/blog', label: 'Blog' },
     { href: '/rewards', label: 'Rewards' },
     { href: '/membership', label: 'Snus Family' },
   ];
@@ -87,7 +90,7 @@ export function Header() {
           ? 'border-b border-white/[0.08] backdrop-blur-lg shadow-[0_2px_20px_rgba(0,0,0,0.15)]'
           : 'border-b border-border/30 glass-panel-strong shadow-none'
       )}
-      style={scrolled ? { backgroundColor: 'rgba(10, 15, 40, 0.8)' } : undefined}
+      style={scrolled ? { backgroundColor: theme === 'light' ? 'rgba(245, 248, 252, 0.88)' : 'rgba(10, 15, 40, 0.8)' } : undefined}
     >
       <div className="container flex h-[72px] items-center justify-between gap-6">
         {/* Logo */}
@@ -145,6 +148,17 @@ export function Header() {
               <span className="hidden md:inline">pts</span>
             </Link>
           ) : null}
+
+          {/* Theme toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-xl h-10 w-10 text-muted-foreground hover:text-primary hidden sm:flex"
+            onClick={() => setTheme(theme === 'light' ? 'velo' : 'light')}
+            aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+          >
+            {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          </Button>
 
           <Button
             variant="ghost"
@@ -222,6 +236,13 @@ export function Header() {
                       {pointsData.balance} SnusPoints
                     </Link>
                   )}
+                  <button
+                    className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+                    onClick={() => { setTheme(theme === 'light' ? 'velo' : 'light'); setMobileMenuOpen(false); }}
+                  >
+                    {theme === 'light' ? <Moon className="h-4 w-4 mr-2.5" /> : <Sun className="h-4 w-4 mr-2.5" />}
+                    {theme === 'light' ? 'Dark mode' : 'Light mode'}
+                  </button>
                 </nav>
               </div>
             </SheetContent>

@@ -593,3 +593,28 @@
     padding-bottom: var(--sab);
   }
 }
+
+/* Blog prose styles */
+.prose-container {
+  @apply text-foreground leading-relaxed;
+}
+.prose-container h1,
+.prose-container h2,
+.prose-container h3 {
+  @apply text-foreground font-bold;
+}
+.prose-container p {
+  @apply text-muted-foreground leading-relaxed mb-4;
+}
+.prose-container ul {
+  @apply my-4 space-y-1 pl-6;
+}
+.prose-container li {
+  @apply text-muted-foreground list-disc;
+}
+.prose-container strong {
+  @apply text-foreground font-semibold;
+}
+.prose-container a {
+  @apply text-primary underline underline-offset-2 hover:opacity-80;
+}

@@ -31,6 +31,8 @@ import RewardsPage from "./pages/RewardsPage";
 import WishlistPage from "./pages/WishlistPage";
 import BundleBuilder from "./pages/BundleBuilder";
 import FaqPage from "./pages/FaqPage";
+const BlogIndex = lazy(() => import("./pages/BlogIndex"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsent } from "@/components/cookie/CookieConsent";
 import { BackToTop } from "@/components/layout/BackToTop";
@@ -130,6 +132,8 @@ const App = () => (
                 <p>For wholesale, partnerships, or brand enquiries, please also reach us at the address above with "Business" in the subject line.</p>
               </>} />} />
               <Route path="/faq" element={<FaqPage />} />
+              <Route path="/blog" element={<Suspense><BlogIndex /></Suspense>} />
+              <Route path="/blog/:slug" element={<Suspense><BlogPost /></Suspense>} />
               <Route path="/shipping" element={<InfoPage title="Shipping Information" content={<>
                 <h2 className="text-foreground font-semibold text-lg">Free delivery</h2>
                 <p>All orders over €29 qualify for free standard delivery. No discount code needed — it's applied automatically at checkout.</p>
