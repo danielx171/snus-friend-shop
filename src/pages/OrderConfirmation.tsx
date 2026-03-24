@@ -237,6 +237,16 @@ export default function OrderConfirmation() {
     }
   }, [state.kind, clearCart]);
 
+  /* ── Quest progress + avatar unlocks after successful order ── */
+  const questFired = useRef(false);
+  useEffect(() => {
+    if (state.kind === 'ok' && !questFired.current) {
+      questFired.current = true;
+      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'order' } }).catch(() => {});
+      apiFetch('check-avatar-unlocks', { method: 'POST' }).catch(() => {});
+    }
+  }, [state.kind]);
+
   /* ── Animate check icon on success ── */
   useEffect(() => {
     if (state.kind !== 'ok') return;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import type { User } from '@supabase/supabase-js';
@@ -20,11 +20,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { EmptyState } from '@/components/ui/states/EmptyState';
-import { Package, MapPin, Settings, LogOut, Crown } from 'lucide-react';
+import { Package, MapPin, Settings, LogOut, Crown, UserCircle } from 'lucide-react';
 import { MembershipAccountTab } from '@/components/account/MembershipAccountTab';
 import { SEO } from '@/components/seo/SEO';
 import { formatPrice } from '@/lib/currency';
 import { cn } from '@/lib/utils';
+import { useUserProfile } from '@/hooks/useUserProfile';
+import ProfileCard from '@/components/profile/ProfileCard';
+import AvatarGallery from '@/components/profile/AvatarGallery';
 
 type DisplayStatus = 'fulfilled' | 'processing' | 'pending' | 'cancelled';
 
@@ -65,6 +68,9 @@ export default function AccountPage() {
   const [phone, setPhone] = useState('');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [saveError, setSaveError] = useState('');
+
+  // Gamification profile
+  const { profile, avatars, unlockedAvatarIds, updateProfile } = useUserProfile(user?.id ?? null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -111,6 +117,31 @@ export default function AccountPage() {
     },
     enabled: !!user?.email,
   });
+
+  // SnusPoints balance for profile stats
+  const { data: pointsBalance = 0 } = useQuery({
+    queryKey: ['points-balance', user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('points_balances')
+        .select('balance')
+        .eq('user_id', user!.id)
+        .maybeSingle();
+      return data?.balance ?? 0;
+    },
+    enabled: !!user?.id,
+  });
+
+  // Derive current avatar data for ProfileCard
+  const currentAvatarId = profile?.avatar_id ?? null;
+  const currentAvatarData = avatars.find((a) => a.id === currentAvatarId) ?? null;
+
+  const handleAvatarSelect = useCallback(
+    async (avatarId: string) => {
+      await updateProfile({ avatar_id: avatarId });
+    },
+    [updateProfile],
+  );
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -165,7 +196,7 @@ export default function AccountPage() {
           </div>
 
           <Tabs defaultValue="orders" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid h-11 rounded-xl bg-muted/20 border border-border/20 p-1">
+            <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid h-11 rounded-xl bg-muted/20 border border-border/20 p-1">
               <TabsTrigger value="orders" className="gap-2 rounded-lg text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
                 <Package className="h-4 w-4" />
                 <span className="hidden sm:inline">Order History</span>
@@ -185,6 +216,11 @@ export default function AccountPage() {
                 <Settings className="h-4 w-4" />
                 <span className="hidden sm:inline">Account Settings</span>
                 <span className="sm:hidden">Settings</span>
+              </TabsTrigger>
+              <TabsTrigger value="profile" className="gap-2 rounded-lg text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
+                <UserCircle className="h-4 w-4" />
+                <span className="hidden sm:inline">Profile</span>
+                <span className="sm:hidden">Profile</span>
               </TabsTrigger>
             </TabsList>
 
@@ -353,6 +389,39 @@ export default function AccountPage() {
                       <h3 className="text-sm font-medium text-muted-foreground">Delete Account</h3>
                       <p className="text-xs text-muted-foreground">Contact support to remove your account and all associated data.</p>
                     </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* ── Profile ── */}
+            <TabsContent value="profile">
+              <div className="space-y-6">
+                <ProfileCard
+                  profile={profile}
+                  avatarData={currentAvatarData}
+                  stats={{
+                    ordersCount: orders.length,
+                    reviewsCount: 0,
+                    snusPoints: pointsBalance,
+                  }}
+                  onSave={updateProfile}
+                />
+
+                <Card className="border-border/30">
+                  <CardHeader>
+                    <CardTitle className="font-serif">Avatar Gallery</CardTitle>
+                    <CardDescription>
+                      Unlock and equip avatars by placing orders, leaving reviews, and earning SnusPoints.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <AvatarGallery
+                      avatars={avatars}
+                      unlockedAvatarIds={unlockedAvatarIds}
+                      currentAvatarId={currentAvatarId}
+                      onSelect={handleAvatarSelect}
+                    />
                   </CardContent>
                 </Card>
               </div>

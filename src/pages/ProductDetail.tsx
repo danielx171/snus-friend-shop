@@ -21,6 +21,7 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { ProductSchema } from '@/components/seo/ProductSchema';
 import { ProductCard } from '@/components/product/ProductCard';
 import { PDPSkeleton } from '@/components/product/PDPSkeleton';
+import { ProductReviews } from '@/components/product/ProductReviews';
 import { Input } from '@/components/ui/input';
 import { apiFetch } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -532,7 +533,12 @@ export default function ProductDetail() {
           </Accordion>
         </div>
 
-        {/* 8. Related Products */}
+        {/* 8. Reviews */}
+        <div className="mt-16 max-w-3xl">
+          <ProductReviews productId={product.id} />
+        </div>
+
+        {/* 9. Related Products */}
         {relatedProducts.length > 0 && (
           <section className="mt-20">
             <motion.h2

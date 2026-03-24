@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      avatars: {
+        Row: {
+          id: string
+          image_url: string
+          name: string
+          rarity: string
+          sort_order: number
+          unlock_threshold: number
+          unlock_type: string
+        }
+        Insert: {
+          id: string
+          image_url: string
+          name: string
+          rarity: string
+          sort_order: number
+          unlock_threshold: number
+          unlock_type: string
+        }
+        Update: {
+          id?: string
+          image_url?: string
+          name?: string
+          rarity?: string
+          sort_order?: number
+          unlock_threshold?: number
+          unlock_type?: string
+        }
+        Relationships: []
+      }
       brands: {
         Row: {
           created_at: string
@@ -400,6 +430,196 @@ export type Database = {
         Insert: { key: string; value: Json; updated_at?: string }
         Update: { key?: string; value?: Json; updated_at?: string }
         Relationships: []
+      }
+      product_reviews: {
+        Row: {
+          body: string
+          created_at: string
+          flagged: boolean
+          helpful_count: number
+          id: string
+          product_id: string
+          rating: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          flagged?: boolean
+          helpful_count?: number
+          id?: string
+          product_id: string
+          rating: number
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          flagged?: boolean
+          helpful_count?: number
+          id?: string
+          product_id?: string
+          rating?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quests: {
+        Row: {
+          active: boolean
+          description: string
+          id: string
+          quest_type: string
+          reward_avatar_id: string | null
+          reward_points: number
+          sort_order: number
+          target_value: number
+          time_limit_days: number | null
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          description: string
+          id: string
+          quest_type: string
+          reward_avatar_id?: string | null
+          reward_points: number
+          sort_order: number
+          target_value: number
+          time_limit_days?: number | null
+          title: string
+        }
+        Update: {
+          active?: boolean
+          description?: string
+          id?: string
+          quest_type?: string
+          reward_avatar_id?: string | null
+          reward_points?: number
+          sort_order?: number
+          target_value?: number
+          time_limit_days?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quests_reward_avatar_id_fkey"
+            columns: ["reward_avatar_id"]
+            isOneToOne: false
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_avatar_unlocks: {
+        Row: {
+          avatar_id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_id: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_id?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_avatar_unlocks_avatar_id_fkey"
+            columns: ["avatar_id"]
+            isOneToOne: false
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_profiles: {
+        Row: {
+          avatar_id: string | null
+          bio: string | null
+          created_at: string
+          display_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_id?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_id?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_avatar_id_fkey"
+            columns: ["avatar_id"]
+            isOneToOne: false
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_quest_progress: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          current_value: number
+          id: string
+          quest_id: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          current_value?: number
+          id?: string
+          quest_id: string
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          current_value?: number
+          id?: string
+          quest_id?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_quest_progress_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "quests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

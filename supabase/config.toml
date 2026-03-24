@@ -50,3 +50,9 @@ verify_jwt = false
 
 [functions.spin-wheel]
 verify_jwt = false
+
+[functions.check-avatar-unlocks]
+verify_jwt = false
+
+[functions.update-quest-progress]
+verify_jwt = false
