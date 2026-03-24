@@ -70,7 +70,8 @@ const CheckoutUpsell = React.memo(function CheckoutUpsell({
 
   if (isLoading || isError || !upsells || upsells.length === 0) return null;
 
-  const totalSavings = (upsells.length * 0.99).toFixed(2);
+  const cappedCount = Math.min(upsells.length, MAX_SELECTIONS);
+  const totalSavings = (cappedCount * 0.99).toFixed(2);
 
   return (
     <Card>

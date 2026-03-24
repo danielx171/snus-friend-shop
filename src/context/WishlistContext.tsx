@@ -4,6 +4,7 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  useMemo,
 } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -109,8 +110,11 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   // Full product data for wishlisted IDs (used on wishlist page)
   const activeIds = user ? remoteIds : localIds;
 
+  const idsSet = useMemo(() => new Set(activeIds), [activeIds]);
+  const stableIdsKey = useMemo(() => [...activeIds].sort().join(','), [activeIds]);
+
   const { data: products = [], isLoading: productsLoading } = useQuery<Product[]>({
-    queryKey: ['wishlist-products', activeIds],
+    queryKey: ['wishlist-products', stableIdsKey],
     queryFn: async (): Promise<Product[]> => {
       if (activeIds.length === 0) return [];
       const { data, error } = await supabase
@@ -157,8 +161,8 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   });
 
   const has = useCallback(
-    (productId: string) => activeIds.includes(productId),
-    [activeIds],
+    (productId: string) => idsSet.has(productId),
+    [idsSet],
   );
 
   const toggle = useCallback(

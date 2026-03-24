@@ -283,6 +283,60 @@ Deno.serve(async (req) => {
     }
   }
 
+  /* ---------- server-side price lookup (never trust client prices) ---------- */
+
+  const skus = items.map((i) => i.sku);
+
+  // 1. Look up real prices from product_variants
+  const { data: variantRows, error: variantErr } = await adminClient
+    .from("product_variants")
+    .select("sku, price")
+    .in("sku", skus);
+
+  if (variantErr) {
+    console.error(JSON.stringify({ requestId, event: "variant_price_lookup_failed", error: variantErr.message }));
+    return jsonResponse({ error: "price_lookup_failed", requestId }, 500);
+  }
+
+  const variantPriceMap: Record<string, number> = {};
+  for (const row of variantRows ?? []) {
+    if (row.sku) variantPriceMap[row.sku] = Number(row.price);
+  }
+
+  // 2. Look up upsell prices from checkout_upsells
+  const { data: upsellRows, error: upsellErr } = await adminClient
+    .from("checkout_upsells")
+    .select("sku, price_override")
+    .in("sku", skus)
+    .eq("active", true);
+
+  if (upsellErr) {
+    console.error(JSON.stringify({ requestId, event: "upsell_price_lookup_failed", error: upsellErr.message }));
+    return jsonResponse({ error: "price_lookup_failed", requestId }, 500);
+  }
+
+  const upsellPriceMap: Record<string, number> = {};
+  for (const row of upsellRows ?? []) {
+    if (row.sku) upsellPriceMap[row.sku] = Number(row.price_override);
+  }
+
+  // 3. Resolve server-side price for each item; reject if any SKU has no price
+  const pricedItems: { sku: string; quantity: number; serverPrice: number }[] = [];
+  for (const item of items) {
+    // Upsell items take priority (they override the regular variant price)
+    const upsellPrice = upsellPriceMap[item.sku];
+    const variantPrice = variantPriceMap[item.sku];
+
+    if (upsellPrice != null) {
+      pricedItems.push({ sku: item.sku, quantity: item.quantity, serverPrice: upsellPrice });
+    } else if (variantPrice != null) {
+      pricedItems.push({ sku: item.sku, quantity: item.quantity, serverPrice: variantPrice });
+    } else {
+      console.error(JSON.stringify({ requestId, event: "sku_price_not_found", sku: item.sku }));
+      return jsonResponse({ error: "sku_not_found", sku: item.sku, requestId }, 400);
+    }
+  }
+
   /* ---------- build Nyehandel POST /orders payload ---------- */
 
   const deliveryCallbackUrl = `${supabaseUrl}/functions/v1/nyehandel-delivery-callback`;
@@ -325,8 +379,8 @@ Deno.serve(async (req) => {
       price_ex_vat: 0,
       price_inc_vat: 0,
     },
-    items: items.map((i) => {
-      const unitPriceOre = Math.round((i.unit_price ?? 0) * 100);
+    items: pricedItems.map((i) => {
+      const unitPriceOre = Math.round(i.serverPrice * 100);
       const totalOre = unitPriceOre * i.quantity;
       return {
         type: "product" as const,

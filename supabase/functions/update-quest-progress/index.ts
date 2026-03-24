@@ -89,7 +89,8 @@ Deno.serve(async (req: Request) => {
     const { data: quests, error: questsError } = await admin
       .from('quests')
       .select('id, quest_type, target_value, reward_points, reward_avatar_id')
-      .in('quest_type', questTypes);
+      .in('quest_type', questTypes)
+      .eq('active', true);
 
     if (questsError) {
       console.error('quests read error', { error: questsError, requestId });

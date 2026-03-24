@@ -59,7 +59,6 @@ const UserAvatar = React.memo(function UserAvatar({
       style={{
         width: px,
         height: px,
-        ringColor: borderColor,
         boxShadow: `0 0 0 ${size === 'lg' ? 3 : 2}px ${borderColor}`,
       }}
       aria-label={name ? `Avatar: ${name}` : `Avatar ${avatarId}`}

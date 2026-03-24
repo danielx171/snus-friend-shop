@@ -140,10 +140,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
 
   const flagMutation = useMutation({
     mutationFn: async (reviewId: string) => {
-      const { error } = await supabase
-        .from('product_reviews')
-        .update({ flagged: true })
-        .eq('id', reviewId);
+      const { error } = await supabase.rpc('flag_review', { review_id: reviewId });
       if (error) throw error;
     },
     onSuccess: () => {

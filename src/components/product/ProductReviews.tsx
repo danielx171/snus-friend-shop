@@ -235,6 +235,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                 <Input
                   id="review-title"
                   placeholder="Summarise your experience"
+                  maxLength={100}
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                 />
@@ -245,6 +246,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                   id="review-body"
                   placeholder="What did you like or dislike?"
                   rows={4}
+                  maxLength={1000}
                   value={newBody}
                   onChange={(e) => setNewBody(e.target.value)}
                 />
