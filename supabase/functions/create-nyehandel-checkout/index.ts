@@ -277,14 +277,17 @@ Deno.serve(async (req) => {
     }
   }
 
-  /* ---------- build Nyehandel POST /orders/simple payload ---------- */
+  /* ---------- build Nyehandel POST /orders payload ---------- */
 
   const deliveryCallbackUrl = `${supabaseUrl}/functions/v1/nyehandel-delivery-callback`;
+  const orderRef = `NB${Date.now()}`;
 
   const nyehandelPayload = {
     prefix: "NB",
     currency_iso: "EUR",
     locale: "en-gb",
+    reference: orderRef,
+    marking: orderRef,
     delivery_callback_url: deliveryCallbackUrl,
     customer: {
       type: "person",
@@ -298,17 +301,35 @@ Deno.serve(async (req) => {
       city: billing_address.city,
       country: billing_address.country,
     },
+    shipping_address: {
+      firstname: customer.firstname,
+      lastname: customer.lastname,
+      address: billing_address.address,
+      postcode: billing_address.postcode,
+      city: billing_address.city,
+      country: billing_address.country,
+    },
     shipping: {
       name: shipping_method,
+      price_ex_vat: 0,
+      price_inc_vat: 0,
     },
     payment: {
       name: "NFC Group Payment",
+      price_ex_vat: 0,
+      price_inc_vat: 0,
     },
-    items: items.map((i) => ({
-      type: "product" as const,
-      sku: i.sku,
-      quantity: i.quantity,
-    })),
+    items: items.map((i) => {
+      const unitPriceOre = Math.round((i.unit_price ?? 0) * 100);
+      const totalOre = unitPriceOre * i.quantity;
+      return {
+        type: "product" as const,
+        sku: i.sku,
+        quantity: i.quantity,
+        price_ex_vat: totalOre,
+        price_inc_vat: totalOre,
+      };
+    }),
   };
 
   /* ---------- call Nyehandel ---------- */
@@ -324,7 +345,7 @@ Deno.serve(async (req) => {
 
   let nyehandelResponse: Response;
   try {
-    nyehandelResponse = await fetch(`${nyehandelBaseUrl}/orders/simple`, {
+    nyehandelResponse = await fetch(`${nyehandelBaseUrl}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
