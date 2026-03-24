@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      avatars: {
+        Row: {
+          id: string
+          image_url: string
+          name: string
+          rarity: string
+          sort_order: number
+          unlock_threshold: number
+          unlock_type: string
+        }
+        Insert: {
+          id: string
+          image_url: string
+          name: string
+          rarity: string
+          sort_order: number
+          unlock_threshold: number
+          unlock_type: string
+        }
+        Update: {
+          id?: string
+          image_url?: string
+          name?: string
+          rarity?: string
+          sort_order?: number
+          unlock_threshold?: number
+          unlock_type?: string
+        }
+        Relationships: []
+      }
+      blog_posts: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          excerpt: string
+          body: string
+          cover_image_url: string | null
+          author_name: string
+          tags: string[]
+          published: boolean
+          published_at: string | null
+          seo_title: string | null
+          seo_description: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          excerpt: string
+          body: string
+          cover_image_url?: string | null
+          author_name?: string
+          tags?: string[]
+          published?: boolean
+          published_at?: string | null
+          seo_title?: string | null
+          seo_description?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title?: string
+          excerpt?: string
+          body?: string
+          cover_image_url?: string | null
+          author_name?: string
+          tags?: string[]
+          published?: boolean
+          published_at?: string | null
+          seo_title?: string | null
+          seo_description?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       brands: {
         Row: {
           created_at: string
@@ -146,7 +227,9 @@ export type Database = {
           badge_keys: string[]
           brand_id: string
           category_key: string
+          compare_price: number | null
           created_at: string
+          description: string | null
           description_key: string | null
           flavor_key: string
           format_key: string
@@ -167,7 +250,9 @@ export type Database = {
           badge_keys?: string[]
           brand_id: string
           category_key?: string
+          compare_price?: number | null
           created_at?: string
+          description?: string | null
           description_key?: string | null
           flavor_key: string
           format_key: string
@@ -188,7 +273,9 @@ export type Database = {
           badge_keys?: string[]
           brand_id?: string
           category_key?: string
+          compare_price?: number | null
           created_at?: string
+          description?: string | null
           description_key?: string | null
           flavor_key?: string
           format_key?: string
@@ -341,11 +428,314 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: { id: string; customer_email: string; total_price: number; currency: string; checkout_status: string; line_items_snapshot: Json | null; customer_metadata: Json | null; nyehandel_order_id: string | null; nyehandel_status: string | null; nyehandel_sync_status: string | null; tracking_id: string | null; tracking_url: string | null; shipping_method: string | null; payment_method: string | null; user_id: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; customer_email: string; total_price: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; customer_email?: string; total_price?: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
+      ops_alerts: {
+        Row: { id: string; alert_date: string; rule_key: string; severity: string; source_order_id: string | null; title: string; message: string; context: Json | null; status: string; resolved_at: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; alert_date?: string; rule_key: string; severity?: string; source_order_id?: string | null; title: string; message: string; context?: Json | null; status?: string; resolved_at?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; alert_date?: string; rule_key?: string; severity?: string; source_order_id?: string | null; title?: string; message?: string; context?: Json | null; status?: string; resolved_at?: string | null; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
+      points_balances: {
+        Row: { user_id: string; balance: number; lifetime_earned: number; updated_at: string }
+        Insert: { user_id: string; balance?: number; lifetime_earned?: number; updated_at?: string }
+        Update: { user_id?: string; balance?: number; lifetime_earned?: number; updated_at?: string }
+        Relationships: []
+      }
+      points_transactions: {
+        Row: { id: string; user_id: string; order_id: string | null; points: number; reason: string; created_at: string }
+        Insert: { id?: string; user_id: string; order_id?: string | null; points: number; reason: string; created_at?: string }
+        Update: { id?: string; user_id?: string; order_id?: string | null; points?: number; reason?: string; created_at?: string }
+        Relationships: []
+      }
+      waitlist_emails: {
+        Row: { id: string; email: string; source: string | null; created_at: string }
+        Insert: { id?: string; email: string; source?: string | null; created_at?: string }
+        Update: { id?: string; email?: string; source?: string | null; created_at?: string }
+        Relationships: []
+      }
+      sync_config: {
+        Row: { id: string; key: string; value: string; created_at: string }
+        Insert: { id?: string; key: string; value: string; created_at?: string }
+        Update: { id?: string; key?: string; value?: string; created_at?: string }
+        Relationships: []
+      }
+      daily_spins: {
+        Row: { id: string; user_id: string; prize_key: string; prize_value: Json; spin_date: string; spun_at: string }
+        Insert: { id?: string; user_id: string; prize_key: string; prize_value: Json; spin_date?: string; spun_at?: string }
+        Update: { id?: string; user_id?: string; prize_key?: string; prize_value?: Json; spin_date?: string; spun_at?: string }
+        Relationships: []
+      }
+      vouchers: {
+        Row: { id: string; user_id: string; type: string; value: Json; status: string; source: string; expires_at: string; used_at: string | null; created_at: string }
+        Insert: { id?: string; user_id: string; type: string; value: Json; status?: string; source?: string; expires_at: string; used_at?: string | null; created_at?: string }
+        Update: { id?: string; user_id?: string; type?: string; value?: Json; status?: string; source?: string; expires_at?: string; used_at?: string | null; created_at?: string }
+        Relationships: []
+      }
+      spin_config: {
+        Row: { key: string; value: Json; updated_at: string }
+        Insert: { key: string; value: Json; updated_at?: string }
+        Update: { key?: string; value?: Json; updated_at?: string }
+        Relationships: []
+      }
+      product_reviews: {
+        Row: {
+          body: string
+          created_at: string
+          flagged: boolean
+          helpful_count: number
+          id: string
+          product_id: string
+          rating: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          flagged?: boolean
+          helpful_count?: number
+          id?: string
+          product_id: string
+          rating: number
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          flagged?: boolean
+          helpful_count?: number
+          id?: string
+          product_id?: string
+          rating?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quests: {
+        Row: {
+          active: boolean
+          description: string
+          id: string
+          quest_type: string
+          reward_avatar_id: string | null
+          reward_points: number
+          sort_order: number
+          target_value: number
+          time_limit_days: number | null
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          description: string
+          id: string
+          quest_type: string
+          reward_avatar_id?: string | null
+          reward_points: number
+          sort_order: number
+          target_value: number
+          time_limit_days?: number | null
+          title: string
+        }
+        Update: {
+          active?: boolean
+          description?: string
+          id?: string
+          quest_type?: string
+          reward_avatar_id?: string | null
+          reward_points?: number
+          sort_order?: number
+          target_value?: number
+          time_limit_days?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quests_reward_avatar_id_fkey"
+            columns: ["reward_avatar_id"]
+            isOneToOne: false
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_avatar_unlocks: {
+        Row: {
+          avatar_id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_id: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_id?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_avatar_unlocks_avatar_id_fkey"
+            columns: ["avatar_id"]
+            isOneToOne: false
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_profiles: {
+        Row: {
+          avatar_id: string | null
+          bio: string | null
+          created_at: string
+          display_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_id?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_id?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_avatar_id_fkey"
+            columns: ["avatar_id"]
+            isOneToOne: false
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_quest_progress: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          current_value: number
+          id: string
+          quest_id: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          current_value?: number
+          id?: string
+          quest_id: string
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          current_value?: number
+          id?: string
+          quest_id?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_quest_progress_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "quests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_wishlists: {
+        Row: {
+          created_at: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_wishlists_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      checkout_upsells: {
+        Row: {
+          active: boolean
+          display_name: string
+          id: string
+          price_override: number
+          sku: string
+          sort_order: number
+        }
+        Insert: {
+          active?: boolean
+          display_name: string
+          id?: string
+          price_override?: number
+          sku: string
+          sort_order?: number
+        }
+        Update: {
+          active?: boolean
+          display_name?: string
+          id?: string
+          price_override?: number
+          sku?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      flag_review: {
+        Args: {
+          review_id: string
+        }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

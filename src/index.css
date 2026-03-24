@@ -569,18 +569,6 @@
   animation: skeleton-shimmer 1.8s ease-in-out infinite;
 }
 
-/* Easter egg wiggle — runs once then stops */
-@keyframes easter-wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  15% { transform: rotate(-12deg); }
-  35% { transform: rotate(10deg); }
-  55% { transform: rotate(-8deg); }
-  75% { transform: rotate(4deg); }
-}
-.easter-wiggle {
-  animation: easter-wiggle 2.5s ease-in-out forwards;
-}
-
 /* Respect reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
