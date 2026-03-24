@@ -8,7 +8,7 @@ declare const Deno: {
 // @ts-ignore: Deno URL import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // @ts-ignore: Deno file import
-import { corsHeaders } from "../_shared/cors.ts";
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
@@ -66,10 +66,12 @@ interface CheckoutRequest {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
+let _corsHeaders: Record<string, string> = getCorsHeaders();
+
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
+    headers: { ..._corsHeaders, "Content-Type": "application/json" },
   });
 }
 
@@ -203,9 +205,10 @@ function validatePayload(
 
 Deno.serve(async (req) => {
   const requestId = req.headers.get("x-request-id") ?? crypto.randomUUID();
+  _corsHeaders = getCorsHeaders(req.headers.get("origin"));
 
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: _corsHeaders });
   }
   if (req.method !== "POST") {
     return jsonResponse({ error: "method_not_allowed", requestId }, 405);
