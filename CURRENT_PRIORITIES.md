@@ -114,27 +114,34 @@ Last updated: 2026-03-24
 - ✅ **Domain live** — snusfriends.com configured in Cloudflare (A + CNAME, proxy off, Vercel authorized)
 - ✅ **Both domains valid** — snusfriends.com + snus-friend-shop.vercel.app both serving the site
 - ✅ **Supabase auth updated** — Site URL = https://snusfriends.com, redirect URLs updated, localhost entries removed
-- ✅ **Nyehandel delivery webhook** — configured with secret aligned (obscure-witness-afraid)
+- ✅ **Nyehandel delivery webhook** — configured with secret aligned
 - ✅ **VITE_SITE_URL** — updated to https://snusfriends.com
 - ✅ **Edge functions deployed** — spin-wheel v2 (atomic balance RPC) + create-nyehandel-checkout v16 (proper email validation)
 - ✅ **Pre-launch code review** — 3 critical + 4 important fixes applied and pushed
+- ✅ **Checkout X-Language fix** — Nyehandel API requires `X-Language: en` header; without it payment/shipping names returned in Swedish and didn't match config. create-nyehandel-checkout bumped to v23.
+- ✅ **CORS origin mismatch fixed** — accept both www and non-www snusfriends.com, fail-closed fallback
+- ✅ **Country code fix** — checkout now sends lowercase country codes as required by Nyehandel
+- ✅ **Security audit (2)** — CORS wildcard removed, delivery callback fail-closed, .gitignore updated for .claude/worktrees/
+- ✅ **Step 39 UAT** — test order Nyehandel ID 479 confirmed working end-to-end
 
 ## Current state
 
 - Site live at snusfriends.com and snus-friend-shop.vercel.app
 - 734 products loading from Supabase
 - Preview mode active (VITE_PREVIEW_MODE=true)
-- Test order blocked — awaiting CEO decision on API order flow
+- Checkout fully working — test order confirmed (Nyehandel order 479)
 
 ## Next phase
 
-1. **CEO answer on order flow** → place test order through Nyehandel
-2. **Product images** — source higher quality product photography
-3. **Retail pricing** — set final per-can pricing (currently wholesale × 1.55 markup)
-4. **Blog agent pipeline** — automated content generation for SEO
-5. **Multi-brand setup** — template architecture for additional storefronts
-6. **Solicitor**: Sign off on Terms, Privacy, Cookie pages
-7. **Go live**: Remove preview mode, final smoke test
+1. **Product images** — source higher quality product photography
+2. **Retail pricing** — set final per-can pricing (currently wholesale x 1.55 markup)
+3. **Blog agent pipeline** — automated content generation for SEO
+4. **Phase 2 features** — reviews, order tracking page, reorder button (designed, ready to implement)
+5. **SEO** — structured data (JSON-LD), blog pipeline
+6. **Resend SMTP** — transactional email (order confirmation, shipping notification)
+7. **Solicitor**: Sign off on Terms, Privacy, Cookie pages
+8. **Multi-brand setup** — template architecture for additional storefronts
+9. **Go live**: Remove preview mode, final smoke test
 
 ## Ready for Lovable design work
 

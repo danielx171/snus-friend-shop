@@ -41,7 +41,7 @@ Tiebreaker docs: `ROADMAP.md` and `CURRENT_PRIORITIES.md`.
 ```
 src/pages/CheckoutHandoff.tsx
   -> POST supabase/functions/create-nyehandel-checkout
-  -> Nyehandel POST /orders/simple
+  -> Nyehandel POST /orders  (X-Language: en header REQUIRED)
   -> delivery_callback_url receives tracking when shipped
   -> orders row updated (tracking_id, tracking_url, status → shipped)
   -> supabase/functions/push-order-to-nyehandel (fulfilment confirmation)
@@ -82,6 +82,7 @@ Tables present: `orders`, `ops_alerts`, `points_balances`, `points_transactions`
 - Internal function-to-function calls: `x-internal-function-secret`
 - Cron-triggered functions: `x-cron-secret`
 - Functions return structured JSON errors with machine-readable `error` keys and `requestId`
+- **Nyehandel API calls MUST include `X-Language: en` header** — product/method names are stored per-locale and the API returns Swedish defaults without it
 
 ## UI Conventions
 
@@ -145,17 +146,19 @@ Conflict patterns:
 - Types: ✅ types.ts synced with schema (daily_spins, vouchers, spin_config, ops_alerts, etc.)
 - Code review: ✅ 3 critical + 4 important issues fixed (PrizeReveal, atomic RPC, types, search escape)
 - Security audit: ✅ 4 critical + 4 important fixes (SEO URLs, email validation, points exploit, CORS, React.memo, any casts, footer tokens)
+- Security audit (2): ✅ CORS wildcard fixed, delivery callback fail-closed, .gitignore updated for .claude/worktrees/
 - Domain: ✅ snusfriends.com live — Cloudflare DNS (A + CNAME, proxy off), Vercel verified, SSL active
 - Supabase auth: ✅ Site URL = https://snusfriends.com, redirect URLs updated, localhost entries removed
 - Webhook: ✅ Nyehandel delivery webhook configured, secret aligned
 - VITE_SITE_URL: ✅ Updated to https://snusfriends.com
-- Edge functions: ✅ spin-wheel v2, create-nyehandel-checkout v17, delivery-callback v14, save-waitlist v3, get-order-confirmation v14
-- Key rotation: ✅ Service role key rotated, passwords changed, old key removed from git tracking
-- Checkout config: ✅ Payment = "NFC Group Payment", Shipping = "UPS Standard (J229F1)", variant 5
+- Edge functions: ✅ spin-wheel v2, create-nyehandel-checkout v23, delivery-callback v14, save-waitlist v3, get-order-confirmation v14
+- Key rotation: ✅ Service role key rotated, passwords changed
+- CORS: ✅ Locked to https://snusfriends.com (fail-closed fallback)
+- Checkout config: ✅ Payment = "NFC Group Payment", Shipping = "UPS Standard (J229F1)", endpoint = /orders (not /orders/simple)
 - Preview mode: 🟢 Active (VITE_PREVIEW_MODE=true) — ready to disable for go-live
-- Step 39 UAT: 🟢 UNBLOCKED — CEO provided payment/shipping method names, ready for test order
+- Step 39 UAT: ✅ UNBLOCKED — test order Nyehandel ID 479 confirmed working
 - Legal pages: 🟡 Waiting on solicitor sign-off (Terms, Privacy, Cookies)
-- Next phase: test order → product images → retail pricing → blog agent pipeline
+- Next phase: product images → retail pricing → blog agent pipeline
 
 ## Project Docs
 
