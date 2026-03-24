@@ -14,14 +14,14 @@ export function useSyncRuns() {
 
       if (error) throw new Error(error.message);
 
-      return (data ?? []).map((r: { id: string; type: string; status: string; started_at: string; duration_ms: number | null; items_processed: number | null; errors: unknown }) => ({
+      return (data ?? []).map((r) => ({
         id: r.id,
         type: r.type as SyncRun['type'],
         status: r.status as SyncRun['status'],
         startedAt: r.started_at,
         durationMs: r.duration_ms,
         itemsProcessed: r.items_processed,
-        errors: r.errors,
+        errors: r.errors as number,
       }));
     },
     refetchInterval: 15000,

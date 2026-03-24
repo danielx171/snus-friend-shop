@@ -6,7 +6,7 @@ import { scoreProduct, matchesQuery } from '@/lib/search';
 import { Layout } from '@/components/layout/Layout';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
-import { ProductFilters, FilterState } from '@/components/product/ProductFilters';
+import { ProductFilters, FilterState, EMPTY_FILTERS } from '@/components/product/ProductFilters';
 import { ActiveFilters } from '@/components/product/ActiveFilters';
 import { EmptyState } from '@/components/ui/states/EmptyState';
 import { Button } from '@/components/ui/button';
@@ -32,7 +32,7 @@ export default function SearchResults() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   const [sortBy, setSortBy] = useState<SortOption>('relevance');
-  const [filters, setFilters] = useState<FilterState>({ brands: [], strengths: [], flavors: [], formats: [] });
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const { data: allProducts = [], isLoading } = useCatalogProducts();
@@ -88,7 +88,7 @@ export default function SearchResults() {
     setFilters({ ...filters, [category]: (filters[category] as string[]).filter(v => v !== value) });
     setCurrentPage(1);
   };
-  const handleClearAll = () => { setFilters({ brands: [], strengths: [], flavors: [], formats: [] }); setCurrentPage(1); };
+  const handleClearAll = () => { setFilters(EMPTY_FILTERS); setCurrentPage(1); };
 
   const activeFilterCount = filters.brands.length + filters.strengths.length + filters.flavors.length + filters.formats.length;
 

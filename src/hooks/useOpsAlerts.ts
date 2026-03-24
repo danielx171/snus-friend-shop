@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import type { OpsAlert } from '@/types/ops';
+import type { OpsAlert, AlertRuleKey, AlertSeverity, AlertStatus } from '@/types/ops';
 
 // ops_alerts is defined in types.ts — use supabase client directly
 
@@ -20,16 +20,16 @@ export function useOpsAlerts() {
 
       if (error) throw new Error(error.message);
 
-      return (data ?? []).map((r: { id: string; alert_date: string; rule_key: string; severity: string; status: string; source_order_id: string | null; title: string; message: string; context: Record<string, unknown> | null; created_at: string; resolved_at: string | null }) => ({
+      return (data ?? []).map((r) => ({
         id: r.id,
         alertDate: r.alert_date,
-        ruleKey: r.rule_key,
-        severity: r.severity,
-        status: r.status,
+        ruleKey: r.rule_key as AlertRuleKey,
+        severity: r.severity as AlertSeverity,
+        status: r.status as AlertStatus,
         sourceOrderId: r.source_order_id ?? null,
         title: r.title,
         message: r.message,
-        context: r.context ?? {},
+        context: (r.context ?? {}) as Record<string, unknown>,
         createdAt: r.created_at,
         resolvedAt: r.resolved_at ?? null,
       }));
