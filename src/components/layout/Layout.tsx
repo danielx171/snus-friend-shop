@@ -10,6 +10,7 @@ import { ScrollProgress } from './ScrollProgress';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { NicotineWarning } from '@/components/compliance/NicotineWarning';
 import { PREVIEW_MODE } from '@/config/brand';
+import { EasterOverlay } from '@/components/easter/EasterOverlay';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ export function Layout({ children, showNicotineWarning = true }: LayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <EasterOverlay />
       <ScrollProgress />
       {PREVIEW_MODE && !bannerDismissed && (
         <div className="relative bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-sm text-amber-800">

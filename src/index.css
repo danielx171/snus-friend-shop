@@ -618,3 +618,21 @@
 .prose-container a {
   @apply text-primary underline underline-offset-2 hover:opacity-80;
 }
+
+/* ═══════════════════════════════════════════════════════
+   Easter Theme — wiggle animation
+   ═══════════════════════════════════════════════════════ */
+@keyframes easter-wiggle {
+  0%   { transform: rotate(0deg) scale(1); }
+  10%  { transform: rotate(-14deg) scale(1.05); }
+  25%  { transform: rotate(12deg) scale(1.03); }
+  40%  { transform: rotate(-10deg) scale(1.04); }
+  55%  { transform: rotate(8deg) scale(1.02); }
+  70%  { transform: rotate(-5deg) scale(1.01); }
+  85%  { transform: rotate(3deg) scale(1); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.easter-wiggle-active {
+  animation: easter-wiggle 2.2s ease-in-out forwards;
+}
