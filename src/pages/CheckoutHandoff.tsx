@@ -276,8 +276,8 @@ export default function CheckoutHandoff() {
     }
   }
 
-  /* ── Preview mode gate ── */
-  if (PREVIEW_MODE) {
+  /* ── Preview mode gate removed — checkout is live ── */
+  if (false) {
     return (
       <>
         <SEO title={`Checkout | SnusFriend`} description="Store coming soon" metaRobots="noindex,nofollow" />
