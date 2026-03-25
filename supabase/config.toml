@@ -65,3 +65,6 @@ verify_jwt = false
 
 [functions.redeem-points]
 verify_jwt = false
+
+[functions.redeem-referral]
+verify_jwt = false

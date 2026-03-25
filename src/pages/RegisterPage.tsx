@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { UserPlus, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
 import { supabase } from '@/integrations/supabase/client';
+import { apiFetch } from '@/lib/api';
 
 /* ------------------------------------------------------------------ */
 /*  Password strength meter                                            */
@@ -60,6 +61,8 @@ function PasswordStrengthBar({ password }: { password: string }) {
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const refCode = searchParams.get('ref');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -84,6 +87,19 @@ export default function RegisterPage() {
       setAuthError(error.message);
       return;
     }
+    // Attempt referral redemption in the background (best-effort)
+    if (refCode && (data.session || data.user)) {
+      try {
+        await apiFetch('redeem-referral', {
+          method: 'POST',
+          body: { code: refCode },
+        });
+      } catch {
+        // Non-blocking — referral failure should not break registration
+        console.warn('Referral redemption failed for code:', refCode);
+      }
+    }
+
     if (data.session) {
       navigate('/account');
     } else {

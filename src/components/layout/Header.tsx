@@ -80,6 +80,7 @@ export function Header() {
     { href: '/blog', label: 'Blog' },
     { href: '/rewards', label: 'Rewards' },
     { href: '/membership', label: 'Snus Family' },
+    { href: '/leaderboard', label: 'Leaderboard' },
   ];
 
   return (

@@ -36,6 +36,7 @@ const WishlistPage = lazy(() => import("./pages/WishlistPage"));
 const BundleBuilder = lazy(() => import("./pages/BundleBuilder"));
 const FaqPage = lazy(() => import("./pages/FaqPage"));
 const WhatsNewPage = lazy(() => import("./pages/WhatsNewPage"));
+const LeaderboardPage = lazy(() => import("./pages/LeaderboardPage"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
@@ -157,6 +158,7 @@ const App = () => {
               </>} />} />
               <Route path="/faq" element={<FaqPage />} />
               <Route path="/whats-new" element={<WhatsNewPage />} />
+              <Route path="/leaderboard" element={<LeaderboardPage />} />
               <Route path="/blog" element={<BlogIndex />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/shipping" element={<InfoPage title="Shipping Information" content={<>

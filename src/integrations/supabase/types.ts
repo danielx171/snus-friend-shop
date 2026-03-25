@@ -1148,6 +1148,62 @@ export type Database = {
           },
         ]
       }
+      referral_codes: {
+        Row: {
+          id: string
+          user_id: string
+          code: string
+          uses: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          code: string
+          uses?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          code?: string
+          uses?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
+      referral_redemptions: {
+        Row: {
+          id: string
+          referral_code_id: string
+          referred_user_id: string
+          points_awarded: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          referral_code_id: string
+          referred_user_id: string
+          points_awarded?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          referral_code_id?: string
+          referred_user_id?: string
+          points_awarded?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_redemptions_referral_code_id_fkey"
+            columns: ["referral_code_id"]
+            isOneToOne: false
+            referencedRelation: "referral_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       checkout_upsells: {
         Row: {
           active: boolean
@@ -1177,7 +1233,15 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      leaderboard_top_users: {
+        Row: {
+          user_id: string
+          total_points: number
+          display_name: string | null
+          avatar_url: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       flag_review: {
@@ -1213,6 +1277,19 @@ export type Database = {
           p_option_id: string
         }
         Returns: { voted: boolean; option_id: string; votes_count: number }[]
+      }
+      get_or_create_referral_code: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: string
+      }
+      redeem_referral_code: {
+        Args: {
+          p_code: string
+          p_new_user_id: string
+        }
+        Returns: Json
       }
       toggle_community_post_like: {
         Args: {
