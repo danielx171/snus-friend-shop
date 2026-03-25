@@ -4,9 +4,16 @@
 
 Frontend: Deploy to Vercel
   - Connect GitHub repo → Vercel auto-deploys on push to main
-  - Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY
-    as Vercel environment variables
-  - Set VITE_SITE_URL to your domain
+  - Set client-side env vars as Vercel environment variables:
+    - VITE_SUPABASE_URL
+    - VITE_SUPABASE_PUBLISHABLE_KEY
+    - VITE_SITE_URL
+
+Vike SSR/SSG (Vercel Environment):
+  - Set server-side Supabase env vars as Vercel environment variables:
+    - SUPABASE_URL — Same value as VITE_SUPABASE_URL (server-only, no VITE_ prefix)
+    - SUPABASE_SERVICE_ROLE_KEY — From Supabase dashboard (server-only, never expose to client)
+  - These are required for server-side rendering and static generation of product pages
 
 Backend: Supabase (already hosted)
   - Edge functions deploy via: supabase functions deploy
