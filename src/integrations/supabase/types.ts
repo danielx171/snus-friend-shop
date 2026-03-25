@@ -1231,6 +1231,86 @@ export type Database = {
         }
         Relationships: []
       }
+      seasonal_events: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          description: string
+          theme_color: string
+          banner_image_url: string | null
+          starts_at: string
+          ends_at: string
+          is_active: boolean
+          bonus_multiplier: number
+          rewards: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          description?: string
+          theme_color?: string
+          banner_image_url?: string | null
+          starts_at: string
+          ends_at: string
+          is_active?: boolean
+          bonus_multiplier?: number
+          rewards?: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          description?: string
+          theme_color?: string
+          banner_image_url?: string | null
+          starts_at?: string
+          ends_at?: string
+          is_active?: boolean
+          bonus_multiplier?: number
+          rewards?: Json
+          created_at?: string
+        }
+        Relationships: []
+      }
+      event_participants: {
+        Row: {
+          id: string
+          event_id: string
+          user_id: string
+          points_earned: number
+          milestones_reached: Json
+          joined_at: string
+        }
+        Insert: {
+          id?: string
+          event_id: string
+          user_id: string
+          points_earned?: number
+          milestones_reached?: Json
+          joined_at?: string
+        }
+        Update: {
+          id?: string
+          event_id?: string
+          user_id?: string
+          points_earned?: number
+          milestones_reached?: Json
+          joined_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_participants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "seasonal_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       checkout_upsells: {
         Row: {
           active: boolean
@@ -1258,6 +1338,143 @@ export type Database = {
         }
         Relationships: []
       }
+      weekly_challenges: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          challenge_type: Database["public"]["Enums"]["challenge_type"]
+          target_value: number
+          reward_points: number
+          starts_at: string
+          ends_at: string
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description?: string
+          challenge_type: Database["public"]["Enums"]["challenge_type"]
+          target_value: number
+          reward_points?: number
+          starts_at: string
+          ends_at: string
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          challenge_type?: Database["public"]["Enums"]["challenge_type"]
+          target_value?: number
+          reward_points?: number
+          starts_at?: string
+          ends_at?: string
+          is_active?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      challenge_participants: {
+        Row: {
+          id: string
+          challenge_id: string
+          user_id: string
+          progress: number
+          completed_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          challenge_id: string
+          user_id: string
+          progress?: number
+          completed_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          challenge_id?: string
+          user_id?: string
+          progress?: number
+          completed_at?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_participants_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "weekly_challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flavor_profiles: {
+        Row: {
+          id: string
+          user_id: string
+          mint_score: number
+          fruit_score: number
+          sweet_score: number
+          bold_score: number
+          strength_pref: string
+          profile_name: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          mint_score: number
+          fruit_score: number
+          sweet_score: number
+          bold_score: number
+          strength_pref: string
+          profile_name: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          mint_score?: number
+          fruit_score?: number
+          sweet_score?: number
+          bold_score?: number
+          strength_pref?: string
+          profile_name?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reputation_levels: {
+        Row: {
+          level: number
+          name: string
+          min_points: number
+          badge_color: string
+          perks: Json
+        }
+        Insert: {
+          level: number
+          name: string
+          min_points: number
+          badge_color: string
+          perks?: Json
+        }
+        Update: {
+          level?: number
+          name?: string
+          min_points?: number
+          badge_color?: string
+          perks?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       leaderboard_top_users: {
@@ -1266,6 +1483,20 @@ export type Database = {
           total_points: number
           display_name: string | null
           avatar_url: string | null
+        }
+        Relationships: []
+      }
+      user_reputation: {
+        Row: {
+          user_id: string
+          lifetime_earned: number
+          level: number
+          level_name: string
+          badge_color: string
+          perks: Json
+          next_level: number | null
+          next_level_name: string | null
+          next_level_min_points: number | null
         }
         Relationships: []
       }
@@ -1333,6 +1564,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      challenge_type: "review_count" | "order_count" | "community_posts" | "referral_count"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1461,6 +1693,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      challenge_type: ["review_count", "order_count", "community_posts", "referral_count"],
     },
   },
 } as const

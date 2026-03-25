@@ -30,6 +30,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { RecentlyViewed } from '@/components/product/RecentlyViewed';
 import { useRecommendations } from '@/hooks/useRecommendations';
+import ShareButton from '@/components/social/ShareButton';
 
 const flavorGradients: Partial<Record<FlavorKey, string>> = {
   mint: 'from-emerald-400 to-green-600',
@@ -406,6 +407,14 @@ export default function ProductDetail() {
                 </Link>
               </div>
             )}
+
+            {/* Social sharing */}
+            <ShareButton
+              type="product"
+              targetId={product.id}
+              shareUrl={`${window.location.origin}/product/${product.id}`}
+              shareText={`Check out ${product.name} on SnusFriends!`}
+            />
 
             {/* Stock count */}
             {typeof product.stock === 'number' && product.stock > 0 && (

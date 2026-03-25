@@ -33,6 +33,7 @@ import { useReviewSummary } from '@/hooks/useReviewSummary';
 import ReviewSummaryCard from '@/components/product/ReviewSummaryCard';
 import { useReviewPhotoUpload } from '@/hooks/useReviewPhotoUpload';
 import { useToast } from '@/hooks/use-toast';
+import ShareButton from '@/components/social/ShareButton';
 
 type ReviewSortOption = 'relevant' | 'newest' | 'highest' | 'helpful';
 

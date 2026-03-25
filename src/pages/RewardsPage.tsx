@@ -18,7 +18,13 @@ import VoucherList from '@/components/rewards/VoucherList';
 import QuestBoard from '@/components/quests/QuestBoard';
 import PointsRedemption from '@/components/rewards/PointsRedemption';
 import StreakBanner from '@/components/rewards/StreakBanner';
+import ReputationCard from '@/components/profile/ReputationCard';
+import WeeklyChallenges from '@/components/rewards/WeeklyChallenges';
 import { useLoginStreak } from '@/hooks/useLoginStreak';
+import { useWeeklyChallenges } from '@/hooks/useWeeklyChallenges';
+import { useSeasonalEvents, useJoinEvent } from '@/hooks/useSeasonalEvents';
+import SeasonalBanner from '@/components/events/SeasonalBanner';
+import EventCard from '@/components/events/EventCard';
 
 /* ------------------------------------------------------------------ */
 /*  Tab type                                                           */
@@ -57,8 +63,19 @@ export default function RewardsPage() {
   const vouchersQuery = useVouchers(userId);
   const questsQuery = useQuests(userId);
   const loginStreak = useLoginStreak(userId);
+  const challengesQuery = useWeeklyChallenges(userId);
+  const eventsQuery = useSeasonalEvents(userId);
+  const joinEventMutation = useJoinEvent();
 
   const hasSpunToday = spinStatus.data === true;
+
+  const handleJoinEvent = useCallback((eventId: string) => {
+    if (!userId) {
+      toast({ title: 'Sign in to join', description: 'Create a free account to participate in events.' });
+      return;
+    }
+    joinEventMutation.mutate({ eventId, userId });
+  }, [userId, joinEventMutation, toast]);
 
   /* ---- Prize reveal ---- */
   const [revealedPrize, setRevealedPrize] = useState<SpinResult | null>(null);
@@ -109,6 +126,17 @@ export default function RewardsPage() {
       />
       <div className="container mx-auto max-w-2xl px-4 py-8">
 
+        {/* Seasonal event banner */}
+        {eventsQuery.data?.map((event) => (
+          <SeasonalBanner
+            key={event.id}
+            event={event}
+            userId={userId}
+            onJoin={handleJoinEvent}
+            isJoining={joinEventMutation.isPending}
+          />
+        ))}
+
         {/* Streak banner */}
         {userId && (
           <StreakBanner
@@ -118,6 +146,9 @@ export default function RewardsPage() {
             isLoading={loginStreak.isLoading}
           />
         )}
+
+        {/* Reputation level */}
+        {userId && <ReputationCard userId={userId} />}
 
         {/* Points balance strip */}
         <div className="flex items-center justify-between rounded-xl bg-card border border-border/40 px-5 py-3 mb-6">
@@ -219,6 +250,24 @@ export default function RewardsPage() {
               quests={questsQuery.data ?? []}
               isLoading={questsQuery.isLoading}
             />
+
+            {/* Active seasonal events */}
+            {eventsQuery.data && eventsQuery.data.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-lg font-bold mb-3">Seasonal Events</h3>
+                <div className="space-y-4">
+                  {eventsQuery.data.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      userId={userId}
+                      onJoin={handleJoinEvent}
+                      isJoining={joinEventMutation.isPending}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </>
         )}
 
@@ -287,6 +336,22 @@ export default function RewardsPage() {
             )}
           </>
         )}
+
+        {/* ---- Weekly Challenges ---- */}
+        <div className="mt-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold mb-1">Weekly Challenges</h2>
+            <p className="text-sm text-muted-foreground">
+              Join time-limited group goals to earn bonus SnusPoints
+            </p>
+          </div>
+          <WeeklyChallenges
+            challenges={challengesQuery.data ?? []}
+            isLoading={challengesQuery.isLoading}
+            onJoin={(id) => challengesQuery.joinChallenge.mutate(id)}
+            isJoining={challengesQuery.joinChallenge.isPending}
+          />
+        </div>
 
       </div>
 
