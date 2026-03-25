@@ -1,4 +1,5 @@
 import React from 'react';
+import { Sentry } from '@/lib/sentry';
 import { EmptyTinSvg } from '@/components/ui/EmptyTinSvg';
 
 interface ErrorBoundaryState {
@@ -21,6 +22,7 @@ export class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     console.error('Uncaught error:', error, info.componentStack);
+    Sentry.captureException(error, { extra: { componentStack: info.componentStack } });
   }
 
   render() {

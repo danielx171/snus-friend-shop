@@ -1,6 +1,9 @@
 import { createRoot } from "react-dom/client";
+import { initSentry } from "@/lib/sentry";
 import App from "./App.tsx";
 import "./index.css";
+
+initSentry();
 
 // Capture the beforeinstallprompt event BEFORE React mounts.
 // The browser fires this event early — if we only listen inside a React
