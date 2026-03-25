@@ -52,6 +52,7 @@ import { AgeGate } from "@/components/compliance/AgeGate";
 import { TermsContent } from "@/components/legal/TermsContent";
 import { PrivacyContent } from "@/components/legal/PrivacyContent";
 import { CookieContent } from "@/components/legal/CookieContent";
+import { PostHogPageView } from "@/components/analytics/PostHogPageView";
 // Script injection is now handled by CookieConsentProvider directly.
 
 /** Redirect legacy /produkt/:id to /product/:id (SEO: avoid duplicate content) */
@@ -213,6 +214,7 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
               </Routes>
               </Suspense>
+              <PostHogPageView />
               <CookieConsentBanner />
               <BackToTop />
               <InstallPrompt />

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { initPostHog, shutdownPostHog } from '@/lib/posthog';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -163,6 +164,11 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
       // Only inject with a real ID or the placeholder (placeholder won't actually fire)
       if (ga4Id !== 'G-XXXXXXXXXX') loadGA4(ga4Id);
       else if (import.meta.env.DEV) console.info('[consent] GA4 placeholder — skipping injection');
+
+      // PostHog — initPostHog is a no-op when VITE_POSTHOG_KEY is empty
+      initPostHog();
+    } else {
+      shutdownPostHog();
     }
 
     if (consent.marketing) {
