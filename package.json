@@ -4,14 +4,14 @@
   "version": "1.4.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vike dev",
+    "build": "vike build",
     "sitemap": "bun run scripts/generate-sitemap.ts",
     "images:download": "bun run scripts/download-product-images.ts",
     "images:upload": "bun run scripts/upload-images-to-supabase.ts",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vike preview",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -99,5 +99,10 @@
     "vite": "^5.4.19",
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^3.2.4"
+  },
+  "overrides": {
+    "lru-cache@5.1.1": {
+      "yallist": "3.1.1"
+    }
   }
 }
