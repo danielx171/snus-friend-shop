@@ -515,6 +515,108 @@ export type Database = {
         Update: { id?: string; user_id?: string; order_id?: string | null; points?: number; reason?: string; created_at?: string }
         Relationships: []
       }
+      pouch_parts: {
+        Row: {
+          id: string
+          category: string
+          name: string
+          svg_data: string
+          unlock_condition: string
+          unlock_value: number
+          rarity: string
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          category: string
+          name: string
+          svg_data: string
+          unlock_condition?: string
+          unlock_value?: number
+          rarity?: string
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          category?: string
+          name?: string
+          svg_data?: string
+          unlock_condition?: string
+          unlock_value?: number
+          rarity?: string
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
+      user_pouch_avatars: {
+        Row: {
+          user_id: string
+          shape_id: string | null
+          color_id: string | null
+          expression_id: string | null
+          accessory_id: string | null
+          background_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          shape_id?: string | null
+          color_id?: string | null
+          expression_id?: string | null
+          accessory_id?: string | null
+          background_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          shape_id?: string | null
+          color_id?: string | null
+          expression_id?: string | null
+          accessory_id?: string | null
+          background_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_pouch_avatars_shape_id_fkey"
+            columns: ["shape_id"]
+            isOneToOne: false
+            referencedRelation: "pouch_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_pouch_avatars_color_id_fkey"
+            columns: ["color_id"]
+            isOneToOne: false
+            referencedRelation: "pouch_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_pouch_avatars_expression_id_fkey"
+            columns: ["expression_id"]
+            isOneToOne: false
+            referencedRelation: "pouch_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_pouch_avatars_accessory_id_fkey"
+            columns: ["accessory_id"]
+            isOneToOne: false
+            referencedRelation: "pouch_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_pouch_avatars_background_id_fkey"
+            columns: ["background_id"]
+            isOneToOne: false
+            referencedRelation: "pouch_parts"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       waitlist_emails: {
         Row: { id: string; email: string; source: string | null; created_at: string }
         Insert: { id?: string; email: string; source?: string | null; created_at?: string }
