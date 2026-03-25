@@ -47,6 +47,13 @@ import { AgeGate } from "@/components/compliance/AgeGate";
 import { TermsContent } from "@/components/legal/TermsContent";
 import { PrivacyContent } from "@/components/legal/PrivacyContent";
 import { CookieContent } from "@/components/legal/CookieContent";
+import { useConsentGatedTracking } from "@/hooks/useConsentGatedTracking";
+
+/** Activates analytics + marketing pixels when the user grants consent. */
+function ConsentGatedTracking() {
+  useConsentGatedTracking();
+  return null;
+}
 
 /** Redirect legacy /produkt/:id to /product/:id (SEO: avoid duplicate content) */
 function ProduktRedirect() {
@@ -113,6 +120,7 @@ const App = () => {
           <CartProvider>
             <WishlistProvider>
             <CookieConsentProvider>
+              <ConsentGatedTracking />
               <Toaster />
               <Sonner />
               <OrganizationSchema />

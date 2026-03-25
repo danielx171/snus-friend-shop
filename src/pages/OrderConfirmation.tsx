@@ -13,6 +13,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { apiFetch } from '@/lib/api';
 import { useCart } from '@/context/CartContext';
 import { useCatalogProducts } from '@/hooks/useCatalog';
+import { trackPurchase } from '@/lib/marketing-pixels';
+import { trackEvent } from '@/lib/analytics';
 import { ProductCard } from '@/components/product/ProductCard';
 
 /* ── Types ── */
@@ -260,6 +262,16 @@ export default function OrderConfirmation() {
       clearCart();
     }
   }, [state.kind, clearCart]);
+
+  /* ── Fire conversion tracking once on success ── */
+  const conversionFired = useRef(false);
+  useEffect(() => {
+    if (state.kind === 'ok' && !conversionFired.current) {
+      conversionFired.current = true;
+      trackPurchase(state.total ?? 0, state.currency ?? 'EUR', state.orderId);
+      trackEvent('purchase', { value: state.total ?? 0, currency: state.currency ?? 'EUR', transaction_id: state.orderId });
+    }
+  }, [state]);
 
   /* ── Quest progress + avatar unlocks after successful order ── */
   const questFired = useRef(false);

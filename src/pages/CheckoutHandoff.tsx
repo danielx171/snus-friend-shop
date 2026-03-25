@@ -18,6 +18,8 @@ import { Separator } from '@/components/ui/separator';
 import { ShoppingBag, Truck, Loader2 } from 'lucide-react';
 import { packSizeMultipliers } from '@/data/products';
 import { useTranslation } from '@/hooks/useTranslation';
+import { trackCheckoutStarted } from '@/lib/marketing-pixels';
+import { trackEvent } from '@/lib/analytics';
 import { formatMarketPrice } from '@/lib/market';
 import { getCartTotals } from '@/lib/cart-utils';
 import { SEO } from '@/components/seo/SEO';
@@ -219,6 +221,10 @@ export default function CheckoutHandoff() {
 
     setSubmitting(true);
     setError(null);
+
+    // Fire marketing/analytics events (no-op if consent not granted)
+    trackCheckoutStarted(finalTotal);
+    trackEvent('begin_checkout', { value: finalTotal, currency: 'EUR' });
 
     try {
       // Map cart items to checkout items with SKUs
