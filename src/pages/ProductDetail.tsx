@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw, PackageX, Bell, Info, MessageSquare, Users,
+  ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw, PackageX, Bell, Info, MessageSquare, Users, Sparkles,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { cn } from '@/lib/utils';
@@ -557,6 +557,14 @@ export default function ProductDetail() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="reviews" className="mt-0">
+              {totalCount < 3 && (
+                <div className="mb-4 flex items-center gap-2 rounded-xl border border-[hsl(var(--chart-4))]/20 bg-[hsl(var(--chart-4))]/5 px-4 py-3">
+                  <Sparkles className="h-4 w-4 shrink-0 text-[hsl(var(--chart-4))]" />
+                  <span className="text-sm font-medium text-[hsl(var(--chart-4))]">
+                    Earn up to {totalCount === 0 ? 50 : totalCount <= 2 ? 35 : 25} SnusPoints for reviewing this product
+                  </span>
+                </div>
+              )}
               <ProductReviews productId={product.id} />
             </TabsContent>
             <TabsContent value="community" className="mt-0">

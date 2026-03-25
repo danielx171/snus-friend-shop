@@ -320,9 +320,21 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
         ...(consFiltered.length ? { cons: consFiltered } : {}),
         ...(photoUrls.length ? { photo_urls: photoUrls } : {}),
       });
-      toast({ title: 'Review submitted', description: 'Thank you for your feedback!' });
+
+      // Calculate scaled points earned (mirrors DB trigger logic)
+      const existingCount = reviews.filter(r => r.product_id === productId).length;
+      const earnedPoints =
+        existingCount === 0 ? 50 :
+        existingCount <= 2 ? 35 :
+        existingCount <= 5 ? 25 :
+        existingCount <= 10 ? 15 : 10;
+
+      toast({
+        title: 'Review submitted',
+        description: `Thank you! You earned ${earnedPoints} SnusPoints for this review.`,
+      });
       // Fire-and-forget quest progress + avatar unlock checks
-      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review' } }).catch(() => {});
+      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review_submitted' } }).catch(() => {});
       apiFetch('check-avatar-unlocks', { method: 'POST' }).catch(() => {});
       setDialogOpen(false);
       setNewRating(0);
