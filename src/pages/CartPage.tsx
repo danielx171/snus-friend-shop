@@ -6,7 +6,8 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 // Select removed — subscription feature not yet implemented
 import { Link } from 'react-router-dom';
-import { Minus, Plus, Trash2, ShoppingBag, Truck, ArrowRight } from 'lucide-react';
+import { Minus, Plus, Trash2, Truck, ArrowRight } from 'lucide-react';
+import { EmptyTinSvg } from '@/components/ui/EmptyTinSvg';
 import { packSizeMultipliers } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { useCatalogProducts } from '@/hooks/useCatalog';
@@ -54,7 +55,9 @@ export default function CartPage() {
         />
         <Layout showNicotineWarning={false}>
           <div className="container py-16 text-center">
-            <ShoppingBag className="mx-auto h-16 w-16 text-muted-foreground mb-6" />
+            <div className="flex justify-center mb-6">
+              <EmptyTinSvg size={120} />
+            </div>
             <h1 className="text-2xl font-bold text-foreground mb-2">{t('cart.empty')}</h1>
             <p className="text-muted-foreground mb-8">
               {t('cart.emptyDescription')}

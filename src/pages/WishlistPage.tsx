@@ -3,6 +3,7 @@ import { SEO } from '@/components/seo/SEO';
 import { ProductCard } from '@/components/product/ProductCard';
 import { useWishlist } from '@/context/WishlistContext';
 import { Button } from '@/components/ui/button';
+import { EmptyTinSvg } from '@/components/ui/EmptyTinSvg';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from 'react-router-dom';
 import { Heart } from 'lucide-react';
@@ -49,8 +50,8 @@ export default function WishlistPage() {
           <WishlistSkeleton />
         ) : products.length === 0 ? (
           <div className="text-center py-16">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted/20">
-              <Heart className="h-10 w-10 text-muted-foreground" />
+            <div className="flex justify-center mb-6">
+              <EmptyTinSvg size={120} />
             </div>
             <h2 className="text-xl font-semibold text-foreground mb-2">No pouches saved yet</h2>
             <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
