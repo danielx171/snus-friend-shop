@@ -1835,6 +1835,21 @@ export type Database = {
         }
         Returns: { liked: boolean; new_count: number }[]
       }
+      search_products: {
+        Args: {
+          query: string
+          result_limit?: number
+        }
+        Returns: {
+          id: string
+          name: string
+          brand: string
+          slug: string
+          image_url: string
+          description: string
+          rank: number
+        }[]
+      }
     }
     Enums: {
       achievement_category: "reviews" | "orders" | "community" | "referrals" | "milestone"
