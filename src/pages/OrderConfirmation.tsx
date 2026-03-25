@@ -527,13 +527,33 @@ export default function OrderConfirmation() {
                   Shipment dispatched
                 </Badge>
               </div>
+            ) : trackingUrl ? (
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                  <Truck className="h-5 w-5 text-primary" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  {shippingMethod && (
+                    <p className="text-sm font-medium text-foreground">{shippingMethod}</p>
+                  )}
+                  <a
+                    href={trackingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+                  >
+                    Track your shipment
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </div>
             ) : (
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted">
                   <Mail className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">Tracking info coming soon</p>
+                  <p className="text-sm font-medium text-foreground">Tracking info will appear here once shipped.</p>
                   <p className="text-sm text-muted-foreground">
                     We'll email you when your order ships with tracking details.
                   </p>
