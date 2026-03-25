@@ -145,17 +145,8 @@ export default function RewardsPage() {
               </p>
             </div>
 
-            <div className="mb-10">
-              <SpinWheel
-                onSpin={handleSpin}
-                isSpinning={spinMutation.isPending}
-                isExhausted={hasSpunToday}
-                onPrizeWon={handlePrizeWon}
-              />
-            </div>
-
             {!userId && (
-              <div className="text-center mb-8 p-4 rounded-xl bg-muted/50 border border-border/30">
+              <div className="text-center mb-6 p-4 rounded-xl bg-muted/50 border border-border/30">
                 <p className="text-sm text-muted-foreground mb-3">
                   Sign in to spin the wheel and collect rewards
                 </p>
@@ -170,6 +161,15 @@ export default function RewardsPage() {
                 </Button>
               </div>
             )}
+
+            <div className="mb-10">
+              <SpinWheel
+                onSpin={handleSpin}
+                isSpinning={spinMutation.isPending}
+                isExhausted={hasSpunToday || !userId}
+                onPrizeWon={handlePrizeWon}
+              />
+            </div>
           </>
         )}
 
