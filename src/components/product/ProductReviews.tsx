@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -13,13 +13,53 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Star, ThumbsUp, MessageSquare, Flag } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Star, Heart, MessageSquare, Flag, ArrowUpDown, Check, X, Plus, Camera, ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useProductReviews, type ProductReview } from '@/hooks/useProductReviews';
+import { useReviewLikes } from '@/hooks/useReviewLikes';
+import { useUsersAttributes, type UserAttribute } from '@/hooks/useUserAttributes';
 import UserAvatar from '@/components/profile/UserAvatar';
+import AttributePills from '@/components/profile/AttributePills';
 import { supabase } from '@/integrations/supabase/client';
 import { apiFetch } from '@/lib/api';
+import { useReviewSummary } from '@/hooks/useReviewSummary';
+import ReviewSummaryCard from '@/components/product/ReviewSummaryCard';
+import { useReviewPhotoUpload } from '@/hooks/useReviewPhotoUpload';
 import { useToast } from '@/hooks/use-toast';
+
+type ReviewSortOption = 'relevant' | 'newest' | 'highest' | 'helpful';
+
+function sortReviews(reviews: ProductReview[], sort: ReviewSortOption): ProductReview[] {
+  const sorted = [...reviews];
+  switch (sort) {
+    case 'newest':
+      return sorted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    case 'highest':
+      return sorted.sort((a, b) => b.rating - a.rating || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    case 'helpful':
+      return sorted.sort((a, b) => b.helpful_count - a.helpful_count || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    case 'relevant':
+    default: {
+      // Weighted combo: helpful votes + recency bonus (reviews from last 30 days get a boost)
+      const now = Date.now();
+      const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+      return sorted.sort((a, b) => {
+        const recencyA = Math.max(0, 1 - (now - new Date(a.created_at).getTime()) / thirtyDays);
+        const recencyB = Math.max(0, 1 - (now - new Date(b.created_at).getTime()) / thirtyDays);
+        const scoreA = a.helpful_count * 2 + recencyA * 3 + a.rating * 0.5;
+        const scoreB = b.helpful_count * 2 + recencyB * 3 + b.rating * 0.5;
+        return scoreB - scoreA;
+      });
+    }
+  }
+}
 
 /* ── Stars helper ── */
 function Stars({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'md' }) {
@@ -83,9 +123,15 @@ function StarPicker({
 const ReviewCard = React.memo(function ReviewCard({
   review,
   onFlag,
+  liked,
+  onToggleLike,
+  userAttributes,
 }: {
   review: ProductReview;
   onFlag: (id: string) => void;
+  liked: boolean;
+  onToggleLike: (id: string) => void;
+  userAttributes: UserAttribute[];
 }) {
   const dateStr = new Date(review.created_at).toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -119,6 +165,7 @@ const ReviewCard = React.memo(function ReviewCard({
                     Verified Buyer
                   </span>
                 </div>
+                <AttributePills attributes={userAttributes} maxVisible={3} />
                 <Stars rating={review.rating} />
               </div>
               <div className="flex items-center gap-2">
@@ -138,13 +185,67 @@ const ReviewCard = React.memo(function ReviewCard({
             <p className="text-sm font-medium text-foreground">{review.title}</p>
             <p className="text-sm leading-relaxed text-muted-foreground">{review.body}</p>
 
+            {(review.pros.length > 0 || review.cons.length > 0) && (
+              <div className="flex flex-col gap-1.5 sm:flex-row sm:gap-6">
+                {review.pros.length > 0 && (
+                  <div className="space-y-0.5">
+                    {review.pros.map((pro, i) => (
+                      <div key={i} className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
+                        <Check className="h-3 w-3 shrink-0" />
+                        <span>{pro}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {review.cons.length > 0 && (
+                  <div className="space-y-0.5">
+                    {review.cons.map((con, i) => (
+                      <div key={i} className="flex items-center gap-1.5 text-xs text-red-500 dark:text-red-400">
+                        <X className="h-3 w-3 shrink-0" />
+                        <span>{con}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {review.photo_urls.length > 0 && (
+              <div className="flex gap-2 pt-1">
+                {review.photo_urls.map((url, i) => (
+                  <a
+                    key={i}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block h-16 w-16 overflow-hidden rounded-md border border-border transition-opacity hover:opacity-80"
+                  >
+                    <img
+                      src={url}
+                      alt={`Review photo ${i + 1} by ${displayName}`}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </a>
+                ))}
+              </div>
+            )}
+
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-              aria-label={`${review.helpful_count} people found this review helpful`}
+              onClick={() => onToggleLike(review.id)}
+              className={cn(
+                'inline-flex items-center gap-1.5 text-xs transition-colors',
+                liked
+                  ? 'text-primary'
+                  : 'text-muted-foreground hover:text-primary',
+              )}
+              aria-label={liked ? `Unlike this review (${review.helpful_count} likes)` : `Like this review (${review.helpful_count} likes)`}
             >
-              <ThumbsUp className="h-3.5 w-3.5" />
-              Helpful ({review.helpful_count})
+              <Heart className={cn('h-3.5 w-3.5', liked && 'fill-primary')} />
+              {review.helpful_count > 0
+                ? `${review.helpful_count} ${review.helpful_count === 1 ? 'like' : 'likes'}`
+                : 'Like'}
             </button>
           </div>
         </div>
@@ -163,11 +264,30 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
   const [newRating, setNewRating] = useState(0);
   const [newTitle, setNewTitle] = useState('');
   const [newBody, setNewBody] = useState('');
+  const [newPros, setNewPros] = useState<string[]>([]);
+  const [newCons, setNewCons] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [sortBy, setSortBy] = useState<ReviewSortOption>('relevant');
   const { toast } = useToast();
 
   const { reviews, avgRating, totalCount, distribution, isLoading, submitReview, flagReview } =
     useProductReviews(productId);
+  const { likedIds, toggleLike } = useReviewLikes(productId);
+  const { data: reviewSummary, isLoading: summaryLoading } = useReviewSummary(productId, totalCount);
+  const reviewerIds = useMemo(() => reviews.map((r) => r.user_id), [reviews]);
+  const { data: usersAttributesMap } = useUsersAttributes(reviewerIds);
+  const { photos, uploading, addPhotos, removePhoto, clearPhotos, uploadAll, canAddMore } = useReviewPhotoUpload();
+
+  const handleToggleLike = useCallback(async (reviewId: string) => {
+    const { data: authData } = await supabase.auth.getUser();
+    if (!authData?.user?.id) {
+      toast({ title: 'Sign in required', description: 'Please sign in to like reviews.', variant: 'destructive' });
+      return;
+    }
+    toggleLike(reviewId);
+  }, [toggleLike, toast]);
+
+  const sortedReviews = useMemo(() => sortReviews(reviews, sortBy), [reviews, sortBy]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -181,8 +301,24 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
     }
 
     setSubmitting(true);
+    let photoUrls: string[] = [];
     try {
-      await submitReview({ product_id: productId, user_id: userId, rating: newRating, title: newTitle.trim(), body: newBody.trim() });
+      const prosFiltered = newPros.map(s => s.trim()).filter(Boolean);
+      const consFiltered = newCons.map(s => s.trim()).filter(Boolean);
+
+      // Upload photos first (if any)
+      photoUrls = await uploadAll(userId);
+
+      await submitReview({
+        product_id: productId,
+        user_id: userId,
+        rating: newRating,
+        title: newTitle.trim(),
+        body: newBody.trim(),
+        ...(prosFiltered.length ? { pros: prosFiltered } : {}),
+        ...(consFiltered.length ? { cons: consFiltered } : {}),
+        ...(photoUrls.length ? { photo_urls: photoUrls } : {}),
+      });
       toast({ title: 'Review submitted', description: 'Thank you for your feedback!' });
       // Fire-and-forget quest progress + avatar unlock checks
       apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review' } }).catch(() => {});
@@ -191,21 +327,34 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
       setNewRating(0);
       setNewTitle('');
       setNewBody('');
+      setNewPros([]);
+      setNewCons([]);
+      clearPhotos();
     } catch {
+      // Clean up orphaned photos if upload succeeded but DB write failed
+      if (photoUrls.length > 0) {
+        const paths = photoUrls.map((url) => {
+          const parts = url.split('/review-photos/');
+          return parts[1];
+        }).filter(Boolean);
+        if (paths.length) {
+          supabase.storage.from('review-photos').remove(paths).catch(() => {});
+        }
+      }
       toast({ title: 'Submission failed', description: 'Please try again.', variant: 'destructive' });
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleFlag = async (reviewId: string) => {
+  const handleFlag = useCallback(async (reviewId: string) => {
     try {
       await flagReview(reviewId);
       toast({ title: 'Review reported', description: 'Thank you — we will look into it.' });
     } catch {
       toast({ title: 'Could not report review', description: 'Please try again.', variant: 'destructive' });
     }
-  };
+  }, [flagReview, toast]);
 
   return (
     <section className="space-y-6">
@@ -214,7 +363,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
           Customer Reviews
         </h2>
 
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) clearPhotos(); setDialogOpen(open); }}>
           <DialogTrigger asChild>
             <Button size="sm">
               <MessageSquare className="mr-2 h-4 w-4" />
@@ -251,6 +400,140 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                   onChange={(e) => setNewBody(e.target.value)}
                 />
               </div>
+              {/* Pros */}
+              <div className="space-y-2">
+                <Label>Pros (optional)</Label>
+                <div className="space-y-1.5">
+                  {newPros.map((pro, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <Check className="h-3.5 w-3.5 shrink-0 text-green-600" />
+                      <Input
+                        value={pro}
+                        aria-label={`Pro ${i + 1}`}
+                        onChange={(e) => {
+                          const updated = [...newPros];
+                          updated[i] = e.target.value;
+                          setNewPros(updated);
+                        }}
+                        placeholder="What did you like?"
+                        maxLength={100}
+                        className="h-8 text-sm"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setNewPros(newPros.filter((_, j) => j !== i))}
+                        className="shrink-0 text-muted-foreground hover:text-destructive"
+                        aria-label={`Remove pro ${i + 1}`}
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  {newPros.length < 5 && (
+                    <button
+                      type="button"
+                      onClick={() => setNewPros([...newPros, ''])}
+                      disabled={newPros.length > 0 && !newPros[newPros.length - 1]?.trim()}
+                      className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      <Plus className="h-3 w-3" /> Add a pro
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Cons */}
+              <div className="space-y-2">
+                <Label>Cons (optional)</Label>
+                <div className="space-y-1.5">
+                  {newCons.map((con, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <X className="h-3.5 w-3.5 shrink-0 text-red-500" />
+                      <Input
+                        value={con}
+                        aria-label={`Con ${i + 1}`}
+                        onChange={(e) => {
+                          const updated = [...newCons];
+                          updated[i] = e.target.value;
+                          setNewCons(updated);
+                        }}
+                        placeholder="What could be better?"
+                        maxLength={100}
+                        className="h-8 text-sm"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setNewCons(newCons.filter((_, j) => j !== i))}
+                        className="shrink-0 text-muted-foreground hover:text-destructive"
+                        aria-label={`Remove con ${i + 1}`}
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  {newCons.length < 5 && (
+                    <button
+                      type="button"
+                      onClick={() => setNewCons([...newCons, ''])}
+                      disabled={newCons.length > 0 && !newCons[newCons.length - 1]?.trim()}
+                      className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      <Plus className="h-3 w-3" /> Add a con
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Photos */}
+              <div className="space-y-2">
+                <Label>Photos (optional, max 3)</Label>
+                <div className="flex flex-wrap gap-2">
+                  {photos.map((photo, i) => (
+                    <div key={i} className="group relative h-16 w-16 overflow-hidden rounded-md border border-border">
+                      <img
+                        src={photo.previewUrl}
+                        alt={`Upload preview ${i + 1}`}
+                        className="h-full w-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(i)}
+                        className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
+                        aria-label={`Remove photo ${i + 1}`}
+                      >
+                        <X className="h-4 w-4 text-white" />
+                      </button>
+                    </div>
+                  ))}
+                  {canAddMore && (
+                    <label className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-md border border-dashed border-muted-foreground/30 text-muted-foreground transition-colors hover:border-primary hover:text-primary">
+                      <Camera className="h-5 w-5" />
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        className="sr-only"
+                        onChange={(e) => {
+                          if (e.target.files?.length) {
+                            const errors = addPhotos(e.target.files);
+                            if (errors.length) {
+                              toast({ title: 'Photo error', description: errors.join(' '), variant: 'destructive' });
+                            }
+                          }
+                          e.target.value = '';
+                        }}
+                        aria-label="Add review photos"
+                      />
+                    </label>
+                  )}
+                </div>
+                {photos.length > 0 && (
+                  <p className="text-[11px] text-muted-foreground">
+                    {photos.length}/3 photos · JPEG, PNG, or WebP · Max 5 MB each
+                  </p>
+                )}
+              </div>
+
               <div className="flex justify-end gap-2 pt-2">
                 <Button
                   type="button"
@@ -261,9 +544,9 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                 </Button>
                 <Button
                   type="submit"
-                  disabled={submitting || newRating === 0 || !newTitle.trim() || !newBody.trim()}
+                  disabled={submitting || uploading || newRating === 0 || !newTitle.trim() || !newBody.trim()}
                 >
-                  {submitting ? 'Submitting…' : 'Submit Review'}
+                  {uploading ? 'Uploading photos…' : submitting ? 'Submitting…' : 'Submit Review'}
                 </Button>
               </div>
             </form>
@@ -311,6 +594,15 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
         </Card>
       )}
 
+      {/* ── AI Summary ── */}
+      {(summaryLoading || reviewSummary) && (
+        <ReviewSummaryCard
+          summaryText={reviewSummary?.summary_text}
+          generatedAt={reviewSummary?.generated_at}
+          isLoading={summaryLoading}
+        />
+      )}
+
       {/* ── Empty state ── */}
       {!isLoading && totalCount === 0 && (
         <p className="text-sm text-muted-foreground">
@@ -318,13 +610,39 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
         </p>
       )}
 
-      {/* ── Review list ── */}
+      {/* ── Sort dropdown + Review list ── */}
       {!isLoading && reviews.length > 0 && (
-        <div className="space-y-4">
-          {reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} onFlag={handleFlag} />
-          ))}
-        </div>
+        <>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              Showing {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
+            </p>
+            <Select value={sortBy} onValueChange={(v) => setSortBy(v as ReviewSortOption)}>
+              <SelectTrigger className="w-[170px]" aria-label="Sort reviews">
+                <ArrowUpDown className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="relevant">Most Relevant</SelectItem>
+                <SelectItem value="newest">Newest</SelectItem>
+                <SelectItem value="highest">Highest Rated</SelectItem>
+                <SelectItem value="helpful">Most Helpful</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-4">
+            {sortedReviews.map((review) => (
+              <ReviewCard
+                key={review.id}
+                review={review}
+                onFlag={handleFlag}
+                liked={likedIds.has(review.id)}
+                onToggleLike={handleToggleLike}
+                userAttributes={usersAttributesMap?.get(review.user_id) ?? []}
+              />
+            ))}
+          </div>
+        </>
       )}
     </section>
   );

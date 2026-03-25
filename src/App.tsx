@@ -9,6 +9,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "next-themes";
 import { CookieConsentProvider } from "@/context/CookieConsentContext";
 import { WishlistProvider } from "@/context/WishlistContext";
+import { HelmetProvider } from "react-helmet-async";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import HomePage from "./pages/HomePage";
 import ProductListing from "./pages/ProductListing";
@@ -86,6 +87,7 @@ const MissingApiKeysScreen = () => (
 
 const App = () => (
   !hasSupabaseEnv ? <MissingApiKeysScreen /> :
+  <HelmetProvider>
   <ThemeProvider
     attribute="class"
     defaultTheme="velo"
@@ -196,6 +198,7 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
   </ThemeProvider>
+  </HelmetProvider>
 );
 
 export default App;

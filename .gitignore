@@ -36,3 +36,4 @@ william-automation/.env
 william-automation/keys.json
 # Claude Code worktrees (may contain secrets)
 .claude/worktrees/
+stats.html

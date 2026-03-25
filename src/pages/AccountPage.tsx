@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import ProfileCard from '@/components/profile/ProfileCard';
 import AvatarGallery from '@/components/profile/AvatarGallery';
+import { AttributeEditor } from '@/components/profile/AttributeEditor';
 
 type DisplayStatus = 'fulfilled' | 'processing' | 'pending' | 'cancelled';
 
@@ -432,6 +433,20 @@ export default function AccountPage() {
                     />
                   </CardContent>
                 </Card>
+
+                {user?.id && (
+                  <Card className="border-border/30">
+                    <CardHeader>
+                      <CardTitle className="font-serif">Your Preferences</CardTitle>
+                      <CardDescription>
+                        Tell us about your snus preferences. These appear as badges on your reviews.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <AttributeEditor userId={user.id} />
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             </TabsContent>
           </Tabs>

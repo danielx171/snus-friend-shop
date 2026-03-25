@@ -57,7 +57,7 @@ export function useSpinWheel() {
       queryClient.invalidateQueries({ queryKey: ['snuspoints'] });
       queryClient.invalidateQueries({ queryKey: ['vouchers'] });
       // Fire-and-forget quest progress after spin
-      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'spin' } }).catch(() => {});
+      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'spin_completed' } }).catch(() => {});
     },
   });
 }

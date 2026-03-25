@@ -35,8 +35,8 @@ export default function BrandsIndex() {
   return (
     <Layout>
       <SEO
-        title="Brands | SnusFriend"
-        description="Explore all nicotine pouch brands available at SnusFriend. From ZYN to VELO, find your perfect match."
+        title="All Brands | SnusFriend"
+        description="Explore all 91+ nicotine pouch brands. ZYN, VELO, Loop, White Fox, and more. Find your perfect brand."
         canonical={`${SITE_URL}/brands`}
         jsonLd={breadcrumbJsonLd}
       />

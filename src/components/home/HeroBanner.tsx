@@ -306,7 +306,7 @@ export function HeroBanner() {
                         </motion.p>
 
                         <motion.div
-                          className="flex flex-wrap gap-3 pt-5"
+                          className="flex flex-col sm:flex-row gap-3 pt-5"
                           initial={{ opacity: 0, y: 12 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{
@@ -452,7 +452,7 @@ export function HeroBanner() {
                         to={`/product/${product.id}`}
                         className="group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm overflow-hidden hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 block"
                       >
-                        <div className="aspect-square w-full overflow-hidden bg-muted/20">
+                        <div className="aspect-square w-full overflow-hidden" style={{ background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.07), rgba(255,255,255,0.02))' }}>
                           {product.image ? (
                             <img
                               src={product.image}
@@ -492,7 +492,7 @@ export function HeroBanner() {
                         to={`/product/${product.id}`}
                         className="rounded-2xl border border-border/30 bg-card/80 p-3 hover:border-border/60 transition-all duration-200 block"
                       >
-                        <div className="w-full aspect-square rounded-xl overflow-hidden bg-muted/30 flex items-center justify-center mb-2">
+                        <div className="w-full aspect-square rounded-xl overflow-hidden flex items-center justify-center mb-2" style={{ background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.07), rgba(255,255,255,0.02))' }}>
                           {product.image ? (
                             <img src={product.image} alt={product.name} className="w-full h-full object-contain" loading="lazy" />
                           ) : (

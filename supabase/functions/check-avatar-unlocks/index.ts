@@ -74,7 +74,7 @@ Deno.serve(async (req: Request) => {
     // 2. Get all non-default avatars
     const { data: avatars, error: avatarsError } = await admin
       .from('avatars')
-      .select('id, name, rarity, unlock_type, unlock_threshold')
+      .select('id, name, image_url, rarity, unlock_type, unlock_threshold')
       .neq('unlock_type', 'default');
 
     if (avatarsError) {
@@ -92,7 +92,7 @@ Deno.serve(async (req: Request) => {
 
     if (lockedAvatars.length === 0) {
       return new Response(
-        JSON.stringify({ newly_unlocked: [] }),
+        JSON.stringify({ newly_unlocked: [], total_unlocked: unlockedIds.size }),
         { status: 200, headers: JSON_HEADERS }
       );
     }
@@ -132,7 +132,8 @@ Deno.serve(async (req: Request) => {
       const { count, error: reviewError } = await admin
         .from('product_reviews')
         .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        .eq('flagged', false);
 
       if (reviewError) {
         console.error('product_reviews read error', { error: reviewError, requestId });
@@ -146,12 +147,13 @@ Deno.serve(async (req: Request) => {
     }
 
     // 4. Check each locked avatar and collect newly qualifying ones
-    const newlyUnlocked: { id: string; name: string; rarity: string }[] = [];
+    const newlyUnlocked: { id: string; name: string; rarity: string; image_url: string }[] = [];
 
     for (const avatar of lockedAvatars) {
-      const { id, name, rarity, unlock_type, unlock_threshold } = avatar as {
+      const { id, name, image_url, rarity, unlock_type, unlock_threshold } = avatar as {
         id: string;
         name: string;
+        image_url: string;
         rarity: string;
         unlock_type: string;
         unlock_threshold: number;
@@ -185,7 +187,7 @@ Deno.serve(async (req: Request) => {
           // 23505 = unique violation (already unlocked via race); treat as OK
           console.error('user_avatar_unlocks insert error', { error: insertError, id, requestId });
         } else {
-          newlyUnlocked.push({ id, name, rarity });
+          newlyUnlocked.push({ id, name, rarity, image_url });
         }
       }
     }
@@ -196,8 +198,10 @@ Deno.serve(async (req: Request) => {
       requestId,
     });
 
+    const totalUnlocked = unlockedIds.size + newlyUnlocked.length;
+
     return new Response(
-      JSON.stringify({ newly_unlocked: newlyUnlocked }),
+      JSON.stringify({ newly_unlocked: newlyUnlocked, total_unlocked: totalUnlocked }),
       { status: 200, headers: JSON_HEADERS }
     );
   } catch (err) {

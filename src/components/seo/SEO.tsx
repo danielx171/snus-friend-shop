@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { SITE_URL } from '@/config/brand';
 
 interface SEOProps {
@@ -25,26 +25,6 @@ function cleanCanonical(url: string): string {
   }
 }
 
-function setMeta(attr: string, key: string, content: string) {
-  let el = document.querySelector(`meta[${attr}="${key}"]`);
-  if (!el) {
-    el = document.createElement('meta');
-    el.setAttribute(attr, key);
-    document.head.appendChild(el);
-  }
-  el.setAttribute('content', content);
-}
-
-function setLink(rel: string, href: string) {
-  let el = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
-  if (!el) {
-    el = document.createElement('link');
-    el.setAttribute('rel', rel);
-    document.head.appendChild(el);
-  }
-  el.setAttribute('href', href);
-}
-
 export function SEO({
   title,
   description,
@@ -55,56 +35,36 @@ export function SEO({
   jsonLd,
   metaRobots,
 }: SEOProps) {
-  useEffect(() => {
-    document.title = title;
+  const resolvedCanonical = canonical
+    ? cleanCanonical(canonical)
+    : cleanCanonical(SITE_URL + window.location.pathname + window.location.search);
 
-    // Standard meta
-    setMeta('name', 'description', description);
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      {metaRobots && <meta name="robots" content={metaRobots} />}
+      <link rel="canonical" href={resolvedCanonical} />
 
-    // Robots
-    if (metaRobots) {
-      setMeta('name', 'robots', metaRobots);
-    } else {
-      const existing = document.querySelector('meta[name="robots"]');
-      if (existing) existing.remove();
-    }
+      {/* Open Graph */}
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:type" content={ogType} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:url" content={resolvedCanonical} />
 
-    // Canonical
-    const resolvedCanonical = canonical
-      ? cleanCanonical(canonical)
-      : cleanCanonical(SITE_URL + window.location.pathname + window.location.search);
-    setLink('canonical', resolvedCanonical);
+      {/* Twitter Card */}
+      <meta name="twitter:card" content={twitterCard} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={ogImage} />
 
-    // Open Graph
-    setMeta('property', 'og:title', title);
-    setMeta('property', 'og:description', description);
-    setMeta('property', 'og:type', ogType);
-    setMeta('property', 'og:image', ogImage);
-    setMeta('property', 'og:url', resolvedCanonical);
-
-    // Twitter Card
-    setMeta('name', 'twitter:card', twitterCard);
-    setMeta('name', 'twitter:title', title);
-    setMeta('name', 'twitter:description', description);
-    setMeta('name', 'twitter:image', ogImage);
-
-    // JSON-LD
-    if (jsonLd) {
-      let script = document.querySelector('script[data-seo-jsonld]');
-      if (!script) {
-        script = document.createElement('script');
-        script.setAttribute('type', 'application/ld+json');
-        script.setAttribute('data-seo-jsonld', 'true');
-        document.head.appendChild(script);
-      }
-      script.textContent = JSON.stringify(jsonLd);
-    }
-
-    return () => {
-      const s = document.querySelector('script[data-seo-jsonld]');
-      if (s) s.remove();
-    };
-  }, [title, description, canonical, ogImage, ogType, twitterCard, jsonLd, metaRobots]);
-
-  return null;
+      {/* JSON-LD Structured Data */}
+      {jsonLd && (
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
+      )}
+    </Helmet>
+  );
 }

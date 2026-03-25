@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
+import { SITE_URL } from '@/config/brand';
 import { motion } from 'framer-motion';
 import {
   Accordion,
@@ -93,8 +94,8 @@ export default function FaqPage() {
     <>
       <SEO
         title="FAQ | SnusFriend"
-        description="Frequently asked questions about nicotine pouches, delivery, and SnusPoints at SnusFriend."
-        canonical="https://snusfriends.com/faq"
+        description="Frequently asked questions about ordering nicotine pouches, delivery, returns, and SnusPoints."
+        canonical={`${SITE_URL}/faq`}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'FAQPage',

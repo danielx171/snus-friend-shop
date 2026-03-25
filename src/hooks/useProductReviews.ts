@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { apiFetch } from '@/lib/api';
 
 export interface ReviewProfile {
   display_name: string;
@@ -14,6 +15,9 @@ export interface ProductReview {
   rating: number;
   title: string;
   body: string;
+  pros: string[];
+  cons: string[];
+  photo_urls: string[];
   helpful_count: number;
   flagged: boolean;
   created_at: string;
@@ -26,6 +30,9 @@ export interface SubmitReviewPayload {
   rating: number;
   title: string;
   body: string;
+  pros?: string[];
+  cons?: string[];
+  photo_urls?: string[];
 }
 
 export interface ReviewStats {
@@ -52,7 +59,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
       // Fetch reviews (unflagged only)
       const { data: reviewRows, error: reviewErr } = await supabase
         .from('product_reviews')
-        .select('id, product_id, user_id, rating, title, body, helpful_count, flagged, created_at')
+        .select('id, product_id, user_id, rating, title, body, pros, cons, photo_urls, helpful_count, flagged, created_at')
         .eq('product_id', productId)
         .eq('flagged', false)
         .order('created_at', { ascending: false });
@@ -130,11 +137,17 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         rating: payload.rating,
         title: payload.title,
         body: payload.body,
+        ...(payload.pros?.length ? { pros: payload.pros } : {}),
+        ...(payload.cons?.length ? { cons: payload.cons } : {}),
+        ...(payload.photo_urls?.length ? { photo_urls: payload.photo_urls } : {}),
       });
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['product_reviews', productId] });
+      // Fire-and-forget quest + avatar progress after review
+      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review_submitted' } }).catch(() => {});
+      apiFetch('check-avatar-unlocks', { method: 'POST' }).catch(() => {});
     },
   });
 

@@ -1,6 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { SEO } from "@/components/seo/SEO";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -55,6 +56,11 @@ const NotFound = () => {
 
   return (
     <Layout showNicotineWarning={false}>
+      <SEO
+        title="Page Not Found | SnusFriend"
+        description="The page you're looking for doesn't exist."
+        metaRobots="noindex,nofollow"
+      />
       <div className="flex min-h-[60vh] items-center justify-center py-20">
         <div className="text-center max-w-md mx-auto px-4">
           {/* 404 heading with animated gradient */}

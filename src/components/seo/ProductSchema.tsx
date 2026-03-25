@@ -5,9 +5,13 @@ import { SITE_URL } from '@/config/brand';
 interface ProductSchemaProps {
   product: Product;
   selectedPackSize: PackSize;
+  reviewStats?: {
+    avgRating: number;
+    totalCount: number;
+  };
 }
 
-export function ProductSchema({ product, selectedPackSize }: ProductSchemaProps) {
+export function ProductSchema({ product, selectedPackSize, reviewStats }: ProductSchemaProps) {
   const baseUrl = SITE_URL;
   const productUrl = `${baseUrl}/product/${product.id}`;
   const price = product.prices[selectedPackSize];
@@ -37,6 +41,17 @@ export function ProductSchema({ product, selectedPackSize }: ProductSchemaProps)
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
     },
+    ...(reviewStats && reviewStats.totalCount > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: reviewStats.avgRating.toFixed(1),
+            reviewCount: reviewStats.totalCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
   };
 
   const breadcrumbJsonLd = {

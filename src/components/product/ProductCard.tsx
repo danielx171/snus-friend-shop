@@ -96,7 +96,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
   return (
     <div className="group">
     <Card className={cn(
-      'product-card relative overflow-hidden rounded-2xl border-white/[0.06] bg-card/90 backdrop-blur-sm shadow-[0_2px_8px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.04)] transition-colors duration-300 ease-out group-hover:border-white/[0.12]',
+      'product-card relative overflow-hidden rounded-2xl border-white/[0.06] bg-card/90 backdrop-blur-sm shadow-[0_2px_8px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-300 ease-out group-hover:border-white/[0.12] group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.06)]',
       isOutOfStock && 'opacity-60'
     )}>
       <Link to={`/product/${product.id}`} aria-label={product.name}>
@@ -105,7 +105,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
           className="product-card-image relative overflow-hidden"
           style={{
             aspectRatio: isCompact ? '3/2' : '1',
-            background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))',
+            background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.07), rgba(255,255,255,0.02))',
           }}
         >
           <button

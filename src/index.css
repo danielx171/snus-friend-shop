@@ -464,9 +464,18 @@
     box-shadow: 0 8px 30px hsl(220 80% 15% / 0.4) !important;
   }
 
-  /* Product image area: solid dark */
+  /* Light theme: product card hover — visible border + shadow lift */
+  .light .product-card {
+    border-color: hsl(210 18% 90%) !important;
+  }
+  .light .product-card:hover {
+    border-color: hsl(213 65% 32% / 0.25) !important;
+    box-shadow: 0 8px 24px hsl(220 20% 60% / 0.12), 0 2px 6px hsl(220 20% 60% / 0.06) !important;
+  }
+
+  /* Product image area: dark with subtle light center for product visibility */
   .velo .product-card-image {
-    background: hsl(220 80% 8%) !important;
+    background: radial-gradient(circle at 50% 40%, hsl(220 60% 18%), hsl(220 80% 10%)) !important;
   }
 
   /* Featured section: navy tint instead of warm */

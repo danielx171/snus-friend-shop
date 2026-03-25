@@ -11,8 +11,9 @@ import { Label } from '@/components/ui/label';
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw, PackageX, Bell, Info,
+  ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw, PackageX, Bell, Info, MessageSquare, Users,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { AgeGate } from '@/components/compliance/AgeGate';
@@ -22,6 +23,8 @@ import { ProductSchema } from '@/components/seo/ProductSchema';
 import { ProductCard } from '@/components/product/ProductCard';
 import { PDPSkeleton } from '@/components/product/PDPSkeleton';
 import { ProductReviews } from '@/components/product/ProductReviews';
+import { useProductReviews } from '@/hooks/useProductReviews';
+import { CommunityBoard } from '@/components/community/CommunityBoard';
 import { Input } from '@/components/ui/input';
 import { apiFetch } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -51,6 +54,7 @@ export default function ProductDetail() {
   }, [id]);
   const { data: product, isLoading, isError } = useCatalogProduct(id);
   const { data: allProducts = [] } = useCatalogProducts();
+  const { avgRating, totalCount } = useProductReviews(id);
   const { addToCart } = useCart();
   const { add: addRecentlyViewed } = useRecentlyViewed();
 
@@ -135,7 +139,7 @@ export default function ProductDetail() {
   return (
     <AgeGate>
     <Layout showNicotineWarning={false}>
-      <ProductSchema product={product} selectedPackSize={selectedPack} />
+      <ProductSchema product={product} selectedPackSize={selectedPack} reviewStats={totalCount > 0 ? { avgRating, totalCount } : undefined} />
 
       <div className="container py-10">
         <nav className="mb-8">
@@ -535,9 +539,32 @@ export default function ProductDetail() {
           </Accordion>
         </div>
 
-        {/* 8. Reviews */}
+        {/* 8. Reviews & Community Tabs */}
         <div className="mt-16 max-w-3xl">
-          <ProductReviews productId={product.id} />
+          <Tabs defaultValue="reviews">
+            <TabsList className="mb-6 w-full justify-start gap-1 bg-transparent p-0 border-b border-border/30 rounded-none">
+              <TabsTrigger
+                value="reviews"
+                className="gap-2 rounded-none border-b-2 border-transparent px-4 pb-3 pt-1 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Reviews
+              </TabsTrigger>
+              <TabsTrigger
+                value="community"
+                className="gap-2 rounded-none border-b-2 border-transparent px-4 pb-3 pt-1 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+              >
+                <Users className="h-4 w-4" />
+                Community
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="reviews" className="mt-0">
+              <ProductReviews productId={product.id} />
+            </TabsContent>
+            <TabsContent value="community" className="mt-0">
+              <CommunityBoard productId={product.id} />
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* 9. You might also like */}

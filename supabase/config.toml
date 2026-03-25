@@ -56,3 +56,6 @@ verify_jwt = false
 
 [functions.update-quest-progress]
 verify_jwt = false
+
+[functions.generate-review-summary]
+verify_jwt = false

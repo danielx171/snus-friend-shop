@@ -11,6 +11,7 @@ import { useVouchers } from '@/hooks/useVouchers';
 import { useQuests } from '@/hooks/useQuests';
 import type { SpinResult } from '@/hooks/useSpinWheel';
 import { SEO } from '@/components/seo/SEO';
+import { SITE_URL } from '@/config/brand';
 import SpinWheel from '@/components/rewards/SpinWheel';
 import PrizeReveal from '@/components/rewards/PrizeReveal';
 import VoucherList from '@/components/rewards/VoucherList';
@@ -97,8 +98,9 @@ export default function RewardsPage() {
   return (
     <Layout>
       <SEO
-        title="Daily Spin & Rewards | SnusFriend"
-        description="Spin the wheel daily to win SnusPoints, vouchers, and free products. Earn rewards every time you shop at SnusFriend."
+        title="Rewards & SnusPoints | SnusFriend"
+        description="Earn SnusPoints with every purchase. Spin the daily wheel, complete quests, and unlock exclusive rewards."
+        canonical={`${SITE_URL}/rewards`}
       />
       <div className="container mx-auto max-w-2xl px-4 py-8">
 

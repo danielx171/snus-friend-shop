@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
+import { visualizer } from "rollup-plugin-visualizer";
 import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
@@ -13,6 +14,7 @@ export default defineConfig(() => ({
   },
   plugins: [
     react(),
+    visualizer({ filename: "stats.html", gzipSize: true, brotliSize: true }),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.png", "favicon.ico", "robots.txt", "apple-touch-icon-180x180.png"],

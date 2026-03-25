@@ -77,7 +77,7 @@ export function BrandCarousel() {
               to={`/brand/${brand.slug}`}
               className="group shrink-0 snap-start"
             >
-              <div className="relative w-36 h-28 rounded-2xl border border-border/40 bg-card overflow-hidden transition-all duration-200 ease-out hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y-1 hover:border-[hsl(0_0%_100%/0.25)]">
+              <div className="relative w-36 h-28 rounded-2xl border border-border/40 bg-card overflow-hidden transition-all duration-200 ease-out hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y-1 hover:border-[hsl(0_0%_100%/0.25)] light:border-border/60 light:hover:shadow-lg light:hover:border-primary/20">
                 <div
                   className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl"
                   style={{ backgroundColor: accent }}

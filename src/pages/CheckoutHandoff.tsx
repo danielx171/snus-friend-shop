@@ -641,9 +641,11 @@ export default function CheckoutHandoff() {
                           type="submit"
                           size="lg"
                           className="w-full mt-6"
-                          disabled={!canSubmit}
+                          disabled={!canSubmit || PREVIEW_MODE}
                         >
-                          {submitting ? (
+                          {PREVIEW_MODE ? (
+                            'Checkout Paused — Coming Soon'
+                          ) : submitting ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                               Placing order...

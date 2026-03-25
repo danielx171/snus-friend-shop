@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      attribute_categories: {
+        Row: {
+          key: string
+          label: string
+          options: string[]
+          sort_order: number
+        }
+        Insert: {
+          key: string
+          label: string
+          options: string[]
+          sort_order?: number
+        }
+        Update: {
+          key?: string
+          label?: string
+          options?: string[]
+          sort_order?: number
+        }
+        Relationships: []
+      }
       avatars: {
         Row: {
           id: string
@@ -485,33 +506,42 @@ export type Database = {
       product_reviews: {
         Row: {
           body: string
+          cons: string[]
           created_at: string
           flagged: boolean
           helpful_count: number
           id: string
+          photo_urls: string[]
           product_id: string
+          pros: string[]
           rating: number
           title: string
           user_id: string
         }
         Insert: {
           body: string
+          cons?: string[]
           created_at?: string
           flagged?: boolean
           helpful_count?: number
           id?: string
+          photo_urls?: string[]
           product_id: string
+          pros?: string[]
           rating: number
           title: string
           user_id: string
         }
         Update: {
           body?: string
+          cons?: string[]
           created_at?: string
           flagged?: boolean
           helpful_count?: number
           id?: string
+          photo_urls?: string[]
           product_id?: string
+          pros?: string[]
           rating?: number
           title?: string
           user_id?: string
@@ -522,6 +552,305 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_summaries: {
+        Row: {
+          product_id: string
+          summary_text: string
+          review_count_at_generation: number
+          generated_at: string
+        }
+        Insert: {
+          product_id: string
+          summary_text: string
+          review_count_at_generation: number
+          generated_at?: string
+        }
+        Update: {
+          product_id?: string
+          summary_text?: string
+          review_count_at_generation?: number
+          generated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_summaries_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_likes: {
+        Row: {
+          user_id: string
+          review_id: string
+          created_at: string
+        }
+        Insert: {
+          user_id: string
+          review_id: string
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          review_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_likes_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "product_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_posts: {
+        Row: {
+          id: string
+          product_id: string
+          user_id: string
+          body: string
+          photo_url: string | null
+          likes_count: number
+          comments_count: number
+          pinned: boolean
+          flagged: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_id: string
+          user_id: string
+          body: string
+          photo_url?: string | null
+          likes_count?: number
+          comments_count?: number
+          pinned?: boolean
+          flagged?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          user_id?: string
+          body?: string
+          photo_url?: string | null
+          likes_count?: number
+          comments_count?: number
+          pinned?: boolean
+          flagged?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_posts_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_comments: {
+        Row: {
+          id: string
+          post_id: string
+          user_id: string
+          body: string
+          flagged: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          user_id: string
+          body: string
+          flagged?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          user_id?: string
+          body?: string
+          flagged?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_post_likes: {
+        Row: {
+          post_id: string
+          user_id: string
+          created_at: string
+        }
+        Insert: {
+          post_id: string
+          user_id: string
+          created_at?: string
+        }
+        Update: {
+          post_id?: string
+          user_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_post_product_tags: {
+        Row: {
+          post_id: string
+          product_id: string
+          created_at: string
+        }
+        Insert: {
+          post_id: string
+          product_id: string
+          created_at?: string
+        }
+        Update: {
+          post_id?: string
+          product_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_post_product_tags_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_post_product_tags_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_polls: {
+        Row: {
+          id: string
+          post_id: string
+          question: string
+          ends_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          question: string
+          ends_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          question?: string
+          ends_at?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_polls_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: true
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_poll_options: {
+        Row: {
+          id: string
+          poll_id: string
+          label: string
+          votes_count: number
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          poll_id: string
+          label: string
+          votes_count?: number
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          poll_id?: string
+          label?: string
+          votes_count?: number
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_poll_options_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "community_polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_poll_votes: {
+        Row: {
+          poll_id: string
+          user_id: string
+          option_id: string
+          created_at: string
+        }
+        Insert: {
+          poll_id: string
+          user_id: string
+          option_id: string
+          created_at?: string
+        }
+        Update: {
+          poll_id?: string
+          user_id?: string
+          option_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_poll_votes_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "community_polls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_poll_votes_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "community_poll_options"
             referencedColumns: ["id"]
           },
         ]
@@ -596,6 +925,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "avatars"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_attributes: {
+        Row: {
+          user_id: string
+          attribute_key: string
+          attribute_value: string
+          created_at: string
+        }
+        Insert: {
+          user_id: string
+          attribute_key: string
+          attribute_value: string
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          attribute_key?: string
+          attribute_value?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_attributes_attribute_key_fkey"
+            columns: ["attribute_key"]
+            isOneToOne: false
+            referencedRelation: "attribute_categories"
+            referencedColumns: ["key"]
           },
         ]
       }
@@ -736,12 +1094,39 @@ export type Database = {
         }
         Returns: undefined
       }
+      replace_user_attributes: {
+        Args: {
+          p_user_id: string
+          p_attribute_key: string
+          p_values: string[]
+        }
+        Returns: undefined
+      }
+      toggle_review_like: {
+        Args: {
+          p_review_id: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      cast_poll_vote: {
+        Args: {
+          p_poll_id: string
+          p_option_id: string
+        }
+        Returns: { voted: boolean; option_id: string; votes_count: number }[]
+      }
+      toggle_community_post_like: {
+        Args: {
+          p_post_id: string
+        }
+        Returns: { liked: boolean; new_count: number }[]
       }
     }
     Enums: {

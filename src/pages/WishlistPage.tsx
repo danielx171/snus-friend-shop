@@ -33,7 +33,7 @@ export default function WishlistPage() {
       <SEO
         title="Wishlist | SnusFriend"
         description="Your saved nicotine pouches."
-        metaRobots="noindex,follow"
+        metaRobots="noindex,nofollow"
       />
       <div className="container py-8">
         <div className="flex items-center gap-3 mb-8">

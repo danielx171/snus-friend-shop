@@ -64,7 +64,21 @@
       "Bash(curl -s -w \"\\\\nHTTP: %{http_code}\" -X POST 'https://bozdnoctcszbhemdjsek.supabase.co/functions/v1/create-nyehandel-checkout' -H 'Content-Type: application/json' -d '{\"\"items\"\":[{\"\"sku\"\":\"\"stng16\"\",\"\"quantity\"\":1,\"\"unit_price\"\":3.50}],\"\"customer\"\":{\"\"email\"\":\"\"test@snusfriends.com\"\",\"\"firstname\"\":\"\"Test\"\",\"\"lastname\"\":\"\"Final\"\"},\"\"billing_address\"\":{\"\"address\"\":\"\"Storgatan 1\"\",\"\"postcode\"\":\"\"11122\"\",\"\"city\"\":\"\"Stockholm\"\",\"\"country\"\":\"\"se\"\"},\"\"shipping_method\"\":\"\"UPS Standard \\(J229F1\\)\"\"}')",
       "Bash(curl -s -w \"\\\\nHTTP: %{http_code}\" -X OPTIONS 'https://bozdnoctcszbhemdjsek.supabase.co/functions/v1/create-nyehandel-checkout' -H 'Origin: https://snusfriends.com')",
       "Bash(curl -v -X POST 'https://bozdnoctcszbhemdjsek.supabase.co/functions/v1/create-nyehandel-checkout' -H 'Content-Type: application/json' -H 'Origin: https://snusfriends.com' -d '{\"\"\"\"items\"\"\"\":[{\"\"\"\"sku\"\"\"\":\"\"\"\"stng16\"\"\"\",\"\"\"\"quantity\"\"\"\":1,\"\"\"\"unit_price\"\"\"\":3.50}],\"\"\"\"customer\"\"\"\":{\"\"\"\"email\"\"\"\":\"\"\"\"test@snusfriends.com\"\"\"\",\"\"\"\"firstname\"\"\"\":\"\"\"\"Test\"\"\"\",\"\"\"\"lastname\"\"\"\":\"\"\"\"Final\"\"\"\"},\"\"\"\"billing_address\"\"\"\":{\"\"\"\"address\"\"\"\":\"\"\"\"Storgatan 1\"\"\"\",\"\"\"\"postcode\"\"\"\":\"\"\"\"11122\"\"\"\",\"\"\"\"city\"\"\"\":\"\"\"\"Stockholm\"\"\"\",\"\"\"\"country\"\"\"\":\"\"\"\"se\"\"\"\"},\"\"\"\"shipping_method\"\"\"\":\"\"\"\"UPS Standard \\(J229F1\\)\"\"\"\"}')",
-      "Bash(curl -s -X POST 'https://bozdnoctcszbhemdjsek.supabase.co/functions/v1/create-nyehandel-checkout' -H 'Content-Type: application/json' -H 'Origin: https://snusfriends.com' -d '{\"\"items\"\":[{\"\"sku\"\":\"\"stng16\"\",\"\"quantity\"\":1,\"\"unit_price\"\":3.50}],\"\"customer\"\":{\"\"email\"\":\"\"test@snusfriends.com\"\",\"\"firstname\"\":\"\"Test\"\",\"\"lastname\"\":\"\"Final\"\"},\"\"billing_address\"\":{\"\"address\"\":\"\"Storgatan 1\"\",\"\"postcode\"\":\"\"11122\"\",\"\"city\"\":\"\"Stockholm\"\",\"\"country\"\":\"\"se\"\"},\"\"shipping_method\"\":\"\"UPS Standard \\(J229F1\\)\"\"}')"
+      "Bash(curl -s -X POST 'https://bozdnoctcszbhemdjsek.supabase.co/functions/v1/create-nyehandel-checkout' -H 'Content-Type: application/json' -H 'Origin: https://snusfriends.com' -d '{\"\"items\"\":[{\"\"sku\"\":\"\"stng16\"\",\"\"quantity\"\":1,\"\"unit_price\"\":3.50}],\"\"customer\"\":{\"\"email\"\":\"\"test@snusfriends.com\"\",\"\"firstname\"\":\"\"Test\"\",\"\"lastname\"\":\"\"Final\"\"},\"\"billing_address\"\":{\"\"address\"\":\"\"Storgatan 1\"\",\"\"postcode\"\":\"\"11122\"\",\"\"city\"\":\"\"Stockholm\"\",\"\"country\"\":\"\"se\"\"},\"\"shipping_method\"\":\"\"UPS Standard \\(J229F1\\)\"\"}')",
+      "Bash(ls /Users/Daniel/Projects/snus-friend-shop/src/pages/Blog*.tsx)",
+      "Bash(ls /Users/Daniel/Projects/snus-friend-shop/supabase/migrations/*blog*)",
+      "Bash(grep -r react-helmet /Users/Daniel/Projects/snus-friend-shop/src --include=*.tsx -l)",
+      "Bash(supabase secrets:*)",
+      "Bash(grep VITE_PREVIEW_MODE /Users/Daniel/Projects/snus-friend-shop/.env*)",
+      "Bash(vercel env:*)",
+      "Bash(claude mcp:*)",
+      "Bash(find ~/.claude -name *hook* -o -name *trigger*)",
+      "WebSearch",
+      "mcp__mcp-registry__search_mcp_registry",
+      "Bash(ls -la /Users/Daniel/Projects/snus-friend-shop/.claude/commands/*.md)",
+      "Bash(node -e \"const m = require\\(''/Users/Daniel/Projects/snus-friend-shop/node_modules/react-helmet-async''\\); console.log\\(Object.keys\\(m\\)\\)\")",
+      "Bash(find /Users/Daniel/Projects/snus-friend-shop -type f \\\\\\(-name *REVIEW* -o -name *AUDIT* -o -name *DESIGN* \\\\\\))",
+      "Bash(git status:*)"
     ]
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams, useLocation, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
+import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -242,7 +243,7 @@ export default function OrderConfirmation() {
   useEffect(() => {
     if (state.kind === 'ok' && !questFired.current) {
       questFired.current = true;
-      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'order' } }).catch(() => {});
+      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'order_placed' } }).catch(() => {});
       apiFetch('check-avatar-unlocks', { method: 'POST' }).catch(() => {});
     }
   }, [state.kind]);
@@ -344,6 +345,11 @@ export default function OrderConfirmation() {
 
   return (
     <Layout>
+      <SEO
+        title="Order Confirmed | SnusFriend"
+        description="Your order has been confirmed."
+        metaRobots="noindex,nofollow"
+      />
       <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
         {/* ── Success header ── */}
         <div className="mb-10 flex flex-col items-center text-center">
