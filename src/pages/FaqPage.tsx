@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
+import { FaqSchema } from '@/components/seo/FaqSchema';
 import { SITE_URL } from '@/config/brand';
 import { motion } from 'framer-motion';
 import { Search, MessageCircleQuestion } from 'lucide-react';
@@ -64,6 +65,20 @@ const rewards: FaqItem[] = [
     question: 'What is SnusPoints?',
     answer: 'SnusPoints is our loyalty programme. You earn 10 SnusPoints for every €1 spent. Points can be redeemed for discounts on future orders. Sign up for a free account to start earning.',
   },
+];
+
+/** Plain-text FAQ items for structured data (JSON-LD). ReactNode answers are flattened to strings. */
+const faqSchemaItems = [
+  ...aboutPouches.map((q) => ({
+    question: q.question,
+    answer: typeof q.answer === 'string'
+      ? q.answer
+      : q.question === 'What strength should I choose?'
+        ? 'Normal (4-8mg) for beginners, Strong (8-12mg) for regular users, Extra Strong (12-18mg) for experienced users, Ultra Strong (18mg+) for advanced users.'
+        : '',
+  })),
+  ...ordersDelivery.map((q) => ({ question: q.question, answer: typeof q.answer === 'string' ? q.answer : '' })),
+  ...rewards.map((q) => ({ question: q.question, answer: typeof q.answer === 'string' ? q.answer : '' })),
 ];
 
 /** Recursively extract text from ReactNode for search matching. */
@@ -129,16 +144,8 @@ export default function FaqPage() {
         title="FAQ | SnusFriend"
         description="Frequently asked questions about ordering nicotine pouches, delivery, returns, and SnusPoints."
         canonical={`${SITE_URL}/faq`}
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: [
-            ...aboutPouches.map(q => ({ '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: typeof q.answer === 'string' ? q.answer : q.question === 'What strength should I choose?' ? 'Normal (4-8mg) for beginners, Strong (8-12mg) for regular users, Extra Strong (12-18mg) for experienced users, Ultra Strong (18mg+) for advanced users.' : '' } })),
-            ...ordersDelivery.map(q => ({ '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: typeof q.answer === 'string' ? q.answer : '' } })),
-            ...rewards.map(q => ({ '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: typeof q.answer === 'string' ? q.answer : '' } })),
-          ],
-        }}
       />
+      <FaqSchema items={faqSchemaItems} />
       <Layout showNicotineWarning={false}>
         <div className="container py-16">
           {/* Header */}

@@ -16,6 +16,7 @@ import {
 import { Filter } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
+import { ItemListSchema } from '@/components/seo/ItemListSchema';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
 const ITEMS_PER_PAGE = 20;
@@ -115,6 +116,17 @@ export default function ProductListing() {
     return sortedProducts.slice(start, start + ITEMS_PER_PAGE);
   }, [sortedProducts, currentPage]);
 
+  const itemListSchemaItems = useMemo(() => {
+    if (!SITE_URL || sortedProducts.length === 0) return [];
+    return sortedProducts.slice(0, 50).map((product, index) => ({
+      id: product.id,
+      name: product.name,
+      url: `${SITE_URL}/product/${product.id}`,
+      image: product.image || undefined,
+      position: index + 1,
+    }));
+  }, [sortedProducts]);
+
   const handleFilterChange = (newFilters: FilterState) => { setFilters(newFilters); setCurrentPage(1); };
   const handleRemoveFilter = (category: keyof FilterState, _value: string) => {
     const current = filters[category];
@@ -155,6 +167,9 @@ export default function ProductListing() {
         jsonLd={breadcrumbJsonLd}
         metaRobots={activeFilterCount > 1 ? 'noindex,follow' : undefined}
       />
+      {!isLoading && itemListSchemaItems.length > 0 && (
+        <ItemListSchema items={itemListSchemaItems} name={pageTitle} />
+      )}
       <Layout showNicotineWarning={false}>
         <div className="container py-8 lg:py-10">
           {/* Page header */}
