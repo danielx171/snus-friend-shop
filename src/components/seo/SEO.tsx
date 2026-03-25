@@ -1,6 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { SITE_URL } from '@/config/brand';
 
+/** Default OG image — uses the PWA icon as a reliable fallback */
+const DEFAULT_OG_IMAGE = '/pwa-512x512.png';
+
 interface SEOProps {
   title: string;
   description: string;
@@ -29,7 +32,7 @@ export function SEO({
   title,
   description,
   canonical,
-  ogImage = '/og-image.jpg',
+  ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
   twitterCard = 'summary_large_image',
   jsonLd,
@@ -38,6 +41,9 @@ export function SEO({
   const resolvedCanonical = canonical
     ? cleanCanonical(canonical)
     : cleanCanonical(SITE_URL + window.location.pathname + window.location.search);
+
+  // Social crawlers require absolute URLs for og:image / twitter:image
+  const resolvedOgImage = ogImage.startsWith('http') ? ogImage : `${SITE_URL}${ogImage}`;
 
   return (
     <Helmet>
@@ -50,14 +56,14 @@ export function SEO({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={ogType} />
-      <meta property="og:image" content={ogImage} />
+      <meta property="og:image" content={resolvedOgImage} />
       <meta property="og:url" content={resolvedCanonical} />
 
       {/* Twitter Card */}
       <meta name="twitter:card" content={twitterCard} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image" content={resolvedOgImage} />
 
       {/* JSON-LD Structured Data */}
       {jsonLd && (
