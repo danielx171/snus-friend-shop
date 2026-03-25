@@ -1,13 +1,11 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { useBrands, brandAccentColor, type Brand } from '@/hooks/useBrands';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+
 
 import { SITE_URL } from '@/config/brand';
 
@@ -101,12 +99,12 @@ export default function BrandsIndex() {
           <>
             {/* Featured Brands */}
             <section className="mb-12">
-              <h2 className="text-xl font-bold text-foreground mb-4">Featured Brands</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-5">
+              <h2 className="text-xl font-bold text-foreground mb-5">Featured Brands</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
                 {(isLoading ? Array.from({ length: 24 }) : topBrands).map((brand: unknown, index: number) => {
                   if (isLoading) {
                     return (
-                      <div key={index} className="h-48 rounded-2xl border border-border/40 bg-card animate-pulse" />
+                      <div key={index} className="aspect-[4/3] rounded-2xl border border-border/40 bg-card animate-pulse" />
                     );
                   }
                   const b = brand as Brand;
@@ -115,54 +113,36 @@ export default function BrandsIndex() {
                   return (
                     <motion.div
                       key={b.id}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 16 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.3 }}
-                      transition={{ duration: 0.4, delay: index * 0.07, ease: 'easeOut' }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.5), ease: 'easeOut' }}
                     >
                       <Link
                         to={`/brand/${b.slug}`}
                         className="group block h-full"
                       >
-                        <div className="relative h-full overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-200 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 hover:border-[hsl(0_0%_100%/0.3)]">
+                        <div className="relative h-full overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-200 ease-out hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 hover:border-white/20">
+                          {/* Top accent line */}
                           <div
-                            className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-2xl transition-all duration-200 group-hover:w-2"
+                            className="absolute top-0 left-0 right-0 h-0.5 transition-all duration-200 group-hover:h-1"
                             style={{ backgroundColor: accent }}
                           />
 
-                          <div className="p-5 md:p-6 pl-6 md:pl-7 flex flex-col h-full">
-                            <div className="flex items-center gap-3 mb-1">
-                              <div
-                                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white font-bold text-sm"
-                                style={{ backgroundColor: accent }}
-                              >
-                                {b.name.charAt(0)}
-                              </div>
-                              <h3 className="text-lg font-semibold text-foreground group-hover:text-[hsl(var(--chart-4))] transition-colors">
+                          <div className="p-4 flex flex-col items-center text-center gap-2.5 pt-5">
+                            <div
+                              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white font-bold text-base shadow-sm"
+                              style={{ backgroundColor: accent }}
+                            >
+                              {b.name.charAt(0)}
+                            </div>
+                            <div className="min-w-0 w-full">
+                              <h3 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors truncate">
                                 {b.name}
                               </h3>
-                            </div>
-                            <div className="mb-3 ml-[52px]">
-                              <Badge className="text-xs bg-[hsl(var(--chart-4)/0.15)] text-[hsl(var(--chart-4))] border-[hsl(var(--chart-4)/0.3)] hover:bg-[hsl(var(--chart-4)/0.2)]">
+                              <p className="text-[11px] text-muted-foreground mt-0.5">
                                 {b.productCount} products
-                              </Badge>
-                            </div>
-
-                            {b.manufacturer && (
-                              <p className="text-xs text-muted-foreground mb-4">
-                                by {b.manufacturer}
                               </p>
-                            )}
-
-                            <div className="mt-auto">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="w-full gap-2 rounded-xl border-[hsl(var(--chart-4)/0.3)] text-[hsl(var(--chart-4))] hover:bg-[hsl(var(--chart-4))] hover:text-white hover:border-[hsl(var(--chart-4))] transition-all duration-200"
-                              >
-                                View {b.name}
-                                <ArrowRight className="h-3.5 w-3.5" />
-                              </Button>
                             </div>
                           </div>
                         </div>

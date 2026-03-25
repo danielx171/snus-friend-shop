@@ -640,7 +640,7 @@ export default function ProductDetail() {
 
       {/* Mobile sticky CTA */}
       {!isOutOfStock && (
-        <div className="fixed bottom-0 left-0 right-0 border-t border-border/20 glass-panel-strong p-4 lg:hidden z-40">
+        <div className="fixed bottom-0 left-0 right-0 border-t border-border/20 glass-panel-strong p-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:hidden z-40">
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0">
               <span className="text-2xl font-bold text-foreground">{formatPrice(currentPrice)}</span>

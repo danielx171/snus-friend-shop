@@ -120,18 +120,17 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const configMap: Record<string, string> = {};
+    // deno-lint-ignore no-explicit-any
+    const configMap: Record<string, any> = {};
     for (const row of configRows ?? []) {
+      // JSONB columns are already parsed by Supabase — no JSON.parse needed
       configMap[row.key] = row.value;
     }
 
     const prizeWeights: Record<string, number> = configMap.prize_weights
-      ? JSON.parse(configMap.prize_weights)
-      : { points_5: 35, points_10: 25, points_25: 15, points_5b: 10, points_50: 5, voucher_15pct: 5, free_can: 4, free_month: 1 };
+      ?? { points_5: 35, points_10: 25, points_25: 15, points_5b: 10, points_50: 5, voucher_15pct: 5, free_can: 4, free_month: 1 };
 
-    const clearanceSku: string | null = configMap.clearance_sku
-      ? JSON.parse(configMap.clearance_sku)
-      : null;
+    const clearanceSku: string | null = configMap.clearance_sku ?? null;
 
     // 3. Weighted random pick
     const prizeKey = weightedRandomPick(prizeWeights);
@@ -167,7 +166,7 @@ Deno.serve(async (req: Request) => {
         .insert({
           user_id: userId,
           type: 'discount_pct',
-          value: JSON.stringify({ percent: 15 }),
+          value: { percent: 15 },
           expires_at: expiresAt,
           source: 'spin_wheel',
         })
@@ -190,7 +189,7 @@ Deno.serve(async (req: Request) => {
           .insert({
             user_id: userId,
             type: 'free_product',
-            value: JSON.stringify(clearanceSku),
+            value: { sku: clearanceSku },
             expires_at: expiresAt,
             source: 'spin_wheel',
           })
@@ -224,7 +223,7 @@ Deno.serve(async (req: Request) => {
         .insert({
           user_id: userId,
           type: 'free_month',
-          value: JSON.stringify({ note: 'Contact us to redeem' }),
+          value: { note: 'Contact us to redeem' },
           expires_at: expiresAt,
           source: 'spin_wheel',
         })
@@ -243,9 +242,9 @@ Deno.serve(async (req: Request) => {
 
     // 5. Update the daily_spins row with prize result
     const prizeValue = pointsAwarded
-      ? JSON.stringify({ points: pointsAwarded })
+      ? { points: pointsAwarded }
       : voucherId
-        ? JSON.stringify({ voucher_id: voucherId })
+        ? { voucher_id: voucherId }
         : null;
 
     await admin

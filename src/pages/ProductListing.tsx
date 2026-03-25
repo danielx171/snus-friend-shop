@@ -215,7 +215,7 @@ export default function ProductListing() {
                         )}
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="w-80 overflow-y-auto glass-panel-strong border-border/30">
+                    <SheetContent side="left" className="w-[85vw] sm:w-80 overflow-y-auto glass-panel-strong border-border/30">
                       <SheetTitle className="sr-only">Filters</SheetTitle>
                       <ProductFilters filters={filters} onFilterChange={handleFilterChange} onClose={() => setMobileFiltersOpen(false)} isMobile />
                     </SheetContent>
@@ -229,7 +229,7 @@ export default function ProductListing() {
                 <div className="flex items-center gap-2 shrink-0">
                   <span className="text-xs text-muted-foreground hidden sm:inline">Sort:</span>
                   <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                    <SelectTrigger className="w-44 rounded-xl h-9 text-xs border-border/30">
+                    <SelectTrigger className="w-auto sm:w-44 rounded-xl h-9 text-xs border-border/30">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="glass-panel-strong">
