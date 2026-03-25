@@ -40,6 +40,7 @@ const LeaderboardPage = lazy(() => import("./pages/LeaderboardPage"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const FlavorQuizPage = lazy(() => import("./pages/FlavorQuizPage"));
+const CommunityPage = lazy(() => import("./pages/CommunityPage"));
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsentBanner } from "@/components/cookie-consent/CookieConsentBanner";
 import { BackToTop } from "@/components/layout/BackToTop";
@@ -156,6 +157,7 @@ const App = () => {
               <Route path="/blog" element={<BlogIndex />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/flavor-quiz" element={<FlavorQuizPage />} />
+              <Route path="/community" element={<CommunityPage />} />
               <Route path="/shipping" element={<InfoPage title="Shipping Information" content={<>
                 <h2 className="text-foreground font-semibold text-lg">Free delivery</h2>
                 <p>All orders over €29 qualify for free standard delivery. No discount code needed — it's applied automatically at checkout.</p>

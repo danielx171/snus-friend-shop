@@ -95,6 +95,7 @@ export function MainNav() {
               { href: '/nicotine-pouches?badge=popular', label: 'Bestsellers' },
               { href: '/nicotine-pouches?badge=newPrice', label: 'Offers' },
               { href: '/brands', label: 'All Brands' },
+              { href: '/community', label: 'Community' },
               { href: '/rewards', label: 'Rewards' },
               { href: '/membership', label: 'Snus Family' },
             ].map((item) => (
