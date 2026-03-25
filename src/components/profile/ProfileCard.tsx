@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import UserAvatar from './UserAvatar';
 import type { AvatarRarity } from './UserAvatar';
 import type { Avatar, UserProfile, UpdateProfilePayload } from '@/hooks/useUserProfile';
+import { ReputationBadge } from '@/components/gamification/ReputationBadge';
+import { useReputation } from '@/hooks/useReputation';
 
 const BIO_MAX = 160;
 
@@ -64,6 +66,7 @@ const ProfileCard = React.memo(function ProfileCard({
     }
   }, [onSave, displayName, bio]);
 
+  const { data: reputation } = useReputation(profile?.user_id ?? null);
   const rarity = (avatarData?.rarity as AvatarRarity | undefined) ?? 'common';
   const isDirty =
     displayName.trim() !== (profile?.display_name ?? '').trim() ||
@@ -86,7 +89,13 @@ const ProfileCard = React.memo(function ProfileCard({
 
           <div className="flex-1 w-full space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="profile-display-name">Display name</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="profile-display-name">Display name</Label>
+                <ReputationBadge
+                  levelName={reputation?.levelName ?? ''}
+                  badgeColor={reputation?.badgeColor ?? 'gray'}
+                />
+              </div>
               <Input
                 id="profile-display-name"
                 placeholder="Choose a display name"

@@ -5,6 +5,7 @@ import { SITE_URL } from '@/config/brand';
 import { useLeaderboard, type LeaderboardEntry } from '@/hooks/useLeaderboard';
 import { Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ReputationBadge } from '@/components/gamification/ReputationBadge';
 
 const MEDAL_COLORS: Record<number, { bg: string; border: string; text: string }> = {
   1: { bg: 'from-yellow-500/20 to-yellow-600/5', border: 'border-yellow-500/40', text: 'text-yellow-400' },
@@ -73,9 +74,16 @@ const LeaderboardRow = React.memo(function LeaderboardRow({
 
       {/* Name */}
       <div className="flex-1 min-w-0">
-        <p className={`font-semibold text-foreground truncate ${isTop3 ? 'text-base' : 'text-sm'}`}>
-          {entry.display_name || 'Anonymous'}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className={`font-semibold text-foreground truncate ${isTop3 ? 'text-base' : 'text-sm'}`}>
+            {entry.display_name || 'Anonymous'}
+          </p>
+          <ReputationBadge
+            levelName={(entry as any).level_name ?? ''}
+            badgeColor={(entry as any).badge_color ?? 'gray'}
+            size="sm"
+          />
+        </div>
         {isTop3 && (
           <p className={`text-xs font-medium ${medal!.text}`}>
             {rank === 1 ? '1st Place' : rank === 2 ? '2nd Place' : '3rd Place'}

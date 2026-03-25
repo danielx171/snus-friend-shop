@@ -12,6 +12,7 @@ import type { CommunityComment } from '@/hooks/useCommunityComments';
 import { useCommunityComments } from '@/hooks/useCommunityComments';
 import { PollCard } from './PollCard';
 import type { PollData } from '@/hooks/useCommunityPolls';
+import { ReputationBadge } from '@/components/gamification/ReputationBadge';
 
 const SUPABASE_STORAGE_HOST = 'bozdnoctcszbhemdjsek.supabase.co';
 
@@ -129,6 +130,7 @@ export const PostCard = memo(function PostCard({
               <span className="text-sm font-medium truncate">
                 {post.profile?.display_name ?? 'Anonymous'}
               </span>
+              <ReputationBadge levelName="" badgeColor="gray" size="sm" />
               {post.pinned && (
                 <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
                   Pinned
