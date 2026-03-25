@@ -27,9 +27,11 @@ import { SEO } from '@/components/seo/SEO';
 import { formatPrice } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import { useUserProfile } from '@/hooks/useUserProfile';
+import { useAchievements } from '@/hooks/useAchievements';
 import ProfileCard from '@/components/profile/ProfileCard';
 import AvatarGallery from '@/components/profile/AvatarGallery';
 import { AttributeEditor } from '@/components/profile/AttributeEditor';
+import { AchievementGrid } from '@/components/gamification/AchievementGrid';
 
 type DisplayStatus = 'fulfilled' | 'processing' | 'pending' | 'cancelled';
 
@@ -76,6 +78,9 @@ export default function AccountPage() {
 
   // Gamification profile
   const { profile, avatars, unlockedAvatarIds, updateProfile } = useUserProfile(user?.id ?? null);
+
+  // Achievements
+  const { data: achievementData } = useAchievements(user?.id ?? null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -455,6 +460,16 @@ export default function AccountPage() {
                       <AttributeEditor userId={user.id} />
                     </CardContent>
                   </Card>
+                )}
+
+                {achievementData && (
+                  <section className="mt-8">
+                    <AchievementGrid
+                      grouped={achievementData.grouped}
+                      unlockedCount={achievementData.unlockedCount}
+                      totalCount={achievementData.totalCount}
+                    />
+                  </section>
                 )}
               </div>
             </TabsContent>
