@@ -146,7 +146,8 @@ function VoucherListInner({ vouchers, onApply, onClaim }: VoucherListProps) {
     return (
       <div className="text-center py-12 text-muted-foreground">
         <Gift className="h-10 w-10 mx-auto mb-3 opacity-40" />
-        <p className="text-sm">No vouchers yet — spin the wheel!</p>
+        <p className="text-sm font-semibold text-foreground mb-1">Your voucher pouch is empty</p>
+        <p className="text-sm">Earn points to unlock discounts</p>
       </div>
     );
   }

@@ -223,8 +223,10 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
                     key={size}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedPack(size); }}
                     disabled={isOutOfStock}
+                    aria-label={`Select pack of ${packNum}`}
+                    aria-pressed={selectedPack === size}
                     className={cn(
-                      'rounded-lg px-3 py-1.5 text-[10px] font-medium transition-all duration-150 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                      'rounded-lg px-3 py-2 text-[10px] font-medium transition-all duration-150 shrink-0 min-h-[36px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                       selectedPack === size
                         ? 'bg-primary text-primary-foreground shadow-sm'
                         : 'bg-muted/20 text-muted-foreground hover:bg-muted/40 border border-border/20',
@@ -306,7 +308,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               className={cn(
                 'w-full rounded-xl font-medium transition-all duration-[250ms] ease-out focus-visible:ring-2 focus-visible:ring-ring group-hover:brightness-110',
                 isCompact ? 'gap-1 text-xs' : 'gap-2 text-sm',
-                justAdded && 'bg-[#22c55e] hover:bg-[#22c55e] text-white',
+                justAdded && 'bg-emerald-500 hover:bg-emerald-500 text-white',
                 justAdded && 'atc-press'
               )}
               size="sm"
@@ -314,7 +316,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               {justAdded ? (
                 <span className="flex items-center gap-1.5">
                   <Check className={cn('shrink-0', isCompact ? 'h-3 w-3' : 'h-3.5 w-3.5')} />
-                  <span className="truncate">Added!</span>
+                  <span className="truncate">Pouched!</span>
                 </span>
               ) : (
                 <span className="flex items-center gap-1.5">

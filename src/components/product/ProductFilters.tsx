@@ -69,6 +69,8 @@ function FilterSection({
       <button
         type="button"
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-label={`${open ? 'Collapse' : 'Expand'} ${title} filter`}
         className="flex w-full items-center justify-between py-1 mb-2"
       >
         <h3 className="font-medium text-sm text-foreground">{title}</h3>

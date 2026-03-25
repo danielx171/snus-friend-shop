@@ -103,12 +103,12 @@ export function Header() {
         </Link>
 
         {/* Desktop nav links */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1 shrink-0">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               to={link.href}
-              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/[0.06]"
+              className="px-2.5 py-2 text-xs xl:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/[0.06]"
             >
               {link.label}
             </Link>
@@ -279,9 +279,9 @@ export function Header() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 80 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed bottom-6 right-6 z-[100] flex items-center gap-2.5 rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 shadow-2xl"
+            className="fixed bottom-6 right-6 z-[100] flex items-center gap-2.5 rounded-xl border border-white/10 bg-card px-4 py-3 shadow-2xl"
           >
-            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#22c55e]">
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500">
               <Check className="h-3 w-3 text-white" />
             </div>
             <span className="text-sm text-white font-medium max-w-[200px] truncate">

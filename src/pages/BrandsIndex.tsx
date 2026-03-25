@@ -67,7 +67,7 @@ export default function BrandsIndex() {
         </div>
 
         {filteredBrands ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {filteredBrands.map((brand) => {
               const accent = brandAccentColor(brand.name);
               return (
@@ -102,7 +102,7 @@ export default function BrandsIndex() {
             {/* Featured Brands */}
             <section className="mb-12">
               <h2 className="text-xl font-bold text-foreground mb-4">Featured Brands</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-5">
                 {(isLoading ? Array.from({ length: 24 }) : topBrands).map((brand: unknown, index: number) => {
                   if (isLoading) {
                     return (

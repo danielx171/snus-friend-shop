@@ -82,7 +82,7 @@ const PointsRedemption = React.memo(function PointsRedemption({ balance }: Props
         return (
           <div
             key={reward.type}
-            className="flex flex-col rounded-xl bg-card border border-border/40 p-4"
+            className="flex flex-col rounded-xl glass-panel p-4"
           >
             <div className="flex items-center gap-2 mb-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">

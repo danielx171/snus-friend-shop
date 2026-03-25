@@ -165,10 +165,13 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} SnusFriend. All rights reserved.
-              <span className="ml-2 text-muted-foreground/30 font-mono">v{__APP_VERSION__}</span>
-            </p>
+            <div className="text-xs text-muted-foreground">
+              <p>
+                © {new Date().getFullYear()} SnusFriend. All rights reserved.
+                <span className="ml-2 text-muted-foreground/30 font-mono">v{__APP_VERSION__}</span>
+              </p>
+              <p className="mt-1 text-muted-foreground/50">Made with ❤️ and a pouch under the lip</p>
+            </div>
             <div className="bg-amber-500/[0.06] border border-amber-500/10 rounded-lg px-4 py-2">
               <p className="text-xs text-amber-400/80">
                 ⚠️ This product contains nicotine. Nicotine is an addictive chemical.

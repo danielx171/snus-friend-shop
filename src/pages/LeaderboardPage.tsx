@@ -36,7 +36,7 @@ const LeaderboardRow = React.memo(function LeaderboardRow({
       className={`flex items-center gap-4 rounded-2xl border p-4 transition-all duration-200 ${
         isTop3
           ? `bg-gradient-to-r ${medal!.bg} ${medal!.border} shadow-lg`
-          : 'border-border/40 bg-card hover:border-white/[0.12] hover:bg-white/[0.03]'
+          : 'glass-panel hover:border-white/[0.12] hover:bg-white/[0.03]'
       }`}
     >
       {/* Rank */}
@@ -121,14 +121,15 @@ export default function LeaderboardPage() {
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={i}
-                className="h-[72px] rounded-2xl border border-border/40 bg-card animate-pulse"
+                className="h-[72px] rounded-2xl glass-panel animate-pulse"
               />
             ))}
           </div>
         ) : leaders.length === 0 ? (
-          <div className="rounded-2xl border border-border/40 bg-card p-12 text-center">
+          <div className="rounded-2xl glass-panel p-12 text-center">
             <Trophy className="h-12 w-12 mx-auto text-muted-foreground/40 mb-4" />
-            <p className="text-muted-foreground">No leaderboard data yet. Start earning SnusPoints to appear here!</p>
+            <h2 className="text-xl font-semibold text-foreground mb-2">The tin is fresh</h2>
+            <p className="text-muted-foreground">Start earning SnusPoints to claim your spot</p>
           </div>
         ) : (
           <div className="space-y-3 max-w-2xl">

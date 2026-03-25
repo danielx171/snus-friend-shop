@@ -245,7 +245,7 @@ export default function ProductListing() {
 
               {/* Product grid */}
               {isLoading ? (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                   {Array.from({ length: 10 }).map((_, i) => <ProductCardSkeleton key={i} variant="compact" />)}
                 </div>
               ) : isError ? (
@@ -255,7 +255,7 @@ export default function ProductListing() {
                 </div>
               ) : paginatedProducts.length > 0 ? (
                 <div
-                  className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 transition-opacity duration-100"
+                  className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 transition-opacity duration-100"
                   style={{ opacity: gridVisible ? 1 : 0 }}
                 >
                   {paginatedProducts.map((product) => (

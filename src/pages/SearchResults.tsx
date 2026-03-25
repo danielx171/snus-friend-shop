@@ -189,18 +189,18 @@ export default function SearchResults() {
 
               {/* Results Grid */}
               {isLoading ? (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                   {Array.from({ length: 10 }).map((_, i) => <ProductCardSkeleton key={i} variant="compact" />)}
                 </div>
               ) : paginatedResults.length > 0 ? (
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                   {paginatedResults.map(p => <ProductCard key={p.id} product={p} variant="compact" />)}
                 </div>
               ) : (
                 <EmptyState
                   variant="search"
-                  title={query ? `No results for "${query}"` : 'Start searching'}
-                  description={query ? 'Try a different term or browse our full range.' : 'Type a product name, brand, or flavour to get started.'}
+                  title={query ? 'Nothing under the lid' : 'Start searching'}
+                  description={query ? 'Try a different search or browse our full range' : 'Type a product name, brand, or flavour to get started.'}
                   actionLabel="Browse all products"
                   actionHref="/nicotine-pouches"
                 />

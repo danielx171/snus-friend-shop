@@ -26,7 +26,7 @@ export const RecentlyViewed = React.memo(function RecentlyViewed({ excludeId }: 
         <h2 className="text-xl font-bold text-foreground tracking-tight mb-6">Recently Viewed</h2>
         <div className="flex overflow-x-auto gap-4 pb-2 snap-x snap-mandatory scrollbar-hide">
           {recentProducts.map((product) => (
-            <div key={product!.id} className="flex-shrink-0 w-[200px] snap-start">
+            <div key={product!.id} className="flex-shrink-0 w-[180px] sm:w-[200px] snap-start">
               <ProductCard product={product!} />
             </div>
           ))}

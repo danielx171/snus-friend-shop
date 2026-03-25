@@ -171,17 +171,19 @@ export default function CartPage() {
                                 variant="outline"
                                 size="icon"
                                 className="h-8 w-8"
+                                aria-label={`Decrease quantity of ${item.product.name}`}
                                 onClick={() =>
                                   updateQuantity(item.product.id, item.packSize, item.quantity - 1)
                                 }
                               >
                                 <Minus className="h-4 w-4" />
                               </Button>
-                              <span className="w-8 text-center font-medium">{item.quantity}</span>
+                              <span className="w-8 text-center font-medium" aria-live="polite">{item.quantity}</span>
                               <Button
                                 variant="outline"
                                 size="icon"
                                 className="h-8 w-8"
+                                aria-label={`Increase quantity of ${item.product.name}`}
                                 onClick={() =>
                                   updateQuantity(item.product.id, item.packSize, item.quantity + 1)
                                 }
