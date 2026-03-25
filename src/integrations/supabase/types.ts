@@ -1204,6 +1204,33 @@ export type Database = {
           },
         ]
       }
+      login_streaks: {
+        Row: {
+          user_id: string
+          current_streak: number
+          longest_streak: number
+          last_login_date: string
+          total_login_days: number
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          current_streak?: number
+          longest_streak?: number
+          last_login_date?: string
+          total_login_days?: number
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          current_streak?: number
+          longest_streak?: number
+          last_login_date?: string
+          total_login_days?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       checkout_upsells: {
         Row: {
           active: boolean
@@ -1288,6 +1315,12 @@ export type Database = {
         Args: {
           p_code: string
           p_new_user_id: string
+        }
+        Returns: Json
+      }
+      record_daily_login: {
+        Args: {
+          p_user_id: string
         }
         Returns: Json
       }

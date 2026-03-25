@@ -351,6 +351,46 @@ Deno.serve(async (req: Request) => {
         },
         body: JSON.stringify({ user_id: userId }),
       }).catch(() => {});
+
+      // --- Fire-and-forget: Discord webhook for completed quests ---
+      for (const completed of newlyCompleted) {
+        const matchingQuest = relevantQuests.find(
+          (q: { id: string; quest_type: string; target_value: number; reward_points: number; reward_avatar_id: string | null }) => q.id === completed.quest_id
+        );
+        fetch(`${projectUrl}/functions/v1/discord-webhook`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-internal-function-secret': chainSecret,
+          },
+          body: JSON.stringify({
+            event_type: 'quest_complete',
+            data: {
+              username: body.username ?? 'A snuser',
+              quest_name: matchingQuest?.quest_type ?? 'Unknown Quest',
+              points: completed.reward_points,
+            },
+          }),
+        }).catch(() => {});
+
+        // If an avatar was unlocked, also fire an achievement event
+        if (completed.reward_avatar_id) {
+          fetch(`${projectUrl}/functions/v1/discord-webhook`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-internal-function-secret': chainSecret,
+            },
+            body: JSON.stringify({
+              event_type: 'achievement',
+              data: {
+                username: body.username ?? 'A snuser',
+                avatar_name: completed.reward_avatar_id,
+              },
+            }),
+          }).catch(() => {});
+        }
+      }
     }
 
     console.log('update-quest-progress result', {

@@ -68,3 +68,6 @@ verify_jwt = false
 
 [functions.redeem-referral]
 verify_jwt = false
+
+[functions.discord-webhook]
+verify_jwt = true

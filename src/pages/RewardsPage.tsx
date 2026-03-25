@@ -17,6 +17,8 @@ import PrizeReveal from '@/components/rewards/PrizeReveal';
 import VoucherList from '@/components/rewards/VoucherList';
 import QuestBoard from '@/components/quests/QuestBoard';
 import PointsRedemption from '@/components/rewards/PointsRedemption';
+import StreakBanner from '@/components/rewards/StreakBanner';
+import { useLoginStreak } from '@/hooks/useLoginStreak';
 
 /* ------------------------------------------------------------------ */
 /*  Tab type                                                           */
@@ -54,6 +56,7 @@ export default function RewardsPage() {
   const spinMutation = useSpinWheel();
   const vouchersQuery = useVouchers(userId);
   const questsQuery = useQuests(userId);
+  const loginStreak = useLoginStreak(userId);
 
   const hasSpunToday = spinStatus.data === true;
 
@@ -105,6 +108,16 @@ export default function RewardsPage() {
         canonical={`${SITE_URL}/rewards`}
       />
       <div className="container mx-auto max-w-2xl px-4 py-8">
+
+        {/* Streak banner */}
+        {userId && (
+          <StreakBanner
+            streak={loginStreak.streak}
+            longestStreak={loginStreak.longestStreak}
+            totalDays={loginStreak.totalDays}
+            isLoading={loginStreak.isLoading}
+          />
+        )}
 
         {/* Points balance strip */}
         <div className="flex items-center justify-between rounded-xl bg-card border border-border/40 px-5 py-3 mb-6">

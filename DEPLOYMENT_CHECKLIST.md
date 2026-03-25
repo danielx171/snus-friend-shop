@@ -57,7 +57,9 @@ Backend: Supabase (already hosted)
 - [x] Store Vault secret for nightly ops queue scheduler: `OPS_ALERTS_CRON_SECRET`.
 - [ ] Set `RESEND_API_KEY` for transactional email via Resend (`send-email`).
 - [ ] Set `DEEPSEEK_API_KEY` for AI-powered review summary generation (`generate-review-summary`).
-- [x] Confirm `supabase/config.toml` has explicit entries for all 15 functions.
+- [ ] Set `DISCORD_WEBHOOK_REVIEWS` — Discord webhook URL for #reviews channel (`discord-webhook`).
+- [ ] Set `DISCORD_WEBHOOK_ACHIEVEMENTS` — Discord webhook URL for #achievements channel (`discord-webhook`).
+- [x] Confirm `supabase/config.toml` has explicit entries for all 16 functions.
 - [x] Deploy DB migrations in order.
 - [x] Deploy Edge Functions.
 - [x] Register Nyehandel webhook URL pointing to `/functions/v1/nyehandel-webhook`.
