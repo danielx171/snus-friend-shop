@@ -1032,6 +1032,109 @@ export type Database = {
           },
         ]
       }
+      community_questions: {
+        Row: {
+          id: string
+          user_id: string
+          title: string
+          body: string | null
+          category: string
+          votes: number
+          answers_count: number
+          accepted_answer_id: string | null
+          is_resolved: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          title: string
+          body?: string | null
+          category?: string
+          votes?: number
+          answers_count?: number
+          accepted_answer_id?: string | null
+          is_resolved?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          title?: string
+          body?: string | null
+          category?: string
+          votes?: number
+          answers_count?: number
+          accepted_answer_id?: string | null
+          is_resolved?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      community_answers: {
+        Row: {
+          id: string
+          question_id: string
+          user_id: string
+          body: string
+          votes: number
+          is_accepted: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          question_id: string
+          user_id: string
+          body: string
+          votes?: number
+          is_accepted?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          question_id?: string
+          user_id?: string
+          body?: string
+          votes?: number
+          is_accepted?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "community_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_answer_votes: {
+        Row: {
+          user_id: string
+          answer_id: string
+          vote: number
+        }
+        Insert: {
+          user_id: string
+          answer_id: string
+          vote: number
+        }
+        Update: {
+          user_id?: string
+          answer_id?: string
+          vote?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_answer_votes_answer_id_fkey"
+            columns: ["answer_id"]
+            isOneToOne: false
+            referencedRelation: "community_answers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quests: {
         Row: {
           active: boolean
