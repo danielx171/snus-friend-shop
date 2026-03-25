@@ -35,6 +35,48 @@ export type Database = {
         }
         Relationships: []
       }
+      achievements: {
+        Row: {
+          id: string
+          slug: string
+          category: string
+          tier: string
+          title: string
+          description: string
+          icon: string
+          threshold: number
+          points_reward: number
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          category: string
+          tier: string
+          title: string
+          description: string
+          icon?: string
+          threshold: number
+          points_reward?: number
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          category?: string
+          tier?: string
+          title?: string
+          description?: string
+          icon?: string
+          threshold?: number
+          points_reward?: number
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
       avatars: {
         Row: {
           id: string
@@ -961,6 +1003,33 @@ export type Database = {
           },
         ]
       }
+      user_achievements: {
+        Row: {
+          id: string
+          user_id: string
+          achievement_id: string
+          progress: number
+          unlocked_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          achievement_id: string
+          progress?: number
+          unlocked_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          achievement_id?: string
+          progress?: number
+          unlocked_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       user_attributes: {
         Row: {
           user_id: string
@@ -1563,6 +1632,8 @@ export type Database = {
       }
     }
     Enums: {
+      achievement_category: "reviews" | "orders" | "community" | "referrals" | "milestone"
+      achievement_tier: "bronze" | "silver" | "gold" | "diamond" | "single"
       app_role: "admin" | "user"
       challenge_type: "review_count" | "order_count" | "community_posts" | "referral_count"
     }
