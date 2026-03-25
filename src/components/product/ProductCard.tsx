@@ -120,7 +120,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
               )}
             />
           </button>
-          <div className="h-full w-full relative z-10 transition-transform duration-300 ease-out group-hover:scale-[1.03]">
+          <div className="h-full w-full relative transition-transform duration-300 ease-out group-hover:scale-[1.03]">
           {product.image ? (
             <img
               src={product.image}
@@ -154,7 +154,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
           )}
 
           {/* Badges */}
-          <div className="absolute left-2.5 top-2.5 flex flex-wrap gap-1">
+          <div className="absolute left-2.5 top-2.5 flex flex-wrap gap-1 z-20">
             {isOutOfStock ? (
               <Badge className="text-[10px] font-semibold rounded-full px-2 py-0.5 shadow-sm border-0 bg-background/80 text-muted-foreground backdrop-blur-sm">
                 Out of Stock
