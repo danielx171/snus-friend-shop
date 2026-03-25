@@ -11,8 +11,8 @@ export function ProductCardSkeleton({ variant = 'default' }: ProductCardSkeleton
     <Card className="overflow-hidden rounded-2xl border-white/[0.06] bg-card/90">
       {/* Circular image placeholder */}
       <div
-        className="flex items-center justify-center"
-        style={{ aspectRatio: isCompact ? '3/2' : '1', background: 'radial-gradient(circle at 50% 40%, rgba(30,50,90,0.4), rgba(15,30,65,0.2))' }}
+        className="flex items-center justify-center product-image-bg"
+        style={{ aspectRatio: isCompact ? '3/2' : '1' }}
       >
         <Skeleton className="rounded-full" style={{ width: '60%', height: '60%' }} />
       </div>

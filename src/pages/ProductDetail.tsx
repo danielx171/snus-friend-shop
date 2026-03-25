@@ -158,15 +158,13 @@ export default function ProductDetail() {
               >
                 <Card className="overflow-hidden rounded-2xl border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.2)] bg-transparent">
                   <div
-                    className="relative aspect-square group/img"
-                    style={{ background: 'radial-gradient(circle at 50% 40%, rgba(40,60,100,0.3), rgba(15,25,55,0.15))' }}
+                    className="relative aspect-square group/img product-image-bg"
                   >
                     {product.image ? (
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="h-full w-full object-cover pdp-image-hover"
-                        style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))', boxShadow: '0 0 40px rgba(80, 120, 255, 0.15)' }}
+                        className="h-full w-full object-cover pdp-image-hover drop-shadow-lg"
                         loading="eager"
                       />
                     ) : (

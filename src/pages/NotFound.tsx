@@ -76,20 +76,7 @@ const NotFound = () => {
         </div>
       </div>
 
-      <style>{`
-        .notfound-gradient {
-          background: linear-gradient(135deg, hsl(220 80% 60%), hsl(270 70% 60%), hsl(220 80% 60%));
-          background-size: 200% 200%;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: notfound-shift 4s ease-in-out infinite;
-        }
-        @keyframes notfound-shift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-      `}</style>
+{/* notfound-gradient class defined in index.css with theme-aware colors */}
     </Layout>
   );
 };

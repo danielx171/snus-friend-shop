@@ -40,19 +40,16 @@ export default function HomePage() {
         {/* Marquee — keeps own bg */}
         <PromoMarquee />
 
-        {/* Category filter — slightly lighter navy */}
-        <div style={{ background: 'rgba(15, 35, 75, 0.5)' }} className="border-t border-white/[0.04]">
+        {/* Category filter */}
+        <div className="homepage-section-alt border-t border-border/10">
           <CategoryShortcuts />
         </div>
 
-        {/* Trust badges — keep */}
+        {/* Trust badges */}
         <TrustBar />
 
-        {/* Bestsellers — base navy */}
-        <div
-          className="border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 100% 10%)' }}
-        >
+        {/* Bestsellers */}
+        <div className="homepage-section-base border-t border-border/10">
           <FeaturedProducts
             title="Bestsellers"
             filterFn={(p) => p.badgeKeys.includes('popular')}
@@ -62,32 +59,18 @@ export default function HomePage() {
         </div>
 
         {/* Discover Brands carousel */}
-        <div
-          className="border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 80% 12%)' }}
-        >
+        <div className="homepage-section-alt border-t border-border/10">
           <BrandCarousel />
         </div>
 
-        {/* Explore & Discover — slightly lighter navy with radial glow */}
-        <div
-          className="relative border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 80% 12%)' }}
-        >
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(50, 80, 150, 0.08), transparent)',
-            }}
-          />
+        {/* Explore & Discover — with radial glow */}
+        <div className="relative homepage-section-alt border-t border-border/10">
+          <div className="absolute inset-0 pointer-events-none homepage-section-glow" />
           <EditorialHighlights />
         </div>
 
-        {/* Special Offers — base navy */}
-        <div
-          className="border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 100% 10%)' }}
-        >
+        {/* Special Offers */}
+        <div className="homepage-section-base border-t border-border/10">
           <FeaturedProducts
             title="Special Offers"
             filterFn={(p) => p.badgeKeys.includes('newPrice')}
@@ -96,33 +79,19 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Snus Family Club — slightly lighter navy with purple gradient */}
-        <div
-          className="relative border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 80% 12%)' }}
-        >
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'linear-gradient(180deg, transparent 0%, rgba(30, 20, 60, 0.3) 60%, rgba(30, 20, 60, 0.3) 100%)',
-            }}
-          />
+        {/* Snus Family Club — with fade overlay */}
+        <div className="relative homepage-section-alt border-t border-border/10">
+          <div className="absolute inset-0 pointer-events-none homepage-section-fade" />
           <MembersClub />
         </div>
 
-        {/* Why SnusFriend — base navy */}
-        <div
-          className="border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 100% 10%)' }}
-        >
+        {/* Why SnusFriend */}
+        <div className="homepage-section-base border-t border-border/10">
           <WhySnusFriends />
         </div>
 
-        {/* New Arrivals — slightly lighter navy */}
-        <div
-          className="border-t border-white/[0.04]"
-          style={{ background: 'hsl(220 80% 12%)' }}
-        >
+        {/* New Arrivals */}
+        <div className="homepage-section-alt border-t border-border/10">
           <FeaturedProducts
             title="New Arrivals"
             filterFn={(p) => p.badgeKeys.includes('new')}

@@ -102,11 +102,8 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
       <Link to={`/product/${product.id}`} aria-label={product.name}>
         {/* Image area */}
         <div
-          className="product-card-image relative overflow-hidden"
-          style={{
-            aspectRatio: isCompact ? '3/2' : '1',
-            background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.07), rgba(255,255,255,0.02))',
-          }}
+          className="product-card-image product-card-image-bg relative overflow-hidden"
+          style={{ aspectRatio: isCompact ? '3/2' : '1' }}
         >
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product.id); }}
