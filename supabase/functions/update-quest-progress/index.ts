@@ -41,31 +41,50 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // --- Authenticate user from JWT ---
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'unauthorized', requestId }),
-        { status: 401, headers: JSON_HEADERS }
-      );
-    }
-
-    const userClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY') ?? '', {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: { user }, error: userError } = await userClient.auth.getUser();
-
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'unauthorized', requestId }),
-        { status: 401, headers: JSON_HEADERS }
-      );
-    }
-
-    const userId = user.id;
-
-    // --- Parse & validate input ---
+    // --- Parse body early (needed for both auth paths) ---
     const body = await req.json().catch(() => null);
+
+    // --- Authenticate: JWT or internal-function-secret ---
+    let userId: string;
+
+    const internalSecret = Deno.env.get('INTERNAL_FUNCTIONS_SECRET');
+    const providedInternal = req.headers.get('x-internal-function-secret');
+
+    if (internalSecret && providedInternal && providedInternal === internalSecret) {
+      // Internal service-to-service call — read user_id from body
+      if (!body || typeof body.user_id !== 'string') {
+        return new Response(
+          JSON.stringify({ error: 'invalid_input', message: 'Body must contain { user_id: string } for internal calls', requestId }),
+          { status: 400, headers: JSON_HEADERS }
+        );
+      }
+      userId = body.user_id;
+    } else {
+      // JWT auth path
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader) {
+        return new Response(
+          JSON.stringify({ error: 'unauthorized', requestId }),
+          { status: 401, headers: JSON_HEADERS }
+        );
+      }
+
+      const userClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY') ?? '', {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data: { user }, error: userError } = await userClient.auth.getUser();
+
+      if (userError || !user) {
+        return new Response(
+          JSON.stringify({ error: 'unauthorized', requestId }),
+          { status: 401, headers: JSON_HEADERS }
+        );
+      }
+
+      userId = user.id;
+    }
+
+    // --- Validate input ---
     if (!body || typeof body.action !== 'string') {
       return new Response(
         JSON.stringify({ error: 'invalid_input', message: 'Body must contain { action: string }', requestId }),
@@ -318,6 +337,20 @@ Deno.serve(async (req: Request) => {
           }
         }
       }
+    }
+
+    // --- Fire-and-forget: check avatar unlocks ---
+    const projectUrl = Deno.env.get('SUPABASE_URL');
+    const chainSecret = Deno.env.get('INTERNAL_FUNCTIONS_SECRET');
+    if (projectUrl && chainSecret) {
+      fetch(`${projectUrl}/functions/v1/check-avatar-unlocks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-internal-function-secret': chainSecret,
+        },
+        body: JSON.stringify({ user_id: userId }),
+      }).catch(() => {});
     }
 
     console.log('update-quest-progress result', {
