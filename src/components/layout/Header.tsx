@@ -101,8 +101,21 @@ export function Header() {
           </span>
         </Link>
 
+        {/* Desktop nav links */}
+        <nav className="hidden lg:flex items-center gap-1">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/[0.06]"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
         {/* Search - Desktop */}
-        <div className="hidden md:flex flex-1 max-w-lg mx-8">
+        <div className="hidden md:flex flex-1 max-w-md ml-auto mr-2">
           <SearchAutocomplete />
         </div>
 

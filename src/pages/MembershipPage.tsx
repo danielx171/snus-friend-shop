@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useSnusPoints } from '@/hooks/useSnusPoints';
+import { useMembership } from '@/hooks/useMembership';
 
 import { SITE_URL } from '@/config/brand';
 
@@ -102,6 +103,7 @@ export default function MembershipPage() {
   }, []);
 
   const { data: pointsData } = useSnusPoints(userId);
+  const { data: membershipData } = useMembership(userId);
   const pts = pointsData?.balance ?? 0;
   const pct = Math.min((pts / SNUSPOINTS.freeTrialCost) * 100, 100);
   const remaining = Math.max(SNUSPOINTS.freeTrialCost - pts, 0);
@@ -248,17 +250,82 @@ export default function MembershipPage() {
                         ))}
                       </ul>
 
-                      <Button
-                        disabled
-                        className={cn(
-                          'w-full rounded-xl h-11 font-semibold',
-                          isVip
-                            ? 'bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)]'
-                            : ''
-                        )}
-                      >
-                        Coming Soon
-                      </Button>
+                      {/* Tier status button */}
+                      {(() => {
+                        const currentTierId = membershipData?.currentTier?.id;
+                        const isCurrentTier = userId && currentTierId === tier.id;
+                        const isUpgrade = userId && currentTierId === 'member' && tier.id === 'vip';
+
+                        if (!userId) {
+                          return (
+                            <Button
+                              asChild
+                              className={cn(
+                                'w-full rounded-xl h-11 font-semibold',
+                                isVip
+                                  ? 'bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)] hover:bg-[hsl(var(--chart-4)/0.9)]'
+                                  : ''
+                              )}
+                            >
+                              <Link to="/login">Sign in to see your tier</Link>
+                            </Button>
+                          );
+                        }
+
+                        if (isCurrentTier) {
+                          return (
+                            <div className="space-y-2">
+                              <Button
+                                disabled
+                                className={cn(
+                                  'w-full rounded-xl h-11 font-semibold',
+                                  isVip
+                                    ? 'bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)]'
+                                    : ''
+                                )}
+                              >
+                                <Check className="h-4 w-4 mr-1.5" />
+                                Your Current Tier
+                              </Button>
+                              {membershipData?.nextTier && !isVip && (
+                                <p className="text-xs text-muted-foreground text-center">
+                                  <span className="font-semibold text-foreground">{membershipData.pointsToNextTier.toLocaleString()}</span> points to {membershipData.nextTier.name}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        if (isUpgrade) {
+                          return (
+                            <div className="space-y-2">
+                              <div className="w-full h-2 rounded-full bg-muted/40 overflow-hidden">
+                                <div
+                                  className="h-full rounded-full transition-all duration-700"
+                                  style={{
+                                    width: `${membershipData?.progressPct ?? 0}%`,
+                                    background: 'linear-gradient(90deg, hsl(var(--chart-2)), hsl(var(--chart-4)))',
+                                  }}
+                                />
+                              </div>
+                              <p className="text-xs text-muted-foreground text-center">
+                                <span className="font-semibold text-foreground">{membershipData?.pointsToNextTier.toLocaleString()}</span> points to unlock VIP
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        // Fallback (e.g. already VIP looking at member card)
+                        return (
+                          <Button
+                            disabled
+                            variant="outline"
+                            className="w-full rounded-xl h-11 font-semibold"
+                          >
+                            Included in your plan
+                          </Button>
+                        );
+                      })()}
                     </div>
                   </div>
                 );

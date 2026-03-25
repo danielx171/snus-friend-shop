@@ -131,19 +131,19 @@ export default function BrandsIndex() {
                           />
 
                           <div className="p-5 md:p-6 pl-6 md:pl-7 flex flex-col h-full">
-                            <div className="flex items-start justify-between gap-3 mb-3">
-                              <div className="flex items-center gap-3">
-                                <div
-                                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white font-bold text-sm"
-                                  style={{ backgroundColor: accent }}
-                                >
-                                  {b.name.charAt(0)}
-                                </div>
-                                <h3 className="text-lg font-semibold text-foreground group-hover:text-[hsl(var(--chart-4))] transition-colors">
-                                  {b.name}
-                                </h3>
+                            <div className="flex items-center gap-3 mb-1">
+                              <div
+                                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white font-bold text-sm"
+                                style={{ backgroundColor: accent }}
+                              >
+                                {b.name.charAt(0)}
                               </div>
-                              <Badge className="shrink-0 text-xs bg-[hsl(var(--chart-4)/0.15)] text-[hsl(var(--chart-4))] border-[hsl(var(--chart-4)/0.3)] hover:bg-[hsl(var(--chart-4)/0.2)]">
+                              <h3 className="text-lg font-semibold text-foreground group-hover:text-[hsl(var(--chart-4))] transition-colors">
+                                {b.name}
+                              </h3>
+                            </div>
+                            <div className="mb-3 ml-[52px]">
+                              <Badge className="text-xs bg-[hsl(var(--chart-4)/0.15)] text-[hsl(var(--chart-4))] border-[hsl(var(--chart-4)/0.3)] hover:bg-[hsl(var(--chart-4)/0.2)]">
                                 {b.productCount} products
                               </Badge>
                             </div>

@@ -59,3 +59,9 @@ verify_jwt = false
 
 [functions.generate-review-summary]
 verify_jwt = false
+
+[functions.send-email]
+verify_jwt = false
+
+[functions.redeem-points]
+verify_jwt = false

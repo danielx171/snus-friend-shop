@@ -16,12 +16,13 @@ import SpinWheel from '@/components/rewards/SpinWheel';
 import PrizeReveal from '@/components/rewards/PrizeReveal';
 import VoucherList from '@/components/rewards/VoucherList';
 import QuestBoard from '@/components/quests/QuestBoard';
+import PointsRedemption from '@/components/rewards/PointsRedemption';
 
 /* ------------------------------------------------------------------ */
 /*  Tab type                                                           */
 /* ------------------------------------------------------------------ */
 
-type Tab = 'spin' | 'quests' | 'vouchers';
+type Tab = 'spin' | 'quests' | 'vouchers' | 'redeem';
 
 /* ------------------------------------------------------------------ */
 /*  Page                                                               */
@@ -93,6 +94,7 @@ export default function RewardsPage() {
     { id: 'spin', label: 'Spin' },
     { id: 'quests', label: 'Quests' },
     { id: 'vouchers', label: 'Vouchers' },
+    { id: 'redeem', label: 'Redeem' },
   ];
 
   return (
@@ -227,6 +229,37 @@ export default function RewardsPage() {
               <div className="text-center mb-8 p-4 rounded-xl bg-muted/50 border border-border/30">
                 <p className="text-sm text-muted-foreground mb-3">
                   Sign in to see your vouchers
+                </p>
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => navigate('/login')}
+                  className="gap-2"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Sign in
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ---- Redeem tab ---- */}
+        {activeTab === 'redeem' && (
+          <>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-1">Redeem Points</h2>
+              <p className="text-sm text-muted-foreground">
+                Spend your SnusPoints on discounts and rewards
+              </p>
+            </div>
+
+            {userId ? (
+              <PointsRedemption balance={pointsQuery.data?.balance ?? 0} />
+            ) : (
+              <div className="text-center mb-8 p-4 rounded-xl bg-muted/50 border border-border/30">
+                <p className="text-sm text-muted-foreground mb-3">
+                  Sign in to redeem your points
                 </p>
                 <Button
                   variant="default"

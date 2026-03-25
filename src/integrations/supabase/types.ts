@@ -497,6 +497,39 @@ export type Database = {
         Update: { id?: string; user_id?: string; type?: string; value?: Json; status?: string; source?: string; expires_at?: string; used_at?: string | null; created_at?: string }
         Relationships: []
       }
+      points_redemptions: {
+        Row: {
+          id: string
+          user_id: string
+          points_spent: number
+          reward_type: string
+          reward_value: number | null
+          voucher_id: string | null
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          points_spent: number
+          reward_type: string
+          reward_value?: number | null
+          voucher_id?: string | null
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          points_spent?: number
+          reward_type?: string
+          reward_value?: number | null
+          voucher_id?: string | null
+          status?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
       spin_config: {
         Row: { key: string; value: Json; updated_at: string }
         Insert: { key: string; value: Json; updated_at?: string }
@@ -1052,6 +1085,65 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      membership_tiers: {
+        Row: {
+          id: string
+          name: string
+          min_points_lifetime: number
+          benefits: Json
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id: string
+          name: string
+          min_points_lifetime: number
+          benefits?: Json
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          min_points_lifetime?: number
+          benefits?: Json
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
+      user_memberships: {
+        Row: {
+          user_id: string
+          tier_id: string
+          lifetime_points: number
+          tier_updated_at: string
+          created_at: string
+        }
+        Insert: {
+          user_id: string
+          tier_id?: string
+          lifetime_points?: number
+          tier_updated_at?: string
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          tier_id?: string
+          lifetime_points?: number
+          tier_updated_at?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_memberships_tier_id_fkey"
+            columns: ["tier_id"]
+            isOneToOne: false
+            referencedRelation: "membership_tiers"
             referencedColumns: ["id"]
           },
         ]

@@ -179,7 +179,7 @@ Deno.serve(async (req) => {
   /* ---------- look up order ---------- */
   const { data: order, error: lookupError } = await adminClient
     .from("orders")
-    .select("id, checkout_status")
+    .select("id, checkout_status, customer_email, customer_name")
     .eq("nyehandel_order_id", nyehandelOrderId)
     .maybeSingle();
 
@@ -220,6 +220,46 @@ Deno.serve(async (req) => {
       .from("webhook_inbox")
       .update({ status: "processed", processed_at: new Date().toISOString() })
       .eq("id", inboxRowId);
+  }
+
+  /* ---------- fire-and-forget: send shipped email ---------- */
+  const customerEmail = order.customer_email;
+  const customerName = order.customer_name;
+  const internalSecret = Deno.env.get("INTERNAL_FUNCTIONS_SECRET");
+  const supabaseFunctionsUrl = supabaseUrl?.replace(".supabase.co", ".supabase.co/functions/v1");
+
+  if (customerEmail && internalSecret && supabaseFunctionsUrl) {
+    fetch(`${supabaseFunctionsUrl}/send-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-function-secret": internalSecret,
+      },
+      body: JSON.stringify({
+        to: customerEmail,
+        subject: `Your SnusFriend order #${nyehandelOrderId} has shipped!`,
+        template: "order_shipped",
+        data: {
+          orderId: nyehandelOrderId,
+          customerName: customerName ?? "Customer",
+          trackingUrl: trackingUrl ?? "",
+          trackingId: trackingId ?? "",
+          carrier: "",
+        },
+      }),
+    }).catch((err) => {
+      console.error(JSON.stringify({
+        requestId,
+        event: "delivery_callback_email_fire_failed",
+        error: String(err),
+      }));
+    });
+  } else {
+    console.log(JSON.stringify({
+      requestId,
+      event: "delivery_callback_email_skipped",
+      reason: !customerEmail ? "no_customer_email" : !internalSecret ? "no_internal_secret" : "no_functions_url",
+    }));
   }
 
   console.log(JSON.stringify({

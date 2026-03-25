@@ -27,6 +27,7 @@ Backend: Supabase (already hosted)
 | SYNC_CRON_SECRET | any strong string | Auth for pg_cron auto-sync invocations |
 | DELIVERY_WEBHOOK_SECRET | any strong string | Auth for delivery callback webhook |
 | ALLOWED_ORIGIN | https://yourdomain.com | CORS lock for checkout (production domain) |
+| RESEND_API_KEY | from Resend dashboard | Transactional email (order confirmations, shipping) |
 | DEEPSEEK_API_KEY | from DeepSeek dashboard | AI review summary generation (optional) |
 
 ## To spin up a new brand
@@ -54,8 +55,9 @@ Backend: Supabase (already hosted)
 - [x] Set `OPS_ALERTS_CRON_SECRET` and pass `x-cron-secret` for `ops-b2b-queues` invocations.
 - [x] Store Vault secrets for scheduler: `SUPABASE_FUNCTIONS_BASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `RETRY_FAILED_ORDERS_SECRET`.
 - [x] Store Vault secret for nightly ops queue scheduler: `OPS_ALERTS_CRON_SECRET`.
+- [ ] Set `RESEND_API_KEY` for transactional email via Resend (`send-email`).
 - [ ] Set `DEEPSEEK_API_KEY` for AI-powered review summary generation (`generate-review-summary`).
-- [x] Confirm `supabase/config.toml` has explicit entries for all 14 functions.
+- [x] Confirm `supabase/config.toml` has explicit entries for all 15 functions.
 - [x] Deploy DB migrations in order.
 - [x] Deploy Edge Functions.
 - [x] Register Nyehandel webhook URL pointing to `/functions/v1/nyehandel-webhook`.
