@@ -32,6 +32,7 @@ import ProfileCard from '@/components/profile/ProfileCard';
 import AvatarGallery from '@/components/profile/AvatarGallery';
 import { AttributeEditor } from '@/components/profile/AttributeEditor';
 import { AchievementGrid } from '@/components/gamification/AchievementGrid';
+import { PouchBuilder } from '@/components/gamification/PouchBuilder';
 
 type DisplayStatus = 'fulfilled' | 'processing' | 'pending' | 'cancelled';
 
@@ -447,6 +448,20 @@ export default function AccountPage() {
                     />
                   </CardContent>
                 </Card>
+
+                {user?.id && (
+                  <Card className="border-border/30">
+                    <CardHeader>
+                      <CardTitle className="font-serif">Pouch Character</CardTitle>
+                      <CardDescription>
+                        Build your custom pouch avatar. Pick a shape, color, expression, accessory, and background.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <PouchBuilder userId={user.id} />
+                    </CardContent>
+                  </Card>
+                )}
 
                 {user?.id && (
                   <Card className="border-border/30">
