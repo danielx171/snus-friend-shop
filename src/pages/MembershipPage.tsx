@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useSnusPoints } from '@/hooks/useSnusPoints';
 
-const SITE_URL = import.meta.env.VITE_SITE_URL as string | undefined;
+import { SITE_URL } from '@/config/brand';
 
 const mysteryBoxFeatures = [
   { icon: Gift, title: 'Curated selection', desc: 'Hand-picked pouches from top brands, tailored to your taste profile.' },

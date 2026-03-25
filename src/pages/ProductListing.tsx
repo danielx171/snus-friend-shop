@@ -19,7 +19,7 @@ import { SEO } from '@/components/seo/SEO';
 
 type SortOption = 'popularity' | 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
 const ITEMS_PER_PAGE = 20;
-const SITE_URL = import.meta.env.VITE_SITE_URL as string | undefined;
+import { SITE_URL } from '@/config/brand';
 const listingUrl = SITE_URL ? SITE_URL + '/nicotine-pouches' : undefined;
 
 const urlBadgeToKey: Record<string, BadgeKey> = { 'new': 'new', 'newPrice': 'newPrice', 'popular': 'popular', 'limited': 'limited' };

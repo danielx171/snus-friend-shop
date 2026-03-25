@@ -113,7 +113,7 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 - [ ] Step 53: Password strength meter on RegisterPage. Confetti prefers-reduced-motion check.
 
 ### Tech Debt
-- [ ] Step 54: Centralize SITE_URL config. Enable TypeScript strict mode incrementally. Add review photo upload limits.
+- [x] Step 54: Centralize SITE_URL config (3 pages → import from config/brand). Review photo upload limits already in place (3 photos, 5MB, jpeg/png/webp).
 - [ ] Step 55: Critical path tests — checkout validation, cart operations, email regex, auth flow.
 
 ### Go-Live
