@@ -1,16 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { useParams, useSearchParams, useLocation, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Check, Package, Truck, MapPin, Home, ArrowRight, Copy, Loader2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Check, Package, Truck, MapPin, Home, ArrowRight, Copy, Loader2, ExternalLink, Mail } from 'lucide-react';
 import { formatPrice } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { apiFetch } from '@/lib/api';
 import { useCart } from '@/context/CartContext';
+import { useCatalogProducts } from '@/hooks/useCatalog';
+import { ProductCard } from '@/components/product/ProductCard';
 
 /* ── Types ── */
 
@@ -42,6 +45,10 @@ type PageState =
       total: number;
       currency: string;
       address: Address | null;
+      trackingId: string | null;
+      trackingUrl: string | null;
+      shippingMethod: string | null;
+      checkoutStatus: string;
     };
 
 /* ── Defensive normalisers ── */
@@ -126,14 +133,23 @@ function normalizeAddress(raw: unknown): Address | null {
   return { name: fullName, line1, line2, country };
 }
 
-/* ── Static timeline ── */
+/* ── Dynamic timeline ── */
 
-const timelineSteps = [
-  { key: 'placed', label: 'Order Placed', icon: Check, done: true, active: false },
-  { key: 'processing', label: 'Processing', icon: Package, done: false, active: true },
-  { key: 'shipped', label: 'Shipped', icon: Truck, done: false, active: false },
-  { key: 'delivered', label: 'Delivered', icon: Home, done: false, active: false },
-] as const;
+function getTimelineSteps(checkoutStatus: string) {
+  const statusOrder = ['confirmed', 'processing', 'shipped', 'delivered'];
+  const currentIndex = statusOrder.indexOf(checkoutStatus);
+
+  return [
+    { key: 'placed', label: 'Order Placed', icon: Check },
+    { key: 'processing', label: 'Processing', icon: Package },
+    { key: 'shipped', label: 'Shipped', icon: Truck },
+    { key: 'delivered', label: 'Delivered', icon: Home },
+  ].map((step, i) => ({
+    ...step,
+    done: i <= currentIndex,
+    active: i === currentIndex + 1,
+  }));
+}
 
 /* ── Component ── */
 
@@ -149,6 +165,9 @@ interface OrderConfirmationResponse {
     checkout_status: string;
     line_items_snapshot: unknown;
     shipping_address: unknown;
+    tracking_id: string | null;
+    tracking_url: string | null;
+    shipping_method: string | null;
   };
   error?: string;
 }
@@ -220,6 +239,10 @@ export default function OrderConfirmation() {
           total: typeof order.total_price === 'number' ? order.total_price : 0,
           currency: typeof order.currency === 'string' ? order.currency : 'SEK',
           address: normalizeAddress(order.shipping_address),
+          trackingId: order.tracking_id ?? null,
+          trackingUrl: order.tracking_url ?? null,
+          shippingMethod: order.shipping_method ?? null,
+          checkoutStatus: order.checkout_status ?? 'confirmed',
         });
       } catch {
         if (cancelled) return;
@@ -339,9 +362,30 @@ export default function OrderConfirmation() {
     );
   }
 
+  /* ── Recommended products (same brand / category as ordered items) ── */
+  const { data: catalogProducts = [] } = useCatalogProducts();
+  const recommendedProducts = useMemo(() => {
+    if (state.kind !== 'ok' || catalogProducts.length === 0) return [];
+    const orderedNames = new Set(state.items.map((i) => i.name));
+    // Prefer products from the same brand as ordered items
+    const orderedBrands = new Set(
+      catalogProducts
+        .filter((p) => orderedNames.has(p.name))
+        .map((p) => p.brand),
+    );
+    const sameBrand = catalogProducts.filter(
+      (p) => orderedBrands.has(p.brand) && !orderedNames.has(p.name),
+    );
+    const others = catalogProducts.filter(
+      (p) => !orderedBrands.has(p.brand) && !orderedNames.has(p.name),
+    );
+    return [...sameBrand, ...others].slice(0, 4);
+  }, [state, catalogProducts]);
+
   /* ── Success state ── */
 
-  const { orderId: displayId, date, items, total, address } = state;
+  const { orderId: displayId, date, items, total, address, trackingId, trackingUrl, shippingMethod, checkoutStatus } = state;
+  const timelineSteps = getTimelineSteps(checkoutStatus);
 
   return (
     <Layout>
@@ -437,6 +481,56 @@ export default function OrderConfirmation() {
           </CardContent>
         </Card>
 
+        {/* ── Tracking Info ── */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="font-serif text-lg">Shipping & Tracking</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {trackingId ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <Truck className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    {shippingMethod && (
+                      <p className="text-sm font-medium text-foreground">{shippingMethod}</p>
+                    )}
+                    <p className="text-sm text-muted-foreground">
+                      Tracking number:{' '}
+                      <span className="font-mono text-foreground">{trackingId}</span>
+                    </p>
+                  </div>
+                  {trackingUrl && (
+                    <Button variant="outline" size="sm" asChild className="shrink-0 gap-1.5">
+                      <a href={trackingUrl} target="_blank" rel="noopener noreferrer">
+                        Track
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
+                    </Button>
+                  )}
+                </div>
+                <Badge variant="outline" className="bg-[hsl(var(--success))]/15 text-[hsl(var(--success))] border-[hsl(var(--success))]/30 text-xs">
+                  Shipment dispatched
+                </Badge>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted">
+                  <Mail className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Tracking info coming soon</p>
+                  <p className="text-sm text-muted-foreground">
+                    We'll email you when your order ships with tracking details.
+                  </p>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* ── Order Summary ── */}
         <Card className="mb-6">
           <CardHeader>
@@ -497,10 +591,24 @@ export default function OrderConfirmation() {
           </Card>
         )}
 
+        {/* ── You might also like ── */}
+        {recommendedProducts.length > 0 && (
+          <section className="mb-10">
+            <h2 className="font-serif text-xl font-semibold text-foreground mb-4">
+              You might also like
+            </h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {recommendedProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* ── Actions ── */}
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Button asChild size="lg">
-            <Link to="/">
+            <Link to="/nicotine-pouches">
               Continue Shopping
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

@@ -20,7 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { EmptyState } from '@/components/ui/states/EmptyState';
-import { Package, Settings, LogOut, Crown, UserCircle } from 'lucide-react';
+import { Package, Settings, LogOut, Crown, UserCircle, ExternalLink } from 'lucide-react';
 import ReorderButton from '@/components/shop/ReorderButton';
 import { MembershipAccountTab } from '@/components/account/MembershipAccountTab';
 import { SEO } from '@/components/seo/SEO';
@@ -60,6 +60,9 @@ type OrderRow = {
   total_price: number;
   currency: string;
   line_items_snapshot: unknown;
+  tracking_id: string | null;
+  tracking_url: string | null;
+  shipping_method: string | null;
 };
 
 export default function AccountPage() {
@@ -111,7 +114,7 @@ export default function AccountPage() {
     queryFn: async (): Promise<OrderRow[]> => {
       const { data, error } = await supabase
         .from('orders')
-        .select('id, created_at, checkout_status, nyehandel_sync_status, total_price, currency, line_items_snapshot')
+        .select('id, created_at, checkout_status, nyehandel_sync_status, total_price, currency, line_items_snapshot, tracking_id, tracking_url, shipping_method')
         .eq('customer_email', user!.email!)
         .order('created_at', { ascending: false });
       if (error) throw new Error(error.message);
@@ -251,6 +254,7 @@ export default function AccountPage() {
                               <TableHead className="text-muted-foreground">Items</TableHead>
                               <TableHead className="text-muted-foreground">Status</TableHead>
                               <TableHead className="text-right text-muted-foreground">Total</TableHead>
+                              <TableHead className="text-muted-foreground">Tracking</TableHead>
                               <TableHead className="text-muted-foreground" />
                             </TableRow>
                           </TableHeader>
@@ -272,6 +276,23 @@ export default function AccountPage() {
                                   </TableCell>
                                   <TableCell className="text-right text-sm font-medium text-foreground">
                                     {formatPrice(order.total_price)}
+                                  </TableCell>
+                                  <TableCell>
+                                    {order.tracking_url ? (
+                                      <a
+                                        href={order.tracking_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                                      >
+                                        Track
+                                        <ExternalLink className="h-3 w-3" />
+                                      </a>
+                                    ) : order.tracking_id ? (
+                                      <span className="font-mono text-xs text-muted-foreground">{order.tracking_id}</span>
+                                    ) : (
+                                      <span className="text-xs text-muted-foreground">--</span>
+                                    )}
                                   </TableCell>
                                   <TableCell className="text-right">
                                     <ReorderButton lineItemsSnapshot={order.line_items_snapshot} />
@@ -302,6 +323,17 @@ export default function AccountPage() {
                                 <span className="text-muted-foreground">{date} &middot; {itemCount} items</span>
                                 <span className="font-medium text-foreground">{formatPrice(order.total_price)}</span>
                               </div>
+                              {order.tracking_url && (
+                                <a
+                                  href={order.tracking_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                                >
+                                  Track shipment
+                                  <ExternalLink className="h-3 w-3" />
+                                </a>
+                              )}
                               <div className="pt-1">
                                 <ReorderButton lineItemsSnapshot={order.line_items_snapshot} />
                               </div>

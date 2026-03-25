@@ -1,8 +1,11 @@
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { SITE_URL } from '@/config/brand';
 import { motion } from 'framer-motion';
+import { Search, MessageCircleQuestion } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import {
   Accordion,
   AccordionContent,
@@ -63,7 +66,29 @@ const rewards: FaqItem[] = [
   },
 ];
 
+/** Recursively extract text from ReactNode for search matching. */
+function extractText(node: React.ReactNode): string {
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join(' ');
+  if (node && typeof node === 'object' && 'props' in node) {
+    return extractText((node as React.ReactElement).props.children);
+  }
+  return '';
+}
+
+function filterFaqItems(items: FaqItem[], query: string): FaqItem[] {
+  if (!query) return items;
+  const lower = query.toLowerCase();
+  return items.filter(
+    (item) =>
+      item.question.toLowerCase().includes(lower) ||
+      extractText(item.answer).toLowerCase().includes(lower),
+  );
+}
+
 function FaqCategory({ title, items, startIndex }: { title: string; items: FaqItem[]; startIndex: number }) {
+  if (items.length === 0) return null;
   return (
     <div>
       <h2 className="text-xs uppercase tracking-wider text-accent/70 font-medium mb-4 mt-8 first:mt-0">
@@ -90,6 +115,14 @@ function FaqCategory({ title, items, startIndex }: { title: string; items: FaqIt
 }
 
 export default function FaqPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredAbout = useMemo(() => filterFaqItems(aboutPouches, searchQuery), [searchQuery]);
+  const filteredOrders = useMemo(() => filterFaqItems(ordersDelivery, searchQuery), [searchQuery]);
+  const filteredRewards = useMemo(() => filterFaqItems(rewards, searchQuery), [searchQuery]);
+  const totalResults = filteredAbout.length + filteredOrders.length + filteredRewards.length;
+  const hasQuery = searchQuery.trim().length > 0;
+
   return (
     <>
       <SEO
@@ -138,6 +171,26 @@ export default function FaqPage() {
             </motion.p>
           </div>
 
+          {/* Search */}
+          <motion.div
+            className="max-w-3xl mx-auto mb-6"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2, ease: 'easeOut' }}
+          >
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <Input
+                type="text"
+                placeholder="Search questions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-card/50 border-white/[0.06] focus-visible:border-accent/40 h-11"
+                aria-label="Search FAQ"
+              />
+            </div>
+          </motion.div>
+
           {/* FAQ card */}
           <motion.div
             className="max-w-3xl mx-auto bg-card/50 border border-white/[0.06] rounded-2xl p-8"
@@ -145,9 +198,31 @@ export default function FaqPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15, ease: 'easeOut' }}
           >
-            <FaqCategory title="About Nicotine Pouches" items={aboutPouches} startIndex={0} />
-            <FaqCategory title="Orders & Delivery" items={ordersDelivery} startIndex={aboutPouches.length} />
-            <FaqCategory title="SnusFriend Rewards" items={rewards} startIndex={aboutPouches.length + ordersDelivery.length} />
+            {hasQuery && totalResults === 0 ? (
+              <div className="flex flex-col items-center text-center py-12 gap-4">
+                <div className="rounded-full bg-muted/30 p-4">
+                  <MessageCircleQuestion className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-base font-medium text-foreground">
+                    No results for "{searchQuery}"
+                  </p>
+                  <p className="text-sm text-muted-foreground max-w-sm">
+                    We couldn't find a matching question. Try different keywords or{' '}
+                    <Link to="/contact" className="text-accent hover:underline font-medium">
+                      contact our support team
+                    </Link>{' '}
+                    — we're happy to help.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>
+                <FaqCategory title="About Nicotine Pouches" items={filteredAbout} startIndex={0} />
+                <FaqCategory title="Orders & Delivery" items={filteredOrders} startIndex={aboutPouches.length} />
+                <FaqCategory title="SnusFriend Rewards" items={filteredRewards} startIndex={aboutPouches.length + ordersDelivery.length} />
+              </>
+            )}
           </motion.div>
         </div>
       </Layout>

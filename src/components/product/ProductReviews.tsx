@@ -160,10 +160,11 @@ const ReviewCard = React.memo(function ReviewCard({
               <div>
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-semibold text-foreground">{displayName}</p>
-                  {/* Verified Buyer badge — shown for all reviews (only logged-in users can review) */}
-                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
-                    Verified Buyer
-                  </span>
+                  {review.verified_buyer && (
+                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                      Verified Buyer
+                    </span>
+                  )}
                 </div>
                 <AttributePills attributes={userAttributes} maxVisible={3} />
                 <Stars rating={review.rating} />

@@ -22,6 +22,7 @@ export interface ProductReview {
   flagged: boolean;
   created_at: string;
   profile: ReviewProfile | null;
+  verified_buyer: boolean;
 }
 
 export interface SubmitReviewPayload {
@@ -105,10 +106,38 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         }
       }
 
-      // Merge reviews with profiles
+      // Batch-check verified buyer status: find which reviewers have a completed order
+      // containing this product in their line_items_snapshot
+      let verifiedBuyerIds = new Set<string>();
+      if (uniqueUserIds.length > 0) {
+        const { data: orderRows } = await supabase
+          .from('orders')
+          .select('user_id, line_items_snapshot')
+          .in('user_id', uniqueUserIds)
+          .eq('checkout_status', 'complete');
+
+        if (orderRows) {
+          for (const order of orderRows) {
+            if (!order.user_id || verifiedBuyerIds.has(order.user_id)) continue;
+            // line_items_snapshot is JSON — check if product_id appears in it
+            const snapshot = order.line_items_snapshot;
+            if (snapshot && typeof snapshot === 'object') {
+              const items = Array.isArray(snapshot) ? snapshot : [];
+              const hasProduct = items.some(
+                (item: Record<string, unknown>) =>
+                  item && (item.product_id === productId || item.id === productId),
+              );
+              if (hasProduct) verifiedBuyerIds.add(order.user_id);
+            }
+          }
+        }
+      }
+
+      // Merge reviews with profiles and verified buyer status
       const reviews: ProductReview[] = rows.map((r) => ({
         ...r,
         profile: profileMap[r.user_id] ?? null,
+        verified_buyer: verifiedBuyerIds.has(r.user_id),
       }));
 
       // Aggregate stats

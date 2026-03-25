@@ -104,7 +104,9 @@ export function Footer() {
       <footer className="border-t border-white/[0.04]" style={{ background: 'linear-gradient(180deg, hsl(230 40% 12%), hsl(225 30% 14%))' }}>
         <div className="container py-16">
           {/* Newsletter */}
-          <NewsletterSignup />
+          <div id="footer-newsletter">
+            <NewsletterSignup />
+          </div>
           <Separator className="my-10 bg-border/30" />
 
           <div className="grid gap-10 md:grid-cols-4">

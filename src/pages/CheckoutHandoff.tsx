@@ -173,10 +173,14 @@ export default function CheckoutHandoff() {
   const idempotencyKey = useMemo(() => crypto.randomUUID(), []);
 
   /* ── Check if all cart items have SKUs ── */
-  const missingSkus = useMemo(() => {
-    if (!skuMap || skuLoading) return false;
-    return items.some((item) => !skuMap.has(item.product.id));
+  const missingSkuProducts = useMemo(() => {
+    if (!skuMap || skuLoading) return [];
+    return items
+      .filter((item) => !skuMap.has(item.product.id))
+      .map((item) => item.product.name);
   }, [items, skuMap, skuLoading]);
+
+  const missingSkus = missingSkuProducts.length > 0;
 
   /* ── Form validation ── */
   function validateForm(): boolean {
@@ -577,8 +581,20 @@ export default function CheckoutHandoff() {
                       </div>
                     ) : (missingSkus || skuError) ? (
                       <div className="mt-6 rounded-md bg-destructive/10 border border-destructive/30 p-3">
-                        <p className="text-sm text-destructive">
-                          Some items are unavailable for checkout. Please remove them to continue.
+                        <p className="text-sm font-medium text-destructive">
+                          {missingSkuProducts.length > 0
+                            ? 'The following items are unavailable for checkout:'
+                            : 'Some items could not be verified. Please try again later.'}
+                        </p>
+                        {missingSkuProducts.length > 0 && (
+                          <ul className="mt-2 list-disc list-inside text-sm text-destructive">
+                            {missingSkuProducts.map((name) => (
+                              <li key={name}>{name}</li>
+                            ))}
+                          </ul>
+                        )}
+                        <p className="mt-2 text-xs text-destructive/80">
+                          Please remove these items from your cart to continue.
                         </p>
                       </div>
                     ) : (

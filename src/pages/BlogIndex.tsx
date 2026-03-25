@@ -4,7 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { SEO } from '@/components/seo/SEO';
-import { CalendarDays, ChevronRight, BookOpen } from 'lucide-react';
+import { CalendarDays, ChevronRight, BookOpen, PenLine, Bell } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 
@@ -72,7 +73,32 @@ export default function BlogIndex() {
               ))}
             </div>
           ) : posts.length === 0 ? (
-            <p className="text-muted-foreground">No posts yet — check back soon.</p>
+            <div className="flex flex-col items-center text-center py-16 gap-5">
+              <div className="relative">
+                <div className="rounded-full bg-primary/10 p-5">
+                  <PenLine className="h-10 w-10 text-primary" />
+                </div>
+                <div className="absolute -top-1 -right-1 rounded-full bg-accent/20 p-1.5">
+                  <Bell className="h-4 w-4 text-accent" />
+                </div>
+              </div>
+              <div className="space-y-2 max-w-md">
+                <h2 className="text-xl font-semibold text-foreground">
+                  Great things are brewing
+                </h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Our team is working on in-depth guides, brand deep-dives, and tips
+                  for getting the most out of nicotine pouches. The first posts will
+                  land here soon.
+                </p>
+              </div>
+              <Button variant="outline" className="mt-2" asChild>
+                <a href="#footer-newsletter">
+                  <Bell className="h-4 w-4 mr-2" />
+                  Get notified when we publish
+                </a>
+              </Button>
+            </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {posts.map(post => (

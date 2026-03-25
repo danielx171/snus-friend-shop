@@ -248,6 +248,12 @@ export default function CartPage() {
                   <p className="text-xs text-muted-foreground text-center mt-4">
                     {t('cart.secureCheckout')}
                   </p>
+
+                  <Button variant="outline" asChild className="w-full mt-3">
+                    <Link to="/nicotine-pouches">
+                      Continue Shopping
+                    </Link>
+                  </Button>
                 </CardContent>
               </Card>
             </div>

@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
   const { data: order, error: fetchError } = await adminClient
     .from("orders")
     .select(
-      "id, created_at, total_price, currency, line_items_snapshot, shipping_address, checkout_status, customer_email",
+      "id, created_at, total_price, currency, line_items_snapshot, shipping_address, checkout_status, customer_email, tracking_id, tracking_url, shipping_method",
     )
     .eq("id", orderId)
     .maybeSingle();
@@ -107,6 +107,9 @@ Deno.serve(async (req) => {
       checkout_status: order.checkout_status,
       line_items_snapshot: order.line_items_snapshot,
       shipping_address: order.shipping_address,
+      tracking_id: order.tracking_id ?? null,
+      tracking_url: order.tracking_url ?? null,
+      shipping_method: order.shipping_method ?? null,
     },
   });
 });
