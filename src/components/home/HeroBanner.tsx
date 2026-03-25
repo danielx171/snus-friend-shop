@@ -238,7 +238,7 @@ export function HeroBanner() {
             >
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border/40 bg-card/60 text-muted-foreground text-xs font-medium backdrop-blur-sm">
                 <Star className="h-3 w-3 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
-                {t('trust.trustpilot')}
+                {t('trust.reviews')}
               </div>
             </motion.div>
 

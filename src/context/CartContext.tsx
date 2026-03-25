@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
+import { toast } from 'sonner';
 import { Product, PackSize } from '@/data/products';
 
 export interface CartItem {
@@ -85,13 +86,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       return [...prev, { product, packSize, quantity }];
     });
-    // Cart drawer no longer auto-opens — toast notification provides feedback
+    toast.success(`Added ${product.name} to cart`, { duration: 2500 });
   }, []);
 
   const removeFromCart = useCallback((productId: string, packSize: PackSize) => {
-    setItems((prev) =>
-      prev.filter((item) => !(item.product.id === productId && item.packSize === packSize))
-    );
+    setItems((prev) => {
+      const removedItem = prev.find(
+        (item) => item.product.id === productId && item.packSize === packSize
+      );
+      if (removedItem) {
+        toast(`Removed ${removedItem.product.name} from cart`, { duration: 2000 });
+      }
+      return prev.filter((item) => !(item.product.id === productId && item.packSize === packSize));
+    });
   }, []);
 
   const updateQuantity = useCallback(
@@ -108,40 +115,47 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             : item
         )
       );
+      toast(`Updated quantity to ${quantity}`, { duration: 1500 });
     },
     [removeFromCart]
   );
 
   const clearCart = useCallback(() => setItems([]), []);
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = useMemo(
+    () => items.reduce((sum, item) => sum + item.quantity, 0),
+    [items]
+  );
 
-  const totalPrice = items.reduce((sum, item) => {
-    const price = item.product.prices[item.packSize];
-    return sum + price * item.quantity;
-  }, 0);
+  const totalPrice = useMemo(
+    () => items.reduce((sum, item) => {
+      const price = item.product.prices[item.packSize];
+      return sum + price * item.quantity;
+    }, 0),
+    [items]
+  );
 
   const hasReachedFreeShipping = totalPrice >= FREE_SHIPPING_THRESHOLD;
   const amountToFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - totalPrice);
 
+  const value = useMemo(() => ({
+    items,
+    isOpen,
+    openCart,
+    closeCart,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    totalItems,
+    totalPrice,
+    freeShippingThreshold: FREE_SHIPPING_THRESHOLD,
+    hasReachedFreeShipping,
+    amountToFreeShipping,
+  }), [items, isOpen, openCart, closeCart, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice, hasReachedFreeShipping, amountToFreeShipping]);
+
   return (
-    <CartContext.Provider
-      value={{
-        items,
-        isOpen,
-        openCart,
-        closeCart,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-        totalItems,
-        totalPrice,
-        freeShippingThreshold: FREE_SHIPPING_THRESHOLD,
-        hasReachedFreeShipping,
-        amountToFreeShipping,
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

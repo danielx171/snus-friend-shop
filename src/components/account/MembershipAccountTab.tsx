@@ -69,10 +69,7 @@ export function MembershipAccountTab({ userId = null, tier = null }: MembershipA
                 {tier === 'vip' ? 'VIP' : 'Member'}
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground mb-4">Next mystery box: Coming soon</p>
-            <Button disabled variant="outline" className="rounded-xl">
-              Manage Subscription
-            </Button>
+            <p className="text-sm text-muted-foreground mb-4">Mystery boxes are on the way — stay tuned!</p>
           </CardContent>
         </Card>
       ) : (

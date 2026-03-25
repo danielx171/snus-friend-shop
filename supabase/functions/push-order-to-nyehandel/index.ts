@@ -182,6 +182,7 @@ Deno.serve(async (req) => {
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
+          "X-Language": "en",
           "X-identifier": nyehandelXIdentifier,
           "Authorization": `Bearer ${nyehandelToken}`,
         },

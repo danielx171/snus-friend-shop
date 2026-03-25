@@ -16,7 +16,6 @@ import {
   ChevronLeft, Star, ShoppingCart, Check, Truck, Package, RefreshCw, PackageX, Bell, Info, MessageSquare, Users,
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import { AgeGate } from '@/components/compliance/AgeGate';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
 import { ProductSchema } from '@/components/seo/ProductSchema';
@@ -137,7 +136,6 @@ export default function ProductDetail() {
   const tagLabels = [translateFlavor(product.flavorKey), translateFormat(product.formatKey), translateStrength(product.strengthKey), `${product.nicotineContent}mg`];
 
   return (
-    <AgeGate>
     <Layout showNicotineWarning={false}>
       <ProductSchema product={product} selectedPackSize={selectedPack} reviewStats={totalCount > 0 ? { avgRating, totalCount } : undefined} />
 
@@ -660,6 +658,5 @@ export default function ProductDetail() {
       )}
       <RecentlyViewed excludeId={product?.id} />
     </Layout>
-    </AgeGate>
   );
 }

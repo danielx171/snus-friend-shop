@@ -123,42 +123,22 @@ Conflict patterns:
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-03-24)
+## Where Things Stand (as of 2026-03-25)
 
-- Steps 26–38: ✅ Done (checkout, catalog sync, auth, preview mode, badge seeding, pg_cron)
-- Checkout wiring: ✅ Nyehandel payment "NFC Group Payment" + shipping "UPS Standard (J229F1)" configured
-- Rewards system: ✅ Daily spin wheel, server-side prize determination, vouchers, SnusPoints
-- Product badges: ✅ Seeded in Supabase — popular (310), newPrice (154), new (60), limited (52)
-- Filter system: ✅ 8 filters — brand, strength, flavor, format, nicotine mg, price, stock, category
-- Navigation: ✅ Simplified header (Shop/Brands/Rewards/Snus Family), quick-filter tabs on Shop page
-- Brand discovery: ✅ Homepage carousel, "also try" on brand pages, 24 featured brands, sticky A-Z
-- UX overhaul: ✅ Compact cards, subtle zoom hover, search + pagination, WCAG color fixes
-- Dynamic brands: ✅ useBrands() hook, dynamic nav/filters/listing, all 91+ brands from Supabase
-- Security: ✅ RLS on sync_config, consolidated duplicate policies, mutable search_path fixed
-- Accessibility: ✅ WCAG AA color contrast on all flavor/strength accents, Lighthouse 100 homepage
-- Brand overrides: ✅ Rebuilt from NordicPouch CSV with real product data
-- Account: ✅ Settings form wired to Supabase auth, Change Password linked
-- Info pages: ✅ Real content for FAQ, Contact, Shipping, Returns, About
-- SEO/GEO: ✅ robots.txt, llms.txt, dynamic sitemap (731 products, 139 brands)
-- Infrastructure: ✅ Vault secrets set, sync_config populated, delivery webhook registered
-- PWA: ✅ Workbox service worker, manifest, install prompt, offline app shell
-- Logo: ✅ SF monogram in teal shield
-- Types: ✅ types.ts synced with schema (daily_spins, vouchers, spin_config, ops_alerts, etc.)
-- Code review: ✅ 3 critical + 4 important issues fixed (PrizeReveal, atomic RPC, types, search escape)
-- Security audit: ✅ 4 critical + 4 important fixes (SEO URLs, email validation, points exploit, CORS, React.memo, any casts, footer tokens)
-- Security audit (2): ✅ CORS wildcard fixed, delivery callback fail-closed, .gitignore updated for .claude/worktrees/
-- Domain: ✅ snusfriends.com live — Cloudflare DNS (A + CNAME, proxy off), Vercel verified, SSL active
-- Supabase auth: ✅ Site URL = https://snusfriends.com, redirect URLs updated, localhost entries removed
-- Webhook: ✅ Nyehandel delivery webhook configured, secret aligned
-- VITE_SITE_URL: ✅ Updated to https://snusfriends.com
-- Edge functions: ✅ spin-wheel v2, create-nyehandel-checkout v23, delivery-callback v14, save-waitlist v3, get-order-confirmation v14
-- Key rotation: ✅ Service role key rotated, passwords changed
-- CORS: ✅ Locked to https://snusfriends.com (fail-closed fallback)
-- Checkout config: ✅ Payment = "NFC Group Payment", Shipping = "UPS Standard (J229F1)", endpoint = /orders (not /orders/simple)
-- Preview mode: 🟢 Active (VITE_PREVIEW_MODE=true) — ready to disable for go-live
-- Step 39 UAT: ✅ UNBLOCKED — test order Nyehandel ID 479 confirmed working
-- Legal pages: 🟡 Waiting on solicitor sign-off (Terms, Privacy, Cookies)
-- Next phase: product images → retail pricing → blog agent pipeline
+- Steps 26–40: ✅ Done (checkout, catalog sync, auth, security audits, UAT passed)
+- Version: 1.4.0 with build metadata, What's New page, lazy loading (40% bundle reduction)
+- Codebase: 47 tables, 20 edge functions, 42 migrations, 23 hooks, 29 pages
+- Phase 2 gamification: ✅ Built — profiles, avatars, reviews, quests, community DB+components
+- Design: 8.5/10 — glass-panel aesthetic, navy+lime palette, premium animations
+- Security: ✅ XSS sanitization, auth on all internal endpoints, CORS fail-closed, stack traces removed
+- Checkout: ✅ Nyehandel payment + shipping configured, test order #479 confirmed
+- Domain: ✅ snusfriends.com live with SSL
+- Preview mode: 🟢 Active (VITE_PREVIEW_MODE=true)
+- Legal pages: 🟡 Need draft content + solicitor sign-off
+- Age gate: 🟡 Currently only on product detail — needs full-screen entry gate
+- PWA install: 🟡 Not showing — needs investigation
+- ALLOWED_ORIGIN: 🔴 Not set in Supabase Vault — CORS pre-launch blocker
+- Next: Steps 41-56 (go-live sprint + UX polish)
 
 ## Project Docs
 

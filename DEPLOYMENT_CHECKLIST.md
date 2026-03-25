@@ -27,6 +27,7 @@ Backend: Supabase (already hosted)
 | SYNC_CRON_SECRET | any strong string | Auth for pg_cron auto-sync invocations |
 | DELIVERY_WEBHOOK_SECRET | any strong string | Auth for delivery callback webhook |
 | ALLOWED_ORIGIN | https://yourdomain.com | CORS lock for checkout (production domain) |
+| DEEPSEEK_API_KEY | from DeepSeek dashboard | AI review summary generation (optional) |
 
 ## To spin up a new brand
 
@@ -49,10 +50,11 @@ Backend: Supabase (already hosted)
 - [x] Set `RETRY_FAILED_ORDERS_SECRET` and pass `x-cron-secret` for retry invocations.
 - [x] Set `SYNC_CRON_SECRET` for pg_cron auto-sync authentication.
 - [x] Set `DELIVERY_WEBHOOK_SECRET` for delivery callback webhook auth.
-- [ ] Set `ALLOWED_ORIGIN` to production domain for checkout CORS lock.
+- [x] Set `ALLOWED_ORIGIN` to production domain for checkout CORS lock.
 - [x] Set `OPS_ALERTS_CRON_SECRET` and pass `x-cron-secret` for `ops-b2b-queues` invocations.
 - [x] Store Vault secrets for scheduler: `SUPABASE_FUNCTIONS_BASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `RETRY_FAILED_ORDERS_SECRET`.
 - [x] Store Vault secret for nightly ops queue scheduler: `OPS_ALERTS_CRON_SECRET`.
+- [ ] Set `DEEPSEEK_API_KEY` for AI-powered review summary generation (`generate-review-summary`).
 - [x] Confirm `supabase/config.toml` has explicit entries for all 14 functions.
 - [x] Deploy DB migrations in order.
 - [x] Deploy Edge Functions.
@@ -90,9 +92,9 @@ Backend: Supabase (already hosted)
 
 ## Pre-Launch (remaining)
 
-- [ ] Set `ALLOWED_ORIGIN` to production domain (currently wildcard `*`).
-- [ ] CEO names shipping + payment methods in Nyehandel admin (BLOCKER for API orders).
+- [x] Set `ALLOWED_ORIGIN` to production domain (`https://snusfriends.com`).
+- [x] CEO names shipping + payment methods in Nyehandel admin (NFC Group Payment + UPS Standard J229F1).
 - [ ] Solicitor sign-off on Terms, Privacy, Cookie pages.
-- [ ] Place and verify test order end-to-end (Step 39 UAT).
+- [x] Place and verify test order end-to-end (Step 39 UAT — order #479 confirmed).
 - [x] Security review: sync_config RLS enabled, function search_path fixed, CORS locked.
 - [ ] Deploy frontend to Vercel, configure env vars, go live.

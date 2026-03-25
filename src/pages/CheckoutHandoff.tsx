@@ -291,31 +291,6 @@ export default function CheckoutHandoff() {
     }
   }
 
-  /* ── Preview mode gate removed — checkout is live ── */
-  if (false) {
-    return (
-      <>
-        <SEO title={`Checkout | SnusFriend`} description="Store coming soon" metaRobots="noindex,nofollow" />
-        <Layout showNicotineWarning={false}>
-          <div className="container py-16 flex justify-center">
-            <Card className="max-w-md w-full">
-              <CardContent className="p-8 text-center space-y-3">
-                <ShoppingBag className="mx-auto h-12 w-12 text-muted-foreground" />
-                <h1 className="text-xl font-bold text-foreground">This store is coming soon.</h1>
-                <p className="text-muted-foreground">
-                  Browsing is enabled — purchases are not yet active.
-                </p>
-                <Button variant="outline" asChild className="mt-2">
-                  <Link to="/nicotine-pouches">Continue browsing</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </Layout>
-      </>
-    );
-  }
-
   /* ── Empty cart ── */
   if (items.length === 0) {
     return (

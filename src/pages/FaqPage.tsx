@@ -66,9 +66,9 @@ const rewards: FaqItem[] = [
 function FaqCategory({ title, items, startIndex }: { title: string; items: FaqItem[]; startIndex: number }) {
   return (
     <div>
-      <h3 className="text-xs uppercase tracking-wider text-accent/70 font-medium mb-4 mt-8 first:mt-0">
+      <h2 className="text-xs uppercase tracking-wider text-accent/70 font-medium mb-4 mt-8 first:mt-0">
         {title}
-      </h3>
+      </h2>
       <Accordion type="single" collapsible className="w-full">
         {items.map((item, i) => (
           <AccordionItem

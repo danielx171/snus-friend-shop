@@ -137,7 +137,7 @@ export default function RewardsPage() {
         {activeTab === 'spin' && (
           <>
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-1">Daily Spin</h1>
+              <h2 className="text-2xl font-bold mb-1">Daily Spin</h2>
               <p className="text-sm text-muted-foreground">
                 {hasSpunToday
                   ? 'Come back tomorrow for another spin!'
@@ -177,7 +177,7 @@ export default function RewardsPage() {
         {activeTab === 'quests' && (
           <>
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-1">Quests</h1>
+              <h2 className="text-2xl font-bold mb-1">Quests</h2>
               <p className="text-sm text-muted-foreground">
                 Complete quests to earn SnusPoints and unlock exclusive avatars
               </p>
@@ -211,7 +211,7 @@ export default function RewardsPage() {
         {activeTab === 'vouchers' && (
           <>
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-1">Your Vouchers</h1>
+              <h2 className="text-2xl font-bold mb-1">Your Vouchers</h2>
               <p className="text-sm text-muted-foreground">
                 Redeem your earned vouchers at checkout
               </p>

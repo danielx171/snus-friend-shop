@@ -111,7 +111,7 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden rounded-xl h-10 w-10 text-muted-foreground hover:text-primary"
+            className="md:hidden rounded-xl h-11 w-11 text-muted-foreground hover:text-primary"
             onClick={() => setSearchOpen(!searchOpen)}
             aria-label="Search"
           >
@@ -122,7 +122,7 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="relative rounded-xl h-10 w-10 text-muted-foreground hover:text-primary hidden sm:flex"
+            className="relative rounded-xl h-11 w-11 text-muted-foreground hover:text-primary hidden sm:flex"
             asChild
             aria-label={`Wishlist${wishlistCount > 0 ? ` (${wishlistCount} items)` : ''}`}
           >
@@ -140,7 +140,7 @@ export function Header() {
           {userId && pointsData ? (
             <Link
               to="/membership#points"
-              className="group relative flex items-center gap-1.5 rounded-xl px-2.5 h-10 text-xs font-medium text-[hsl(var(--chart-4))] hover:bg-[hsl(var(--chart-4)/0.08)] transition-colors"
+              className="group relative flex items-center gap-1.5 rounded-xl px-2.5 h-11 text-xs font-medium text-[hsl(var(--chart-4))] hover:bg-[hsl(var(--chart-4)/0.08)] transition-colors"
               title={`${pointsData.balance} / 500 pts — earn ${Math.max(500 - pointsData.balance, 0)} more for a free mystery box!`}
             >
               <Star className="h-3.5 w-3.5 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
@@ -153,7 +153,7 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-xl h-10 w-10 text-muted-foreground hover:text-primary hidden sm:flex"
+            className="rounded-xl h-11 w-11 text-muted-foreground hover:text-primary hidden sm:flex"
             onClick={() => setTheme(theme === 'light' ? 'velo' : 'light')}
             aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
           >
@@ -162,7 +162,7 @@ export function Header() {
 
           <Button
             variant="ghost"
-            className="relative rounded-xl h-10 gap-2 px-3 text-muted-foreground hover:text-primary"
+            className="relative rounded-xl h-11 gap-2 px-3 text-muted-foreground hover:text-primary"
             onClick={openCart}
             aria-label={`Cart with ${totalItems} items`}
           >
@@ -186,7 +186,7 @@ export function Header() {
 
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden rounded-xl h-10 w-10 text-muted-foreground hover:text-primary" aria-label="Menu">
+              <Button variant="ghost" size="icon" className="lg:hidden rounded-xl h-11 w-11 text-muted-foreground hover:text-primary" aria-label="Menu">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>

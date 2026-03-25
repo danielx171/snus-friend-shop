@@ -72,7 +72,7 @@ function deriveStrengthKey(mgPerPouch: number): MockProduct['strengthKey'] {
 }
 
 /** Convert DB product row to the frontend Product shape. */
-function toProduct(row: DbProduct): MockProduct {
+export function toProduct(row: DbProduct): MockProduct {
   // Find the base per-can price from pack_size=1 variant (or first variant)
   // Apply retail markup — Nyehandel prices are wholesale
   const variants = row.product_variants ?? [];

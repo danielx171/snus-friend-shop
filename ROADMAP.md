@@ -86,5 +86,35 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 - [x] Step 37: Flytta `DbProduct`-typen från `useCatalog.ts` till `src/integrations/supabase/types.ts` för konsistens med manuellt underhållna typer.
 - [x] Step 38: Lös chunk size-varning (874 kB JS bundle) — code splitting med `manualChunks` eller dynamic imports för tunga routes.
 - [x] Step 38b: Ta bort `window.location.origin/href` från `ProductListing.tsx` render (breadcrumb JSON-LD och canonical-prop). Ersätt med konstanta sökvägar eller `VITE_SITE_URL`.
-- [ ] Step 39: UAT av komplett Nyehandel-first checkout-flöde: frontend → Nyehandel payment → order row → fulfillment-push → status `synced`.
-- [ ] Step 40: Pre-launch security review: CORS-lås på edge functions (ta bort wildcard `*` på interna funktioner), verifiera RLS-policies, kör OWASP top-10 check.
+- [x] Step 39: UAT av komplett Nyehandel-first checkout-flöde: frontend → Nyehandel payment → order row → fulfillment-push → status `synced`. ✅ Test order #479 confirmed.
+- [x] Step 40: Pre-launch security review: XSS sanitization, auth on edge functions, CORS fail-closed, stack trace removal, translation cleanup. 50-finding audit completed.
+
+---
+
+## Steps 41–55: Go-Live Sprint + UX Polish (from 5-agent site audit, 2026-03-25)
+
+### Pre-Launch Blockers
+- [ ] Step 41: Full-screen age gate on site entry (localStorage remember, proper deny page). Currently only on product detail — legal requirement for nicotine products.
+- [ ] Step 42: Set `ALLOWED_ORIGIN=https://snusfriends.com` in Supabase Vault. Fix CORS pre-launch blocker.
+- [ ] Step 43: Document + set `DEEPSEEK_API_KEY` in .env.example and DEPLOYMENT_CHECKLIST.md.
+- [ ] Step 44: Draft legal page content (Terms, Privacy, Cookie) — needs solicitor sign-off but needs draft first.
+- [ ] Step 45: Fix PWA install prompt (was working, now invisible — investigate).
+
+### UX Quick Wins
+- [ ] Step 46: Cart toast notifications — show feedback when items added/removed (Sonner toast).
+- [ ] Step 47: Order tracking display on OrderConfirmation — tracking number, carrier, expected delivery date.
+- [ ] Step 48: Touch target compliance — icon buttons 40px→44px, pack-size button padding increase.
+- [ ] Step 49: Checkout UX — delivery time estimates next to shipping select, SKU error listing, progress indicator.
+- [ ] Step 50: Continue Shopping link on CartPage + post-purchase recommendations on OrderConfirmation.
+
+### Design Polish
+- [ ] Step 51: Establish flagship brand color across all 4 themes. Extract semantic colors to CSS vars.
+- [ ] Step 52: FAQ search filter for 80+ questions. Improve empty states (Blog, Addresses).
+- [ ] Step 53: Password strength meter on RegisterPage. Confetti prefers-reduced-motion check.
+
+### Tech Debt
+- [ ] Step 54: Centralize SITE_URL config. Enable TypeScript strict mode incrementally. Add review photo upload limits.
+- [ ] Step 55: Critical path tests — checkout validation, cart operations, email regex, auth flow.
+
+### Go-Live
+- [ ] Step 56: Remove preview mode (VITE_PREVIEW_MODE=false). Final smoke test. Uptime monitoring setup.

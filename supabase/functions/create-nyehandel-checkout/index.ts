@@ -447,8 +447,6 @@ Deno.serve(async (req) => {
         error: "nyehandel_order_creation_failed",
         status: nyehandelResponse.status,
         requestId,
-        // TEMPORARY: expose upstream error for debugging — remove before go-live
-        upstream_error: errText,
       },
       502,
     );
@@ -579,7 +577,7 @@ Deno.serve(async (req) => {
   } catch (fatalError) {
     console.error("FATAL_UNHANDLED", String(fatalError), (fatalError as Error)?.stack);
     return new Response(
-      JSON.stringify({ error: "fatal_unhandled", detail: String(fatalError), stack: (fatalError as Error)?.stack, requestId }),
+      JSON.stringify({ error: "fatal_unhandled", requestId }),
       { status: 500, headers: { ..._corsHeaders, "Content-Type": "application/json" } }
     );
   }

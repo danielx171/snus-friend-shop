@@ -110,7 +110,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
         >
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product.id); }}
-            className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 transition-all"
+            className="absolute top-2 right-2 z-10 p-2.5 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 transition-all"
             aria-label={wishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
           >
             <Heart
@@ -224,7 +224,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedPack(size); }}
                     disabled={isOutOfStock}
                     className={cn(
-                      'rounded-lg px-2 py-0.5 text-[10px] font-medium transition-all duration-150 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                      'rounded-lg px-3 py-1.5 text-[10px] font-medium transition-all duration-150 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                       selectedPack === size
                         ? 'bg-primary text-primary-foreground shadow-sm'
                         : 'bg-muted/20 text-muted-foreground hover:bg-muted/40 border border-border/20',

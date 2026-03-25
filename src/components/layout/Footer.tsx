@@ -133,6 +133,7 @@ export function Footer() {
                 links: [
                   { to: '/about', label: 'About Us' },
                   { to: '/membership', label: 'Snus Family' },
+                  { to: '/whats-new', label: "What's New" },
                   { to: '/terms', label: 'Terms & Conditions' },
                   { to: '/privacy', label: 'Privacy Policy' },
                   { to: '/cookies', label: 'Cookie Policy' },
@@ -164,6 +165,7 @@ export function Footer() {
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <p className="text-xs text-muted-foreground">
               © {new Date().getFullYear()} SnusFriend. All rights reserved.
+              <span className="ml-2 text-muted-foreground/30 font-mono">v{__APP_VERSION__}</span>
             </p>
             <div className="bg-amber-500/[0.06] border border-amber-500/10 rounded-lg px-4 py-2">
               <p className="text-xs text-amber-400/80">

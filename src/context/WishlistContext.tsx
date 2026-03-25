@@ -9,9 +9,8 @@ import React, {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { User } from '@supabase/supabase-js';
-import type { Database } from '@/integrations/supabase/types';
-
-type Product = Database['public']['Tables']['products']['Row'];
+import { toProduct, type DbProduct } from '@/hooks/useCatalog';
+import type { Product } from '@/data/products';
 
 interface WishlistContextValue {
   ids: string[];
@@ -119,10 +118,11 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
       if (activeIds.length === 0) return [];
       const { data, error } = await supabase
         .from('products')
-        .select('*')
+        .select('*, brands(id, slug, name, manufacturer), product_variants(pack_size, price, sku, inventory(quantity))')
         .in('id', activeIds);
       if (error) throw error;
-      return data ?? [];
+      if (!data) return [];
+      return (data as unknown as DbProduct[]).map(toProduct);
     },
     enabled: activeIds.length > 0,
     staleTime: 60_000,

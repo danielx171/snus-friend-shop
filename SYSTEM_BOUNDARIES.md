@@ -62,21 +62,20 @@ This is a **headless B2C nicotine pouch shop** built on:
   source of truth for all Nyehandel integration work. Read them before touching
   any order/checkout/fulfilment code.
 
-## Where things stand (as of 2026-03-20 evening)
+## Where things stand (as of 2026-03-25 evening)
 
-**Steps 26-38: Done** — Nyehandel-first checkout flow implemented, Shopify fully removed,
-catalog synced (731 products, 139 brands), useCatalog wired to Supabase, auth pages wired,
-preview mode live, badge seeding, Velo theme lock, pg_cron auto-sync all complete.
+**Steps 26-40: Done** — Nyehandel-first checkout flow implemented, Shopify fully removed,
+catalog synced (734 products, 139 brands), UAT passed (order #479), 50-finding security audit complete.
 
-**UX overhaul: Done** — Compact product cards, enhanced search with filters + pagination,
-SnusPoints header badge, Account Settings form, real info page content, SEO/GEO files.
+**Codebase scale:** 47 database tables, 20 edge functions, 42 migrations, 23 hooks, 29 pages.
 
-**Infrastructure: Done** — All Supabase Vault secrets set, sync_config populated,
-delivery webhook registered in NordicPouch, types.ts synced with schema.
+**Phase 2 gamification: Built** — User profiles, avatars, product reviews, quests, community
+posts/comments/polls all have DB tables, hooks, and components. Ready for testing.
 
-**Step 39 UAT: BLOCKED** — Nyehandel account has all shipping/payment method names blank.
-CEO must name the methods in Nyehandel admin before API orders are possible.
-Fallback option: use Nyehandel hosted checkout (redirect flow) instead of API.
+**Design system: 8.5/10** — Glass-panel aesthetic, navy+lime palette, premium animations.
+Distinctive and cohesive across dark/light themes. Not generic AI slop.
 
-**Remaining:** Step 39 (UAT), Step 40 (security review), Vercel deploy, go live,
-solicitor sign-off on legal pages.
+**Version: 1.4.0** — Build metadata system, What's New page, lazy loading (40% bundle reduction).
+
+**Next: Steps 41-56** — Age gate on entry, CORS secret, legal pages, UX quick wins,
+design polish, tech debt, then go-live.

@@ -1,8 +1,36 @@
 # Current Priorities
 
-Last updated: 2026-03-24
+Last updated: 2026-03-25
 
-## Completed today (2026-03-21)
+## Completed today (2026-03-25)
+
+### 50-Finding Code Audit + UX Fixes
+- XSS sanitization: DOMParser-based allowlist in BlogPost.tsx (blocks javascript: URLs, strips disallowed tags)
+- Security hardening: removed stack traces and upstream errors from edge function responses
+- Translation cleanup: removed false Trustpilot/Klarna/Stripe claims across all 12 locales
+- Dead link fix: Terms/Privacy links on Login/Register now go to actual pages
+- X-Language header: added to push-order-to-nyehandel and sync-nyehandel (prevents Swedish defaults)
+- Wishlist crash fix: WishlistContext now fetches with joins and maps through toProduct()
+- Currency fix: all prices now display EUR (was GBP in some places)
+- Dead code removal: removed `if (false)` preview block from CheckoutHandoff
+- Heading hierarchy: fixed duplicate h1s on RewardsPage, h3→h2 on FaqPage
+- Auth on generate-review-summary: now requires x-cron-secret or x-internal-function-secret
+- CartContext performance: wrapped totalItems, totalPrice, and context value in useMemo
+- Lazy loading: 17 pages converted to React.lazy() — main chunk 517KB→311KB (40% reduction)
+- ErrorBoundary: new component wrapping entire app with user-friendly error UI
+- Build version system: __APP_VERSION__ and __BUILD_DATE__ via Vite define
+- What's New page: customer-facing changelog at /whats-new with 4 version entries
+- Footer: added "What's New" link and v1.4.0 badge in copyright line
+- Package version bumped to 1.4.0
+
+### 5-Agent Comprehensive Site Audit
+- Design system audit: 8.5/10 — glass-panel aesthetic distinctive, navy+lime unique in market
+- UX patterns audit: strong fundamentals, gaps in cart feedback and order tracking
+- Mobile/responsive audit: solid mobile-first, icon buttons need 44px minimum
+- Tech debt scan: 3 critical (AgeGate redirect, ALLOWED_ORIGIN, strict TS), 6 important
+- Codebase state: 47 tables, 20 edge functions, 23 hooks, 29 pages, 42 migrations
+
+## Completed (2026-03-21)
 
 ### Launch Readiness Sprint (from Cowork infrastructure audit)
 - Webhook 401 fix: diagnosed `nyehandel-webhook` returning 401 because NordicPouch wasn't sending `x-api-key` header. Daniel added it in NordicPouch admin.
@@ -127,40 +155,93 @@ Last updated: 2026-03-24
 ## Current state
 
 - Site live at snusfriends.com and snus-friend-shop.vercel.app
-- 734 products loading from Supabase
+- 734 products loading from Supabase (47 tables, 20 edge functions, 42 migrations)
 - Preview mode active (VITE_PREVIEW_MODE=true)
 - Checkout fully working — test order confirmed (Nyehandel order 479)
+- Phase 2 gamification DB tables + components built (profiles, avatars, reviews, quests, community)
+- Design system: 8.5/10 — glass-panel aesthetic, navy+lime palette, premium animations
+- Version: 1.4.0 with build metadata and What's New page
 
-## Next phase
+## Tomorrow's Plan (2026-03-26) — Prioritized
 
-1. **Product images** — source higher quality product photography
-2. **Retail pricing** — set final per-can pricing (currently wholesale x 1.55 markup)
-3. **Blog agent pipeline** — automated content generation for SEO
-4. **Phase 2 features** — reviews, order tracking page, reorder button (designed, ready to implement)
-5. **SEO** — structured data (JSON-LD), blog pipeline
-6. **Resend SMTP** — transactional email (order confirmation, shipping notification)
-7. **Solicitor**: Sign off on Terms, Privacy, Cookie pages
-8. **Multi-brand setup** — template architecture for additional storefronts
-9. **Go live**: Remove preview mode, final smoke test
+### Sprint 1: Pre-Launch Blockers (MUST DO)
 
-## Ready for Lovable design work
+1. **Age gate on site entry** — move age verification from product detail to a full-screen gate on first visit (localStorage remember). Legal requirement for nicotine products.
+2. **Fix AgeGate redirect** — currently redirects denied users to google.com. Should show proper "access denied" page or redirect to /
+3. **Set ALLOWED_ORIGIN** — set `ALLOWED_ORIGIN=https://snusfriends.com` in Supabase Vault (CORS pre-launch blocker)
+4. **Document DEEPSEEK_API_KEY** — add to .env.example and DEPLOYMENT_CHECKLIST.md
+5. **Legal pages** — draft real Terms & Conditions, Privacy Policy, Cookie Policy content (solicitor sign-off still needed, but needs draft content)
+6. **PWA install prompt** — investigate why it's not showing (was working before, may be broken)
 
-The following areas are ready for visual polish in Lovable (use as visual reference only per AGENTS.md):
-- Home page hero and featured sections (keep `default` card variant)
-- Product listing page (now uses compact cards — verify look)
-- Search results page (new filter sidebar layout)
-- Brand hub pages
-- Membership page
-- Mobile navigation and responsive breakpoints
+### Sprint 2: UX Quick Wins (HIGH IMPACT)
+
+7. **Cart toast notifications** — show toast when items added/removed from cart (major UX gap, users get no feedback)
+8. **Order tracking display** — show tracking number, carrier, and expected delivery on OrderConfirmation page
+9. **Touch targets** — increase icon buttons from 40px to 44px (Header search/wishlist/theme, ProductCard wishlist)
+10. **Pack-size button sizing** — increase padding on ProductCard pack selectors for mobile
+11. **Checkout delivery estimates** — show "3-5 business days" next to shipping method select
+12. **SKU error UI** — show clear error message listing which items are unavailable (not vague text)
+13. **Continue Shopping link** — add to CartPage for upsell flow
+
+### Sprint 3: Design Polish
+
+14. **Flagship brand color** — establish one color that works across all 4 themes (teal candidate)
+15. **Extract semantic colors** — move hardcoded strength/flavor colors to CSS variables
+16. **FAQ search filter** — add search bar to filter FAQ questions (80+ questions)
+17. **Empty states improvement** — Blog "no posts" needs icon/CTA, Account Addresses needs timeline/CTA
+18. **Password strength meter** — add to RegisterPage
+
+### Sprint 4: Tech Debt
+
+19. **Centralize SITE_URL** — create `src/config/site.ts`, replace hardcoded fallbacks in BrandsIndex, ProductListing, MembershipPage
+20. **TypeScript strict mode** — enable `strictNullChecks` and `noImplicitAny` incrementally
+21. **Review photo upload limits** — add 5MB file size cap and 10/day per-user rate limit
+22. **Postcode/phone validation** — country-aware format validation in checkout
+23. **Critical path tests** — add Vitest tests for checkout validation, cart operations, email regex
+
+### Future (not tomorrow)
+
+- **Product images** — source higher quality product photography (52GB Snus/ folder)
+- **Retail pricing** — set final per-can pricing (currently wholesale x 1.55 markup)
+- **Blog agent pipeline** — automated content generation for SEO
+- **Resend SMTP** — transactional email (order confirmation, shipping notification)
+- **Multi-brand setup** — template architecture for additional storefronts
+- **Go live**: Remove preview mode, final smoke test, uptime monitoring
+
+## Design Audit Findings (from 5-agent review)
+
+### Keep (distinctive, high quality)
+- Glass-panel aesthetic with backdrop blur
+- Navy + lime + electric blue palette
+- Staggered text entrance animations on hero
+- Floating pouch-can circles (subtle background)
+- Semantic strength/flavor color coding
+- Inset card highlights (top rim light)
+- Skeleton shimmer loading states
+
+### Improve
+- Establish single flagship brand color across all themes
+- Move hardcoded semantic colors to CSS variables
+- Expand serif typography for editorial/luxury feel
+- Add checkout progress indicator (step 1/2/3)
+- Add "did you mean?" for search typos
+- Review flag button needs to be more discoverable
+
+### Mobile-Specific
+- Icon buttons 40px → 44px minimum (WCAG touch target)
+- Pack-size buttons too small on mobile (need more padding)
+- Toast positioning may feel cramped on 375px width
+- FeaturedProducts gap-6 may be tight on mobile (try gap-5)
 
 ## Technical debt / follow-up
 
-- Postcode/phone format validation (country-aware) needed before go-live
 - SnusPoints redemption is still mock (disabled button) — needs product/business decision
-- Wishlist star icon in header does nothing — implement or remove
 - Account page mocks: saved addresses, email preferences, delete account — implement or remove
 - Discount system only supports hardcoded WELCOME10 — no coupon management UI
-- TypeScript strict mode (`strictNullChecks`, `noImplicitAny`) still disabled in tsconfig
+- TypeScript strict mode still disabled
+- Test coverage minimal (only example.test.ts exists)
+- No skip-to-main-content link (a11y best practice)
+- Confetti animation missing prefers-reduced-motion check
 
 ## What not to do
 

@@ -8,16 +8,44 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const DISMISS_KEY = 'pwa-install-dismissed';
+const DISMISS_DAYS = 7;
+
+/** Returns true if the user dismissed the prompt less than DISMISS_DAYS ago. */
+function isDismissed(): boolean {
+  const raw = localStorage.getItem(DISMISS_KEY);
+  if (!raw) return false;
+  const dismissedAt = Number(raw);
+  if (Number.isNaN(dismissedAt)) return false;
+  const elapsed = Date.now() - dismissedAt;
+  // Re-show after DISMISS_DAYS
+  if (elapsed > DISMISS_DAYS * 24 * 60 * 60 * 1000) {
+    localStorage.removeItem(DISMISS_KEY);
+    return false;
+  }
+  return true;
+}
 
 export function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Don't show if already installed or previously dismissed
+    // Already running as installed PWA — never show
     if (window.matchMedia('(display-mode: standalone)').matches) return;
-    if (localStorage.getItem(DISMISS_KEY)) return;
+    if (isDismissed()) return;
 
+    // Check if the event was captured before React mounted (main.tsx).
+    // This is the primary path — the browser fires beforeinstallprompt early,
+    // often before React's first useEffect runs.
+    if (window.__pwaInstallPromptEvent) {
+      setDeferredPrompt(window.__pwaInstallPromptEvent as BeforeInstallPromptEvent);
+      setShow(true);
+      window.__pwaInstallPromptEvent = null; // consumed
+      return;
+    }
+
+    // Fallback: listen for the event in case it hasn't fired yet
+    // (e.g. slow network, or browser defers the event).
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -40,7 +68,8 @@ export function InstallPrompt() {
 
   const handleDismiss = useCallback(() => {
     setShow(false);
-    localStorage.setItem(DISMISS_KEY, '1');
+    // Store timestamp so the prompt resurfaces after DISMISS_DAYS
+    localStorage.setItem(DISMISS_KEY, String(Date.now()));
   }, []);
 
   if (!show) return null;

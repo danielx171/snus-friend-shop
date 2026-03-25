@@ -1,31 +1,31 @@
 /**
  * Centralized currency formatting utilities using Intl.NumberFormat
- * Base currency: GBP (£)
+ * Base currency: EUR (€)
  */
 
 /**
- * Format a monetary value in GBP
+ * Format a monetary value in EUR
  */
 export function formatMoney(
   amount: number,
-  options?: { 
+  options?: {
     decimals?: number;
   }
 ): string {
   const { decimals = 2 } = options || {};
-  
+
   try {
-    const formatter = new Intl.NumberFormat('en-GB', {
+    const formatter = new Intl.NumberFormat('en-IE', {
       style: 'currency',
-      currency: 'GBP',
+      currency: 'EUR',
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });
-    
+
     return formatter.format(amount);
-  } catch (error) {
+  } catch {
     // Fallback formatting
-    return `£${amount.toFixed(decimals)}`;
+    return `€${amount.toFixed(decimals)}`;
   }
 }
 
@@ -37,7 +37,7 @@ export function formatPrice(amount: number, decimals?: number): string {
 }
 
 /**
- * Format a per-unit price (e.g., "£1.05/can")
+ * Format a per-unit price (e.g., "€1.05/can")
  */
 export function formatPricePerUnit(amount: number, unitSuffix: string = '/can'): string {
   return `${formatMoney(amount)}${unitSuffix}`;

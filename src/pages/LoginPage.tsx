@@ -92,8 +92,8 @@ export default function LoginPage() {
 
                 <p className="text-center text-[11px] text-muted-foreground mt-4 leading-relaxed">
                   By signing in you confirm you are 18+ and agree to our{' '}
-                  <span className="underline cursor-pointer">Terms of Service</span> and{' '}
-                  <span className="underline cursor-pointer">Privacy Policy</span>.
+                  <Link to="/terms" className="underline hover:text-foreground">Terms of Service</Link> and{' '}
+                  <Link to="/privacy" className="underline hover:text-foreground">Privacy Policy</Link>.
                 </p>
               </CardContent>
             </Card>

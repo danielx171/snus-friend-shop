@@ -3,8 +3,13 @@ import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
 import { visualizer } from "rollup-plugin-visualizer";
 import path from "path";
+import pkg from "./package.json" with { type: "json" };
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().split('T')[0]),
+  },
   server: {
     host: "::",
     port: 8080,

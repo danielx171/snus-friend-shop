@@ -27,9 +27,85 @@ function formatDate(iso: string | null): string {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
+/** Sanitize HTML — strip all tags except a safe allowlist */
+function sanitizeHtml(html: string): string {
+  const ALLOWED_TAGS = new Set([
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'hr',
+    'strong', 'em', 'b', 'i', 'u', 'a', 'ul', 'ol', 'li',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td',
+    'div', 'span', 'blockquote', 'pre', 'code',
+    'img',
+  ]);
+  const ALLOWED_ATTRS: Record<string, Set<string>> = {
+    a: new Set(['href', 'title', 'rel', 'target']),
+    img: new Set(['src', 'alt', 'width', 'height']),
+    th: new Set(['class']),
+    td: new Set(['class']),
+    div: new Set(['class']),
+    span: new Set(['class']),
+    table: new Set(['class']),
+    thead: new Set(['class']),
+    tr: new Set(['class']),
+    ul: new Set(['class']),
+    li: new Set(['class']),
+    h1: new Set(['class']),
+    h2: new Set(['class']),
+    h3: new Set(['class']),
+    pre: new Set(['class']),
+    code: new Set(['class']),
+    blockquote: new Set(['class']),
+  };
+
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+
+  function walk(node: Node): string {
+    if (node.nodeType === Node.TEXT_NODE) {
+      return node.textContent ?? '';
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+    const el = node as Element;
+    const tag = el.tagName.toLowerCase();
+
+    if (!ALLOWED_TAGS.has(tag)) {
+      // Strip the tag but keep its children
+      return Array.from(el.childNodes).map(walk).join('');
+    }
+
+    const allowedAttrs = ALLOWED_ATTRS[tag] ?? new Set<string>();
+    const attrs: string[] = [];
+    for (const attr of Array.from(el.attributes)) {
+      if (!allowedAttrs.has(attr.name)) continue;
+      // Block javascript: URLs
+      if ((attr.name === 'href' || attr.name === 'src') && /^\s*javascript\s*:/i.test(attr.value)) continue;
+      attrs.push(`${attr.name}="${attr.value.replace(/"/g, '&quot;')}"`);
+    }
+
+    // Force external links to be safe
+    if (tag === 'a') {
+      if (!attrs.some(a => a.startsWith('rel='))) {
+        attrs.push('rel="noopener noreferrer"');
+      }
+      if (!attrs.some(a => a.startsWith('target='))) {
+        attrs.push('target="_blank"');
+      }
+    }
+
+    const children = Array.from(el.childNodes).map(walk).join('');
+    const attrStr = attrs.length > 0 ? ' ' + attrs.join(' ') : '';
+
+    const voidTags = new Set(['br', 'hr', 'img']);
+    if (voidTags.has(tag)) return `<${tag}${attrStr} />`;
+
+    return `<${tag}${attrStr}>${children}</${tag}>`;
+  }
+
+  return Array.from(doc.body.childNodes).map(walk).join('');
+}
+
 /** Simple markdown renderer — no external deps needed */
 function renderMarkdown(md: string): string {
-  return md
+  const raw = md
     // Tables: detect | ... | rows
     .replace(/^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/gm, (_m, header, rows) => {
       const ths = header.split('|').filter((c: string) => c.trim()).map((c: string) => `<th class="px-3 py-2 text-left">${c.trim()}</th>`).join('');
@@ -62,6 +138,8 @@ function renderMarkdown(md: string): string {
       return `<p class="text-muted-foreground leading-relaxed">${block.replace(/\n/g, '<br />')}</p>`;
     })
     .join('\n');
+
+  return sanitizeHtml(raw);
 }
 
 export default function BlogPost() {

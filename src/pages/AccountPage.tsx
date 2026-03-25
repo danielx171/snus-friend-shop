@@ -20,7 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { EmptyState } from '@/components/ui/states/EmptyState';
-import { Package, MapPin, Settings, LogOut, Crown, UserCircle } from 'lucide-react';
+import { Package, Settings, LogOut, Crown, UserCircle } from 'lucide-react';
 import ReorderButton from '@/components/shop/ReorderButton';
 import { MembershipAccountTab } from '@/components/account/MembershipAccountTab';
 import { SEO } from '@/components/seo/SEO';
@@ -198,7 +198,7 @@ export default function AccountPage() {
           </div>
 
           <Tabs defaultValue="orders" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid h-11 rounded-xl bg-muted/20 border border-border/20 p-1">
+            <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid h-11 rounded-xl bg-muted/20 border border-border/20 p-1">
               <TabsTrigger value="orders" className="gap-2 rounded-lg text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
                 <Package className="h-4 w-4" />
                 <span className="hidden sm:inline">Order History</span>
@@ -208,11 +208,6 @@ export default function AccountPage() {
                 <Crown className="h-4 w-4" />
                 <span className="hidden sm:inline">Membership</span>
                 <span className="sm:hidden">Club</span>
-              </TabsTrigger>
-              <TabsTrigger value="addresses" className="gap-2 rounded-lg text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
-                <MapPin className="h-4 w-4" />
-                <span className="hidden sm:inline">Saved Addresses</span>
-                <span className="sm:hidden">Addresses</span>
               </TabsTrigger>
               <TabsTrigger value="settings" className="gap-2 rounded-lg text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
                 <Settings className="h-4 w-4" />
@@ -325,23 +320,6 @@ export default function AccountPage() {
               <MembershipAccountTab />
             </TabsContent>
 
-            {/* ── Saved Addresses ── */}
-            <TabsContent value="addresses">
-              <Card className="border-border/30">
-                <CardHeader>
-                  <CardTitle className="font-serif">Saved Addresses</CardTitle>
-                  <CardDescription>Manage your delivery addresses</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <EmptyState
-                    variant="generic"
-                    title="No saved addresses"
-                    description="Address management is coming soon."
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-
             {/* ── Account Settings ── */}
             <TabsContent value="settings">
               <div className="space-y-6">
@@ -389,14 +367,13 @@ export default function AccountPage() {
                     </div>
                     <Separator className="bg-border/20" />
                     <div className="space-y-2">
-                      <h3 className="text-sm font-medium text-foreground">Email Preferences</h3>
-                      <p className="text-xs text-muted-foreground">Manage marketing emails and order notifications.</p>
-                      <Button variant="outline" size="sm" disabled className="opacity-50">Manage Preferences (Coming Soon)</Button>
-                    </div>
-                    <Separator className="bg-border/20" />
-                    <div className="space-y-2">
                       <h3 className="text-sm font-medium text-muted-foreground">Delete Account</h3>
-                      <p className="text-xs text-muted-foreground">Contact support to remove your account and all associated data.</p>
+                      <p className="text-xs text-muted-foreground">
+                        To delete your account and all associated data, please email{' '}
+                        <a href="mailto:support@snusfriend.com" className="text-primary underline underline-offset-2 hover:text-primary/80">
+                          support@snusfriend.com
+                        </a>
+                      </p>
                     </div>
                   </CardContent>
                 </Card>

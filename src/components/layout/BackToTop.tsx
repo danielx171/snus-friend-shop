@@ -32,7 +32,7 @@ export function BackToTop() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className={cn(
             'fixed bottom-6 right-6 z-40',
-            'h-10 w-10 md:h-10 md:w-10 max-sm:h-9 max-sm:w-9',
+            'h-11 w-11',
             'flex items-center justify-center rounded-full',
             'bg-card/90 backdrop-blur-sm border border-border/30 shadow-lg',
             'text-muted-foreground',
