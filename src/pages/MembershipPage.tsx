@@ -54,6 +54,10 @@ function StepCounter({ inView, target, label, delay }: { inView: boolean; target
 
 /* Confetti-like floating dots for celebration */
 function ConfettiDots() {
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return null;
+
   const dots = Array.from({ length: 12 }, (_, i) => i);
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">

@@ -94,22 +94,22 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 ## Steps 41–55: Go-Live Sprint + UX Polish (from 5-agent site audit, 2026-03-25)
 
 ### Pre-Launch Blockers
-- [ ] Step 41: Full-screen age gate on site entry (localStorage remember, proper deny page). Currently only on product detail — legal requirement for nicotine products.
-- [ ] Step 42: Set `ALLOWED_ORIGIN=https://snusfriends.com` in Supabase Vault. Fix CORS pre-launch blocker.
-- [ ] Step 43: Document + set `DEEPSEEK_API_KEY` in .env.example and DEPLOYMENT_CHECKLIST.md.
-- [ ] Step 44: Draft legal page content (Terms, Privacy, Cookie) — needs solicitor sign-off but needs draft first.
-- [ ] Step 45: Fix PWA install prompt (was working, now invisible — investigate).
+- [x] Step 41: Full-screen age gate on site entry (localStorage remember, proper deny page).
+- [x] Step 42: Set `ALLOWED_ORIGIN=https://snusfriends.com` in Supabase Vault.
+- [x] Step 43: Document + set `DEEPSEEK_API_KEY` in .env.example and DEPLOYMENT_CHECKLIST.md.
+- [x] Step 44: Draft legal page content (Terms, Privacy, Cookie) — pending solicitor sign-off.
+- [x] Step 45: Fix PWA install prompt (global beforeinstallprompt capture in main.tsx).
 
 ### UX Quick Wins
-- [ ] Step 46: Cart toast notifications — show feedback when items added/removed (Sonner toast).
-- [ ] Step 47: Order tracking display on OrderConfirmation — tracking number, carrier, expected delivery date.
-- [ ] Step 48: Touch target compliance — icon buttons 40px→44px, pack-size button padding increase.
-- [ ] Step 49: Checkout UX — delivery time estimates next to shipping select, SKU error listing, progress indicator.
-- [ ] Step 50: Continue Shopping link on CartPage + post-purchase recommendations on OrderConfirmation.
+- [x] Step 46: Cart toast notifications via Sonner (add/remove/update).
+- [x] Step 47: Order tracking display — shipping card on confirmation + tracking in account history.
+- [x] Step 48: Touch target compliance — icon buttons 44px, pack-size button padding.
+- [x] Step 49: Checkout UX — specific SKU error listing, Continue Shopping, recommendations.
+- [x] Step 50: Continue Shopping on CartPage + post-purchase recommendations on OrderConfirmation.
 
 ### Design Polish
 - [ ] Step 51: Establish flagship brand color across all 4 themes. Extract semantic colors to CSS vars.
-- [ ] Step 52: FAQ search filter for 80+ questions. Improve empty states (Blog, Addresses).
+- [x] Step 52: FAQ search filter for 80+ questions. Improved blog empty state.
 - [ ] Step 53: Password strength meter on RegisterPage. Confetti prefers-reduced-motion check.
 
 ### Tech Debt

@@ -19,7 +19,13 @@ interface QuestCompleteProps {
 /*  Confetti                                                           */
 /* ------------------------------------------------------------------ */
 
+function usePrefersReducedMotion() {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 function Confetti() {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const pieces = useMemo(
     () =>
       Array.from({ length: 60 }, (_, i) => ({
@@ -33,6 +39,8 @@ function Confetti() {
       })),
     [],
   );
+
+  if (prefersReducedMotion) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -61,6 +69,7 @@ function Confetti() {
 /* ------------------------------------------------------------------ */
 
 function Particles() {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const particles = useMemo(
     () =>
       Array.from({ length: 20 }, (_, i) => {
@@ -76,6 +85,8 @@ function Particles() {
       }),
     [],
   );
+
+  if (prefersReducedMotion) return null;
 
   return (
     <>

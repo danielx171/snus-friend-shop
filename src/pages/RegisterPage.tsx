@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -10,6 +10,53 @@ import { Separator } from '@/components/ui/separator';
 import { UserPlus, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
 import { supabase } from '@/integrations/supabase/client';
+
+/* ------------------------------------------------------------------ */
+/*  Password strength meter                                            */
+/* ------------------------------------------------------------------ */
+
+type StrengthLevel = 'weak' | 'fair' | 'good' | 'strong';
+
+function getPasswordStrength(pw: string): { score: number; label: StrengthLevel } {
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[a-z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+  if (score <= 1) return { score: 1, label: 'weak' };
+  if (score <= 2) return { score: 2, label: 'fair' };
+  if (score <= 3) return { score: 3, label: 'good' };
+  return { score: 4, label: 'strong' };
+}
+
+const STRENGTH_CONFIG: Record<StrengthLevel, { color: string; width: string }> = {
+  weak:   { color: 'bg-red-500',    width: 'w-1/4' },
+  fair:   { color: 'bg-orange-500', width: 'w-2/4' },
+  good:   { color: 'bg-yellow-500', width: 'w-3/4' },
+  strong: { color: 'bg-green-500',  width: 'w-full' },
+};
+
+function PasswordStrengthBar({ password }: { password: string }) {
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const config = STRENGTH_CONFIG[strength.label];
+
+  if (!password) return null;
+
+  return (
+    <div className="space-y-1">
+      <div className="h-1.5 w-full rounded-full bg-muted/40 overflow-hidden">
+        <div
+          className={`h-full rounded-full transition-all duration-300 ${config.color} ${config.width}`}
+        />
+      </div>
+      <p className="text-[11px] text-muted-foreground">
+        Password strength: <span className="font-medium capitalize">{strength.label}</span>
+      </p>
+    </div>
+  );
+}
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -106,7 +153,8 @@ export default function RegisterPage() {
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
-                    <p className="text-[11px] text-muted-foreground">Must be at least 8 characters</p>
+                    <PasswordStrengthBar password={password} />
+                    {!password && <p className="text-[11px] text-muted-foreground">Must be at least 8 characters</p>}
                   </div>
 
                   <div className="flex items-start gap-2">

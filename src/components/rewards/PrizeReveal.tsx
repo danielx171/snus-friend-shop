@@ -29,6 +29,7 @@ const TYPE_CONFIG: Record<string, { Icon: React.ElementType; glowColor: string; 
 /* ------------------------------------------------------------------ */
 
 function Particles({ color }: { color: string }) {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const particles = useMemo(
     () =>
       Array.from({ length: 24 }, (_, i) => {
@@ -44,6 +45,8 @@ function Particles({ color }: { color: string }) {
       }),
     [],
   );
+
+  if (prefersReducedMotion) return null;
 
   return (
     <>
@@ -71,7 +74,13 @@ function Particles({ color }: { color: string }) {
 /*  Confetti rain                                                     */
 /* ------------------------------------------------------------------ */
 
+function usePrefersReducedMotion() {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 function Confetti() {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const pieces = useMemo(
     () =>
       Array.from({ length: 80 }, (_, i) => ({
@@ -85,6 +94,8 @@ function Confetti() {
       })),
     [],
   );
+
+  if (prefersReducedMotion) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
