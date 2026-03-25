@@ -4,7 +4,8 @@ import { Separator } from '@/components/ui/separator';
 import { Logo } from './Logo';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
-import { Mail, Check } from 'lucide-react';
+import { Mail, Check, Cookie } from 'lucide-react';
+import { useCookieConsent } from '@/components/cookie-consent/CookieConsentProvider';
 
 function NewsletterSignup() {
   const [email, setEmail] = useState('');
@@ -94,6 +95,8 @@ function FooterLink({ to, label }: { to: string; label: string }) {
 }
 
 export function Footer() {
+  const { resetConsent } = useCookieConsent();
+
   return (
     <>
       {/* Gradient fade transition */}
@@ -171,6 +174,14 @@ export function Footer() {
                 <span className="ml-2 text-muted-foreground/30 font-mono">v{__APP_VERSION__}</span>
               </p>
               <p className="mt-1 text-muted-foreground/50">Made with ❤️ and a pouch under the lip</p>
+              <button
+                type="button"
+                onClick={resetConsent}
+                className="mt-2 inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Cookie className="h-3.5 w-3.5" />
+                Cookie Preferences
+              </button>
             </div>
             <div className="bg-amber-500/[0.06] border border-amber-500/10 rounded-lg px-4 py-2">
               <p className="text-xs text-amber-400/80">

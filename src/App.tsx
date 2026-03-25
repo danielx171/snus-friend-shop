@@ -7,7 +7,7 @@ import { lazy, Suspense } from "react";
 import { CartProvider } from "@/context/CartContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "next-themes";
-import { CookieConsentProvider } from "@/context/CookieConsentContext";
+import { CookieConsentProvider } from "@/components/cookie-consent/CookieConsentProvider";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { HelmetProvider } from "react-helmet-async";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
@@ -41,7 +41,7 @@ const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const FlavorQuizPage = lazy(() => import("./pages/FlavorQuizPage"));
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
-import { CookieConsent } from "@/components/cookie/CookieConsent";
+import { CookieConsentBanner } from "@/components/cookie-consent/CookieConsentBanner";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -49,13 +49,7 @@ import { AgeGate } from "@/components/compliance/AgeGate";
 import { TermsContent } from "@/components/legal/TermsContent";
 import { PrivacyContent } from "@/components/legal/PrivacyContent";
 import { CookieContent } from "@/components/legal/CookieContent";
-import { useConsentGatedTracking } from "@/hooks/useConsentGatedTracking";
-
-/** Activates analytics + marketing pixels when the user grants consent. */
-function ConsentGatedTracking() {
-  useConsentGatedTracking();
-  return null;
-}
+// Script injection is now handled by CookieConsentProvider directly.
 
 /** Redirect legacy /produkt/:id to /product/:id (SEO: avoid duplicate content) */
 function ProduktRedirect() {
@@ -122,7 +116,6 @@ const App = () => {
           <CartProvider>
             <WishlistProvider>
             <CookieConsentProvider>
-              <ConsentGatedTracking />
               <Toaster />
               <Sonner />
               <OrganizationSchema />
@@ -215,7 +208,7 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
               </Routes>
               </Suspense>
-              <CookieConsent />
+              <CookieConsentBanner />
               <BackToTop />
               <InstallPrompt />
               </BrowserRouter>
