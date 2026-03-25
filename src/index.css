@@ -325,6 +325,16 @@
    UTILITY CLASSES — Glass panels + glow
    ═══════════════════════════════════════════════════════ */
 @layer utilities {
+  @keyframes easter-float {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.2; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+  .animate-easter-float {
+    animation: easter-float linear infinite;
+  }
+
   .glow-primary {
     box-shadow: var(--glow-primary);
   }

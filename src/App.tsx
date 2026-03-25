@@ -9,6 +9,8 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "next-themes";
 import { CookieConsentProvider } from "@/components/cookie-consent/CookieConsentProvider";
 import { WishlistProvider } from "@/context/WishlistContext";
+import { EasterProvider } from "@/context/EasterContext";
+import { EasterOverlay } from "@/components/easter/EasterOverlay";
 import { HelmetProvider } from "react-helmet-async";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 // Critical path pages — eagerly loaded for instant first paint
@@ -104,6 +106,7 @@ const App = () => {
   return (
     <AgeGate>
     <ErrorBoundary>
+    <EasterProvider>
     <HelmetProvider>
     <ThemeProvider
       attribute="class"
@@ -213,6 +216,7 @@ const App = () => {
               <CookieConsentBanner />
               <BackToTop />
               <InstallPrompt />
+              <EasterOverlay />
               </BrowserRouter>
             </CookieConsentProvider>
             </WishlistProvider>
@@ -222,6 +226,7 @@ const App = () => {
     </QueryClientProvider>
     </ThemeProvider>
     </HelmetProvider>
+    </EasterProvider>
     </ErrorBoundary>
     </AgeGate>
   );

@@ -6,6 +6,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { Mail, Check, Cookie } from 'lucide-react';
 import { useCookieConsent } from '@/components/cookie-consent/CookieConsentProvider';
+import { EasterEgg } from '@/components/easter/EasterEgg';
+import { FooterRabbit } from '@/components/easter/FooterRabbit';
 
 function NewsletterSignup() {
   const [email, setEmail] = useState('');
@@ -173,7 +175,7 @@ export function Footer() {
                 © {new Date().getFullYear()} SnusFriend. All rights reserved.
                 <span className="ml-2 text-muted-foreground/30 font-mono">v{__APP_VERSION__}</span>
               </p>
-              <p className="mt-1 text-muted-foreground/50">Made with ❤️ and a pouch under the lip</p>
+              <p className="mt-1 text-muted-foreground/50">Made with ❤️ and a pouch under the lip <EasterEgg /> <FooterRabbit /></p>
               <button
                 type="button"
                 onClick={resetConsent}
