@@ -2,7 +2,6 @@ import { Star, Truck, CreditCard, User, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useTranslation } from '@/hooks/useTranslation';
-import { Link } from 'react-router-dom';
 import { formatMarketPrice } from '@/lib/market';
 import { useBrands } from '@/hooks/useBrands';
 
@@ -43,10 +42,10 @@ export function UtilityBar() {
 
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="sm" className="h-9 gap-1 text-[11px] px-2.5 text-muted-foreground hover:text-primary" asChild>
-            <Link to="/account">
+            <a href="/account">
               <User className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">{t('auth.login')}</span>
-            </Link>
+            </a>
           </Button>
           <Button
             variant="ghost"

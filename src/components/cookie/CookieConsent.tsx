@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useCookieConsent } from '@/hooks/useCookieConsent';
@@ -71,9 +70,9 @@ export function CookieConsent() {
           <p className="text-sm text-muted-foreground flex-1">
             We use cookies to keep the site working and to understand how you use it.
             Read our{' '}
-            <Link to="/cookies" className="underline hover:text-foreground">
+            <a href="/cookies" className="underline hover:text-foreground">
               cookie policy
-            </Link>
+            </a>
             .
           </p>
           <div className="flex gap-2 shrink-0">

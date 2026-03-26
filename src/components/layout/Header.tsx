@@ -2,7 +2,6 @@ import { ShoppingCart, Search, Menu, User, Coins, Check, Star, Heart, Sun, Moon 
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
-import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -95,23 +94,23 @@ export function Header() {
     >
       <div className="container flex h-[72px] items-center justify-between gap-6">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 shrink-0">
+        <a href="/" className="flex items-center gap-3 shrink-0">
           <Logo size={38} className="text-primary" />
           <span className="hidden sm:block text-xl font-semibold text-foreground tracking-tight">
             SnusFriend
           </span>
-        </Link>
+        </a>
 
         {/* Desktop nav links */}
         <nav className="hidden lg:flex items-center gap-1 shrink-0">
           {navLinks.map((link) => (
-            <Link
+            <a
               key={link.href}
-              to={link.href}
+              href={link.href}
               className="px-2.5 py-2 text-xs xl:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/[0.06]"
             >
               {link.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -140,27 +139,27 @@ export function Header() {
             asChild
             aria-label={`Wishlist${wishlistCount > 0 ? ` (${wishlistCount} items)` : ''}`}
           >
-            <Link to="/wishlist">
+            <a href="/wishlist">
               <Heart className="h-5 w-5" />
               {wishlistCount > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground glow-primary">
                   {wishlistCount > 9 ? '9+' : wishlistCount}
                 </span>
               )}
-            </Link>
+            </a>
           </Button>
 
           {/* SnusPoints indicator */}
           {userId && pointsData ? (
-            <Link
-              to="/membership#points"
+            <a
+              href="/membership#points"
               className="group relative flex items-center gap-1.5 rounded-xl px-2.5 h-11 text-xs font-medium text-[hsl(var(--chart-4))] hover:bg-[hsl(var(--chart-4)/0.08)] transition-colors"
               title={`${pointsData.balance} / 500 pts — earn ${Math.max(500 - pointsData.balance, 0)} more for a free mystery box!`}
             >
               <Star className="h-3.5 w-3.5 fill-[hsl(var(--chart-4))] text-[hsl(var(--chart-4))]" />
               <span>{pointsData.balance}</span>
               <span className="hidden md:inline">pts</span>
-            </Link>
+            </a>
           ) : null}
 
           {/* Theme toggle */}
@@ -210,17 +209,17 @@ export function Header() {
                 <SearchAutocomplete onClose={() => setMobileMenuOpen(false)} autoFocus={false} />
                 <nav className="flex flex-col">
                   {navLinks.map((link) => (
-                    <Link
+                    <a
                       key={link.href}
-                      to={link.href}
+                      href={link.href}
                       className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-white/5"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {link.label}
-                    </Link>
+                    </a>
                   ))}
-                  <Link
-                    to="/wishlist"
+                  <a
+                    href="/wishlist"
                     className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-white/5"
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -231,24 +230,24 @@ export function Header() {
                         {wishlistCount}
                       </span>
                     )}
-                  </Link>
-                  <Link
-                    to="/account"
+                  </a>
+                  <a
+                    href="/account"
                     className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors border-b border-white/5"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <User className="h-4 w-4 mr-2.5" />
                     My Account
-                  </Link>
+                  </a>
                   {userId && pointsData && (
-                    <Link
-                      to="/membership"
+                    <a
+                      href="/membership"
                       className="flex items-center rounded-xl px-4 py-3.5 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <Coins className="h-4 w-4 mr-2.5" />
                       {pointsData.balance} SnusPoints
-                    </Link>
+                    </a>
                   )}
                   <button
                     className="flex items-center min-h-[48px] px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors"

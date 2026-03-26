@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Logo } from './Logo';
 import { supabase } from '@/integrations/supabase/client';
@@ -85,13 +84,13 @@ function NewsletterSignup() {
 function FooterLink({ to, label }: { to: string; label: string }) {
   return (
     <li>
-      <Link
-        to={to}
+      <a
+        href={to}
         className="group inline-flex items-center gap-0 text-muted-foreground hover:text-[hsl(var(--chart-4))] transition-colors duration-200"
       >
         <span className="inline-block w-0 group-hover:w-2.5 h-1 rounded-full bg-[hsl(var(--chart-4))] transition-all duration-200 mr-0 group-hover:mr-2 opacity-0 group-hover:opacity-100" />
         {label}
-      </Link>
+      </a>
     </li>
   );
 }
@@ -116,10 +115,10 @@ export function Footer() {
 
           <div className="grid gap-10 md:grid-cols-4">
             <div className="space-y-4">
-              <Link to="/" className="flex items-center gap-3">
+              <a href="/" className="flex items-center gap-3">
                 <Logo size={38} className="text-primary" />
                 <span className="text-[22px] font-semibold text-foreground" style={{ letterSpacing: '0.02em' }}>SnusFriend</span>
-              </Link>
+              </a>
               <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
                 Your trusted source for premium nicotine pouches. Fast EU delivery and excellent customer service.
               </p>

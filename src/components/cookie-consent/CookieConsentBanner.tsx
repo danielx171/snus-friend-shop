@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Cookie } from 'lucide-react';
@@ -145,12 +144,12 @@ const CookieConsentBanner = React.memo(function CookieConsentBanner() {
                   <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                     We use cookies to keep things running smoothly and to understand how you interact
                     with our site. You can accept all, or customise your preferences.{' '}
-                    <Link
-                      to="/cookies"
+                    <a
+                      href="/cookies"
                       className="underline hover:text-foreground transition-colors"
                     >
                       Cookie policy
-                    </Link>
+                    </a>
                   </p>
 
                   <Button

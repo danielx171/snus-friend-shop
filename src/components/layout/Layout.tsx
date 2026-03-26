@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from './Header';
@@ -19,7 +18,6 @@ interface LayoutProps {
 
 export function Layout({ children, showNicotineWarning = true }: LayoutProps) {
   const [bannerDismissed, setBannerDismissed] = useState(false);
-  const location = useLocation();
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -43,7 +41,7 @@ export function Layout({ children, showNicotineWarning = true }: LayoutProps) {
       {showNicotineWarning && <NicotineWarning />}
       <AnimatePresence mode="wait">
         <motion.main
-          key={location.pathname}
+          key={typeof window !== 'undefined' ? window.location.pathname : '/'}
           className="flex-1"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } }}

@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { navigate } from 'vike/client/router';
 import { Search, ArrowRight, X, ShoppingBag } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
@@ -44,7 +44,6 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
   const [isOpen, setIsOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -140,7 +139,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
     setIsOpen(false);
     setIsFocused(false);
     onClose?.();
-  }, [navigate, onClose]);
+  }, [onClose]);
 
   const handleViewAll = useCallback(() => {
     if (query.trim()) {
@@ -150,7 +149,7 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
       setIsFocused(false);
       onClose?.();
     }
-  }, [query, navigate, onClose]);
+  }, [query, onClose]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     // total selectable = results.length + 1 (view all link)
@@ -239,13 +238,13 @@ export function SearchAutocomplete({ onClose, autoFocus, className }: SearchAuto
             {results.length === 0 ? (
               <div className="p-6 text-center">
                 <p className="text-sm text-muted-foreground">No products found for "{debouncedQuery}"</p>
-                <Link
-                  to="/nicotine-pouches"
+                <a
+                  href="/nicotine-pouches"
                   onClick={() => { setIsOpen(false); setIsFocused(false); onClose?.(); }}
                   className="text-xs text-primary hover:underline mt-1 inline-block"
                 >
                   Browse all products →
-                </Link>
+                </a>
               </div>
             ) : (
               <>
