@@ -291,7 +291,14 @@
       "Bash(curl -sL -o /dev/null -w \"%{http_code}\" \"https://www.snusfriends.com/login\")",
       "Bash(mcp__2c3d402e-6748-4031-8a37-a51a9be65ea1__get_runtime_logs)",
       "Bash(curl -s https://www.snusfriends.com/login)",
-      "Bash(grep -l login .vercel/output/functions/_isr.func/dist/server/*.mjs)"
+      "Bash(grep -l login .vercel/output/functions/_isr.func/dist/server/*.mjs)",
+      "Bash(curl -sL -w \"\\\\n%{http_code}\" \"https://www.snusfriends.com/login\")",
+      "Bash(curl -sL -w \"\\\\nHTTP %{http_code}\" \"https://www.snusfriends.com/login\")",
+      "mcp__firecrawl__firecrawl_search",
+      "Bash(git ls-tree:*)",
+      "Bash(fuser /Users/Daniel/Projects/snus-friend-shop/.git/index.lock)",
+      "Bash(curl -sL \"https://www.snusfriends.com/login\")",
+      "Bash(curl -sL \"https://www.snusfriends.com/products\")"
     ]
   }
 }

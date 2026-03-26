@@ -8,7 +8,6 @@ import { getCollection } from 'astro:content';
 const products = await getCollection('products');
 const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id })));
 ---
-export const prerender = true;
 
 <Shop
   title="Shop All Nicotine Pouches | SnusFriend"

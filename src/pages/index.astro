@@ -16,7 +16,6 @@ const bestSellers = [...allProducts]
 // Brands sorted alphabetically
 const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
-export const prerender = true;
 
 <Shop
   title={tenant.seo.defaultTitle}
