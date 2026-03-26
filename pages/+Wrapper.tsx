@@ -8,11 +8,10 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { CartProvider } from "@/context/CartContext"
 import { LanguageProvider } from "@/context/LanguageContext"
-import { ThemeProvider } from "next-themes"
+import { ThemeProvider } from "@/context/ThemeContext"
 import { CookieConsentProvider } from "@/components/cookie-consent/CookieConsentProvider"
 import { WishlistProvider } from "@/context/WishlistContext"
 import { EasterProvider } from "@/context/EasterContext"
-import { HelmetProvider } from "react-helmet-async"
 import { ErrorBoundary } from "@/components/ErrorBoundary"
 import { AgeGate } from "@/components/compliance/AgeGate"
 import { hasSupabaseEnv, missingSupabaseEnvVars } from "@/integrations/supabase/client"
@@ -55,13 +54,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
     <AgeGate>
     <ErrorBoundary>
     <EasterProvider>
-    <HelmetProvider>
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="velo"
-      enableSystem={false}
-      themes={['velo', 'light']}
-    >
+    <ThemeProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <LanguageProvider>
@@ -78,7 +71,6 @@ function Wrapper({ children }: { children: React.ReactNode }) {
       </TooltipProvider>
     </QueryClientProvider>
     </ThemeProvider>
-    </HelmetProvider>
     </EasterProvider>
     </ErrorBoundary>
     </AgeGate>

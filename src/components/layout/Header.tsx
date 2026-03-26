@@ -11,7 +11,7 @@ import { useSnusPoints } from '@/hooks/useSnusPoints';
 import { useWishlist } from '@/context/WishlistContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/context/ThemeContext';
 
 export function Header() {
   const { totalItems, totalPrice, openCart } = useCart();
