@@ -1,8 +1,10 @@
 ---
+export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
 ---
+export const prerender = true;
 
 <Shop
   title={`About Us | ${tenant.name}`}

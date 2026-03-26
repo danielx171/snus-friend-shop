@@ -274,7 +274,24 @@
       "Bash(find /Users/Daniel/Projects/snus-friend-shop/src/components/react -name *.tsx)",
       "Bash(find /Users/Daniel/Projects/snus-friend-shop/src/stores -name *.ts)",
       "Bash(for legacy:*)",
-      "Bash(do basename:*)"
+      "Bash(do basename:*)",
+      "Bash(vercel inspect:*)",
+      "Bash(.env.local:*)",
+      "WebFetch(domain:snusfriends.com)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://bozdnoctcszbhemdjsek.supabase.co/functions/v1/healthcheck\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://bozdnoctcszbhemdjsek.supabase.co/functions/v1/get-shipping-methods\")",
+      "Bash(grep -r \"grid-cols-2\\\\|grid-cols-4\\\\|sm:grid-cols\\\\|lg:grid-cols\" /Users/Daniel/Projects/snus-friend-shop/src/pages/*.astro /Users/Daniel/Projects/snus-friend-shop/src/components/astro/*.astro)",
+      "Bash(grep -n \"skeleton\\\\|placeholder\\\\|TODO\\\\|FIXME\\\\|BUG\" /Users/Daniel/Projects/snus-friend-shop/src/pages/*.astro)",
+      "Bash(grep -rn \"emerald-400\\\\|emerald-500\" /Users/Daniel/Projects/snus-friend-shop/src/pages/products/[slug].astro)",
+      "Bash(grep -n \"prices\\\\[key\\\\]\\\\|p.prices\\\\|product.prices\" /Users/Daniel/Projects/snus-friend-shop/src/pages/products/[slug].astro)",
+      "Bash(grep -n \"reviewCount\\\\|ratingValue\" /Users/Daniel/Projects/snus-friend-shop/src/pages/products/[slug].astro)",
+      "Bash(grep -rn \"container mx-auto\\\\|mx-auto max-w\" /Users/Daniel/Projects/snus-friend-shop/src/pages/*.astro)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\" \"https://snusfriends.com/login\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://www.snusfriends.com/login\")",
+      "Bash(curl -sL -o /dev/null -w \"%{http_code}\" \"https://www.snusfriends.com/login\")",
+      "Bash(mcp__2c3d402e-6748-4031-8a37-a51a9be65ea1__get_runtime_logs)",
+      "Bash(curl -s https://www.snusfriends.com/login)",
+      "Bash(grep -l login .vercel/output/functions/_isr.func/dist/server/*.mjs)"
     ]
   }
 }

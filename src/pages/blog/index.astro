@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
@@ -21,6 +22,7 @@ const articles = [
   },
 ];
 ---
+export const prerender = true;
 
 <Shop
   title={`Blog | ${tenant.name}`}

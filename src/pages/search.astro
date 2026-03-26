@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import SearchIsland from '@/components/react/SearchIsland';
@@ -9,6 +10,7 @@ const query = Astro.url.searchParams.get('q')?.trim() ?? '';
 const products = await getCollection('products');
 const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id })));
 ---
+export const prerender = true;
 
 <Shop
   title={query ? `Search: ${query} | ${tenant.name}` : `Search | ${tenant.name}`}

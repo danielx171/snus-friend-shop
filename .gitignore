@@ -40,3 +40,5 @@ stats.html
 
 .vercel
 Snus/
+
+.env*.local
