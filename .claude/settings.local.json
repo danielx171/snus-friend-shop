@@ -253,7 +253,10 @@
       "Bash(git count-objects:*)",
       "Bash(git rev-list:*)",
       "Bash(git cat-file:*)",
-      "Bash(sort -rnk2)"
+      "Bash(sort -rnk2)",
+      "Bash(vercel project:*)",
+      "WebFetch(domain:snus-friend-shop-i1uk7wnze-danielx171s-projects.vercel.app)",
+      "WebFetch(domain:snus-friend-shop-gwna7ypuy-danielx171s-projects.vercel.app)"
     ]
   }
 }
