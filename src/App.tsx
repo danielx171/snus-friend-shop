@@ -20,7 +20,6 @@ const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const ForgotPasswordPage = lazy(() => import("./pages/ForgotPasswordPage"));
 const UpdatePasswordPage = lazy(() => import("./pages/UpdatePasswordPage"));
 const SearchResults = lazy(() => import("./pages/SearchResults"));
-const InfoPage = lazy(() => import("./pages/InfoPage"));
 const OrderConfirmation = lazy(() => import("./pages/OrderConfirmation"));
 const BrandHub = lazy(() => import("./pages/BrandHub"));
 const BrandsIndex = lazy(() => import("./pages/BrandsIndex"));
@@ -28,7 +27,6 @@ const MembershipPage = lazy(() => import("./pages/MembershipPage"));
 const RewardsPage = lazy(() => import("./pages/RewardsPage"));
 const WishlistPage = lazy(() => import("./pages/WishlistPage"));
 const BundleBuilder = lazy(() => import("./pages/BundleBuilder"));
-const WhatsNewPage = lazy(() => import("./pages/WhatsNewPage"));
 const LeaderboardPage = lazy(() => import("./pages/LeaderboardPage"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -38,9 +36,6 @@ import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import { CookieConsentBanner } from "@/components/cookie-consent/CookieConsentBanner";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
-import { TermsContent } from "@/components/legal/TermsContent";
-import { PrivacyContent } from "@/components/legal/PrivacyContent";
-import { CookieContent } from "@/components/legal/CookieContent";
 import { PostHogPageView } from "@/components/analytics/PostHogPageView";
 // Script injection is now handled by CookieConsentProvider directly.
 
@@ -85,59 +80,13 @@ const App = () => {
           <Route path="/rewards" element={<RewardsPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/bundle-builder" element={<BundleBuilder />} />
-          {/* Info pages */}
-          <Route path="/contact" element={<InfoPage title="Contact Us" content={<>
-            <p>We're here to help. Reach us at <a href="mailto:support@snusfriend.com" className="text-primary hover:underline">support@snusfriend.com</a> and we'll get back to you within 24 hours on business days.</p>
-            <p>For order-related queries, please include your order ID in the subject line so we can look into it faster.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Business enquiries</h2>
-            <p>For wholesale, partnerships, or brand enquiries, please also reach us at the address above with "Business" in the subject line.</p>
-          </>} />} />
-          {/* /faq is now handled by Vike SSG — see pages/faq/+Page.tsx */}
-          <Route path="/whats-new" element={<WhatsNewPage />} />
+          {/* /faq, /contact, /shipping, /returns, /about, /terms, /privacy, /cookies, /whats-new
+              are now handled by Vike SSG — see pages/<name>/+Page.tsx */}
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/blog" element={<BlogIndex />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/flavor-quiz" element={<FlavorQuizPage />} />
           <Route path="/community" element={<CommunityPage />} />
-          <Route path="/shipping" element={<InfoPage title="Shipping Information" content={<>
-            <h2 className="text-foreground font-semibold text-lg">Free delivery</h2>
-            <p>All orders over €29 qualify for free standard delivery. No discount code needed — it's applied automatically at checkout.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Delivery times</h2>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>Standard delivery: 3–5 business days</li>
-              <li>Orders placed before 2pm on business days are dispatched the same day</li>
-              <li>Orders placed after 2pm or on weekends are dispatched the next business day</li>
-            </ul>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Tracking</h2>
-            <p>Once your order ships, you'll receive an email with your tracking number. You can also view your tracking status in your account under Order History.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Where do you ship?</h2>
-            <p>We ship to the UK and most EU countries. The full list of supported countries is shown at checkout. We use Nylogistik for all fulfilment.</p>
-          </>} />} />
-          <Route path="/returns" element={<InfoPage title="Returns & Refunds" content={<>
-            <h2 className="text-foreground font-semibold text-lg">Return window</h2>
-            <p>You have 14 days from the date of delivery to request a return. Products must be unopened and in their original packaging.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">How to return</h2>
-            <p>Email <a href="mailto:support@snusfriend.com" className="text-primary hover:underline">support@snusfriend.com</a> with your order ID and the reason for your return. We'll send you return instructions within 1 business day.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Refunds</h2>
-            <p>Once we receive and inspect the returned items, your refund will be processed within 5–7 business days to your original payment method.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Return shipping costs</h2>
-            <p>If an item is faulty, damaged, or incorrect, we cover the return shipping cost. For change-of-mind returns, the buyer is responsible for return shipping.</p>
-          </>} />} />
-          <Route path="/about" element={<InfoPage title="About SnusFriend" content={<>
-            <p>SnusFriend was founded to make the best Scandinavian nicotine pouches accessible across the UK and Europe. We believe in giving smokers a genuinely better alternative — one that's smoke-free, tobacco-free, and actually enjoyable.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Our range</h2>
-            <p>We stock 500+ products from 40+ top brands including VELO, ZYN, Sting, LOOP, Lyft, Skruf, White Fox, Pablo, and many more. New products are added regularly as we expand our catalogue.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">SnusPoints loyalty</h2>
-            <p>Every purchase earns you SnusPoints — 10 points per €1 spent. Points accumulate in your account and can be redeemed for discounts. Create a free account to start earning.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Delivery</h2>
-            <p>We ship across the UK and EU with free delivery on orders over €29. All orders are fulfilled by Nylogistik for fast, reliable dispatch.</p>
-            <h2 className="text-foreground font-semibold text-lg mt-6">Get in touch</h2>
-            <p>Questions? Email us at <a href="mailto:support@snusfriend.com" className="text-primary hover:underline">support@snusfriend.com</a>.</p>
-          </>} />} />
-          {/* Legal pages — need solicitor sign-off before go-live */}
-          <Route path="/terms" element={<InfoPage title="Terms & Conditions" legalWarning content={<TermsContent />} />} />
-          <Route path="/privacy" element={<InfoPage title="Privacy Policy" legalWarning content={<PrivacyContent />} />} />
-          <Route path="/cookies" element={<InfoPage title="Cookie Policy" legalWarning content={<CookieContent />} />} />
 
           <Route path="/ops/login" element={<Suspense><OpsLogin /></Suspense>} />
           <Route path="/ops" element={<Suspense><OpsAuthGuard><OpsDashboard /></OpsAuthGuard></Suspense>} />
