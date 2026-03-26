@@ -6,7 +6,7 @@ import { lazy, Suspense } from "react";
 import { EasterOverlay } from "@/components/easter/EasterOverlay";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 // Critical path pages — eagerly loaded for instant first paint
-import HomePage from "./pages/HomePage";
+// Note: HomePage is now handled by Vike SSG (pages/index/+Page.tsx)
 import ProductListing from "./pages/ProductListing";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
@@ -59,7 +59,7 @@ const App = () => {
       <OrganizationSchema />
       <Suspense fallback={<div className="min-h-screen bg-background" />}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          {/* / (root) is now handled by Vike SSG — see pages/index/+Page.tsx */}
           <Route path="/produkter" element={<Navigate to="/nicotine-pouches" replace />} />
           <Route path="/nicotine-pouches" element={<ProductListing />} />
           <Route path="/produkt/:id" element={<ProduktRedirect />} />
