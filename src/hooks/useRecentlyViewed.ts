@@ -4,6 +4,7 @@ const STORAGE_KEY = 'snusfriend_recently_viewed';
 const MAX_ITEMS = 12;
 
 function loadFromStorage(): string[] {
+  if (typeof window === 'undefined') return [];
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) return JSON.parse(stored);

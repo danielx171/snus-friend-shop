@@ -49,6 +49,7 @@ function persist(state: ConsentState) {
 }
 
 function loadStored(): ConsentState | null {
+  if (typeof window === 'undefined') return null;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;

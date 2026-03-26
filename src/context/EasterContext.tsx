@@ -13,7 +13,7 @@ const STORAGE_KEY = 'sf_easter_mode';
 
 export function EasterProvider({ children }: { children: React.ReactNode }) {
   const [isEasterMode, setIsEasterMode] = useState(() => {
-    try { return localStorage.getItem(STORAGE_KEY) === 'true'; } catch { return false; }
+    try { return typeof window !== 'undefined' && localStorage.getItem(STORAGE_KEY) === 'true'; } catch { return false; }
   });
 
   useEffect(() => {

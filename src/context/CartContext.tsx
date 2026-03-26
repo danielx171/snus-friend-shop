@@ -34,6 +34,7 @@ const FREE_SHIPPING_THRESHOLD = 29; // €29 for default EUR market
 const STORAGE_KEY = 'snusfriend_cart';
 
 function loadCartFromStorage(): CartItem[] {
+  if (typeof window === 'undefined') return [];
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {

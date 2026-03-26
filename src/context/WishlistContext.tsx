@@ -27,6 +27,7 @@ const WishlistContext = createContext<WishlistContextValue | undefined>(undefine
 const STORAGE_KEY = 'snusfriend_wishlist';
 
 function loadFromStorage(): string[] {
+  if (typeof window === 'undefined') return [];
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) return JSON.parse(stored);

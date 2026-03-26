@@ -12,6 +12,7 @@ const DISMISS_DAYS = 7;
 
 /** Returns true if the user dismissed the prompt less than DISMISS_DAYS ago. */
 function isDismissed(): boolean {
+  if (typeof window === 'undefined') return false;
   const raw = localStorage.getItem(DISMISS_KEY);
   if (!raw) return false;
   const dismissedAt = Number(raw);

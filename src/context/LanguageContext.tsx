@@ -80,7 +80,7 @@ function detectBrowserLanguage(): Language {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
-    const saved = localStorage.getItem('snusfriend-language');
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('snusfriend-language') : null;
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
