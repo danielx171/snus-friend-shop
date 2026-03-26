@@ -22,7 +22,7 @@ const {
 const suffix = tenant.name; // e.g. "SnusFriend"
 const pageTitle = !title
   ? tenant.seo.defaultTitle
-  : title.endsWith(suffix)
+  : title.includes(suffix)
     ? title                                         // already includes brand
     : tenant.seo.titleTemplate.replace('%s', title); // add "| SnusFriend"
 
