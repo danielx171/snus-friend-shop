@@ -71,3 +71,6 @@ verify_jwt = false
 
 [functions.discord-webhook]
 verify_jwt = true
+
+[functions.batch-review-summaries]
+verify_jwt = true
