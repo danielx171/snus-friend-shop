@@ -25,6 +25,6 @@ const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id }))
       </p>
     </div>
 
-    <FilterableProductGrid client:load productsJson={serialized} />
+    <FilterableProductGrid client:idle productsJson={serialized} />
   </div>
 </Shop>

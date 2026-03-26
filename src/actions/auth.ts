@@ -17,14 +17,11 @@ function createSupabaseFromContext(ctx: { cookies: any; request: Request }) {
   return createServerClient(url, key, {
     cookies: {
       getAll() {
-        return Array.from(ctx.cookies.headers()).map((h: string) => {
-          const [name, ...rest] = h.split('=');
-          return { name, value: rest.join('=') };
-        });
+        return ctx.cookies.getAll().map((c: any) => ({ name: c.name ?? '', value: c.value }));
       },
-      setAll(cookies: { name: string; value: string; options?: CookieOptions }[]) {
-        for (const cookie of cookies) {
-          ctx.cookies.set(cookie.name, cookie.value, cookie.options as any);
+      setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
+        for (const { name, value, options } of cookiesToSet) {
+          ctx.cookies.set(name, value, options as any);
         }
       },
     },
@@ -133,6 +130,9 @@ export const auth = {
       }
 
       const supabase = createSupabaseFromContext(ctx);
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new ActionError({ code: 'UNAUTHORIZED', message: 'Not authenticated' });
       const { error } = await supabase.auth.updateUser({
         password: input.password,
       });

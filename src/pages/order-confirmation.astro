@@ -77,7 +77,7 @@ function formatDate(dateStr: string) {
 }
 
 function formatPrice(amount: number, currency: string = 'EUR') {
-  return new Intl.NumberFormat('en-EU', {
+  return new Intl.NumberFormat('en-IE', {
     style: 'currency',
     currency,
   }).format(amount);

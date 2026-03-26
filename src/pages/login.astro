@@ -9,7 +9,9 @@ import { tenant } from '@/config/tenant';
 const result = Astro.getActionResult(actions.auth.login);
 
 if (result && !result.error && result.data?.redirect) {
-  return Astro.redirect(result.data.redirect);
+  const dest = result.data.redirect ?? '/account';
+  const safeDest = dest.startsWith('/') && !dest.startsWith('//') ? dest : '/account';
+  return Astro.redirect(safeDest);
 }
 
 const redirectTo = Astro.url.searchParams.get('redirect') || '/account';

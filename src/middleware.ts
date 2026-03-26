@@ -14,14 +14,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
-        return Array.from(context.cookies.headers()).map((h) => {
-          const [name, ...rest] = h.split('=');
-          return { name, value: rest.join('=') };
-        });
+        return context.cookies.getAll().map(c => ({ name: c.name ?? '', value: c.value }));
       },
-      setAll(cookies: { name: string; value: string; options?: CookieOptions }[]) {
-        for (const cookie of cookies) {
-          context.cookies.set(cookie.name, cookie.value, cookie.options as any);
+      setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
+        for (const { name, value, options } of cookiesToSet) {
+          context.cookies.set(name, value, options as any);
         }
       },
     },
@@ -42,6 +39,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   if (isOps && !user) {
     return context.redirect('/ops/login');
+  }
+
+  if (isOps && user) {
+    const isAdmin = user.app_metadata?.role === 'admin' || user.app_metadata?.role === 'ops';
+    if (!isAdmin) return context.redirect('/');
   }
 
   return next();

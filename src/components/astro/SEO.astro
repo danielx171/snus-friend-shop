@@ -23,7 +23,9 @@ const pageTitle = title
   ? tenant.seo.titleTemplate.replace('%s', title)
   : tenant.seo.defaultTitle;
 
-const canonicalUrl = canonical ?? Astro.url.href;
+const canonicalUrl = canonical
+  ? new URL(canonical, Astro.site || Astro.url.origin).href
+  : Astro.url.href;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).href;
 ---
 
