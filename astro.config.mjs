@@ -11,9 +11,8 @@ export default defineConfig({
   site: 'https://snusfriends.com',
   output: 'server',
   adapter: vercel({
-    isr: {
-      expiration: 14400, // 4 hours default
-    },
+    // ISR disabled — causes 404 on SSR pages (known Astro+Vercel bug)
+    // Static pages are still cached by Vercel's CDN via Cache-Control headers
     imageService: true,
     maxDuration: 10,
   }),
