@@ -2,3 +2,4 @@
 node_modules
 Snus
 .git
+# Force Vercel rebuild
