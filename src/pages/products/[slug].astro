@@ -2,6 +2,7 @@
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import AddToCartButton from '@/components/react/AddToCartButton';
+import ProductReviewsIsland from '@/components/react/ProductReviewsIsland';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -300,5 +301,10 @@ const jsonLd = {
         )}
       </div>
     </div>
+
+    <!-- Customer Reviews -->
+    <section class="mt-12">
+      <ProductReviewsIsland client:visible productId={product.id} />
+    </section>
   </div>
 </Shop>
