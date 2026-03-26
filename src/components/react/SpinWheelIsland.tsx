@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase-browser';
 import { useSpinWheel, useSpinStatus } from '@/hooks/useSpinWheel';
 import type { SpinResult } from '@/hooks/useSpinWheel';
 import SpinWheel from '@/components/rewards/SpinWheel';

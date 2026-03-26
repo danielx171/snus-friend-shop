@@ -256,7 +256,18 @@
       "Bash(sort -rnk2)",
       "Bash(vercel project:*)",
       "WebFetch(domain:snus-friend-shop-i1uk7wnze-danielx171s-projects.vercel.app)",
-      "WebFetch(domain:snus-friend-shop-gwna7ypuy-danielx171s-projects.vercel.app)"
+      "WebFetch(domain:snus-friend-shop-gwna7ypuy-danielx171s-projects.vercel.app)",
+      "WebFetch(domain:snus-friend-shop-kkh4qa7a6-danielx171s-projects.vercel.app)",
+      "Bash(find /Users/Daniel/Projects/snus-friend-shop -type f \\\\\\(-name *.astro -o -name astro.config.mjs -o -name middleware.ts \\\\\\))",
+      "Bash(grep -r \"noindex\" /Users/Daniel/Projects/snus-friend-shop/src/pages/*.astro)",
+      "Bash(grep -r \"set:html\\\\|dangerouslySetInnerHTML\" /Users/Daniel/Projects/snus-friend-shop/src --include=*.astro --include=*.tsx)",
+      "Bash(grep -n \"form.*method.*POST\" /Users/Daniel/Projects/snus-friend-shop/src/pages/*.astro)",
+      "Bash(grep -r \"SpinWheel\\\\|QuestBoard\\\\|AchievementGrid\\\\|PouchBuilder\" /Users/Daniel/Projects/snus-friend-shop/src --include=*.ts --include=*.tsx --include=*.astro)",
+      "Bash(grep -l \"SpinWheel\\\\|RewardsPage\\\\|MembershipPage\\\\|QuizPage\\\\|CommunityPage\" /Users/Daniel/Projects/snus-friend-shop/src/pages/*.astro)",
+      "Bash(grep -r \"import.*React\\\\|export.*default\" /Users/Daniel/Projects/snus-friend-shop/src/pages/*.astro)",
+      "Bash(find /Users/Daniel/Projects/snus-friend-shop/src -name \"*.astro\" -type f -exec grep -l \"client:load\\\\|client:only\" {})",
+      "Bash(head -30 /Users/Daniel/Projects/snus-friend-shop/src/pages/products/[slug].astro)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

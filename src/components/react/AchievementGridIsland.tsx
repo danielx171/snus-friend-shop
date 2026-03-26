@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase-browser';
 import { useAchievements } from '@/hooks/useAchievements';
 import { AchievementGrid } from '@/components/gamification/AchievementGrid';
 

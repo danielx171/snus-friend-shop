@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase-browser';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import ProfileCard from '@/components/profile/ProfileCard';
 
