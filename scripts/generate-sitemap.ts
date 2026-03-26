@@ -9,6 +9,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
+import { DIMENSIONS, DIMENSION_ORDER } from '../src/lib/filter-dimensions';
 
 const SITE_URL = 'https://snusfriends.com';
 const OUT = resolve(import.meta.dir, '../public/sitemap.xml');
@@ -84,7 +85,35 @@ async function generate() {
     url(`/brand/${b.slug}`, 'weekly', '0.7', b.updated_at?.split('T')[0])
   );
 
-  const allUrls = [...statics, ...productUrls, ...brandUrls].join('\n');
+  // Programmatic filter pages — single-dimension
+  // e.g. /nicotine-pouches/mint/, /nicotine-pouches/strong/
+  const singleFilterUrls: string[] = [];
+  for (const [, def] of Object.entries(DIMENSIONS)) {
+    for (const slug of def.values) {
+      singleFilterUrls.push(url(`/nicotine-pouches/${slug}/`, 'weekly', '0.8', today));
+    }
+  }
+
+  // Programmatic filter pages — two-dimension combinations in canonical order
+  // e.g. /nicotine-pouches/strong/mint/
+  const doubleFilterUrls: string[] = [];
+  const dimEntries = Object.entries(DIMENSIONS) as [string, (typeof DIMENSIONS)[keyof typeof DIMENSIONS]][];
+  for (let i = 0; i < dimEntries.length; i++) {
+    for (let j = i + 1; j < dimEntries.length; j++) {
+      const [dim1, def1] = dimEntries[i];
+      const [dim2, def2] = dimEntries[j];
+      const order1 = DIMENSION_ORDER.indexOf(dim1 as any);
+      const order2 = DIMENSION_ORDER.indexOf(dim2 as any);
+      const [first, second] = order1 < order2 ? [def1, def2] : [def2, def1];
+      for (const slug1 of first.values) {
+        for (const slug2 of second.values) {
+          doubleFilterUrls.push(url(`/nicotine-pouches/${slug1}/${slug2}/`, 'weekly', '0.7', today));
+        }
+      }
+    }
+  }
+
+  const allUrls = [...statics, ...productUrls, ...brandUrls, ...singleFilterUrls, ...doubleFilterUrls].join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -94,7 +123,7 @@ ${allUrls}
 
   writeFileSync(OUT, xml);
   console.log(
-    `Sitemap written to public/sitemap.xml — ${statics.length} static, ${productUrls.length} products, ${brandUrls.length} brands`
+    `Sitemap written to public/sitemap.xml — ${statics.length} static, ${productUrls.length} products, ${brandUrls.length} brands, ${singleFilterUrls.length} single-filter, ${doubleFilterUrls.length} double-filter`
   );
 }
 
