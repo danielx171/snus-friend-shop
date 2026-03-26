@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import vike from "vike/plugin";
+import vercel from "vite-plugin-vercel";
 import { VitePWA } from "vite-plugin-pwa";
 import { visualizer } from "rollup-plugin-visualizer";
 import path from "path";
@@ -21,6 +22,7 @@ export default defineConfig(() => ({
   plugins: [
     react(),
     vike(),
+    vercel(),
     visualizer({ filename: "stats.html", gzipSize: true, brotliSize: true }),
     VitePWA({
       devOptions: { enabled: false },

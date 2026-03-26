@@ -1,5 +1,4 @@
 // pages/+config.ts
-// Note: vike-photon requires Vite 7+ — deferred until Vite upgrade (Task N)
 import vikeReact from 'vike-react/config'
 
 export default {
