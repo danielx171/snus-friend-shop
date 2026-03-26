@@ -30,6 +30,10 @@ export const checkout = {
       display_currency: z.string(),
     }),
     handler: async (input, context) => {
+      if (!context.locals.supabase) {
+        throw new ActionError({ code: 'INTERNAL_SERVER_ERROR', message: 'Database not configured' });
+      }
+
       const user = context.locals.user;
       if (!user) {
         throw new ActionError({

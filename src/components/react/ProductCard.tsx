@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { useStore } from '@nanostores/react';
-import { $cartItems, addToCart, openCart } from '@/stores/cart';
+import { addToCart, openCart } from '@/stores/cart';
 import { cartToast } from '@/lib/toast';
 import type { Product } from '@/data/products';
 

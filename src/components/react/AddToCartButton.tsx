@@ -10,6 +10,11 @@ interface AddToCartButtonProps {
     imageUrl: string;
     prices: Record<string, number>;
     stock: number;
+    flavorKey?: string;
+    strengthKey?: string;
+    formatKey?: string;
+    nicotineContent?: number;
+    portionsPerCan?: number;
   };
 }
 
@@ -38,11 +43,11 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
         name: product.name,
         brand: product.brand,
         categoryKey: 'nicotinePouches',
-        flavorKey: 'mint',
-        strengthKey: 'normal',
-        formatKey: 'slim',
-        nicotineContent: 0,
-        portionsPerCan: 20,
+        flavorKey: (product.flavorKey ?? 'mint') as Product['flavorKey'],
+        strengthKey: (product.strengthKey ?? 'normal') as Product['strengthKey'],
+        formatKey: (product.formatKey ?? 'slim') as Product['formatKey'],
+        nicotineContent: product.nicotineContent ?? 0,
+        portionsPerCan: product.portionsPerCan ?? 20,
         descriptionKey: '',
         image: product.imageUrl,
         ratings: 0,

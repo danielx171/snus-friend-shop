@@ -53,7 +53,7 @@ const { key } = Astro.props;
 const meta = STRENGTH_META[key as keyof typeof STRENGTH_META];
 const allProducts = await getCollection('products');
 const products = allProducts.filter((p) => p.data.strengthKey === key);
-const serialized = JSON.stringify(products.map((p) => ({ ...p.data, slug: p.id })));
+const serialized = JSON.stringify(allProducts.map((p) => ({ ...p.data, slug: p.id })));
 
 const jsonLd = {
   '@context': 'https://schema.org',

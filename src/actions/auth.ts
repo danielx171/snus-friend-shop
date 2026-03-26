@@ -105,7 +105,7 @@ export const auth = {
 
       // Always return success to avoid leaking whether the email exists.
       await supabase.auth.resetPasswordForEmail(input.email, {
-        redirectTo: `${siteUrl}/reset-password`,
+        redirectTo: `${siteUrl}/update-password`,
       });
 
       return {

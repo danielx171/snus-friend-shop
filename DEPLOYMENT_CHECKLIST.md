@@ -93,6 +93,9 @@ Backend: Supabase (already hosted)
 
 - [ ] Enable "Leaked Password Protection" in Supabase Dashboard → Auth → Settings.
       This checks passwords against HaveIBeenPwned and blocks compromised passwords at registration.
+- [ ] Set `app_metadata.role = 'admin'` for ops dashboard users. Do this via the Supabase
+      Dashboard (Authentication → Users → select user → Edit User JSON) or via a service-role
+      query: `SELECT auth.update_user_metadata('<user-id>', '{"role":"admin"}'::jsonb, 'app_metadata');`
 
 ## Pre-Launch (remaining)
 

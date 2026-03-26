@@ -9,6 +9,9 @@ export const account = {
       phone: z.string().optional(),
     }),
     handler: async (input, context) => {
+      if (!context.locals.supabase) {
+        throw new ActionError({ code: 'INTERNAL_SERVER_ERROR', message: 'Database not configured' });
+      }
       if (!context.locals.user) {
         throw new ActionError({ code: 'UNAUTHORIZED' });
       }
@@ -41,6 +44,9 @@ export const account = {
       path: ['confirmPassword'],
     }),
     handler: async (input, context) => {
+      if (!context.locals.supabase) {
+        throw new ActionError({ code: 'INTERNAL_SERVER_ERROR', message: 'Database not configured' });
+      }
       if (!context.locals.user) {
         throw new ActionError({ code: 'UNAUTHORIZED' });
       }
