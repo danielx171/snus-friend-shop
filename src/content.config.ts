@@ -31,6 +31,13 @@ function computePrices(variants: Array<{ pack_size: number; price: number }>) {
 }
 
 function computeStock(variants: Array<{ inventory?: Array<{ quantity: number }> }>) {
+  // If no inventory rows exist at all, treat product as available (Nyehandel manages stock).
+  // Only report out-of-stock when inventory rows explicitly show quantity 0.
+  const hasAnyInventory = variants.some(
+    (v) => Array.isArray(v.inventory) && v.inventory.length > 0,
+  );
+  if (!hasAnyInventory) return 999; // no inventory tracking — assume available
+
   return variants.reduce((total, v) => {
     const qty = v.inventory?.[0]?.quantity ?? 0;
     return total + qty;

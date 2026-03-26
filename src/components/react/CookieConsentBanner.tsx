@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useStore } from '@nanostores/react';
 import { $cookieConsent, acceptAll, rejectAll, setConsent } from '@/stores/cookie-consent';
 
@@ -8,6 +8,11 @@ const CookieConsentBanner: React.FC = () => {
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
 
+  // Prevent hydration mismatch: server always sees answered=false (no localStorage).
+  // Wait until mounted so the persistent store has synced from localStorage.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const handleSave = useCallback(() => {
     setConsent(analytics, marketing);
   }, [analytics, marketing]);
@@ -16,7 +21,10 @@ const CookieConsentBanner: React.FC = () => {
     setShowManage(true);
   }, []);
 
-  if (consent.answered) return null;
+  // On server, always render the banner (answered=false default).
+  // After mount, read actual consent from localStorage.
+  if (mounted && consent.answered) return null;
+  if (!mounted) return null; // SSR: render nothing — banner appears after hydration if needed
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card p-4 shadow-lg">

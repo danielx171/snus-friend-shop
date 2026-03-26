@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import * as Dialog from '@radix-ui/react-dialog';
 import {
@@ -189,9 +189,17 @@ export default function CartDrawer() {
   const total = useStore($cartTotal);
   const count = useStore($cartCount);
 
+  // Prevent hydration mismatch: server has no localStorage, so
+  // render nothing until after first mount when persistentAtom syncs.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const handleOpenChange = useCallback((open: boolean) => {
     if (!open) closeCart();
   }, []);
+
+  // On server / first client render, the drawer is closed and empty — matches SSR output
+  if (!mounted) return null;
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>

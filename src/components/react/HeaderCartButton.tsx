@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { $cartCount, openCart } from '@/stores/cart';
 
 const HeaderCartButton = React.memo(function HeaderCartButton() {
   const count = useStore($cartCount);
 
+  // Prevent hydration mismatch: server renders 0 (no localStorage),
+  // so suppress the badge until after first client mount.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const displayCount = mounted ? count : 0;
+
   return (
     <button
       type="button"
       onClick={openCart}
       className="relative text-foreground hover:text-primary transition"
-      aria-label={`Shopping cart${count > 0 ? `, ${count} items` : ''}`}
+      aria-label={`Shopping cart${displayCount > 0 ? `, ${displayCount} items` : ''}`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -28,9 +35,9 @@ const HeaderCartButton = React.memo(function HeaderCartButton() {
         <path d="M3 6h18" />
         <path d="M16 10a4 4 0 0 1-8 0" />
       </svg>
-      {count > 0 && (
+      {displayCount > 0 && (
         <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-          {count > 99 ? '99+' : count}
+          {displayCount > 99 ? '99+' : displayCount}
         </span>
       )}
     </button>
