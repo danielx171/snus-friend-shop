@@ -105,7 +105,7 @@ const brands = defineCollection({
     if (!url || !key) return [];
     const { data, error } = await buildClient!
       .from('brands')
-      .select('id, slug, name, manufacturer, logo_url, description, country_code')
+      .select('id, slug, name, manufacturer, logo_url, description')
       .order('name');
 
     if (error) {

@@ -2,6 +2,13 @@ import { defineMiddleware } from 'astro:middleware';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  // Skip auth for prerendered (static) pages — cookies aren't available during build
+  if (context.isPrerendered) {
+    context.locals.user = null;
+    context.locals.supabase = null;
+    return next();
+  }
+
   const supabaseUrl = import.meta.env.SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
   const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -14,11 +21,19 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
-        return context.cookies.getAll().map(c => ({ name: c.name ?? '', value: c.value }));
+        try {
+          return context.cookies.getAll().map(c => ({ name: c.name ?? '', value: c.value }));
+        } catch {
+          return [];
+        }
       },
       setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
-        for (const { name, value, options } of cookiesToSet) {
-          context.cookies.set(name, value, options as any);
+        try {
+          for (const { name, value, options } of cookiesToSet) {
+            context.cookies.set(name, value, options as any);
+          }
+        } catch {
+          // Cookies unavailable during prerender — safe to ignore
         }
       },
     },
