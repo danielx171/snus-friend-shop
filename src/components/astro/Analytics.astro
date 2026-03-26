@@ -1,0 +1,85 @@
+---
+// Analytics — conditionally loads Sentry + PostHog based on cookie consent.
+// Sentry loads always in production (error tracking is "essential").
+// PostHog loads ONLY when analytics consent is granted.
+import { tenant } from '@/config/tenant';
+
+const sentryDsn = import.meta.env.PUBLIC_SENTRY_DSN ?? '';
+const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY ?? '';
+const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com';
+const isProd = import.meta.env.PROD;
+const consentKey = tenant.storage.consentKey;
+---
+
+{isProd && (sentryDsn || posthogKey) && (
+  <script
+    is:inline
+    define:vars={{ sentryDsn, posthogKey, posthogHost, consentKey }}
+  >
+    (function () {
+      // Read consent from localStorage (matches nanostores/persistent format)
+      var raw = localStorage.getItem(consentKey);
+      var consent;
+      try { consent = raw ? JSON.parse(raw) : null; } catch (_) { consent = null; }
+      var analyticsAllowed = consent && consent.analytics === true;
+
+      // ── Sentry — essential error tracking (no consent needed) ──
+      if (sentryDsn) {
+        var s = document.createElement('script');
+        s.src = 'https://browser.sentry-cdn.com/8.0.0/bundle.min.js';
+        s.crossOrigin = 'anonymous';
+        s.onload = function () {
+          if (window.Sentry) {
+            window.Sentry.init({
+              dsn: sentryDsn,
+              environment: 'production',
+              tracesSampleRate: 0.1,
+              replaysSessionSampleRate: 0.1,
+              replaysOnErrorSampleRate: 1.0,
+              sendDefaultPii: false,
+              ignoreErrors: [
+                'ResizeObserver loop',
+                'Network request failed',
+                'Load failed',
+                'ChunkLoadError',
+              ],
+            });
+          }
+        };
+        document.head.appendChild(s);
+      }
+
+      // ── PostHog — analytics consent required ──
+      if (posthogKey && analyticsAllowed) {
+        var ph = document.createElement('script');
+        ph.async = true;
+        ph.crossOrigin = 'anonymous';
+        ph.src = posthogHost + '/static/array.js';
+        ph.onload = function () {
+          if (window.posthog) {
+            window.posthog.init(posthogKey, {
+              api_host: posthogHost,
+              capture_pageview: true,
+              capture_pageleave: true,
+              persistence: 'localStorage',
+              autocapture: true,
+            });
+          }
+        };
+        document.head.appendChild(ph);
+      }
+
+      // Listen for consent changes (user accepts analytics after page load)
+      window.addEventListener('storage', function (e) {
+        if (e.key === consentKey) {
+          try {
+            var updated = e.newValue ? JSON.parse(e.newValue) : null;
+            if (updated && updated.analytics && posthogKey && !window.posthog?.__loaded) {
+              location.reload();
+            }
+          } catch (_) { /* ignore parse errors */ }
+        }
+      });
+    })();
+  </script>
+)}
