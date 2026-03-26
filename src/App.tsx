@@ -20,13 +20,11 @@ const ForgotPasswordPage = lazy(() => import("./pages/ForgotPasswordPage"));
 const UpdatePasswordPage = lazy(() => import("./pages/UpdatePasswordPage"));
 const SearchResults = lazy(() => import("./pages/SearchResults"));
 const OrderConfirmation = lazy(() => import("./pages/OrderConfirmation"));
-const BrandHub = lazy(() => import("./pages/BrandHub"));
 const MembershipPage = lazy(() => import("./pages/MembershipPage"));
 const RewardsPage = lazy(() => import("./pages/RewardsPage"));
 const WishlistPage = lazy(() => import("./pages/WishlistPage"));
 const BundleBuilder = lazy(() => import("./pages/BundleBuilder"));
 const LeaderboardPage = lazy(() => import("./pages/LeaderboardPage"));
-const BlogPost = lazy(() => import("./pages/BlogPost"));
 const FlavorQuizPage = lazy(() => import("./pages/FlavorQuizPage"));
 const CommunityPage = lazy(() => import("./pages/CommunityPage"));
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
@@ -72,7 +70,7 @@ const App = () => {
           <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           {/* /brands is now handled by Vike SSG — see pages/brands/+Page.tsx */}
-          <Route path="/brand/:brandSlug" element={<BrandHub />} />
+          {/* /brand/:brandSlug is now handled by Vike — see pages/brand/@brandSlug/+Page.tsx */}
           <Route path="/membership" element={<MembershipPage />} />
           <Route path="/rewards" element={<RewardsPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
@@ -81,7 +79,7 @@ const App = () => {
               are now handled by Vike SSG — see pages/<name>/+Page.tsx */}
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           {/* /blog is now handled by Vike SSG — see pages/blog/+Page.tsx */}
-          <Route path="/blog/:slug" element={<BlogPost />} />
+          {/* /blog/:slug is now handled by Vike — see pages/blog/@slug/+Page.tsx */}
           <Route path="/flavor-quiz" element={<FlavorQuizPage />} />
           <Route path="/community" element={<CommunityPage />} />
 
