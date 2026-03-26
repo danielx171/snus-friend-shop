@@ -7,8 +7,7 @@ import { EasterOverlay } from "@/components/easter/EasterOverlay";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 // Critical path pages — eagerly loaded for instant first paint
 // Note: HomePage is now handled by Vike SSG (pages/index/+Page.tsx)
-import ProductListing from "./pages/ProductListing";
-import ProductDetail from "./pages/ProductDetail";
+// Note: ProductListing is now handled by Vike (pages/nicotine-pouches/+Page.tsx)
 import NotFound from "./pages/NotFound";
 
 // Lazy-load all other pages — they're not part of the main landing flow
@@ -58,10 +57,10 @@ const App = () => {
       <Suspense fallback={<div className="min-h-screen bg-background" />}>
         <Routes>
           {/* / (root) is now handled by Vike SSG — see pages/index/+Page.tsx */}
-          <Route path="/produkter" element={<Navigate to="/nicotine-pouches" replace />} />
-          <Route path="/nicotine-pouches" element={<ProductListing />} />
+          {/* /produkter → /nicotine-pouches redirect is handled by pages/+config.ts */}
+          {/* /nicotine-pouches is now handled by Vike — see pages/nicotine-pouches/+Page.tsx */}
           <Route path="/produkt/:id" element={<ProduktRedirect />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
+          {/* /product/:id is now handled by Vike — see pages/product/@id/+Page.tsx */}
           <Route path="/search" element={<SearchResults />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutHandoff />} />
