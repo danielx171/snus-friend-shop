@@ -249,5 +249,41 @@ Deno.serve(async (req) => {
 
   console.log(JSON.stringify({ requestId, event: "nyehandel_push_success", orderId: order.id, nyehandelOrderId }));
 
+  /* ---------- fire-and-forget: send order confirmation email ---------- */
+  try {
+    const customerEmail = (order.customer_metadata as Record<string, unknown>)?.email as string ?? order.customer_email;
+    if (customerEmail && supabaseUrl) {
+      const lineItems = (Array.isArray(order.line_items_snapshot) ? order.line_items_snapshot as LineItem[] : []).map((item: LineItem) => ({
+        name: item.sku ?? "Product",
+        qty: item.quantity ?? 1,
+        price: `€${(typeof (item as Record<string, unknown>).price === 'number' ? ((item as Record<string, unknown>).price as number) : 0).toFixed(2)}`,
+      }));
+
+      fetch(`${supabaseUrl}/functions/v1/send-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-internal-function-secret": internalFunctionsSecret,
+        },
+        body: JSON.stringify({
+          to: customerEmail,
+          subject: `Order Confirmed — #${nyehandelOrderId || order.id}`,
+          template: "order_confirmed",
+          data: {
+            orderId: nyehandelOrderId || order.id,
+            orderDate: new Date().toISOString().split("T")[0],
+            items: lineItems,
+            total: order.total_price ?? "—",
+          },
+        }),
+      }).catch((err: unknown) => {
+        console.error(JSON.stringify({ requestId, event: "send_email_failed", error: String(err) }));
+      });
+    }
+  } catch (emailErr) {
+    // Non-blocking — order is already confirmed, email is best-effort
+    console.error(JSON.stringify({ requestId, event: "send_email_error", error: String(emailErr) }));
+  }
+
   return jsonResponse({ ok: true, orderId: order.id, nyehandelOrderId, nyehandelPrefix, requestId });
 });
