@@ -28,7 +28,6 @@ const MembershipPage = lazy(() => import("./pages/MembershipPage"));
 const RewardsPage = lazy(() => import("./pages/RewardsPage"));
 const WishlistPage = lazy(() => import("./pages/WishlistPage"));
 const BundleBuilder = lazy(() => import("./pages/BundleBuilder"));
-const FaqPage = lazy(() => import("./pages/FaqPage"));
 const WhatsNewPage = lazy(() => import("./pages/WhatsNewPage"));
 const LeaderboardPage = lazy(() => import("./pages/LeaderboardPage"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
@@ -93,7 +92,7 @@ const App = () => {
             <h2 className="text-foreground font-semibold text-lg mt-6">Business enquiries</h2>
             <p>For wholesale, partnerships, or brand enquiries, please also reach us at the address above with "Business" in the subject line.</p>
           </>} />} />
-          <Route path="/faq" element={<FaqPage />} />
+          {/* /faq is now handled by Vike SSG — see pages/faq/+Page.tsx */}
           <Route path="/whats-new" element={<WhatsNewPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/blog" element={<BlogIndex />} />
