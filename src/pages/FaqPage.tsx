@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { FaqSchema } from '@/components/seo/FaqSchema';
@@ -171,9 +171,9 @@ export default function FaqPage() {
               transition={{ duration: 0.4, delay: 0.3 }}
             >
               Can't find what you're looking for?{' '}
-              <Link to="/contact" className="text-accent hover:underline font-medium">
+              <a href="/contact" className="text-accent hover:underline font-medium">
                 Contact us
-              </Link>
+              </a>
               .
             </motion.p>
           </div>
@@ -216,9 +216,9 @@ export default function FaqPage() {
                   </p>
                   <p className="text-sm text-muted-foreground max-w-sm">
                     We couldn't find a matching question. Try different keywords or{' '}
-                    <Link to="/contact" className="text-accent hover:underline font-medium">
+                    <a href="/contact" className="text-accent hover:underline font-medium">
                       contact our support team
-                    </Link>{' '}
+                    </a>{' '}
                     — we're happy to help.
                   </p>
                 </div>

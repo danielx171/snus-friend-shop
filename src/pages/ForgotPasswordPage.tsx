@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -61,10 +61,10 @@ export default function ForgotPasswordPage() {
                       <button onClick={() => setSubmitted(false)} className="text-primary hover:underline">try again</button>.
                     </p>
                     <Button asChild variant="outline" className="w-full rounded-xl border-border/30">
-                      <Link to="/login">
+                      <a href="/login">
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Back to sign in
-                      </Link>
+                      </a>
                     </Button>
                   </div>
                 ) : (
@@ -83,10 +83,10 @@ export default function ForgotPasswordPage() {
                       {isLoading ? 'Sending…' : 'Send Reset Link'}
                     </Button>
                     <Button asChild variant="ghost" className="w-full text-sm">
-                      <Link to="/login">
+                      <a href="/login">
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Back to sign in
-                      </Link>
+                      </a>
                     </Button>
                   </form>
                 )}

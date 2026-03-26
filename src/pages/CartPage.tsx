@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 // Select removed — subscription feature not yet implemented
-import { Link } from 'react-router-dom';
+
 import { Minus, Plus, Trash2, Truck, ArrowRight } from 'lucide-react';
 import { EmptyTinSvg } from '@/components/ui/EmptyTinSvg';
 import { packSizeMultipliers } from '@/data/products';
@@ -63,7 +63,7 @@ export default function CartPage() {
               {t('cart.emptyDescription')}
             </p>
             <Button asChild size="lg">
-              <Link to="/nicotine-pouches">{t('cart.browseProducts')}</Link>
+              <a href="/nicotine-pouches">{t('cart.browseProducts')}</a>
             </Button>
           </div>
         </Layout>
@@ -131,7 +131,7 @@ export default function CartPage() {
                     <CardContent className="p-4">
                       <div className="flex gap-4">
                         {/* Product Image */}
-                        <Link to={`/product/${item.product.id}`} className="shrink-0">
+                        <a href={`/product/${item.product.id}`} className="shrink-0">
                           {item.product.image ? (
                             <img
                               src={item.product.image}
@@ -143,18 +143,18 @@ export default function CartPage() {
                               <span className="text-[10px] text-center text-muted-foreground px-1 line-clamp-2">{item.product.name}</span>
                             </div>
                           )}
-                        </Link>
+                        </a>
 
                         {/* Product Info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between gap-2">
                             <div>
-                              <Link
-                                to={`/product/${item.product.id}`}
+                              <a
+                                href={`/product/${item.product.id}`}
                                 className="font-semibold text-foreground hover:text-primary transition-colors line-clamp-1"
                               >
                                 {item.product.name}
-                              </Link>
+                              </a>
                               <p className="text-sm text-muted-foreground">
                                 {item.product.brand} • {packCount} {canLabel}
                               </p>
@@ -244,10 +244,10 @@ export default function CartPage() {
                   </div>
 
                   <Button asChild size="lg" className="w-full mt-6 gap-2">
-                    <Link to="/checkout">
+                    <a href="/checkout">
                       {t('cart.proceedToCheckout')}
                       <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    </a>
                   </Button>
 
                   <p className="text-xs text-muted-foreground text-center mt-4">
@@ -255,9 +255,9 @@ export default function CartPage() {
                   </p>
 
                   <Button variant="outline" asChild className="w-full mt-3">
-                    <Link to="/nicotine-pouches">
+                    <a href="/nicotine-pouches">
                       Continue Shopping
-                    </Link>
+                    </a>
                   </Button>
                 </CardContent>
               </Card>

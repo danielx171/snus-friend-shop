@@ -1,4 +1,3 @@
-import { Link, useLocation } from 'react-router-dom';
 import { Gauge, BicepsFlexed, CircleDot, Trophy, Tag, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -13,8 +12,7 @@ const categories = [
 ];
 
 export function CategoryShortcuts() {
-  const location = useLocation();
-  const currentPath = location.pathname + location.search;
+  const currentPath = (typeof window !== 'undefined' ? window.location.pathname + window.location.search : '');
 
   function isSelected(href: string) {
     if (currentPath === '/') return false;
@@ -41,8 +39,8 @@ export function CategoryShortcuts() {
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.35, delay: index * 0.08, ease: 'easeOut' }}
               >
-                <Link
-                  to={category.href}
+                <a
+                  href={category.href}
                   className="relative flex flex-col items-center gap-2.5 rounded-2xl p-4 min-w-[88px] transition-all duration-150 shrink-0 group"
                 >
                   <div className="relative">
@@ -79,7 +77,7 @@ export function CategoryShortcuts() {
                   >
                     {category.label}
                   </span>
-                </Link>
+                </a>
               </motion.div>
             );
           })}

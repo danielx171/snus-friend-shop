@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { Users, MessageSquare, BarChart3, Tag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -153,7 +153,7 @@ export const CommunityBoard = memo(function CommunityBoard({ productId }: Commun
             <span className="flex items-center gap-1"><Tag className="h-3 w-3" />Tag products</span>
           </div>
           <Button asChild size="sm" variant="outline" className="text-xs">
-            <Link to="/login">Sign in to post</Link>
+            <a href="/login">Sign in to post</a>
           </Button>
         </div>
       )}

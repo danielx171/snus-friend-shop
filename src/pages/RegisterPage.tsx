@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,8 +60,7 @@ function PasswordStrengthBar({ password }: { password: string }) {
 }
 
 export default function RegisterPage() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const refCode = searchParams.get('ref');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -198,13 +197,13 @@ export default function RegisterPage() {
 
                 <p className="text-center text-sm text-muted-foreground">
                   Already have an account?{' '}
-                  <Link to="/login" className="text-primary font-medium hover:underline">Sign in</Link>
+                  <a href="/login" className="text-primary font-medium hover:underline">Sign in</a>
                 </p>
 
                 <p className="text-center text-[11px] text-muted-foreground mt-4 leading-relaxed">
                   By creating an account you agree to our{' '}
-                  <Link to="/terms" className="underline hover:text-foreground">Terms of Service</Link> and{' '}
-                  <Link to="/privacy" className="underline hover:text-foreground">Privacy Policy</Link>.
+                  <a href="/terms" className="underline hover:text-foreground">Terms of Service</a> and{' '}
+                  <a href="/privacy" className="underline hover:text-foreground">Privacy Policy</a>.
                   We'll never share your details with third parties.
                 </p>
               </CardContent>

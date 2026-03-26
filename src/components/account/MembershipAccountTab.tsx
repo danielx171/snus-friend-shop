@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -114,10 +114,10 @@ export function MembershipAccountTab({ userId = null, tier = null }: MembershipA
             </div>
 
             <Button asChild className="w-full rounded-xl bg-[hsl(var(--chart-4))] text-[hsl(220_16%_6%)] hover:bg-[hsl(var(--chart-4)/0.9)]">
-              <Link to="/membership">
+              <a href="/membership">
                 Learn More
                 <ArrowRight className="h-4 w-4 ml-1.5" />
-              </Link>
+              </a>
             </Button>
           </CardContent>
         </Card>

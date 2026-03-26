@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo } from 'react';
 import { Heart, MessageCircle, Trash2, Send, Tag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -155,14 +155,14 @@ export const PostCard = memo(function PostCard({
             {post.tagged_products.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {post.tagged_products.map((tp) => (
-                  <Link
+                  <a
                     key={tp.id}
-                    to={`/product/${tp.id}`}
+                    href={`/product/${tp.id}`}
                     className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs text-primary hover:bg-primary/20 transition-colors"
                   >
                     <Tag className="h-3 w-3" />
                     <span className="max-w-[120px] truncate">{tp.name}</span>
-                  </Link>
+                  </a>
                 ))}
               </div>
             )}

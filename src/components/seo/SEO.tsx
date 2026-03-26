@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import { useEffect } from 'react';
 import { SITE_URL } from '@/config/brand';
 
 /** Default OG image — uses the PWA icon as a reliable fallback */
@@ -28,6 +28,28 @@ function cleanCanonical(url: string): string {
   }
 }
 
+/** Set or create a <meta> tag in the document head */
+function setMeta(attr: 'name' | 'property', key: string, content: string) {
+  let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.content = content;
+}
+
+/** Set or create a <link rel="canonical"> in the document head */
+function setCanonicalLink(href: string) {
+  let el = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!el) {
+    el = document.createElement('link');
+    el.rel = 'canonical';
+    document.head.appendChild(el);
+  }
+  el.href = href;
+}
+
 export function SEO({
   title,
   description,
@@ -45,32 +67,36 @@ export function SEO({
   // Social crawlers require absolute URLs for og:image / twitter:image
   const resolvedOgImage = ogImage.startsWith('http') ? ogImage : `${SITE_URL}${ogImage}`;
 
+  useEffect(() => {
+    document.title = title;
+    setMeta('name', 'description', description);
+    setCanonicalLink(resolvedCanonical);
+
+    // Open Graph
+    setMeta('property', 'og:title', title);
+    setMeta('property', 'og:description', description);
+    setMeta('property', 'og:type', ogType);
+    setMeta('property', 'og:image', resolvedOgImage);
+    setMeta('property', 'og:url', resolvedCanonical);
+
+    // Twitter Card
+    setMeta('name', 'twitter:card', twitterCard);
+    setMeta('name', 'twitter:title', title);
+    setMeta('name', 'twitter:description', description);
+    setMeta('name', 'twitter:image', resolvedOgImage);
+
+    // Robots
+    if (metaRobots) {
+      setMeta('name', 'robots', metaRobots);
+    }
+  }, [title, description, resolvedCanonical, resolvedOgImage, ogType, twitterCard, metaRobots]);
+
+  // JSON-LD can live in the body — Google supports it anywhere
+  if (!jsonLd) return null;
   return (
-    <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      {metaRobots && <meta name="robots" content={metaRobots} />}
-      <link rel="canonical" href={resolvedCanonical} />
-
-      {/* Open Graph */}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:type" content={ogType} />
-      <meta property="og:image" content={resolvedOgImage} />
-      <meta property="og:url" content={resolvedCanonical} />
-
-      {/* Twitter Card */}
-      <meta name="twitter:card" content={twitterCard} />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={resolvedOgImage} />
-
-      {/* JSON-LD Structured Data */}
-      {jsonLd && (
-        <script type="application/ld+json">
-          {JSON.stringify(jsonLd)}
-        </script>
-      )}
-    </Helmet>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
   );
 }

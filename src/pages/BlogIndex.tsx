@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -102,7 +102,7 @@ export default function BlogIndex() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {posts.map(post => (
-                <Link key={post.id} to={`/blog/${post.slug}`} className="group block">
+                <a key={post.id} href={`/blog/${post.slug}`} className="group block">
                   <Card className="h-full border-border/50 bg-card hover:border-primary/30 transition-all duration-200 hover:shadow-md overflow-hidden">
                     {post.cover_image_url && (
                       <div className="h-40 overflow-hidden bg-muted">
@@ -142,7 +142,7 @@ export default function BlogIndex() {
                       </div>
                     </CardContent>
                   </Card>
-                </Link>
+                </a>
               ))}
             </div>
           )}

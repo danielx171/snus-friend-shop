@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,6 @@ import { supabase } from '@/integrations/supabase/client';
 type PageState = 'loading' | 'ready' | 'no-recovery' | 'expired' | 'init-error' | 'submitting' | 'success';
 
 export default function UpdatePasswordPage() {
-  const navigate = useNavigate();
 
   // Captured synchronously at first render, before Supabase's async initialize()
   // strips the hash. This is the only reliable way to detect recovery context
@@ -128,10 +127,10 @@ export default function UpdatePasswordPage() {
                       This link is invalid. Use the forgot password page to request a new one.
                     </p>
                     <Button asChild variant="outline" className="w-full rounded-xl border-border/30">
-                      <Link to="/forgot">
+                      <a href="/forgot">
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Request a reset link
-                      </Link>
+                      </a>
                     </Button>
                   </div>
                 )}
@@ -142,10 +141,10 @@ export default function UpdatePasswordPage() {
                       This reset link has expired or has already been used.
                     </p>
                     <Button asChild variant="outline" className="w-full rounded-xl border-border/30">
-                      <Link to="/forgot">
+                      <a href="/forgot">
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Request a new link
-                      </Link>
+                      </a>
                     </Button>
                   </div>
                 )}
@@ -156,10 +155,10 @@ export default function UpdatePasswordPage() {
                       Something went wrong while verifying your reset link. Please try again.
                     </p>
                     <Button asChild variant="outline" className="w-full rounded-xl border-border/30">
-                      <Link to="/forgot">
+                      <a href="/forgot">
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Request a new link
-                      </Link>
+                      </a>
                     </Button>
                   </div>
                 )}
@@ -167,7 +166,7 @@ export default function UpdatePasswordPage() {
                 {pageState === 'success' && (
                   <div className="text-center py-2">
                     <Button asChild variant="outline" className="rounded-xl border-border/30">
-                      <Link to="/account">Go to account</Link>
+                      <a href="/account">Go to account</a>
                     </Button>
                   </div>
                 )}

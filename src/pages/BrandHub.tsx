@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { usePageContext } from 'vike-react/usePageContext';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { useBrands, brandAccentColor } from '@/hooks/useBrands';
@@ -18,7 +18,8 @@ import { ArrowRight } from 'lucide-react';
 import NotFound from './NotFound';
 
 export default function BrandHub() {
-  const { brandSlug } = useParams<{ brandSlug: string }>();
+  const { routeParams } = usePageContext();
+  const brandSlug = routeParams?.brandSlug || '';
   const { brands, isLoading: brandsLoading } = useBrands();
   const { data: allProducts = [], isLoading: productsLoading } = useCatalogProducts();
 
@@ -89,9 +90,9 @@ export default function BrandHub() {
           <div className="container">
             <nav className="mb-4 text-xs text-muted-foreground" aria-label="Breadcrumb">
               <ol className="flex items-center gap-1 flex-wrap">
-                <li><Link to="/" className="hover:text-foreground transition-colors">Home</Link></li>
+                <li><a href="/" className="hover:text-foreground transition-colors">Home</a></li>
                 <li>/</li>
-                <li><Link to="/nicotine-pouches" className="hover:text-foreground transition-colors">Nicotine Pouches</Link></li>
+                <li><a href="/nicotine-pouches" className="hover:text-foreground transition-colors">Nicotine Pouches</a></li>
                 <li>/</li>
                 <li className="text-foreground font-medium">{brandName}</li>
               </ol>
@@ -135,9 +136,9 @@ export default function BrandHub() {
                 {brandName} Products
               </h2>
               <Button variant="ghost" size="sm" asChild className="gap-1 text-xs">
-                <Link to={`/nicotine-pouches?brand=${encodeURIComponent(brandName)}`}>
+                <a href={`/nicotine-pouches?brand=${encodeURIComponent(brandName)}`}>
                   View all <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                </a>
               </Button>
             </div>
 
@@ -205,9 +206,9 @@ export default function BrandHub() {
                 {suggestions.map((b) => {
                   const bAccent = brandAccentColor(b.name);
                   return (
-                    <Link
+                    <a
                       key={b.id}
-                      to={`/brand/${b.slug}`}
+                      href={`/brand/${b.slug}`}
                       className="group block"
                     >
                       <div className="relative h-full overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-200 ease-out hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y-1 hover:border-[hsl(0_0%_100%/0.25)]">
@@ -228,7 +229,7 @@ export default function BrandHub() {
                           <span className="text-xs text-muted-foreground">{b.productCount} products</span>
                         </div>
                       </div>
-                    </Link>
+                    </a>
                   );
                 })}
               </div>
@@ -241,7 +242,7 @@ export default function BrandHub() {
             Looking for more brands?
           </p>
           <Button variant="outline" asChild className="rounded-xl">
-            <Link to="/brands">Explore all brands</Link>
+            <a href="/brands">Explore all brands</a>
           </Button>
         </section>
       </Layout>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { usePageContext } from 'vike-react/usePageContext';
+import { navigate } from 'vike/client/router';
 import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
 import { SEO } from '@/components/seo/SEO';
@@ -143,7 +144,8 @@ function renderMarkdown(md: string): string {
 }
 
 export default function BlogPost() {
-  const { slug } = useParams<{ slug: string }>();
+  const { routeParams } = usePageContext();
+  const slug = routeParams?.slug || '';
   const [post, setPost] = useState<BlogPost | null | 'loading'>('loading');
 
   useEffect(() => {
@@ -175,7 +177,10 @@ export default function BlogPost() {
     );
   }
 
-  if (!post) return <Navigate to="/blog" replace />;
+  if (!post) {
+    navigate('/blog');
+    return null;
+  }
 
   const siteUrl = 'https://snusfriends.com';
   const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
@@ -209,9 +214,9 @@ export default function BlogPost() {
         <div className="container py-8 max-w-3xl">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-            <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+            <a href="/" className="hover:text-foreground transition-colors">Home</a>
             <span>/</span>
-            <Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link>
+            <a href="/blog" className="hover:text-foreground transition-colors">Blog</a>
             <span>/</span>
             <span className="text-foreground truncate max-w-[200px]">{post.title}</span>
           </nav>
@@ -266,10 +271,10 @@ export default function BlogPost() {
           {/* Back link */}
           <div className="mt-12 pt-8 border-t border-border/40">
             <Button variant="outline" asChild>
-              <Link to="/blog">
+              <a href="/blog">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Blog
-              </Link>
+              </a>
             </Button>
           </div>
         </div>

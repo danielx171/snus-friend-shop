@@ -1,5 +1,4 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
 import { useCatalogProducts } from '@/hooks/useCatalog';
 import { brandDirectory } from '@/data/brand-overrides';
 import { scoreProduct, matchesQuery } from '@/lib/search';
@@ -29,7 +28,7 @@ const sortLabels: Record<SortOption, string> = {
 };
 
 export default function SearchResults() {
-  const [searchParams] = useSearchParams();
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const query = searchParams.get('q') || '';
   const [sortBy, setSortBy] = useState<SortOption>('relevance');
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
@@ -119,9 +118,9 @@ export default function SearchResults() {
           {matchedBrands.length > 0 && (
             <div className="mb-8 flex flex-wrap gap-3">
               {matchedBrands.map(b => (
-                <Link
+                <a
                   key={b.slug}
-                  to={`/brand/${b.slug}`}
+                  href={`/brand/${b.slug}`}
                   className="flex items-center gap-3 rounded-2xl border border-border/30 bg-card/60 p-4 hover:border-primary/30 transition-colors"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-sm">
@@ -131,7 +130,7 @@ export default function SearchResults() {
                     <p className="text-sm font-medium text-foreground">{b.name}</p>
                     <p className="text-xs text-muted-foreground">{b.tagline}</p>
                   </div>
-                </Link>
+                </a>
               ))}
             </div>
           )}

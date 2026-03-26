@@ -5,7 +5,7 @@ import { useWishlist } from '@/context/WishlistContext';
 import { Button } from '@/components/ui/button';
 import { EmptyTinSvg } from '@/components/ui/EmptyTinSvg';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Link } from 'react-router-dom';
+
 import { Heart } from 'lucide-react';
 
 function WishlistSkeleton() {
@@ -58,7 +58,7 @@ export default function WishlistPage() {
               Tap the heart on products you love — they'll be waiting here
             </p>
             <Button asChild>
-              <Link to="/nicotine-pouches">Browse products</Link>
+              <a href="/nicotine-pouches">Browse products</a>
             </Button>
           </div>
         ) : (

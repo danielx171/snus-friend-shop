@@ -3,7 +3,7 @@ import { useCatalogProducts } from '@/hooks/useCatalog';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductCardSkeleton } from '@/components/product/ProductCardSkeleton';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { motion } from 'framer-motion';
@@ -43,10 +43,10 @@ export const FeaturedProducts = React.memo(function FeaturedProducts({
             {title}
           </motion.h2>
           <Button asChild variant="ghost" className="gap-1.5 text-accent hover:text-white hover:bg-accent/8 transition-all duration-200 group/viewall">
-            <Link to={viewAllHref}>
+            <a href={viewAllHref}>
               {t('products.viewAll')}
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/viewall:translate-x-1" />
-            </Link>
+            </a>
           </Button>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

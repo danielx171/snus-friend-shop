@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { useQuery } from '@tanstack/react-query';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -69,7 +69,6 @@ type OrderRow = {
 };
 
 export default function AccountPage() {
-  const navigate = useNavigate();
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

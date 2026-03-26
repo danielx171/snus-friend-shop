@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/context/CartContext';
 import { Minus, Plus, Trash2, ShoppingBag, Truck, Star, Sparkles } from 'lucide-react';
 import { packSizeMultipliers, PackSize } from '@/data/products';
-import { Link } from 'react-router-dom';
+
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
 import { getCartTotals } from '@/lib/cart-utils';
@@ -125,7 +125,7 @@ export function CartDrawer() {
             </div>
             <p className="text-muted-foreground">{t('cart.empty')}</p>
             <Button onClick={closeCart} asChild className="rounded-xl glow-primary">
-              <Link to="/">{t('cart.startShopping')}</Link>
+              <a href="/">{t('cart.startShopping')}</a>
             </Button>
           </div>
         ) : (
@@ -269,7 +269,7 @@ export function CartDrawer() {
                 </div>
               </div>
               <Button asChild className="mt-3 w-full rounded-xl glow-primary" size="default">
-                <Link to="/cart" onClick={closeCart}>{t('cart.checkout')}</Link>
+                <a href="/cart" onClick={closeCart}>{t('cart.checkout')}</a>
               </Button>
               <Button variant="ghost" size="sm" className="mt-1.5 w-full text-sm hover:text-primary" onClick={closeCart}>
                 {t('cart.continueShopping')}

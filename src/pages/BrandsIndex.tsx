@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
@@ -41,7 +41,7 @@ export default function BrandsIndex() {
 
       <div className="container py-8 md:py-12">
         <nav className="flex items-center gap-1.5 text-sm text-muted-foreground mb-6">
-          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+          <a href="/" className="hover:text-foreground transition-colors">Home</a>
           <span>/</span>
           <span className="text-foreground font-medium">Brands</span>
         </nav>
@@ -69,9 +69,9 @@ export default function BrandsIndex() {
             {filteredBrands.map((brand) => {
               const accent = brandAccentColor(brand.name);
               return (
-                <Link
+                <a
                   key={brand.id}
-                  to={`/brand/${brand.slug}`}
+                  href={`/brand/${brand.slug}`}
                   className="group block"
                 >
                   <div className="relative h-full overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-200 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 hover:border-[hsl(0_0%_100%/0.3)]">
@@ -88,7 +88,7 @@ export default function BrandsIndex() {
                       <span className="text-xs text-muted-foreground">{brand.productCount} products</span>
                     </div>
                   </div>
-                </Link>
+                </a>
               );
             })}
             {filteredBrands.length === 0 && (
@@ -118,8 +118,8 @@ export default function BrandsIndex() {
                       viewport={{ once: true, amount: 0.2 }}
                       transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.5), ease: 'easeOut' }}
                     >
-                      <Link
-                        to={`/brand/${b.slug}`}
+                      <a
+                        href={`/brand/${b.slug}`}
                         className="group block h-full"
                       >
                         <div className="relative h-full overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-200 ease-out hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 hover:border-white/20">
@@ -146,7 +146,7 @@ export default function BrandsIndex() {
                             </div>
                           </div>
                         </div>
-                      </Link>
+                      </a>
                     </motion.div>
                   );
                 })}
@@ -213,12 +213,12 @@ export default function BrandsIndex() {
                       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1">
                         {brandsByLetter[letter].map((b) => (
                           <li key={b.id} className="flex items-center justify-between py-1.5">
-                            <Link
-                              to={`/brand/${b.slug}`}
+                            <a
+                              href={`/brand/${b.slug}`}
                               className="text-sm text-foreground hover:text-[hsl(var(--chart-4))] transition-colors"
                             >
                               {b.name}
-                            </Link>
+                            </a>
                             <span className="text-xs text-muted-foreground">{b.productCount}</span>
                           </li>
                         ))}

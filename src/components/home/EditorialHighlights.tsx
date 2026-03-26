@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -63,8 +63,8 @@ export function EditorialHighlights() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
             >
-              <Link
-                to={item.href}
+              <a
+                href={item.href}
                 className="group relative block h-[280px] rounded-2xl border border-white/10 bg-white/[0.08] overflow-hidden transition-all duration-200 ease-out hover:border-white/20 hover:-translate-y-0.5"
               >
                 {/* Large emoji watermark */}
@@ -86,7 +86,7 @@ export function EditorialHighlights() {
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
                   </span>
                 </div>
-              </Link>
+              </a>
             </motion.div>
           ))}
         </div>

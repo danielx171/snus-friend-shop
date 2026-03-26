@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+
 import { motion, useInView, animate } from 'framer-motion';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
@@ -267,7 +267,7 @@ export default function MembershipPage() {
                                   : ''
                               )}
                             >
-                              <Link to="/login">Sign in to see your tier</Link>
+                              <a href="/login">Sign in to see your tier</a>
                             </Button>
                           );
                         }
@@ -552,7 +552,7 @@ export default function MembershipPage() {
                     Shop <span className="font-semibold text-foreground">€34</span> worth of pouches and you're already here! →
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    <Link to="/login" className="text-primary hover:underline font-medium">Sign in</Link> to track your real balance.
+                    <a href="/login" className="text-primary hover:underline font-medium">Sign in</a> to track your real balance.
                   </p>
                 </div>
               )}

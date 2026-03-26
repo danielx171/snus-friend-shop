@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,6 @@ import { SEO } from '@/components/seo/SEO';
 import { supabase } from '@/integrations/supabase/client';
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -57,7 +56,7 @@ export default function LoginPage() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="password">Password</Label>
-                      <Link to="/forgot" className="text-xs text-primary hover:underline">Forgot password?</Link>
+                      <a href="/forgot" className="text-xs text-primary hover:underline">Forgot password?</a>
                     </div>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -87,13 +86,13 @@ export default function LoginPage() {
 
                 <p className="text-center text-sm text-muted-foreground">
                   Don't have an account?{' '}
-                  <Link to="/register" className="text-primary font-medium hover:underline">Create one</Link>
+                  <a href="/register" className="text-primary font-medium hover:underline">Create one</a>
                 </p>
 
                 <p className="text-center text-[11px] text-muted-foreground mt-4 leading-relaxed">
                   By signing in you confirm you are 18+ and agree to our{' '}
-                  <Link to="/terms" className="underline hover:text-foreground">Terms of Service</Link> and{' '}
-                  <Link to="/privacy" className="underline hover:text-foreground">Privacy Policy</Link>.
+                  <a href="/terms" className="underline hover:text-foreground">Terms of Service</a> and{' '}
+                  <a href="/privacy" className="underline hover:text-foreground">Privacy Policy</a>.
                 </p>
               </CardContent>
             </Card>

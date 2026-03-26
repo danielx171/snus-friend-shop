@@ -1,5 +1,4 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
 import { BadgeKey, StrengthKey } from '@/data/products';
 import { useBrands } from '@/hooks/useBrands';
 import { useCatalogProducts } from '@/hooks/useCatalog';
@@ -32,7 +31,7 @@ export default function ProductListing() {
   const { data: products = [], isLoading, isError } = useCatalogProducts();
   const { topBrands } = useBrands();
   const featuredBrandNames = topBrands.slice(0, 6).map(b => b.name);
-  const [searchParams] = useSearchParams();
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const badgeFilter = searchParams.get('badge');
   const brandFilter = searchParams.get('brand');
   const strengthFilter = searchParams.get('strength');
@@ -190,9 +189,9 @@ export default function ProductListing() {
             ].map((tab) => {
               const isActive = tab.match(badgeFilter, strengthFilter);
               return (
-                <Link
+                <a
                   key={tab.label}
-                  to={tab.href}
+                  href={tab.href}
                   className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     isActive
                       ? 'bg-primary text-primary-foreground glow-primary'
@@ -200,7 +199,7 @@ export default function ProductListing() {
                   }`}
                 >
                   {tab.label}
-                </Link>
+                </a>
               );
             })}
           </div>

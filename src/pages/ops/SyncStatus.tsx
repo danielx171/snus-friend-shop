@@ -4,7 +4,7 @@ import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Link } from 'react-router-dom';
+
 import { ArrowLeft, Package, RefreshCw } from 'lucide-react';
 import { fetchNyehandel } from '@/lib/api';
 import type { SyncRun } from '@/types/ops';
@@ -51,9 +51,9 @@ export default function SyncStatus() {
       <SEO title="Sync Status — SnusFriend Ops" description="Internal sync monitoring." metaRobots="noindex,nofollow" />
       <div className="container py-8 space-y-8">
         <div className="flex items-center gap-3">
-          <Link to="/ops" className="text-muted-foreground hover:text-foreground transition-colors">
+          <a href="/ops" className="text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="h-5 w-5" />
-          </Link>
+          </a>
           <h1 className="text-2xl font-bold text-foreground">Sync Status</h1>
         </div>
 

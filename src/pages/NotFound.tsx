@@ -1,4 +1,3 @@
-import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { SEO } from "@/components/seo/SEO";
@@ -8,11 +7,9 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const NotFound = () => {
-  const location = useLocation();
-
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
+    console.error("404 Error: User attempted to access non-existent route:", window.location.pathname);
+  }, []);
 
   return (
     <Layout showNicotineWarning={false}>
@@ -67,10 +64,10 @@ const NotFound = () => {
             transition={{ duration: 0.4, delay: 0.55, ease: 'easeOut' }}
           >
             <Button asChild size="lg" className="gap-2 rounded-2xl h-12 px-7 font-semibold glow-primary">
-              <Link to="/nicotine-pouches">
+              <a href="/nicotine-pouches">
                 Browse All Pouches
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </a>
             </Button>
           </motion.div>
         </div>

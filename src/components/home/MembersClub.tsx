@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+
 import { ArrowRight, Check, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TIERS, SNUSPOINTS } from '@/data/membership';
@@ -110,10 +110,10 @@ export function MembersClub() {
 
                     {/* CTA */}
                     <Button asChild variant={isVip ? 'default' : 'outline'} className={cn('w-full rounded-xl transition-all duration-200 hover:scale-[1.02] hover:brightness-110', isVip && 'bg-accent text-accent-foreground')}>
-                      <Link to="/membership">
+                      <a href="/membership">
                         Join Waitlist
                         <ArrowRight className="h-4 w-4 ml-1.5" />
-                      </Link>
+                      </a>
                     </Button>
                   </div>
                 </div>
@@ -130,8 +130,8 @@ export function MembersClub() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
-          <Link
-            to="/membership#points"
+          <a
+            href="/membership#points"
             className="block rounded-2xl bg-accent/[0.06] border border-accent/15 p-6 hover:bg-accent/[0.08] transition-all duration-200 group"
           >
             <div className="flex items-center gap-4 mb-4">
@@ -168,18 +168,18 @@ export function MembersClub() {
                 Shop €50 worth of pouches and you're already here!
               </p>
             </div>
-          </Link>
+          </a>
         </motion.div>
 
         {/* Learn more link */}
         <div className="text-center mt-8">
-          <Link
-            to="/membership"
+          <a
+            href="/membership"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
             Learn more about the Snus Family Club
             <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          </a>
         </div>
       </div>
 

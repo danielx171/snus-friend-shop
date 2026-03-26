@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { supabase } from '@/integrations/supabase/client';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
@@ -14,7 +14,6 @@ export default function OpsLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,7 +30,7 @@ export default function OpsLogin() {
     }
 
     toast({ title: 'Signed in' });
-    navigate('/ops', { replace: true });
+    navigate('/ops', { overwriteLastHistoryEntry: true });
   };
 
   return (

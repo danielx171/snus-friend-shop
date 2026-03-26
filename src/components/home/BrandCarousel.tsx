@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+
 import { ArrowRight } from 'lucide-react';
 import { useBrands, brandAccentColor } from '@/hooks/useBrands';
 
@@ -59,22 +59,22 @@ export function BrandCarousel() {
         <h2 className="text-xl lg:text-2xl font-bold text-foreground tracking-tight">
           Discover Brands
         </h2>
-        <Link
-          to="/brands"
+        <a
+          href="/brands"
           className="group flex items-center gap-1.5 text-sm font-medium text-[hsl(var(--chart-4))] hover:underline"
         >
           View all
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </Link>
+        </a>
       </div>
 
       <div className="flex gap-4 overflow-x-auto pb-3 scrollbar-hide -mx-4 px-4 snap-x snap-mandatory">
         {displayBrands.map((brand) => {
           const accent = brandAccentColor(brand.name);
           return (
-            <Link
+            <a
               key={brand.id}
-              to={`/brand/${brand.slug}`}
+              href={`/brand/${brand.slug}`}
               className="group shrink-0 snap-start"
             >
               <div className="relative w-36 h-28 rounded-2xl border border-border/40 bg-card overflow-hidden transition-all duration-200 ease-out hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y-1 hover:border-[hsl(0_0%_100%/0.25)] light:border-border/60 light:hover:shadow-lg light:hover:border-primary/20">
@@ -97,7 +97,7 @@ export function BrandCarousel() {
                   </span>
                 </div>
               </div>
-            </Link>
+            </a>
           );
         })}
       </div>

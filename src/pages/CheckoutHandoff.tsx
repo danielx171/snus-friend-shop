@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { Layout } from '@/components/layout/Layout';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
@@ -72,7 +72,6 @@ const COUNTRY_OPTIONS = [
 export default function CheckoutHandoff() {
   const { items } = useCart();
   const { t, formatPrice, market } = useTranslation();
-  const navigate = useNavigate();
 
   /* ── Form state ── */
   const [form, setForm] = useState({
@@ -274,9 +273,7 @@ export default function CheckoutHandoff() {
       });
 
       if (result.ok && result.orderId) {
-        navigate(`/order-confirmation/${result.orderId}`, {
-          state: { email: form.email },
-        });
+        navigate(`/order-confirmation/${result.orderId}?email=${encodeURIComponent(form.email)}`);
       } else {
         setError('Order creation failed. Please try again.');
       }
@@ -312,7 +309,7 @@ export default function CheckoutHandoff() {
             <h1 className="text-2xl font-bold text-foreground mb-2">{t('cart.empty')}</h1>
             <p className="text-muted-foreground mb-8">{t('checkout.emptyDescription')}</p>
             <Button asChild size="lg">
-              <Link to="/nicotine-pouches">{t('cart.browseProducts')}</Link>
+              <a href="/nicotine-pouches">{t('cart.browseProducts')}</a>
             </Button>
           </div>
         </Layout>
@@ -621,16 +618,16 @@ export default function CheckoutHandoff() {
                           <p>All prices include VAT where applicable.</p>
                           <p>
                             You have 14 days from delivery to withdraw from this purchase.{' '}
-                            <Link to="/returns" className="underline hover:text-foreground">
+                            <a href="/returns" className="underline hover:text-foreground">
                               Returns &amp; refunds policy
-                            </Link>
+                            </a>
                           </p>
                           <p>Estimated delivery: 3-10 business days.</p>
                           <p>
                             By placing this order you accept our{' '}
-                            <Link to="/terms" className="underline hover:text-foreground">
+                            <a href="/terms" className="underline hover:text-foreground">
                               terms &amp; conditions
-                            </Link>.
+                            </a>.
                           </p>
                         </div>
 

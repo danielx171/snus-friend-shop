@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { Coins, LogIn } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Layout } from '@/components/layout/Layout';
@@ -37,7 +37,6 @@ type Tab = 'spin' | 'quests' | 'vouchers' | 'redeem';
 /* ------------------------------------------------------------------ */
 
 export default function RewardsPage() {
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   /* ---- Auth state ---- */

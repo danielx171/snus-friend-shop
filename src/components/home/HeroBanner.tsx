@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+
 import { ArrowRight, Truck, Star, Shield, ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { formatMarketPrice } from '@/lib/market';
@@ -321,10 +321,10 @@ export function HeroBanner() {
                             className="gap-2 rounded-2xl h-12 px-7 font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
                             style={{ backgroundColor: s.accentColor, color: 'hsl(220 100% 12%)' }}
                           >
-                            <Link to={s.cta.href}>
+                            <a href={s.cta.href}>
                               {s.cta.label}
                               <ArrowRight className="h-4 w-4" />
-                            </Link>
+                            </a>
                           </Button>
                           {s.secondaryCta && (
                             <Button
@@ -333,9 +333,9 @@ export function HeroBanner() {
                               size="lg"
                               className="rounded-2xl h-12 px-7 border-border/60 bg-card/60 backdrop-blur-sm hover:bg-card hover:border-border transition-all duration-200 text-foreground"
                             >
-                              <Link to={s.secondaryCta.href}>
+                              <a href={s.secondaryCta.href}>
                                 {s.secondaryCta.label}
-                              </Link>
+                              </a>
                             </Button>
                           )}
                         </motion.div>
@@ -448,8 +448,8 @@ export function HeroBanner() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ duration: 0.5, delay: 0.7 + i * 0.1, ease: easeOut }}
                     >
-                      <Link
-                        to={`/product/${product.id}`}
+                      <a
+                        href={`/product/${product.id}`}
                         className="group relative rounded-2xl border border-border/30 bg-card/80 backdrop-blur-sm overflow-hidden hover:border-border/60 hover:bg-card transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 block"
                       >
                         <div className="aspect-square w-full overflow-hidden" style={{ background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.07), rgba(255,255,255,0.02))' }}>
@@ -473,7 +473,7 @@ export function HeroBanner() {
                             {formatPrice(product.prices.pack1)}/{t('cart.can')}
                           </p>
                         </div>
-                      </Link>
+                      </a>
                     </motion.div>
                   ))}
                 </div>
@@ -488,8 +488,8 @@ export function HeroBanner() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ duration: 0.5, delay: 0.7 + i * 0.1, ease: easeOut }}
                     >
-                      <Link
-                        to={`/product/${product.id}`}
+                      <a
+                        href={`/product/${product.id}`}
                         className="rounded-2xl border border-border/30 bg-card/80 p-3 hover:border-border/60 transition-all duration-200 block"
                       >
                         <div className="w-full aspect-square rounded-xl overflow-hidden flex items-center justify-center mb-2" style={{ background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.07), rgba(255,255,255,0.02))' }}>
@@ -504,7 +504,7 @@ export function HeroBanner() {
                         <p className="text-[10px] mt-1" style={{ color: slide.accentColor }}>
                           {formatPrice(product.prices.pack1)}
                         </p>
-                      </Link>
+                      </a>
                     </motion.div>
                   ))}
                 </div>

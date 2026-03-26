@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { PackageOpen, ShoppingBag, Search, Users, FileX } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
 
 type EmptyVariant = 'plp' | 'pdp' | 'cart' | 'orders' | 'search' | 'ops' | 'generic';
 
@@ -46,7 +46,7 @@ export function EmptyState({
       <p className="text-sm text-muted-foreground max-w-sm mb-6">{description ?? defaults.description}</p>
       {(actionLabel && actionHref) && (
         <Button asChild className="rounded-xl glow-primary">
-          <Link to={actionHref}>{actionLabel}</Link>
+          <a href={actionHref}>{actionLabel}</a>
         </Button>
       )}
       {(actionLabel && onAction && !actionHref) && (

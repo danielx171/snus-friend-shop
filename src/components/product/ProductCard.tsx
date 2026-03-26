@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ShoppingCart, Bell, Check, Heart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
-import { Link } from 'react-router-dom';
+
 import { apiFetch } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -99,7 +99,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
       'product-card relative overflow-hidden rounded-2xl border-white/[0.06] bg-card/90 backdrop-blur-sm shadow-[0_2px_8px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-300 ease-out group-hover:border-white/[0.12] group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.06)]',
       isOutOfStock && 'opacity-60'
     )}>
-      <Link to={`/product/${product.id}`} aria-label={product.name}>
+      <a href={`/product/${product.id}`} aria-label={product.name}>
         {/* Image area */}
         <div
           className="product-card-image product-card-image-bg relative overflow-hidden"
@@ -264,10 +264,10 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
                 asChild
               >
-                <Link to={`/product/${product.id}`}>
+                <a href={`/product/${product.id}`}>
                   <Bell className="h-3 w-3" />
                   Notify Me
-                </Link>
+                </a>
               </Button>
             ) : (
               <div className="space-y-2" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
@@ -331,7 +331,7 @@ function ProductCardInner({ product, variant = 'default' }: ProductCardProps) {
             </Button>
           )}
         </CardContent>
-      </Link>
+      </a>
     </Card>
     </div>
   );

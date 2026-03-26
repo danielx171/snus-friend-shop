@@ -1,5 +1,3 @@
-import { Helmet } from 'react-helmet-async';
-
 interface ItemListProduct {
   id: string;
   name: string;
@@ -34,8 +32,9 @@ export function ItemListSchema({ items, name = 'Nicotine Pouches' }: ItemListSch
   };
 
   return (
-    <Helmet>
-      <script type="application/ld+json">{JSON.stringify(schema)}</script>
-    </Helmet>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
   );
 }

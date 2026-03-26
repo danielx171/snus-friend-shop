@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import { Shield, ShieldOff, Users, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
 
 interface AuthUser {
   id: string;
@@ -51,7 +51,7 @@ export default function OpsUsers() {
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto flex items-center gap-4 px-4 py-3">
-          <Link to="/ops" className="text-sm text-muted-foreground hover:text-foreground">← Dashboard</Link>
+          <a href="/ops" className="text-sm text-muted-foreground hover:text-foreground">← Dashboard</a>
           <h1 className="text-lg font-semibold flex items-center gap-2"><Users className="h-5 w-5" /> User Management</h1>
         </div>
       </header>

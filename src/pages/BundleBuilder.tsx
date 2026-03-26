@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Button } from '@/components/ui/button';
@@ -173,7 +173,6 @@ const BundleSlot = React.memo(function BundleSlot({
 });
 
 export default function BundleBuilder() {
-  const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toast } = useToast();
   const { data: allProducts = [], isLoading } = useCatalogProducts();
@@ -265,7 +264,7 @@ export default function BundleBuilder() {
     });
 
     navigate('/cart');
-  }, [bundleSlots, selectedTier, addToCart, toast, navigate, discountAmount]);
+  }, [bundleSlots, selectedTier, addToCart, toast, discountAmount]);
 
   return (
     <Layout>

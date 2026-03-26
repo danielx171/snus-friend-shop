@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { supabase } from '@/integrations/supabase/client';
 import { apiFetch } from '@/lib/api';
 import type { Session } from '@supabase/supabase-js';
 
 export default function OpsAuthGuard({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [isAdmin, setIsAdmin] = useState<boolean | undefined>(undefined);
 
@@ -55,7 +54,8 @@ export default function OpsAuthGuard({ children }: { children: React.ReactNode }
   }
 
   if (!session) {
-    return <Navigate to="/ops/login" replace />;
+    navigate('/ops/login');
+    return null;
   }
 
   if (!isAdmin) {

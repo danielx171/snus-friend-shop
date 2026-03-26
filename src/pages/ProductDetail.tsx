@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { usePageContext } from 'vike-react/usePageContext';
 import { PackSize, packSizeMultipliers, FlavorKey, RETAIL_PACK_SIZES } from '@/data/products';
 import { useCatalogProducts, useCatalogProduct } from '@/hooks/useCatalog';
 import { Layout } from '@/components/layout/Layout';
@@ -47,7 +47,8 @@ const packSizes = RETAIL_PACK_SIZES;
 const easeOut = [0, 0, 0.2, 1] as const;
 
 export default function ProductDetail() {
-  const { id } = useParams();
+  const { routeParams } = usePageContext();
+  const id = routeParams?.id || '';
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -79,7 +80,7 @@ export default function ProductDetail() {
           <h1 className="text-2xl font-bold text-foreground mb-4">Unable to load product</h1>
           <p className="text-muted-foreground mb-6 text-sm">There was a problem fetching this product. Please try again.</p>
           <Button asChild variant="outline" className="rounded-xl border-border/30">
-            <Link to="/nicotine-pouches">{t('detail.backToProducts')}</Link>
+            <a href="/nicotine-pouches">{t('detail.backToProducts')}</a>
           </Button>
         </div>
       </Layout>
@@ -92,7 +93,7 @@ export default function ProductDetail() {
         <div className="container py-20 text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">{t('detail.productNotFound')}</h1>
           <Button asChild variant="outline" className="rounded-xl border-border/30">
-            <Link to="/nicotine-pouches">{t('detail.backToProducts')}</Link>
+            <a href="/nicotine-pouches">{t('detail.backToProducts')}</a>
           </Button>
         </div>
       </Layout>
@@ -142,10 +143,10 @@ export default function ProductDetail() {
 
       <div className="container py-10">
         <nav className="mb-8">
-          <Link to="/nicotine-pouches" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+          <a href="/nicotine-pouches" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
             <ChevronLeft className="mr-1 h-4 w-4" />
             {t('detail.backToProducts')}
-          </Link>
+          </a>
         </nav>
 
         <div className="grid gap-10 lg:grid-cols-2">
@@ -396,13 +397,13 @@ export default function ProductDetail() {
                   </AnimatePresence>
                   {' '}SnusPoints with this purchase
                 </span>
-                <Link
-                  to="/membership#points"
+                <a
+                  href="/membership#points"
                   className="group relative"
                   title="10 pts per €1 spent. 500 pts = free mystery box month!"
                 >
                   <Info className="h-3.5 w-3.5 text-muted-foreground hover:text-[hsl(var(--chart-4))] transition-colors" />
-                </Link>
+                </a>
               </div>
             )}
 

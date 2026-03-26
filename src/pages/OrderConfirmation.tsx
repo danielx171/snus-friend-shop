@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { useParams, useSearchParams, useLocation, Link } from 'react-router-dom';
+import { usePageContext } from 'vike-react/usePageContext';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -175,9 +175,9 @@ interface OrderConfirmationResponse {
 }
 
 export default function OrderConfirmation() {
-  const { orderId: paramOrderId } = useParams<{ orderId: string }>();
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
+  const { routeParams } = usePageContext();
+  const paramOrderId = routeParams?.orderId;
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const orderId = paramOrderId ?? searchParams.get('orderId') ?? undefined;
 
   const [state, setState] = useState<PageState>({ kind: 'loading' });
@@ -197,8 +197,8 @@ export default function OrderConfirmation() {
     let cancelled = false;
 
     (async () => {
-      // Resolve email: navigation state (from checkout) > auth session
-      const navEmail = (location.state as { email?: string } | null)?.email;
+      // Resolve email: URL param (from checkout) > auth session
+      const navEmail = searchParams.get('email');
       let email = typeof navEmail === 'string' ? navEmail.trim() : '';
 
       if (!email) {
@@ -253,7 +253,7 @@ export default function OrderConfirmation() {
     })();
 
     return () => { cancelled = true; };
-  }, [orderId, location.state]);
+  }, [orderId]);
 
   /* ── Clear cart once on success ── */
   useEffect(() => {
@@ -316,7 +316,7 @@ export default function OrderConfirmation() {
           <h1 className="font-serif text-2xl font-semibold">No order found</h1>
           <p className="mt-2 text-muted-foreground">No order ID was provided in the URL.</p>
           <Button asChild className="mt-6">
-            <Link to="/">Back to shop</Link>
+            <a href="/">Back to shop</a>
           </Button>
         </div>
       </Layout>
@@ -332,7 +332,7 @@ export default function OrderConfirmation() {
             Please sign in to view your order confirmation.
           </p>
           <Button asChild className="mt-6">
-            <Link to="/login">Sign in</Link>
+            <a href="/login">Sign in</a>
           </Button>
         </div>
       </Layout>
@@ -349,10 +349,10 @@ export default function OrderConfirmation() {
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Button asChild>
-              <Link to="/account">View orders</Link>
+              <a href="/account">View orders</a>
             </Button>
             <Button variant="outline" asChild>
-              <Link to="/">Back to shop</Link>
+              <a href="/">Back to shop</a>
             </Button>
           </div>
         </div>
@@ -367,7 +367,7 @@ export default function OrderConfirmation() {
           <h1 className="font-serif text-2xl font-semibold">Something went wrong</h1>
           <p className="mt-2 text-muted-foreground text-sm">{state.message}</p>
           <Button asChild className="mt-6">
-            <Link to="/account">View orders</Link>
+            <a href="/account">View orders</a>
           </Button>
         </div>
       </Layout>
@@ -640,13 +640,13 @@ export default function OrderConfirmation() {
         {/* ── Actions ── */}
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Button asChild size="lg">
-            <Link to="/nicotine-pouches">
+            <a href="/nicotine-pouches">
               Continue Shopping
               <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
+            </a>
           </Button>
           <Button variant="outline" size="lg" asChild>
-            <Link to="/account">View Account</Link>
+            <a href="/account">View Account</a>
           </Button>
         </div>
       </div>

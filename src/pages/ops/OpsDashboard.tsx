@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router';
 import { Layout } from '@/components/layout/Layout';
 import { SEO } from '@/components/seo/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -203,7 +203,6 @@ function AlertActionQueue({ alerts, isLoading }: { alerts: OpsAlert[]; isLoading
 
 // --- Main page ---
 export default function OpsDashboard() {
-  const navigate = useNavigate();
   const { data: events = [] } = useWebhookEvents();
   const { data: syncRuns = [] } = useSyncRuns();
   const { data: alerts = [], isLoading: alertsLoading } = useOpsAlerts();
@@ -255,13 +254,13 @@ export default function OpsDashboard() {
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-foreground">Ops Dashboard</h1>
           <div className="flex items-center gap-3 text-sm">
-            <Link to="/ops/webhooks" className="text-primary hover:underline">Webhooks</Link>
+            <a href="/ops/webhooks" className="text-primary hover:underline">Webhooks</a>
             <span className="text-muted-foreground">·</span>
-            <Link to="/ops/sync" className="text-primary hover:underline">Sync Status</Link>
+            <a href="/ops/sync" className="text-primary hover:underline">Sync Status</a>
             <span className="text-muted-foreground">·</span>
-            <Link to="/ops/mappings" className="text-primary hover:underline">Mappings</Link>
+            <a href="/ops/mappings" className="text-primary hover:underline">Mappings</a>
             <span className="text-muted-foreground">·</span>
-            <Link to="/ops/users" className="text-primary hover:underline">Users</Link>
+            <a href="/ops/users" className="text-primary hover:underline">Users</a>
             <Button variant="ghost" size="sm" className="gap-1.5 ml-2" onClick={handleSignOut}>
               <LogOut className="h-4 w-4" />
               Sign Out

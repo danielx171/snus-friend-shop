@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import type { WebhookEvent } from '@/types/ops';
-import { Link } from 'react-router-dom';
+
 import { ArrowLeft } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -100,9 +100,9 @@ export default function WebhookInbox() {
       <SEO title="Webhook Inbox — SnusFriend Ops" description="Internal webhook event log." metaRobots="noindex,nofollow" />
       <div className="container py-8 space-y-6">
         <div className="flex items-center gap-3">
-          <Link to="/ops" className="text-muted-foreground hover:text-foreground transition-colors">
+          <a href="/ops" className="text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="h-5 w-5" />
-          </Link>
+          </a>
           <h1 className="text-2xl font-bold text-foreground">Webhook Inbox</h1>
         </div>
 

@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+
 import { ArrowLeft, Search, Link2, AlertTriangle, XCircle, Download, Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Layout } from '@/components/layout/Layout';
@@ -97,7 +97,7 @@ export default function SkuMappings() {
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-              <Link to="/ops"><ArrowLeft className="h-4 w-4" /></Link>
+              <a href="/ops"><ArrowLeft className="h-4 w-4" /></a>
             </Button>
             <div>
               <h1 className="text-2xl font-bold text-foreground">SKU Mappings</h1>
