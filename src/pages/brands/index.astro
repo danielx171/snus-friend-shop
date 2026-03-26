@@ -1,0 +1,82 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+
+const brands = await getCollection('brands');
+---
+
+<Shop
+  title="All Brands | SnusFriend"
+  description="Browse all 91+ nicotine pouch brands we carry. VELO, ZYN, LOOP, Siberia, PABLO and many more. Find your favourite brand and shop the full range."
+  canonical="/brands"
+>
+  <div class="mx-auto max-w-7xl px-4 py-8">
+    <Breadcrumb items={[{ label: 'Brands' }]} />
+
+    <!-- Page header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        All Brands
+      </h1>
+      <p class="mt-2 text-lg text-muted-foreground">
+        {brands.length > 0 ? `Explore ${brands.length} nicotine pouch brands` : 'Explore our growing collection of nicotine pouch brands'}
+      </p>
+    </div>
+
+    <!-- Brand grid -->
+    <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:gap-4 lg:grid-cols-6 lg:gap-5">
+      {brands.map((brand) => {
+        const initials = brand.data.name
+          .split(/[\s-]+/)
+          .slice(0, 2)
+          .map((w: string) => w[0]?.toUpperCase() ?? '')
+          .join('');
+        return (
+          <a
+            href={`/brands/${brand.id}`}
+            class="group flex flex-col items-center rounded-xl border border-border bg-card/60 p-4 backdrop-blur-sm transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+          >
+            {/* Brand logo or initials */}
+            {brand.data.logoUrl ? (
+              <div class="mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-muted/20">
+                <img
+                  src={brand.data.logoUrl}
+                  alt={`${brand.data.name} logo`}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-contain"
+                />
+              </div>
+            ) : (
+              <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                <span class="text-lg font-bold text-primary">{initials}</span>
+              </div>
+            )}
+
+            {/* Brand name */}
+            <h2 class="mb-0.5 text-center text-sm font-semibold text-foreground group-hover:text-primary">
+              {brand.data.name}
+            </h2>
+
+            {/* Manufacturer subtitle */}
+            {brand.data.manufacturer && (
+              <p class="text-center text-xs text-muted-foreground truncate max-w-full">
+                {brand.data.manufacturer}
+              </p>
+            )}
+          </a>
+        );
+      })}
+    </div>
+
+    {/* Empty state */}
+    {brands.length === 0 && (
+      <div class="py-20 text-center">
+        <p class="text-lg text-muted-foreground">
+          Brands are loading&hellip; Check back soon.
+        </p>
+      </div>
+    )}
+  </div>
+</Shop>

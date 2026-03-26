@@ -1,0 +1,40 @@
+---
+import Base from './Base.astro';
+import Header from '@/components/astro/Header.astro';
+import Footer from '@/components/astro/Footer.astro';
+import AgeGate from '@/components/astro/AgeGate.astro';
+import ToastProvider from '@/components/react/ToastProvider';
+import CookieConsentBanner from '@/components/react/CookieConsentBanner';
+import CartDrawer from '@/components/react/CartDrawer';
+import MobileMenu from '@/components/react/MobileMenu';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonical?: string;
+  noindex?: boolean;
+}
+
+const props = Astro.props;
+const authUser = Astro.locals.user ? { id: Astro.locals.user.id, email: Astro.locals.user.email } : null;
+---
+
+<Base {...props}>
+  <script is:inline define:vars={{ authUser }}>
+    window.__AUTH_STATE__ = authUser;
+  </script>
+  <AgeGate />
+  <div class="flex min-h-screen flex-col">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </div>
+  <CartDrawer client:load />
+  <MobileMenu client:load />
+  <ToastProvider client:load />
+  <CookieConsentBanner client:idle />
+</Base>

@@ -1,0 +1,207 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const brands = await getCollection('brands');
+  const products = await getCollection('products');
+
+  return brands.map((brand) => ({
+    params: { slug: brand.id },
+    props: {
+      brand,
+      products: products.filter((p) => p.data.brandSlug === brand.id),
+    },
+  }));
+}
+
+const { brand, products } = Astro.props;
+const b = brand.data;
+
+// Strength dots mapping (same as products/index.astro)
+const strengthDots: Record<string, number> = {
+  light: 1,
+  normal: 2,
+  strong: 3,
+  'extra-strong': 4,
+  'super-strong': 5,
+};
+
+const countryNames: Record<string, string> = {
+  SE: 'Sweden',
+  DK: 'Denmark',
+  NO: 'Norway',
+  US: 'United States',
+  UK: 'United Kingdom',
+  DE: 'Germany',
+  FI: 'Finland',
+  CH: 'Switzerland',
+};
+
+const countryLabel = b.countryCode ? (countryNames[b.countryCode] ?? b.countryCode) : '';
+
+const metaDescription = b.description
+  ? (b.description.length > 160 ? b.description.slice(0, 157) + '...' : b.description)
+  : `Shop ${b.name} nicotine pouches at SnusFriend. Browse the full range of ${b.name} products with free EU shipping on qualifying orders.`;
+---
+
+<Shop
+  title={`${b.name} Nicotine Pouches | SnusFriend`}
+  description={metaDescription}
+  canonical={`/brands/${brand.id}`}
+>
+  <div class="mx-auto max-w-7xl px-4 py-8">
+    <Breadcrumb items={[
+      { label: 'Brands', href: '/brands' },
+      { label: b.name },
+    ]} />
+
+    <!-- Brand hero -->
+    <div class="mb-10 rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm sm:p-8">
+      <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+        {/* Brand logo or initials */}
+        {b.logoUrl ? (
+          <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted/20">
+            <img
+              src={b.logoUrl}
+              alt={`${b.name} logo`}
+              loading="eager"
+              decoding="async"
+              class="h-full w-full object-contain"
+            />
+          </div>
+        ) : (
+          <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+            <span class="text-3xl font-bold text-primary">
+              {b.name.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
+            </span>
+          </div>
+        )}
+
+        <div class="flex-1">
+          <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            {b.name}
+          </h1>
+
+          {/* Manufacturer and country */}
+          <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            {b.manufacturer && (
+              <span>by {b.manufacturer}</span>
+            )}
+            {b.manufacturer && countryLabel && (
+              <span class="text-muted-foreground/40">&middot;</span>
+            )}
+            {countryLabel && (
+              <span>{countryLabel}</span>
+            )}
+          </div>
+
+          {/* Description */}
+          {b.description && (
+            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              {b.description}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- Products section -->
+    <div class="mb-6 flex items-center justify-between">
+      <h2 class="text-xl font-semibold text-foreground">
+        {products.length > 0 ? `${b.name} Products` : 'Products'}
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        {products.length} {products.length === 1 ? 'product' : 'products'}
+      </p>
+    </div>
+
+    <!-- Product grid (matches products/index.astro style) -->
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
+      {products.map((product) => {
+        const dots = strengthDots[product.data.strengthKey] ?? 2;
+        const price = product.data.prices?.pack1;
+        return (
+          <a
+            href={`/products/${product.id}`}
+            class="group rounded-xl border border-border bg-card/50 p-3 backdrop-blur transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 sm:p-4"
+          >
+            {/* Product image */}
+            {product.data.imageUrl ? (
+              <div class="mb-3 aspect-square overflow-hidden rounded-lg bg-muted/20">
+                <img
+                  src={product.data.imageUrl}
+                  alt={product.data.name}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-contain transition group-hover:scale-105"
+                />
+              </div>
+            ) : (
+              <div class="mb-3 flex aspect-square items-center justify-center rounded-lg bg-muted/20">
+                <svg
+                  class="h-10 w-10 text-muted-foreground/30"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1"
+                >
+                  <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+            )}
+
+            {/* Brand */}
+            <p class="mb-0.5 truncate text-xs text-muted-foreground">
+              {product.data.brand}
+            </p>
+
+            {/* Product name */}
+            <h3 class="mb-1.5 line-clamp-2 text-sm font-semibold leading-snug text-foreground group-hover:text-primary">
+              {product.data.name}
+            </h3>
+
+            {/* Strength dots */}
+            <div class="mb-2 flex items-center gap-1" aria-label={`Strength: ${product.data.strengthKey}`}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span
+                  class={`inline-block h-1.5 w-1.5 rounded-full ${
+                    i < dots ? 'bg-primary' : 'bg-muted-foreground/20'
+                  }`}
+                />
+              ))}
+              <span class="ml-1 text-[10px] text-muted-foreground">
+                {product.data.nicotineContent > 0 ? `${product.data.nicotineContent}mg` : ''}
+              </span>
+            </div>
+
+            {/* Price */}
+            {price != null && (
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-base font-bold text-foreground">
+                  &euro;{price.toFixed(2)}
+                </span>
+                {product.data.comparePrice != null && product.data.comparePrice > price && (
+                  <span class="text-xs text-muted-foreground line-through">
+                    &euro;{product.data.comparePrice.toFixed(2)}
+                  </span>
+                )}
+              </div>
+            )}
+          </a>
+        );
+      })}
+
+      {/* Empty state */}
+      {products.length === 0 && (
+        <div class="col-span-full py-20 text-center">
+          <p class="text-lg text-muted-foreground">
+            No products found for {b.name} yet. Check back soon.
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+</Shop>

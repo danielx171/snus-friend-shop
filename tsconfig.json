@@ -1,0 +1,16 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+    "strictNullChecks": false
+  },
+  "include": ["src/**/*", "astro.config.mjs", "src/env.d.ts"],
+  "exclude": ["node_modules", "dist", ".vercel"]
+}

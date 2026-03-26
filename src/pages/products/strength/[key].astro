@@ -1,0 +1,127 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import FilterableProductGrid from '@/components/react/FilterableProductGrid';
+import { getCollection } from 'astro:content';
+
+const STRENGTH_META: Record<string, { label: string; range: string; h1: string; desc: string; intro: string }> = {
+  'light': {
+    label: 'Light',
+    range: '1-4mg',
+    h1: 'Light Nicotine Pouches',
+    desc: 'Shop light nicotine pouches (1-4mg) for beginners. Gentle satisfaction from top brands. Free EU delivery.',
+    intro: 'Light nicotine pouches (1-4mg) are the ideal starting point for newcomers or anyone who prefers a subtle, gentle nicotine experience. These pouches deliver smooth satisfaction without overwhelming intensity, making them perfect for everyday use throughout the day.',
+  },
+  'normal': {
+    label: 'Normal',
+    range: '4-6mg',
+    h1: 'Normal Strength Nicotine Pouches',
+    desc: 'Browse normal strength nicotine pouches (4-6mg). The most popular strength for everyday use. Fast EU shipping.',
+    intro: 'Normal strength nicotine pouches (4-6mg) are the most popular choice for regular users. Offering a balanced nicotine delivery that suits most preferences, these pouches are the go-to option for daily enjoyment from brands like VELO, ZYN, and more.',
+  },
+  'strong': {
+    label: 'Strong',
+    range: '6-12mg',
+    h1: 'Strong Nicotine Pouches',
+    desc: 'Shop strong nicotine pouches (6-12mg) from top brands. Satisfying kick with fast EU delivery.',
+    intro: 'Strong nicotine pouches (6-12mg) deliver a noticeable kick that experienced users appreciate. These pouches provide a satisfying intensity while still remaining comfortable for extended use. Popular among those transitioning from traditional tobacco products.',
+  },
+  'extra-strong': {
+    label: 'Extra Strong',
+    range: '12-20mg',
+    h1: 'Extra Strong Nicotine Pouches',
+    desc: 'Shop extra strong nicotine pouches (12-20mg) for experienced users. Premium brands, fast EU delivery.',
+    intro: 'Extra strong nicotine pouches (12-20mg) are designed for experienced users who want a powerful nicotine hit. These high-intensity pouches deliver rapid satisfaction and are favoured by those who have built up a tolerance over time.',
+  },
+  'super-strong': {
+    label: 'Super Strong',
+    range: '20mg+',
+    h1: 'Super Strong Nicotine Pouches',
+    desc: 'Shop super strong nicotine pouches (20mg+). Maximum intensity from brands like Siberia and PABLO.',
+    intro: 'Super strong nicotine pouches (20mg+) offer maximum intensity for seasoned users who demand the most powerful experience available. Brands like Siberia and PABLO lead this category with pouches that deliver an unmistakable punch.',
+  },
+};
+
+export async function getStaticPaths() {
+  const keys = ['light', 'normal', 'strong', 'extra-strong', 'super-strong'];
+  return keys.map((key) => ({ params: { key }, props: { key } }));
+}
+
+const ALL_STRENGTH_KEYS = Object.keys(STRENGTH_META);
+
+const { key } = Astro.props;
+const meta = STRENGTH_META[key as keyof typeof STRENGTH_META];
+const allProducts = await getCollection('products');
+const products = allProducts.filter((p) => p.data.strengthKey === key);
+const serialized = JSON.stringify(products.map((p) => ({ ...p.data, slug: p.id })));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: meta.h1,
+  description: meta.desc,
+  numberOfItems: products.length,
+  itemListElement: products.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://snusfriends.com/products/${p.id}`,
+    name: p.data.name,
+  })),
+};
+---
+
+<Shop
+  title={`${meta.h1} | SnusFriend`}
+  description={meta.desc}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:py-12">
+    <Breadcrumb items={[
+      { label: 'Products', href: '/products' },
+      { label: meta.label },
+    ]} />
+
+    <header class="mb-8">
+      <h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        {meta.h1}
+      </h1>
+      <p class="max-w-3xl text-base leading-relaxed text-muted-foreground">
+        {meta.intro}
+      </p>
+      <p class="mt-2 text-sm text-muted-foreground">
+        Nicotine range: <strong class="text-foreground">{meta.range}</strong> &middot; {products.length} products
+      </p>
+    </header>
+
+    <FilterableProductGrid
+      client:load
+      productsJson={serialized}
+      initialFilters={JSON.stringify({ strengths: [key] })}
+    />
+
+    <!-- Cross-links to other strength categories -->
+    <nav class="mt-12 border-t border-border pt-8" aria-label="Browse by strength">
+      <h2 class="mb-4 text-lg font-semibold text-foreground">Browse by Strength</h2>
+      <div class="flex flex-wrap gap-3">
+        {ALL_STRENGTH_KEYS.map((k) => {
+          const m = STRENGTH_META[k];
+          const isCurrent = k === key;
+          return (
+            <a
+              href={`/products/strength/${k}`}
+              class={`rounded-lg border px-4 py-2 text-sm font-medium transition ${
+                isCurrent
+                  ? 'border-primary bg-primary/10 text-primary pointer-events-none'
+                  : 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/5'
+              }`}
+              aria-current={isCurrent ? 'page' : undefined}
+            >
+              {m.label} <span class="text-xs text-muted-foreground">({m.range})</span>
+            </a>
+          );
+        })}
+      </div>
+    </nav>
+  </div>
+</Shop>

@@ -1,0 +1,22 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import WishlistIsland from '@/components/react/WishlistIsland';
+---
+
+<Shop
+  title="Wishlist | SnusFriend"
+  noindex={true}
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Wishlist' }]} />
+
+      <h1 class="text-4xl font-bold tracking-tight mb-8">Wishlist</h1>
+
+      <div id="wishlist-root">
+        <WishlistIsland client:load />
+      </div>
+    </div>
+  </section>
+</Shop>

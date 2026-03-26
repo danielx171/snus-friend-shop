@@ -1,0 +1,284 @@
+---
+export const prerender = false;
+
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const orderId = Astro.url.searchParams.get('order');
+const supabase = Astro.locals.supabase;
+const user = Astro.locals.user;
+
+// Fetch order data if we have an orderId and authenticated user
+let order: any = null;
+let lineItems: any[] = [];
+let fetchError = false;
+
+if (orderId && supabase && user) {
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .eq('user_id', user.id)
+    .single();
+
+  if (error || !data) {
+    fetchError = true;
+  } else {
+    order = data;
+    // Parse line_items_snapshot — stored as JSON
+    if (order.line_items_snapshot) {
+      try {
+        lineItems = typeof order.line_items_snapshot === 'string'
+          ? JSON.parse(order.line_items_snapshot)
+          : Array.isArray(order.line_items_snapshot)
+            ? order.line_items_snapshot
+            : [];
+      } catch {
+        lineItems = [];
+      }
+    }
+  }
+}
+
+// Parse customer metadata for shipping address
+let shippingAddress: any = null;
+if (order?.customer_metadata) {
+  try {
+    const meta = typeof order.customer_metadata === 'string'
+      ? JSON.parse(order.customer_metadata)
+      : order.customer_metadata;
+    shippingAddress = meta?.shipping_address ?? meta?.address ?? null;
+  } catch {
+    shippingAddress = null;
+  }
+}
+
+// Status badge styling
+const statusStyles: Record<string, string> = {
+  pending: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+  confirmed: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  processing: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  shipped: 'bg-primary/10 text-primary border-primary/20',
+  delivered: 'bg-green-500/10 text-green-400 border-green-500/20',
+  cancelled: 'bg-red-500/10 text-red-400 border-red-500/20',
+  failed: 'bg-red-500/10 text-red-400 border-red-500/20',
+};
+
+const status = order?.checkout_status ?? order?.nyehandel_status ?? 'pending';
+const badgeStyle = statusStyles[status] ?? statusStyles.pending;
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+function formatPrice(amount: number, currency: string = 'EUR') {
+  return new Intl.NumberFormat('en-EU', {
+    style: 'currency',
+    currency,
+  }).format(amount);
+}
+
+// Compute subtotal from line items
+const subtotal = lineItems.reduce((sum: number, item: any) => {
+  const price = item.price ?? item.unit_price ?? 0;
+  const qty = item.quantity ?? 1;
+  return sum + (price * qty);
+}, 0);
+---
+
+<Shop
+  title={`Order Confirmation | ${tenant.name}`}
+  description="Your order has been placed successfully."
+  noindex={true}
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Order Confirmation' }]} />
+
+      <div class="mx-auto">
+        {/* Success header */}
+        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center mb-6">
+          <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+            <svg class="h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          </div>
+
+          <h1 class="text-3xl font-bold tracking-tight mb-2">Thank You for Your Order!</h1>
+
+          {order ? (
+            <div>
+              <p class="text-muted-foreground mb-3">
+                Order <strong class="text-foreground font-semibold">#{orderId}</strong> placed on {formatDate(order.created_at)}
+              </p>
+              <span class={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium capitalize ${badgeStyle}`}>
+                {status}
+              </span>
+            </div>
+          ) : orderId && fetchError ? (
+            <p class="text-muted-foreground mb-6">
+              We couldn't find order <strong class="text-foreground font-semibold">#{orderId}</strong>.
+              It may still be processing. You'll receive a confirmation email shortly.
+            </p>
+          ) : (
+            <p class="text-muted-foreground mb-6">
+              Your order has been placed successfully. You'll receive a confirmation email shortly.
+            </p>
+          )}
+        </div>
+
+        {/* Order details */}
+        {order && lineItems.length > 0 && (
+          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Order Details</h2>
+
+            {/* Line items */}
+            <div class="divide-y divide-border">
+              {lineItems.map((item: any) => {
+                const itemName = item.name ?? item.product_name ?? 'Product';
+                const itemPrice = item.price ?? item.unit_price ?? 0;
+                const itemQty = item.quantity ?? 1;
+                const itemImage = item.image_url ?? item.imageUrl ?? null;
+
+                return (
+                  <div class="flex items-center gap-4 py-3">
+                    {itemImage ? (
+                      <img
+                        src={itemImage}
+                        alt={itemName}
+                        class="h-14 w-14 rounded-lg object-cover border border-border bg-muted/20"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div class="h-14 w-14 rounded-lg border border-border bg-muted/20 flex items-center justify-center">
+                        <svg class="h-6 w-6 text-muted-foreground/40" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      </div>
+                    )}
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-medium text-foreground truncate">{itemName}</p>
+                      <p class="text-xs text-muted-foreground">Qty: {itemQty}</p>
+                    </div>
+                    <p class="text-sm font-medium text-foreground whitespace-nowrap">
+                      {formatPrice(itemPrice * itemQty, order.currency)}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Totals */}
+            <div class="mt-4 pt-4 border-t border-border space-y-2">
+              {subtotal > 0 && subtotal !== order.total_price && (
+                <div class="flex justify-between text-sm">
+                  <span class="text-muted-foreground">Subtotal</span>
+                  <span class="text-foreground">{formatPrice(subtotal, order.currency)}</span>
+                </div>
+              )}
+              {order.shipping_method && (
+                <div class="flex justify-between text-sm">
+                  <span class="text-muted-foreground">Shipping ({order.shipping_method})</span>
+                  <span class="text-foreground">
+                    {subtotal > 0 && order.total_price > subtotal
+                      ? formatPrice(order.total_price - subtotal, order.currency)
+                      : 'Included'}
+                  </span>
+                </div>
+              )}
+              <div class="flex justify-between text-base font-semibold pt-2 border-t border-border">
+                <span class="text-foreground">Total</span>
+                <span class="text-foreground">{formatPrice(order.total_price, order.currency)}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Shipping address */}
+        {order && shippingAddress && (
+          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">Shipping Address</h2>
+            <div class="text-sm text-muted-foreground space-y-0.5">
+              {shippingAddress.name && <p class="text-foreground font-medium">{shippingAddress.name}</p>}
+              {shippingAddress.line1 && <p>{shippingAddress.line1}</p>}
+              {shippingAddress.line2 && <p>{shippingAddress.line2}</p>}
+              <p>
+                {[shippingAddress.city, shippingAddress.postal_code, shippingAddress.state]
+                  .filter(Boolean)
+                  .join(', ')}
+              </p>
+              {shippingAddress.country && <p>{shippingAddress.country}</p>}
+            </div>
+          </div>
+        )}
+
+        {/* Tracking link */}
+        {order?.tracking_url && (
+          <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6 mb-6">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <svg class="h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-foreground">Your order is on its way!</p>
+                {order.tracking_id && (
+                  <p class="text-xs text-muted-foreground">Tracking: {order.tracking_id}</p>
+                )}
+              </div>
+              <a
+                href={order.tracking_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ml-auto inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+              >
+                Track Package
+              </a>
+            </div>
+          </div>
+        )}
+
+        {/* What happens next */}
+        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+          <h2 class="text-sm font-semibold text-foreground mb-2">What happens next?</h2>
+          <ul class="space-y-2 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2">
+              <span class="text-primary mt-0.5">1.</span>
+              <span>You'll receive an order confirmation email</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-primary mt-0.5">2.</span>
+              <span>We'll dispatch your order within 1 business day</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-primary mt-0.5">3.</span>
+              <span>You'll get a tracking link once it's shipped</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Actions */}
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href="/products"
+            class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+          >
+            Continue Shopping
+          </a>
+          <a
+            href="/account"
+            class="inline-flex items-center justify-center rounded-lg border border-border bg-background px-6 py-2.5 text-sm font-medium text-foreground hover:bg-card transition"
+          >
+            View Orders
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Shop>

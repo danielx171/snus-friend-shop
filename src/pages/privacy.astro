@@ -1,0 +1,146 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+---
+
+<Shop
+  title={`Privacy Policy | ${tenant.name}`}
+  description={`Privacy policy for ${tenant.name}. Learn how we collect, use, and protect your personal data in compliance with GDPR.`}
+  canonical="/privacy"
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Privacy Policy' }]} />
+
+      <div class="prose prose-invert max-w-none
+        prose-headings:text-foreground prose-p:text-muted-foreground
+        prose-a:text-primary prose-strong:text-foreground
+        prose-li:text-muted-foreground prose-hr:border-border">
+
+        <div class="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-4 mb-8 not-prose">
+          <p class="text-sm text-yellow-400">
+            <strong>Note:</strong> This privacy policy is under review by our legal team.
+            Last revised: March 2026.
+          </p>
+        </div>
+
+        <h1 class="text-4xl font-bold tracking-tight mb-2">Privacy Policy</h1>
+        <p class="text-sm text-muted-foreground mb-8">Effective date: 26 March 2026</p>
+
+        <h2>1. Data Controller</h2>
+        <p>
+          {tenant.name} ("{tenant.name}", "we", "us", or "our") is the data controller for
+          personal data collected through the website at {tenant.domain}. For any questions
+          about this policy, contact us at <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.
+        </p>
+
+        <h2>2. Data We Collect</h2>
+        <p>We collect the following categories of personal data:</p>
+        <ul>
+          <li><strong>Account data:</strong> name, email address, and encrypted password when you create an account.</li>
+          <li><strong>Order data:</strong> shipping address, billing information, order history, and payment transaction references (we do not store full card numbers).</li>
+          <li><strong>Usage data:</strong> pages visited, products viewed, search queries, device information, browser type, IP address, and referring URLs.</li>
+          <li><strong>Community data:</strong> product reviews, ratings, and profile information you choose to share.</li>
+          <li><strong>Communication data:</strong> email correspondence, support tickets, and newsletter preferences.</li>
+        </ul>
+
+        <h2>3. Legal Basis for Processing</h2>
+        <p>We process your data under the following legal bases (GDPR Art. 6):</p>
+        <ul>
+          <li><strong>Contract performance:</strong> processing orders, managing your account, and providing customer support.</li>
+          <li><strong>Legitimate interests:</strong> improving our services, fraud prevention, website analytics, and personalisation.</li>
+          <li><strong>Consent:</strong> sending marketing emails, setting non-essential cookies, and collecting community content.</li>
+          <li><strong>Legal obligation:</strong> age verification, tax records, and regulatory compliance.</li>
+        </ul>
+
+        <h2>4. Cookies</h2>
+        <p>
+          We use cookies and similar technologies to operate the Site, remember your preferences,
+          and analyse usage. For full details, see our <a href="/cookies">Cookie Policy</a>.
+        </p>
+        <p>
+          Essential cookies are required for the Site to function. Analytics and marketing
+          cookies are only set with your consent.
+        </p>
+
+        <h2>5. Third-Party Services</h2>
+        <p>We share data with the following categories of third parties, each under appropriate data processing agreements:</p>
+        <ul>
+          <li><strong>Supabase</strong> (database and authentication) &mdash; stores account, order, and application data. EU-hosted infrastructure.</li>
+          <li><strong>Nyehandel</strong> (commerce and fulfilment) &mdash; processes orders, payments, and shipping. Swedish company.</li>
+          <li><strong>PostHog</strong> (product analytics) &mdash; collects anonymised usage data to help us improve the shopping experience. EU-hosted.</li>
+          <li><strong>Sentry</strong> (error monitoring) &mdash; captures technical errors to maintain site reliability. No personal data is intentionally collected.</li>
+          <li><strong>Vercel</strong> (hosting) &mdash; serves the website and processes HTTP requests.</li>
+        </ul>
+        <p>
+          We do not sell your personal data to any third party.
+        </p>
+
+        <h2>6. Data Retention</h2>
+        <ul>
+          <li><strong>Account data:</strong> retained for as long as your account is active, plus 30 days after deletion.</li>
+          <li><strong>Order data:</strong> retained for 7 years to comply with tax and accounting regulations.</li>
+          <li><strong>Usage and analytics data:</strong> retained for up to 26 months in anonymised form.</li>
+          <li><strong>Marketing consent records:</strong> retained for as long as the consent is valid, plus 3 years.</li>
+        </ul>
+
+        <h2>7. Your Rights</h2>
+        <p>Under GDPR, you have the following rights:</p>
+        <ul>
+          <li><strong>Access:</strong> request a copy of your personal data.</li>
+          <li><strong>Rectification:</strong> correct inaccurate or incomplete data.</li>
+          <li><strong>Erasure:</strong> request deletion of your data ("right to be forgotten").</li>
+          <li><strong>Restriction:</strong> limit how we process your data.</li>
+          <li><strong>Portability:</strong> receive your data in a structured, machine-readable format.</li>
+          <li><strong>Objection:</strong> object to processing based on legitimate interests or direct marketing.</li>
+          <li><strong>Withdraw consent:</strong> withdraw consent at any time for processing based on consent.</li>
+        </ul>
+        <p>
+          To exercise any of these rights, contact us at <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.
+          We will respond within 30 days.
+        </p>
+
+        <h2>8. Data Security</h2>
+        <p>
+          We implement appropriate technical and organisational measures to protect your data,
+          including encryption in transit (TLS), secure authentication, access controls, and
+          regular security reviews. However, no method of transmission over the Internet is
+          100% secure.
+        </p>
+
+        <h2>9. International Transfers</h2>
+        <p>
+          Your data is primarily stored within the EU. Where data is transferred outside the
+          EEA (e.g., to US-based sub-processors), we ensure appropriate safeguards are in place,
+          such as Standard Contractual Clauses or adequacy decisions.
+        </p>
+
+        <h2>10. Children</h2>
+        <p>
+          Our Site is not intended for individuals under 18 years of age. We do not knowingly
+          collect data from minors. If we become aware that we have collected data from someone
+          under 18, we will promptly delete it.
+        </p>
+
+        <h2>11. Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy from time to time. Changes will be posted on this
+          page with an updated effective date. We encourage you to review this page periodically.
+        </p>
+
+        <h2>12. Contact and Complaints</h2>
+        <p>
+          For privacy-related questions or to exercise your rights, contact us at
+          <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.
+        </p>
+        <p>
+          If you are not satisfied with our response, you have the right to lodge a complaint
+          with your local Data Protection Authority. In Sweden, this is the
+          Swedish Authority for Privacy Protection (IMY) at
+          <a href="https://www.imy.se" target="_blank" rel="noopener noreferrer">www.imy.se</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Shop>

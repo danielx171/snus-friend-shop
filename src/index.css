@@ -1,0 +1,862 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════
+   Tailwind v4 theme — design tokens from tailwind.config.ts
+   ═══════════════════════════════════════════════════════ */
+@theme {
+  /* Container */
+  --container-2xl: 1400px;
+
+  /* Border radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Colors — mapped from shadcn/ui CSS variables */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Font families */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  /* Box shadows — use initial values, overridden per-theme in :root/.light/.velo/.editorial */
+  --shadow-2xs: 0 1px 2px 0px hsl(0 0% 0% / 0.3);
+  --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.4);
+  --shadow-sm: 0 2px 6px 0px hsl(0 0% 0% / 0.4), 0 1px 2px -1px hsl(0 0% 0% / 0.3);
+  --shadow-md: 0 6px 16px 0px hsl(0 0% 0% / 0.4), 0 3px 6px -1px hsl(0 0% 0% / 0.3);
+  --shadow-lg: 0 10px 24px 0px hsl(0 0% 0% / 0.5), 0 4px 8px -1px hsl(0 0% 0% / 0.3);
+  --shadow-xl: 0 16px 40px 0px hsl(0 0% 0% / 0.5), 0 8px 16px -1px hsl(0 0% 0% / 0.3);
+  --shadow-2xl: 0 24px 50px 0px hsl(0 0% 0% / 0.6);
+
+  /* Keyframe animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-cart-item-in: cart-item-in 0.2s ease-out both;
+  --animate-cart-item-out: cart-item-out 0.2s ease-in both;
+  --animate-btn-spring: btn-spring 0.2s ease-out;
+  --animate-number-flip: number-flip 0.2s ease-out;
+  --animate-hero-sway: hero-sway 6s ease-in-out infinite;
+  --animate-hero-fade-in: hero-fade-in 0.8s ease-out 0.3s both;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+  @keyframes hero-sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  @keyframes cart-item-in {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes cart-item-out {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(100%); }
+  }
+  @keyframes btn-spring {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.85); }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  @keyframes number-flip {
+    0% { opacity: 0; transform: translateY(-6px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes hero-fade-in {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   THEME A — Dark Premium
+   Deep charcoal, glassy panels, restrained teal accents
+   ═══════════════════════════════════════════════════════ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  :root {
+    --background: 220 16% 8%;
+    --foreground: 210 20% 95%;
+
+    --card: 220 14% 13%;
+    --card-foreground: 210 20% 96%;
+
+    --popover: 220 14% 14%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 174 90% 50%;
+    --primary-foreground: 220 16% 6%;
+
+    --secondary: 220 14% 18%;
+    --secondary-foreground: 210 20% 90%;
+
+    --muted: 220 10% 22%;
+    --muted-foreground: 215 15% 70%;
+
+    --accent: 220 14% 15%;
+    --accent-foreground: 210 20% 90%;
+
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 12% 22%;
+    --input: 220 12% 22%;
+    --ring: 174 90% 50%;
+
+    --radius: 0.625rem;
+
+    /* Success / info tokens */
+    --success: 160 70% 42%;
+    --success-foreground: 0 0% 100%;
+    --info: 200 85% 55%;
+
+    --sidebar-background: 220 16% 6%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 174 90% 50%;
+    --sidebar-primary-foreground: 220 16% 6%;
+    --sidebar-accent: 220 14% 18%;
+    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-border: 220 12% 20%;
+    --sidebar-ring: 174 90% 50%;
+
+    --chart-1: 174 90% 50%;
+    --chart-2: 260 80% 65%;
+    --chart-3: 330 80% 60%;
+    --chart-4: 65 80% 62%;
+    --chart-5: 200 85% 55%;
+
+    --sidebar: 220 16% 6%;
+
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+    --shadow-2xs: 0 1px 2px 0px hsl(0 0% 0% / 0.3);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.4);
+    --shadow-sm: 0 2px 6px 0px hsl(0 0% 0% / 0.4), 0 1px 2px -1px hsl(0 0% 0% / 0.3);
+    --shadow: 0 4px 12px 0px hsl(0 0% 0% / 0.4), 0 2px 4px -1px hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 6px 16px 0px hsl(0 0% 0% / 0.4), 0 3px 6px -1px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 24px 0px hsl(0 0% 0% / 0.5), 0 4px 8px -1px hsl(0 0% 0% / 0.3);
+    --shadow-xl: 0 16px 40px 0px hsl(0 0% 0% / 0.5), 0 8px 16px -1px hsl(0 0% 0% / 0.3);
+    --shadow-2xl: 0 24px 50px 0px hsl(0 0% 0% / 0.6);
+
+    --glow-primary: 0 0 20px hsl(174 90% 50% / 0.25), 0 0 40px hsl(174 90% 50% / 0.1);
+
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
+  }
+
+  .dark {
+    /* Mirrors root — dark is default */
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     THEME B — Scandinavian Premium (Light Glacier)
+     Bright, airy, clean. Glacier navy + ice blue.
+     ═══════════════════════════════════════════════════════ */
+  .light {
+    --background: 210 25% 97%;
+    --foreground: 220 30% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 30% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 30% 10%;
+
+    --primary: 213 65% 32%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 30% 94%;
+    --secondary-foreground: 213 65% 22%;
+
+    --muted: 210 18% 93%;
+    --muted-foreground: 220 12% 46%;
+
+    --accent: 210 25% 90%;
+    --accent-foreground: 213 65% 22%;
+
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 160 65% 38%;
+    --success-foreground: 0 0% 100%;
+    --info: 205 60% 45%;
+
+    --border: 210 18% 87%;
+    --input: 210 18% 87%;
+    --ring: 213 65% 32%;
+
+    --sidebar-background: 210 25% 95%;
+    --sidebar-foreground: 220 30% 10%;
+    --sidebar-primary: 213 65% 32%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 30% 94%;
+    --sidebar-accent-foreground: 213 65% 22%;
+    --sidebar-border: 210 18% 87%;
+    --sidebar-ring: 213 65% 32%;
+
+    --chart-1: 213 65% 32%;
+    --chart-2: 205 55% 45%;
+    --chart-3: 160 50% 40%;
+    --chart-4: 35 80% 55%;
+    --chart-5: 280 45% 50%;
+
+    --shadow-2xs: 0 1px 2px 0px hsl(220 20% 60% / 0.06);
+    --shadow-xs: 0 1px 3px 0px hsl(220 20% 60% / 0.08);
+    --shadow-sm: 0 2px 8px 0px hsl(220 20% 60% / 0.08), 0 1px 2px -1px hsl(220 20% 60% / 0.06);
+    --shadow: 0 4px 12px 0px hsl(220 20% 60% / 0.08), 0 2px 4px -1px hsl(220 20% 60% / 0.06);
+    --shadow-md: 0 6px 16px 0px hsl(220 20% 60% / 0.08), 0 3px 6px -1px hsl(220 20% 60% / 0.06);
+    --shadow-lg: 0 10px 24px 0px hsl(220 20% 60% / 0.10), 0 4px 8px -1px hsl(220 20% 60% / 0.06);
+    --shadow-xl: 0 16px 40px 0px hsl(220 20% 60% / 0.12), 0 8px 16px -1px hsl(220 20% 60% / 0.06);
+    --shadow-2xl: 0 24px 50px 0px hsl(220 20% 60% / 0.14);
+
+    --glow-primary: 0 0 20px hsl(213 65% 32% / 0.12), 0 0 40px hsl(213 65% 32% / 0.06);
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     THEME C — Editorial Luxury
+     Magazine meets boutique. Warm cream, rich type, amber accents.
+     ═══════════════════════════════════════════════════════ */
+  .editorial {
+    --background: 40 30% 96%;
+    --foreground: 30 15% 12%;
+
+    --card: 40 25% 99%;
+    --card-foreground: 30 15% 12%;
+
+    --popover: 40 25% 99%;
+    --popover-foreground: 30 15% 12%;
+
+    /* Warm amber/cognac accent */
+    --primary: 28 80% 44%;
+    --primary-foreground: 40 30% 98%;
+
+    --secondary: 35 20% 91%;
+    --secondary-foreground: 30 30% 25%;
+
+    --muted: 35 15% 90%;
+    --muted-foreground: 30 10% 48%;
+
+    --accent: 35 20% 88%;
+    --accent-foreground: 30 30% 20%;
+
+    --destructive: 0 65% 48%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 155 55% 38%;
+    --success-foreground: 0 0% 100%;
+    --info: 210 50% 48%;
+
+    --border: 35 15% 84%;
+    --input: 35 15% 84%;
+    --ring: 28 80% 44%;
+
+    --sidebar-background: 40 25% 94%;
+    --sidebar-foreground: 30 15% 12%;
+    --sidebar-primary: 28 80% 44%;
+    --sidebar-primary-foreground: 40 30% 98%;
+    --sidebar-accent: 35 20% 91%;
+    --sidebar-accent-foreground: 30 30% 25%;
+    --sidebar-border: 35 15% 84%;
+    --sidebar-ring: 28 80% 44%;
+
+    --chart-1: 28 80% 44%;
+    --chart-2: 340 50% 50%;
+    --chart-3: 155 55% 38%;
+    --chart-4: 210 50% 48%;
+    --chart-5: 270 40% 55%;
+
+    --shadow-2xs: 0 1px 2px 0px hsl(30 20% 40% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(30 20% 40% / 0.07);
+    --shadow-sm: 0 2px 8px 0px hsl(30 20% 40% / 0.07), 0 1px 2px -1px hsl(30 20% 40% / 0.05);
+    --shadow: 0 4px 14px 0px hsl(30 20% 40% / 0.08), 0 2px 4px -1px hsl(30 20% 40% / 0.05);
+    --shadow-md: 0 6px 18px 0px hsl(30 20% 40% / 0.08), 0 3px 6px -1px hsl(30 20% 40% / 0.05);
+    --shadow-lg: 0 12px 28px 0px hsl(30 20% 40% / 0.10), 0 4px 8px -1px hsl(30 20% 40% / 0.05);
+    --shadow-xl: 0 18px 44px 0px hsl(30 20% 40% / 0.12), 0 8px 16px -1px hsl(30 20% 40% / 0.05);
+    --shadow-2xl: 0 24px 50px 0px hsl(30 20% 40% / 0.14);
+
+    --glow-primary: 0 0 20px hsl(28 80% 44% / 0.15), 0 0 40px hsl(28 80% 44% / 0.07);
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     THEME D — Velo
+     Deep navy, electric blue, clinical sharp edges.
+     Space Grotesk headlines, Plus Jakarta Sans body.
+     ═══════════════════════════════════════════════════════ */
+  .velo {
+    --background: 220 100% 12%;
+    --foreground: 210 30% 95%;
+
+    --card: 220 80% 16%;
+    --card-foreground: 210 30% 95%;
+
+    --popover: 220 80% 18%;
+    --popover-foreground: 210 30% 95%;
+
+    --primary: 218 100% 27%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 60% 20%;
+    --secondary-foreground: 210 30% 90%;
+
+    --muted: 220 50% 22%;
+    --muted-foreground: 215 25% 58%;
+
+    --accent: 65 80% 62%;
+    --accent-foreground: 220 100% 12%;
+
+    --destructive: 0 80% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 74 78% 66%;
+    --success-foreground: 220 100% 12%;
+    --info: 218 100% 27%;
+
+    --border: 220 60% 18%;
+    --input: 220 60% 30%;
+    --ring: 65 80% 62%;
+
+    --radius: 0.25rem;
+
+    --sidebar-background: 220 100% 10%;
+    --sidebar-foreground: 210 30% 95%;
+    --sidebar-primary: 218 100% 27%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 60% 20%;
+    --sidebar-accent-foreground: 210 30% 90%;
+    --sidebar-border: 220 60% 30%;
+    --sidebar-ring: 65 80% 62%;
+
+    --chart-1: 218 100% 27%;
+    --chart-2: 74 78% 66%;
+    --chart-3: 65 80% 62%;
+    --chart-4: 65 80% 62%;
+    --chart-5: 200 80% 55%;
+
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-serif: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Blue-tinted ambient shadows */
+    --shadow-2xs: 0 1px 2px 0px hsl(220 80% 20% / 0.25);
+    --shadow-xs: 0 1px 3px 0px hsl(220 80% 20% / 0.30);
+    --shadow-sm: 0 2px 6px 0px hsl(220 80% 20% / 0.30), 0 1px 2px -1px hsl(220 80% 20% / 0.25);
+    --shadow: 0 4px 12px 0px hsl(220 80% 20% / 0.30), 0 2px 4px -1px hsl(220 80% 20% / 0.25);
+    --shadow-md: 0 6px 16px 0px hsl(220 80% 20% / 0.30), 0 3px 6px -1px hsl(220 80% 20% / 0.25);
+    --shadow-lg: 0 10px 24px 0px hsl(220 80% 20% / 0.40), 0 4px 8px -1px hsl(220 80% 20% / 0.25);
+    --shadow-xl: 0 16px 40px 0px hsl(220 80% 20% / 0.40), 0 8px 16px -1px hsl(220 80% 20% / 0.25);
+    --shadow-2xl: 0 24px 50px 0px hsl(220 80% 20% / 0.50);
+
+    --glow-primary: 0 0 20px hsl(218 100% 27% / 0.30), 0 0 40px hsl(218 100% 27% / 0.15);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Editorial theme uses serif for headings */
+  .editorial h1,
+  .editorial h2,
+  .editorial h3 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+  }
+
+  /* Velo theme — Space Grotesk 800 headings, Plus Jakarta Sans body */
+  .velo {
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .velo h1,
+  .velo h2,
+  .velo h3 {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   UTILITY CLASSES — Glass panels + glow
+   ═══════════════════════════════════════════════════════ */
+@layer utilities {
+  @keyframes easter-float {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.2; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+  .animate-easter-float {
+    animation: easter-float linear infinite;
+  }
+
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+
+  /* === Dark (default) glass === */
+  .glass-panel {
+    background: hsl(220 14% 12% / 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(220 12% 20% / 0.5);
+  }
+
+  .glass-panel-strong {
+    background: hsl(220 14% 12% / 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(220 12% 20% / 0.6);
+  }
+
+  /* === Light / Glacier glass === */
+  .light .glass-panel {
+    background: hsl(0 0% 100% / 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(210 18% 87% / 0.7);
+  }
+
+  .light .glass-panel-strong {
+    background: hsl(0 0% 100% / 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(210 18% 87% / 0.8);
+  }
+
+  /* === Editorial glass — warmer, more opaque, elegant === */
+  .editorial .glass-panel {
+    background: hsl(40 25% 99% / 0.80);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(35 15% 84% / 0.6);
+  }
+
+  .editorial .glass-panel-strong {
+    background: hsl(40 25% 99% / 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(35 15% 84% / 0.7);
+  }
+
+  /* === Velo glass — solid deep navy, ghost borders 15% === */
+  .velo .glass-panel {
+    background: hsl(220 80% 14% / 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(220 60% 40% / 0.15);
+  }
+
+  .velo .glass-panel-strong {
+    background: hsl(220 80% 14% / 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(220 60% 40% / 0.15);
+  }
+
+  /* === Velo overrides — solid surfaces, consistent navy === */
+
+  /* Header: solid navy, no glass */
+  .velo header.sticky {
+    background: hsl(220 100% 8%) !important;
+    border-color: hsl(220 60% 30% / 0.15) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Sub-nav: solid dark navy */
+  .velo header.sticky + nav,
+  .velo nav.border-b {
+    background: hsl(220 100% 10%) !important;
+    border-color: hsl(220 60% 30% / 0.15) !important;
+  }
+
+  /* Hero: override warm cream slide backgrounds */
+  .velo .grain[style] {
+    background-color: hsl(220 100% 10%) !important;
+  }
+
+  /* Hero text: override hardcoded warm/dark colors for navy bg */
+  .velo .grain .font-serif {
+    color: hsl(210 30% 95%) !important;
+  }
+  .velo .grain p {
+    color: hsl(215 25% 70%) !important;
+  }
+  /* Trust pill: navy-tinted instead of warm beige */
+  .velo .grain .rounded-full[class*="border-[hsl(30"] {
+    background: hsl(220 60% 20% / 0.5) !important;
+    border-color: hsl(220 60% 40% / 0.2) !important;
+    color: hsl(210 30% 90%) !important;
+  }
+  /* Secondary CTA on hero */
+  .velo .grain .border-\[hsl\(220_15\%_30\%\/0\.2\)\] {
+    border-color: hsl(220 60% 40% / 0.3) !important;
+    color: hsl(210 30% 90%) !important;
+  }
+  .velo .grain .text-\[hsl\(220_10\%_45\%\)\] {
+    color: hsl(215 25% 70%) !important;
+  }
+  .velo .grain .text-\[hsl\(220_20\%_15\%\)\] {
+    color: hsl(210 30% 95%) !important;
+  }
+  /* Trust signals below hero text */
+  .velo .grain .text-\[hsl\(220_10\%_45\%\)\] span {
+    color: hsl(215 25% 75%) !important;
+  }
+  /* Arrow buttons */
+  .velo .grain button[class*="bg-white"] {
+    background: hsl(220 60% 20% / 0.5) !important;
+    border-color: hsl(220 60% 40% / 0.2) !important;
+    color: hsl(210 30% 90%) !important;
+  }
+
+.velo .bg-card\/20 {
+    background: hsl(220 80% 10% / 0.3) !important;
+  }
+  .velo .bg-card\/30 {
+    background: hsl(220 80% 10% / 0.4) !important;
+  }
+
+  /* Product card: solid dark surface */
+  .velo .product-card {
+    background: hsl(220 60% 14%) !important;
+    border-color: hsl(220 60% 30% / 0.15) !important;
+    backdrop-filter: none !important;
+  }
+  .velo .product-card:hover {
+    border-color: hsl(218 100% 27% / 0.4) !important;
+    box-shadow: 0 8px 30px hsl(220 80% 15% / 0.4) !important;
+  }
+
+  /* Light theme: product card hover — visible border + shadow lift */
+  .light .product-card {
+    border-color: hsl(210 18% 90%) !important;
+  }
+  .light .product-card:hover {
+    border-color: hsl(213 65% 32% / 0.25) !important;
+    box-shadow: 0 8px 24px hsl(220 20% 60% / 0.12), 0 2px 6px hsl(220 20% 60% / 0.06) !important;
+  }
+
+  /* Product image area: dark with subtle light center for product visibility */
+  .velo .product-card-image {
+    background: radial-gradient(circle at 50% 40%, hsl(220 60% 18%), hsl(220 80% 10%)) !important;
+  }
+
+  /* Featured section: navy tint instead of warm */
+  .velo .featured-section {
+    background: hsl(220 80% 10% / 0.3) !important;
+  }
+
+  /* Scrollbar hide */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Grain texture overlay */
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
+  /* === Reputation badge shimmer — Legend tier === */
+  @keyframes shimmer {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; filter: brightness(1.2); }
+  }
+  .animate-shimmer {
+    animation: shimmer 2s ease-in-out infinite;
+  }
+}
+
+/* Cart progress bar pulse glow at 80-99% */
+@keyframes cart-progress-glow {
+  0%, 100% { box-shadow: 0 0 6px hsl(var(--chart-4) / 0.3); }
+  50% { box-shadow: 0 0 14px hsl(var(--chart-4) / 0.5); }
+}
+.cart-progress-pulse {
+  animation: cart-progress-glow 1.5s ease-in-out infinite;
+}
+
+/* Free delivery celebration pop */
+@keyframes cart-free-pop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.cart-free-delivery-pop {
+  animation: cart-free-pop 0.4s ease-out;
+}
+
+/* PDP product image — entrance animation */
+@keyframes pdp-entrance {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.pdp-image-entrance {
+  animation: pdp-entrance 0.5s ease-out both;
+}
+
+/* PDP product image — hover zoom (premium, smooth) */
+.pdp-image-hover {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+@media (hover: hover) {
+  .group\/img:hover .pdp-image-hover {
+    transform: scale(1.08);
+  }
+}
+
+/* Add-to-cart button press animation */
+@keyframes atc-press {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+.atc-press {
+  animation: atc-press 150ms ease-out;
+}
+
+/* Skeleton shimmer animation */
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--muted) / 0.25) 40%,
+    hsl(var(--muted) / 0.25) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── Theme-aware surface utilities ── */
+/* HomePage section backgrounds */
+.homepage-section-base {
+  background: hsl(var(--background));
+}
+.homepage-section-alt {
+  background: hsl(var(--card));
+}
+.homepage-section-glow {
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, hsl(var(--primary) / 0.06), transparent);
+}
+.homepage-section-fade {
+  background: linear-gradient(180deg, transparent 0%, hsl(var(--muted) / 0.2) 60%, hsl(var(--muted) / 0.2) 100%);
+}
+
+/* Product image backgrounds */
+.product-image-bg {
+  background: radial-gradient(circle at 50% 40%, hsl(var(--muted) / 0.3), hsl(var(--background) / 0.15));
+}
+.product-card-image-bg {
+  background: radial-gradient(circle at 50% 40%, hsl(var(--foreground) / 0.05), hsl(var(--foreground) / 0.015));
+}
+
+/* Footer gradient */
+.footer-gradient {
+  background: linear-gradient(180deg, hsl(var(--card)), hsl(var(--card) / 0.9));
+}
+
+/* EmptyTinSvg theme-aware colors */
+.tin-ring { stroke: hsl(var(--primary) / 0.4); }
+.tin-fill { fill: hsl(var(--background)); }
+.tin-inner { fill: hsl(var(--background) / 0.9); stroke: hsl(var(--foreground) / 0.06); }
+.tin-emboss { stroke: hsl(var(--foreground) / 0.05); }
+.tin-shadow { stroke: hsl(var(--background) / 0.6); }
+.tin-dot { fill: hsl(var(--foreground) / 0.06); }
+.tin-dashed { stroke: hsl(var(--foreground) / 0.08); }
+.tin-highlight { stroke: hsl(var(--foreground) / 0.12); }
+
+/* 404 gradient text — theme-aware */
+.notfound-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--chart-2)), hsl(var(--primary)));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: notfound-shift 4s ease-in-out infinite;
+}
+@keyframes notfound-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee-scroll {
+    animation: none !important;
+  }
+}
+
+/* PWA standalone mode — safe-area insets for notched devices */
+@media (display-mode: standalone) {
+  :root {
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+  }
+  body {
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
+  }
+}
+
+/* Blog prose styles */
+.prose-container {
+  @apply text-foreground leading-relaxed;
+}
+.prose-container h1,
+.prose-container h2,
+.prose-container h3 {
+  @apply text-foreground font-bold;
+}
+.prose-container p {
+  @apply text-muted-foreground leading-relaxed mb-4;
+}
+.prose-container ul {
+  @apply my-4 space-y-1 pl-6;
+}
+.prose-container li {
+  @apply text-muted-foreground list-disc;
+}
+.prose-container strong {
+  @apply text-foreground font-semibold;
+}
+.prose-container a {
+  @apply text-primary underline underline-offset-2 hover:opacity-80;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Easter Theme — wiggle animation
+   ═══════════════════════════════════════════════════════ */
+@keyframes easter-wiggle {
+  0%   { transform: rotate(0deg) scale(1); }
+  10%  { transform: rotate(-14deg) scale(1.05); }
+  25%  { transform: rotate(12deg) scale(1.03); }
+  40%  { transform: rotate(-10deg) scale(1.04); }
+  55%  { transform: rotate(8deg) scale(1.02); }
+  70%  { transform: rotate(-5deg) scale(1.01); }
+  85%  { transform: rotate(3deg) scale(1); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.easter-wiggle-active {
+  animation: easter-wiggle 2.5s ease-in-out 2 forwards;
+}
+
+/* ─── Side bunny wander — left bunny walks up from bottom, collecting eggs ─── */
+/* Positioned at top:0 left:0; animation drives the full transform              */
+@keyframes bunny-wander-left {
+  0%   { transform: translateX(-24px) translateY(72vh) rotate(0deg); }
+  /* near bottom egg — lean in to grab */
+  8%   { transform: translateX(-2px)  translateY(68vh) rotate(-11deg); }
+  14%  { transform: translateX(-24px) translateY(64vh) rotate(0deg); }
+  /* walk up to mid-page egg */
+  32%  { transform: translateX(-24px) translateY(38vh) rotate(0deg); }
+  40%  { transform: translateX(-3px)  translateY(35vh) rotate(-9deg); }
+  46%  { transform: translateX(-24px) translateY(31vh) rotate(0deg); }
+  /* walk up to top egg */
+  65%  { transform: translateX(-24px) translateY(7vh)  rotate(0deg); }
+  72%  { transform: translateX(-4px)  translateY(4vh)  rotate(-12deg); }
+  78%  { transform: translateX(-24px) translateY(7vh)  rotate(0deg); }
+  /* wander back down */
+  100% { transform: translateX(-24px) translateY(72vh) rotate(0deg); }
+}
+
+/* ─── Right bunny starts near top, walks down ─── */
+@keyframes bunny-wander-right {
+  0%   { transform: translateX(24px) translateY(7vh)  rotate(0deg); }
+  8%   { transform: translateX(3px)  translateY(4vh)  rotate(11deg); }
+  14%  { transform: translateX(24px) translateY(8vh)  rotate(0deg); }
+  32%  { transform: translateX(24px) translateY(34vh) rotate(0deg); }
+  40%  { transform: translateX(2px)  translateY(37vh) rotate(9deg); }
+  46%  { transform: translateX(24px) translateY(40vh) rotate(0deg); }
+  65%  { transform: translateX(24px) translateY(66vh) rotate(0deg); }
+  72%  { transform: translateX(4px)  translateY(69vh) rotate(12deg); }
+  78%  { transform: translateX(24px) translateY(66vh) rotate(0deg); }
+  100% { transform: translateX(24px) translateY(7vh)  rotate(0deg); }
+}
+
+.bunny-wander-left {
+  animation: bunny-wander-left 18s ease-in-out infinite;
+}
+.bunny-wander-right {
+  animation: bunny-wander-right 18s ease-in-out infinite;
+  animation-delay: -9s; /* opposite phase so they don't move together */
+}

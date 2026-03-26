@@ -1,0 +1,184 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+---
+
+<Shop
+  title={`Shipping Information | ${tenant.name}`}
+  description={`Fast EU-wide delivery from ${tenant.name}. Free shipping on orders over €${tenant.freeShippingThreshold}. 2-5 business day delivery with full tracking.`}
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Shipping' }]} />
+
+      <h1 class="text-4xl font-bold tracking-tight mb-4">Shipping Information</h1>
+      <p class="text-lg text-muted-foreground mb-10 leading-relaxed">
+        We dispatch orders the same or next business day from our EU warehouse.
+        Here's everything you need to know about delivery.
+      </p>
+
+      <!-- Free shipping banner -->
+      <div class="rounded-xl border border-primary/30 bg-primary/5 p-6 mb-10 text-center">
+        <p class="text-2xl font-bold text-foreground mb-1">
+          Free Shipping on Orders Over &euro;{tenant.freeShippingThreshold}
+        </p>
+        <p class="text-sm text-muted-foreground">
+          No promo code needed — just add &euro;{tenant.freeShippingThreshold} or more to your cart.
+        </p>
+      </div>
+
+      <!-- Shipping Zones -->
+      <h2 class="text-2xl font-semibold mb-4">Shipping Zones</h2>
+      <div class="grid gap-6 sm:grid-cols-2 mb-10">
+        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 text-lg">
+              &#127466;&#127482;
+            </span>
+            <h3 class="text-lg font-semibold">European Union</h3>
+          </div>
+          <ul class="space-y-2 text-sm text-muted-foreground leading-relaxed">
+            <li class="flex justify-between">
+              <span>Delivery time</span>
+              <span class="font-medium text-foreground">3-5 business days</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Standard shipping</span>
+              <span class="font-medium text-foreground">&euro;4.90</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Free shipping from</span>
+              <span class="font-medium text-primary">&euro;{tenant.freeShippingThreshold}</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Tracking</span>
+              <span class="font-medium text-foreground">Included</span>
+            </li>
+          </ul>
+          <p class="mt-4 text-xs text-muted-foreground">
+            Covers all EU member states including Germany, France, Netherlands, Poland,
+            Spain, Italy, Belgium, Austria, Ireland, and more.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 text-lg">
+              &#10052;
+            </span>
+            <h3 class="text-lg font-semibold">Nordics</h3>
+          </div>
+          <ul class="space-y-2 text-sm text-muted-foreground leading-relaxed">
+            <li class="flex justify-between">
+              <span>Delivery time</span>
+              <span class="font-medium text-foreground">2-4 business days</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Standard shipping</span>
+              <span class="font-medium text-foreground">&euro;3.90</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Free shipping from</span>
+              <span class="font-medium text-primary">&euro;{tenant.freeShippingThreshold}</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Tracking</span>
+              <span class="font-medium text-foreground">Included</span>
+            </li>
+          </ul>
+          <p class="mt-4 text-xs text-muted-foreground">
+            Covers Sweden, Denmark, Finland, and Norway. Faster delivery thanks to
+            proximity to our Nordic warehouse.
+          </p>
+        </div>
+      </div>
+
+      <!-- Delivery process -->
+      <h2 class="text-2xl font-semibold mb-4">How Delivery Works</h2>
+      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-10">
+        <ol class="space-y-4">
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">1</span>
+            <div>
+              <p class="font-medium text-foreground">Order placed</p>
+              <p class="text-sm text-muted-foreground">
+                You receive an order confirmation email immediately after checkout.
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">2</span>
+            <div>
+              <p class="font-medium text-foreground">Dispatch</p>
+              <p class="text-sm text-muted-foreground">
+                Orders placed before 14:00 CET on business days are dispatched the same day.
+                Later orders ship the next business day.
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">3</span>
+            <div>
+              <p class="font-medium text-foreground">Tracking</p>
+              <p class="text-sm text-muted-foreground">
+                A tracking link is emailed to you as soon as your parcel is handed to
+                the carrier. You can also check order status in your account.
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">4</span>
+            <div>
+              <p class="font-medium text-foreground">Delivered</p>
+              <p class="text-sm text-muted-foreground">
+                Your package arrives at your door or nearest pick-up point, depending
+                on the delivery option selected at checkout.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- FAQ -->
+      <h2 class="text-2xl font-semibold mb-4">Common Questions</h2>
+      <div class="space-y-3">
+        <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+          <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+            Do you ship outside the EU?
+            <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+          </summary>
+          <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+            We currently ship to EU member states and Norway only. We are working on
+            expanding to additional markets — sign up for our newsletter to be notified.
+          </div>
+        </details>
+
+        <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+          <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+            What happens if I'm not home?
+            <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+          </summary>
+          <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+            Depending on the carrier and your location, the parcel will either be left
+            at a nearby pick-up point or a redelivery will be attempted the next business
+            day. Check your tracking link for details.
+          </div>
+        </details>
+
+        <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+          <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+            My tracking hasn't updated. What should I do?
+            <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+          </summary>
+          <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+            Tracking updates can sometimes be delayed by 24-48 hours, especially when
+            parcels cross borders. If your tracking hasn't updated after 3 business days,
+            contact us at <a href={`mailto:${tenant.supportEmail}`} class="underline hover:text-foreground">{tenant.supportEmail}</a> and
+            we'll investigate immediately.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+</Shop>

@@ -1,0 +1,145 @@
+<h2>Reputation Badge Visual Direction</h2>
+<p class="subtitle">The current badge is a small colored dot with text. Which direction should we take it?</p>
+
+<div class="cards">
+  <!-- Option A: Shield/Emblem -->
+  <div class="card" data-choice="shield" onclick="toggleSelect(this)">
+    <div class="card-image" style="display:flex;align-items:center;justify-content:center;min-height:220px;background:linear-gradient(135deg,#0a1628,#132040);">
+      <!-- 5 tier badges in shield style -->
+      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;justify-content:center;padding:12px;">
+        <!-- Newcomer -->
+        <div style="text-align:center;">
+          <div style="width:48px;height:56px;position:relative;margin:0 auto;">
+            <svg viewBox="0 0 48 56" width="48" height="56">
+              <path d="M24 2 L44 14 L44 38 L24 54 L4 38 L4 14 Z" fill="none" stroke="#6b7280" stroke-width="2"/>
+              <text x="24" y="32" text-anchor="middle" fill="#6b7280" font-size="16" font-weight="bold">1</text>
+            </svg>
+          </div>
+          <span style="font-size:10px;color:#6b7280;display:block;margin-top:4px;">Newcomer</span>
+        </div>
+        <!-- Regular -->
+        <div style="text-align:center;">
+          <div style="width:48px;height:56px;position:relative;margin:0 auto;">
+            <svg viewBox="0 0 48 56" width="48" height="56">
+              <defs><linearGradient id="blue-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs>
+              <path d="M24 2 L44 14 L44 38 L24 54 L4 38 L4 14 Z" fill="url(#blue-g)" opacity="0.15" stroke="#3b82f6" stroke-width="2"/>
+              <text x="24" y="32" text-anchor="middle" fill="#3b82f6" font-size="16" font-weight="bold">2</text>
+            </svg>
+          </div>
+          <span style="font-size:10px;color:#3b82f6;display:block;margin-top:4px;">Regular</span>
+        </div>
+        <!-- Enthusiast -->
+        <div style="text-align:center;">
+          <div style="width:48px;height:56px;position:relative;margin:0 auto;">
+            <svg viewBox="0 0 48 56" width="48" height="56">
+              <defs><linearGradient id="green-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient></defs>
+              <path d="M24 2 L44 14 L44 38 L24 54 L4 38 L4 14 Z" fill="url(#green-g)" opacity="0.2" stroke="#10b981" stroke-width="2"/>
+              <text x="24" y="32" text-anchor="middle" fill="#10b981" font-size="16" font-weight="bold">3</text>
+            </svg>
+          </div>
+          <span style="font-size:10px;color:#10b981;display:block;margin-top:4px;">Enthusiast</span>
+        </div>
+        <!-- Expert -->
+        <div style="text-align:center;">
+          <div style="width:52px;height:60px;position:relative;margin:0 auto;">
+            <svg viewBox="0 0 48 56" width="52" height="60">
+              <defs><linearGradient id="purple-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+              <path d="M24 2 L44 14 L44 38 L24 54 L4 38 L4 14 Z" fill="url(#purple-g)" opacity="0.25" stroke="#a855f7" stroke-width="2.5"/>
+              <text x="24" y="32" text-anchor="middle" fill="#a855f7" font-size="16" font-weight="bold">4</text>
+            </svg>
+          </div>
+          <span style="font-size:10px;color:#a855f7;display:block;margin-top:4px;">Expert</span>
+        </div>
+        <!-- Legend -->
+        <div style="text-align:center;">
+          <div style="width:56px;height:64px;position:relative;margin:0 auto;">
+            <svg viewBox="0 0 48 56" width="56" height="64">
+              <defs>
+                <linearGradient id="gold-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
+                <filter id="gold-glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <path d="M24 2 L44 14 L44 38 L24 54 L4 38 L4 14 Z" fill="url(#gold-g)" opacity="0.3" stroke="#fbbf24" stroke-width="3" filter="url(#gold-glow)"/>
+              <text x="24" y="32" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="bold">5</text>
+            </svg>
+          </div>
+          <span style="font-size:10px;color:#fbbf24;display:block;margin-top:4px;">Legend</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A: Shield Emblems</h3>
+      <p>Gaming-inspired hexagonal shields that grow in size and glow intensity per tier. Military rank feel. Badges scale up physically as you level.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Rings/Orbs -->
+  <div class="card" data-choice="rings" onclick="toggleSelect(this)">
+    <div class="card-image" style="display:flex;align-items:center;justify-content:center;min-height:220px;background:linear-gradient(135deg,#0a1628,#132040);">
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:center;padding:12px;">
+        <!-- Newcomer ring -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;border:2px solid #6b7280;display:flex;align-items:center;justify-content:center;margin:0 auto;">
+            <span style="font-size:11px;color:#6b7280;font-weight:700;">N</span>
+          </div>
+          <span style="font-size:10px;color:#6b7280;display:block;margin-top:6px;">Newcomer</span>
+        </div>
+        <!-- Regular ring -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;border:2px solid #3b82f6;background:radial-gradient(circle at 30% 30%,rgba(59,130,246,0.15),transparent);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+            <span style="font-size:11px;color:#3b82f6;font-weight:700;">R</span>
+          </div>
+          <span style="font-size:10px;color:#3b82f6;display:block;margin-top:6px;">Regular</span>
+        </div>
+        <!-- Enthusiast double ring -->
+        <div style="text-align:center;">
+          <div style="width:48px;height:48px;border-radius:50%;border:2px solid #10b981;box-shadow:0 0 0 3px transparent,0 0 0 5px rgba(16,185,129,0.2);background:radial-gradient(circle at 30% 30%,rgba(16,185,129,0.15),transparent);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+            <span style="font-size:11px;color:#10b981;font-weight:700;">E</span>
+          </div>
+          <span style="font-size:10px;color:#10b981;display:block;margin-top:6px;">Enthusiast</span>
+        </div>
+        <!-- Expert triple ring -->
+        <div style="text-align:center;">
+          <div style="width:52px;height:52px;border-radius:50%;border:2.5px solid #a855f7;box-shadow:0 0 8px rgba(168,85,247,0.3),0 0 0 4px rgba(168,85,247,0.15);background:radial-gradient(circle at 30% 30%,rgba(168,85,247,0.2),transparent);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+            <span style="font-size:12px;color:#a855f7;font-weight:700;">X</span>
+          </div>
+          <span style="font-size:10px;color:#a855f7;display:block;margin-top:6px;">Expert</span>
+        </div>
+        <!-- Legend orb -->
+        <div style="text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;border:3px solid #fbbf24;box-shadow:0 0 16px rgba(251,191,36,0.4),0 0 0 4px rgba(251,191,36,0.2),inset 0 0 12px rgba(251,191,36,0.1);background:radial-gradient(circle at 30% 30%,rgba(251,191,36,0.25),transparent);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+            <span style="font-size:14px;color:#fbbf24;font-weight:800;">L</span>
+          </div>
+          <span style="font-size:10px;color:#fbbf24;display:block;margin-top:6px;">Legend</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B: Glowing Orbs / Rings</h3>
+      <p>Circular badges with increasing glow intensity, ring layers, and inner radiance per tier. Clean and modern. Fits naturally as avatar frames or beside usernames. More subtle/premium than shields.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Minimal with animation -->
+  <div class="card" data-choice="minimal" onclick="toggleSelect(this)">
+    <div class="card-image" style="display:flex;align-items:center;justify-content:center;min-height:220px;background:linear-gradient(135deg,#0a1628,#132040);">
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:center;padding:12px;">
+        <!-- Each tier is a stylized text badge -->
+        <div style="padding:6px 14px;border-radius:20px;border:1px solid #6b7280;font-size:12px;color:#6b7280;font-weight:600;">Newcomer</div>
+        <div style="padding:6px 14px;border-radius:20px;border:1px solid #3b82f6;background:rgba(59,130,246,0.08);font-size:12px;color:#3b82f6;font-weight:600;">Regular</div>
+        <div style="padding:6px 14px;border-radius:20px;border:1px solid #10b981;background:rgba(16,185,129,0.1);font-size:12px;color:#10b981;font-weight:600;">Enthusiast</div>
+        <div style="padding:7px 16px;border-radius:20px;border:1.5px solid #a855f7;background:rgba(168,85,247,0.12);font-size:12px;color:#a855f7;font-weight:700;box-shadow:0 0 8px rgba(168,85,247,0.15);">Expert</div>
+        <div style="padding:8px 18px;border-radius:20px;border:2px solid #fbbf24;background:linear-gradient(135deg,rgba(251,191,36,0.15),rgba(217,119,6,0.1));font-size:13px;color:#fbbf24;font-weight:800;box-shadow:0 0 12px rgba(251,191,36,0.2);letter-spacing:0.5px;">LEGEND</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C: Pill Badges (Enhanced)</h3>
+      <p>Clean pill/tag badges that scale up in visual weight — thicker borders, stronger backgrounds, glow effects at higher tiers. Compact, works inline everywhere. Add CSS animations (pulse for Legend) rather than complex SVGs.</p>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:1.5rem;padding:1rem;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);">
+  <p style="font-size:0.85em;color:var(--muted);">
+    <strong>Note:</strong> Whichever style we pick, the badge will appear in: leaderboard rows, review cards, community posts, profile header, and as a compact inline version next to usernames. It needs to work at both large (profile card) and small (inline beside name) sizes.
+  </p>
+</div>

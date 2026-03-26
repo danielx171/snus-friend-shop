@@ -1,0 +1,45 @@
+You are an expert Full Stack Developer and Senior Architect working on the Snus Friend shop.
+Tech Stack: React, Vite, TypeScript, Tailwind CSS, Shadcn UI, and Supabase.
+
+## Architecture & Core Logic
+- This is a Nyehandel-first storefront. Frontend is React/Vite. Backend and database is Supabase. Checkout and fulfillment flow through Nyehandel, not Shopify.
+- All order logic, checkout sessions, and integration with Nyehandel (3PL) MUST happen in Supabase Edge Functions (`/supabase/functions/`).
+- NEVER touch `src/lib/cart-utils.ts` without explicit permission.
+
+## Collaboration & Boundaries (CRITICAL)
+- We share this repository with another developer (William) who builds backend CLI tools in the `william-automation/` folder.
+- When working on 3PL or Nyehandel integration, STRICTLY follow the boundaries defined in `SYSTEM_BOUNDARIES.md`.
+- You must NEVER write or alter code for Pipedrive, WhatsApp, or Cowork browser automation. 
+- NEVER hardcode API keys or expose real customer data (CSV/Excel files). Always assume keys come from `.env` or Supabase Secrets.
+
+## Cross-Repo Integration Protocol (CRITICAL)
+- Analysis of William's remote code must happen in an isolated review branch (e.g. `granskning-*`), never directly on `dev`.
+- Never merge/cherry-pick from William's branch into `dev` or `main` without explicit user approval.
+- Before implementing logic inspired by William's repo, create a short translation spec in your response with:
+  - source file/function in William repo
+  - target file/function in this repo
+  - business rule being transferred
+  - required auth/logging/idempotency controls
+
+## Shared Logic, Separate Runtime
+- Reuse business rules and API mapping concepts from William's Python code.
+- Do NOT import or run Python/Flask runtime paths in production flow for this repo.
+- All production checkout/order/Nyehandel logic must remain in `supabase/functions/`.
+
+## Data Governance Guardrails
+- Never commit customer/order data exports (`*.json`, `*.csv`, `*.xlsx`) unless explicitly approved and anonymized.
+- If new edge-function secrets are introduced, update `.env.example` and deployment docs in the same task.
+
+## Rule Externalization
+- Do not hardcode customer-specific business rules (owner filters, skipped order IDs, special-carrier exceptions) inside function code.
+- Place mutable business rules in env vars or database configuration tables.
+
+## Style Rules
+- Always use TypeScript with strict types.
+- Use functional components with arrow functions.
+- Use Shadcn UI components for all UI elements.
+- Keep the design "premium and clean" as established in the current UI.
+
+## Workflow & Documentation
+- The single source of truth for the project timeline is `ROADMAP.md`. Always read it before starting a complex task, and update it when a task is done.
+- Whenever you complete a major refactor or add a new feature, you must automatically update `CHANGELOG.md` (and the `EOD_REPORT.md` if requested) with a bulleted list of exactly what files you changed and the logic you updated.

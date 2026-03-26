@@ -1,0 +1,134 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import FilterableProductGrid from '@/components/react/FilterableProductGrid';
+import { getCollection } from 'astro:content';
+
+const FLAVOR_META: Record<string, { label: string; h1: string; desc: string; intro: string }> = {
+  'mint': {
+    label: 'Mint',
+    h1: 'Mint Nicotine Pouches',
+    desc: 'Shop mint nicotine pouches — the most popular flavour. Cool, refreshing options from VELO, ZYN, and more.',
+    intro: 'Mint is by far the most popular nicotine pouch flavour, and for good reason. These pouches deliver a cool, refreshing burst that pairs perfectly with the nicotine experience. From spearmint to peppermint and icy menthol blends, the mint category offers something for every preference.',
+  },
+  'citrus': {
+    label: 'Citrus',
+    h1: 'Citrus Nicotine Pouches',
+    desc: 'Browse citrus nicotine pouches with zesty orange, lemon, and bergamot flavours. Fresh and uplifting.',
+    intro: 'Citrus nicotine pouches bring a zesty, uplifting twist to your nicotine experience. Featuring flavours like orange, lemon, bergamot, and grapefruit, these pouches are refreshing and bright — a favourite among users who want something different from mint.',
+  },
+  'berry': {
+    label: 'Berry',
+    h1: 'Berry Nicotine Pouches',
+    desc: 'Shop berry nicotine pouches — blueberry, strawberry, mixed berries and more from top brands.',
+    intro: 'Berry nicotine pouches offer a sweet, fruity flavour profile that many users love. From blueberry and strawberry to mixed berry blends and wild forest berries, this category delivers a naturally sweet experience without being overpowering.',
+  },
+  'coffee': {
+    label: 'Coffee',
+    h1: 'Coffee Nicotine Pouches',
+    desc: 'Discover coffee nicotine pouches with rich espresso and mocha flavours. Perfect morning pairing.',
+    intro: 'Coffee nicotine pouches combine the rich, roasted notes of espresso, mocha, and coffee bean with satisfying nicotine delivery. A perfect pairing for your morning routine or an afternoon pick-me-up, these pouches appeal to coffee lovers everywhere.',
+  },
+  'tobacco': {
+    label: 'Tobacco',
+    h1: 'Tobacco Flavour Nicotine Pouches',
+    desc: 'Classic tobacco flavour nicotine pouches for a traditional experience. Smooth and familiar.',
+    intro: 'Tobacco-flavoured nicotine pouches deliver the classic, familiar taste that traditional tobacco users appreciate — without the smoke, ash, or staining. These pouches offer a smooth, earthy flavour that makes the switch from cigarettes or snus feel natural.',
+  },
+  'exotic': {
+    label: 'Exotic',
+    h1: 'Exotic Nicotine Pouches',
+    desc: 'Explore exotic nicotine pouches — mango, passion fruit, watermelon and more unique flavours.',
+    intro: 'Exotic nicotine pouches push the boundaries of flavour with tropical and unique taste profiles. From mango and passion fruit to watermelon, lychee, and creative blends, these pouches are for adventurous users who want to explore beyond the classics.',
+  },
+  'unflavored': {
+    label: 'Unflavored',
+    h1: 'Unflavored Nicotine Pouches',
+    desc: 'Shop unflavored nicotine pouches for a pure, clean nicotine experience without added taste.',
+    intro: 'Unflavored nicotine pouches deliver a pure, clean nicotine experience with no added taste. Ideal for users who prefer simplicity or want to avoid sweeteners and flavourings, these pouches let you enjoy nicotine in its most straightforward form.',
+  },
+};
+
+export async function getStaticPaths() {
+  const keys = ['mint', 'citrus', 'berry', 'coffee', 'tobacco', 'exotic', 'unflavored'];
+  return keys.map((key) => ({ params: { key }, props: { key } }));
+}
+
+const ALL_FLAVOR_KEYS = Object.keys(FLAVOR_META);
+
+const { key } = Astro.props;
+const meta = FLAVOR_META[key as keyof typeof FLAVOR_META];
+const allProducts = await getCollection('products');
+const products = allProducts.filter((p) => p.data.flavorKey === key);
+const serialized = JSON.stringify(products.map((p) => ({ ...p.data, slug: p.id })));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: meta.h1,
+  description: meta.desc,
+  numberOfItems: products.length,
+  itemListElement: products.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://snusfriends.com/products/${p.id}`,
+    name: p.data.name,
+  })),
+};
+---
+
+<Shop
+  title={`${meta.h1} | SnusFriend`}
+  description={meta.desc}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:py-12">
+    <Breadcrumb items={[
+      { label: 'Products', href: '/products' },
+      { label: meta.label },
+    ]} />
+
+    <header class="mb-8">
+      <h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        {meta.h1}
+      </h1>
+      <p class="max-w-3xl text-base leading-relaxed text-muted-foreground">
+        {meta.intro}
+      </p>
+      <p class="mt-2 text-sm text-muted-foreground">
+        {products.length} products
+      </p>
+    </header>
+
+    <FilterableProductGrid
+      client:load
+      productsJson={serialized}
+      initialFilters={JSON.stringify({ flavors: [key] })}
+    />
+
+    <!-- Cross-links to other flavor categories -->
+    <nav class="mt-12 border-t border-border pt-8" aria-label="Browse by flavour">
+      <h2 class="mb-4 text-lg font-semibold text-foreground">Browse by Flavour</h2>
+      <div class="flex flex-wrap gap-3">
+        {ALL_FLAVOR_KEYS.map((k) => {
+          const m = FLAVOR_META[k];
+          const isCurrent = k === key;
+          return (
+            <a
+              href={`/products/flavor/${k}`}
+              class={`rounded-lg border px-4 py-2 text-sm font-medium transition ${
+                isCurrent
+                  ? 'border-primary bg-primary/10 text-primary pointer-events-none'
+                  : 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/5'
+              }`}
+              aria-current={isCurrent ? 'page' : undefined}
+            >
+              {m.label}
+            </a>
+          );
+        })}
+      </div>
+    </nav>
+  </div>
+</Shop>

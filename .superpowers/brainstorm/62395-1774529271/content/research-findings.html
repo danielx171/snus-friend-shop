@@ -1,0 +1,107 @@
+<h2>Astro Migration — Research Findings</h2>
+<p class="subtitle">4 agents researched Astro features, white-label patterns, shadcn/ui compatibility, and migration case studies</p>
+
+<div class="section">
+  <h3>✅ Confirmed: Astro is the right choice</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;">
+    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-radius: 8px; padding: 16px;">
+      <strong style="color: #22c55e;">SEO Win</strong>
+      <p style="font-size: 14px; margin-top: 8px;">Info/content pages ship <strong>0KB JavaScript</strong>. Product catalog pages render as static HTML. Google crawls everything instantly. This is existential for your nicotine pouch niche (no paid ads possible).</p>
+    </div>
+    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-radius: 8px; padding: 16px;">
+      <strong style="color: #22c55e;">White-Label Ready</strong>
+      <p style="font-size: 14px; margin-top: 8px;">Config-driven tenant system with CSS custom properties. One codebase → multiple branded storefronts. Turborepo monorepo when tenant #2 arrives. Vercel Platforms handles multi-domain.</p>
+    </div>
+    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-radius: 8px; padding: 16px;">
+      <strong style="color: #22c55e;">shadcn/ui Works</strong>
+      <p style="font-size: 14px; margin-top: 8px;">Official Astro support. All 52 shadcn components carry over unchanged. Simple components use <code>client:load</code>, portal-based ones use <code>client:only="react"</code>.</p>
+    </div>
+    <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-radius: 8px; padding: 16px;">
+      <strong style="color: #22c55e;">Performance</strong>
+      <p style="font-size: 14px; margin-top: 8px;">Lighthouse 95-100 for static pages. 50-80% JS reduction vs current SPA. LCP improvements of 2-5 seconds on mobile. React only loads where islands exist.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>⚠️ Key Challenges Identified</h3>
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+    <div style="background: rgba(234,179,8,0.08); border: 1px solid rgba(234,179,8,0.2); border-radius: 8px; padding: 16px;">
+      <strong style="color: #eab308;">1. React Context doesn't cross islands</strong>
+      <p style="font-size: 14px; margin-top: 4px;">Cart, Theme, Wishlist, Language, CookieConsent — all 6 contexts must become <strong>Nanostores</strong> (atomic stores shared across islands). This is mechanical but touches every component that reads context.</p>
+    </div>
+    <div style="background: rgba(234,179,8,0.08); border: 1px solid rgba(234,179,8,0.2); border-radius: 8px; padding: 16px;">
+      <strong style="color: #eab308;">2. Radix portal components need client:only</strong>
+      <p style="font-size: 14px; margin-top: 4px;">~30 of 52 shadcn components (Dialog, Sheet, Select, Popover, etc.) cause hydration mismatches in SSG. Must use <code>client:only="react"</code> which means no server-rendered HTML for those islands. Fine because these are interactive widgets, not SEO content.</p>
+    </div>
+    <div style="background: rgba(234,179,8,0.08); border: 1px solid rgba(234,179,8,0.2); border-radius: 8px; padding: 16px;">
+      <strong style="color: #eab308;">3. Sonner toasts across islands</strong>
+      <p style="font-size: 14px; margin-top: 4px;">Single <code>&lt;Toaster&gt;</code> in layout + CustomEvent bridge or Nanostores for cross-island toast triggering. Not hard, just different from the current global provider pattern.</p>
+    </div>
+    <div style="background: rgba(234,179,8,0.08); border: 1px solid rgba(234,179,8,0.2); border-radius: 8px; padding: 16px;">
+      <strong style="color: #eab308;">4. No client-side routing by default</strong>
+      <p style="font-size: 14px; margin-top: 4px;">Full page navigations instead of React Router. Astro View Transitions API smooths this out with page morphing and persistent elements, but it's different from SPA navigation.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🏗️ Architecture Decisions (Locked In)</h3>
+  <div style="display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin-top: 12px; font-size: 14px;">
+    <strong>Approach:</strong> <span>Full Astro — rewrite pages as .astro, React only for interactive islands</span>
+    <strong>State:</strong> <span>Nanostores — framework-agnostic, ~1KB, purpose-built for islands</span>
+    <strong>Data:</strong> <span>Hybrid SSG+SSR — static HTML for catalog, client overlay for live pricing</span>
+    <strong>Components:</strong> <span>shadcn/ui stays — zero source changes, just wrapped in client directives</span>
+    <strong>Styling:</strong> <span>Tailwind + CSS custom properties — unchanged, framework-agnostic</span>
+    <strong>Backend:</strong> <span>Supabase edge functions — zero changes needed</span>
+    <strong>Deploy:</strong> <span>Vercel + @astrojs/vercel adapter — GitHub Actions CI/CD</span>
+    <strong>White-label:</strong> <span>Tenant config object → CSS vars + feature flags → Turborepo later</span>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📊 Estimated Bundle Impact</h3>
+  <div style="margin-top: 12px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+      <thead>
+        <tr style="border-bottom: 2px solid rgba(255,255,255,0.1);">
+          <th style="text-align: left; padding: 8px;">Page Type</th>
+          <th style="text-align: right; padding: 8px;">Current SPA</th>
+          <th style="text-align: right; padding: 8px;">After Astro</th>
+          <th style="text-align: right; padding: 8px;">Reduction</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 8px;">Info pages (About, FAQ, Legal)</td>
+          <td style="text-align: right; padding: 8px;">~250KB</td>
+          <td style="text-align: right; padding: 8px; color: #22c55e;"><strong>~0KB</strong></td>
+          <td style="text-align: right; padding: 8px; color: #22c55e;">100%</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 8px;">Product listing</td>
+          <td style="text-align: right; padding: 8px;">~250KB</td>
+          <td style="text-align: right; padding: 8px; color: #22c55e;"><strong>~70KB</strong></td>
+          <td style="text-align: right; padding: 8px; color: #22c55e;">72%</td>
+        </tr>
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 8px;">Product detail</td>
+          <td style="text-align: right; padding: 8px;">~250KB</td>
+          <td style="text-align: right; padding: 8px; color: #22c55e;"><strong>~120KB</strong></td>
+          <td style="text-align: right; padding: 8px; color: #22c55e;">52%</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px;">Checkout / Account</td>
+          <td style="text-align: right; padding: 8px;">~250KB</td>
+          <td style="text-align: right; padding: 8px;">~180KB</td>
+          <td style="text-align: right; padding: 8px; color: #eab308;">28%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div style="margin-top: 24px; padding: 16px; background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.2); border-radius: 8px;">
+  <strong style="color: #60a5fa;">⏳ Still waiting on: Astro latest features agent</strong>
+  <p style="font-size: 14px; margin-top: 4px;">Researching Astro 5.x features, Server Islands, Actions, Content Layer API, Vercel adapter details, i18n, and PWA support. Will update when it lands.</p>
+</div>

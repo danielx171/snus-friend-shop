@@ -1,0 +1,83 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const tiers = [
+  { name: 'Bronze', points: '0', perks: ['1 point per euro spent', 'Birthday bonus', 'Member-only newsletter'], color: 'from-amber-700 to-amber-900' },
+  { name: 'Silver', points: '500', perks: ['1.5x points multiplier', 'Early access to new flavours', 'Free shipping on orders over 30 EUR'], color: 'from-slate-400 to-slate-600' },
+  { name: 'Gold', points: '2,000', perks: ['2x points multiplier', 'Exclusive product drops', 'Priority customer support'], color: 'from-yellow-500 to-amber-600' },
+  { name: 'Platinum', points: '5,000', perks: ['3x points multiplier', 'Free shipping on every order', 'Quarterly surprise box', 'VIP community access'], color: 'from-slate-200 to-slate-400' },
+];
+---
+
+<Shop
+  title={`Rewards | ${tenant.name}`}
+  description={`Earn points on every purchase and redeem them for discounts, free products, and exclusive perks with ${tenant.name} Rewards.`}
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Rewards' }]} />
+
+      <h1 class="text-4xl font-bold tracking-tight mb-3">{tenant.loyaltyProgramName}</h1>
+      <p class="text-lg text-muted-foreground mb-10">
+        Every purchase earns you points. Redeem them for discounts, free products, and exclusive perks.
+      </p>
+
+      <!-- How it works -->
+      <div class="grid gap-6 sm:grid-cols-3 mb-12">
+        {[
+          { step: '1', title: 'Earn Points', desc: 'Get points on every order. Bonus points for reviews, referrals, and quests.' },
+          { step: '2', title: 'Redeem Rewards', desc: 'Spend your points on discounts, free products, or limited-edition drops.' },
+          { step: '3', title: 'Level Up', desc: 'The more you earn, the higher your tier — unlocking better multipliers and perks.' },
+        ].map((item) => (
+          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 text-center">
+            <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground">
+              {item.step}
+            </div>
+            <h3 class="text-lg font-semibold mb-2">{item.title}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Tier cards -->
+      <h2 class="text-2xl font-bold tracking-tight mb-6">Tier Overview</h2>
+      <div class="grid gap-6 sm:grid-cols-2 mb-12">
+        {tiers.map((tier) => (
+          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden">
+            <div class={`bg-gradient-to-r ${tier.color} px-6 py-4`}>
+              <h3 class="text-lg font-bold text-white">{tier.name}</h3>
+              <p class="text-sm text-white/80">{tier.points} points to unlock</p>
+            </div>
+            <ul class="p-6 space-y-2">
+              {tier.perks.map((perk) => (
+                <li class="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span class="mt-0.5 text-primary">&#10003;</span>
+                  <span>{perk}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <!-- CTA -->
+      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
+        <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary mb-4">
+          Coming Soon
+        </span>
+        <h2 class="text-xl font-semibold mb-2">Rewards launching soon</h2>
+        <p class="text-muted-foreground text-sm max-w-md mx-auto mb-6">
+          Create an account now so your purchases count toward your tier from day one.
+        </p>
+        <a
+          href="/products"
+          class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Start Shopping
+        </a>
+      </div>
+    </div>
+  </section>
+</Shop>

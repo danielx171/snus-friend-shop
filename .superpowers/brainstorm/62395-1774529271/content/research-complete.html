@@ -1,0 +1,70 @@
+<h2>Research Complete — Key Discoveries</h2>
+<p class="subtitle">These Astro 5 features change our architecture for the better</p>
+
+<div class="section">
+  <h3>🔥 Game-Changers from Astro 5</h3>
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+
+    <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25); border-radius: 8px; padding: 16px;">
+      <strong style="color: #a855f7;">Server Islands (server:defer)</strong>
+      <p style="font-size: 14px; margin-top: 4px;">Static page shell loads instantly from CDN. Dynamic widgets (cart count, user avatar, personalized recs) load independently via server request. <strong>No client JS needed for server-rendered dynamic content.</strong> Each island can have its own cache lifetime. This is perfect for product pages — static HTML for SEO, deferred server islands for cart/auth.</p>
+    </div>
+
+    <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25); border-radius: 8px; padding: 16px;">
+      <strong style="color: #a855f7;">Actions (type-safe server functions)</strong>
+      <p style="font-size: 14px; margin-top: 4px;">Define server functions with Zod schemas, call from client or HTML forms. <strong>Progressive enhancement — forms work without JS.</strong> Perfect for: add-to-cart, newsletter signup, review submission, contact form. Replaces manual API fetch calls with type-safe RPC.</p>
+    </div>
+
+    <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25); border-radius: 8px; padding: 16px;">
+      <strong style="color: #a855f7;">Content Layer with Custom Loaders</strong>
+      <p style="font-size: 14px; margin-top: 4px;">Build a custom Supabase loader that fetches all 734 products at build time into a typed collection. Query with <code>getCollection('products')</code>. Zod-validated. Incremental builds. <strong>Replaces React Query for catalog data on SSG pages.</strong></p>
+    </div>
+
+    <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25); border-radius: 8px; padding: 16px;">
+      <strong style="color: #a855f7;">ISR on Vercel (Incremental Static Regeneration)</strong>
+      <p style="font-size: 14px; margin-top: 4px;">Static pages auto-revalidate on a schedule (e.g., every 4 hours). On-demand invalidation via webhook when Nyehandel syncs. <strong>No full rebuild needed for price changes.</strong> Combines CDN speed with data freshness.</p>
+    </div>
+
+    <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25); border-radius: 8px; padding: 16px;">
+      <strong style="color: #a855f7;">Built-in i18n Routing</strong>
+      <p style="font-size: 14px; margin-top: 4px;">Native locale-prefixed routing (<code>/sv/om-oss</code> vs <code>/en/about</code>). Auto-generated hreflang tags. Fallback locales. <strong>Replaces your custom LanguageContext entirely.</strong> Critical for EU nicotine pouch market (EN, SV, DE).</p>
+    </div>
+
+    <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25); border-radius: 8px; padding: 16px;">
+      <strong style="color: #a855f7;">View Transitions</strong>
+      <p style="font-size: 14px; margin-top: 4px;">SPA-like smooth page transitions without a client router. Add <code>&lt;ViewTransitions /&gt;</code> to layout. Supports persistent elements (cart icon stays), morph animations, slide transitions. <strong>Solves the "MPA feels slow" problem.</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🏪 Vercel Adapter — Built for This</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; font-size: 14px;">
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px;">
+      <strong>Hybrid mode</strong><br/>Default SSG + opt-in SSR per page
+    </div>
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px;">
+      <strong>Edge Middleware</strong><br/>Auth checks, tenant resolution, geo-routing
+    </div>
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px;">
+      <strong>Image Optimization</strong><br/>Vercel's native image service
+    </div>
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px;">
+      <strong>Speed Insights</strong><br/>Built-in Core Web Vitals
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🏷️ White-Label Architecture (Confirmed)</h3>
+  <div style="font-size: 14px; margin-top: 12px; line-height: 1.8;">
+    <strong>Phase 1 (now):</strong> Tenant config object (name, theme, features, SEO, assets) → CSS custom properties<br/>
+    <strong>Phase 2 (tenant #2):</strong> Turborepo monorepo, apps/tenant-a + packages/shared, middleware tenant resolution<br/>
+    <strong>Phase 3 (5+ tenants):</strong> Database multi-tenancy (tenant_id + RLS), PostHog group feature flags, CDN assets
+  </div>
+</div>
+
+<div style="margin-top: 24px; padding: 16px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-radius: 8px;">
+  <strong style="color: #22c55e;">✅ All research complete. Ready to finalize the design spec.</strong>
+  <p style="font-size: 14px; margin-top: 4px;">Continuing in the terminal with remaining design questions...</p>
+</div>

@@ -1,0 +1,61 @@
+<h2>Avatar Customization Approach</h2>
+<p class="subtitle">How deep should the avatar builder go? This determines art requirements and complexity.</p>
+
+<div class="options">
+  <div class="option" data-choice="frames" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Avatar Frames + Flair</h3>
+      <p>Keep the current avatar gallery (pick a base image). Add <strong>unlockable frames</strong> around it — tier-colored borders, animated rings for Legend, seasonal frames (snowflakes, spring flowers). Plus small <strong>flair icons</strong> (badges, emojis) overlaid on the corner.</p>
+      <div style="margin-top:8px;display:flex;gap:12px;align-items:center;">
+        <div style="position:relative;width:56px;height:56px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:#374151;position:absolute;top:4px;left:4px;display:flex;align-items:center;justify-content:center;font-size:20px;">D</div>
+          <div style="width:56px;height:56px;border-radius:50%;border:3px solid #a855f7;box-shadow:0 0 10px rgba(168,85,247,0.3);position:absolute;top:0;left:0;"></div>
+          <div style="position:absolute;bottom:-2px;right:-2px;width:18px;height:18px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:10px;">4</div>
+        </div>
+        <span style="font-size:12px;color:var(--muted);">Expert frame + level flair</span>
+      </div>
+      <p style="color:var(--accent);font-size:0.85em;margin-top:8px;">Art needed: Frame SVGs only (5 tiers + seasonal). Low effort.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="builder" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Layered Avatar Builder</h3>
+      <p>Full character builder: pick <strong>base shape</strong>, <strong>face expression</strong>, <strong>accessory</strong> (hat, glasses, headphones), <strong>background</strong>, and <strong>frame</strong>. Each layer is a simple SVG. Items unlock via achievements and reputation tier.</p>
+      <div style="margin-top:8px;display:flex;gap:6px;align-items:center;">
+        <div style="padding:4px 10px;border-radius:12px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);font-size:11px;color:#3b82f6;">Base</div>
+        <span style="color:var(--muted);">+</span>
+        <div style="padding:4px 10px;border-radius:12px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);font-size:11px;color:#10b981;">Face</div>
+        <span style="color:var(--muted);">+</span>
+        <div style="padding:4px 10px;border-radius:12px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);font-size:11px;color:#a855f7;">Accessory</div>
+        <span style="color:var(--muted);">+</span>
+        <div style="padding:4px 10px;border-radius:12px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);font-size:11px;color:#fbbf24;">Frame</div>
+      </div>
+      <p style="color:var(--accent);font-size:0.85em;margin-top:8px;">Art needed: ~30-50 SVG pieces across categories. Medium-high effort.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="pouch" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Pouch Character Builder</h3>
+      <p>Brand-specific twist: your avatar IS a nicotine pouch character. Pick <strong>pouch shape</strong>, <strong>flavor color</strong>, <strong>expression</strong>, <strong>hat/accessory</strong>, and <strong>background scene</strong>. Themed to the snus world. Could become the SnusFriend mascot system.</p>
+      <div style="margin-top:8px;display:flex;gap:12px;align-items:center;">
+        <div style="width:52px;height:40px;border-radius:20px;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 2px 8px rgba(34,197,94,0.3);">
+          <span style="font-size:16px;">😎</span>
+          <div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:14px;">🎩</div>
+        </div>
+        <span style="font-size:12px;color:var(--muted);">Mint pouch with top hat</span>
+      </div>
+      <p style="color:var(--accent);font-size:0.85em;margin-top:8px;">Art needed: ~40-60 SVG pieces, all custom themed. High effort but very unique.</p>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:1.5rem;padding:1rem;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);">
+  <p style="font-size:0.85em;color:var(--muted);">
+    <strong>My take:</strong> Option A (frames + flair) ships fast and still looks great. Option C (pouch characters) is the most memorable and brandable but needs the most art. Option B is the safe middle ground but lacks personality. For a CEO demo, C would get the biggest reaction — but A is the smartest MVP.
+  </p>
+</div>

@@ -1,0 +1,174 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+---
+
+<Shop
+  title={`Returns & Refunds | ${tenant.name}`}
+  description={`${tenant.name} returns policy. 14-day return window for unopened products. Learn how to initiate a return and when to expect your refund.`}
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Returns' }]} />
+
+      <h1 class="text-4xl font-bold tracking-tight mb-4">Returns &amp; Refunds</h1>
+      <p class="text-lg text-muted-foreground mb-10 leading-relaxed">
+        We want you to be happy with every order. If something isn't right,
+        here's how we make it right.
+      </p>
+
+      <!-- Policy overview -->
+      <div class="rounded-xl border border-primary/30 bg-primary/5 p-6 mb-10">
+        <h2 class="text-xl font-bold text-foreground mb-2">14-Day Return Policy</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          You have 14 days from the date of delivery to request a return for eligible items.
+          This is in line with EU consumer protection regulations.
+        </p>
+      </div>
+
+      <!-- Conditions -->
+      <h2 class="text-2xl font-semibold mb-4">Return Conditions</h2>
+      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-10">
+        <ul class="space-y-3">
+          <li class="flex gap-3 text-sm">
+            <span class="flex-shrink-0 text-primary font-bold">&#10003;</span>
+            <span class="text-muted-foreground">
+              <strong class="text-foreground">Unopened products</strong> — items must be in
+              their original, sealed packaging. Unopened cans and rolls are fully eligible.
+            </span>
+          </li>
+          <li class="flex gap-3 text-sm">
+            <span class="flex-shrink-0 text-primary font-bold">&#10003;</span>
+            <span class="text-muted-foreground">
+              <strong class="text-foreground">Damaged or defective items</strong> — if your
+              order arrived damaged, we will replace or refund regardless of whether the
+              packaging has been opened.
+            </span>
+          </li>
+          <li class="flex gap-3 text-sm">
+            <span class="flex-shrink-0 text-primary font-bold">&#10003;</span>
+            <span class="text-muted-foreground">
+              <strong class="text-foreground">Wrong items received</strong> — if we sent the
+              wrong product, we cover return shipping and send the correct item at no cost.
+            </span>
+          </li>
+          <li class="flex gap-3 text-sm">
+            <span class="flex-shrink-0 text-destructive font-bold">&#10005;</span>
+            <span class="text-muted-foreground">
+              <strong class="text-foreground">Opened products</strong> — due to health and
+              hygiene regulations, we cannot accept returns on opened nicotine pouch
+              products.
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- How to return -->
+      <h2 class="text-2xl font-semibold mb-4">How to Initiate a Return</h2>
+      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-10">
+        <ol class="space-y-6">
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">1</span>
+            <div>
+              <p class="font-medium text-foreground">Contact us</p>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Email <a href={`mailto:${tenant.supportEmail}`} class="underline hover:text-foreground">{tenant.supportEmail}</a> with
+                your order number and the reason for the return. If the item is damaged,
+                please attach a photo.
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">2</span>
+            <div>
+              <p class="font-medium text-foreground">Receive return instructions</p>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                We'll review your request within one business day and send you a return
+                shipping label or replacement instructions.
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">3</span>
+            <div>
+              <p class="font-medium text-foreground">Ship the item back</p>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Pack the item securely in its original packaging and drop it off at the
+                carrier location specified in your return label. Keep the tracking receipt.
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">4</span>
+            <div>
+              <p class="font-medium text-foreground">Receive your refund</p>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Once we receive and inspect the returned item, your refund is processed.
+                See the timeline below for details.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Refund timeline -->
+      <h2 class="text-2xl font-semibold mb-4">Refund Timeline</h2>
+      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-10">
+        <ul class="space-y-3">
+          <li class="flex justify-between text-sm">
+            <span class="text-muted-foreground">Return inspection</span>
+            <span class="font-medium text-foreground">1-2 business days after receipt</span>
+          </li>
+          <li class="flex justify-between text-sm">
+            <span class="text-muted-foreground">Refund issued</span>
+            <span class="font-medium text-foreground">Same day as inspection approval</span>
+          </li>
+          <li class="flex justify-between text-sm">
+            <span class="text-muted-foreground">Funds in your account</span>
+            <span class="font-medium text-foreground">3-5 business days (varies by bank)</span>
+          </li>
+        </ul>
+        <p class="mt-4 text-xs text-muted-foreground">
+          Refunds are issued to the original payment method. If you paid by card, the
+          refund will appear on your statement within 5-10 business days depending on
+          your bank.
+        </p>
+      </div>
+
+      <!-- Return shipping costs -->
+      <h2 class="text-2xl font-semibold mb-4">Return Shipping Costs</h2>
+      <div class="grid gap-6 sm:grid-cols-2 mb-10">
+        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <h3 class="text-lg font-semibold mb-2">Our fault</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            If you received the wrong item or a damaged product, we pay for return
+            shipping. A prepaid label will be included in your return instructions.
+          </p>
+        </div>
+        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <h3 class="text-lg font-semibold mb-2">Change of mind</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            For change-of-mind returns on unopened products, return shipping costs are
+            the customer's responsibility. The product refund amount is not affected.
+          </p>
+        </div>
+      </div>
+
+      <!-- Need help -->
+      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 text-center">
+        <h2 class="text-xl font-semibold mb-2">Need Help?</h2>
+        <p class="text-sm text-muted-foreground mb-4 leading-relaxed">
+          Questions about a return or refund? Our support team typically responds
+          within a few hours.
+        </p>
+        <a
+          href="/contact"
+          class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Contact Support
+        </a>
+      </div>
+    </div>
+  </section>
+</Shop>

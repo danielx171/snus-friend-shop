@@ -1,0 +1,231 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import ProductCard from '@/components/react/ProductCard';
+
+const allProducts = await getCollection('products');
+const allBrands = await getCollection('brands');
+
+// Best sellers: sort by ratings descending, take top 8
+const bestSellers = [...allProducts]
+  .sort((a, b) => (b.data.ratings ?? 0) - (a.data.ratings ?? 0))
+  .slice(0, 8);
+
+// Brands sorted alphabetically
+const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
+---
+
+<Shop
+  title={tenant.seo.defaultTitle}
+  description={tenant.seo.defaultDescription}
+  ogImage={tenant.seo.ogImage}
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden border-b border-border bg-background">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_70%)]" />
+    <div class="relative mx-auto max-w-6xl px-4 py-24 text-center sm:py-32 lg:py-40">
+      <p class="mb-4 text-sm font-medium uppercase tracking-widest text-primary">
+        Europe's Nicotine Pouch Shop
+      </p>
+      <h1 class="mx-auto max-w-3xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+        {tenant.tagline}
+      </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+        {tenant.seo.defaultDescription}
+      </p>
+      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a
+          href="/products"
+          class="inline-flex h-12 items-center rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90"
+        >
+          Shop All Pouches
+        </a>
+        <a
+          href="/brands"
+          class="inline-flex h-12 items-center rounded-lg border border-border bg-card/60 px-8 text-base font-semibold text-foreground backdrop-blur transition hover:bg-card"
+        >
+          Browse Brands
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Sellers -->
+  <section class="border-b border-border bg-background py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="mb-10 flex items-end justify-between">
+        <div>
+          <h2 class="text-2xl font-bold text-foreground sm:text-3xl">Best Sellers</h2>
+          <p class="mt-2 text-muted-foreground">Our most popular nicotine pouches this week</p>
+        </div>
+        <a href="/products" class="hidden text-sm font-medium text-primary hover:underline sm:block">
+          View all &rarr;
+        </a>
+      </div>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+        {bestSellers.length > 0 ? (
+          bestSellers.map((product) => (
+            <ProductCard
+              client:visible
+              slug={product.id}
+              name={product.data.name}
+              brand={product.data.brand}
+              brandSlug={product.data.brandSlug}
+              imageUrl={product.data.imageUrl}
+              prices={product.data.prices}
+              stock={product.data.stock}
+              nicotineContent={product.data.nicotineContent}
+              strengthKey={product.data.strengthKey}
+              flavorKey={product.data.flavorKey}
+              ratings={product.data.ratings}
+              badgeKeys={product.data.badgeKeys}
+            />
+          ))
+        ) : (
+          Array.from({ length: 8 }).map(() => (
+            <div class="group rounded-xl border border-border bg-card/50 p-4 backdrop-blur transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+              <div class="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
+              <div class="mb-2 h-4 w-3/4 rounded bg-muted/30 animate-pulse" />
+              <div class="h-3 w-1/2 rounded bg-muted/30 animate-pulse" />
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Signals -->
+  <section class="border-b border-border bg-card/30 py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="mb-12 text-center text-2xl font-bold text-foreground sm:text-3xl">
+        Why Shop With Us
+      </h2>
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
+          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          <h3 class="mb-2 font-semibold text-foreground">Free Shipping</h3>
+          <p class="text-sm text-muted-foreground">
+            Free delivery on orders over &euro;{tenant.freeShippingThreshold}. No hidden fees, ever.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
+          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h3 class="mb-2 font-semibold text-foreground">700+ Products</h3>
+          <p class="text-sm text-muted-foreground">
+            The largest selection of nicotine pouches from {brands.length > 0 ? brands.length : 91} leading brands in Europe.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
+          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h3 class="mb-2 font-semibold text-foreground">Fast EU Delivery</h3>
+          <p class="text-sm text-muted-foreground">
+            Dispatched within 24 hours. Delivered across the EU in 2-5 business days.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
+          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="mb-2 font-semibold text-foreground">Verified Reviews</h3>
+          <p class="text-sm text-muted-foreground">
+            Real ratings from real customers. Every review is verified by our community.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop by Brand -->
+  <section class="border-b border-border bg-background py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="mb-10 text-center text-2xl font-bold text-foreground sm:text-3xl">
+        Shop by Brand
+      </h2>
+      <p class="mb-10 text-center text-muted-foreground">
+        We carry all the brands you know and love &mdash; plus new favourites waiting to be discovered.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        {brands.length > 0 ? (
+          brands.slice(0, 16).map((brand) => (
+            <a
+              href={`/brands/${brand.id}`}
+              class="flex h-14 items-center rounded-lg border border-border bg-card/40 px-6 text-sm font-medium text-muted-foreground backdrop-blur transition hover:border-primary/30 hover:text-foreground hover:bg-card/60"
+            >
+              {brand.data.name}
+            </a>
+          ))
+        ) : (
+          ['VELO', 'ZYN', 'LOOP', 'Siberia', 'PABLO', 'KILLA', 'Kurwa', 'ACE'].map((name) => (
+            <div class="flex h-14 items-center rounded-lg border border-border bg-card/40 px-6 text-sm font-medium text-muted-foreground backdrop-blur transition hover:border-primary/30 hover:text-foreground">
+              {name}
+            </div>
+          ))
+        )}
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/brands" class="text-sm font-medium text-primary hover:underline">
+          View all {brands.length > 0 ? brands.length : 91} brands &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-background py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl px-4 text-center">
+      <h2 class="text-2xl font-bold text-foreground sm:text-3xl">
+        Ready to find your perfect pouch?
+      </h2>
+      <p class="mt-4 text-lg text-muted-foreground">
+        Take our flavour quiz and get personalised recommendations in under a minute.
+      </p>
+      <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a
+          href="/flavor-quiz"
+          class="inline-flex h-12 items-center rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90"
+        >
+          Take the Quiz
+        </a>
+        <a
+          href="/products"
+          class="inline-flex h-12 items-center rounded-lg border border-border bg-card/60 px-8 text-base font-semibold text-foreground backdrop-blur transition hover:bg-card"
+        >
+          Browse All Products
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "SnusFriend",
+    "url": "https://snusfriends.com",
+    "logo": "https://snusfriends.com/favicon.png",
+    "description": "Europe's leading online shop for premium nicotine pouches. 700+ products from 91 brands.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "support@snusfriends.com",
+      "contactType": "customer service"
+    },
+    "sameAs": []
+  })} />
+</Shop>

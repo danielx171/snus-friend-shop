@@ -1,0 +1,156 @@
+---
+export const prerender = false;
+
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { actions } from 'astro:actions';
+import { tenant } from '@/config/tenant';
+
+const result = Astro.getActionResult(actions.auth.register);
+
+const errorMessage = result?.error?.message;
+const successMessage = result?.data?.message;
+---
+
+<Shop
+  title={`Create Account | ${tenant.name}`}
+  description={`Join ${tenant.name} to earn rewards, track orders, and get exclusive offers on nicotine pouches.`}
+  noindex={true}
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Register' }]} />
+
+      <div class="max-w-md mx-auto">
+        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8">
+          <h1 class="text-3xl font-bold tracking-tight mb-2 text-center">Create Account</h1>
+          <p class="text-muted-foreground text-center mb-8">
+            Join {tenant.name} and start earning rewards
+          </p>
+
+          {errorMessage && (
+            <div class="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-center">
+              <p class="text-sm text-destructive font-medium">{errorMessage}</p>
+            </div>
+          )}
+
+          {successMessage && (
+            <div class="mb-6 rounded-lg border border-primary/30 bg-primary/5 p-4 text-center">
+              <p class="text-sm text-foreground font-medium mb-1">Check your inbox</p>
+              <p class="text-sm text-muted-foreground">{successMessage}</p>
+            </div>
+          )}
+
+          {!successMessage && (
+            <form method="POST" action={actions.auth.register} class="space-y-5">
+              <div>
+                <label for="fullName" class="block text-sm font-medium text-foreground mb-1.5">
+                  Full name
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                  autocomplete="name"
+                  placeholder="Your full name"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                />
+              </div>
+
+              <div>
+                <label for="email" class="block text-sm font-medium text-foreground mb-1.5">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  placeholder="you@example.com"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                />
+              </div>
+
+              <div>
+                <label for="password" class="block text-sm font-medium text-foreground mb-1.5">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  autocomplete="new-password"
+                  minlength="8"
+                  placeholder="At least 8 characters"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                />
+              </div>
+
+              <div>
+                <label for="confirm-password" class="block text-sm font-medium text-foreground mb-1.5">
+                  Confirm password
+                </label>
+                <input
+                  type="password"
+                  id="confirm-password"
+                  name="confirm-password"
+                  required
+                  autocomplete="new-password"
+                  minlength="8"
+                  placeholder="Repeat your password"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                />
+              </div>
+
+              <div class="space-y-3">
+                <label class="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="ageVerified"
+                    required
+                    class="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary/50"
+                  />
+                  <span class="text-sm text-muted-foreground">
+                    I confirm that I am <strong class="text-foreground">18 years or older</strong>
+                  </span>
+                </label>
+
+                <label class="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="termsAccepted"
+                    required
+                    class="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary/50"
+                  />
+                  <span class="text-sm text-muted-foreground">
+                    I agree to the
+                    <a href="/terms" class="text-primary hover:underline">Terms of Service</a>
+                    and
+                    <a href="/privacy" class="text-primary hover:underline">Privacy Policy</a>
+                  </span>
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-primary/50"
+              >
+                Create Account
+              </button>
+            </form>
+          )}
+
+          <p class="mt-6 text-center text-sm text-muted-foreground">
+            Already have an account?
+            <a href="/login" class="text-primary font-medium hover:underline">
+              Sign in
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Shop>

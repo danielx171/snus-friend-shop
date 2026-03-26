@@ -1,0 +1,65 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { tenant } from '@/config/tenant';
+import SEO from '@/components/astro/SEO.astro';
+import '@/index.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonical?: string;
+  noindex?: boolean;
+  class?: string;
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang={Astro.currentLocale ?? 'en'} class={tenant.theme.darkModeClass}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="generator" content={Astro.generator} />
+  <link rel="icon" type="image/png" href={tenant.assets.favicon} />
+  <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta name="theme-color" content="#121620" />
+
+  <SEO
+    title={props.title}
+    description={props.description}
+    ogImage={props.ogImage}
+    ogType={props.ogType}
+    canonical={props.canonical}
+    noindex={props.noindex}
+  />
+
+  <ClientRouter />
+
+  <script is:inline define:vars={{ storageKey: tenant.storage.themeKey, defaultTheme: tenant.theme.darkModeClass }}>
+    (function() {
+      var stored = localStorage.getItem(storageKey);
+      var theme = (stored === 'velo' || stored === 'light') ? stored : defaultTheme;
+      document.documentElement.classList.add(theme);
+    })();
+  </script>
+</head>
+<body class:list={['min-h-screen bg-background text-foreground antialiased', props.class]}>
+  <slot />
+
+  <script>
+    import { $theme } from '@/stores/theme';
+
+    document.addEventListener('astro:page-load', () => {
+      const theme = $theme.get();
+      const root = document.documentElement;
+      root.classList.remove('velo', 'light');
+      root.classList.add(theme);
+    });
+  </script>
+</body>
+</html>

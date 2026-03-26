@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "string"
+    },
+    "brandSlug": {
+      "type": "string"
+    },
+    "manufacturer": {
+      "type": "string"
+    },
+    "categoryKey": {
+      "type": "string"
+    },
+    "flavorKey": {
+      "type": "string"
+    },
+    "strengthKey": {
+      "type": "string"
+    },
+    "formatKey": {
+      "type": "string"
+    },
+    "nicotineContent": {
+      "type": "number"
+    },
+    "portionsPerCan": {
+      "type": "number"
+    },
+    "description": {
+      "type": "string"
+    },
+    "descriptionKey": {
+      "type": "string"
+    },
+    "comparePrice": {
+      "type": "number"
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "ratings": {
+      "type": "number"
+    },
+    "badgeKeys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prices": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "stock": {
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "slug",
+    "name",
+    "brand",
+    "brandSlug",
+    "manufacturer",
+    "categoryKey",
+    "flavorKey",
+    "strengthKey",
+    "formatKey",
+    "nicotineContent",
+    "portionsPerCan",
+    "description",
+    "descriptionKey",
+    "imageUrl",
+    "ratings",
+    "badgeKeys",
+    "prices",
+    "stock"
+  ]
+}

@@ -1,0 +1,162 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+---
+
+<Shop
+  title={`Terms of Service | ${tenant.name}`}
+  description={`Terms and conditions for using ${tenant.name}, Europe's premium nicotine pouch shop.`}
+  canonical="/terms"
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Terms of Service' }]} />
+
+      <div class="prose prose-invert max-w-none
+        prose-headings:text-foreground prose-p:text-muted-foreground
+        prose-a:text-primary prose-strong:text-foreground
+        prose-li:text-muted-foreground prose-hr:border-border">
+
+        <div class="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-4 mb-8 not-prose">
+          <p class="text-sm text-yellow-400">
+            <strong>Note:</strong> These terms are under review by our legal team and may be updated.
+            Last revised: March 2026.
+          </p>
+        </div>
+
+        <h1 class="text-4xl font-bold tracking-tight mb-2">Terms of Service</h1>
+        <p class="text-sm text-muted-foreground mb-8">Effective date: 26 March 2026</p>
+
+        <h2>1. General Terms</h2>
+        <p>
+          These Terms of Service ("Terms") govern your use of the {tenant.name} website
+          located at {tenant.domain} ("Site") and all related services, including ordering,
+          account management, and community features. By accessing or using the Site, you
+          agree to be bound by these Terms. If you do not agree, you must not use the Site.
+        </p>
+        <p>
+          {tenant.name} reserves the right to update these Terms at any time. Changes will be
+          posted on this page with an updated effective date. Your continued use of the Site
+          after changes are posted constitutes acceptance of the revised Terms.
+        </p>
+
+        <h2>2. Eligibility</h2>
+        <p>
+          You must be at least <strong>18 years of age</strong> (or the legal age for purchasing
+          nicotine products in your jurisdiction, whichever is higher) to use the Site and place
+          orders. By creating an account or placing an order, you confirm that you meet this age
+          requirement.
+        </p>
+        <p>
+          We reserve the right to request proof of age at any time and to cancel orders where
+          age verification cannot be completed.
+        </p>
+
+        <h2>3. Orders and Pricing</h2>
+        <p>
+          All prices on the Site are displayed in euros ({tenant.currencyCode}) and include
+          applicable taxes unless otherwise stated. Prices are subject to change without notice,
+          but changes will not affect orders that have already been confirmed.
+        </p>
+        <p>
+          An order is considered confirmed once you receive an order confirmation email. We
+          reserve the right to refuse or cancel any order for reasons including but not limited
+          to: product availability, pricing errors, suspected fraud, or failure to meet
+          eligibility requirements.
+        </p>
+        <p>
+          Payment is processed securely through our payment provider at checkout. We do not
+          store your payment card details on our servers.
+        </p>
+
+        <h2>4. Shipping and Delivery</h2>
+        <p>
+          We ship to countries within the European Union. Delivery times are estimates and
+          may vary depending on your location and carrier conditions. Typical delivery is
+          2-5 business days after dispatch.
+        </p>
+        <p>
+          Free shipping is available on orders over &euro;{tenant.freeShippingThreshold}.
+          Shipping costs for orders below this threshold are calculated and displayed at checkout.
+        </p>
+        <p>
+          Risk of loss and title for products pass to you upon delivery. If a package is lost
+          or damaged during transit, please contact our support team within 14 days of the
+          expected delivery date.
+        </p>
+
+        <h2>5. Returns and Refunds</h2>
+        <p>
+          Due to the nature of nicotine products and health regulations, we can only accept
+          returns of unopened, undamaged products in their original packaging within 14 days
+          of delivery.
+        </p>
+        <p>
+          To initiate a return, contact our support team at {tenant.supportEmail}. Refunds
+          will be processed to your original payment method within 10 business days of receiving
+          the returned product.
+        </p>
+        <p>
+          We reserve the right to refuse returns that do not meet these conditions or that show
+          signs of tampering.
+        </p>
+
+        <h2>6. Intellectual Property</h2>
+        <p>
+          All content on the Site &mdash; including text, graphics, logos, images, product
+          descriptions, and software &mdash; is the property of {tenant.name} or its licensors
+          and is protected by applicable intellectual property laws.
+        </p>
+        <p>
+          You may not reproduce, distribute, modify, or create derivative works from any
+          content on the Site without prior written permission. Product names and brand logos
+          belong to their respective owners.
+        </p>
+
+        <h2>7. User Accounts and Conduct</h2>
+        <p>
+          You are responsible for maintaining the confidentiality of your account credentials
+          and for all activity that occurs under your account. You agree to notify us
+          immediately of any unauthorized access.
+        </p>
+        <p>
+          You agree not to: use the Site for any unlawful purpose; submit false or misleading
+          information; attempt to interfere with the Site's operation; resell products purchased
+          on the Site without authorization; or post abusive, offensive, or harmful content in
+          community features.
+        </p>
+
+        <h2>8. Limitation of Liability</h2>
+        <p>
+          To the maximum extent permitted by law, {tenant.name} shall not be liable for any
+          indirect, incidental, special, consequential, or punitive damages, or any loss of
+          profits or revenues, whether incurred directly or indirectly, arising from your use
+          of the Site or products purchased through it.
+        </p>
+        <p>
+          Our total liability for any claim arising from these Terms or your use of the Site
+          shall not exceed the amount you paid for the specific order giving rise to the claim.
+        </p>
+
+        <h2>9. Governing Law and Disputes</h2>
+        <p>
+          These Terms are governed by and construed in accordance with the laws of Sweden.
+          Any disputes arising from these Terms or your use of the Site shall be resolved
+          through the courts of Sweden, without prejudice to any mandatory consumer protection
+          provisions in your country of residence that may apply.
+        </p>
+        <p>
+          For EU consumers: you may also use the European Commission's Online Dispute Resolution
+          platform at <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr</a>.
+        </p>
+
+        <h2>10. Contact</h2>
+        <p>
+          If you have any questions about these Terms, please contact us at
+          <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Shop>

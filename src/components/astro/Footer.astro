@@ -1,0 +1,72 @@
+---
+import { tenant } from '@/config/tenant';
+
+const currentYear = new Date().getFullYear();
+
+const footerLinks = {
+  shop: [
+    { href: '/products', label: 'All Products' },
+    { href: '/brands', label: 'Brands' },
+    { href: '/shipping', label: 'Shipping' },
+    { href: '/returns', label: 'Returns' },
+  ],
+  company: [
+    { href: '/about', label: 'About Us' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/whats-new', label: "What's New" },
+  ],
+  legal: [
+    { href: '/terms', label: 'Terms of Service' },
+    { href: '/privacy', label: 'Privacy Policy' },
+    { href: '/cookies', label: 'Cookie Policy' },
+  ],
+};
+---
+
+<footer class="border-t border-border/40 bg-card/50 py-12">
+  <div class="container">
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+      <div class="col-span-2 md:col-span-1">
+        <p class="font-bold text-lg text-primary">{tenant.name}</p>
+        <p class="mt-2 text-sm text-muted-foreground">{tenant.tagline}</p>
+        <p class="mt-4 text-xs text-muted-foreground">
+          <a href={`mailto:${tenant.supportEmail}`} class="hover:text-foreground">{tenant.supportEmail}</a>
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-foreground">Shop</h3>
+        <ul class="mt-3 space-y-2">
+          {footerLinks.shop.map(({ href, label }) => (
+            <li><a href={href} class="text-sm text-muted-foreground hover:text-foreground">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-foreground">Company</h3>
+        <ul class="mt-3 space-y-2">
+          {footerLinks.company.map(({ href, label }) => (
+            <li><a href={href} class="text-sm text-muted-foreground hover:text-foreground">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-foreground">Legal</h3>
+        <ul class="mt-3 space-y-2">
+          {footerLinks.legal.map(({ href, label }) => (
+            <li><a href={href} class="text-sm text-muted-foreground hover:text-foreground">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-8 border-t border-border/40 pt-6">
+      <p class="text-center text-xs text-muted-foreground">
+        © {currentYear} {tenant.name}. All rights reserved. 18+ only.
+      </p>
+    </div>
+  </div>
+</footer>

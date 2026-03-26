@@ -1,0 +1,298 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import AddToCartButton from '@/components/react/AddToCartButton';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map((product) => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const p = product.data;
+
+const strengthMap: Record<string, number> = {
+  normal: 2,
+  strong: 3,
+  'extra-strong': 4,
+  extraStrong: 4,
+  'super-strong': 5,
+  ultraStrong: 5,
+};
+const strengthLevel = strengthMap[p.strengthKey] ?? 2;
+
+const strengthLabels: Record<string, string> = {
+  normal: 'Normal',
+  strong: 'Strong',
+  'extra-strong': 'Extra Strong',
+  extraStrong: 'Extra Strong',
+  'super-strong': 'Super Strong',
+  ultraStrong: 'Ultra Strong',
+};
+const strengthLabel = strengthLabels[p.strengthKey] ?? 'Normal';
+
+const flavorLabels: Record<string, string> = {
+  mint: 'Mint',
+  berry: 'Berry',
+  citrus: 'Citrus',
+  fruit: 'Fruit',
+  coffee: 'Coffee',
+  cola: 'Cola',
+  menthol: 'Menthol',
+  wintergreen: 'Wintergreen',
+  tropical: 'Tropical',
+  ice: 'Ice',
+  original: 'Original',
+};
+const flavorLabel = flavorLabels[p.flavorKey] ?? p.flavorKey;
+
+const flavorColors: Record<string, string> = {
+  mint: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20',
+  berry: 'bg-purple-500/15 text-purple-400 border-purple-500/20',
+  citrus: 'bg-amber-500/15 text-amber-400 border-amber-500/20',
+  fruit: 'bg-orange-500/15 text-orange-400 border-orange-500/20',
+  coffee: 'bg-amber-700/15 text-amber-600 border-amber-700/20',
+  cola: 'bg-amber-700/15 text-amber-600 border-amber-700/20',
+  menthol: 'bg-cyan-500/15 text-cyan-400 border-cyan-500/20',
+  ice: 'bg-sky-500/15 text-sky-400 border-sky-500/20',
+};
+const flavorColor = flavorColors[p.flavorKey] ?? 'bg-primary/10 text-primary border-primary/20';
+
+const description = p.description || `${p.name} by ${p.brand}. ${p.nicotineContent}mg nicotine pouches with ${flavorLabel.toLowerCase()} flavour. ${p.portionsPerCan} portions per can.`;
+const metaDescription = description.length > 160 ? description.slice(0, 157) + '...' : description;
+
+const packTiers = [
+  { key: 'pack1', label: '1 can', qty: 1 },
+  { key: 'pack3', label: '3 cans', qty: 3 },
+  { key: 'pack5', label: '5 cans', qty: 5 },
+  { key: 'pack10', label: '10 cans', qty: 10 },
+];
+
+const inStock = p.stock > 0;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: p.name,
+  image: p.imageUrl || undefined,
+  description: description,
+  brand: {
+    '@type': 'Brand',
+    name: p.brand,
+  },
+  sku: p.slug,
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'EUR',
+    lowPrice: Math.min(...Object.values(p.prices).filter((v): v is number => typeof v === 'number' && v > 0)),
+    highPrice: Math.max(...Object.values(p.prices).filter((v): v is number => typeof v === 'number' && v > 0)),
+    offerCount: Object.keys(p.prices).length,
+    availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+  },
+  ...(p.ratings > 0 && {
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: p.ratings.toFixed(1),
+      bestRating: '5',
+    },
+  }),
+};
+---
+
+<Shop
+  title={`${p.name} | SnusFriend`}
+  description={metaDescription}
+  ogType="product"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-12">
+    <Breadcrumb items={[
+      { label: 'Products', href: '/products' },
+      { label: p.name },
+    ]} />
+
+    <!-- Two-column PDP layout -->
+    <div class="grid gap-8 lg:grid-cols-2 lg:gap-12">
+
+      <!-- Left: Product Image -->
+      <div class="group/img relative">
+        <div class="product-card-image-bg overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur">
+          <div class="pdp-image-entrance relative aspect-square w-full">
+            {p.imageUrl ? (
+              <img
+                src={p.imageUrl}
+                alt={p.name}
+                width="600"
+                height="600"
+                loading="eager"
+                decoding="async"
+                class="pdp-image-hover h-full w-full object-contain p-8"
+              />
+            ) : (
+              <div class="flex h-full w-full items-center justify-center text-muted-foreground/40">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Badges overlay */}
+        {p.badgeKeys.length > 0 && (
+          <div class="absolute left-4 top-4 flex flex-col gap-1.5">
+            {p.badgeKeys.map((badge: string) => (
+              <span class="rounded-md bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground shadow-lg shadow-primary/20">
+                {badge.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Stock overlay */}
+        {!inStock && (
+          <div class="absolute inset-0 flex items-center justify-center rounded-2xl bg-background/60 backdrop-blur-sm">
+            <span class="rounded-lg bg-destructive/90 px-4 py-2 text-sm font-semibold text-destructive-foreground">
+              Out of Stock
+            </span>
+          </div>
+        )}
+      </div>
+
+      <!-- Right: Product Info -->
+      <div class="flex flex-col">
+        {/* Brand */}
+        <a
+          href={`/brands/${p.brandSlug}`}
+          class="mb-2 text-sm font-medium uppercase tracking-widest text-primary hover:underline"
+        >
+          {p.brand}
+        </a>
+
+        {/* Product Name */}
+        <h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          {p.name}
+        </h1>
+
+        {/* Star Rating */}
+        {p.ratings > 0 && (
+          <div class="mb-4 flex items-center gap-2">
+            <div class="flex items-center gap-0.5">
+              {Array.from({ length: 5 }, (_, i) => (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class={`h-4 w-4 ${i < Math.round(p.ratings) ? 'fill-amber-400 text-amber-400' : 'fill-muted text-muted'}`}
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              ))}
+            </div>
+            <span class="text-sm text-muted-foreground">{p.ratings.toFixed(1)}</span>
+          </div>
+        )}
+
+        {/* Flavor Badge + Strength Indicator */}
+        <div class="mb-6 flex flex-wrap items-center gap-3">
+          <span class={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${flavorColor}`}>
+            {flavorLabel}
+          </span>
+
+          <div class="flex items-center gap-2">
+            <div class="flex items-center gap-0.5" aria-label={`Strength ${strengthLevel} of 5`}>
+              {Array.from({ length: 5 }, (_, i) => (
+                <span
+                  class={`inline-block h-2 w-2 rounded-full ${i < strengthLevel ? 'bg-primary' : 'bg-muted-foreground/25'}`}
+                />
+              ))}
+            </div>
+            <span class="text-xs text-muted-foreground">{strengthLabel}</span>
+          </div>
+        </div>
+
+        {/* Quick Specs */}
+        <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+            <p class="text-xs text-muted-foreground">Nicotine</p>
+            <p class="text-sm font-semibold text-foreground">{p.nicotineContent}mg</p>
+          </div>
+          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+            <p class="text-xs text-muted-foreground">Portions</p>
+            <p class="text-sm font-semibold text-foreground">{p.portionsPerCan}/can</p>
+          </div>
+          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+            <p class="text-xs text-muted-foreground">Format</p>
+            <p class="text-sm font-semibold text-foreground capitalize">{p.formatKey}</p>
+          </div>
+        </div>
+
+        {/* Price Tiers */}
+        <div class="mb-6 rounded-xl border border-border bg-card/50 p-4 backdrop-blur">
+          <h2 class="mb-3 text-sm font-semibold text-foreground">Pack Pricing</h2>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {packTiers.map(({ key, label, qty }) => {
+              const price = p.prices[key];
+              if (!price) return null;
+              const perCan = (price / qty).toFixed(2);
+              const isBase = key === 'pack1';
+              return (
+                <div class={`rounded-lg border p-3 text-center transition ${isBase ? 'border-primary/40 bg-primary/5' : 'border-border bg-card/30 hover:border-primary/20'}`}>
+                  <p class="text-xs text-muted-foreground">{label}</p>
+                  <p class="text-lg font-bold text-foreground">&euro;{price.toFixed(2)}</p>
+                  {!isBase && (
+                    <p class="text-[10px] text-primary">&euro;{perCan}/can</p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Stock Status */}
+        <div class="mb-6 flex items-center gap-2">
+          {inStock ? (
+            <>
+              <span class="inline-block h-2 w-2 rounded-full bg-emerald-500" />
+              <span class="text-sm text-emerald-400">In Stock</span>
+            </>
+          ) : (
+            <>
+              <span class="inline-block h-2 w-2 rounded-full bg-destructive" />
+              <span class="text-sm text-destructive">Out of Stock</span>
+            </>
+          )}
+        </div>
+
+        {/* Add to Cart — React island */}
+        <div class="mb-8">
+          <AddToCartButton
+            client:visible
+            product={{
+              slug: p.slug,
+              name: p.name,
+              brand: p.brand,
+              imageUrl: p.imageUrl,
+              prices: p.prices,
+              stock: p.stock ?? 0,
+            }}
+          />
+        </div>
+
+        {/* Description */}
+        {description && (
+          <div class="rounded-xl border border-border bg-card/30 p-5 backdrop-blur">
+            <h2 class="mb-2 text-sm font-semibold text-foreground">Description</h2>
+            <p class="text-sm leading-relaxed text-muted-foreground">
+              {description}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</Shop>

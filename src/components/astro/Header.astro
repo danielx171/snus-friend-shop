@@ -1,0 +1,65 @@
+---
+import { tenant } from '@/config/tenant';
+import HeaderCartButton from '@/components/react/HeaderCartButton';
+
+const user = Astro.locals.user;
+
+const navLinks = [
+  { href: '/products', label: 'Products' },
+  { href: '/brands', label: 'Brands' },
+  { href: '/about', label: 'About' },
+  { href: '/faq', label: 'FAQ' },
+];
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl" transition:persist="header">
+  <div class="container flex h-16 items-center justify-between">
+    <a href="/" class="flex items-center gap-2 font-bold text-lg text-primary">
+      {tenant.name}
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6" aria-label="Main navigation">
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="/search" class="text-muted-foreground hover:text-foreground" aria-label="Search products">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </a>
+
+      {user ? (
+        <a href="/account" class="text-muted-foreground hover:text-foreground" aria-label="My account">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+      ) : (
+        <a href="/login" class="text-muted-foreground hover:text-foreground text-sm font-medium" aria-label="Sign in">
+          Login
+        </a>
+      )}
+
+      <div id="header-islands" class="flex items-center gap-3">
+        <HeaderCartButton client:load />
+      </div>
+
+      <button
+        class="md:hidden text-muted-foreground hover:text-foreground"
+        aria-label="Open menu"
+        data-mobile-menu-toggle
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { openMobileMenu } from '@/stores/ui';
+  document.querySelector('[data-mobile-menu-toggle]')?.addEventListener('click', () => openMobileMenu());
+</script>

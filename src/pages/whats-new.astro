@@ -1,0 +1,115 @@
+---
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const releases = [
+  {
+    version: 'v1.5.0',
+    date: '26 March 2026',
+    title: 'Astro Migration',
+    description: 'Rebuilt from the ground up on Astro for blazing-fast page loads and better SEO.',
+    items: [
+      'Migrated from Vite SPA to Astro with server-side rendering',
+      'Static generation for product, brand, and info pages',
+      'Content Layer integration with Supabase for real-time catalog data',
+      'New homepage with best sellers and brand discovery',
+      'Legal pages: terms of service, privacy policy, and cookie policy',
+      'Improved accessibility and Core Web Vitals scores',
+    ],
+  },
+  {
+    version: 'v1.4.0',
+    date: '21 March 2026',
+    title: 'Community & Gamification',
+    description: 'A new community layer with profiles, reviews, quests, and rewards.',
+    items: [
+      'User profiles with customisable avatars and display names',
+      'Product review system with verified purchase badges',
+      'Quest and achievement system with bronze to diamond tiers',
+      'Points and rewards program for loyal customers',
+      'Community leaderboard and activity feed',
+      'Full-text search powered by Supabase pg_trgm',
+      'PostHog analytics and Sentry error monitoring integration',
+    ],
+  },
+  {
+    version: 'v1.3.0',
+    date: '15 March 2026',
+    title: 'Checkout & Payments',
+    description: 'End-to-end checkout with Nyehandel, live shipping rates, and order tracking.',
+    items: [
+      'Nyehandel payment integration with secure checkout handoff',
+      'Real-time shipping rates from Nylogistik',
+      'Order confirmation with email notifications',
+      'Order history and tracking in account dashboard',
+      'Ops dashboard for order management and alerts',
+      'Automated retry for failed Nyehandel order syncs',
+      'Security audit: XSS sanitisation, CORS, auth hardening',
+    ],
+  },
+];
+---
+
+<Shop
+  title={`What's New | ${tenant.name}`}
+  description={`See what's new at ${tenant.name}. Release notes, feature updates, and improvements.`}
+  canonical="/whats-new"
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: "What's New" }]} />
+
+      <h1 class="text-4xl font-bold tracking-tight mb-2">What's New</h1>
+      <p class="text-lg text-muted-foreground mb-10">
+        The latest updates, features, and improvements to {tenant.name}.
+      </p>
+
+      {/* Timeline */}
+      <div class="relative">
+        {/* Vertical line */}
+        <div class="absolute left-4 top-0 bottom-0 w-px bg-border hidden sm:block" />
+
+        <div class="space-y-8">
+          {releases.map((release, i) => (
+            <div class="relative sm:pl-12">
+              {/* Timeline dot */}
+              <div class="absolute left-2.5 top-6 hidden sm:flex h-3 w-3 rounded-full border-2 border-primary bg-background" />
+
+              <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+                <div class="flex flex-wrap items-center gap-3 mb-3">
+                  <span class="inline-flex items-center rounded-full bg-primary/10 border border-primary/20 px-3 py-0.5 text-xs font-semibold text-primary">
+                    {release.version}
+                  </span>
+                  <span class="text-sm text-muted-foreground">{release.date}</span>
+                </div>
+
+                <h2 class="text-xl font-semibold text-foreground mb-2">{release.title}</h2>
+                <p class="text-muted-foreground mb-4">{release.description}</p>
+
+                <ul class="space-y-2">
+                  {release.items.map((item) => (
+                    <li class="flex items-start gap-2 text-sm text-muted-foreground">
+                      <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer note */}
+      <div class="mt-12 text-center">
+        <p class="text-sm text-muted-foreground">
+          Have feedback or a feature request? Drop us a line at
+          <a href={`mailto:${tenant.supportEmail}`} class="text-primary hover:underline">{tenant.supportEmail}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Shop>

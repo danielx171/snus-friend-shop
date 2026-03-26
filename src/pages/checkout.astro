@@ -1,0 +1,22 @@
+---
+export const prerender = false;
+
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import CheckoutForm from '@/components/react/CheckoutForm';
+import { tenant } from '@/config/tenant';
+
+const user = Astro.locals.user;
+if (!user) {
+  return Astro.redirect('/login?redirect=/checkout');
+}
+---
+
+<Shop title={`Checkout | ${tenant.name}`} description="Complete your purchase securely." noindex={true}>
+  <section class="bg-background text-foreground">
+    <div class="max-w-5xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Cart', href: '/cart' }, { label: 'Checkout' }]} />
+      <CheckoutForm client:load userEmail={user.email} />
+    </div>
+  </section>
+</Shop>
