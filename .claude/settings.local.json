@@ -267,7 +267,14 @@
       "Bash(grep -r \"import.*React\\\\|export.*default\" /Users/Daniel/Projects/snus-friend-shop/src/pages/*.astro)",
       "Bash(find /Users/Daniel/Projects/snus-friend-shop/src -name \"*.astro\" -type f -exec grep -l \"client:load\\\\|client:only\" {})",
       "Bash(head -30 /Users/Daniel/Projects/snus-friend-shop/src/pages/products/[slug].astro)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "Bash(find /Users/Daniel/Projects/snus-friend-shop/src/pages -name *.astro)",
+      "Bash(find /Users/Daniel/Projects/snus-friend-shop/src/actions -name *.ts)",
+      "Bash(find /Users/Daniel/Projects/snus-friend-shop/src/components/react -name *.tsx)",
+      "Bash(find /Users/Daniel/Projects/snus-friend-shop/src/stores -name *.ts)",
+      "Bash(for legacy:*)",
+      "Bash(do basename:*)"
     ]
   }
 }
