@@ -71,6 +71,9 @@
     "stock": {
       "type": "number"
     },
+    "updatedAt": {
+      "type": "string"
+    },
     "$schema": {
       "type": "string"
     }

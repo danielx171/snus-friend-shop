@@ -118,4 +118,4 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 - [ ] Step 55: Critical path tests — checkout validation, cart operations, email regex, auth flow.
 
 ### Go-Live
-- [ ] Step 56: Remove preview mode (VITE_PREVIEW_MODE=false). Final smoke test. Uptime monitoring setup.
+- [x] Step 56: Remove preview mode (VITE_PREVIEW_MODE deleted — was dead code, never used). Site live on snusfriends.com.

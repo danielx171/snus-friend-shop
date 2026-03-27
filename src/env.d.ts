@@ -5,7 +5,6 @@ interface ImportMetaEnv {
   readonly PUBLIC_SUPABASE_URL: string;
   readonly PUBLIC_SUPABASE_ANON_KEY: string;
   readonly PUBLIC_SITE_URL: string;
-  readonly PUBLIC_PREVIEW_MODE: string;
   readonly PUBLIC_SENTRY_DSN: string;
   readonly PUBLIC_POSTHOG_KEY: string;
   readonly PUBLIC_POSTHOG_HOST: string;
@@ -15,7 +14,6 @@ interface ImportMetaEnv {
   readonly VITE_SUPABASE_URL: string;
   readonly VITE_SUPABASE_PUBLISHABLE_KEY: string;
   readonly VITE_SITE_URL: string;
-  readonly VITE_PREVIEW_MODE: string;
   readonly VITE_SENTRY_DSN: string;
   readonly VITE_POSTHOG_KEY: string;
   readonly VITE_POSTHOG_HOST: string;

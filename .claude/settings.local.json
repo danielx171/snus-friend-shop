@@ -298,7 +298,9 @@
       "Bash(git ls-tree:*)",
       "Bash(fuser /Users/Daniel/Projects/snus-friend-shop/.git/index.lock)",
       "Bash(curl -sL \"https://www.snusfriends.com/login\")",
-      "Bash(curl -sL \"https://www.snusfriends.com/products\")"
+      "Bash(curl -sL \"https://www.snusfriends.com/products\")",
+      "Bash(git merge:*)",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__evaluate_script"
     ]
   }
 }
