@@ -3,6 +3,7 @@ import Base from './Base.astro';
 import Header from '@/components/astro/Header.astro';
 import Footer from '@/components/astro/Footer.astro';
 import AgeGate from '@/components/astro/AgeGate.astro';
+import { tenant } from '@/config/tenant';
 import ToastProvider from '@/components/react/ToastProvider';
 import CookieConsentBanner from '@/components/react/CookieConsentBanner';
 import CartDrawer from '@/components/react/CartDrawer';
@@ -26,9 +27,17 @@ const authUser = Astro.locals.user ? { id: Astro.locals.user.id, email: Astro.lo
     window.__AUTH_STATE__ = authUser;
   </script>
   <AgeGate />
+  <!-- Skip to content (a11y) -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[9999] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground focus:shadow-lg">
+    Skip to main content
+  </a>
   <div class="flex min-h-screen flex-col">
+    <!-- Shipping banner -->
+    <div class="border-b border-border/30 bg-primary/5 px-4 py-1.5 text-center text-xs font-medium text-foreground">
+      Free EU shipping over &euro;{tenant.freeShippingThreshold} &bull; Dispatched same day before 2pm CET
+    </div>
     <Header />
-    <main class="flex-1">
+    <main id="main-content" class="flex-1">
       <slot />
     </main>
     <Footer />

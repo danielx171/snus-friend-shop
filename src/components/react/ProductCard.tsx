@@ -18,6 +18,18 @@ interface ProductCardProps {
   badgeKeys: string[];
 }
 
+// Format badge keys: "NewPrice" → "New Price", "popular" → "Popular"
+const badgeLabelMap: Record<string, string> = {
+  NewPrice: 'New Price',
+  newPrice: 'New Price',
+  popular: 'Popular',
+  bestseller: 'Bestseller',
+  new: 'New',
+};
+function formatBadge(key: string): string {
+  return badgeLabelMap[key] ?? key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase());
+}
+
 const strengthMap: Record<string, number> = {
   light: 1,
   normal: 2,
@@ -142,7 +154,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
             key={badge}
             className="rounded-md bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary"
           >
-            {badge}
+            {formatBadge(badge)}
           </span>
         ))}
       </div>

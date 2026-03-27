@@ -107,19 +107,71 @@ import { tenant } from '@/config/tenant';
             ></textarea>
           </div>
 
+          <div id="contact-status" class="hidden rounded-lg px-4 py-3 text-sm"></div>
+
           <button
             type="submit"
-            class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50"
+            id="contact-submit-btn"
+            class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Send Message
           </button>
 
           <p class="text-xs text-muted-foreground">
             By submitting this form you agree to our
-            <a href="/privacy-policy" class="underline hover:text-foreground">Privacy Policy</a>.
+            <a href="/privacy" class="underline hover:text-foreground">Privacy Policy</a>.
           </p>
         </form>
       </div>
     </div>
   </section>
 </Shop>
+
+<script is:inline>
+(function() {
+  var form = document.querySelector('[data-contact-form]');
+  if (!form) return;
+  var btn = document.getElementById('contact-submit-btn');
+  var status = document.getElementById('contact-status');
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var data = new FormData(form);
+    var name = (data.get('name') || '').toString().trim();
+    var email = (data.get('email') || '').toString().trim();
+    var subject = (data.get('subject') || '').toString();
+    var message = (data.get('message') || '').toString().trim();
+
+    if (!name || !email || !subject || !message) {
+      showStatus('Please fill in all fields.', true);
+      return;
+    }
+    if (!emailRe.test(email)) {
+      showStatus('Please enter a valid email address.', true);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    // Send via mailto link as fallback (no backend form handler yet)
+    var mailtoBody = 'Name: ' + name + '\nSubject: ' + subject + '\n\n' + message;
+    var mailto = 'mailto:support@snusfriends.com?subject=' + encodeURIComponent(subject + ' — ' + name) + '&body=' + encodeURIComponent(mailtoBody);
+
+    // Open mailto and show success
+    window.location.href = mailto;
+
+    setTimeout(function() {
+      showStatus('Your email client should open shortly. If it does not, email us directly at support@snusfriends.com.', false);
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    }, 500);
+  });
+
+  function showStatus(text, isError) {
+    status.textContent = text;
+    status.className = 'rounded-lg px-4 py-3 text-sm ' + (isError ? 'bg-destructive/10 text-destructive border border-destructive/20' : 'bg-primary/10 text-primary border border-primary/20');
+  }
+})();
+</script>

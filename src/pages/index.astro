@@ -8,10 +8,17 @@ import ProductCard from '@/components/react/ProductCard';
 const allProducts = await getCollection('products');
 const allBrands = await getCollection('brands');
 
-// Best sellers: sort by ratings descending, take top 8
-const bestSellers = [...allProducts]
-  .sort((a, b) => (b.data.ratings ?? 0) - (a.data.ratings ?? 0))
-  .slice(0, 8);
+// Best sellers: top-rated products, max 2 per brand for diversity
+const sortedByRating = [...allProducts].sort((a, b) => (b.data.ratings ?? 0) - (a.data.ratings ?? 0));
+const bestSellers: typeof sortedByRating = [];
+const brandCount: Record<string, number> = {};
+for (const p of sortedByRating) {
+  if (bestSellers.length >= 8) break;
+  const b = p.data.brand;
+  if ((brandCount[b] ?? 0) >= 2) continue;
+  brandCount[b] = (brandCount[b] ?? 0) + 1;
+  bestSellers.push(p);
+}
 
 // Brands sorted alphabetically
 const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
@@ -125,7 +132,7 @@ const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.na
           </div>
           <h3 class="mb-2 font-semibold text-foreground">700+ Products</h3>
           <p class="text-sm text-muted-foreground">
-            The largest selection of nicotine pouches from {brands.length > 0 ? brands.length : 91} leading brands in Europe.
+            The largest selection of nicotine pouches from {brands.length > 0 ? brands.length : 139} leading brands in Europe.
           </p>
         </div>
 
@@ -185,7 +192,7 @@ const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.na
       </div>
       <div class="mt-8 text-center">
         <a href="/brands" class="text-sm font-medium text-primary hover:underline">
-          View all {brands.length > 0 ? brands.length : 91} brands &rarr;
+          View all {brands.length > 0 ? brands.length : 139} brands &rarr;
         </a>
       </div>
     </div>
@@ -223,7 +230,7 @@ const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.na
     "name": "SnusFriend",
     "url": "https://snusfriends.com",
     "logo": "https://snusfriends.com/favicon.png",
-    "description": "Europe's leading online shop for premium nicotine pouches. 700+ products from 91 brands.",
+    "description": "Europe's leading online shop for premium nicotine pouches. 700+ products from 139+ brands.",
     "contactPoint": {
       "@type": "ContactPoint",
       "email": "support@snusfriends.com",
