@@ -1,0 +1,290 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-27';
+const title = 'Switching from Cigarettes to Nicotine Pouches: A Practical Guide';
+const description = 'Ready to quit smoking? Learn how nicotine pouches can help — which strengths match your cigarette intake, best brands for switchers, and tips for a smooth transition.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Switching from Cigarettes' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 27, 2026</time>
+          <span>&middot;</span>
+          <span>8 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Why Nicotine Pouches?</h2>
+        <p>
+          If you are a smoker looking for a way out, nicotine pouches offer one of the most
+          practical alternatives available today. They are <strong>completely tobacco-free</strong>,
+          produce no smoke, vapour, or odour, and can be used anywhere — at your desk, on a
+          plane, in a restaurant, or lying in bed. No lighters, no ashtrays, no stepping outside
+          in the rain.
+        </p>
+        <p>
+          The health argument is compelling. While no nicotine product is entirely risk-free,
+          the overwhelming consensus among public health researchers is that the harm from
+          smoking comes from combustion — the tar, carbon monoxide, and thousands of toxic
+          chemicals released when tobacco burns. Nicotine pouches eliminate combustion entirely.
+          Public Health England has consistently maintained that smokeless nicotine products are
+          <strong>significantly less harmful</strong> than cigarettes, and independent reviews
+          support this position. By removing tobacco and fire from the equation, you remove the
+          vast majority of the risk.
+        </p>
+        <p>
+          Pouches also solve the social friction of smoking. No second-hand smoke, no lingering
+          smell on your clothes, and no stained teeth. For many switchers, these everyday quality-of-life
+          improvements matter just as much as the long-term health benefits.
+        </p>
+
+        <h2>Matching Your Cigarette Intake to Pouch Strength</h2>
+        <p>
+          The most common mistake new switchers make is choosing a nicotine strength that is too
+          low. If the pouch does not satisfy your cravings, you will reach for a cigarette within
+          hours. The table below maps your daily cigarette consumption to a recommended starting
+          strength. You can always adjust later — but getting the first week right is critical.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse [&_th]:text-left [&_th]:text-foreground [&_th]:font-semibold [&_th]:px-4 [&_th]:py-3 [&_th]:border-b [&_th]:border-border [&_td]:px-4 [&_td]:py-3 [&_td]:border-b [&_td]:border-border/50">
+            <thead>
+              <tr>
+                <th>Cigarettes per Day</th>
+                <th>Recommended Pouch Strength</th>
+                <th>Strength Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Fewer than 5</td>
+                <td>4 mg</td>
+                <td><a href="/products/strength/light">Light</a></td>
+              </tr>
+              <tr>
+                <td>5 &ndash; 10</td>
+                <td>6 &ndash; 8 mg</td>
+                <td><a href="/products/strength/normal">Normal</a></td>
+              </tr>
+              <tr>
+                <td>10 &ndash; 20</td>
+                <td>8 &ndash; 12 mg</td>
+                <td><a href="/products/strength/strong">Strong</a></td>
+              </tr>
+              <tr>
+                <td>20+</td>
+                <td>12 &ndash; 16 mg</td>
+                <td><a href="/products/strength/extra-strong">Extra Strong</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          For a deeper breakdown of every strength tier, read our full guide:
+          <a href="/blog/how-to-choose-your-strength">How to Choose the Right Nicotine Pouch Strength</a>.
+        </p>
+
+        <h2>Best Brands for Switchers</h2>
+        <p>
+          Not all pouches are created equal, and some brands have designed their product lines
+          specifically with smokers in mind. Here are three trusted options that cover the
+          strength range most switchers need:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>
+            <strong><a href="/brand/zyn">ZYN Slim</a></strong> (6 &ndash; 11 mg) — The world's
+            best-selling nicotine pouch brand. ZYN Slim pouches sit comfortably under the lip
+            and deliver consistent, predictable nicotine release. Their Cool Mint and Citrus
+            flavours are excellent starting points.
+          </li>
+          <li>
+            <strong><a href="/brand/velo">VELO</a></strong> (6 &ndash; 11 mg) — Made by BAT
+            (British American Tobacco), VELO pouches are widely available and come in a broad
+            range of flavours. Their slim format is comfortable for all-day use, and the nicotine
+            delivery is smooth rather than sharp.
+          </li>
+          <li>
+            <strong><a href="/brand/skruf">Skruf</a></strong> (6 &ndash; 12 mg) — A Swedish
+            heritage brand with a modern pouch line. Skruf is known for creative flavour
+            combinations and a slightly softer pouch material that some switchers find more
+            comfortable during the first few days.
+          </li>
+        </ul>
+        <p>
+          New to pouches entirely? See our hand-picked list of
+          <a href="/blog/best-nicotine-pouches-for-beginners">the best nicotine pouches for beginners</a>.
+        </p>
+
+        <h2>Flavour Recommendations for Ex-Smokers</h2>
+        <p>
+          Flavour plays a bigger role than most people expect. When you stop smoking, your mouth
+          is used to a very specific sensation — the heat, the throat hit, the taste of burnt
+          tobacco. A nicotine pouch will never replicate that exactly, but certain flavours make
+          the transition much easier.
+        </p>
+        <h3>Mint and Menthol</h3>
+        <p>
+          <a href="/products/flavor/mint">Mint-flavoured pouches</a> are by far the most popular
+          choice among switchers. The cooling sensation provides a strong oral stimulus that
+          helps replace the physical ritual of smoking. Spearmint is gentler; peppermint and
+          menthol are more intense. If you smoked menthol cigarettes, this is the natural starting
+          point.
+        </p>
+        <h3>Tobacco Flavour</h3>
+        <p>
+          Some brands offer pouches with a tobacco-inspired flavour profile — earthy, slightly
+          woody, with a hint of sweetness. These contain no actual tobacco, but they can provide
+          a sense of familiarity during the first week or two. Many switchers start with tobacco
+          flavour and gradually move to mint or fruit as their palate adjusts.
+        </p>
+        <h3>Coffee and Spice</h3>
+        <p>
+          If you associated smoking with your morning coffee, a coffee-flavoured pouch can serve
+          as a satisfying replacement for that ritual. Cinnamon and cardamom options also work
+          well for smokers who enjoyed the warmth of tobacco.
+        </p>
+
+        <h2>Your Week-by-Week Transition Plan</h2>
+        <p>
+          Going cold turkey rarely works. A structured, gradual switch gives your brain and body
+          time to adapt. Here is a realistic four-week plan:
+        </p>
+        <h3>Week 1: Supplement, Do Not Replace</h3>
+        <p>
+          Use nicotine pouches <strong>between</strong> cigarettes rather than instead of them.
+          The goal is to get comfortable with the format — how to place the pouch, how long to
+          keep it in, and which strength feels right. Aim to replace 2-3 cigarettes per day with
+          pouches. Keep smoking the rest as normal.
+        </p>
+        <h3>Week 2: Replace Half Your Cigarettes</h3>
+        <p>
+          By now the pouch should feel natural under your lip. Start actively choosing a pouch
+          over a cigarette whenever the craving hits — especially during the easier moments (after
+          meals, during a work break). Target a 50/50 split between pouches and cigarettes.
+        </p>
+        <h3>Weeks 3 &ndash; 4: Make the Full Switch</h3>
+        <p>
+          Push towards using pouches exclusively. The first fully smoke-free day is the hardest
+          — plan it for a low-stress day and keep plenty of pouches within reach. If you slip and
+          have a cigarette, do not treat it as failure. Simply use a pouch for the next craving
+          and keep moving forward.
+        </p>
+        <h3>Month 2 and Beyond: Consider Stepping Down</h3>
+        <p>
+          Once cigarettes are fully behind you, some people choose to gradually reduce their pouch
+          strength. Drop one tier every 4-6 weeks — for example, from 12 mg to 8 mg, then to 6 mg.
+          This is entirely optional. Many long-term pouch users are happy to continue at their
+          current strength indefinitely.
+        </p>
+
+        <h2>Common Challenges (and How to Handle Them)</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>
+            <strong>Mouth tingling or burning</strong> — Completely normal, especially in the
+            first few days. The nicotine and flavouring irritate the gum lining slightly. This
+            fades within a week for most people. Move the pouch to a different spot if it becomes
+            uncomfortable.
+          </li>
+          <li>
+            <strong>Different nicotine absorption curve</strong> — Cigarettes deliver a fast,
+            sharp spike of nicotine via the lungs. Pouches deliver nicotine more gradually through
+            the oral mucosa. You may feel like the pouch is not working at first — give it 5-10
+            minutes before reaching for another. The satisfaction builds more slowly but lasts longer.
+          </li>
+          <li>
+            <strong>Craving management</strong> — The ritual of smoking — stepping outside,
+            flicking the lighter, the hand-to-mouth motion — is a habit separate from the nicotine
+            addiction. Replace these rituals deliberately: chew gum, drink water, go for a short
+            walk. The nicotine pouch handles the chemical craving; you need to handle the behavioural
+            one.
+          </li>
+          <li>
+            <strong>Hiccups or nausea</strong> — A sign that your strength is too high. Drop
+            down one tier immediately. It is better to use a lighter pouch more frequently than
+            a strong pouch that makes you feel unwell.
+          </li>
+        </ul>
+
+        <h2>Mini vs Slim: Which Format for Smokers?</h2>
+        <p>
+          Nicotine pouches come in two main sizes: <strong>mini</strong> (small, very discreet)
+          and <strong>slim</strong> (longer, sits along the gum line). For smokers making the
+          switch, we recommend <strong>slim format</strong>. The larger surface area provides
+          a more noticeable oral sensation, which helps fill the gap left by the physical act of
+          smoking. Slim pouches also tend to release nicotine more evenly over a longer period.
+        </p>
+        <p>
+          Mini pouches are better suited to experienced pouch users who want maximum discretion
+          — they are a great option later on, but for the crucial first few weeks, slim gives you
+          the best chance of sticking with it.
+        </p>
+
+        <h2>Important Disclaimer</h2>
+        <p>
+          This guide is for informational purposes only and <strong>does not constitute medical
+          advice</strong>. Nicotine is an addictive substance. If you are pregnant, nursing, or
+          have a cardiovascular condition, consult your healthcare provider before using nicotine
+          pouches. If you do not currently use nicotine in any form, we do not recommend starting.
+        </p>
+        <p>
+          For answers to more common questions, visit our <a href="/faq">FAQ page</a> or browse
+          our full <a href="/nicotine-pouches">nicotine pouch catalogue</a>.
+        </p>
+
+        <h2>Browse by Strength</h2>
+        <p>
+          Find the right starting strength for your switch:
+        </p>
+      </div>
+
+      <nav class="mt-6 flex flex-wrap gap-3" aria-label="Browse by strength">
+        <a href="/products/strength/light" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Light (2-4 mg)</a>
+        <a href="/products/strength/normal" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Normal (4-8 mg)</a>
+        <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strong (8-12 mg)</a>
+        <a href="/products/strength/extra-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Extra Strong (12-20 mg)</a>
+      </nav>
+
+      <div class="mt-10">
+        <h2 class="text-2xl font-bold text-foreground mb-4">Browse by Flavour</h2>
+        <nav class="flex flex-wrap gap-3" aria-label="Browse by flavour">
+          <a href="/products/flavor/mint" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Mint</a>
+          <a href="/products/flavor/tobacco" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Tobacco</a>
+          <a href="/products/flavor/coffee" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Coffee</a>
+          <a href="/products/flavor/citrus" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Citrus</a>
+          <a href="/products/flavor/berry" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Berry</a>
+        </nav>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Organization", "name": "SnusFriends Editorial", "url": `https://${tenant.domain}` },
+    "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/switching-from-cigarettes-to-nicotine-pouches` },
+  })} />
+</Shop>

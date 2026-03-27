@@ -1,0 +1,228 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-27';
+const title = 'Strongest Nicotine Pouches: Complete Ranking for 2026';
+const description = 'Looking for the most powerful nicotine pouches? We rank the strongest brands from 20mg to 50mg — including CUBA, Rabbit, ICEBERG, and more.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Strongest Pouches' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Ranking</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 27, 2026</time>
+          <span>&middot;</span>
+          <span>8 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>What Makes a Pouch "Strong"?</h2>
+        <p>
+          Nicotine pouch strength is measured in milligrams per pouch (mg/pouch). This tells you exactly how much nicotine is packed into each individual pouch, which directly affects how intense the experience feels. Some brands also list mg/g (milligrams per gram of filling), but mg/pouch is the more useful figure because pouch sizes vary between brands.
+        </p>
+        <p>
+          Most mainstream pouches from brands like <a href="/brands/zyn">ZYN</a> or <a href="/brands/velo">VELO</a> sit between 4mg and 11mg per pouch. Once you cross 12mg, you are entering <strong>strong</strong> territory. At 20mg and above, products are classified as <strong>ultra strong</strong> — and beyond 40mg, you are in the <strong>extreme</strong> category, where only experienced users with high nicotine tolerance should venture.
+        </p>
+        <p>
+          Strength is not the only factor that determines how a pouch feels. The pH level of the filling, the moisture content, and the pouch format (slim vs. regular) all influence how quickly nicotine is absorbed through the gum. A well-engineered 20mg pouch can hit harder than a poorly made 30mg one. That said, when you are shopping at the top end of the strength scale, milligrams matter — and the products below deliver serious nicotine.
+        </p>
+
+        <h2>Top 10 Strongest Nicotine Pouches</h2>
+        <p>
+          We ranked every ultra-strong and extreme pouch in our catalogue by mg/pouch. Here are the ten most powerful nicotine pouches you can buy in 2026:
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border text-foreground">
+                <th class="py-3 pr-4 font-semibold">#</th>
+                <th class="py-3 pr-4 font-semibold">Brand</th>
+                <th class="py-3 pr-4 font-semibold">Product</th>
+                <th class="py-3 pr-4 font-semibold">mg/pouch</th>
+                <th class="py-3 font-semibold">Flavour</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">1</td>
+                <td class="py-3 pr-4"><a href="/brands/rabbit">Rabbit</a></td>
+                <td class="py-3 pr-4">Rabbit Extreme</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">50mg</td>
+                <td class="py-3">Spearmint</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">2</td>
+                <td class="py-3 pr-4">MAGGIE</td>
+                <td class="py-3 pr-4">MAGGIE Ultra</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">45mg</td>
+                <td class="py-3">Cool Mint</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">3</td>
+                <td class="py-3 pr-4"><a href="/brands/cuba">CUBA</a></td>
+                <td class="py-3 pr-4">CUBA Black</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">43mg</td>
+                <td class="py-3">Fresh Mint</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">4</td>
+                <td class="py-3 pr-4"><a href="/brands/iceberg">ICEBERG</a></td>
+                <td class="py-3 pr-4">ICEBERG Max</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">40mg</td>
+                <td class="py-3">Arctic Mint</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">5</td>
+                <td class="py-3 pr-4">Garant</td>
+                <td class="py-3 pr-4">Garant Ultra</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">38mg</td>
+                <td class="py-3">Peppermint</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">6</td>
+                <td class="py-3 pr-4">STNG</td>
+                <td class="py-3 pr-4">STNG Ultra</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">27.5mg</td>
+                <td class="py-3">Menthol</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">7</td>
+                <td class="py-3 pr-4"><a href="/brands/rabbit">Rabbit</a></td>
+                <td class="py-3 pr-4">Rabbit Regular</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">26mg</td>
+                <td class="py-3">Spearmint</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">8</td>
+                <td class="py-3 pr-4"><a href="/brands/zeus">Zeus</a></td>
+                <td class="py-3 pr-4">Zeus Ultra Strong</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">25mg</td>
+                <td class="py-3">Wintergreen</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">9</td>
+                <td class="py-3 pr-4">GLICK</td>
+                <td class="py-3 pr-4">GLICK Ultra</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">25mg</td>
+                <td class="py-3">Ice Mint</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">10</td>
+                <td class="py-3 pr-4">NOiS</td>
+                <td class="py-3 pr-4">NOiS Ultra</td>
+                <td class="py-3 pr-4 font-semibold text-foreground">25mg</td>
+                <td class="py-3">Frosty Mint</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The top four entries — <a href="/brands/rabbit">Rabbit</a> Extreme, MAGGIE Ultra, <a href="/brands/cuba">CUBA</a> Black, and <a href="/brands/iceberg">ICEBERG</a> Max — all sit at 40mg or above, placing them firmly in the extreme category. These are not products for casual users. They are engineered for people who have built significant nicotine tolerance over months or years of regular use.
+        </p>
+
+        <h2>Strength Categories Explained</h2>
+        <p>
+          The nicotine pouch market has settled on four broadly recognised strength tiers. Understanding where a product sits helps you choose wisely:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Strong (6&ndash;12mg):</strong> A noticeable step up from regular-strength pouches. Suitable for daily users who want more kick without going overboard. Brands like ZYN, VELO, and Skruf offer popular options in this range.</li>
+          <li><strong>Extra Strong (12&ndash;20mg):</strong> Where things start to get serious. These pouches deliver a pronounced nicotine buzz that lasts 30&ndash;45 minutes. Best for experienced users. <a href="/products/strength/extra-strong">Browse our extra strong collection</a>.</li>
+          <li><strong>Ultra Strong (20&ndash;40mg):</strong> Reserved for high-tolerance users. The nicotine hit is immediate and intense. Products from <a href="/brands/zeus">Zeus</a>, STNG, and <a href="/brands/rabbit">Rabbit</a> Regular sit here. <a href="/products/strength/super-strong">Browse our super strong collection</a>.</li>
+          <li><strong>Extreme (40mg+):</strong> The absolute ceiling. Only four products in our catalogue exceed 40mg. If you are considering these, you should already have extensive experience with ultra-strong pouches.</li>
+        </ul>
+
+        <h2>Safety: What You Need to Know</h2>
+        <p>
+          Ultra-strong and extreme nicotine pouches are <strong>not for beginners</strong>. Using a 40mg+ pouch without established tolerance can cause unpleasant side effects including:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Nausea and dizziness</li>
+          <li>Headache and lightheadedness</li>
+          <li>Elevated heart rate</li>
+          <li>Stomach discomfort</li>
+          <li>Excessive salivation and hiccups</li>
+        </ul>
+        <p>
+          If you experience any of these symptoms, remove the pouch immediately, drink water, and sit down until the feeling passes. These signs indicate your body is absorbing more nicotine than it can comfortably handle.
+        </p>
+        <p>
+          <strong>Our recommendation:</strong> Always start with the lowest strength that satisfies your craving. If you are currently using 12mg pouches and find them too mild, step up to 16&ndash;20mg before jumping to ultra-strong. There is no prize for using the strongest product available — the goal is finding the right strength for your individual tolerance.
+        </p>
+
+        <h2>Who Are Ultra-Strong Pouches For?</h2>
+        <p>
+          The typical ultra-strong pouch user falls into one of these groups:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Former heavy snus users:</strong> People who previously used traditional Swedish snus (which typically contains 14&ndash;22mg of nicotine per gram) and need a comparable experience from tobacco-free pouches.</li>
+          <li><strong>High-tolerance nicotine users:</strong> Long-term users who have gradually built tolerance over time and find standard 8&ndash;12mg pouches insufficient.</li>
+          <li><strong>People reducing consumption:</strong> Some users prefer one strong pouch that lasts 45&ndash;60 minutes over multiple weaker pouches throughout the day.</li>
+        </ul>
+        <p>
+          If none of these describe you, ultra-strong pouches are probably not the right choice. There is a large, well-stocked middle ground of excellent products in the 6&ndash;16mg range that will serve most users far better.
+        </p>
+
+        <h2>Best Strong Brands to Start With</h2>
+        <p>
+          If you are currently using regular-strength pouches and want to step up — but are not ready for the extreme end — these established brands offer excellent <a href="/products/strength/extra-strong">extra strong</a> options that bridge the gap:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong><a href="/brands/velo">VELO</a> Extra Strong (11mg):</strong> Smooth nicotine delivery with well-balanced flavours. One of the most popular extra strong pouches in Europe thanks to consistent quality and wide availability.</li>
+          <li><strong><a href="/brands/zyn">ZYN</a> Extra Strong (11mg):</strong> The market leader's step-up option. Clean taste, reliable delivery, and the reassurance of buying from the world's most established nicotine pouch brand.</li>
+          <li><strong>Skruf Extra Strong (12mg):</strong> A slightly higher strength from a respected Swedish manufacturer. Skruf's pouches are known for excellent moisture balance and comfortable fit.</li>
+        </ul>
+        <p>
+          These products let you test how you respond to higher nicotine levels before committing to anything more intense. Spend at least a few weeks at the extra strong level before considering a move to ultra strong.
+        </p>
+
+      </div>
+
+      <div class="mt-12 border-t border-border pt-10">
+        <h2 class="text-xl font-bold text-foreground mb-6">Browse by Strength</h2>
+        <div class="flex flex-wrap gap-3">
+          <a href="/products/strength/extra-strong" class="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">Extra Strong Pouches</a>
+          <a href="/products/strength/super-strong" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Super Strong Pouches</a>
+          <a href="/products" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">All Products</a>
+        </div>
+      </div>
+
+      <div class="mt-8 rounded-lg border border-border bg-card p-6">
+        <p class="text-sm text-muted-foreground">
+          <strong class="text-foreground">New to nicotine pouches?</strong> This guide is aimed at experienced users. If you are just getting started, read our
+          <a href="/blog/best-nicotine-pouches-for-beginners" class="text-primary underline hover:text-foreground">beginner's guide to nicotine pouches</a> instead — it covers how to choose your first strength, what to expect, and which brands are best for newcomers.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "SnusFriends Editorial" },
+    "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/strongest-nicotine-pouches` },
+  })} />
+</Shop>

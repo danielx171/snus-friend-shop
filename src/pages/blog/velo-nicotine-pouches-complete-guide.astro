@@ -1,0 +1,256 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-27';
+const title = 'VELO Nicotine Pouches: Complete Brand Guide';
+const description = 'Discover VELO by BAT — the global nicotine pouch leader. Explore 53 products across all strengths, from Mighty Peppermint to Tropical Mango.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'VELO Guide' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Brand Spotlight</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 27, 2026</time>
+          <span>&middot;</span>
+          <span>9 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>About VELO</h2>
+        <p>
+          <a href="/brands/velo">VELO</a> is the flagship nicotine pouch brand from British American Tobacco (BAT),
+          one of the world's largest tobacco companies. Originally launched in Scandinavia under the names EPOK and
+          LYFT, the brand was consolidated under the VELO name in 2019 as part of BAT's global strategy to build a
+          single, recognisable identity for their tobacco-free nicotine pouch range.
+        </p>
+        <p>
+          Today, VELO is manufactured at BAT's dedicated production facility in Pecs, Hungary, and is sold in over
+          50 markets worldwide. It is the second-best-selling nicotine pouch brand globally, behind only ZYN by
+          Swedish Match. In several European and African markets, VELO holds the number one position.
+        </p>
+        <p>
+          What sets VELO apart is scale and consistency. With the full backing of a multinational corporation, VELO
+          can invest heavily in product development, quality control, and flavour innovation. Their catalogue has
+          grown to <strong>53 products</strong> across multiple formats, strengths, and flavour families — making
+          them one of the most diverse brands on the market.
+        </p>
+
+        <h2>VELO Formats: Mini vs Slim</h2>
+        <p>
+          VELO offers two pouch formats, each designed for a different use case:
+        </p>
+        <p>
+          <strong>Mini</strong> pouches are the smaller of the two. They are compact, lightweight, and virtually
+          invisible under the lip. Mini format is ideal if you value discretion — during meetings, on public
+          transport, or in any situation where you prefer nobody notices. The trade-off is a slightly shorter
+          flavour duration compared to slim pouches, typically lasting 20 to 30 minutes.
+        </p>
+        <p>
+          <strong>Slim</strong> pouches are longer and flatter, sitting comfortably along the gum line. They offer
+          a larger surface area, which means more consistent nicotine release and longer-lasting flavour — usually
+          30 to 45 minutes. Slim is the most popular format in the VELO range and is what most users reach for as
+          their daily choice.
+        </p>
+        <p>
+          Neither format is objectively better. If discretion is your priority, go mini. If flavour longevity and
+          comfort matter more, go slim. Many VELO users keep both formats on hand for different occasions.
+        </p>
+
+        <h2>VELO Strength Range</h2>
+        <p>
+          VELO covers the full nicotine spectrum, from zero-nicotine pouches all the way up to ultra-strong
+          options. This makes the brand suitable for everyone — from curious first-timers to experienced users
+          who need a serious nicotine hit.
+        </p>
+
+        <div class="overflow-x-auto my-6">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border text-foreground">
+                <th class="text-left py-3 pr-4 font-semibold">Strength Level</th>
+                <th class="text-left py-3 pr-4 font-semibold">Nicotine Range</th>
+                <th class="text-left py-3 font-semibold">Best For</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4"><strong>Zero</strong></td>
+                <td class="py-3 pr-4">0 mg</td>
+                <td class="py-3">Flavour-only experience, stepping down from nicotine</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4"><strong>Normal</strong></td>
+                <td class="py-3 pr-4">4 mg</td>
+                <td class="py-3">Beginners, light users, all-day comfort</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4"><strong>Strong</strong></td>
+                <td class="py-3 pr-4">6 - 10 mg</td>
+                <td class="py-3">Regular users, former smokers transitioning</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4"><strong>Extra Strong</strong></td>
+                <td class="py-3 pr-4">10 - 14 mg</td>
+                <td class="py-3">Experienced users who want a noticeable kick</td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-4"><strong>Ultra Strong</strong></td>
+                <td class="py-3 pr-4">14 - 17 mg</td>
+                <td class="py-3">High-tolerance users, maximum intensity</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          If you are new to nicotine pouches, start with <strong>Normal</strong> (4 mg) and work upward only
+          if you feel you need more. Most daily users settle comfortably in the <strong>Strong</strong> range.
+          Read our <a href="/blog/how-to-choose-your-strength">strength guide</a> for a deeper breakdown of
+          how to find your ideal level.
+        </p>
+
+        <h2>VELO Flavour Guide</h2>
+        <p>
+          VELO's flavour range is one of the broadest in the industry, spanning five major flavour families.
+          Here is what to expect from each:
+        </p>
+
+        <h3>Mint</h3>
+        <p>
+          <a href="/products/flavor/mint">Mint</a> is the cornerstone of the VELO lineup and includes their
+          best-selling products. You will find everything from crisp peppermint to smooth spearmint to icy
+          menthol blends. If you only ever try one VELO flavour, make it a mint.
+        </p>
+
+        <h3>Berry</h3>
+        <p>
+          The <a href="/products/flavor/berry">berry</a> range leans sweet and fruity, featuring blueberry,
+          raspberry, and mixed berry blends. These are popular with users who find mint too sharp or who simply
+          prefer a sweeter, more dessert-like experience. Berry pairs particularly well with lower strengths.
+        </p>
+
+        <h3>Citrus</h3>
+        <p>
+          <a href="/products/flavor/citrus">Citrus</a> flavours deliver a bright, zesty punch. Expect notes
+          of lemon, orange, and grapefruit. Citrus pouches tend to feel crisp and refreshing — a good
+          alternative to mint when you want freshness without the menthol cooling sensation.
+        </p>
+
+        <h3>Fruit</h3>
+        <p>
+          The <a href="/products/flavor/fruit">fruit</a> category goes beyond berries and citrus into tropical
+          territory — mango, passion fruit, and watermelon. These are VELO's most adventurous flavours and
+          appeal to users who want something genuinely different from the traditional mint-and-tobacco world.
+        </p>
+
+        <h3>Licorice</h3>
+        <p>
+          <a href="/products/flavor/licorice">Licorice</a> is a distinctly Scandinavian flavour that pays
+          homage to the brand's Nordic roots. It is earthy, slightly sweet, and deeply satisfying for fans
+          of traditional snus flavour profiles. Not for everyone, but beloved by those who appreciate it.
+        </p>
+
+        <h2>Spotlight: VELO Mighty Peppermint</h2>
+        <p>
+          If there is one product that defines VELO, it is <strong>Mighty Peppermint</strong>. This is the
+          brand's signature pouch — the one that outsells everything else in the range by a wide margin and
+          the product most people picture when they think of VELO.
+        </p>
+        <p>
+          Mighty Peppermint delivers an intense, cooling peppermint flavour that hits immediately when you
+          place the pouch under your lip. The mint is bold without being artificial, and the cooling sensation
+          lingers well beyond the 30-minute mark. It is available across multiple strengths, from Normal
+          (4 mg) all the way up to Ultra Strong (17 mg), so you can enjoy the same great flavour at whatever
+          intensity suits you.
+        </p>
+        <p>
+          For many users, Mighty Peppermint is not just their favourite VELO product — it is their daily
+          driver, the pouch they reach for first thing in the morning and keep coming back to throughout the
+          day. If you want to understand what VELO does best, start here.
+        </p>
+
+        <h2>Who Should Choose VELO?</h2>
+        <p>
+          VELO is built for the mainstream market. It is not trying to be the most extreme brand or the most
+          niche — it is trying to be the most reliable, most accessible, and most widely available. That
+          positioning makes it an excellent choice for several types of users:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Smokers looking to switch:</strong> VELO's wide strength range means you can match your current nicotine intake and step down gradually if desired. The familiar mint and tobacco-adjacent flavours ease the transition.</li>
+          <li><strong>New nicotine pouch users:</strong> The Normal (4 mg) strength is genuinely gentle, and the slim format is comfortable even if you have never used a pouch before. VELO is forgiving for beginners.</li>
+          <li><strong>Daily users who value consistency:</strong> Because VELO is manufactured at industrial scale with strict quality control, every can tastes the same. No batch variation, no surprises — just the same product every time.</li>
+          <li><strong>Users who want variety:</strong> With 53 products spanning five flavour families and five strength levels, you can explore extensively without ever leaving the brand. Many users rotate between three or four VELO flavours throughout the week.</li>
+        </ul>
+        <p>
+          If you prefer extreme nicotine strength (above 17 mg), niche artisanal brands, or unusual flavour
+          experiments, VELO may feel too safe. But for most users, that reliability and breadth of choice is
+          exactly what they want.
+        </p>
+
+        <h2>Browse the Full VELO Range</h2>
+        <p>
+          Ready to explore? Visit our <a href="/brands/velo">complete VELO collection</a> to see all 53
+          products with detailed descriptions, pricing, and strength indicators. You can filter by format,
+          strength, and flavour to find exactly what you are looking for.
+        </p>
+      </div>
+
+      <div class="mt-12 space-y-8">
+        <div>
+          <h3 class="text-lg font-semibold text-foreground mb-4">Browse by Flavour</h3>
+          <div class="flex flex-wrap gap-3">
+            <a href="/products/flavor/mint" class="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">Mint</a>
+            <a href="/products/flavor/berry" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Berry</a>
+            <a href="/products/flavor/citrus" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Citrus</a>
+            <a href="/products/flavor/fruit" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Fruit</a>
+            <a href="/products/flavor/licorice" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Licorice</a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold text-foreground mb-4">Browse by Strength</h3>
+          <div class="flex flex-wrap gap-3">
+            <a href="/products/strength/normal" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Normal</a>
+            <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strong</a>
+            <a href="/products/strength/extraStrong" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Extra Strong</a>
+            <a href="/products/strength/ultraStrong" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Ultra Strong</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "SnusFriends Editorial" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SnusFriends",
+      "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-nicotine-pouches-complete-guide` },
+  })} />
+</Shop>

@@ -5,6 +5,58 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
 
 const articles = [
+  // Brand Spotlights
+  {
+    title: 'ZYN Nicotine Pouches: The Complete Guide',
+    excerpt: 'Everything about the world\'s best-selling nicotine pouch brand — 52 products, strengths from 1.5 to 16.5 mg, and the full ZYN flavour range explained.',
+    slug: 'zyn-nicotine-pouches-complete-guide',
+    tag: 'Brand Spotlight',
+  },
+  {
+    title: 'VELO Nicotine Pouches: Complete Brand Guide',
+    excerpt: 'Discover BAT\'s global nicotine pouch leader — 53 products from Mighty Peppermint to Tropical Mango, available in mini and slim formats.',
+    slug: 'velo-nicotine-pouches-complete-guide',
+    tag: 'Brand Spotlight',
+  },
+  {
+    title: 'LOOP Nicotine Pouches: The Flavour-First Brand',
+    excerpt: 'Swedish-made with Instant Rush technology for faster nicotine delivery. 32 bold products from jalapeño lime to habanero mint.',
+    slug: 'loop-nicotine-pouches-complete-guide',
+    tag: 'Brand Spotlight',
+  },
+  // Buying Guides
+  {
+    title: 'Best Nicotine Pouches for Beginners in 2026',
+    excerpt: 'New to pouches? Our beginner\'s guide covers ideal strengths, top brands to start with, and the 5 mistakes every beginner makes.',
+    slug: 'best-nicotine-pouches-for-beginners',
+    tag: 'Buying Guide',
+  },
+  {
+    title: 'Switching from Cigarettes to Nicotine Pouches',
+    excerpt: 'A practical week-by-week transition plan — which pouch strength matches your cigarette intake, best brands for switchers, and how to make it stick.',
+    slug: 'switching-from-cigarettes-to-nicotine-pouches',
+    tag: 'Guide',
+  },
+  {
+    title: 'Strongest Nicotine Pouches: Complete Ranking for 2026',
+    excerpt: 'The most powerful pouches from 20 mg to 50 mg — ranking CUBA, Rabbit, ICEBERG, Zeus, and more. Strength categories and safety guidance included.',
+    slug: 'strongest-nicotine-pouches',
+    tag: 'Ranking',
+  },
+  // Flavour Guides
+  {
+    title: 'Top 10 Mint Nicotine Pouches in 2026',
+    excerpt: 'We ranked the best mint and menthol nicotine pouches from 91+ brands. From icy peppermint to smooth spearmint — find your perfect mint.',
+    slug: 'top-10-mint-flavours',
+    tag: 'Ranking',
+  },
+  {
+    title: 'Best Berry Nicotine Pouches: Top 10 for 2026',
+    excerpt: 'From sweet strawberry to tart mixed berries — our expert ranking of the best berry-flavoured pouches across all strengths and brands.',
+    slug: 'best-berry-nicotine-pouches',
+    tag: 'Ranking',
+  },
+  // Fundamentals
   {
     title: 'What Are Nicotine Pouches? A Complete Guide',
     excerpt: 'A beginner-friendly guide to tobacco-free nicotine pouches — how they work, how to use them, and why millions of Europeans are making the switch.',
@@ -13,15 +65,9 @@ const articles = [
   },
   {
     title: 'How to Choose the Right Nicotine Strength',
-    excerpt: 'From light (2 mg) to super strong (20 mg+), picking the right strength matters. Here is a practical framework based on your experience level.',
+    excerpt: 'From light (2 mg) to super strong (20 mg+), picking the right strength matters. A practical framework based on your experience level.',
     slug: 'how-to-choose-your-strength',
     tag: 'Guide',
-  },
-  {
-    title: 'Top 10 Mint Nicotine Pouches in 2026',
-    excerpt: 'We ranked the best mint and menthol nicotine pouches from 91+ brands. From icy peppermint to smooth spearmint — find your perfect mint.',
-    slug: 'top-10-mint-flavours',
-    tag: 'Ranking',
   },
 ];
 ---
@@ -57,11 +103,13 @@ const articles = [
       </div>
 
       <div class="mt-12 rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
-        <h2 class="text-xl font-semibold mb-2">More articles coming soon</h2>
-        <p class="text-muted-foreground text-sm max-w-md mx-auto">
-          We are working on brand spotlights, flavour deep-dives, and comparison guides.
-          Check back soon for new content.
+        <h2 class="text-xl font-semibold mb-2">Explore More</h2>
+        <p class="text-muted-foreground text-sm max-w-md mx-auto mb-6">
+          Browse our full catalogue of 700+ nicotine pouches from 91 brands.
         </p>
+        <a href="/products" class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
+          Shop All Products
+        </a>
       </div>
     </div>
   </section>

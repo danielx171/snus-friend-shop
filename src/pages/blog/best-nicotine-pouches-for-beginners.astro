@@ -1,0 +1,223 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-27';
+const title = 'Best Nicotine Pouches for Beginners in 2026';
+const description = 'New to nicotine pouches? Our beginner\'s guide covers the best brands, ideal strengths, and top flavours to start with — plus common mistakes to avoid.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Best for Beginners' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Buying Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 27, 2026</time>
+          <span>&middot;</span>
+          <span>7 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Why Start with Nicotine Pouches?</h2>
+        <p>
+          If you are considering nicotine pouches for the first time, you are joining millions
+          of adults across Europe who have already made the switch. Nicotine pouches are
+          <strong>completely tobacco-free</strong> — they contain no tobacco leaf, produce no smoke,
+          and generate no vapour. You place a small white pouch under your upper lip, and it
+          delivers nicotine discreetly through the gum lining.
+        </p>
+        <p>
+          Unlike cigarettes or vapes, pouches leave no lingering smell on your clothes, no ash
+          on the table, and no cloud hanging in the air. You can use them anywhere — at your
+          desk, on the train, in a meeting — without anyone noticing. For a full breakdown of
+          how they work, see our guide on <a href="/blog/what-are-nicotine-pouches">what nicotine pouches are</a>.
+        </p>
+        <p>
+          The key for beginners is choosing the right product from the start. Pick something
+          too strong and you will feel nauseous. Pick something too bland and you will wonder
+          what the fuss is about. This guide walks you through exactly what to buy, what
+          strength to choose, and which mistakes to avoid.
+        </p>
+
+        <h2>Choosing Your First Strength</h2>
+        <p>
+          Strength is the single most important decision for a beginner. Nicotine pouches range
+          from 1.5 mg all the way up to 20 mg and beyond. Getting this wrong is the number one
+          reason people have a bad first experience. Here is a simple framework:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Never used nicotine before (2-4 mg):</strong> Start with <a href="/products/strength/mild">mild strength</a> pouches. Brands like ZYN Mini (1.5-3 mg) and HELWIT (3.5 mg) are specifically designed for low tolerance. You will feel a gentle buzz without any discomfort.</li>
+          <li><strong>Light or social smoker (4-6 mg):</strong> A <a href="/products/strength/regular">regular strength</a> pouch gives you enough nicotine to satisfy a light habit. Kelly White (4 mg) and VELO (4 mg) sit in this sweet spot.</li>
+          <li><strong>Regular smoker switching over (6-8 mg):</strong> You need slightly more nicotine to match what you are accustomed to. A 6-8 mg pouch delivers a satisfying experience without overwhelming you during the transition.</li>
+        </ul>
+        <p>
+          The golden rule: <strong>always start lower than you think you need</strong>. You can
+          move up in strength easily. Moving down after a bad experience is harder because it
+          colours your impression of the whole product category. For a deeper dive, read our
+          full guide on <a href="/blog/how-to-choose-your-strength">how to choose your strength</a>.
+        </p>
+
+        <h2>Best Beginner Brands</h2>
+        <p>
+          Not all brands are created equal, and some are explicitly designed with newcomers in
+          mind. These four brands consistently get recommended by first-time users:
+        </p>
+
+        <h3>ZYN Mini (1.5-3 mg)</h3>
+        <p>
+          <a href="/brands/zyn">ZYN</a> is the world's best-selling nicotine pouch brand, and
+          their Mini range is purpose-built for beginners. The pouches are small, comfortable
+          under the lip, and come in gentle strengths starting at just 1.5 mg. Flavours like
+          Cool Mint and Citrus are clean and approachable. If you have never tried nicotine
+          before, ZYN Mini is the safest starting point.
+        </p>
+
+        <h3>HELWIT (3.5 mg)</h3>
+        <p>
+          <a href="/brands/helwit">HELWIT</a> positions itself as a premium, low-strength brand.
+          Every product in their range sits at 3.5 mg — you never have to guess which strength
+          you are getting. Their flavours are refined and not overpowering, with options like
+          Violet, Mocha, and Mint. An excellent choice if you want something a step above
+          the lightest options without jumping to medium strength.
+        </p>
+
+        <h3>Kelly White (4 mg)</h3>
+        <p>
+          <a href="/brands/kelly-white">Kelly White</a> offers a compact slim format at 4 mg that
+          bridges the gap between mild and regular strength. The pouches are soft, sit flush
+          against the gum, and deliver a smooth, even release. Their Cool Mint and Eucalyptus
+          flavours are particularly popular with new users.
+        </p>
+
+        <h3>VELO (4 mg)</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> is made by BAT (British American Tobacco), one of the
+          largest tobacco companies in the world. Their 4 mg slim pouches are widely available
+          and come in a broad flavour range. Ice Cool and Berry Frost are two standout options
+          for beginners. VELO pouches have a slightly drier feel, which some first-time users
+          prefer because they produce less drip.
+        </p>
+
+        <h2>Best Beginner Flavours</h2>
+        <p>
+          Flavour preference is personal, but there are clear patterns among first-time users:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong><a href="/products/flavor/mint">Mint</a></strong> — By far the safest bet. Spearmint, peppermint, and cool mint are the most popular starting flavours because they feel fresh and familiar. The cooling sensation also masks the mild tingle that nicotine causes on the gum, making the experience more comfortable for beginners.</li>
+          <li><strong><a href="/products/flavor/citrus">Citrus</a></strong> — If you want something different from mint, citrus flavours (lemon, bergamot, orange) offer a clean, bright taste without being overly sweet. They pair particularly well with lower strengths.</li>
+        </ul>
+        <p>
+          Avoid overly complex or exotic flavours on your first try. Once you are comfortable
+          with how pouches feel and how nicotine affects you, branch out into berry, coffee,
+          or tropical options.
+        </p>
+
+        <h2>Mini vs Slim Format</h2>
+        <p>
+          Nicotine pouches come in two main physical formats, and your choice affects comfort
+          and duration:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Mini</strong> — Smaller pouches that are virtually invisible under the lip. They are ideal if discretion is your priority or if you have a smaller mouth. Mini pouches tend to release nicotine faster but for a shorter duration (15-25 minutes).</li>
+          <li><strong>Slim</strong> — Longer and flatter, slim pouches distribute across a wider area of gum. They last longer (25-40 minutes), deliver a more gradual release, and many users find them more comfortable for extended wear.</li>
+        </ul>
+        <p>
+          Most beginners do well with either format. If in doubt, start with slim — the longer
+          duration gives you more time to adjust to the sensation, and the gradual release
+          is gentler on sensitive gums.
+        </p>
+
+        <h2>5 Mistakes Beginners Make</h2>
+        <p>
+          Learning from other people's errors saves you a lot of discomfort. These are the five
+          most common beginner mistakes:
+        </p>
+        <ol class="list-decimal pl-6 space-y-3">
+          <li><strong>Starting too strong.</strong> This is mistake number one. A 10 mg or 12 mg pouch might sound moderate, but for someone without nicotine tolerance, it can cause nausea, dizziness, and hiccups. Start at 2-4 mg and work up gradually.</li>
+          <li><strong>Using too many pouches per day.</strong> Your body needs time to adjust. Limit yourself to 3-4 pouches on day one and increase slowly over the first week. There is no rush.</li>
+          <li><strong>Moving the pouch around.</strong> Once you place the pouch under your lip, leave it there. Fidgeting with it using your tongue disrupts the nicotine release and irritates the gum. It should sit still in one position.</li>
+          <li><strong>Using on an empty stomach.</strong> Nicotine on an empty stomach intensifies the effect and can cause nausea even at low strengths. Have a meal or snack beforehand, especially during your first week.</li>
+          <li><strong>Not giving it time.</strong> The first pouch might feel unusual — a slight tingle, an unfamiliar sensation under the lip. This is completely normal and fades after a few uses. Give yourself at least a full can (20 pouches) before deciding whether you enjoy the experience.</li>
+        </ol>
+
+        <h2>How to Use Your First Pouch</h2>
+        <p>
+          Follow these steps for the best first experience:
+        </p>
+        <ol class="list-decimal pl-6 space-y-2">
+          <li><strong>Eat something first</strong> — a light meal or snack is enough to settle your stomach</li>
+          <li><strong>Open the can</strong> and take one pouch. Fluff it gently between your fingers to distribute the contents evenly</li>
+          <li><strong>Lift your upper lip</strong> and place the pouch against the gum, either left or right side. Centre it between your front teeth and canine</li>
+          <li><strong>Press your lip down</strong> and leave the pouch in place. You will feel a mild tingle — this is the nicotine activating and it is perfectly normal</li>
+          <li><strong>Keep it in for 15-20 minutes</strong> on your first try. You can go longer once you know how your body responds</li>
+          <li><strong>Remove and dispose</strong> — most cans have a compartment in the lid for used pouches. Never litter</li>
+          <li><strong>Wait at least an hour</strong> before using a second pouch on your first day</li>
+        </ol>
+        <p>
+          That is all there is to it. No device to charge, no liquid to refill, no smoke to
+          blow — just a clean, quiet nicotine experience.
+        </p>
+
+        <h2>Start Exploring</h2>
+        <p>
+          Ready to find your first pouch? Use the links below to browse by strength or flavour,
+          or head straight to the <a href="/nicotine-pouches">full catalogue</a>.
+          If you still have questions, our <a href="/faq">FAQ</a> covers everything from
+          shipping times to storage tips.
+        </p>
+      </div>
+
+      <!-- Cross-link grids -->
+      <div class="mt-16 space-y-10">
+        <div>
+          <h2 class="text-xl font-bold text-foreground mb-4">Browse by Strength</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <a href="/products/strength/mild" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Mild (2-4 mg)</a>
+            <a href="/products/strength/regular" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Regular (4-8 mg)</a>
+            <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Strong (8-12 mg)</a>
+          </div>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-foreground mb-4">Browse by Flavour</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <a href="/products/flavor/mint" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Mint</a>
+            <a href="/products/flavor/citrus" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Citrus</a>
+            <a href="/products/flavor/berry" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Berry</a>
+            <a href="/products/flavor/coffee" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Coffee</a>
+            <a href="/products/flavor/exotic" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Exotic</a>
+            <a href="/products/flavor/tobacco" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Tobacco</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "SnusFriends Editorial" },
+    "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-for-beginners` },
+  })} />
+</Shop>
