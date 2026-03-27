@@ -14,10 +14,10 @@ interface AvatarGalleryProps {
 
 // Rarity dot colors match UserAvatar's rarityBorderColor values
 const rarityDotClass: Record<string, string> = {
-  common:    'bg-gray-500',
-  rare:      'bg-blue-500',
-  epic:      'bg-purple-500',
-  legendary: 'bg-amber-500',
+  common:    'bg-rarity-common',
+  rare:      'bg-rarity-rare',
+  epic:      'bg-rarity-epic',
+  legendary: 'bg-rarity-legendary',
 };
 
 const rarityLabel: Record<string, string> = {
