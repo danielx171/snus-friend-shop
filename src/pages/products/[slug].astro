@@ -55,7 +55,7 @@ const flavorLabel = flavorLabels[p.flavorKey] ?? p.flavorKey;
 // Theme-aware flavor colors — no hardcoded Tailwind palette colors
 const flavorColor = 'bg-primary/10 text-primary border-primary/20';
 
-const description = p.description || `${p.name} by ${p.brand}. ${p.nicotineContent}mg nicotine pouches with ${flavorLabel.toLowerCase()} flavour. ${p.portionsPerCan} portions per can.`;
+const description = p.description || `${p.name} by ${p.brand}. ${p.nicotineContent} mg/pouch nicotine pouches with ${flavorLabel.toLowerCase()} flavour. ${p.portionsPerCan} portions per can.`;
 const metaDescription = description.length > 160 ? description.slice(0, 157) + '...' : description;
 
 const packTiers = [
@@ -215,7 +215,7 @@ const jsonLd = {
         <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
           <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
             <p class="text-xs text-muted-foreground">Nicotine</p>
-            <p class="text-sm font-semibold text-foreground">{p.nicotineContent}mg</p>
+            <p class="text-sm font-semibold text-foreground">{p.nicotineContent} mg/pouch</p>
           </div>
           <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
             <p class="text-xs text-muted-foreground">Portions</p>

@@ -227,7 +227,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
 
         {/* Nicotine */}
         <span className="text-xs text-muted-foreground">
-          {nicotineContent} mg/portion
+          {nicotineContent} mg/pouch
         </span>
 
         {/* Price + Cart */}
