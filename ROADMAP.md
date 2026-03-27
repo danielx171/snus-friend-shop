@@ -109,7 +109,7 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 - [x] Step 50: Continue Shopping on CartPage + post-purchase recommendations on OrderConfirmation.
 
 ### Design Polish
-- [ ] Step 51: Establish flagship brand color across all 4 themes. Extract semantic colors to CSS vars.
+- [x] Step 51: Establish flagship brand color across all 4 themes. Extract semantic colors to CSS vars.
 - [x] Step 52: FAQ search filter for 80+ questions. Improved blog empty state.
 - [ ] Step 53: Password strength meter on RegisterPage. Confetti prefers-reduced-motion check.
 

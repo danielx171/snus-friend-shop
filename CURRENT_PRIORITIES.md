@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-03-26
+Last updated: 2026-03-27
 
 ## Astro 6 Migration: COMPLETE
 
@@ -38,13 +38,13 @@ Migrated from Vite SPA to Astro 6 with React islands. Deployed and live on snusf
 - [x] Brand links: added padding for touch target compliance
 - [ ] Review progressbar accessible names
 
-### 3. Gamification Backend (PARKED — resume after SEO)
-- [ ] A0: Spin wheel DB tables (daily_spins, vouchers, spin_config)
-- [ ] A1: Order confirmed → quest progress trigger
-- [ ] A2: Quest → avatar unlock chain
-- [ ] C1-C2: Points redemption backend + UI
-- [ ] C3: Membership tiers
-- [ ] C4: Transactional email (Resend)
+### 3. Gamification (LIVE — all core features complete)
+- [x] A0: Spin wheel DB tables + edge function + SpinWheelIsland
+- [x] A1: Order → quest progress trigger (client + DB)
+- [x] A2: Quest → avatar unlock (9 avatars, fire-and-forget)
+- [x] C1-C2: Points balance + transactions + redemption
+- [ ] C3: Membership tiers (deferred)
+- [ ] C4: Transactional email (Resend — deferred)
 - Plan: `.claude/plans/federated-gathering-lecun.md`
 
 ### 4. Pre-Launch Blockers

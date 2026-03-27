@@ -91,7 +91,7 @@ Tables present: `orders`, `ops_alerts`, `points_balances`, `points_transactions`
 - **Quantity/icon buttons** need `aria-label` describing the action and target item.
 - **Email validation:** use `/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())` — not `.includes('@')`.
 - **Expensive list components** (cards, list items): wrap with `React.memo`; wrap handlers with `useCallback`.
-- **Theme:** The velo theme is in `src/index.css` as CSS custom properties (`--primary`, `--background`, etc.).
+- **Theme:** The forest theme (default) is in `src/index.css` as CSS custom properties (`--primary`, `--background`, etc.).
   Inter is the primary font; all spacing/radius tokens come from the theme. Never hardcode colors inline.
 
 ## Git / Lovable Workflow
@@ -136,8 +136,8 @@ Conflict patterns:
 - SEO: ✅ FAQPage + Organization + WebSite + Product + CollectionPage schemas, auto-sitemap, llms.txt
 - Legal pages: 🟡 Need solicitor sign-off
 - Accessibility: 🟡 Color contrast needs fixing (navy on dark navy)
-- Gamification backend: 🟡 Parked — resume after SEO content
-- Next: SEO content (category copy, blog posts), accessibility fixes, gamification backend
+- Gamification: ✅ LIVE — all 5 core features (spin wheel, quests, points, avatars, order triggers)
+- Next: SEO content (remaining brand copy, blog posts), accessibility fixes, legal sign-off
 
 ## MCP Tools (Connected)
 
