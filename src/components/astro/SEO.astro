@@ -26,9 +26,11 @@ const pageTitle = !title
     ? title                                         // already includes brand
     : tenant.seo.titleTemplate.replace('%s', title); // add "| SnusFriend"
 
+// Strip query params from canonical to prevent duplicate content (e.g. ?brand=zyn, ?badge=new)
+const fallbackCanonical = new URL(Astro.url.pathname, Astro.site || Astro.url.origin).href;
 const canonicalUrl = canonical
   ? new URL(canonical, Astro.site || Astro.url.origin).href
-  : Astro.url.href;
+  : fallbackCanonical;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).href;
 ---
 
