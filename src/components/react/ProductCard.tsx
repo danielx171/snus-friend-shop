@@ -149,13 +149,15 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
       {/* Content */}
       <div className="flex flex-1 flex-col gap-1.5 p-3">
         {/* Brand */}
-        <a
-          href={`/brands/${brandSlug}`}
-          onClick={(e) => e.stopPropagation()}
-          className="text-xs text-muted-foreground hover:text-primary transition-colors py-1"
+        <span
+          role="link"
+          tabIndex={0}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `/brands/${brandSlug}`; }}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); window.location.href = `/brands/${brandSlug}`; }}}
+          className="text-xs text-muted-foreground hover:text-primary cursor-pointer transition-colors py-1"
         >
           {brand}
-        </a>
+        </span>
 
         {/* Name */}
         <h3 className="text-sm font-bold leading-tight text-foreground line-clamp-2">
@@ -165,13 +167,13 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
         {/* Strength + Flavor */}
         <div className="flex items-center gap-2">
           <StrengthIndicator strengthKey={strengthKey} />
-          <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-secondary-foreground">
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
             {flavorKey}
           </span>
         </div>
 
         {/* Nicotine */}
-        <span className="text-[10px] text-muted-foreground">
+        <span className="text-xs text-muted-foreground">
           {nicotineContent} mg/portion
         </span>
 

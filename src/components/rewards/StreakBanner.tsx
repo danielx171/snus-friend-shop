@@ -43,7 +43,7 @@ const StreakBanner = React.memo(function StreakBanner({
       {/* Header row */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Flame className="h-5 w-5 text-orange-400" />
+          <Flame className="h-5 w-5 text-accent-foreground" />
           <span className="text-lg font-bold">
             {streak} day streak
           </span>

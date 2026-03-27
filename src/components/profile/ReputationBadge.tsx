@@ -13,19 +13,19 @@ import type { ReputationLevel } from '@/hooks/useReputation';
 /* ------------------------------------------------------------------ */
 
 const DOT_COLORS: Record<string, string> = {
-  gray: 'bg-gray-400',
-  blue: 'bg-blue-500',
-  green: 'bg-emerald-500',
-  purple: 'bg-purple-500',
-  gold: 'bg-yellow-400',
+  gray: 'bg-[hsl(var(--color-tier-bronze))]',
+  blue: 'bg-[hsl(var(--color-tier-silver))]',
+  green: 'bg-[hsl(var(--color-tier-gold))]',
+  purple: 'bg-[hsl(var(--color-tier-diamond))]',
+  gold: 'bg-[hsl(var(--color-tier-epic))]',
 };
 
 const TEXT_COLORS: Record<string, string> = {
-  gray: 'text-gray-400',
-  blue: 'text-blue-500',
-  green: 'text-emerald-500',
-  purple: 'text-purple-500',
-  gold: 'text-yellow-400',
+  gray: 'text-[hsl(var(--color-tier-bronze))]',
+  blue: 'text-[hsl(var(--color-tier-silver))]',
+  green: 'text-[hsl(var(--color-tier-gold))]',
+  purple: 'text-[hsl(var(--color-tier-diamond))]',
+  gold: 'text-[hsl(var(--color-tier-epic))]',
 };
 
 /* ------------------------------------------------------------------ */

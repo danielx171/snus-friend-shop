@@ -36,7 +36,7 @@ const HeaderCartButton = React.memo(function HeaderCartButton() {
         <path d="M16 10a4 4 0 0 1-8 0" />
       </svg>
       {displayCount > 0 && (
-        <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+        <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
           {displayCount > 99 ? '99+' : displayCount}
         </span>
       )}

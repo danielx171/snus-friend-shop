@@ -7,10 +7,10 @@ import PointsRedemptionIsland from '@/components/react/PointsRedemptionIsland';
 import { tenant } from '@/config/tenant';
 
 const tiers = [
-  { name: 'Bronze', points: '0', perks: ['1 point per euro spent', 'Birthday bonus', 'Member-only newsletter'], color: 'from-amber-700 to-amber-900' },
-  { name: 'Silver', points: '500', perks: ['1.5x points multiplier', 'Early access to new flavours', 'Free shipping on orders over 30 EUR'], color: 'from-slate-400 to-slate-600' },
-  { name: 'Gold', points: '2,000', perks: ['2x points multiplier', 'Exclusive product drops', 'Priority customer support'], color: 'from-yellow-500 to-amber-600' },
-  { name: 'Platinum', points: '5,000', perks: ['3x points multiplier', 'Free shipping on every order', 'Quarterly surprise box', 'VIP community access'], color: 'from-slate-200 to-slate-400' },
+  { name: 'Bronze', points: '0', perks: ['1 point per euro spent', 'Birthday bonus', 'Member-only newsletter'], color: 'from-[hsl(var(--color-tier-bronze))] to-[hsl(var(--color-tier-bronze)/0.7)]' },
+  { name: 'Silver', points: '500', perks: ['1.5x points multiplier', 'Early access to new flavours', 'Free shipping on orders over 30 EUR'], color: 'from-[hsl(var(--color-tier-silver))] to-[hsl(var(--color-tier-silver)/0.7)]' },
+  { name: 'Gold', points: '2,000', perks: ['2x points multiplier', 'Exclusive product drops', 'Priority customer support'], color: 'from-[hsl(var(--color-tier-gold))] to-[hsl(var(--color-tier-gold)/0.7)]' },
+  { name: 'Platinum', points: '5,000', perks: ['3x points multiplier', 'Free shipping on every order', 'Quarterly surprise box', 'VIP community access'], color: 'from-[hsl(var(--color-tier-diamond))] to-[hsl(var(--color-tier-diamond)/0.7)]' },
 ];
 ---
 
@@ -50,8 +50,8 @@ const tiers = [
         {tiers.map((tier) => (
           <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden">
             <div class={`bg-gradient-to-r ${tier.color} px-6 py-4`}>
-              <h3 class="text-lg font-bold text-white">{tier.name}</h3>
-              <p class="text-sm text-white/80">{tier.points} points to unlock</p>
+              <h3 class="text-lg font-bold text-foreground">{tier.name}</h3>
+              <p class="text-sm text-foreground/80">{tier.points} points to unlock</p>
             </div>
             <ul class="p-6 space-y-2">
               {tier.perks.map((perk) => (

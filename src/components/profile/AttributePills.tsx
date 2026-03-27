@@ -3,11 +3,11 @@ import { cn } from '@/lib/utils';
 import type { UserAttribute } from '@/hooks/useUserAttributes';
 
 const PILL_COLORS: Record<string, string> = {
-  flavor_preference: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400',
-  strength_preference: 'bg-orange-500/15 text-orange-700 dark:text-orange-400',
-  brand_preference: 'bg-blue-500/15 text-blue-700 dark:text-blue-400',
-  usage_frequency: 'bg-purple-500/15 text-purple-700 dark:text-purple-400',
-  format_preference: 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-400',
+  flavor_preference: 'bg-[hsl(var(--color-success)/0.15)] text-[hsl(var(--color-success))]',
+  strength_preference: 'bg-[hsl(var(--color-warning)/0.15)] text-[hsl(var(--color-warning))]',
+  brand_preference: 'bg-[hsl(var(--color-info)/0.15)] text-[hsl(var(--color-info))]',
+  usage_frequency: 'bg-[hsl(var(--color-rarity-epic)/0.15)] text-[hsl(var(--color-rarity-epic))]',
+  format_preference: 'bg-[hsl(var(--color-tier-diamond)/0.15)] text-[hsl(var(--color-tier-diamond))]',
 };
 
 interface AttributePillsProps {
@@ -32,7 +32,7 @@ const AttributePills = React.memo(function AttributePills({
         <span
           key={`${attr.attribute_key}-${attr.attribute_value}`}
           className={cn(
-            'inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium leading-tight',
+            'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium leading-tight',
             PILL_COLORS[attr.attribute_key] ?? 'bg-muted text-muted-foreground',
           )}
         >
@@ -40,7 +40,7 @@ const AttributePills = React.memo(function AttributePills({
         </span>
       ))}
       {remaining > 0 && (
-        <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium leading-tight text-muted-foreground">
+        <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium leading-tight text-muted-foreground">
           +{remaining}
         </span>
       )}

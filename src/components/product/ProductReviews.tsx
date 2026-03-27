@@ -162,7 +162,7 @@ const ReviewCard = React.memo(function ReviewCard({
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-semibold text-foreground">{displayName}</p>
                   {review.verified_buyer && (
-                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                       Verified Buyer
                     </span>
                   )}
@@ -192,7 +192,7 @@ const ReviewCard = React.memo(function ReviewCard({
                 {review.pros.length > 0 && (
                   <div className="space-y-0.5">
                     {review.pros.map((pro, i) => (
-                      <div key={i} className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
+                      <div key={i} className="flex items-center gap-1.5 text-xs text-[hsl(var(--color-success))]">
                         <Check className="h-3 w-3 shrink-0" />
                         <span>{pro}</span>
                       </div>
@@ -202,7 +202,7 @@ const ReviewCard = React.memo(function ReviewCard({
                 {review.cons.length > 0 && (
                   <div className="space-y-0.5">
                     {review.cons.map((con, i) => (
-                      <div key={i} className="flex items-center gap-1.5 text-xs text-red-500 dark:text-red-400">
+                      <div key={i} className="flex items-center gap-1.5 text-xs text-[hsl(var(--color-error))]">
                         <X className="h-3 w-3 shrink-0" />
                         <span>{con}</span>
                       </div>
@@ -542,7 +542,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                   )}
                 </div>
                 {photos.length > 0 && (
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {photos.length}/3 photos · JPEG, PNG, or WebP · Max 5 MB each
                   </p>
                 )}
@@ -596,7 +596,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                       {row.stars}
                     </span>
                     <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-                    <Progress value={pct} className="h-2 flex-1" />
+                    <Progress value={pct} className="h-2 flex-1" aria-label={`${row.stars} star reviews: ${row.count}`} />
                     <span className="w-8 text-right text-xs text-muted-foreground">
                       {row.count}
                     </span>

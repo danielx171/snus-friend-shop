@@ -57,13 +57,13 @@ if (order?.customer_metadata) {
 
 // Status badge styling
 const statusStyles: Record<string, string> = {
-  pending: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-  confirmed: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  processing: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  shipped: 'bg-primary/10 text-primary border-primary/20',
-  delivered: 'bg-green-500/10 text-green-400 border-green-500/20',
-  cancelled: 'bg-red-500/10 text-red-400 border-red-500/20',
-  failed: 'bg-red-500/10 text-red-400 border-red-500/20',
+  pending: 'bg-[hsl(var(--color-warning)/0.1)] text-[hsl(var(--color-warning))] border-[hsl(var(--color-warning)/0.2)]',
+  confirmed: 'bg-[hsl(var(--color-info)/0.1)] text-[hsl(var(--color-info))] border-[hsl(var(--color-info)/0.2)]',
+  processing: 'bg-[hsl(var(--color-warning)/0.1)] text-[hsl(var(--color-warning))] border-[hsl(var(--color-warning)/0.2)]',
+  shipped: 'bg-[hsl(var(--color-info)/0.1)] text-[hsl(var(--color-info))] border-[hsl(var(--color-info)/0.2)]',
+  delivered: 'bg-[hsl(var(--color-success)/0.1)] text-[hsl(var(--color-success))] border-[hsl(var(--color-success)/0.2)]',
+  cancelled: 'bg-[hsl(var(--color-error)/0.1)] text-[hsl(var(--color-error))] border-[hsl(var(--color-error)/0.2)]',
+  failed: 'bg-[hsl(var(--color-error)/0.1)] text-[hsl(var(--color-error))] border-[hsl(var(--color-error)/0.2)]',
 };
 
 const status = order?.checkout_status ?? order?.nyehandel_status ?? 'pending';

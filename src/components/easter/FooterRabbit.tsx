@@ -24,7 +24,7 @@ export function FooterRabbit() {
       aria-label="Deactivate Easter mode"
     >
       <span className="animate-bounce">{'\u{1F407}'}</span>
-      <span className="text-[10px] opacity-0 hover:opacity-100 transition-opacity">hop away</span>
+      <span className="text-xs opacity-0 hover:opacity-100 transition-opacity">hop away</span>
     </button>
   );
 }

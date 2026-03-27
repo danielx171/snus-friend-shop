@@ -93,7 +93,7 @@ function Particles() {
       {particles.map((p) => (
         <motion.div
           key={p.id}
-          className="absolute rounded-full pointer-events-none bg-emerald-400"
+          className="absolute rounded-full pointer-events-none bg-[hsl(var(--color-success))]"
           style={{ width: p.size, height: p.size, left: '50%', top: '50%' }}
           initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
           animate={{ x: p.x, y: p.y, opacity: 0, scale: 0.2 }}
@@ -172,7 +172,7 @@ function QuestCompleteInner({ quest, onDismiss, open }: QuestCompleteProps) {
 
               {/* Icon */}
               <motion.div
-                className="relative flex items-center justify-center w-20 h-20 rounded-full border-2 border-emerald-500 text-emerald-500"
+                className="relative flex items-center justify-center w-20 h-20 rounded-full border-2 border-[hsl(var(--color-success))] text-[hsl(var(--color-success))]"
                 initial={{ scale: 0, rotate: -90 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: 'spring', damping: 12, stiffness: 200, delay: 0.4 }}
@@ -192,7 +192,7 @@ function QuestCompleteInner({ quest, onDismiss, open }: QuestCompleteProps) {
             </motion.p>
 
             <motion.h2
-              className="text-xl font-bold mb-4 text-emerald-500"
+              className="text-xl font-bold mb-4 text-[hsl(var(--color-success))]"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.72 }}
@@ -214,12 +214,12 @@ function QuestCompleteInner({ quest, onDismiss, open }: QuestCompleteProps) {
 
               {quest.rewardAvatarName && (
                 <div className="flex items-center gap-1.5 text-sm">
-                  <Star className="h-4 w-4 text-amber-400" />
+                  <Star className="h-4 w-4 text-[hsl(var(--color-tier-gold))]" />
                   <span className="font-medium">{quest.rewardAvatarName}</span>
                   {quest.rewardAvatarRarity && (
                     <Badge
                       variant="outline"
-                      className="text-[10px] px-1.5 py-0 h-4 border border-amber-500/40 text-amber-400 bg-amber-500/10"
+                      className="text-xs px-1.5 py-0 h-4 border border-[hsl(var(--color-rarity-legendary)/0.4)] text-[hsl(var(--color-rarity-legendary))] bg-[hsl(var(--color-rarity-legendary)/0.1)]"
                     >
                       {quest.rewardAvatarRarity}
                     </Badge>

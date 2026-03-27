@@ -188,7 +188,7 @@ function FlavorRadar({ mint, fruit, sweet, bold }: RadarProps) {
               x={lx} y={ly}
               textAnchor="middle"
               dominantBaseline="central"
-              className="fill-foreground text-[11px] font-medium"
+              className="fill-foreground text-xs font-medium"
             >
               {l.name}
             </text>

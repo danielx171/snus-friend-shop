@@ -9,11 +9,11 @@ import type { QuestWithProgress } from '@/hooks/useQuests';
 /* ------------------------------------------------------------------ */
 
 const RARITY_COLORS: Record<string, string> = {
-  common: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
-  uncommon: 'bg-green-500/20 text-green-400 border-green-500/30',
-  rare: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  epic: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  legendary: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  common: 'bg-[hsl(var(--color-rarity-common)/0.2)] text-[hsl(var(--color-rarity-common))] border-[hsl(var(--color-rarity-common)/0.3)]',
+  uncommon: 'bg-[hsl(var(--color-rarity-uncommon)/0.2)] text-[hsl(var(--color-rarity-uncommon))] border-[hsl(var(--color-rarity-uncommon)/0.3)]',
+  rare: 'bg-[hsl(var(--color-rarity-rare)/0.2)] text-[hsl(var(--color-rarity-rare))] border-[hsl(var(--color-rarity-rare)/0.3)]',
+  epic: 'bg-[hsl(var(--color-rarity-epic)/0.2)] text-[hsl(var(--color-rarity-epic))] border-[hsl(var(--color-rarity-epic)/0.3)]',
+  legendary: 'bg-[hsl(var(--color-rarity-legendary)/0.2)] text-[hsl(var(--color-rarity-legendary))] border-[hsl(var(--color-rarity-legendary)/0.3)]',
 };
 
 function rarityClass(rarity: string | null): string {
@@ -94,7 +94,7 @@ function QuestCardInner({ quest }: QuestCardProps) {
                 {quest.rewardAvatarRarity && (
                   <Badge
                     variant="outline"
-                    className={`text-[10px] px-1.5 py-0 h-4 border ${rarityClass(quest.rewardAvatarRarity)}`}
+                    className={`text-xs px-1.5 py-0 h-4 border ${rarityClass(quest.rewardAvatarRarity)}`}
                   >
                     {quest.rewardAvatarRarity}
                   </Badge>
@@ -106,15 +106,15 @@ function QuestCardInner({ quest }: QuestCardProps) {
           {/* Status badge */}
           <div className="ml-auto">
             {isCompleted ? (
-              <Badge variant="outline" className="text-[10px] border-primary/40 text-primary bg-primary/10">
+              <Badge variant="outline" className="text-xs border-primary/40 text-primary bg-primary/10">
                 Done
               </Badge>
             ) : isStarted ? (
-              <Badge variant="outline" className="text-[10px] border-primary/40 text-primary bg-primary/10">
+              <Badge variant="outline" className="text-xs border-primary/40 text-primary bg-primary/10">
                 In Progress
               </Badge>
             ) : (
-              <Badge variant="secondary" className="text-[10px]">
+              <Badge variant="secondary" className="text-xs">
                 Start Quest
               </Badge>
             )}

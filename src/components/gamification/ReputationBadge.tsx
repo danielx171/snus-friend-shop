@@ -18,30 +18,30 @@ interface TierConfig {
 const TIER_CONFIGS: Record<string, TierConfig> = {
   gray: {
     Icon: User,
-    containerClass: "bg-gray-500/20 text-gray-400 border-gray-500/40",
-    iconClass: "text-gray-400",
+    containerClass: "bg-[hsl(var(--color-tier-bronze)/0.2)] text-[hsl(var(--color-tier-bronze))] border-[hsl(var(--color-tier-bronze)/0.4)]",
+    iconClass: "text-[hsl(var(--color-tier-bronze))]",
   },
   blue: {
     Icon: Shield,
-    containerClass: "bg-blue-500/20 text-blue-400 border-blue-500/40",
-    iconClass: "text-blue-400",
+    containerClass: "bg-[hsl(var(--color-tier-silver)/0.2)] text-[hsl(var(--color-tier-silver))] border-[hsl(var(--color-tier-silver)/0.4)]",
+    iconClass: "text-[hsl(var(--color-tier-silver))]",
   },
   green: {
     Icon: Star,
-    containerClass: "bg-emerald-500/20 text-emerald-400 border-emerald-500/40",
-    iconClass: "text-emerald-400",
+    containerClass: "bg-[hsl(var(--color-tier-gold)/0.2)] text-[hsl(var(--color-tier-gold))] border-[hsl(var(--color-tier-gold)/0.4)]",
+    iconClass: "text-[hsl(var(--color-tier-gold))]",
   },
   purple: {
     Icon: Gem,
     containerClass:
-      "bg-purple-500/20 text-purple-400 border-purple-500/40 shadow-[0_0_8px_rgba(168,85,247,0.4)]",
-    iconClass: "text-purple-400",
+      "bg-[hsl(var(--color-tier-diamond)/0.2)] text-[hsl(var(--color-tier-diamond))] border-[hsl(var(--color-tier-diamond)/0.4)] shadow-[0_0_8px_hsl(var(--color-tier-diamond)/0.4)]",
+    iconClass: "text-[hsl(var(--color-tier-diamond))]",
   },
   gold: {
     Icon: Crown,
     containerClass:
-      "bg-amber-500/20 text-amber-400 border-amber-500/40 shadow-[0_0_8px_rgba(251,191,36,0.4)] animate-shimmer",
-    iconClass: "text-amber-400",
+      "bg-[hsl(var(--color-tier-epic)/0.2)] text-[hsl(var(--color-tier-epic))] border-[hsl(var(--color-tier-epic)/0.4)] shadow-[0_0_8px_hsl(var(--color-tier-epic)/0.4)] animate-shimmer",
+    iconClass: "text-[hsl(var(--color-tier-epic))]",
   },
 };
 

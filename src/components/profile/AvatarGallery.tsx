@@ -129,19 +129,19 @@ const AvatarGallery = React.memo(function AvatarGallery({
             {/* Rarity badge */}
             <span className="flex items-center gap-1">
               <span className={cn('h-1.5 w-1.5 rounded-full shrink-0', dotClass)} aria-hidden="true" />
-              <span className="text-[10px] text-muted-foreground leading-none">
+              <span className="text-xs text-muted-foreground leading-none">
                 {rarityLabel[rarity] ?? rarity}
               </span>
             </span>
 
             {/* Avatar name */}
-            <span className="text-[11px] font-medium text-foreground text-center leading-tight line-clamp-1 w-full px-0.5">
+            <span className="text-xs font-medium text-foreground text-center leading-tight line-clamp-1 w-full px-0.5">
               {avatar.name}
             </span>
 
             {/* Progress text for locked avatars */}
             {!isUnlocked && (
-              <span className="text-[10px] text-muted-foreground text-center leading-tight line-clamp-2 w-full px-0.5">
+              <span className="text-xs text-muted-foreground text-center leading-tight line-clamp-2 w-full px-0.5">
                 {unlockProgressText(avatar)}
               </span>
             )}

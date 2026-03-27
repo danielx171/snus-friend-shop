@@ -51,7 +51,7 @@ const ReviewSummaryCard = React.memo(function ReviewSummaryCard({
               <span className="text-sm font-semibold text-foreground">
                 Review Summary
               </span>
-              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                 AI Generated
               </span>
             </div>
@@ -59,7 +59,7 @@ const ReviewSummaryCard = React.memo(function ReviewSummaryCard({
               {summaryText}
             </p>
             {dateStr && (
-              <p className="text-[11px] text-muted-foreground/60">
+              <p className="text-xs text-muted-foreground/60">
                 Last updated {dateStr}
               </p>
             )}

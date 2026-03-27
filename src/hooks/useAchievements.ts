@@ -36,29 +36,29 @@ export const TIER_ORDER: Record<string, number> = {
 
 export const TIER_COLORS: Record<string, { bg: string; border: string; text: string }> = {
   bronze: {
-    bg: 'bg-orange-900/20',
-    border: 'border-orange-700/30',
-    text: 'text-orange-400',
+    bg: 'bg-[hsl(var(--color-tier-bronze)/0.2)]',
+    border: 'border-[hsl(var(--color-tier-bronze)/0.3)]',
+    text: 'text-[hsl(var(--color-tier-bronze))]',
   },
   silver: {
-    bg: 'bg-slate-400/15',
-    border: 'border-slate-400/30',
-    text: 'text-slate-300',
+    bg: 'bg-[hsl(var(--color-tier-silver)/0.15)]',
+    border: 'border-[hsl(var(--color-tier-silver)/0.3)]',
+    text: 'text-[hsl(var(--color-tier-silver))]',
   },
   gold: {
-    bg: 'bg-amber-500/15',
-    border: 'border-amber-500/30',
-    text: 'text-amber-400',
+    bg: 'bg-[hsl(var(--color-tier-gold)/0.15)]',
+    border: 'border-[hsl(var(--color-tier-gold)/0.3)]',
+    text: 'text-[hsl(var(--color-tier-gold))]',
   },
   diamond: {
-    bg: 'bg-cyan-400/15',
-    border: 'border-cyan-400/30',
-    text: 'text-cyan-300',
+    bg: 'bg-[hsl(var(--color-tier-diamond)/0.15)]',
+    border: 'border-[hsl(var(--color-tier-diamond)/0.3)]',
+    text: 'text-[hsl(var(--color-tier-diamond))]',
   },
   single: {
-    bg: 'bg-violet-500/15',
-    border: 'border-violet-500/30',
-    text: 'text-violet-400',
+    bg: 'bg-[hsl(var(--color-tier-epic)/0.15)]',
+    border: 'border-[hsl(var(--color-tier-epic)/0.3)]',
+    text: 'text-[hsl(var(--color-tier-epic))]',
   },
 };
 

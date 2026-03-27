@@ -160,19 +160,19 @@ const ProfileCard = React.memo(function ProfileCard({
             <span className="text-lg font-semibold text-foreground tabular-nums">
               {stats?.ordersCount ?? 0}
             </span>
-            <span className="text-[11px] text-muted-foreground">Orders</span>
+            <span className="text-xs text-muted-foreground">Orders</span>
           </div>
           <div className="flex flex-col items-center gap-0.5 border-x border-border/20">
             <span className="text-lg font-semibold text-foreground tabular-nums">
               {stats?.reviewsCount ?? 0}
             </span>
-            <span className="text-[11px] text-muted-foreground">Reviews</span>
+            <span className="text-xs text-muted-foreground">Reviews</span>
           </div>
           <div className="flex flex-col items-center gap-0.5">
             <span className="text-lg font-semibold text-primary tabular-nums">
               {stats?.snusPoints ?? 0}
             </span>
-            <span className="text-[11px] text-muted-foreground">SnusPoints</span>
+            <span className="text-xs text-muted-foreground">SnusPoints</span>
           </div>
         </div>
 

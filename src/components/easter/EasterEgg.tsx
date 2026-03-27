@@ -25,7 +25,7 @@ export function EasterEgg() {
   return (
     <button
       onClick={handleClick}
-      className="opacity-[0.15] hover:opacity-60 transition-opacity duration-500 text-[10px] leading-none select-none cursor-default focus:outline-none"
+      className="opacity-[0.15] hover:opacity-60 transition-opacity duration-500 text-xs leading-none select-none cursor-default focus:outline-none"
       aria-label="Secret Easter egg"
       title=""
     >

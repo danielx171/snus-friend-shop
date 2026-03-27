@@ -113,7 +113,7 @@ const ReferralCard = React.memo(function ReferralCard() {
 
         {/* Share URL preview */}
         {shareUrl && (
-          <p className="text-[11px] text-muted-foreground text-center truncate">
+          <p className="text-xs text-muted-foreground text-center truncate">
             {shareUrl}
           </p>
         )}

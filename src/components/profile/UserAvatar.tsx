@@ -19,20 +19,18 @@ const sizeMap: Record<AvatarSize, { px: number; text: string; ring: string }> = 
   lg: { px: 72, text: 'text-xl',  ring: 'ring-[3px]' },
 };
 
-// Rarity border colors are intentionally hardcoded — they are
-// gamification-specific accent values not present in the design token system.
 const rarityBorderColor: Record<AvatarRarity, string> = {
-  common:    '#6b7280',
-  rare:      '#3b82f6',
-  epic:      '#a855f7',
-  legendary: '#f59e0b',
+  common:    'hsl(var(--color-rarity-common))',
+  rare:      'hsl(var(--color-rarity-rare))',
+  epic:      'hsl(var(--color-rarity-epic))',
+  legendary: 'hsl(var(--color-rarity-legendary))',
 };
 
 const rarityBgColor: Record<AvatarRarity, string> = {
-  common:    'bg-gray-500',
-  rare:      'bg-blue-500',
-  epic:      'bg-purple-500',
-  legendary: 'bg-amber-500',
+  common:    'bg-[hsl(var(--color-rarity-common))]',
+  rare:      'bg-[hsl(var(--color-rarity-rare))]',
+  epic:      'bg-[hsl(var(--color-rarity-epic))]',
+  legendary: 'bg-[hsl(var(--color-rarity-legendary))]',
 };
 
 const UserAvatar = React.memo(function UserAvatar({

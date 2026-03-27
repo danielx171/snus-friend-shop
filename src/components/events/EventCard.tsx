@@ -36,7 +36,7 @@ const EventCard = React.memo(function EventCard({
             <h3 className="text-base font-bold leading-tight">{event.name}</h3>
           </div>
           {event.isLive && (
-            <span className="shrink-0 ml-2 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-green-500/10 text-green-500 border border-green-500/20">
+            <span className="shrink-0 ml-2 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-[hsl(var(--color-success)/0.1)] text-[hsl(var(--color-success))] border border-[hsl(var(--color-success)/0.2)]">
               Live
             </span>
           )}

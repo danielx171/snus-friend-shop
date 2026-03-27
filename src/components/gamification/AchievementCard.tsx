@@ -59,7 +59,7 @@ export const AchievementCard = React.memo(function AchievementCard({
       {/* Unlocked badge */}
       {unlocked && (
         <span className="absolute top-2 right-2">
-          <CheckCircle className="w-4 h-4 text-green-400" aria-label="Unlocked" />
+          <CheckCircle className="w-4 h-4 text-[hsl(var(--color-success))]" aria-label="Unlocked" />
         </span>
       )}
 

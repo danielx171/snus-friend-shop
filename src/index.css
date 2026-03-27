@@ -95,6 +95,26 @@
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
 
+  /* Status colors */
+  --color-success: hsl(var(--color-success));
+  --color-warning: hsl(var(--color-warning));
+  --color-error: hsl(var(--color-error));
+  --color-info: hsl(var(--color-info));
+
+  /* Tier system */
+  --color-tier-bronze: hsl(var(--color-tier-bronze));
+  --color-tier-silver: hsl(var(--color-tier-silver));
+  --color-tier-gold: hsl(var(--color-tier-gold));
+  --color-tier-diamond: hsl(var(--color-tier-diamond));
+  --color-tier-epic: hsl(var(--color-tier-epic));
+
+  /* Rarity system */
+  --color-rarity-common: hsl(var(--color-rarity-common));
+  --color-rarity-uncommon: hsl(var(--color-rarity-uncommon));
+  --color-rarity-rare: hsl(var(--color-rarity-rare));
+  --color-rarity-epic: hsl(var(--color-rarity-epic));
+  --color-rarity-legendary: hsl(var(--color-rarity-legendary));
+
   /* Font families */
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
   --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
@@ -234,6 +254,26 @@
 
     --tracking-normal: 0em;
     --spacing: 0.25rem;
+
+    /* Status colors */
+    --color-success: 153 60% 35%;
+    --color-warning: 40 90% 50%;
+    --color-error: 0 72% 51%;
+    --color-info: 200 65% 45%;
+
+    /* Tier system */
+    --color-tier-bronze: 25 60% 40%;
+    --color-tier-silver: 210 10% 60%;
+    --color-tier-gold: 43 85% 50%;
+    --color-tier-diamond: 185 70% 50%;
+    --color-tier-epic: 270 55% 55%;
+
+    /* Rarity system */
+    --color-rarity-common: 210 10% 55%;
+    --color-rarity-uncommon: 153 50% 40%;
+    --color-rarity-rare: 210 65% 50%;
+    --color-rarity-epic: 270 55% 55%;
+    --color-rarity-legendary: 43 85% 50%;
   }
 
   .dark {
@@ -294,6 +334,26 @@
     --shadow-2xl: 0 24px 50px 0px hsl(0 0% 0% / 0.6);
 
     --glow-primary: 0 0 20px hsl(174 90% 50% / 0.25), 0 0 40px hsl(174 90% 50% / 0.1);
+
+    /* Status colors */
+    --color-success: 160 84% 39%;
+    --color-warning: 38 92% 50%;
+    --color-error: 0 84% 60%;
+    --color-info: 199 89% 48%;
+
+    /* Tier system */
+    --color-tier-bronze: 25 70% 45%;
+    --color-tier-silver: 215 15% 55%;
+    --color-tier-gold: 43 96% 56%;
+    --color-tier-diamond: 185 80% 55%;
+    --color-tier-epic: 270 60% 60%;
+
+    /* Rarity system */
+    --color-rarity-common: 215 15% 50%;
+    --color-rarity-uncommon: 142 71% 45%;
+    --color-rarity-rare: 217 91% 60%;
+    --color-rarity-epic: 270 60% 60%;
+    --color-rarity-legendary: 43 96% 56%;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -358,6 +418,26 @@
     --shadow-2xl: 0 24px 50px 0px hsl(220 20% 60% / 0.14);
 
     --glow-primary: 0 0 20px hsl(213 65% 32% / 0.12), 0 0 40px hsl(213 65% 32% / 0.06);
+
+    /* Status colors */
+    --color-success: 152 55% 38%;
+    --color-warning: 38 88% 48%;
+    --color-error: 0 70% 50%;
+    --color-info: 213 65% 45%;
+
+    /* Tier system */
+    --color-tier-bronze: 25 55% 42%;
+    --color-tier-silver: 210 12% 58%;
+    --color-tier-gold: 43 80% 48%;
+    --color-tier-diamond: 190 65% 45%;
+    --color-tier-epic: 268 50% 52%;
+
+    /* Rarity system */
+    --color-rarity-common: 210 12% 55%;
+    --color-rarity-uncommon: 152 50% 38%;
+    --color-rarity-rare: 213 65% 45%;
+    --color-rarity-epic: 268 50% 52%;
+    --color-rarity-legendary: 43 80% 48%;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -423,6 +503,26 @@
     --shadow-2xl: 0 24px 50px 0px hsl(30 20% 40% / 0.14);
 
     --glow-primary: 0 0 20px hsl(28 80% 44% / 0.15), 0 0 40px hsl(28 80% 44% / 0.07);
+
+    /* Status colors */
+    --color-success: 145 50% 38%;
+    --color-warning: 35 85% 50%;
+    --color-error: 0 65% 50%;
+    --color-info: 210 55% 48%;
+
+    /* Tier system */
+    --color-tier-bronze: 28 60% 42%;
+    --color-tier-silver: 220 8% 58%;
+    --color-tier-gold: 40 80% 50%;
+    --color-tier-diamond: 188 60% 48%;
+    --color-tier-epic: 265 50% 55%;
+
+    /* Rarity system */
+    --color-rarity-common: 220 8% 55%;
+    --color-rarity-uncommon: 145 45% 38%;
+    --color-rarity-rare: 210 55% 48%;
+    --color-rarity-epic: 265 50% 55%;
+    --color-rarity-legendary: 40 80% 50%;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -487,6 +587,26 @@
     --shadow-2xl: 0 24px 50px 0px hsl(150 15% 40% / 0.12);
 
     --glow-primary: 0 0 20px hsl(153 55% 18% / 0.12), 0 0 40px hsl(153 55% 18% / 0.06);
+
+    /* Status colors */
+    --color-success: 153 60% 35%;
+    --color-warning: 40 90% 50%;
+    --color-error: 0 72% 51%;
+    --color-info: 200 65% 45%;
+
+    /* Tier system */
+    --color-tier-bronze: 25 60% 40%;
+    --color-tier-silver: 210 10% 60%;
+    --color-tier-gold: 43 85% 50%;
+    --color-tier-diamond: 185 70% 50%;
+    --color-tier-epic: 270 55% 55%;
+
+    /* Rarity system */
+    --color-rarity-common: 210 10% 55%;
+    --color-rarity-uncommon: 153 50% 40%;
+    --color-rarity-rare: 210 65% 50%;
+    --color-rarity-epic: 270 55% 55%;
+    --color-rarity-legendary: 43 85% 50%;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -551,6 +671,26 @@
     --shadow-2xl: 0 24px 50px 0px hsl(0 0% 0% / 0.50);
 
     --glow-primary: 0 0 20px hsl(28 55% 46% / 0.25), 0 0 40px hsl(28 55% 46% / 0.10);
+
+    /* Status colors */
+    --color-success: 155 55% 40%;
+    --color-warning: 35 85% 52%;
+    --color-error: 0 70% 55%;
+    --color-info: 200 60% 50%;
+
+    /* Tier system */
+    --color-tier-bronze: 28 55% 46%;
+    --color-tier-silver: 215 12% 58%;
+    --color-tier-gold: 40 82% 52%;
+    --color-tier-diamond: 188 65% 52%;
+    --color-tier-epic: 268 55% 58%;
+
+    /* Rarity system */
+    --color-rarity-common: 215 12% 52%;
+    --color-rarity-uncommon: 155 50% 40%;
+    --color-rarity-rare: 200 60% 50%;
+    --color-rarity-epic: 268 55% 58%;
+    --color-rarity-legendary: 40 82% 52%;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -623,6 +763,26 @@
     --shadow-2xl: 0 24px 50px 0px hsl(220 80% 20% / 0.50);
 
     --glow-primary: 0 0 20px hsl(218 100% 55% / 0.30), 0 0 40px hsl(218 100% 55% / 0.15);
+
+    /* Status colors */
+    --color-success: 160 84% 39%;
+    --color-warning: 38 92% 50%;
+    --color-error: 0 84% 60%;
+    --color-info: 217 91% 60%;
+
+    /* Tier system */
+    --color-tier-bronze: 25 70% 45%;
+    --color-tier-silver: 218 15% 55%;
+    --color-tier-gold: 43 96% 56%;
+    --color-tier-diamond: 188 80% 55%;
+    --color-tier-epic: 271 60% 60%;
+
+    /* Rarity system */
+    --color-rarity-common: 218 15% 50%;
+    --color-rarity-uncommon: 142 71% 45%;
+    --color-rarity-rare: 218 100% 55%;
+    --color-rarity-epic: 271 60% 60%;
+    --color-rarity-legendary: 43 96% 56%;
   }
 }
 
