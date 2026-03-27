@@ -4,12 +4,23 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { getCollection } from 'astro:content';
 
-const brands = await getCollection('brands');
+const allBrands = await getCollection('brands');
+const allProducts = await getCollection('products');
+
+// Count products per brand and only show brands that have products
+const productCountByBrand = new Map<string, number>();
+for (const p of allProducts) {
+  const bs = p.data.brandSlug;
+  productCountByBrand.set(bs, (productCountByBrand.get(bs) ?? 0) + 1);
+}
+const brands = allBrands
+  .filter((b) => (productCountByBrand.get(b.id) ?? 0) > 0)
+  .sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 
 <Shop
   title="All Brands | SnusFriend"
-  description="Browse all 91+ nicotine pouch brands we carry. VELO, ZYN, LOOP, Siberia, PABLO and many more. Find your favourite brand and shop the full range."
+  description={`Browse all ${brands.length} nicotine pouch brands we carry. VELO, ZYN, LOOP, Siberia, PABLO and many more. Find your favourite brand and shop the full range.`}
   canonical="/brands"
 >
   <div class="mx-auto max-w-7xl px-4 py-8">
@@ -33,6 +44,7 @@ const brands = await getCollection('brands');
           .slice(0, 2)
           .map((w: string) => w[0]?.toUpperCase() ?? '')
           .join('');
+        const count = productCountByBrand.get(brand.id) ?? 0;
         return (
           <a
             href={`/brands/${brand.id}`}
@@ -60,12 +72,10 @@ const brands = await getCollection('brands');
               {brand.data.name}
             </h2>
 
-            {/* Manufacturer subtitle */}
-            {brand.data.manufacturer && (
-              <p class="text-center text-xs text-muted-foreground truncate max-w-full">
-                {brand.data.manufacturer}
-              </p>
-            )}
+            {/* Product count */}
+            <p class="text-center text-xs text-muted-foreground">
+              {count} {count === 1 ? 'product' : 'products'}
+            </p>
           </a>
         );
       })}

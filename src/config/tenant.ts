@@ -87,7 +87,7 @@ export const tenant: TenantConfig = {
   seo: {
     titleTemplate: '%s | SnusFriend',
     defaultTitle: 'SnusFriend | Premium Nicotine Pouches',
-    defaultDescription: 'Shop 700+ nicotine pouches from 91 leading brands. Fast EU-wide delivery, loyalty rewards, and the best prices online.',
+    defaultDescription: 'Shop premium nicotine pouches from top European brands. Fast EU-wide delivery, loyalty rewards, and the best prices online.',
     ogImage: '/og-default.png',
   },
   assets: {

@@ -18,7 +18,7 @@ fs.writeFileSync(path.join(outDir, 'products.json'), JSON.stringify(productData)
 
 <Shop
   title="Shop All Nicotine Pouches | SnusFriend"
-  description="Browse our full collection of 700+ premium nicotine pouches from 91 top brands. Filter by strength, flavour, brand and format. Free EU shipping on qualifying orders."
+  description={`Browse our full collection of ${products.length}+ premium nicotine pouches from top European brands. Filter by strength, flavour, brand and format. Free EU shipping on qualifying orders.`}
   canonical="/products"
 >
   <Breadcrumb items={[{ label: 'Products' }]} />
