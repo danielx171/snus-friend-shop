@@ -62,7 +62,7 @@ export default function MobileMenu() {
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
-        <Dialog.Content className="fixed left-0 top-0 w-[280px] h-full bg-background border-r border-border z-50 overflow-y-auto focus:outline-none">
+        <Dialog.Content className="fixed left-0 top-0 w-3/4 max-w-[320px] h-full bg-background border-r border-border z-50 overflow-y-auto focus:outline-none">
           <Dialog.Title className="sr-only">Navigation menu</Dialog.Title>
 
           <div className="p-4 border-b border-border">

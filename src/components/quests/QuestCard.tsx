@@ -51,7 +51,7 @@ function QuestCardInner({ quest }: QuestCardProps) {
             <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{quest.description}</p>
           </div>
           {isCompleted && (
-            <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-emerald-500 mt-0.5" aria-label="Quest completed" />
+            <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-primary mt-0.5" aria-label="Quest completed" />
           )}
         </div>
 
@@ -65,9 +65,7 @@ function QuestCardInner({ quest }: QuestCardProps) {
           </div>
           <div className="h-2 rounded-full bg-muted overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                isCompleted ? 'bg-emerald-500' : 'bg-primary'
-              }`}
+              className="h-full rounded-full transition-all duration-500 bg-primary"
               style={{ width: `${pct}%` }}
               role="progressbar"
               aria-valuenow={pct}
@@ -91,7 +89,7 @@ function QuestCardInner({ quest }: QuestCardProps) {
             <>
               <span className="text-muted-foreground/40 text-xs">·</span>
               <div className="flex items-center gap-1.5">
-                <Star className="h-3.5 w-3.5 text-amber-400" />
+                <Star className="h-3.5 w-3.5 text-accent-foreground" />
                 <span className="text-xs font-medium">{quest.rewardAvatarName}</span>
                 {quest.rewardAvatarRarity && (
                   <Badge
@@ -108,7 +106,7 @@ function QuestCardInner({ quest }: QuestCardProps) {
           {/* Status badge */}
           <div className="ml-auto">
             {isCompleted ? (
-              <Badge variant="outline" className="text-[10px] border-emerald-500/40 text-emerald-500 bg-emerald-500/10">
+              <Badge variant="outline" className="text-[10px] border-primary/40 text-primary bg-primary/10">
                 Done
               </Badge>
             ) : isStarted ? (

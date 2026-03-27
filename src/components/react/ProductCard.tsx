@@ -119,7 +119,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={name}
+            alt={`${name}${brand ? ` by ${brand}` : ''}${strengthKey ? ` - ${strengthKey}` : ''}`}
             width={300}
             height={300}
             loading="lazy"

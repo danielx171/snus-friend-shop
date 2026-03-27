@@ -37,5 +37,5 @@ export function cycleTheme() {
 
 /** Legacy toggle — kept for backward compat */
 export function toggleTheme() {
-  setTheme($theme.get() === 'velo' ? 'light' : 'velo');
+  setTheme($theme.get() === 'forest' ? 'light' : 'forest');
 }

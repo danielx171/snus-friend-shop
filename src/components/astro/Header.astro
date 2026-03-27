@@ -14,7 +14,7 @@ const navLinks = [
 
 <header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl" transition:persist="header">
   <div class="container flex h-16 items-center justify-between">
-    <a href="/" class="flex items-center gap-2 font-bold text-lg text-primary">
+    <a href="/" class="flex items-center gap-2 font-bold text-lg text-primary focus:outline-2 focus:outline-offset-2 focus:outline-primary">
       {tenant.name}
     </a>
 
@@ -22,7 +22,7 @@ const navLinks = [
       {navLinks.map(({ href, label }) => (
         <a
           href={href}
-          class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary"
         >
           {label}
         </a>
@@ -30,16 +30,16 @@ const navLinks = [
     </nav>
 
     <div class="flex items-center gap-3">
-      <a href="/search" class="text-muted-foreground hover:text-foreground" aria-label="Search products">
+      <a href="/search" class="text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="Search products">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       </a>
 
       {user ? (
-        <a href="/account" class="text-muted-foreground hover:text-foreground" aria-label="My account">
+        <a href="/account" class="text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="My account">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </a>
       ) : (
-        <a href="/login" class="text-muted-foreground hover:text-foreground text-sm font-medium" aria-label="Login">
+        <a href="/login" class="text-muted-foreground hover:text-foreground text-sm font-medium focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="Login">
           Login
         </a>
       )}
@@ -49,7 +49,7 @@ const navLinks = [
       </div>
 
       <button
-        class="md:hidden text-muted-foreground hover:text-foreground"
+        class="md:hidden text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary"
         aria-label="Open menu"
         data-mobile-menu-toggle
       >
