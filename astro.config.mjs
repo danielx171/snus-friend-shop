@@ -30,11 +30,6 @@ export default defineConfig({
     }),
     // PWA integration removed — incompatible with output:'server'
   ],
-  i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'sv'],
-    routing: { prefixDefaultLocale: false },
-  },
   vite: {
     plugins: [tailwindcss()],
     resolve: {

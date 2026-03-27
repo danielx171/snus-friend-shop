@@ -87,6 +87,15 @@ const successMessage = result?.data?.message;
                   placeholder="At least 8 characters"
                   class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
                 />
+                <div id="password-strength" class="mt-2 space-y-1" aria-live="polite" style="display:none">
+                  <div class="flex gap-1">
+                    <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="1"></div>
+                    <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="2"></div>
+                    <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="3"></div>
+                    <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="4"></div>
+                  </div>
+                  <p id="strength-label" class="text-xs text-muted-foreground"></p>
+                </div>
               </div>
 
               <div>
@@ -153,4 +162,50 @@ const successMessage = result?.data?.message;
       </div>
     </div>
   </section>
+
+  <script>
+    const pw = document.getElementById('password') as HTMLInputElement | null;
+    const meter = document.getElementById('password-strength');
+    const label = document.getElementById('strength-label');
+    const segments = meter?.querySelectorAll('[data-segment]') as NodeListOf<HTMLElement> | undefined;
+
+    if (pw && meter && label && segments) {
+      pw.addEventListener('input', () => {
+        const v = pw.value;
+        if (!v) {
+          meter.style.display = 'none';
+          return;
+        }
+        meter.style.display = '';
+
+        let score = 0;
+        if (v.length >= 8) score++;
+        if (/[A-Z]/.test(v)) score++;
+        if (/[0-9]/.test(v)) score++;
+        if (/[^A-Za-z0-9]/.test(v)) score++;
+        if (v.length >= 12) score++;
+
+        type Level = { fill: number; color: string; text: string };
+        const levels: Record<string, Level> = {
+          weak:   { fill: 1, color: 'hsl(var(--color-error))',   text: 'Weak' },
+          fair:   { fill: 2, color: 'hsl(var(--color-warning))', text: 'Fair' },
+          good:   { fill: 3, color: 'hsl(var(--color-success))', text: 'Good' },
+          strong: { fill: 4, color: 'hsl(var(--color-success) / 0.85)', text: 'Strong' },
+        };
+
+        const level = score <= 1 ? levels.weak
+          : score === 2 ? levels.fair
+          : score === 3 ? levels.good
+          : levels.strong;
+
+        segments.forEach((seg, i) => {
+          seg.style.backgroundColor = i < level.fill ? level.color : '';
+          if (i >= level.fill) seg.style.backgroundColor = '';
+        });
+
+        label.textContent = level.text;
+        label.style.color = level.color;
+      });
+    }
+  </script>
 </Shop>
