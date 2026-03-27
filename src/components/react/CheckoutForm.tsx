@@ -29,6 +29,16 @@ const SHIPPING_COUNTRIES = [
   { code: 'GB', name: 'United Kingdom' },
 ] as const;
 
+/** Maps frontend shipping IDs to Nyehandel's expected method names */
+const SHIPPING_NAME_MAP: Record<string, string> = {
+  'ups-standard': 'UPS Standard (J229F1)',
+  'ups-express': 'UPS Express Saver',
+  'dhl-economy-eu': 'DHL Economy EU',
+  'dhl-express-eu': 'DHL Express EU',
+  'dhl-economy-intl': 'DHL Economy (Non EU)',
+  'dhl-express-intl': 'DHL Express (Non EU)',
+};
+
 function getShippingMethods(country: string) {
   if (country === 'SE') {
     return [
@@ -119,7 +129,7 @@ export default function CheckoutForm({ userEmail }: Props) {
           city,
           country,
         },
-        shipping_method: shippingMethod,
+        shipping_method: SHIPPING_NAME_MAP[shippingMethod] ?? shippingMethod,
         display_total: orderTotal,
         display_currency: tenant.currencyCode,
       });

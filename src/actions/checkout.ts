@@ -75,7 +75,7 @@ export const checkout = {
           item_sku_required: 'One or more products are unavailable.',
           customer_fields_required: 'Please fill in all contact fields.',
           address_fields_required: 'Please fill in your full shipping address.',
-          shipping_method_invalid: 'Please select a valid shipping method.',
+          invalid_shipping_method: 'Please select a valid shipping method.',
           nyehandel_api_error: 'Payment provider error. Please try again.',
         };
 

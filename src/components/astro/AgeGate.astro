@@ -44,17 +44,14 @@ import { tenant } from '@/config/tenant';
 
       if (verified) {
         gate.style.display = 'none';
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
         return;
       }
 
       // Lock scrolling — both html+body for iOS Safari compatibility
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
-
-      // Prevent touch scrolling behind the modal on iOS
-      gate.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-      }, { passive: false });
 
       function confirmAge() {
         try { localStorage.setItem(storageKey, 'true'); } catch(e) {}
@@ -68,31 +65,28 @@ import { tenant } from '@/config/tenant';
         window.location.href = 'https://google.com';
       }
 
+      // Use onclick instead of addEventListener to avoid stale duplicates
+      // after Astro View Transitions replace the DOM
       var confirmBtn = document.getElementById('age-gate-confirm');
       var denyBtn = document.getElementById('age-gate-deny');
 
       if (confirmBtn) {
-        confirmBtn.addEventListener('click', confirmAge);
-        confirmBtn.addEventListener('touchend', function(e) {
-          e.preventDefault(); // Prevent ghost click / double-fire
-          confirmAge();
-        }, { passive: false });
+        confirmBtn.onclick = confirmAge;
       }
 
       if (denyBtn) {
-        denyBtn.addEventListener('click', denyAge);
-        denyBtn.addEventListener('touchend', function(e) {
-          e.preventDefault();
-          denyAge();
-        }, { passive: false });
+        denyBtn.onclick = denyAge;
       }
     }
 
-    // Run immediately if DOM is ready, otherwise wait
+    // Run on initial load
     if (document.getElementById('age-gate')) {
       init();
     } else {
       document.addEventListener('DOMContentLoaded', init);
     }
+
+    // Re-run after Astro View Transitions replace the DOM
+    document.addEventListener('astro:page-load', init);
   })();
 </script>

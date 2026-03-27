@@ -61,6 +61,7 @@ Deno.serve(async (req) => {
     const response = await fetch(`${nyehandelBaseUrl}/shipping-methods`, {
       headers: {
         Accept: "application/json",
+        "X-Language": "en",
         "X-identifier": nyehandelXIdentifier,
         Authorization: `Bearer ${nyehandelToken}`,
       },
