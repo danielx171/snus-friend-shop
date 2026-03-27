@@ -3,7 +3,7 @@ import { tenant } from '@/config/tenant';
 ---
 
 {tenant.features.ageGate && (
-  <div id="age-gate" class="fixed inset-0 z-[200] flex items-center justify-center bg-background/98">
+  <div id="age-gate" class="fixed inset-0 z-[200] flex items-center justify-center bg-background">
     <div class="mx-4 max-w-md rounded-lg border border-border bg-card p-5 sm:p-8 text-center shadow-xl">
       <h2 class="text-2xl font-bold text-foreground">Age Verification</h2>
       <p class="mt-3 text-sm text-muted-foreground">
@@ -34,26 +34,65 @@ import { tenant } from '@/config/tenant';
 <script is:inline define:vars={{ storageKey: tenant.storage.ageVerifiedKey, enabled: tenant.features.ageGate }}>
   (function() {
     if (!enabled) return;
-    var gate = document.getElementById('age-gate');
-    if (!gate) return;
-    var verified = localStorage.getItem(storageKey) === 'true';
-    if (verified) {
-      gate.style.display = 'none';
-      return;
+
+    function init() {
+      var gate = document.getElementById('age-gate');
+      if (!gate) return;
+
+      var verified = false;
+      try { verified = localStorage.getItem(storageKey) === 'true'; } catch(e) {}
+
+      if (verified) {
+        gate.style.display = 'none';
+        return;
+      }
+
+      // Lock scrolling — both html+body for iOS Safari compatibility
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+
+      // Prevent touch scrolling behind the modal on iOS
+      gate.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+      }, { passive: false });
+
+      function confirmAge() {
+        try { localStorage.setItem(storageKey, 'true'); } catch(e) {}
+        gate.style.display = 'none';
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        window.dispatchEvent(new Event('age-verified'));
+      }
+
+      function denyAge() {
+        window.location.href = 'https://google.com';
+      }
+
+      var confirmBtn = document.getElementById('age-gate-confirm');
+      var denyBtn = document.getElementById('age-gate-deny');
+
+      if (confirmBtn) {
+        confirmBtn.addEventListener('click', confirmAge);
+        confirmBtn.addEventListener('touchend', function(e) {
+          e.preventDefault(); // Prevent ghost click / double-fire
+          confirmAge();
+        }, { passive: false });
+      }
+
+      if (denyBtn) {
+        denyBtn.addEventListener('click', denyAge);
+        denyBtn.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          denyAge();
+        }, { passive: false });
+      }
     }
-    document.body.style.overflow = 'hidden';
-    document.getElementById('age-gate-confirm').addEventListener('click', function(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      localStorage.setItem(storageKey, 'true');
-      gate.style.display = 'none';
-      document.body.style.overflow = '';
-      window.dispatchEvent(new Event('age-verified'));
-    });
-    document.getElementById('age-gate-deny').addEventListener('click', function(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      window.location.href = 'https://google.com';
-    });
+
+    // Run immediately if DOM is ready, otherwise wait
+    if (document.getElementById('age-gate')) {
+      init();
+    } else {
+      document.addEventListener('DOMContentLoaded', init);
+    }
   })();
 </script>
