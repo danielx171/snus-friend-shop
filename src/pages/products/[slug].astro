@@ -52,17 +52,8 @@ const flavorLabels: Record<string, string> = {
 };
 const flavorLabel = flavorLabels[p.flavorKey] ?? p.flavorKey;
 
-const flavorColors: Record<string, string> = {
-  mint: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20',
-  berry: 'bg-purple-500/15 text-purple-400 border-purple-500/20',
-  citrus: 'bg-amber-500/15 text-amber-400 border-amber-500/20',
-  fruit: 'bg-orange-500/15 text-orange-400 border-orange-500/20',
-  coffee: 'bg-amber-700/15 text-amber-600 border-amber-700/20',
-  cola: 'bg-amber-700/15 text-amber-600 border-amber-700/20',
-  menthol: 'bg-cyan-500/15 text-cyan-400 border-cyan-500/20',
-  ice: 'bg-sky-500/15 text-sky-400 border-sky-500/20',
-};
-const flavorColor = flavorColors[p.flavorKey] ?? 'bg-primary/10 text-primary border-primary/20';
+// Theme-aware flavor colors — no hardcoded Tailwind palette colors
+const flavorColor = 'bg-primary/10 text-primary border-primary/20';
 
 const description = p.description || `${p.name} by ${p.brand}. ${p.nicotineContent}mg nicotine pouches with ${flavorLabel.toLowerCase()} flavour. ${p.portionsPerCan} portions per can.`;
 const metaDescription = description.length > 160 ? description.slice(0, 157) + '...' : description;
@@ -185,12 +176,13 @@ const jsonLd = {
         {/* Star Rating */}
         {p.ratings > 0 && (
           <div class="mb-4 flex items-center gap-2">
-            <div class="flex items-center gap-0.5">
+            <div class="flex items-center gap-0.5" role="img" aria-label={`Rating: ${p.ratings.toFixed(1)} out of 5 stars`}>
               {Array.from({ length: 5 }, (_, i) => (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class={`h-4 w-4 ${i < Math.round(p.ratings) ? 'fill-amber-400 text-amber-400' : 'fill-muted text-muted'}`}
+                  class={`h-4 w-4 ${i < Math.round(p.ratings) ? 'fill-primary text-primary' : 'fill-muted text-muted'}`}
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
@@ -260,8 +252,8 @@ const jsonLd = {
         <div class="mb-6 flex items-center gap-2">
           {inStock ? (
             <>
-              <span class="inline-block h-2 w-2 rounded-full bg-emerald-500" />
-              <span class="text-sm text-emerald-400">In Stock</span>
+              <span class="inline-block h-2 w-2 rounded-full bg-primary" />
+              <span class="text-sm text-primary">In Stock</span>
             </>
           ) : (
             <>

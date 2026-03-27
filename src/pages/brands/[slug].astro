@@ -52,6 +52,20 @@ const metaDescription = b.description
   description={metaDescription}
   canonical={`/brands/${brand.id}`}
 >
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": `${b.name} Nicotine Pouches`,
+    "description": metaDescription,
+    "url": `https://snusfriends.com/brands/${brand.id}`,
+    "numberOfItems": products.length,
+    "provider": {
+      "@type": "Organization",
+      "name": "SnusFriend",
+      "url": "https://snusfriends.com"
+    }
+  })} />
+
   <div class="mx-auto max-w-7xl px-4 py-8">
     <Breadcrumb items={[
       { label: 'Brands', href: '/brands' },

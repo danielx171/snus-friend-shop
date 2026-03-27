@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useStore } from '@nanostores/react';
 import { $cookieConsent, acceptAll, rejectAll, setConsent } from '@/stores/cookie-consent';
+import { tenant } from '@/config/tenant';
 
 const CookieConsentBanner: React.FC = () => {
   const consent = useStore($cookieConsent);
@@ -11,7 +12,21 @@ const CookieConsentBanner: React.FC = () => {
   // Prevent hydration mismatch: server always sees answered=false (no localStorage).
   // Wait until mounted so the persistent store has synced from localStorage.
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [ageVerified, setAgeVerified] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Check if age gate has already been dismissed
+    const verified = localStorage.getItem(tenant.storage.ageVerifiedKey) === 'true';
+    setAgeVerified(verified || !tenant.features.ageGate);
+
+    // Listen for age gate dismissal if not yet verified
+    if (!verified && tenant.features.ageGate) {
+      const handler = () => setAgeVerified(true);
+      window.addEventListener('age-verified', handler);
+      return () => window.removeEventListener('age-verified', handler);
+    }
+  }, []);
 
   const handleSave = useCallback(() => {
     setConsent(analytics, marketing);
@@ -21,13 +36,15 @@ const CookieConsentBanner: React.FC = () => {
     setShowManage(true);
   }, []);
 
-  // On server, always render the banner (answered=false default).
-  // After mount, read actual consent from localStorage.
-  if (mounted && consent.answered) return null;
-  if (!mounted) return null; // SSR: render nothing — banner appears after hydration if needed
+  // Don't render during SSR
+  if (!mounted) return null;
+  // Don't render if consent already given
+  if (consent.answered) return null;
+  // Don't render while age gate is still visible — avoid overlapping popups
+  if (!ageVerified) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card p-4 shadow-lg">
+    <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-card p-4 shadow-lg">
       {!showManage ? (
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <p className="text-sm text-muted-foreground">

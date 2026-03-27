@@ -5,9 +5,18 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const products = await getCollection('products');
-const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id })));
+
+// Ensure the shared products.json exists (may run before /products/index.astro)
+const outDir = path.resolve('./public/data');
+fs.mkdirSync(outDir, { recursive: true });
+const jsonPath = path.join(outDir, 'products.json');
+if (!fs.existsSync(jsonPath)) {
+  fs.writeFileSync(jsonPath, JSON.stringify(products.map(p => ({ ...p.data, slug: p.id }))));
+}
 
 const totalProducts = products.length;
 const brandCount = new Set(products.map(p => p.data.brand)).size;
@@ -74,7 +83,7 @@ const brandCount = new Set(products.map(p => p.data.brand)).size;
       </div>
     </article>
 
-    <FilterableProductGrid client:idle productsJson={serialized} />
+    <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
   </div>
 
   <script type="application/ld+json" set:html={JSON.stringify({

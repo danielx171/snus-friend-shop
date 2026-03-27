@@ -4,6 +4,8 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const STRENGTH_META: Record<string, { label: string; range: string; h1: string; desc: string; intro: string }> = {
   'light': {
@@ -63,7 +65,14 @@ const { key } = Astro.props;
 const meta = STRENGTH_META[key as keyof typeof STRENGTH_META];
 const allProducts = await getCollection('products');
 const products = allProducts.filter((p) => p.data.strengthKey === key);
-const serialized = JSON.stringify(allProducts.map((p) => ({ ...p.data, slug: p.id })));
+
+// Ensure the shared products.json exists (may run before /products/index.astro)
+const outDir = path.resolve('./public/data');
+fs.mkdirSync(outDir, { recursive: true });
+const jsonPath = path.join(outDir, 'products.json');
+if (!fs.existsSync(jsonPath)) {
+  fs.writeFileSync(jsonPath, JSON.stringify(allProducts.map(p => ({ ...p.data, slug: p.id }))));
+}
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -71,7 +80,7 @@ const jsonLd = {
   name: meta.h1,
   description: meta.desc,
   numberOfItems: products.length,
-  itemListElement: products.map((p, i) => ({
+  itemListElement: products.slice(0, 20).map((p, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     url: `https://snusfriends.com/products/${p.id}`,
@@ -106,7 +115,7 @@ const jsonLd = {
 
     <FilterableProductGrid
       client:idle
-      productsJson={serialized}
+      productsJsonUrl="/data/products.json"
       initialFilters={JSON.stringify({ strengths: [key] })}
     />
 

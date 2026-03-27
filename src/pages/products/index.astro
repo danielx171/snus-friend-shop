@@ -4,9 +4,16 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const products = await getCollection('products');
-const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id })));
+const productData = products.map(p => ({ ...p.data, slug: p.id }));
+
+// Write product catalog to a static JSON file — keeps HTML under 200KB
+const outDir = path.resolve('./public/data');
+fs.mkdirSync(outDir, { recursive: true });
+fs.writeFileSync(path.join(outDir, 'products.json'), JSON.stringify(productData));
 ---
 
 <Shop
@@ -31,6 +38,6 @@ const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id }))
       </p>
     </div>
 
-    <FilterableProductGrid client:idle productsJson={serialized} />
+    <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
   </div>
 </Shop>

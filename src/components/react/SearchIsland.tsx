@@ -7,7 +7,8 @@ import { scoreProduct, type SearchableProduct } from '@/lib/search';
 // ---------------------------------------------------------------------------
 
 interface SearchIslandProps {
-  productsJson: string;
+  productsJson?: string;
+  productsJsonUrl?: string;
   initialQuery?: string;
 }
 
@@ -28,14 +29,24 @@ const QUICK_LINKS = [
 // Component
 // ---------------------------------------------------------------------------
 
-function SearchIsland({ productsJson, initialQuery }: SearchIslandProps) {
+function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIslandProps) {
+  const [fetchedProducts, setFetchedProducts] = useState<SearchableProduct[] | null>(null);
+
+  // Fetch products from URL if provided (keeps HTML small)
+  useEffect(() => {
+    if (!productsJsonUrl || productsJson) return;
+    fetch(productsJsonUrl)
+      .then(r => r.json())
+      .then(data => setFetchedProducts(data))
+      .catch(() => setFetchedProducts([]));
+  }, [productsJsonUrl, productsJson]);
+
   const allProducts = useMemo<SearchableProduct[]>(() => {
-    try {
-      return JSON.parse(productsJson);
-    } catch {
-      return [];
+    if (productsJson) {
+      try { return JSON.parse(productsJson); } catch { return []; }
     }
-  }, [productsJson]);
+    return fetchedProducts ?? [];
+  }, [productsJson, fetchedProducts]);
 
   const [query, setQuery] = useState(initialQuery ?? '');
   const [debouncedQuery, setDebouncedQuery] = useState(initialQuery ?? '');

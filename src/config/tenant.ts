@@ -18,7 +18,7 @@ export interface TenantConfig {
     readonly borderRadius: string;
     readonly darkModeClass: string;
     readonly lightModeClass: string;
-    readonly defaultTheme: 'velo' | 'light';
+    readonly defaultTheme: 'velo' | 'light' | 'editorial' | 'forest' | 'copper';
   };
   readonly features: {
     readonly loyaltyProgram: boolean;

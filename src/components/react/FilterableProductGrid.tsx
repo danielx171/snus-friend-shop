@@ -12,7 +12,8 @@ import {
 // ---------------------------------------------------------------------------
 
 interface FilterableProductGridProps {
-  productsJson: string;
+  productsJson?: string;
+  productsJsonUrl?: string;
   initialFilters?: string;
 }
 
@@ -366,16 +367,36 @@ function MobileFilterSheet({
 
 export default function FilterableProductGrid({
   productsJson,
+  productsJsonUrl,
   initialFilters,
 }: FilterableProductGridProps) {
-  // Parse products once
-  const allProducts = useMemo<SearchableProduct[]>(() => {
+  // Products state — loaded from inline JSON or fetched from URL
+  const [fetchedProducts, setFetchedProducts] = useState<SearchableProduct[]>([]);
+  const [loading, setLoading] = useState(!!productsJsonUrl);
+
+  // Parse inline products if provided
+  const inlineProducts = useMemo<SearchableProduct[]>(() => {
+    if (!productsJson) return [];
     try {
       return JSON.parse(productsJson);
     } catch {
       return [];
     }
   }, [productsJson]);
+
+  // Fetch from URL if no inline data
+  useEffect(() => {
+    if (!productsJsonUrl || productsJson) return;
+    fetch(productsJsonUrl)
+      .then((r) => r.json())
+      .then((data) => {
+        setFetchedProducts(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [productsJsonUrl, productsJson]);
+
+  const allProducts = productsJson ? inlineProducts : fetchedProducts;
 
   // Parse optional initial filters prop
   const parsedInitial = useMemo<Partial<FilterState> | undefined>(() => {
@@ -489,6 +510,26 @@ export default function FilterableProductGrid({
     [allProducts, filters],
   );
 
+  // Pagination — show 24 products initially, load more on click
+  const ITEMS_PER_PAGE = 24;
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(ITEMS_PER_PAGE);
+  }, [filters]);
+
+  const visibleProducts = useMemo(
+    () => filteredProducts.slice(0, visibleCount),
+    [filteredProducts, visibleCount],
+  );
+
+  const hasMore = visibleCount < filteredProducts.length;
+
+  const showMore = useCallback(() => {
+    setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
+  }, []);
+
   // Active filter count (excluding sort)
   const activeCount = filters.brands.length + filters.strengths.length + filters.flavors.length + filters.formats.length;
 
@@ -552,7 +593,17 @@ export default function FilterableProductGrid({
 
         {/* Product grid */}
         <div className="flex-1">
-          {filteredProducts.length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3" role="status" aria-label="Loading products">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="rounded-xl border border-border bg-card/50 p-4">
+                  <div className="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
+                  <div className="mb-2 h-4 w-3/4 rounded bg-muted/30 animate-pulse" />
+                  <div className="h-3 w-1/2 rounded bg-muted/30 animate-pulse" />
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
               <svg className="h-12 w-12 text-muted-foreground/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -567,25 +618,38 @@ export default function FilterableProductGrid({
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.slug}
-                  slug={product.slug}
-                  name={product.name}
-                  brand={product.brand}
-                  brandSlug={product.brandSlug}
-                  imageUrl={product.imageUrl}
-                  prices={product.prices}
-                  stock={product.stock}
-                  nicotineContent={product.nicotineContent}
-                  strengthKey={product.strengthKey}
-                  flavorKey={product.flavorKey}
-                  ratings={product.ratings}
-                  badgeKeys={product.badgeKeys}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                {visibleProducts.map((product) => (
+                  <ProductCard
+                    key={product.slug}
+                    slug={product.slug}
+                    name={product.name}
+                    brand={product.brand}
+                    brandSlug={product.brandSlug}
+                    imageUrl={product.imageUrl}
+                    prices={product.prices}
+                    stock={product.stock}
+                    nicotineContent={product.nicotineContent}
+                    strengthKey={product.strengthKey}
+                    flavorKey={product.flavorKey}
+                    ratings={product.ratings}
+                    badgeKeys={product.badgeKeys}
+                  />
+                ))}
+              </div>
+              {hasMore && (
+                <div className="mt-8 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={showMore}
+                    className="rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-card/80 hover:border-primary/30"
+                  >
+                    Show More ({filteredProducts.length - visibleCount} remaining)
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

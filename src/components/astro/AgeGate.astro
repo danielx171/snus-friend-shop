@@ -23,6 +23,10 @@ import { tenant } from '@/config/tenant';
           I am under 18
         </button>
       </div>
+      <p class="mt-4 text-xs text-muted-foreground">
+        By continuing, you accept our use of essential cookies.
+        <a href="/cookie-policy" class="underline hover:text-foreground">Cookie Policy</a>
+      </p>
     </div>
   </div>
 )}
@@ -42,6 +46,7 @@ import { tenant } from '@/config/tenant';
       localStorage.setItem(storageKey, 'true');
       gate.style.display = 'none';
       document.body.style.overflow = '';
+      window.dispatchEvent(new Event('age-verified'));
     });
     document.getElementById('age-gate-deny').addEventListener('click', function() {
       window.location.href = 'https://google.com';

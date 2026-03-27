@@ -120,6 +120,8 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
           <img
             src={imageUrl}
             alt={name}
+            width={300}
+            height={300}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {

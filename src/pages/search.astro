@@ -5,10 +5,19 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import SearchIsland from '@/components/react/SearchIsland';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const query = Astro.url.searchParams.get('q')?.trim() ?? '';
 const products = await getCollection('products');
-const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id })));
+
+// Ensure the shared products.json exists
+const outDir = path.resolve('./public/data');
+fs.mkdirSync(outDir, { recursive: true });
+const jsonPath = path.join(outDir, 'products.json');
+if (!fs.existsSync(jsonPath)) {
+  fs.writeFileSync(jsonPath, JSON.stringify(products.map(p => ({ ...p.data, slug: p.id }))));
+}
 ---
 
 <Shop
@@ -24,7 +33,7 @@ const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id }))
 
       <SearchIsland
         client:load
-        productsJson={serialized}
+        productsJsonUrl="/data/products.json"
         initialQuery={query}
       />
     </div>
