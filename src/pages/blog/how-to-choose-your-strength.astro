@@ -1,0 +1,174 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-26';
+const title = 'How to Choose the Right Nicotine Pouch Strength';
+const description = 'A practical guide to nicotine pouch strengths — from light (2mg) to super strong (20mg+). Learn which strength is right for you based on your experience level and goals.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'How to Choose Your Strength' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 26, 2026</time>
+          <span>&middot;</span>
+          <span>6 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Why Strength Matters</h2>
+        <p>
+          Picking the right nicotine strength is the single most important decision when trying
+          nicotine pouches for the first time. Too low and you will not feel anything — too high
+          and the experience can be unpleasant, with nausea, dizziness, or hiccups.
+        </p>
+        <p>
+          The good news: nicotine pouches come in more strength tiers than any other nicotine
+          product, so there is a perfect fit for everyone.
+        </p>
+
+        <h2>Understanding Milligrams</h2>
+        <p>
+          Nicotine strength is measured in milligrams per pouch (mg/pouch). This tells you
+          how much total nicotine is in each pouch. However, the <strong>perceived strength</strong>
+          also depends on the pouch size, moisture level, pH, and how long you keep it in.
+          A 6 mg slim pouch may feel different from a 6 mg regular pouch.
+        </p>
+        <p>
+          As a general rule, the mg/pouch number is the best comparison metric across brands.
+        </p>
+
+        <h2>The Strength Tiers</h2>
+
+        <h3>Light (2-4 mg) — For Beginners</h3>
+        <p>
+          <a href="/products/strength/light">Light pouches</a> deliver a gentle, barely-there
+          nicotine sensation. They are perfect if you have never used nicotine products before,
+          or if you are a very occasional user who wants something mild for social situations.
+        </p>
+        <p>
+          <strong>Best for:</strong> First-time users, light social use, all-day comfort.
+        </p>
+
+        <h3>Normal (4-8 mg) — The Sweet Spot</h3>
+        <p>
+          <a href="/products/strength/normal">Normal strength pouches</a> are the most popular
+          tier globally. They provide a clear but comfortable nicotine delivery that works for
+          extended daily use. Most new-to-pouch users who previously smoked 5-10 cigarettes per
+          day will find their home here.
+        </p>
+        <p>
+          <strong>Best for:</strong> Light-to-moderate smokers switching over, everyday use,
+          people who want to feel the nicotine without it being overwhelming.
+        </p>
+
+        <h3>Strong (8-12 mg) — For Experienced Users</h3>
+        <p>
+          <a href="/products/strength/strong">Strong pouches</a> deliver a definite kick. You
+          will feel the nicotine within seconds and it lasts noticeably. This tier suits
+          users who have built some tolerance or are transitioning from a pack-a-day habit.
+        </p>
+        <p>
+          <strong>Best for:</strong> Regular smokers making the switch, experienced pouch users,
+          people who tried normal and wanted more.
+        </p>
+
+        <h3>Extra Strong (12-20 mg) — High Intensity</h3>
+        <p>
+          <a href="/products/strength/extra-strong">Extra strong pouches</a> are not for
+          beginners. The nicotine hit is fast and intense. These are designed for heavy users
+          who need a strong dose to satisfy their cravings — particularly those transitioning
+          from heavy smoking or strong snus.
+        </p>
+        <p>
+          <strong>Best for:</strong> Heavy smokers, strong snus users, people with high tolerance.
+        </p>
+
+        <h3>Super Strong (20 mg+) — Maximum Power</h3>
+        <p>
+          <a href="/products/strength/super-strong">Super strong pouches</a> like Siberia
+          and PABLO sit at the top of the intensity scale. These products are explicitly
+          designed for veteran users with very high nicotine tolerance. If you are new to
+          pouches, do not start here.
+        </p>
+        <p>
+          <strong>Best for:</strong> Very experienced users only, high-tolerance individuals.
+        </p>
+
+        <h2>Quick Reference: Which Strength Should I Choose?</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse [&_th]:text-left [&_th]:text-foreground [&_th]:font-semibold [&_th]:px-4 [&_th]:py-3 [&_th]:border-b [&_th]:border-border [&_td]:px-4 [&_td]:py-3 [&_td]:border-b [&_td]:border-border/50">
+            <thead>
+              <tr>
+                <th>Your Background</th>
+                <th>Recommended Start</th>
+                <th>Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Never used nicotine</td><td>Light</td><td>2-4 mg</td></tr>
+              <tr><td>Occasional social smoker</td><td>Light or Normal</td><td>4-6 mg</td></tr>
+              <tr><td>5-10 cigarettes/day</td><td>Normal</td><td>6-8 mg</td></tr>
+              <tr><td>10-20 cigarettes/day</td><td>Strong</td><td>8-12 mg</td></tr>
+              <tr><td>20+ cigarettes/day</td><td>Extra Strong</td><td>12-16 mg</td></tr>
+              <tr><td>Heavy snus user</td><td>Strong or Extra Strong</td><td>10-16 mg</td></tr>
+              <tr><td>Very high tolerance</td><td>Super Strong</td><td>20+ mg</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Tips for Finding Your Strength</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Start low, go slow</strong> — It is always easier to move up than to recover from starting too high</li>
+          <li><strong>Give it 3-5 pouches</strong> — The tingling sensation is stronger on your first few pouches and settles with use</li>
+          <li><strong>Time of day matters</strong> — Many users prefer a lighter pouch during the day and a stronger one in the evening</li>
+          <li><strong>Brand varies</strong> — A "strong" from one brand may feel different from another. The mg number is the best guide</li>
+          <li><strong>Hydration helps</strong> — Drink water. Dehydration makes nicotine feel harsher</li>
+        </ul>
+
+        <h2>Browse by Strength</h2>
+        <p>
+          Ready to find your match? Browse our full selection by strength level:
+        </p>
+      </div>
+
+      <nav class="mt-6 flex flex-wrap gap-3" aria-label="Browse by strength">
+        <a href="/products/strength/light" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Light (2-4 mg)</a>
+        <a href="/products/strength/normal" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Normal (4-8 mg)</a>
+        <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strong (8-12 mg)</a>
+        <a href="/products/strength/extra-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Extra Strong (12-20 mg)</a>
+        <a href="/products/strength/super-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Super Strong (20+ mg)</a>
+      </nav>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Organization", "name": tenant.name, "url": `https://${tenant.domain}` },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/how-to-choose-your-strength` },
+  })} />
+</Shop>

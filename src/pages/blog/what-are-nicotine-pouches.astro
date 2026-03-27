@@ -1,0 +1,149 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-26';
+const title = 'What Are Nicotine Pouches? A Complete Guide for Beginners';
+const description = 'Learn everything about tobacco-free nicotine pouches — how they work, how to use them, available strengths and flavours, and why millions are switching from traditional tobacco.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'What Are Nicotine Pouches?' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 26, 2026</time>
+          <span>&middot;</span>
+          <span>8 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>What Are Nicotine Pouches?</h2>
+        <p>
+          Nicotine pouches are small, pre-portioned sachets that deliver nicotine through
+          the lining of your mouth. Unlike traditional snus or chewing tobacco, nicotine
+          pouches contain <strong>no tobacco leaf whatsoever</strong>. They are white, discreet, and produce
+          no smoke, no vapour, and no spit.
+        </p>
+        <p>
+          Each pouch typically contains pharmaceutical-grade nicotine, plant-based fibres
+          (usually cellulose), flavouring, and a pH adjuster that helps the nicotine absorb
+          efficiently. You place one pouch between your upper lip and gum, leave it there for
+          20 to 40 minutes, then remove and dispose of it.
+        </p>
+
+        <h2>How Do Nicotine Pouches Work?</h2>
+        <p>
+          When the pouch rests against your gum, moisture activates the ingredients. Nicotine
+          is released gradually and absorbed through the oral mucosa — the soft tissue inside
+          your mouth. Most users feel the effect within 1 to 5 minutes, with a tingling
+          sensation that settles after the first few uses.
+        </p>
+        <p>
+          Because there is no combustion or heating involved, nicotine pouches avoid the
+          thousands of harmful chemicals produced by burning tobacco. This is a key reason
+          public health researchers consider them a reduced-risk alternative.
+        </p>
+
+        <h2>Available Strengths</h2>
+        <p>
+          Nicotine pouches come in a wide range of strengths to suit different preferences
+          and experience levels:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/products/strength/light"><strong>Light (2-4 mg)</strong></a> — Ideal for beginners or those who want subtle, all-day use</li>
+          <li><a href="/products/strength/normal"><strong>Normal (4-8 mg)</strong></a> — The most popular range for everyday users</li>
+          <li><a href="/products/strength/strong"><strong>Strong (8-12 mg)</strong></a> — Noticeable kick, popular with experienced users</li>
+          <li><a href="/products/strength/extra-strong"><strong>Extra Strong (12-20 mg)</strong></a> — High intensity for heavy users</li>
+          <li><a href="/products/strength/super-strong"><strong>Super Strong (20 mg+)</strong></a> — Maximum intensity from brands like Siberia and PABLO</li>
+        </ul>
+        <p>
+          If you are new to nicotine pouches, start with a light or normal strength and
+          adjust upward as needed. It is much easier to move up in strength than to manage
+          the discomfort of starting too high.
+        </p>
+
+        <h2>Popular Flavours</h2>
+        <p>
+          One of the biggest advantages of nicotine pouches over traditional tobacco products
+          is the variety of flavours available:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/products/flavor/mint"><strong>Mint</strong></a> — The most popular flavour category by far, from peppermint to spearmint to icy menthol</li>
+          <li><a href="/products/flavor/berry"><strong>Berry</strong></a> — Blueberry, strawberry, mixed berries, and wild forest blends</li>
+          <li><a href="/products/flavor/citrus"><strong>Citrus</strong></a> — Orange, lemon, bergamot, and grapefruit</li>
+          <li><a href="/products/flavor/coffee"><strong>Coffee</strong></a> — Espresso, mocha, and roasted bean flavours</li>
+          <li><a href="/products/flavor/exotic"><strong>Exotic</strong></a> — Mango, passion fruit, watermelon, and other tropical flavours</li>
+          <li><a href="/products/flavor/tobacco"><strong>Tobacco</strong></a> — Classic taste for those transitioning from traditional products</li>
+        </ul>
+
+        <h2>How to Use Nicotine Pouches</h2>
+        <ol class="list-decimal pl-6 space-y-2">
+          <li><strong>Open the can</strong> and take one pouch</li>
+          <li><strong>Place it</strong> between your upper lip and gum — either left or right side</li>
+          <li><strong>Leave it in place</strong> for 20 to 40 minutes. You may feel a mild tingling — this is normal</li>
+          <li><strong>Remove and dispose</strong> — most cans have a compartment in the lid for used pouches</li>
+        </ol>
+        <p>
+          There is no need to chew, spit, or do anything else. The pouch works on its own.
+          You can talk, drink water, and go about your day normally.
+        </p>
+
+        <h2>Who Uses Nicotine Pouches?</h2>
+        <p>
+          Nicotine pouches appeal to several groups:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Smokers looking to quit</strong> — Pouches provide nicotine without the harmful chemicals from combustion</li>
+          <li><strong>Vapers seeking an alternative</strong> — No device, no charging, no liquid refills</li>
+          <li><strong>Traditional snus users</strong> — Cleaner, no staining, wider flavour variety</li>
+          <li><strong>Adults who want discretion</strong> — No smell, no visible use, usable anywhere</li>
+        </ul>
+
+        <h2>Are Nicotine Pouches Legal in Europe?</h2>
+        <p>
+          Nicotine pouches are legal in most EU countries. Regulations vary by country — some
+          markets classify them as consumer products, others as tobacco-related products with
+          specific age and labelling requirements. In all cases, you must be at least 18 years
+          old to purchase them.
+        </p>
+
+        <h2>Ready to Try?</h2>
+        <p>
+          With <a href="/nicotine-pouches">over 700 products from 91+ brands</a>, {tenant.name}
+          has the largest selection of nicotine pouches in Europe. Not sure where to start?
+          Take our <a href="/flavor-quiz">flavour quiz</a> for a personalised recommendation,
+          or browse our <a href="/faq">FAQ</a> for more answers.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Organization", "name": tenant.name, "url": `https://${tenant.domain}` },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/what-are-nicotine-pouches` },
+  })} />
+</Shop>

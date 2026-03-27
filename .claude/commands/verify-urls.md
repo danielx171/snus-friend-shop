@@ -19,11 +19,12 @@ This has been a recurring issue — the domain changed from lovable.app → snus
    grep -r "snusfriends.com" src/ public/ scripts/ | head -20
    ```
 
-3. **Verify VITE_SITE_URL usage:**
-   - All SEO canonical URLs should use `SITE_URL` from `@/config/brand`
-   - JSON-LD breadcrumbs should use `VITE_SITE_URL`
-   - sitemap.xml should reference `https://snusfriends.com`
+3. **Verify env var and config usage:**
+   - All SEO canonical URLs should use `tenant.url` from `@/config/tenant`
+   - JSON-LD schemas should use `PUBLIC_SITE_URL` or `tenant.url`
+   - `astro.config.mjs` site field should be `https://snusfriends.com`
    - robots.txt should reference `https://snusfriends.com`
+   - Check for stale `import.meta.env.VITE_*` that should be `import.meta.env.PUBLIC_*`
 
 4. **Report** any stale URLs with file paths and line numbers
 

@@ -1,6 +1,7 @@
-# Headless Shopify -> Nyehandel Roadmap
+# SnusFriend Roadmap
 
-Next session start order: Step 39 (UAT) — blocked on Nyehandel shipping/payment method naming.
+> Migrated from Vite SPA to Astro 6 (March 2026). Steps 1-55 complete. Astro migration live.
+> Original checkout migrated Shopify → Nyehandel (Steps 25-40). Shopify fully removed.
 
 ## UX & Infrastructure (completed 2026-03-20)
 

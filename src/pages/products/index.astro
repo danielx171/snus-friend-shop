@@ -21,8 +21,13 @@ const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id }))
       <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
         Shop All Nicotine Pouches
       </h1>
-      <p class="mt-2 text-lg text-muted-foreground">
-        Browse our collection of premium nicotine pouches from top brands
+      <p class="mt-2 max-w-3xl text-base text-muted-foreground leading-relaxed">
+        Browse our full collection of premium nicotine pouches. Use the filters to narrow by
+        <a href="/products/flavor/mint" class="underline hover:text-foreground">flavour</a>,
+        <a href="/products/strength/strong" class="underline hover:text-foreground">strength</a>,
+        brand, or format — or explore our curated
+        <a href="/nicotine-pouches" class="underline hover:text-foreground">nicotine pouches guide</a> for
+        recommendations.
       </p>
     </div>
 

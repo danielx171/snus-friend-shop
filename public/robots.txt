@@ -9,6 +9,10 @@ Disallow: /search?
 # Sitemap
 Sitemap: https://snusfriends.com/sitemap.xml
 
+# LLM context file
+# See https://llmstxt.org/
+# Provides structured site information for AI systems
+
 # AI / LLM crawlers — allow full access
 User-agent: GPTBot
 Allow: /

@@ -37,6 +37,12 @@ Deploy one or all Supabase edge functions to production (project: bozdnoctcszbhe
 | healthcheck | false | Public status check |
 | get-shipping-methods | false | Public, cached |
 | webhook-inbox | true | Admin only |
+| update-quest-progress | true | Gamification quest tracking |
+| check-avatar-unlocks | true | Internal function-to-function |
+| generate-review-summary | true | AI review summarization |
+| batch-review-summaries | true | Cron batch job |
+| redeem-points | true | Points redemption |
+| send-email | true | Transactional email via Resend |
 
 If deploying all, iterate through the registry above.
 If deploying a specific function, match $ARGUMENTS against function names.

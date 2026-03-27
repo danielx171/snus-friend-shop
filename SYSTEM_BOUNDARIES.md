@@ -1,13 +1,13 @@
 # System Boundaries
 
-Last updated: 2026-03-20
+Last updated: 2026-03-26
 
 This is the compact rule file for planning and implementation.
 
 ## Canonical sources
 
 - `ROADMAP.md` is the delivery sequence and current execution order.
-- `PROJECT_STATE.md` is the latest session-level status log.
+- `CURRENT_PRIORITIES.md` is the latest session-level status log.
 - `AGENTS.md` and `.cursorrules` are mandatory operating rules.
 
 ## Architecture
@@ -62,20 +62,27 @@ This is a **headless B2C nicotine pouch shop** built on:
   source of truth for all Nyehandel integration work. Read them before touching
   any order/checkout/fulfilment code.
 
-## Where things stand (as of 2026-03-25 evening)
+## Where things stand (as of 2026-03-26)
 
-**Steps 26-40: Done** — Nyehandel-first checkout flow implemented, Shopify fully removed,
-catalog synced (734 products, 139 brands), UAT passed (order #479), 50-finding security audit complete.
+**Astro 6 migration: Live** — Migrated from Vite SPA to Astro 6 with React islands.
+SSG for all public pages, SSR for auth/checkout. Deployed on Vercel via `@astrojs/vercel`.
 
-**Codebase scale:** 47 database tables, 20 edge functions, 42 migrations, 23 hooks, 29 pages.
+**Frontend architecture:**
+- Pages: `.astro` files in `src/pages/` (30 pages — 18 SSG, 12 SSR)
+- React islands: `client:visible`, `client:idle`, `client:load` for interactive components
+- State: nanostores (`src/stores/`) — cart, auth, theme, wishlist, cookie-consent, language, easter
+- Content Layer: Supabase loader fetches products + brands at build time
+- Styling: Tailwind v4 via `@tailwindcss/vite` plugin + shadcn/ui
 
-**Phase 2 gamification: Built** — User profiles, avatars, product reviews, quests, community
-posts/comments/polls all have DB tables, hooks, and components. Ready for testing.
+**Steps 1-55: Done** — Checkout, catalog sync, security, gamification UI, go-live sprint complete.
+
+**Codebase scale:** 47 database tables, 20 edge functions, 42 migrations, 23 hooks, 30 pages.
+
+**SEO:** Lighthouse 100/100 SEO score. FAQPage + Organization + WebSite + Product + CollectionPage
+schemas. Auto-generated sitemap via `@astrojs/sitemap`. GEO: `llms.txt` + AI crawler access in robots.txt.
 
 **Design system: 8.5/10** — Glass-panel aesthetic, navy+lime palette, premium animations.
-Distinctive and cohesive across dark/light themes. Not generic AI slop.
 
-**Version: 1.4.0** — Build metadata system, What's New page, lazy loading (40% bundle reduction).
+**Version: 1.5.0** — Astro 6, SSG/SSR hybrid, React islands, nanostores.
 
-**Next: Steps 41-56** — Age gate on entry, CORS secret, legal pages, UX quick wins,
-design polish, tech debt, then go-live.
+**Next:** SEO content (category page copy, blog posts), accessibility fixes, gamification backend wiring.

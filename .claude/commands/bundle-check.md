@@ -8,7 +8,7 @@ Run a production build and analyze bundle size for performance issues.
    ```bash
    cd /Users/Daniel/Projects/snus-friend-shop && bun run build
    ```
-   Capture the full output — Vite prints chunk sizes at the end.
+   Capture the full output — Astro/Vite prints chunk sizes during build.
 
 2. **Parse build output** — extract every chunk and its size (gzipped).
 
@@ -34,11 +34,11 @@ Run a production build and analyze bundle size for performance issues.
    | index-xxxxx.js | ? | ? | OK/WARN/FAIL |
 
 7. **Suggest code-splitting opportunities** if large chunks are found:
-   - React.lazy() for route-level components
-   - Dynamic imports for heavy libraries (e.g., chart libraries, animation libs)
-   - Check if vendor chunks could be split further in `vite.config.ts`
+   - Dynamic imports for heavy React islands
+   - Use `client:visible` instead of `client:load` for below-fold components
+   - Check if vendor chunks could be split further in `astro.config.mjs` vite config
 
-8. **Check vite.config.ts** for existing `manualChunks` or `rollupOptions.output` config
+8. **Check astro.config.mjs** for existing `vite.build.rollupOptions.output` config
    and report current splitting strategy.
 
 ## Thresholds

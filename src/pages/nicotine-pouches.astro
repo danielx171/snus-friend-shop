@@ -1,0 +1,97 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import FilterableProductGrid from '@/components/react/FilterableProductGrid';
+import { getCollection } from 'astro:content';
+import { tenant } from '@/config/tenant';
+
+const products = await getCollection('products');
+const serialized = JSON.stringify(products.map(p => ({ ...p.data, slug: p.id })));
+
+const totalProducts = products.length;
+const brandCount = new Set(products.map(p => p.data.brand)).size;
+---
+
+<Shop
+  title={`Buy Nicotine Pouches Online — ${totalProducts}+ Products | ${tenant.name}`}
+  description={`Shop ${totalProducts}+ tobacco-free nicotine pouches from ${brandCount} leading brands. Browse by strength, flavour, and format. Fast EU shipping on all orders. 18+ only.`}
+  canonical="/nicotine-pouches"
+>
+  <Breadcrumb items={[{ label: 'Nicotine Pouches' }]} />
+
+  <div class="container mx-auto px-4 py-8">
+    <article class="mb-10">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        Buy Nicotine Pouches Online
+      </h1>
+      <div class="mt-4 max-w-3xl space-y-3 text-base text-muted-foreground leading-relaxed">
+        <p>
+          Nicotine pouches are tobacco-free, smoke-free, and vapour-free — simply place one
+          between your gum and upper lip for a discreet nicotine experience that lasts 20-40
+          minutes. {tenant.name} carries <strong class="text-foreground">{totalProducts}+
+          products</strong> from <strong class="text-foreground">{brandCount} brands</strong>,
+          including ZYN, VELO, LOOP, ACE, Pablo, Siberia, KILLA, and many more.
+        </p>
+        <p>
+          Whether you prefer <a href="/products/flavor/mint" class="underline hover:text-foreground">refreshing mint</a>,
+          <a href="/products/flavor/berry" class="underline hover:text-foreground">sweet berries</a>,
+          <a href="/products/flavor/citrus" class="underline hover:text-foreground">zesty citrus</a>,
+          or <a href="/products/flavor/coffee" class="underline hover:text-foreground">rich coffee</a>,
+          our catalog covers every taste. Strengths range from
+          <a href="/products/strength/light" class="underline hover:text-foreground">light (2-4 mg)</a> for beginners to
+          <a href="/products/strength/super-strong" class="underline hover:text-foreground">super strong (20 mg+)</a> for
+          experienced users. Not sure where to start? Try our
+          <a href="/faq" class="underline hover:text-foreground">FAQ</a> or
+          <a href="/flavor-quiz" class="underline hover:text-foreground">flavour quiz</a>.
+        </p>
+        <p>
+          All orders ship fast across the EU with tracking — most arrive within 2-5 business
+          days. Free shipping on qualifying orders. We only sell to customers aged 18 and over.
+        </p>
+      </div>
+
+      <!-- Quick category navigation -->
+      <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <a href="/products/flavor/mint" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
+          Mint
+        </a>
+        <a href="/products/flavor/berry" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
+          Berry
+        </a>
+        <a href="/products/flavor/citrus" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
+          Citrus
+        </a>
+        <a href="/products/strength/strong" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
+          Strong
+        </a>
+        <a href="/products/strength/extra-strong" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
+          Extra Strong
+        </a>
+        <a href="/brands" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
+          All Brands
+        </a>
+      </div>
+    </article>
+
+    <FilterableProductGrid client:idle productsJson={serialized} />
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": `Buy Nicotine Pouches Online — ${totalProducts}+ Products`,
+    "description": `Shop ${totalProducts}+ tobacco-free nicotine pouches from ${brandCount} leading brands at ${tenant.name}.`,
+    "url": `https://${tenant.domain}/nicotine-pouches`,
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": totalProducts,
+      "itemListElement": products.slice(0, 10).map((p, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "url": `https://${tenant.domain}/products/${p.id}`,
+        "name": p.data.name,
+      })),
+    },
+  })} />
+</Shop>

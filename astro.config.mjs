@@ -19,7 +19,14 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      i18n: { defaultLocale: 'en', locales: { en: 'en', sv: 'sv' } },
+      filter: (page) => {
+        const exclude = [
+          '/account', '/cart', '/checkout', '/login', '/register',
+          '/forgot-password', '/update-password', '/order-confirmation',
+          '/search', '/wishlist',
+        ];
+        return !exclude.some((path) => page.includes(path));
+      },
     }),
     // PWA integration removed — incompatible with output:'server'
   ],
@@ -30,10 +37,6 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
-    optimizeDeps: {
-      // Exclude uninstalled legacy deps that _legacy/ files still import
-      exclude: ['react-router-dom', 'react-helmet-async', 'next-themes'],
-    },
     resolve: {
       alias: {
         '@': path.resolve(import.meta.dirname, './src'),

@@ -1,0 +1,176 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-26';
+const title = 'Top 10 Mint Nicotine Pouches in 2026';
+const description = 'We ranked the best mint and menthol nicotine pouches from 91+ brands. From icy peppermint to smooth spearmint — find your perfect mint pouch.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Top 10 Mint Flavours' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Ranking</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 26, 2026</time>
+          <span>&middot;</span>
+          <span>7 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Why Mint Dominates</h2>
+        <p>
+          <a href="/products/flavor/mint">Mint nicotine pouches</a> account for roughly half
+          of all nicotine pouch sales globally. The reason is simple: mint flavour and nicotine
+          are a natural pairing. The cooling sensation enhances the nicotine experience, masks
+          any bitterness, and leaves your breath fresh.
+        </p>
+        <p>
+          But not all mints are equal. Within the mint category, you will find everything from
+          delicate spearmint to face-melting menthol ice. Here are our picks for the 10 best
+          mint pouches available in 2026, based on flavour quality, nicotine delivery, brand
+          reputation, and customer reviews.
+        </p>
+
+        <h2>The Top 10</h2>
+
+        <h3>1. ZYN Cool Mint — The Gold Standard</h3>
+        <p>
+          ZYN practically invented the modern nicotine pouch category, and their Cool Mint
+          remains the best-selling flavour worldwide. It delivers a clean, balanced peppermint
+          taste that is neither too sweet nor too sharp. Available in strengths from 3 mg to
+          9 mg, it suits beginners and regulars alike.
+        </p>
+        <p><strong>Why we love it:</strong> Consistent quality, smooth release, universally appealing flavour.</p>
+
+        <h3>2. VELO Mighty Peppermint — Bold and Refreshing</h3>
+        <p>
+          VELO (by British American Tobacco) is ZYN's biggest competitor, and Mighty Peppermint
+          is their flagship mint. It is slightly more intense than ZYN's Cool Mint, with a
+          stronger menthol kick and a longer-lasting flavour. The slim format sits comfortably
+          under the lip.
+        </p>
+        <p><strong>Why we love it:</strong> Stronger mint punch than ZYN, great slim format, wide strength range.</p>
+
+        <h3>3. LOOP Mint Mania — Swedish Innovation</h3>
+        <p>
+          LOOP pouches use their proprietary Instant-Hit technology that releases flavour
+          faster than traditional pouches. Mint Mania delivers an immediate, intense spearmint
+          burst that is genuinely exciting. The pouch texture is also softer than most brands.
+        </p>
+        <p><strong>Why we love it:</strong> Fastest flavour release, unique texture, genuinely fun to use.</p>
+
+        <h3>4. ACE Cool Mint — Smooth Operator</h3>
+        <p>
+          ACE positions itself as a premium lifestyle brand, and their Cool Mint lives up to
+          it. The flavour is smooth and sophisticated — less sweet than ZYN, less sharp than
+          VELO. It is the mint for people who find other mints too candy-like.
+        </p>
+        <p><strong>Why we love it:</strong> Refined taste, minimal sweetness, elegant packaging.</p>
+
+        <h3>5. Siberia Mint — For the Brave</h3>
+        <p>
+          Siberia is legendary for extreme nicotine strength, and their mint variant is no
+          exception. At 43 mg/g, this is one of the strongest pouches on the market. The
+          mint flavour is clean and icy, but make no mistake — this product is for experienced
+          users with high tolerance only.
+        </p>
+        <p><strong>Why we love it:</strong> Unmatched intensity, clean mint without chemical taste.</p>
+
+        <h3>6. White Fox Double Mint</h3>
+        <p>
+          White Fox layers two mint profiles — a base of smooth spearmint topped with bright
+          peppermint. The dual-mint approach creates depth that single-note mints lack. The
+          slim pouches are comfortable and the nicotine delivery is well-calibrated.
+        </p>
+        <p><strong>Why we love it:</strong> Layered flavour complexity, comfortable slim format.</p>
+
+        <h3>7. KILLA Cold Mint — Icy Blast</h3>
+        <p>
+          KILLA brings an unapologetically cold, menthol-forward mint that feels like biting
+          into an ice cube. It is more menthol than mint — the cooling effect is the star. If
+          you want maximum freshness, KILLA Cold Mint delivers.
+        </p>
+        <p><strong>Why we love it:</strong> Maximum cooling effect, strong menthol, bold branding.</p>
+
+        <h3>8. Helwit Mint — The Clean Choice</h3>
+        <p>
+          Helwit focuses on natural ingredients and clean labelling. Their mint flavour uses
+          natural peppermint extract rather than synthetic flavouring, and you can taste the
+          difference. It is lighter and more herbal than most mints, with a pleasant
+          earthiness underneath.
+        </p>
+        <p><strong>Why we love it:</strong> Natural ingredients, unique herbal-mint character, transparent labelling.</p>
+
+        <h3>9. Pablo Ice Cold — Not for the Faint-Hearted</h3>
+        <p>
+          Pablo has built its reputation on extreme strength, and Ice Cold combines brutal
+          nicotine delivery with an aggressive menthol blast. At 30 mg/pouch, it is designed
+          for heavy users who want both nicotine and flavour turned up to maximum.
+        </p>
+        <p><strong>Why we love it:</strong> Dual intensity (nicotine + menthol), cult following, distinctive design.</p>
+
+        <h3>10. VOLT Spearmint Breeze — The Gentle Giant</h3>
+        <p>
+          VOLT Spearmint Breeze closes our list with the most approachable mint on the chart.
+          The spearmint flavour is gentle and slightly sweet — think chewing gum rather than
+          toothpaste. Available in low strengths, it is an excellent entry point for new users.
+        </p>
+        <p><strong>Why we love it:</strong> Beginner-friendly, gentle spearmint, good value.</p>
+
+        <h2>How to Pick Your Mint</h2>
+        <p>
+          With so many mint options, choosing can feel overwhelming. Here is a quick decision guide:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Want classic, safe, reliable?</strong> Go with ZYN Cool Mint or VELO Mighty Peppermint</li>
+          <li><strong>Want maximum cold/menthol?</strong> KILLA Cold Mint or Pablo Ice Cold</li>
+          <li><strong>Want spearmint over peppermint?</strong> LOOP Mint Mania or VOLT Spearmint Breeze</li>
+          <li><strong>Want extreme strength + mint?</strong> Siberia Mint or Pablo Ice Cold</li>
+          <li><strong>Want natural ingredients?</strong> Helwit Mint</li>
+        </ul>
+
+        <h2>Browse All Mint Pouches</h2>
+        <p>
+          This is just our top 10 — {tenant.name} carries <a href="/products/flavor/mint">
+          every mint pouch from every brand</a>. Browse the full selection and filter by
+          strength, brand, and format to find your perfect match.
+        </p>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/products/flavor/mint" class="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">Browse All Mint Pouches</a>
+        <a href="/products/flavor/berry" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Try Berry Instead</a>
+        <a href="/products/flavor/citrus" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Try Citrus Instead</a>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Organization", "name": tenant.name, "url": `https://${tenant.domain}` },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/top-10-mint-flavours` },
+  })} />
+</Shop>

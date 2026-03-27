@@ -6,19 +6,22 @@ import { tenant } from '@/config/tenant';
 
 const articles = [
   {
-    title: 'What Are Nicotine Pouches?',
+    title: 'What Are Nicotine Pouches? A Complete Guide',
     excerpt: 'A beginner-friendly guide to tobacco-free nicotine pouches — how they work, how to use them, and why millions of Europeans are making the switch.',
     slug: 'what-are-nicotine-pouches',
+    tag: 'Guide',
   },
   {
-    title: 'How to Choose Your Strength',
-    excerpt: 'From light (4 mg) to extra strong (20 mg+), picking the right nicotine strength matters. Here\'s a simple framework to find your sweet spot.',
+    title: 'How to Choose the Right Nicotine Strength',
+    excerpt: 'From light (2 mg) to super strong (20 mg+), picking the right strength matters. Here is a practical framework based on your experience level.',
     slug: 'how-to-choose-your-strength',
+    tag: 'Guide',
   },
   {
-    title: 'Top 10 Mint Flavours',
-    excerpt: 'We ranked the best mint and menthol nicotine pouches across 91 brands. Cool, icy, or spearmint — there\'s a mint for everyone.',
+    title: 'Top 10 Mint Nicotine Pouches in 2026',
+    excerpt: 'We ranked the best mint and menthol nicotine pouches from 91+ brands. From icy peppermint to smooth spearmint — find your perfect mint.',
     slug: 'top-10-mint-flavours',
+    tag: 'Ranking',
   },
 ];
 ---
@@ -38,26 +41,26 @@ const articles = [
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {articles.map((article) => (
-          <article class="group relative rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 flex flex-col">
-            <span class="absolute top-4 right-4 inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-              Coming Soon
+          <a href={`/blog/${article.slug}`} class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 flex flex-col transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+            <span class="inline-flex self-start items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary mb-3">
+              {article.tag}
             </span>
-            <h2 class="text-lg font-semibold mb-2 pr-20">{article.title}</h2>
+            <h2 class="text-lg font-semibold mb-2 text-foreground group-hover:text-primary transition-colors">{article.title}</h2>
             <p class="text-sm text-muted-foreground leading-relaxed flex-1">
               {article.excerpt}
             </p>
             <div class="mt-4 pt-4 border-t border-border">
-              <span class="text-xs text-muted-foreground/60">Article coming soon</span>
+              <span class="text-sm font-medium text-primary">Read article &rarr;</span>
             </div>
-          </article>
+          </a>
         ))}
       </div>
 
       <div class="mt-12 rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
-        <h2 class="text-xl font-semibold mb-2">More articles on the way</h2>
+        <h2 class="text-xl font-semibold mb-2">More articles coming soon</h2>
         <p class="text-muted-foreground text-sm max-w-md mx-auto">
-          We're working on in-depth guides, brand spotlights, and flavour deep-dives.
-          Check back soon or follow us on social media for updates.
+          We are working on brand spotlights, flavour deep-dives, and comparison guides.
+          Check back soon for new content.
         </p>
       </div>
     </div>

@@ -4,6 +4,7 @@ export const prerender = false;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+import OrderQuestTrigger from '@/components/react/OrderQuestTrigger';
 
 const orderId = Astro.url.searchParams.get('order');
 const supabase = Astro.locals.supabase;
@@ -262,6 +263,11 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
             </li>
           </ul>
         </div>
+
+        {/* Quest trigger — fires order_placed progress update */}
+        {order && user && orderId && (
+          <OrderQuestTrigger client:load orderId={orderId} />
+        )}
 
         {/* Actions */}
         <div class="flex flex-col sm:flex-row gap-3 justify-center">

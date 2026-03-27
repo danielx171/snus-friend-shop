@@ -56,6 +56,13 @@ export async function getStaticPaths() {
 }
 
 const ALL_FLAVOR_KEYS = Object.keys(FLAVOR_META);
+const STRENGTH_LINKS = [
+  { key: 'light', label: 'Light' },
+  { key: 'normal', label: 'Normal' },
+  { key: 'strong', label: 'Strong' },
+  { key: 'extra-strong', label: 'Extra Strong' },
+  { key: 'super-strong', label: 'Super Strong' },
+];
 
 const { key } = Astro.props;
 const meta = FLAVOR_META[key as keyof typeof FLAVOR_META];
@@ -129,6 +136,21 @@ const jsonLd = {
             </a>
           );
         })}
+      </div>
+    </nav>
+
+    <!-- Cross-links to strength categories -->
+    <nav class="mt-6 border-t border-border pt-8" aria-label="Browse by strength">
+      <h2 class="mb-4 text-lg font-semibold text-foreground">Browse by Strength</h2>
+      <div class="flex flex-wrap gap-3">
+        {STRENGTH_LINKS.map((s) => (
+          <a
+            href={`/products/strength/${s.key}`}
+            class="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5"
+          >
+            {s.label}
+          </a>
+        ))}
       </div>
     </nav>
   </div>

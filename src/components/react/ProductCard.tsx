@@ -29,7 +29,7 @@ const strengthMap: Record<string, number> = {
 function StrengthIndicator({ strengthKey }: { strengthKey: string }) {
   const level = strengthMap[strengthKey] ?? 2;
   return (
-    <div className="flex items-center gap-0.5" aria-label={`Strength ${level} of 5`}>
+    <div className="flex items-center gap-0.5" role="img" aria-label={`Strength ${level} of 5`}>
       {Array.from({ length: 5 }, (_, i) => (
         <span
           key={i}
@@ -150,7 +150,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
         <a
           href={`/brands/${brandSlug}`}
           onClick={(e) => e.stopPropagation()}
-          className="text-xs text-muted-foreground hover:text-primary transition-colors"
+          className="text-xs text-muted-foreground hover:text-primary transition-colors py-1"
         >
           {brand}
         </a>

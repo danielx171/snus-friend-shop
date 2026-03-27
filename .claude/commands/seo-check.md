@@ -4,29 +4,32 @@ Quick scan of SEO elements across all pages.
 
 ## Steps
 
-1. **Check every page component** for SEO usage:
+1. **Check every Astro page** for SEO elements:
    ```
-   grep -rn "<SEO" src/pages/
+   grep -rn "title=" src/pages/*.astro src/pages/**/*.astro
    ```
-   Every page in src/pages/ should have a `<SEO>` component with:
-   - Unique title (not generic)
-   - Unique description (not generic)
-   - Canonical URL (for indexable pages)
-   - metaRobots="noindex,follow" (for transient pages: cart, checkout, search, account)
+   Every page should use `<Shop>` layout with:
+   - Unique `title` prop (not generic)
+   - Unique `description` prop (not generic)
+   - Transient pages (cart, checkout, account) should have noindex meta
 
 2. **Check JSON-LD structured data:**
+   ```
+   grep -rn "application/ld+json" src/pages/ src/layouts/
+   ```
    - HomePage: WebSite + SearchAction schema
-   - ProductDetail: Product schema with price, brand, availability
-   - BrandHub: BreadcrumbList + FAQPage schema
-   - FaqPage: FAQPage schema
-   - All pages: OrganizationSchema (via App.tsx)
+   - Product pages: Product schema with price, brand, availability
+   - Brand pages: BreadcrumbList schema
+   - FAQ page: FAQPage schema
+   - Blog posts: Article schema
+   - Category pages: CollectionPage schema
+   - All pages: Organization schema (via `src/layouts/Shop.astro`)
 
-3. **Check meta in index.html:**
-   - Title tag present
-   - Meta description present
-   - OG tags (title, description, image, type)
-   - Twitter card tags
-   - Viewport meta
+3. **Check rendered HTML** (build first with `bun run build`):
+   - `<title>` tag present and unique per page
+   - `<meta name="description">` present and unique
+   - OG tags in `<head>` (title, description, image, type)
+   - Canonical URL tag
 
 4. **Check robots.txt:**
    - Correct domain in Sitemap reference

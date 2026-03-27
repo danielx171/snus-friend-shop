@@ -7,12 +7,13 @@ Run a comprehensive 3-agent parallel audit of the entire codebase.
 1. Launch **3 Explore agents in parallel** (single message, multiple tool calls):
 
 ### Agent 1: Frontend Audit
-- Check all pages for broken wiring, empty sections, missing data
-- Check product cards for hover animations and image quality
+- Check all Astro pages (`src/pages/*.astro`) for broken wiring, empty sections, missing data
+- Check React islands (`src/components/react/`) for QueryProvider wrapping, hydration guards
+- Check `src/layouts/Shop.astro` for correct meta tags and JSON-LD schemas
 - Check navigation for duplicate elements and color consistency
 - Check filter system comprehensiveness
 - Check footer and header text visibility on dark backgrounds
-- Check for hardcoded URLs (should use VITE_SITE_URL)
+- Check for hardcoded URLs (should use `tenant.url` from `@/config/tenant`)
 - Check for missing React.memo on expensive list components
 - Report every issue with file paths and line numbers
 
