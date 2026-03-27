@@ -76,16 +76,20 @@ if (!fs.existsSync(jsonPath)) {
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'ItemList',
+  '@type': 'CollectionPage',
   name: meta.h1,
   description: meta.desc,
+  url: `https://snusfriends.com/products/strength/${key}`,
   numberOfItems: products.length,
-  itemListElement: products.slice(0, 20).map((p, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    url: `https://snusfriends.com/products/${p.id}`,
-    name: p.data.name,
-  })),
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: products.slice(0, 20).map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://snusfriends.com/products/${p.id}`,
+      name: p.data.name,
+    })),
+  },
 };
 ---
 

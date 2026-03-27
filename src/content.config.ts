@@ -79,6 +79,7 @@ const products = defineCollection({
       imageUrl: p.image_url ?? '',
       ratings: p.ratings ?? 0,
       badgeKeys: p.badge_keys ?? [],
+      updatedAt: p.updated_at ?? undefined,
       prices: computePrices(p.product_variants ?? []),
       stock: computeStock(p.product_variants ?? []),
     }));
@@ -104,6 +105,7 @@ const products = defineCollection({
     badgeKeys: z.array(z.string()),
     prices: z.record(z.string(), z.number()),
     stock: z.number(),
+    updatedAt: z.string().optional(),
   }),
 });
 

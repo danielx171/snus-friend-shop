@@ -78,6 +78,7 @@ const jsonLd = {
     name: p.brand,
   },
   sku: p.slug,
+  ...(p.updatedAt && { dateModified: new Date(p.updatedAt).toISOString() }),
   offers: {
     '@type': 'AggregateOffer',
     priceCurrency: 'EUR',
@@ -294,6 +295,32 @@ const jsonLd = {
         )}
       </div>
     </div>
+
+    <!-- Internal links to categories -->
+    <nav class="mt-10 flex flex-wrap gap-3" aria-label="Related categories">
+      {p.flavorKey && flavorLabels[p.flavorKey] && (
+        <a
+          href={`/products/flavor/${p.flavorKey}`}
+          class="rounded-lg border border-border bg-card/50 px-4 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5"
+        >
+          More {flavorLabel} Pouches
+        </a>
+      )}
+      {p.strengthKey && strengthLabels[p.strengthKey] && (
+        <a
+          href={`/products/strength/${p.strengthKey}`}
+          class="rounded-lg border border-border bg-card/50 px-4 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5"
+        >
+          More {strengthLabel} Pouches
+        </a>
+      )}
+      <a
+        href={`/brands/${p.brandSlug}`}
+        class="rounded-lg border border-border bg-card/50 px-4 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5"
+      >
+        All {p.brand} Products
+      </a>
+    </nav>
 
     <!-- Customer Reviews -->
     <section class="mt-12">

@@ -65,6 +65,15 @@ const metaDescription = b.description
       "url": "https://snusfriends.com"
     }
   })} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Brand",
+    "name": b.name,
+    ...(b.logoUrl && { "logo": b.logoUrl }),
+    "description": metaDescription,
+    "url": `https://snusfriends.com/brands/${brand.id}`,
+    ...(b.manufacturer && { "manufacturer": { "@type": "Organization", "name": b.manufacturer } })
+  })} />
 
   <div class="mx-auto max-w-7xl px-4 py-8">
     <Breadcrumb items={[
