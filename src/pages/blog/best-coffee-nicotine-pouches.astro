@@ -1,0 +1,233 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-27';
+const title = 'Best Coffee-Flavoured Nicotine Pouches: Our Top Picks';
+const description = 'From rich espresso to smooth macchiato — the best coffee nicotine pouches ranked by flavour, strength, and value. Perfect morning pouches.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Coffee Pouches' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Flavour Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 27, 2026</time>
+          <span>&middot;</span>
+          <span>6 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Why Coffee Nicotine Pouches?</h2>
+        <p>
+          Coffee and nicotine are a natural pairing. Millions of people reach for both every morning — so
+          it was only a matter of time before <strong>coffee-flavoured nicotine pouches</strong> became a
+          category of their own. The warm, roasted bitterness of coffee works brilliantly with the gentle
+          tingle of a nicotine pouch, creating something that feels genuinely comforting rather than just flavoured.
+        </p>
+        <p>
+          Compared to <a href="/blog/top-10-mint-flavours">mint</a> or
+          <a href="/blog/best-berry-nicotine-pouches">berry</a>, the coffee category is still smaller — but
+          it's growing fast. Nearly every major brand now has at least one coffee option in their range, from
+          light latte styles to dark espresso blends. If you've never tried a coffee pouch, you're in for a
+          pleasant surprise: <strong>the flavour is richer and more layered than most fruit or mint alternatives</strong>.
+        </p>
+        <p>
+          At <a href="/brands">SnusFriends</a>, we stock coffee nicotine pouches across the full strength
+          spectrum — including a nicotine-free option for anyone who wants the taste without the kick.
+          Here are our top picks.
+        </p>
+
+        <h2>Our Top Coffee Nicotine Pouch Picks</h2>
+
+        <h3>ZYN Coffee Mini S2 / S4</h3>
+        <p>
+          <a href="/brands/zyn">ZYN</a> is the world's best-selling nicotine pouch brand, and their coffee
+          range is a masterclass in balance. The <strong>S2 (6 mg)</strong> delivers a mellow, smooth coffee
+          flavour that pairs beautifully with your actual morning cup. The <strong>S4 (11 mg)</strong> ups
+          the nicotine whilst keeping the same roasted character. Both use ZYN's dry mini format, which means
+          minimal drip and a comfortable fit. If you're new to coffee pouches, start here — it's the
+          benchmark the others are measured against.
+        </p>
+
+        <h3>ZYN Macchiato Slim S3</h3>
+        <p>
+          Still <a href="/brands/zyn">ZYN</a>, but a completely different experience. The Macchiato Slim
+          swaps the straight-coffee profile for something <strong>creamier and sweeter — think steamed milk
+          with a shot of espresso</strong>. At S3 strength (8 mg), it sits in the medium range and works
+          well as an afternoon pouch when you want something indulgent without being overpowering. The slim
+          format is more discreet than the mini and sits flatter under the lip.
+        </p>
+
+        <h3>LOOP Coffee</h3>
+        <p>
+          <a href="/brands/loop">LOOP</a> brings their signature Instant Rush technology to the coffee
+          category, which means <strong>the flavour and nicotine hit faster</strong> than traditional pouches.
+          The coffee profile here is bolder and more roasted — closer to a dark espresso than a latte. If
+          you find ZYN's coffee too mild, LOOP is the step up. The flavour develops nicely over 20–30 minutes,
+          starting with a punchy roast note and mellowing into a smooth, slightly sweet finish.
+        </p>
+
+        <h3>HELWIT Coffee</h3>
+        <p>
+          <a href="/brands/helwit">HELWIT</a> is one of the most
+          <a href="/blog/best-nicotine-pouches-for-beginners">beginner-friendly</a> brands on the market,
+          and their coffee pouch is no exception. At <strong>3.5–7.5 mg</strong>, the nicotine is gentle
+          enough that flavour takes centre stage. The coffee taste is smooth and approachable — more filter
+          coffee than espresso — with no harshness or bitterness. An excellent first coffee pouch if you're
+          not sure about the category.
+        </p>
+
+        <h3>ON! Coffee Mini</h3>
+        <p>
+          <a href="/brands/on">ON!</a> specialises in ultra-discreet mini pouches, and their coffee range
+          spans a wide <strong>3–9.3 mg strength window</strong>. The mini format is tiny — genuinely
+          invisible under the lip — making it ideal for meetings, calls, or any situation where discretion
+          matters. The coffee flavour is clean and medium-roasted, without the creaminess of ZYN Macchiato
+          or the boldness of LOOP. A solid everyday option that never draws attention.
+        </p>
+
+        <h3>Zeronito Coffee</h3>
+        <p>
+          <a href="/brands/zeronito">Zeronito</a> proves that coffee pouches don't need nicotine to work.
+          At <strong>0 mg</strong>, this is purely about the ritual and the flavour. The coffee taste is
+          surprisingly convincing — warm and roasted with a hint of cocoa. Ideal for users cutting down,
+          taking a tolerance break, or anyone who simply enjoys the oral fixation of a pouch without wanting
+          nicotine. Pair it with your morning coffee for a genuinely comforting habit.
+        </p>
+
+        <h3>CLEW Coffee</h3>
+        <p>
+          <a href="/brands/clew">CLEW</a> delivers a dependable mid-range coffee pouch with a straightforward
+          roasted flavour profile. No frills, no gimmicks — just <strong>honest coffee taste at a fair
+          price</strong>. The pouch material is soft and comfortable, and the flavour lasts well past the
+          20-minute mark. A reliable daily driver for coffee pouch fans who want consistency.
+        </p>
+
+        <h3>VID Coffee</h3>
+        <p>
+          <a href="/brands/vid">VID</a> Coffee is the strongest dedicated coffee pouch on this list at
+          <strong>7.2 mg with a rich, dark roast character</strong>. The flavour leans heavily into
+          espresso territory — bitter, intense, and satisfying. If you like your coffee black and strong,
+          VID is the pouch equivalent. Not ideal for beginners, but experienced users who want
+          <a href="/products/strength/strong">strong pouches</a> with genuine flavour depth will love it.
+        </p>
+
+        <h2>Coffee Nicotine Pouches: Strength Guide</h2>
+        <p>
+          Coffee flavour works across all strength levels, but the experience changes significantly.
+          Here's how the options break down:
+        </p>
+        <p>
+          <strong><a href="/products/strength/mild">Light Coffee (1–4 mg)</a></strong> — ZYN Coffee Mini S2
+          and HELWIT Coffee 3.5 mg. Flavour-forward, gentle nicotine. Best for beginners and those who
+          want to taste the coffee first.
+        </p>
+        <p>
+          <strong><a href="/products/strength/regular">Medium Coffee (4–8 mg)</a></strong> — LOOP Coffee,
+          ZYN Macchiato Slim S3, and CLEW Coffee. The sweet spot where coffee flavour and nicotine
+          satisfaction are well-balanced. Our recommendation for daily use.
+        </p>
+        <p>
+          <strong><a href="/products/strength/strong">Strong Coffee (8–12 mg)</a></strong> — ON! Coffee 9.3 mg
+          and VID Coffee 7.2 mg. Nicotine becomes the primary experience, with coffee providing a warm,
+          pleasant backdrop. For experienced users who've built some tolerance.
+        </p>
+
+        <h2>Morning Routine: Pairing Pouches with Coffee</h2>
+        <p>
+          Using a coffee pouch alongside an actual cup of coffee is one of life's small pleasures — but
+          there are a few practical tips worth knowing. <strong>Don't pop a pouch in while drinking hot
+          coffee.</strong> The pouch already warms slightly under your lip, and combining that with a hot
+          drink can be uncomfortable and make the nicotine release unpredictable.
+        </p>
+        <p>
+          Instead, <strong>wait about five minutes after finishing your cup</strong> before placing a pouch.
+          This lets your mouth cool down and means you'll taste the pouch's coffee flavour more distinctly
+          rather than it blending into the aftertaste of your drink. Medium-strength pouches (S3 or 4–8 mg)
+          pair best — anything too strong can feel overwhelming on top of your caffeine hit.
+        </p>
+        <p>
+          If you're a two-coffee-a-day person, try switching to a <a href="/brands/zeronito">Zeronito 0 mg</a>
+          coffee pouch with your second cup. You get the ritual and the flavour pairing without doubling
+          up on stimulants. It's a genuinely satisfying way to
+          <a href="/blog/how-to-choose-your-strength">manage your daily intake</a>.
+        </p>
+
+        <h2>Coffee vs Other Flavours</h2>
+        <p>
+          Coffee pouches occupy a unique space in the flavour world. They're <strong>warmer and more
+          complex</strong> than fruit flavours, <strong>less intense</strong> than mint, and genuinely
+          comforting in a way that few other categories manage. They're at their best in the morning
+          and after meals — moments when a sharp mint pouch might feel too aggressive.
+        </p>
+        <p>
+          If you enjoy coffee nicotine pouches, you'll likely also appreciate
+          <a href="/products/flavor/mint">mint pouches</a> for their clean, refreshing contrast — they make
+          a great afternoon switch. Check out our <a href="/blog/top-10-mint-flavours">Top 10 Mint Flavours</a>
+          guide for the best options. And if you're curious about the wider flavour landscape,
+          <a href="/blog/what-are-nicotine-pouches">our beginner's guide</a> covers every category from
+          citrus to cola.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/best-coffee-nicotine-pouches` },
+        "description": description
+      })} />
+    </div>
+  </article>
+</Shop>

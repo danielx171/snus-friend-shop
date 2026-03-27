@@ -1,0 +1,228 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-27';
+const title = 'How Long Do Nicotine Pouches Last? Everything You Need to Know';
+const description = 'A nicotine pouch typically lasts 20-40 minutes per use. We cover usage time, shelf life, storage tips, and how format and strength affect duration.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'How Long Do Pouches Last?' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">FAQ</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 27, 2026</time>
+          <span>&middot;</span>
+          <span>5 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <p>
+          A nicotine pouch typically lasts <strong>20 to 40 minutes</strong> per use. That is the
+          window where flavour and nicotine are actively released. Most people remove the pouch once
+          the flavour fades, which is a reliable signal that the pouch has done its job. However,
+          several factors influence exactly how long yours will last — from the format and strength
+          to how you position it in your mouth.
+        </p>
+        <p>
+          Below, we cover everything: usage time per pouch, what affects duration, how long the
+          nicotine effect lasts in your body, shelf life and storage, daily usage, and practical
+          tips to get the most from every can. If you are new to nicotine pouches,
+          our <a href="/blog/what-are-nicotine-pouches">beginner's guide</a> covers the basics first.
+        </p>
+
+        <h2>Quick Answer: 20 to 40 Minutes Per Pouch</h2>
+        <p>
+          When you place a nicotine pouch under your upper lip, <strong>flavour peaks within 5 to
+          10 minutes</strong> as moisture activates the ingredients. Nicotine continues to absorb
+          through the oral mucosa throughout the full session. Once the tingling and flavour
+          have mostly faded — usually around the 20- to 40-minute mark — the pouch is spent and
+          ready to be removed.
+        </p>
+        <p>
+          There is no harm in leaving a pouch in slightly longer, but you will not get meaningfully
+          more nicotine after about 40 minutes. Most cans have a compartment in the lid for
+          used pouches, so disposal is simple and discreet. Browse our
+          <a href="/nicotine-pouches">full catalogue</a> to find the format that suits your routine.
+        </p>
+
+        <h2>Factors That Affect Duration</h2>
+        <p>
+          Not every pouch lasts the same amount of time. Here are the key variables:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>
+            <strong>Format (size)</strong> — Mini pouches are smaller and contain less filling, so
+            they tend to release their contents faster, typically lasting around <strong>15 to
+            20 minutes</strong>. Slim and regular pouches hold more material and last the full
+            <strong>30 to 40 minutes</strong>.
+          </li>
+          <li>
+            <strong>Strength</strong> — A higher milligram count does not make the pouch last
+            longer. It means the <strong>effect is more intense</strong> over roughly the same
+            duration. A 16 mg pouch and a 6 mg pouch may both last 30 minutes, but the experience
+            will be very different. See our guide on
+            <a href="/blog/how-to-choose-your-strength">how to choose your strength</a>.
+          </li>
+          <li>
+            <strong>Moisture level</strong> — Wetter pouches activate faster and deliver nicotine
+            more quickly. Drier pouches have a slower, more gradual release. Brands label this as
+            "moist" or "dry" on the can.
+          </li>
+          <li>
+            <strong>Brand technology</strong> — Some brands engineer faster release. LOOP Instant
+            Rush, for example, is designed for a quicker onset of flavour and nicotine, though the
+            total session length remains similar to standard pouches. Read more in our
+            <a href="/blog/loop-nicotine-pouches-complete-guide">LOOP complete guide</a>.
+          </li>
+        </ul>
+
+        <h2>How Long Does the Nicotine Effect Last?</h2>
+        <p>
+          The pouch itself lasts 20 to 40 minutes, but the <strong>nicotine effect in your body
+          continues beyond that</strong>. Nicotine blood levels typically peak around <strong>15
+          to 30 minutes</strong> after placing the pouch. After removal, the satisfying effect
+          gradually tapers off over the next <strong>1 to 2 hours</strong>, depending on the
+          strength you used and your personal tolerance.
+        </p>
+        <p>
+          This is why most users space their pouches 1 to 2 hours apart rather than using them
+          back-to-back. If you are just starting out, a
+          <a href="/products/strength/mild">mild strength pouch</a> gives you a gentler curve that
+          is easier to gauge. Experienced users who want more detail can check our
+          <a href="/blog/strongest-nicotine-pouches">strongest pouches guide</a>.
+        </p>
+
+        <h2>Shelf Life: How Long Do Unopened Pouches Last?</h2>
+        <p>
+          An unopened can of nicotine pouches has a shelf life of <strong>12 to 18 months</strong>
+          from the date of manufacture. The expiry date is printed on the bottom of every can.
+          After this date, the pouches will not become dangerous, but the <strong>flavour and
+          nicotine potency will degrade</strong> noticeably.
+        </p>
+        <p>
+          Store your cans in a <strong>cool, dry place</strong> — a drawer or cupboard away from
+          direct sunlight is perfect. Unlike traditional Swedish snus, nicotine pouches
+          <strong>do not need refrigeration</strong> because they contain no tobacco that could
+          ferment or spoil. This is one of the practical advantages covered in our
+          <a href="/blog/nicotine-pouches-vs-snus">pouches vs snus comparison</a>.
+        </p>
+        <p>
+          Once you open a can, aim to <strong>use it within a week or two</strong> for the best
+          flavour. The pouches will dry out gradually once exposed to air, which shortens the
+          active usage time per pouch.
+        </p>
+
+        <h2>How Many Pouches Per Day?</h2>
+        <p>
+          Daily usage varies widely depending on strength and personal preference. Most regular
+          users go through <strong>5 to 15 pouches per day</strong>. Lighter-strength users often
+          sit at the higher end of that range, while those using stronger pouches tend to use fewer.
+        </p>
+        <p>
+          There is no universal "correct" number. The best approach is to <strong>listen to your
+          body</strong>. If you experience nausea, dizziness, or hiccups, you are using too much
+          or the strength is too high. Stepping down to a
+          <a href="/products/strength/mild">milder option</a> is always a good move. If you are
+          switching from cigarettes, our
+          <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">transition guide</a>
+          has practical advice on finding the right balance.
+        </p>
+
+        <h2>Tips for Maximum Duration</h2>
+        <p>
+          Want to get the most from every pouch? These small habits make a noticeable difference:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>
+            <strong>Place it and leave it</strong> — Moving the pouch around with your tongue
+            speeds up release and shortens the session. Tuck it in and forget about it.
+          </li>
+          <li>
+            <strong>Use the upper lip</strong> — The area under your upper lip produces less
+            saliva than the lower lip, which means a <strong>slower, more even release</strong>
+            of nicotine and flavour.
+          </li>
+          <li>
+            <strong>Avoid drinking while using</strong> — Sipping water or coffee washes flavour
+            out of the pouch faster. If you need a drink, take small sips rather than large gulps.
+          </li>
+          <li>
+            <strong>Keep the can sealed</strong> — Close the lid properly after each use to prevent
+            the remaining pouches from drying out prematurely.
+          </li>
+        </ul>
+
+        <h2>Find Your Perfect Pouch</h2>
+        <p>
+          Now you know how long nicotine pouches last and what affects the experience, it is time
+          to find the right product for you. Browse our
+          <a href="/nicotine-pouches">full range of over 700 products</a>, take
+          the <a href="/flavor-quiz">flavour quiz</a> for a personalised recommendation, or
+          check our <a href="/blog/best-nicotine-pouches-for-beginners">beginner picks</a> if
+          you are just getting started.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Organization", "name": tenant.name, "url": `https://${tenant.domain}` },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/how-long-do-nicotine-pouches-last` },
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How long does a nicotine pouch last?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A nicotine pouch typically lasts 20 to 40 minutes per use. Flavour peaks within 5 to 10 minutes, and nicotine absorbs gradually throughout. Mini pouches tend to last closer to 15-20 minutes, while slim and regular formats last 30-40 minutes. Remove the pouch once the flavour fades."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many nicotine pouches can I use per day?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most regular users go through 5 to 15 nicotine pouches per day. The exact number depends on the strength of the pouch and personal preference. If you experience nausea or dizziness, reduce your usage or switch to a milder strength."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do nicotine pouches expire?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, nicotine pouches have a shelf life of 12 to 18 months from the date of manufacture. The expiry date is printed on the bottom of the can. After this date, flavour and nicotine potency will degrade. Store cans in a cool, dry place — no refrigeration needed."
+        }
+      }
+    ]
+  })} />
+</Shop>

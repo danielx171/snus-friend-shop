@@ -1,0 +1,188 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-27';
+const title = 'Nicotine Pouches vs Snus: What\'s the Difference?';
+const description = 'Confused about nicotine pouches and snus? We break down the key differences — ingredients, legality, strength, flavour, and which is right for you.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Pouches vs Snus' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 27, 2026</time>
+          <span>&middot;</span>
+          <span>6 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Quick Answer</h2>
+        <p>
+          <strong>Snus contains tobacco leaf. Nicotine pouches don't.</strong> Both go under the lip. That is the fundamental difference. Everything else &mdash; legality, flavour range, staining, shelf life &mdash; flows from that single distinction.
+        </p>
+        <p>
+          Snus is a traditional Swedish oral tobacco product that has been around for over two centuries. Nicotine pouches are the modern, tobacco-free evolution &mdash; created for people who want nicotine without the tobacco leaf, the brown colour, or the legal restrictions. If you are shopping for either, understanding what sets them apart will help you make a better choice. Let's break it down properly.
+        </p>
+
+        <h2>What Is Snus?</h2>
+        <p>
+          Snus is a moist, ground tobacco product originating from Sweden. It is made from <strong>air-dried or steam-pasteurised tobacco, salt, water, and flavouring</strong>. You place a pouch (or a pinch of loose snus) under your upper lip, where the nicotine is absorbed through the gum. Unlike American dipping tobacco, snus is pasteurised rather than fermented &mdash; which means lower levels of certain harmful compounds.
+        </p>
+        <p>
+          Sweden has used snus for over 200 years, and it is the only EU country where snus is legal for sale. <strong>The rest of the EU banned snus sales in 1992</strong>, though possession and personal use remain legal everywhere. Major snus brands include General, G&ouml;teborgs Rap&eacute;, Ettan, and <a href="/brands/lundgrens">Lundgrens</a>. These names carry serious heritage &mdash; Ettan has been produced since 1822.
+        </p>
+        <p>
+          Snus comes in loose and portioned formats, with traditional flavour profiles leaning towards tobacco, bergamot, juniper, and herb. Strength typically ranges from <strong>4mg to 45mg per pouch</strong>, though most classic Swedish snus sits in the 8&ndash;14mg range. It requires refrigeration for optimal freshness, and the brown tobacco filling can stain teeth over time.
+        </p>
+
+        <h2>What Are Nicotine Pouches?</h2>
+        <p>
+          Nicotine pouches are <strong>completely tobacco-free</strong>. Instead of ground tobacco, the pouch contains plant-based fibre (usually cellulose), pharmaceutical-grade nicotine, flavouring, and a pH adjuster. The result is a white pouch that sits under your lip, delivers nicotine the same way snus does, but without any tobacco leaf involved. For a deeper dive, read our full guide on <a href="/blog/what-are-nicotine-pouches">what nicotine pouches are and how they work</a>.
+        </p>
+        <p>
+          Because they contain no tobacco, nicotine pouches are <strong>legal across the entire EU</strong> and most global markets. This is the single biggest practical advantage over snus. Leading brands include <a href="/brands/zyn">ZYN</a>, <a href="/brands/velo">VELO</a>, <a href="/brands/loop">LOOP</a>, and <a href="/brands/ace">ACE</a> &mdash; all of which you can <a href="/products">browse in our shop</a>. Strength ranges from 0mg (nicotine-free) up to 50mg for extreme products.
+        </p>
+        <p>
+          The flavour variety is far wider than traditional snus. Beyond the usual mint and tobacco options, you will find tropical fruit, coffee, cola, citrus, and berry blends. Pouches are white, produce no staining, require no spitting, and store at room temperature. For most people outside Sweden, nicotine pouches are the only practical option &mdash; and increasingly, even Swedish users are making the switch.
+        </p>
+
+        <h2>Side-by-Side Comparison</h2>
+        <p>
+          Here is everything that matters in one table. Bookmark this if you are explaining the difference to someone else.
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border text-foreground">
+                <th class="py-3 pr-4 font-semibold">Feature</th>
+                <th class="py-3 pr-4 font-semibold">Snus</th>
+                <th class="py-3 font-semibold">Nicotine Pouches</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Contains tobacco</td>
+                <td class="py-3 pr-4">Yes</td>
+                <td class="py-3">No</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Pouch colour</td>
+                <td class="py-3 pr-4">Brown</td>
+                <td class="py-3">White</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Stains teeth</td>
+                <td class="py-3 pr-4">Yes</td>
+                <td class="py-3">No</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Flavour range</td>
+                <td class="py-3 pr-4">Traditional (tobacco, herb, bergamot)</td>
+                <td class="py-3">Wide (mint, fruit, coffee, citrus, cola)</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Strength range</td>
+                <td class="py-3 pr-4">4&ndash;45mg/pouch</td>
+                <td class="py-3">0&ndash;50mg/pouch</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Legal in EU</td>
+                <td class="py-3 pr-4">Sweden only</td>
+                <td class="py-3">Yes &mdash; all member states</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Spit required</td>
+                <td class="py-3 pr-4">Sometimes</td>
+                <td class="py-3">Never</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Shelf life</td>
+                <td class="py-3 pr-4">Refrigerated</td>
+                <td class="py-3">Room temperature</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Why People Switch from Snus to Pouches</h2>
+        <p>
+          The shift from snus to nicotine pouches has accelerated across Scandinavia over the past five years, and it is not hard to see why. <strong>No staining</strong> is the number-one reason people cite. Brown snus pouches discolour teeth over time &mdash; white nicotine pouches simply do not. If you care about your smile, this alone is enough reason to switch.
+        </p>
+        <p>
+          <strong>Discretion</strong> matters too. White pouches are virtually invisible under the lip, with no drip and no spit. You can use them in meetings, on flights, or during a date without anyone noticing. The flavour range is also dramatically wider. Where snus offers perhaps a dozen traditional profiles, brands like <a href="/brands/loop">LOOP</a> and <a href="/brands/velo">VELO</a> release new flavours quarterly &mdash; from watermelon to espresso.
+        </p>
+        <p>
+          Then there is the practical side. <strong>Nicotine pouches don't need refrigeration</strong>, which makes them easier to store and ship. They are legal everywhere in the EU, so you can order them online without worrying about customs. Brands with roots in the snus world &mdash; like <a href="/brands/skruf">Skruf</a> and <a href="/brands/lundgrens">Lundgrens</a> &mdash; now produce nicotine pouches alongside their traditional lines, which tells you where the industry sees the future heading.
+        </p>
+
+        <h2>Strength: How Do They Compare?</h2>
+        <p>
+          Both snus and nicotine pouches can be very strong. The key complication is that <strong>snus strength is often measured in mg/g</strong> (milligrams per gram of filling), while nicotine pouches typically use <strong>mg/pouch</strong>. This makes direct comparison tricky. A snus labelled "14mg/g" in a 1-gram pouch delivers roughly 14mg per pouch &mdash; but pouch weights vary, so the actual dose depends on format.
+        </p>
+        <p>
+          At the top end, the strongest snus products reach around 45mg per pouch. Nicotine pouches go even further &mdash; some extreme products hit 50mg. For a full breakdown of high-strength options, see our <a href="/blog/strongest-nicotine-pouches">strongest nicotine pouches ranking</a>. If you are new to either product, start low. Read our <a href="/blog/how-to-choose-your-strength">strength guide</a> before experimenting at the top end.
+        </p>
+
+        <h2>Which Should You Choose?</h2>
+        <p>
+          <strong>Choose snus if</strong> you value traditional tobacco flavour and the heritage of a 200-year-old Swedish product &mdash; and if you live in Sweden or can legally source it where you are. Snus delivers a distinct, earthy character that nicotine pouches do not replicate.
+        </p>
+        <p>
+          <strong>Choose nicotine pouches if</strong> you want no tobacco, no staining, no spitting, and maximum flavour variety. If you live anywhere in the EU outside Sweden, nicotine pouches are your only legal option for an oral nicotine product. They are also the better choice if you are <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">switching from cigarettes</a> and want to avoid tobacco entirely.
+        </p>
+        <p>
+          For most people reading this, nicotine pouches are the practical answer. Browse our full <a href="/nicotine-pouches">nicotine pouch range</a> or start with our <a href="/blog/best-nicotine-pouches-for-beginners">beginner's guide</a> if you are not sure where to start.
+        </p>
+
+      </div>
+
+      <div class="mt-12 border-t border-border pt-10">
+        <h2 class="text-xl font-bold text-foreground mb-6">Related Guides</h2>
+        <div class="flex flex-wrap gap-3">
+          <a href="/blog/what-are-nicotine-pouches" class="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">What Are Nicotine Pouches?</a>
+          <a href="/blog/strongest-nicotine-pouches" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strongest Pouches</a>
+          <a href="/blog/how-to-choose-your-strength" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strength Guide</a>
+          <a href="/products" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">All Products</a>
+        </div>
+      </div>
+
+      <div class="mt-8 rounded-lg border border-border bg-card p-6">
+        <p class="text-sm text-muted-foreground">
+          <strong class="text-foreground">Thinking of making the switch?</strong> If you are coming from snus and want to try nicotine pouches, our
+          <a href="/blog/best-nicotine-pouches-for-beginners" class="text-primary underline hover:text-foreground">beginner's guide</a> will help you pick the right strength and flavour. Or jump straight to our <a href="/nicotine-pouches" class="text-primary underline hover:text-foreground">full collection</a>.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "SnusFriends Editorial" },
+    "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/nicotine-pouches-vs-snus` },
+  })} />
+</Shop>
