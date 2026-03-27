@@ -127,17 +127,17 @@ Conflict patterns:
 ## Where Things Stand (as of 2026-03-26)
 
 - Astro 6 migration: ✅ Live on snusfriends.com (SSG + SSR hybrid)
-- Steps 1–55: ✅ Done (checkout, catalog sync, auth, security, gamification UI, go-live sprint)
+- Steps 1–56: ✅ Done (checkout, catalog sync, auth, security, gamification UI, go-live sprint, preview mode removed)
 - Version: 1.5.0 — Astro 6, React islands, nanostores, Tailwind v4
 - Codebase: 47 tables, 20 edge functions, 42 migrations, 23 hooks, 30 pages
-- Lighthouse: SEO 100, Performance LCP <200ms, Accessibility 83-95
+- Lighthouse: SEO 100, Performance LCP <200ms, Accessibility 96, Best Practices 100
 - Checkout: ✅ Nyehandel payment + shipping configured, test order #479 confirmed
 - Domain: ✅ snusfriends.com live with SSL
 - SEO: ✅ FAQPage + Organization + WebSite + Product + CollectionPage schemas, auto-sitemap, llms.txt
 - Legal pages: 🟡 Need solicitor sign-off
-- Accessibility: 🟡 Color contrast needs fixing (navy on dark navy)
+- Accessibility: ✅ Lighthouse 96 (muted-foreground contrast fixed, label-in-name fixed)
 - Gamification: ✅ LIVE — all 5 core features (spin wheel, quests, points, avatars, order triggers)
-- Next: SEO content (remaining brand copy, blog posts), accessibility fixes, legal sign-off
+- Next: SEO content (remaining brand copy, blog posts), legal sign-off
 
 ## MCP Tools (Connected)
 
