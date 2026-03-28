@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,9 +8,7 @@ import UserAvatar from './UserAvatar';
 import type { AvatarRarity } from './UserAvatar';
 import type { Avatar, UserProfile, UpdateProfilePayload } from '@/hooks/useUserProfile';
 import { ReputationBadge } from '@/components/gamification/ReputationBadge';
-import { PouchAvatar } from '@/components/gamification/PouchAvatar';
 import { useReputation } from '@/hooks/useReputation';
-import { usePouchParts, usePouchAvatar } from '@/hooks/usePouchBuilder';
 
 const BIO_MAX = 160;
 
@@ -69,21 +67,6 @@ const ProfileCard = React.memo(function ProfileCard({
   }, [onSave, displayName, bio]);
 
   const { data: reputation } = useReputation(profile?.user_id ?? null);
-  const { data: partsByCategory = {} } = usePouchParts();
-  const { selection: pouchSelection } = usePouchAvatar(profile?.user_id ?? null);
-
-  const resolvedPouch = useMemo(() => {
-    if (!pouchSelection) return null;
-    const find = (cat: string, id: string | null) =>
-      id ? partsByCategory[cat]?.find((p: any) => p.id === id) ?? null : null;
-    return {
-      shape: find('shape', pouchSelection.shape_id),
-      color: find('color', pouchSelection.color_id),
-      expression: find('expression', pouchSelection.expression_id),
-      accessory: find('accessory', pouchSelection.accessory_id),
-      background: find('background', pouchSelection.background_id),
-    };
-  }, [pouchSelection, partsByCategory]);
 
   const rarity = (avatarData?.rarity as AvatarRarity | undefined) ?? 'common';
   const isDirty =
@@ -103,18 +86,6 @@ const ProfileCard = React.memo(function ProfileCard({
               size="lg"
               rarity={rarity}
             />
-            {resolvedPouch && (
-              <div className="mt-2">
-                <PouchAvatar
-                  shape={resolvedPouch.shape}
-                  color={resolvedPouch.color}
-                  expression={resolvedPouch.expression}
-                  accessory={resolvedPouch.accessory}
-                  background={resolvedPouch.background}
-                  size={48}
-                />
-              </div>
-            )}
           </div>
 
           <div className="flex-1 w-full space-y-3">

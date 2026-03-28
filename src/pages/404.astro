@@ -1,15 +1,15 @@
 ---
 export const prerender = true;
-import Base from '@/layouts/Base.astro';
+import Shop from '@/layouts/Shop.astro';
 import { tenant } from '@/config/tenant';
 ---
 
-<Base
+<Shop
   title={`Page Not Found | ${tenant.name}`}
   description="The page you're looking for doesn't exist or has been moved."
   noindex={true}
 >
-  <div class="flex min-h-screen flex-col items-center justify-center px-4 text-center">
+  <div class="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
     <h1 class="text-[8rem] sm:text-[12rem] font-black leading-none tracking-tighter bg-gradient-to-b from-primary via-primary/60 to-primary/20 bg-clip-text text-transparent select-none">
       404
     </h1>
@@ -38,8 +38,5 @@ import { tenant } from '@/config/tenant';
       </a>
     </div>
 
-    <p class="mt-16 text-xs text-muted-foreground">
-      {tenant.name}
-    </p>
   </div>
-</Base>
+</Shop>

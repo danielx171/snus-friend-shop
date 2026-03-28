@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
-import { supabase } from '@/lib/supabase-browser';
+import { supabase } from '@/integrations/supabase/client';
 import { useAvatarSelector } from '@/hooks/useAvatarSelector';
 import AvatarSelector from '@/components/profile/AvatarSelector';
 

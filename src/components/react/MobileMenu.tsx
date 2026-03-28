@@ -29,8 +29,7 @@ const navSections = [
       { href: '/products/flavor/berry', label: 'Berry' },
       { href: '/products/flavor/coffee', label: 'Coffee' },
       { href: '/products/flavor/tobacco', label: 'Tobacco' },
-      { href: '/products/flavor/exotic', label: 'Exotic' },
-      { href: '/products/flavor/unflavored', label: 'Unflavored' },
+      { href: '/products/flavor/tropical', label: 'Tropical' },
     ],
   },
   {

@@ -31,33 +31,8 @@ export interface DbProduct {
   }>;
 }
 
-/**
- * Retail markup on wholesale (Nyehandel) price.
- * Wholesale ~€3.29/can → retail ~€5.10/can at 1.55×.
- * Adjust this to change the margin. Set to 1.0 to sell at wholesale.
- */
-const RETAIL_MARKUP = 1.55;
-
-/**
- * Volume discount multipliers per can.
- * pack1 = full price, pack3 = 5% off per can, etc.
- * Adjust these to change the volume discount tiers.
- */
-const PACK_DISCOUNT: Record<string, number> = {
-  pack1: 1.0,
-  pack3: 0.95,
-  pack5: 0.90,
-  pack10: 0.85,
-  pack30: 0.80,
-};
-
-const PACK_QUANTITIES: Record<string, number> = {
-  pack1: 1,
-  pack3: 3,
-  pack5: 5,
-  pack10: 10,
-  pack30: 30,
-};
+// Pricing from shared module — single source of truth
+import { RETAIL_MARKUP, PACK_DISCOUNT, PACK_QUANTITIES } from '@/lib/pricing';
 
 /** Derive strength from nicotine mg for display.
  *  Thresholds chosen to give good variety across 734+ products:

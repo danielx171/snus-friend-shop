@@ -58,7 +58,7 @@ All customers must be 18 or older. Age verification is required at checkout in c
 
 ## Sitemap
 
-https://snusfriends.com/sitemap.xml
+https://snusfriends.com/sitemap-index.xml
 
 ## Contact
 

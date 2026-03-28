@@ -44,21 +44,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
   context.locals.supabase = supabase as any;
 
   const pathname = context.url.pathname;
-  const protectedPaths = ['/account', '/checkout', '/order-confirmation', '/rewards', '/wishlist'];
+  // Only protect SSR pages here — SSG pages skip middleware (isPrerendered check above)
+  // /rewards and /wishlist are SSG with client-side auth checks, so not listed here
+  const protectedPaths = ['/account', '/checkout', '/order-confirmation'];
   const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
-  const isOps = pathname.startsWith('/ops') && pathname !== '/ops/login';
 
   if (isProtected && !user) {
     return context.redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
-  }
-
-  if (isOps && !user) {
-    return context.redirect('/ops/login');
-  }
-
-  if (isOps && user) {
-    const isAdmin = user.app_metadata?.role === 'admin' || user.app_metadata?.role === 'ops';
-    if (!isAdmin) return context.redirect('/');
   }
 
   return next();

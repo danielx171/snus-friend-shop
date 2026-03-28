@@ -7,7 +7,7 @@ Disallow: /ops/
 Disallow: /search?
 
 # Sitemap
-Sitemap: https://snusfriends.com/sitemap.xml
+Sitemap: https://snusfriends.com/sitemap-index.xml
 
 # LLM context file
 # See https://llmstxt.org/

@@ -10,25 +10,8 @@ const buildClient = url && key
   ? createClient(url, key, { auth: { persistSession: false } })
   : null;
 
-const RETAIL_MARKUP = 1.55;
-const PACK_DISCOUNT: Record<string, number> = {
-  pack1: 1.0, pack3: 0.95, pack5: 0.90, pack10: 0.85, pack30: 0.80,
-};
-const PACK_QUANTITIES: Record<string, number> = {
-  pack1: 1, pack3: 3, pack5: 5, pack10: 10, pack30: 30,
-};
-
-function computePrices(variants: Array<{ pack_size: number; price: number }>) {
-  const baseCan = variants.find((v) => v.pack_size === 1);
-  const wholesalePerCan = baseCan?.price ?? 3.29;
-  const retailPerCan = wholesalePerCan * RETAIL_MARKUP;
-  const prices: Record<string, number> = {};
-  for (const [packKey, qty] of Object.entries(PACK_QUANTITIES)) {
-    const discount = PACK_DISCOUNT[packKey] ?? 1.0;
-    prices[packKey] = Math.round(retailPerCan * qty * discount * 100) / 100;
-  }
-  return prices;
-}
+// Pricing logic from shared module — single source of truth
+import { computePrices } from './lib/pricing';
 
 function computeStock(variants: Array<{ inventory?: Array<{ quantity: number }> }>) {
   // If no inventory rows exist at all, treat product as available (Nyehandel manages stock).
