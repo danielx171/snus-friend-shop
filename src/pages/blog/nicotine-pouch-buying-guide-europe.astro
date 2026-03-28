@@ -1,0 +1,269 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-28';
+const title = 'The Complete Nicotine Pouch Buying Guide for Europe (2026)';
+const description = 'Everything European buyers need to know about choosing, buying, and using nicotine pouches. Strength tiers, regulations, top brands, and honest tips.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Europe Buying Guide' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 28, 2026</time>
+          <span>&middot;</span>
+          <span>12 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>How Nicotine Pouches Work</h2>
+        <p>
+          Nicotine pouches are small white sachets that contain nicotine, plant-based fibres, flavourings, and other
+          ingredients. You place one between your upper lip and gum, and the nicotine absorbs through the mucous membrane.
+          It takes about 30 seconds to a few minutes to feel the effects.
+        </p>
+        <p>
+          Unlike traditional <a href="/blog/nicotine-pouches-vs-snus">snus</a> (which contains tobacco), modern nicotine
+          pouches are tobacco-free. They're completely white, discreet, and don't stain your teeth. You keep the pouch in
+          for 15-45 minutes, then pop it out and bin it. Think of it as a slow-release nicotine delivery system with no
+          smoke, no combustion, no ash.
+        </p>
+
+        <h2>Choosing Your Strength: The Tier System</h2>
+        <p>
+          This is the most important decision you'll make. Get the strength wrong, and you'll either be disappointed
+          (too weak) or uncomfortably buzzed (too strong).
+        </p>
+        <p>
+          <strong><a href="/products/strength/mild">Mild (2-4 mg per pouch)</a></strong> — For complete beginners or
+          people who want a light kick. Good for testing whether you even like nicotine before committing to stronger options.
+        </p>
+        <p>
+          <strong><a href="/products/strength/regular">Regular (4-8 mg per pouch)</a></strong> — The sweet spot for most
+          people transitioning from cigarettes. A noticeable buzz without being overwhelming. Most popular brands like
+          <a href="/brands/zyn">ZYN</a> and <a href="/brands/velo">VELO</a> sell their core products in this range.
+        </p>
+        <p>
+          <strong><a href="/products/strength/strong">Strong (8-12 mg per pouch)</a></strong> — For people with moderate
+          nicotine tolerance. If you smoke a pack a day or more, this is where you'll probably land.
+        </p>
+        <p>
+          <strong><a href="/products/strength/extra-strong">Extra Strong (12-20 mg per pouch)</a></strong> — Designed
+          for heavy users. These hit hard and fast. Not for newbies.
+        </p>
+        <p>
+          <strong><a href="/products/strength/super-strong">Extreme (20+ mg per pouch)</a></strong> — Some brands push
+          up to 30+ mg per pouch. These cater to seasoned nicotine users who've built serious tolerance.
+        </p>
+        <p>
+          <strong>How to choose:</strong> Start lower than you think you need. The nicotine hits differently depending
+          on the brand too — some brands have higher moisture and deliver more smoothly and quickly. Read our
+          <a href="/blog/how-to-choose-your-strength">strength guide</a> for the full breakdown.
+        </p>
+
+        <h2>Understanding Formats: Slim vs Mini vs Normal</h2>
+        <p>
+          <strong>Slim</strong> — The standard size for most brands. Sits comfortably between your lip and gum. Most
+          popular format in Europe.
+        </p>
+        <p>
+          <strong>Mini</strong> — Noticeably smaller and more discreet. Ideal if you want something nearly invisible.
+          ZYN offers a lot of options in mini format.
+        </p>
+        <p>
+          <strong>Normal (or "Full")</strong> — Thicker and larger, holds more material and delivers a bigger nicotine
+          boost. Less common now as most modern brands have standardized on slim.
+        </p>
+
+        <h2>Flavour Categories Explained</h2>
+        <p>
+          <strong><a href="/products/flavor/mint">Mint and Menthol</a></strong> — The most popular category. Clean,
+          fresh, and genuinely pleasant. Ranges from subtle spearmint to aggressive peppermint.
+        </p>
+        <p>
+          <strong><a href="/products/flavor/berry">Fruit and Berry</a></strong> — Covers everything from strawberry to
+          watermelon to mixed berry. Quality varies — some taste artificial, others surprisingly natural.
+        </p>
+        <p>
+          <strong><a href="/products/flavor/citrus">Citrus</a></strong> — Lemon, lime, grapefruit, orange. Zesty and
+          refreshing. Less heavy than berry flavours.
+        </p>
+        <p>
+          <strong><a href="/products/flavor/coffee">Coffee and Tobacco</a></strong> — For purists who want something
+          resembling snus or traditional tobacco products. Coffee flavours give a warm, earthy vibe.
+        </p>
+
+        <h2>Top Brands for European Buyers</h2>
+        <p>
+          <strong><a href="/brands/zyn">ZYN</a></strong> — The market leader. Consistent, well-made, available everywhere
+          in Europe. Huge range of flavours and strengths. Pouches are drier than competitors, meaning slower nicotine
+          release — good if you want a steady buzz. Their "Citrus" and "Cool Mint" are reliable crowd-pleasers.
+        </p>
+        <p>
+          <strong><a href="/brands/velo">VELO</a></strong> — Premium option with excellent build quality. Pouches are
+          softer and more moist than ZYN, so the nicotine and flavour hit faster. Wild flavour combinations available.
+          Slightly pricier but many people think it's worth it.
+        </p>
+        <p>
+          <strong><a href="/brands/loop">Loop</a></strong> — The Scandinavian innovator with patented InstantRush
+          technology — faster and stronger initial nicotine release, followed by a longer sustained experience.
+        </p>
+        <p>
+          <strong><a href="/brands/skruf">Skruf</a></strong> — A Swedish brand with serious heritage. Dependable and
+          popular in Scandinavia. Strong minty flavours and straightforward branding.
+        </p>
+        <p>
+          <strong><a href="/brands/helwit">HELWIT</a></strong> — A newer European brand focusing on natural ingredients
+          and sustainable packaging. More "natural" tasting than mass-market brands.
+        </p>
+
+        <h2>EU Regulations: What You Need to Know</h2>
+        <p>
+          Nicotine pouches are not classified as tobacco products under EU law, which means individual member states make
+          their own rules. This has led to a patchwork of regulations.
+        </p>
+        <p>
+          <strong>Germany and Belgium</strong> — Completely banned. Don't try to import them legally.
+        </p>
+        <p>
+          <strong>Denmark</strong> — Strict new rules as of April 2026: only tobacco and menthol flavours allowed,
+          nicotine capped at 9 mg per pouch, and excise taxes added.
+        </p>
+        <p>
+          <strong>Austria</strong> — Classified as controlled adult nicotine products and must be sold through licensed
+          tobacconists only. Excise taxes apply.
+        </p>
+        <p>
+          <strong>France</strong> — Was set to ban nicotine pouches starting April 2026, but the French Council of State
+          suspended that decree. Essentially a legal grey zone right now.
+        </p>
+        <p>
+          <strong>UK</strong> (post-Brexit) — Largely unregulated. No major restrictions. Age restrictions (18+) apply.
+        </p>
+        <p>
+          <strong>Scandinavia</strong> (Sweden, Norway) — Generally permissive. These countries see nicotine pouches as
+          a harm-reduction tool. No major restrictions yet.
+        </p>
+        <p>
+          <strong>Before buying online:</strong> Check your country's current status, as regulations change quickly. If
+          you're in a banned/restricted country, cross-border shipping likely won't work. Always look for reputable
+          sellers with age verification.
+        </p>
+
+        <h2>How to Store Your Pouches</h2>
+        <p>
+          <strong>Keep them cool and dry.</strong> Room temperature (18-22 C) is ideal. Heat speeds up degradation.
+          Always seal the tin tightly — exposure to air dries them out within days.
+        </p>
+        <p>
+          <strong>Consider the fridge.</strong> If you're a light user and pouches sit around for weeks, keeping the tin
+          sealed in the fridge extends freshness by 2-3 months. Don't freeze — it changes the texture.
+        </p>
+        <p>
+          <strong>Shelf life:</strong> Unopened cans last 12-24 months. Once opened, enjoy them within 30-60 days for
+          peak freshness.
+        </p>
+
+        <h2>How Much Should You Pay?</h2>
+        <p>
+          <strong>Retail shops</strong> (convenience stores, petrol stations): 5-8 EUR per can. Most expensive.
+        </p>
+        <p>
+          <strong>Online retailers</strong> (within Europe): 2.50-4 EUR per can. Cheapest option when buying in bulk.
+        </p>
+        <p>
+          <strong>The maths:</strong> If you use one can per week (25 pouches typically), that's 10-40 EUR per month
+          depending on where and what you buy. Compare that to cigarettes (7-10 EUR per pack in most of Europe) and
+          it's competitive or cheaper, especially online.
+        </p>
+
+        <h2>FAQ</h2>
+        <h3>Are nicotine pouches safer than cigarettes?</h3>
+        <p>
+          They're not risk-free (nicotine is addictive), but they eliminate combustion, tar, and most carcinogens in
+          smoke. Most harm reduction experts see them as significantly lower-risk than smoking.
+        </p>
+
+        <h3>How long does one pouch last?</h3>
+        <p>
+          15-45 minutes, depending on the brand, strength, and your preference. ZYN tends to last longer (steadier
+          release). VELO hits hard and fades faster. Read our
+          <a href="/blog/how-long-do-nicotine-pouches-last">detailed duration guide</a>.
+        </p>
+
+        <h3>What's the difference between nicotine pouches and snus?</h3>
+        <p>
+          Snus contains tobacco leaf; nicotine pouches don't. Both deliver nicotine through the gum line, but snus
+          tastes different (earthier, more complex). Pouches are whiter, cleaner, easier to travel with. Read our
+          <a href="/blog/nicotine-pouches-vs-snus">full comparison</a>.
+        </p>
+
+        <h3>Can I use them at work without anyone noticing?</h3>
+        <p>
+          Completely discreet if you use mini pouches. Nobody can tell you're using them — no smell, no visible smoke,
+          no spitting. They're great for offices.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/nicotine-pouch-buying-guide-europe` },
+        "description": description
+      })} />
+    </div>
+  </article>
+</Shop>

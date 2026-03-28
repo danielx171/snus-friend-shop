@@ -1,0 +1,265 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-28';
+const title = 'Best Citrus Nicotine Pouches: 2026 Flavour Guide';
+const description = 'Expert guide to the top citrus nicotine pouches in 2026 — from zesty lemon and lime to smooth orange and grapefruit. Find your perfect citrus pouch.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Best Citrus Pouches' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Flavour Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 28, 2026</time>
+          <span>&middot;</span>
+          <span>9 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Why Citrus Is Having a Moment</h2>
+        <p>
+          If you're tired of <a href="/products/flavor/mint">mint</a> dominance and looking for something that genuinely
+          wakes up your palate, citrus might be your next go-to. While mint remains the undisputed king of nicotine pouches,
+          citrus has quietly become one of the most popular flavour categories — and for good reason. Citrus pouches deliver
+          a sharp, zesty, and energizing experience that feels crisp and refreshing without the cooling sensation of mint.
+        </p>
+        <p>
+          Whether you prefer the tartness of lemon and lime, the smoothness of orange, or the complex bite of grapefruit,
+          the <a href="/products/flavor/citrus">citrus category</a> has exploded with quality options in 2026. This guide
+          walks you through the best citrus pouches on the market, ranked by flavour quality, strength, and overall experience.
+        </p>
+
+        <h2>Types of Citrus Pouches</h2>
+        <p>
+          Citrus is far more diverse than people expect. Here's the spectrum:
+        </p>
+        <p>
+          <strong>Lemon</strong> — Sharp, zesty, and tangy. Delivers a burst of brightness that cuts through for the
+          first 10-15 minutes before settling into a gentle background note.
+        </p>
+        <p>
+          <strong>Lime</strong> — Slightly sweeter than lemon but still tart. Often paired with other fruits or spice
+          notes for complexity.
+        </p>
+        <p>
+          <strong>Orange</strong> — The smoothest citrus option. Warm, slightly sweet, and less aggressive than lemon
+          or lime. Perfect for longer sessions.
+        </p>
+        <p>
+          <strong>Grapefruit</strong> — Complex and slightly bitter. High-end flavour with depth and sophistication.
+          Not for those seeking pure sweetness.
+        </p>
+        <p>
+          <strong>Bergamot</strong> — Floral and aromatic citrus (the flavour in Earl Grey tea). Rare in pouches but
+          increasingly popular with premium brands.
+        </p>
+        <p>
+          <strong>Mixed Citrus</strong> — Blends of two or more citrus fruits, often balanced for consistent flavour delivery.
+        </p>
+
+        <h2>Top 8 Citrus Nicotine Pouches</h2>
+
+        <h3>1. ZYN Citrus</h3>
+        <p>
+          <a href="/brands/zyn">ZYN</a> Citrus is the gateway citrus pouch — and it's earned its popularity honestly.
+          This one combines lemon, lime, and a whisper of sweetness that prevents it from becoming too tart. The flavour
+          bursts immediately on placement, and the nicotine hit is gentle and steady, making it ideal for newcomers to
+          citrus or those who prefer lighter strengths. Flavour life is around 20 minutes before it fades into background
+          territory. If you're just dipping your toes into citrus, this is your entry point.
+        </p>
+        <p>
+          <strong>Strength:</strong> Mild (3-6 mg) | <strong>Flavour Duration:</strong> 20 minutes |
+          <strong>Best For:</strong> <a href="/blog/best-nicotine-pouches-for-beginners">Beginners</a>, daytime use
+        </p>
+
+        <h3>2. VELO Orange Spark</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Orange Spark pairs pure orange with a broader citrus backing that prevents
+          the flavour from flattening out. The nicotine is immediate and substantial at 10.9 mg per pouch. There's a
+          smooth, slightly waxy orange core that tastes like actual citrus rather than candy, with subtle sweetness that
+          balances the tartness. Flavour lasts a solid 30-35 minutes.
+        </p>
+        <p>
+          <strong>Strength:</strong> Strong (10.9 mg) | <strong>Flavour Duration:</strong> 30-35 minutes |
+          <strong>Best For:</strong> Experienced users, afternoon sessions
+        </p>
+
+        <h3>3. KLINT Pink Grapefruit #4 Extra Strong</h3>
+        <p>
+          KLINT Pink Grapefruit delivers a sharp, juicy, and genuinely invigorating experience that captures the tang
+          of fresh grapefruit with just the right amount of sweetness. This is where citrus moves beyond "fruit flavour"
+          into something with real character. The taste is bold and confident — slightly bitter, complex, and energizing.
+          It's one of the few citrus pouches that actually improves over the first 5 minutes as the pouch hydrates.
+        </p>
+        <p>
+          <strong>Strength:</strong> Extra Strong | <strong>Flavour Duration:</strong> 30-40 minutes |
+          <strong>Best For:</strong> Advanced users, those who appreciate complex flavours
+        </p>
+
+        <h3>4. VELO Lime Flame</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Lime Flame is the pouch for people who thought citrus was too boring. It combines
+          lime with a genuine jalapeno kick — not overwhelming, but present. The lime sits front and centre, sharp and
+          bright, while the spice creeps in as a warming undertone. It's an unexpected pairing that somehow works beautifully.
+        </p>
+        <p>
+          <strong>Strength:</strong> Strong (8-10 mg) | <strong>Flavour Duration:</strong> 30 minutes |
+          <strong>Best For:</strong> Adventurous users, those who enjoy spice
+        </p>
+
+        <h3>5. Helwit Orange</h3>
+        <p>
+          <a href="/brands/helwit">Helwit</a> Orange keeps the formula minimal: straightforward orange at 4.5 mg that
+          tastes like the actual fruit rather than an orange-flavoured product. There's no added sweetness masking what
+          you're getting, no chemical aftertaste. It's clean, simple, and honest.
+        </p>
+        <p>
+          <strong>Strength:</strong> Mild (4.5 mg) | <strong>Flavour Duration:</strong> 25 minutes |
+          <strong>Best For:</strong> Daytime use, purists
+        </p>
+
+        <h3>6. ZYLO Citrus Ice</h3>
+        <p>
+          ZYLO Citrus Ice enhances the citrus experience with icy undertones, creating something that feels both cooling
+          and zesty. The citrus blend (lemon, lime, orange) is balanced and bright, while the ice element adds complexity
+          without becoming minty. Flavour duration stretches to 45-60 minutes, which is impressive for a citrus pouch.
+        </p>
+        <p>
+          <strong>Strength:</strong> Moderate-Strong (6-9 mg) | <strong>Flavour Duration:</strong> 45-60 minutes |
+          <strong>Best For:</strong> Extended sessions, mint-adjacent lovers
+        </p>
+
+        <h3>7. Loop Jalapeno Lime Hyper Strong</h3>
+        <p>
+          <a href="/brands/loop">Loop</a> Jalapeno Lime Hyper Strong is the extreme option — 15.5 mg of pure nicotine
+          paired with bright lime and genuine jalapeno heat. This is not for casual users. The lime cuts through sharp
+          and bright, while the spice builds throughout the first 5 minutes. Flavour lasts 35-45 minutes, and the spice
+          element actually enhances longevity.
+        </p>
+        <p>
+          <strong>Strength:</strong> Hyper Strong (15.5 mg) | <strong>Flavour Duration:</strong> 35-45 minutes |
+          <strong>Best For:</strong> Advanced users, maximum strength seekers
+        </p>
+
+        <h3>8. VELO Arctic Grapefruit</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Arctic Grapefruit features the juicy, slightly bitter notes of grapefruit
+          combined with subtle cooling sensations. The grapefruit is the star — complex, sophisticated, and genuinely
+          refined compared to simpler citrus options. Flavour lasts 35 minutes and stays remarkably consistent.
+        </p>
+        <p>
+          <strong>Strength:</strong> Strong (8-10 mg) | <strong>Flavour Duration:</strong> 35 minutes |
+          <strong>Best For:</strong> Those who appreciate grapefruit, balanced strength seekers
+        </p>
+
+        <h2>Citrus vs Mint: Which Suits You?</h2>
+        <p>
+          <strong>Choose Citrus If:</strong> You find mint fatiguing or overplayed, you want a sharper, more awakening
+          sensation, you prefer bright, zesty flavours over cooling, or you enjoy complex or spiced fruit flavours.
+        </p>
+        <p>
+          <strong>Stick with <a href="/blog/best-mint-nicotine-pouches-2026">Mint</a> If:</strong> You love the cooling,
+          refreshing sensation, you use pouches primarily in the morning or for energy, or you want maximum flavour longevity.
+        </p>
+        <p>
+          <strong>Hybrid Approach:</strong> Try ZYLO Citrus Ice or VELO Lime Flame. These bridge the gap, offering citrus
+          brightness with cooling or spice elements that make the transition from mint-dominant use smooth.
+        </p>
+
+        <h2>Best Citrus Pouches by Strength Level</h2>
+        <p>
+          <strong><a href="/products/strength/mild">Mild (3-6 mg)</a></strong> — ZYN Citrus (perfect beginner option)
+          and Helwit Orange (pure, clean orange).
+        </p>
+        <p>
+          <strong><a href="/products/strength/regular">Moderate (6-10 mg)</a></strong> — VELO Orange Spark, VELO Lime Flame,
+          ZYLO Citrus Ice, and VELO Arctic Grapefruit.
+        </p>
+        <p>
+          <strong><a href="/products/strength/extra-strong">Strong/Extra Strong (10+ mg)</a></strong> — KLINT Pink
+          Grapefruit #4 and Loop Jalapeno Lime Hyper Strong. Don't jump straight to max strength just because citrus
+          sounds appealing — start with ZYN or Helwit, then progress.
+        </p>
+
+        <h2>FAQ: Citrus Nicotine Pouches</h2>
+        <h3>Do citrus pouches stain teeth like citric acid would?</h3>
+        <p>
+          The nicotine pouches themselves contain minimal citric acid compared to actual lemon juice. The pouch format
+          means contact time is limited. Long-term impact is negligible if you maintain normal oral hygiene.
+        </p>
+
+        <h3>Which citrus pouch has the longest flavour duration?</h3>
+        <p>
+          ZYLO Citrus Ice and Loop Jalapeno Lime both stretch to 45-60 minutes. Most citrus options peak at 30-35 minutes.
+        </p>
+
+        <h3>Can I use citrus pouches back-to-back without flavour fatigue?</h3>
+        <p>
+          Yes, better than mint. Citrus fatigue is real (your palate dulls to zesty flavours faster), but the brightness
+          prevents the numbing sensation that back-to-back mint causes. Mix citrus with other flavour categories throughout
+          the day for best results.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/best-citrus-nicotine-pouches` },
+        "description": description
+      })} />
+    </div>
+  </article>
+</Shop>

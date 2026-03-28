@@ -1,0 +1,223 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-28';
+const title = 'ZYN vs VELO in 2026: The Definitive Comparison';
+const description = 'Updated 2026 comparison of ZYN and VELO nicotine pouches. Head-to-head analysis of flavours, strength, format, pricing, and performance.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'ZYN vs VELO 2026' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Comparison</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 28, 2026</time>
+          <span>&middot;</span>
+          <span>13 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>The Two Biggest Brands in 2026</h2>
+        <p>
+          <a href="/brands/zyn">ZYN</a> and <a href="/brands/velo">VELO</a> have established themselves as the two
+          dominant players in the global nicotine pouch market. In 2026, the gap between them has tightened significantly.
+          ZYN still holds the U.S. market crown with roughly 58% market share, but VELO has captured second position and
+          is aggressively expanding through expanded flavour ranges, higher nicotine options, and a distinctly different
+          user experience philosophy.
+        </p>
+
+        <h3>ZYN: Swedish Match (Philip Morris International)</h3>
+        <p>
+          ZYN is manufactured by Swedish Match, acquired by Philip Morris International in 2022. As the original market
+          leader, ZYN built its dominance on consistency and flavour depth rather than raw nicotine strength. PMI's 2025
+          earnings reported approximately 794 million cans shipped worldwide — a 19% year-over-year increase.
+        </p>
+
+        <h3>VELO: British American Tobacco</h3>
+        <p>
+          VELO is owned by BAT. It launched in the U.S. in 2019 but didn't gain significant traction until the 2024
+          introduction of VELO Plus — a reformulated, moister pouch with improved nicotine absorption. BAT's strategy
+          is aggressive growth through innovation and variety, including synthetic nicotine options and pushing the
+          strength ceiling to 17 mg.
+        </p>
+
+        <h2>Head-to-Head: Flavour Range</h2>
+        <p>
+          <strong>ZYN (52 SKUs)</strong> — Core flavours include Cool Mint, Menthol, Peppermint, Wintergreen, Spearmint,
+          Citrus, Black Currant, Black Cherry, Cinnamon, Red Fruits, Smooth, and Coffee. Plus limited-time After Dark
+          series (Mojito, Espresso Martini, Spiced Cider). ZYN prioritizes consistency and refinement — each flavour
+          is tuned for a slow, balanced nicotine curve that doesn't overwhelm the taste profile.
+        </p>
+        <p>
+          <strong>VELO (53 SKUs)</strong> — Includes Spearmint, Peppermint, Wintergreen, Dragon Fruit, Wild Berry,
+          Ruby Berry, Tropical Heat, Tropical Mango, Zesty Elderflower, Cappuccino, and more. VELO's strategy is bold
+          and varied, leaning heavily into fruit combinations. The moister pouch format means flavours dissolve and
+          diffuse faster.
+        </p>
+        <p>
+          <strong>Verdict:</strong> If you prefer subtle, refined flavours, ZYN wins. If you want bold, fruity,
+          adventurous options, VELO edges ahead. For mint purists, ZYN's Cool Mint still edges VELO in pure flavour
+          clarity.
+        </p>
+
+        <h2>Head-to-Head: Strength and Nicotine Delivery</h2>
+        <p>
+          <strong>ZYN strengths:</strong> 3 mg, 6 mg, 9 mg, 11 mg, 13.5 mg (super strong, introduced 2025).
+          Regional variants: 1.5 mg, 16.5 mg.
+        </p>
+        <p>
+          <strong>VELO strengths:</strong> 3 mg, 6 mg, 9 mg (VELO Plus), plus 4 mg, 10 mg, 14 mg, 17 mg (classic range,
+          varies by region).
+        </p>
+        <p>
+          <strong>The critical difference — absorption:</strong> ZYN pouches are drier, with a slower nicotine release
+          curve. A ZYN 9 mg takes 5-7 minutes to reach peak nicotine, then sustains for 30-45 minutes. VELO pouches
+          (especially VELO Plus) are moister, with higher pH and faster absorption. A VELO 6 mg hits within 2-3 minutes
+          and often <em>feels like</em> a ZYN 8-9 mg in terms of immediate satisfaction.
+        </p>
+        <p>
+          <strong>Verdict:</strong> If you want sustained satisfaction, ZYN. If you want an immediate rush, VELO. If
+          you're chasing maximum intensity, VELO's 17 mg is the current ceiling. Read our
+          <a href="/blog/how-to-choose-your-strength">strength guide</a> for more detail.
+        </p>
+
+        <h2>Head-to-Head: Format Options</h2>
+        <p>
+          <strong>ZYN</strong> offers both Mini (more discreet, 15-20 minute sessions) and Slim (standard, 30-45 minute
+          sessions). <strong>VELO</strong> is slim only — no mini option. ZYN's mini format is a genuine advantage if
+          you value discretion or short sessions.
+        </p>
+
+        <h2>Head-to-Head: Pouch Feel and Moisture</h2>
+        <p>
+          <strong>ZYN:</strong> Dry-to-moist spectrum. Lower moisture means less initial drip, slower flavour release,
+          and longer-lasting dryness. Some users prefer this because less saliva buildup means less swallowing. Pouch
+          integrity remains excellent even after 45 minutes.
+        </p>
+        <p>
+          <strong>VELO:</strong> Distinctly moist from the first second. Higher moisture means noticeable initial drip,
+          faster flavour diffusion, more "wet" feeling. Some find this more satisfying (faster hit); others find it
+          unpleasant.
+        </p>
+        <p>
+          <strong>Verdict:</strong> This is genuinely subjective. If you hate moisture, ZYN. If you want immediate
+          intense flavour, VELO.
+        </p>
+
+        <h2>Head-to-Head: Price and Value</h2>
+        <p>
+          In raw price-per-can terms, VELO edges slightly ahead, but the difference is negligible (10-15%). Where real
+          savings happen: bulk buying (subscription discounts can reach 20-30% for both brands). Value depends on what
+          you prioritize — if you want flavour quality and sustained satisfaction, ZYN justifies its price. If you want
+          intensity and variety, VELO is the better deal.
+        </p>
+
+        <h2>Head-to-Head: European Availability</h2>
+        <p>
+          <strong>ZYN:</strong> Widely available in Scandinavia, UK, Germany. Easier to find in online retailers.
+        </p>
+        <p>
+          <strong>VELO:</strong> Dominant in UK and Scandinavia. Easier to find in physical retail (convenience stores,
+          petrol stations). Better-stocked in most European nicotine pouch shops.
+        </p>
+        <p>
+          In Europe, VELO has a slight retail advantage due to BAT's established distribution. For online ordering,
+          both are readily available worldwide.
+        </p>
+
+        <h2>Switching Between Brands</h2>
+
+        <h3>From ZYN to VELO</h3>
+        <p>
+          Expect the nicotine hit to feel stronger immediately (faster absorption, not necessarily more nicotine).
+          Flavour intensity increases dramatically. Moisture will be noticeable if you're coming from ZYN's drier
+          pouches. Session duration feels shorter. Start with VELO 6 mg (not 9 mg) and expect a 2-3 week adaptation
+          period.
+        </p>
+
+        <h3>From VELO to ZYN</h3>
+        <p>
+          Initial nicotine satisfaction will feel lighter due to the slower curve. Flavours become more subtle — give
+          it time, as the refinement becomes apparent. Sessions last longer. Start with ZYN 9 mg (not 6 mg) and stick
+          with it for 3 weeks before deciding.
+        </p>
+
+        <h2>The Final Verdict</h2>
+        <p>
+          <strong>Choose ZYN if you:</strong> Prioritize flavour refinement over intensity, want sustained nicotine
+          satisfaction, value discretion (mini format available), prefer drier pouches, or use pouches multiple times
+          daily with lower saliva production.
+        </p>
+        <p>
+          <strong>Choose VELO if you:</strong> Want an immediate, intense nicotine hit, prefer bold fruity flavour
+          profiles, appreciate fast flavour diffusion, like experimental flavours and frequent limited editions, or
+          use pouches less frequently but want maximum satisfaction per pouch.
+        </p>
+        <p>
+          In 2026, there's no "objectively better" choice. ZYN is the safer, more refined option with proven quality.
+          VELO is the exciting, aggressive innovator. Many serious pouch users maintain rotation between both — ZYN for
+          daily consistency, VELO for weekend intensity or flavour exploration. Try both, use what you prefer.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/zyn-vs-velo-2026` },
+        "description": description
+      })} />
+    </div>
+  </article>
+</Shop>

@@ -1,0 +1,198 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-28';
+const title = 'LOOP vs Skruf: Which Swedish Brand Is Right for You?';
+const description = 'A detailed comparison of LOOP and Skruf nicotine pouches — flavour range, strength, pouch format, and which brand suits different users.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'LOOP vs Skruf' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Comparison</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 28, 2026</time>
+          <span>&middot;</span>
+          <span>8 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Two Swedish Brands, Two Different Philosophies</h2>
+        <p>
+          If you're shopping for nicotine pouches, you've probably seen <a href="/brands/loop">LOOP</a> and
+          <a href="/brands/skruf">Skruf</a> everywhere. Both are Swedish, both have strong followings, and both make
+          genuinely good products. But they're actually quite different in philosophy. One is the experimental upstart
+          chasing wild flavour combinations; the other is the established player focused on refinement and consistency.
+        </p>
+
+        <h2>LOOP: The Bold Innovator</h2>
+        <p>
+          LOOP was founded in 2020 by Another Snus Factory AB out of Stockholm. Despite being relatively fresh to the
+          market, LOOP has carved out a distinct identity through aggressive flavour experimentation and their Instant
+          Rush technology — a promise of immediate flavour and nicotine release paired with a lasting hit.
+        </p>
+        <p>
+          The brand went straight for unusual flavour blends you won't find anywhere else: Jalapeno Lime, Habanero Mint,
+          Red Chili Melon, Hot Peach, Hot Mango. These aren't typical nicotine pouch offerings. They're the kind of thing
+          you try because they sound crazy, then end up ordering regularly because they actually work.
+        </p>
+
+        <h3>LOOP's Flavour Range</h3>
+        <p>
+          LOOP currently offers around 30+ products across several flavour families: spicy lineup (Jalapeno Lime, Red
+          Chili Melon, Habanero Mint), traditional mint (Smooth Mint, Cool Mint), fruit-forward (Cassis Bliss, Hot Peach,
+          Hot Mango), and unique blends (Licorice Fusion, Creamy Cappuccino, Mint Mania). Nicotine content ranges from
+          6.25 mg to 15.5 mg per pouch.
+        </p>
+
+        <h2>Skruf: The Established Standard</h2>
+        <p>
+          Skruf was founded in 2002 by Jonas Engwall and Adam Gillberg. It's now one of Sweden's largest smokeless
+          manufacturers and probably the most widely available premium nicotine pouch brand globally. They launched their
+          Super White line in 2018 and haven't looked back.
+        </p>
+        <p>
+          Skruf's philosophy is different from LOOP's. Rather than chasing bizarre flavours, Skruf focused on getting
+          the fundamentals right: clean materials, consistent quality, and a carefully curated flavour palette. They use
+          microcrystalline cellulose (actual plant fibres), high-purity nicotine, and natural flavourings.
+        </p>
+
+        <h3>Skruf's Strength Levels</h3>
+        <p>
+          Skruf uses a numbered system (#2 through #5): <strong>#2 (Light)</strong> at 6 mg per pouch for occasional or
+          new users, <strong>#3 (Standard)</strong> at 10 mg for the workhorse strength, <strong>#4 (Extra Strong)</strong>
+          at 11 mg for regular users, and <strong>#5 (Ultra Strong)</strong> at 16 mg for experienced users who want a
+          serious hit.
+        </p>
+
+        <h2>Head-to-Head Comparison</h2>
+
+        <h3>Flavour Range and Variety</h3>
+        <p>
+          <strong>LOOP wins here, hands down.</strong> If you're the type who gets bored or likes to experiment, LOOP
+          gives you permission to try something completely different each time you order. Jalapeno Lime is a genuine
+          flavour experience.
+        </p>
+        <p>
+          <strong>Skruf plays it safer.</strong> Their flavours are all good — genuinely well-executed mint and fruit
+          profiles — but they're in the same flavour family as dozens of other brands. The upside is consistency: you
+          know exactly what you're getting, and Skruf pulls off "clean mint" better than almost anyone.
+        </p>
+
+        <h3>Strength Options and Nicotine Hit</h3>
+        <p>
+          <strong>LOOP</strong> ranges from 6.25 mg to 15.5 mg. The Instant Rush tech seems to make a difference in
+          how quickly the nicotine hits, which some users prefer.
+        </p>
+        <p>
+          <strong>Skruf</strong> has a tidier strength ladder with clear numbering and genuine range from light to
+          ultra-strong. If you're new to pouches or <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">switching
+          from something stronger</a>, Skruf's #2 and #3 are easier to understand.
+        </p>
+
+        <h3>Pouch Format and Feel</h3>
+        <p>
+          <strong>LOOP</strong> offers slim and mini formats. The pouches are designed for fast saturation and tend to be
+          slightly more moist.
+        </p>
+        <p>
+          <strong>Skruf</strong> is famous for its soft, thin pouches. The super slim format (0.7 g) is genuinely discreet
+          and comfortable. If discretion and comfort are priority one, Skruf's pouch engineering is slightly ahead.
+        </p>
+
+        <h2>Who Should Choose LOOP?</h2>
+        <p>
+          Pick LOOP if you like variety and don't want to get bored with the same mint flavour repeatedly, you want a
+          strong, fast nicotine hit and appreciate the Instant Rush technology, you're willing to experiment with
+          boundary-pushing flavour profiles, you care about sustainable packaging (recyclable cans, 50% plant material),
+          or you're an experienced user looking for strength options in the 12-15 mg range.
+        </p>
+        <p>
+          In short: LOOP is for the adventurous user who treats pouches like a hobby and enjoys discovery.
+        </p>
+
+        <h2>Who Should Choose Skruf?</h2>
+        <p>
+          Pick Skruf if you know what you want and you want it consistently delivered every time, you prefer classic,
+          well-executed flavours — particularly mint, you value comfort and discretion, you're
+          <a href="/blog/best-nicotine-pouches-for-beginners">new to nicotine pouches</a> and want an intuitive strength
+          system (#2-#5), you want easy global availability, or you prefer a drier pouch feel for extended periods.
+        </p>
+        <p>
+          In short: Skruf is for the user who appreciates quality fundamentals and doesn't need to be surprised.
+        </p>
+
+        <h2>Final Verdict</h2>
+        <p>
+          There's no wrong choice here. LOOP and Skruf represent two valid approaches to the nicotine pouch category.
+          LOOP is the innovator breaking expectations with unusual flavours and fast-hit technology. Skruf is the
+          reliable professional who's been doing this for years and has refined every detail.
+        </p>
+        <p>
+          If you're stuck, buy one can of each. Many serious users actually rotate between them — LOOP for variety,
+          Skruf as the default go-to when you just want something straightforward. The Swedish nicotine pouch industry
+          is strong enough that both can coexist, and honestly, having choices this good is the real win.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/loop-vs-skruf` },
+        "description": description
+      })} />
+    </div>
+  </article>
+</Shop>

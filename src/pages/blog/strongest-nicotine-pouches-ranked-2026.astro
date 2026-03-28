@@ -1,0 +1,244 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-28';
+const title = 'Strongest Nicotine Pouches in 2026: The Complete Strength Ranking';
+const description = 'Ranked comparison of the strongest nicotine pouches available in 2026. Ultra-extreme (40 mg+), extreme (25-40 mg), and very strong tiers with exact mg/pouch specifications and safety guidance.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Strongest Pouches 2026' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Ranking</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 28, 2026</time>
+          <span>&middot;</span>
+          <span>14 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Understanding High-Strength Pouches</h2>
+        <p>
+          The high-strength nicotine pouch segment continues to grow in 2026, driven by experienced users seeking potent
+          alternatives to traditional snus and cigarettes. But raw milligrams matter less than understanding your tolerance,
+          the delivery mechanics of pouches, and when a product is genuinely the right fit.
+        </p>
+
+        <h3>mg/pouch vs mg/g</h3>
+        <p>
+          Nicotine strength is expressed two ways: <strong>mg/pouch</strong> (total nicotine in a single pouch — this is
+          what hits your bloodstream) and <strong>mg/g</strong> (nicotine concentration in the pouch material). A 50 mg/g
+          pouch in a tiny slim format might deliver less total nicotine than a larger regular-format pouch with 30 mg/g.
+          High-strength brands prioritize total mg/pouch because that's the delivery metric that matters.
+        </p>
+
+        <h3>Absorption Speed Matters</h3>
+        <p>
+          Total nicotine is only half the story. How fast your body absorbs it depends on moisture content (wetter
+          pouches release nicotine faster), pH level (higher pH accelerates absorption), and pouch size and format. Two
+          pouches with identical mg counts can feel very different based on these factors.
+        </p>
+
+        <h2>Ultra Extreme (40 mg+): For Long-Term Daily Users Only</h2>
+
+        <h3>NOIS Extreme — 50 mg/pouch</h3>
+        <p>
+          The current ceiling in commercial nicotine pouch production. Within 2-3 minutes, you'll feel a significant
+          head rush if you're not a daily extreme-strength user. Even seasoned users should treat the first pouch as a
+          test, not regular rotation.
+        </p>
+        <p><strong>Who this is for:</strong> Users actively rotating 40+ mg products daily. Not a "try once" product.</p>
+
+        <h3>Rabbit Peppermint — 50 mg/pouch</h3>
+        <p>
+          Rabbit's Extreme edition matches NOIS in raw strength. The Peppermint variant delivers the full 50 mg payload
+          in a tobacco-free formulation with authentic, smooth peppermint flavour.
+        </p>
+        <p><strong>Who this is for:</strong> Users seeking extreme strength with a more flavourful experience than basic mint.</p>
+
+        <h3>CUBA Black — 43 mg/pouch</h3>
+        <p>
+          <a href="/brands/cuba">CUBA's</a> Black Line is the strongest consistently available product from a major brand.
+          The formulation is slightly drier, giving you aggressive but controlled delivery rather than a shock.
+        </p>
+        <p><strong>Who this is for:</strong> Daily users accustomed to 30+ mg ranges.</p>
+
+        <h3>Siberia — Up to 40 mg/pouch</h3>
+        <p>
+          Siberia's strongest offerings (the -80 C line and select variants) deliver up to 40 mg per pouch. The dry
+          format means less immediate shock than wetter competitors, but total payload is just as high. Seasoned users
+          report a cleaner, less jittery experience.
+        </p>
+        <p><strong>Who this is for:</strong> Users who've rotated Siberia for months and want their familiar brand at the strongest level.</p>
+
+        <h2>Extreme (25-40 mg): The Working Range for Heavy Users</h2>
+
+        <h3>ICEBERG Black — 30 mg/pouch</h3>
+        <p>
+          ICEBERG's Black Line delivers a focused 30 mg per slim pouch with high moisture. Fast absorption — the
+          nicotine delivery is noticeable within minutes. The pouch is slick and fresh; no dry mouth.
+        </p>
+        <p><strong>Who this is for:</strong> Users stepping up from 20-25 mg ranges or transitioning from daily smoking.</p>
+
+        <h3>STNG MAX — 27.5 mg/pouch</h3>
+        <p>
+          Squarely in the extreme range without hitting the 30+ ceiling. Solid, manageable delivery with good flavour retention.
+        </p>
+        <p><strong>Who this is for:</strong> Users wanting something between 20-30 mg with reliable performance.</p>
+
+        <h3>White Fox — Up to 26 mg/pouch</h3>
+        <p>
+          White Fox's strongest variants deliver clean, steady nicotine without harshness. Well-constructed pouches with
+          minimal leaking and moderate but sustained absorption.
+        </p>
+        <p><strong>Who this is for:</strong> Users preferring tobacco-free pouches at higher strengths.</p>
+
+        <h3>Garant Extreme — 22 mg/pouch</h3>
+        <p>
+          The bridge between "very strong" and "extreme." Consistent quality and wide flavour availability (spearmint,
+          peppermint, crisp mint, fruit variants) make it reliable for daily users.
+        </p>
+        <p><strong>Who this is for:</strong> Daily users wanting strength and variety.</p>
+
+        <h2>Very Strong (15-25 mg): Intermediate to Heavy Users</h2>
+
+        <h3>Klint Avalanche Mint 6 — 17.5 mg/pouch</h3>
+        <p>
+          Balanced delivery. Not the fastest-hitting product, but reliable and smooth. Known for durability and consistent
+          nicotine release.
+        </p>
+        <p><strong>Who this is for:</strong> Users seeking "very strong" without jumping to 25+ mg.</p>
+
+        <h3>GLICK — 15-22 mg range</h3>
+        <p>
+          Consistent delivery focused on flavour over pure nicotine sensation. Specializes in unique flavours (berries,
+          citrus, herbal) more than mint-only competitors.
+        </p>
+        <p><strong>Who this is for:</strong> Users who want strength <em>and</em> want to enjoy flavour.</p>
+
+        <h2>Strong (10-15 mg): Gateway to Higher Strengths</h2>
+
+        <h3>Loop Strong — ~13.5 mg/pouch</h3>
+        <p>
+          <a href="/brands/loop">Loop's</a> Strong variant is positioned for users moving beyond medium-strength
+          alternatives. Moderate, predictable delivery — good for building tolerance without overwhelming.
+        </p>
+
+        <h3>Brand-Specific Strong Variants — 12-15 mg/pouch</h3>
+        <p>
+          Most major brands (<a href="/brands/zyn">ZYN</a>, <a href="/brands/velo">VELO</a>, ALP) offer "strong"
+          variants in the 10-15 mg range. These serve as a bridge between mainstream and specialist strong pouches.
+          Extremely wide flavour variety at this strength level.
+        </p>
+
+        <h2>Safety Guidance for High-Strength Pouches</h2>
+
+        <h3>Signs You're Pushing Too Hard</h3>
+        <p>
+          Stop immediately if you experience persistent nausea (not just the first session), dizziness beyond 10 minutes,
+          accelerated heartbeat that doesn't settle after 15 minutes, cold sweats or trembling, or severe headache. These
+          are signals your body can't process the nicotine load. Step down one tier and rebuild.
+        </p>
+
+        <h3>Building Tolerance Responsibly</h3>
+        <p>
+          <strong>Never start at 40+ mg.</strong> Not once. Not as a challenge. If you're new to pouches, start at
+          <a href="/products/strength/regular">6-10 mg</a>. After 2-3 weeks of daily use, progress to
+          <a href="/products/strength/strong">10-15 mg</a>. After another 2-3 weeks, consider 15-25 mg. Only after
+          6-8 weeks of consistent use consider 25+ mg tiers. Read our
+          <a href="/blog/best-nicotine-pouches-for-beginners">beginner guide</a> if you're starting out.
+        </p>
+
+        <h3>Who Actually Needs Ultra-Strong Pouches?</h3>
+        <p>
+          Honest answer: most people don't. You might genuinely need 40+ mg if you've been a daily heavy smoker
+          (1+ pack/day) and are using pouches as a complete replacement, or you've been using 25-30 mg pouches daily for
+          2+ months and hit a tolerance plateau.
+        </p>
+        <p>
+          The sweet spot for most regular users is 15-25 mg — strong enough to feel genuinely satisfying, manageable
+          enough for daily life, and sustainable long-term without escalating further.
+        </p>
+
+        <h2>FAQ</h2>
+
+        <h3>Can I switch brands at the same strength level?</h3>
+        <p>
+          Mostly yes — but don't expect identical sensations. CUBA Black (43 mg) and Siberia 40 mg both deliver extreme
+          strength, but CUBA hits faster and Siberia sustains longer. The nicotine load is the same; the delivery is different.
+        </p>
+
+        <h3>Why do some 30 mg pouches feel weaker than some 25 mg pouches?</h3>
+        <p>
+          Absorption speed. A wetter, higher-pH 25 mg pouch might deliver nicotine faster than a dry 30 mg pouch. Your
+          body feels the speed of delivery as much as the total load.
+        </p>
+
+        <h3>Should I refrigerate high-strength pouches?</h3>
+        <p>
+          Not essential, but it helps. High-strength pouches deteriorate faster at room temperature due to higher moisture
+          and nicotine oxidation. A fridge is ideal; a cool cupboard is acceptable for short-term storage.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/strongest-nicotine-pouches-ranked-2026` },
+        "description": description
+      })} />
+    </div>
+  </article>
+</Shop>

@@ -1,0 +1,236 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-28';
+const title = 'Best Nicotine Pouches for Beginners: 2026 Starter Guide';
+const description = 'Overwhelmed by pouch options? Here\'s exactly which low-strength brands to try first, what strength to start with, and what to expect in your first week.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Beginner Guide 2026' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Buying Guide</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 28, 2026</time>
+          <span>&middot;</span>
+          <span>11 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Before You Start: What to Look For</h2>
+        <p>
+          Starting with nicotine pouches can feel overwhelming. You're staring at 20+ brands, strength numbers ranging
+          from 1.5 mg to 17 mg, and confusing format names like "slim," "regular," and "micro." The biggest mistake
+          beginners make? Assuming you need the "best" pouch immediately. You don't.
+        </p>
+        <p>
+          Your first week is about finding what <strong>you</strong> respond to — not what social media says is coolest.
+          This guide cuts through the noise and gives you exactly seven tried-and-tested options to start with, all in
+          the beginner-friendly 2-8 mg range.
+        </p>
+
+        <h3>Nicotine Strength: Stay in the 2-6 mg Zone</h3>
+        <p>
+          A standard cigarette delivers about 1-2 mg of absorbed nicotine. A 3 mg pouch gives you roughly what a light
+          cigarette user absorbs over a longer, steadier timeframe. Going above 6 mg as a beginner often leads to nausea
+          or an unpleasant "rush." Start lower and move up — you can always use a second pouch if needed.
+        </p>
+
+        <h3>Format: Slim or Mini</h3>
+        <p>
+          Slim and mini pouches are smaller, feel less intrusive, and release nicotine more gently. Regular-format pouches
+          are thicker and deliver faster — save those for later.
+        </p>
+
+        <h3>Flavour: Mild and Neutral</h3>
+        <p>
+          <a href="/products/flavor/mint">Spearmint</a>, peppermint, and tobacco are safe bets. Stay away from
+          super-sweet or intense cinnamon flavours your first week — you're learning <em>how</em> pouches work,
+          not hunting for your favourite flavour yet.
+        </p>
+
+        <h2>The 7 Best Beginner Nicotine Pouches</h2>
+
+        <h3>1. ZYN Mini White (1.5 mg or 3 mg)</h3>
+        <p>
+          <a href="/brands/zyn">ZYN</a> Mini is the gold standard entry point. If you're genuinely new to nicotine or
+          ex-vaping and want to dial back, the 1.5 mg is the lowest you can buy anywhere. The pouch is dry — that means
+          less drip, less spit, and a cleaner experience overall. Sessions last 20-30 minutes, which is perfect for
+          learning your rhythm.
+        </p>
+        <p><strong>How to use:</strong> Pop it in your upper lip, leave it for 20 minutes, and remove. If you feel nothing after one pouch, try the 3 mg next time.</p>
+
+        <h3>2. VELO Easy Mint (4 mg)</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Easy Mint is the bridge if you want a slightly more noticeable kick than ZYN
+          Mini but still staying gentle. It's creamy, the mint is fresh without being aggressive, and the 4 mg sits right
+          in the "I can definitely feel this" zone. VELO pouches have a bit more moisture, which means slightly faster
+          nicotine absorption. Sessions run 25-35 minutes.
+        </p>
+        <p><strong>How to use:</strong> Place between gum and lip, hold still for 25-30 minutes. Don't chew it — let it sit.</p>
+
+        <h3>3. HELWIT (3.5 mg or 7.5 mg)</h3>
+        <p>
+          <a href="/brands/helwit">HELWIT</a> focuses on comfort. The pouch material is softer, which means it adapts
+          better to your gum without causing irritation. The 3.5 mg is perfect if ZYN's 1.5 mg felt like nothing but 3 mg
+          feels slightly too much — it's the "Goldilocks" strength. Users report less initial harshness compared to other brands.
+        </p>
+        <p><strong>Best for:</strong> Sensitive gums, anyone wanting in-between strengths.</p>
+
+        <h3>4. ON! Mini (3 mg)</h3>
+        <p>
+          ON! makes the smallest pouch on the market — a micro-portion that's almost invisible in your mouth. If
+          discretion is your top priority (work, social situations), ON! is your answer. It's also the driest pouch
+          available, meaning virtually zero drip. Sessions last 30-45 minutes.
+        </p>
+        <p><strong>Best for:</strong> Maximum discretion, daytime use.</p>
+
+        <h3>5. Kelly White (4 mg or 8 mg)</h3>
+        <p>
+          <a href="/brands/kelly-white">Kelly White</a> emphasizes comfort and an ultra-clean white fill. The pouches
+          are soft and pack nicely without feeling bulky. The 4 mg is an underrated beginner option — slightly stronger
+          than ZYN 3 mg but not as intense as VELO. Sessions are 25-30 minutes with a steady, predictable release.
+        </p>
+        <p><strong>Best for:</strong> Users who want a natural-feeling pouch without fuss.</p>
+
+        <h3>6. ACE Quick Release (3 mg or 6 mg)</h3>
+        <p>
+          ACE is known for a "quick release" formula — nicotine hits faster and sessions are shorter (30-45 minutes vs.
+          the slower 60-minute burn of some competitors). Great for beginners because the quick feedback loop helps you
+          dial in your perfect strength in days rather than weeks.
+        </p>
+        <p><strong>Best for:</strong> Users who want to find their ideal strength quickly.</p>
+
+        <h3>7. Loop Nicotine-Free (Jalapeno Lime)</h3>
+        <p>
+          Yes, a zero-nicotine option. <a href="/brands/loop">Loop's</a> nicotine-free line lets you practice the
+          mechanics — how long to hold it, where it sits comfortably, how your mouth responds — with zero risk. If you
+          like it, you can graduate to their nicotine options. The Jalapeno Lime is bold and interesting without being
+          overwhelming.
+        </p>
+        <p><strong>Best for:</strong> Trying the format before committing to nicotine.</p>
+
+        <h2>5 Beginner Mistakes to Avoid</h2>
+        <p>
+          <strong>Mistake 1: Swallowing the spit.</strong> Your mouth will produce saliva. Don't swallow it straight —
+          let small amounts trickle down naturally, or spit into a cup/tissue.
+        </p>
+        <p>
+          <strong>Mistake 2: Jumping to high strength too fast.</strong> You feel nothing after 10 minutes, so you think
+          "Maybe I need 6 mg." Wait the full 20-30 minutes. Nicotine pouches deliver slowly — a 3 mg pouch might take
+          15 minutes to peak.
+        </p>
+        <p>
+          <strong>Mistake 3: Using the same spot every time.</strong> Rotate where you place the pouch — upper left,
+          upper right. Using the same spot every day causes irritation.
+        </p>
+        <p>
+          <strong>Mistake 4: Keeping it in too long.</strong> Remove the pouch after 45 minutes max. Leaving it longer
+          doesn't increase the nicotine hit — it just irritates your mouth.
+        </p>
+        <p>
+          <strong>Mistake 5: Chewing or moving the pouch around.</strong> Let it sit. Totally still. Stillness = better
+          absorption and less gum soreness.
+        </p>
+
+        <h2>Your First Week: What to Expect</h2>
+        <p>
+          <strong>Day 1-2:</strong> You'll place your first pouch and wonder if anything's happening. After 15-20 minutes,
+          you might feel a slight tingle, a bit of warmth, and a subtle "alert" feeling. Not like a cigarette rush —
+          more like coffee kicking in gently.
+        </p>
+        <p>
+          <strong>Day 3-4:</strong> By now, you should feel the nicotine clearly — a light head sensation, slight rush,
+          good focus. If you feel nothing at all, try the next strength up. If you feel queasy, dial back.
+        </p>
+        <p>
+          <strong>Day 5-7:</strong> You've found your rhythm. You know your preferred strength, how long a session feels
+          right, and you're not thinking about the pouch mechanics anymore.
+        </p>
+
+        <h2>Next Steps</h2>
+        <p>
+          <strong>Never used nicotine?</strong> Start with ZYN Mini 1.5 mg or HELWIT 3.5 mg.
+        </p>
+        <p>
+          <strong>Ex-vaper cutting back?</strong> Try ZYN Mini 3 mg or VELO 4 mg.
+        </p>
+        <p>
+          <strong>Just want to try the format?</strong> Grab Loop zero-nicotine to practice.
+        </p>
+        <p>
+          <strong>Sensitive gums?</strong> Go with HELWIT or Kelly White.
+        </p>
+        <p>
+          <strong>Discretion matters?</strong> ON! Mini is your answer.
+        </p>
+        <p>
+          Order a single tin (10-15 pouches) of your pick. Use it every day for 5 days. Notice what works. Then expand.
+          Once you've found your base, explore our guides to
+          <a href="/blog/best-mint-nicotine-pouches-2026">best mint pouches</a>,
+          <a href="/blog/best-berry-nicotine-pouches">best berry pouches</a>, and
+          <a href="/blog/how-to-choose-your-strength">choosing the right strength</a>.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/best-nicotine-pouches-for-beginners-2026` },
+        "description": description
+      })} />
+    </div>
+  </article>
+</Shop>

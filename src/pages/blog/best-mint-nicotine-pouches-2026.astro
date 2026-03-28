@@ -1,0 +1,242 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-28';
+const title = 'The 10 Best Mint Nicotine Pouches in 2026: Expert Picks';
+const description = 'Expert ranking of the top mint nicotine pouches. Compare White Fox, VELO, Skruf, ZYN, Nordic Spirit, and more. Includes strength guide, flavour profiles, and buying tips.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Best Mint Pouches 2026' },
+      ]} />
+
+      <header class="mb-10">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Ranking</p>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
+        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+          <time datetime={publishDate}>March 28, 2026</time>
+          <span>&middot;</span>
+          <span>10 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Why Mint Remains the King</h2>
+        <p>
+          <a href="/products/flavor/mint">Mint</a> dominates the nicotine pouch world for good reason. It's refreshing,
+          versatile, and honest — no candy masking, just clean flavour and nicotine. Whether you're after a subtle spearmint
+          whisper or an ice mint brain freeze, the category has evolved dramatically. The major brands have dialed in their
+          mint formulas over years of iteration, and 2026 is packed with genuinely solid options.
+        </p>
+        <p>
+          Mint accounts for the largest share of nicotine pouch sales globally, and that's not changing anytime soon. The
+          flavour works across strength tiers — you can run a 3 mg spearmint as your morning light hit or a 12 mg peppermint
+          as a serious nicotine delivery system. What to look for in a mint pouch: <strong>consistency</strong> (flavour
+          shouldn't fade after 10 minutes), <strong>cooling sensation</strong> (good ones deliver actual menthol without
+          burning), and <strong>nicotine longevity</strong> (the hit should plateau around the 5-minute mark and hold steady
+          until 30-40 minutes in).
+        </p>
+
+        <h2>The Top 10 Mint Nicotine Pouches of 2026</h2>
+
+        <h3>1. White Fox Double Mint — 12 mg</h3>
+        <p>
+          White Fox doesn't play it safe with mint. Double Mint hits with an extreme cooling sensation that's more than
+          theatre — it's a genuine ice effect that tingles across your gums for the full duration. At 12 mg, this is solidly
+          in the <a href="/products/strength/strong">strong</a> category. The peppermint character is assertive without
+          tasting artificial. Flavour holds steady past 35 minutes, and the cooling never quite fades.
+        </p>
+        <p><strong>Best for:</strong> Experienced users seeking maximum cooling and strong nicotine in a compact pouch.</p>
+
+        <h3>2. VELO Crispy Peppermint — 9.8 mg</h3>
+        <p>
+          <a href="/brands/velo">VELO's</a> reformulation of their strongest mint option nailed the brief: clean peppermint,
+          rapid onset, long duration. There's a slightly dry, almost crisp quality to the flavour that sets it apart from the
+          usual waxy mint profiles. At 9.8 mg, it's genuinely strong without the overkill feeling of the 12 mg tier. Flavour
+          maintains through 40+ minutes.
+        </p>
+        <p><strong>Best for:</strong> Users seeking strong but balanced peppermint without the extreme cooling of White Fox.</p>
+
+        <h3>3. Skruf Fresh Mint — 10 mg</h3>
+        <p>
+          <a href="/brands/skruf">Skruf</a> dialed in their mint differently. Fresh Mint uses a creamier, less aggressive
+          peppermint than competitors. The cooling effect is present but restrained — you get the menthol chill without the
+          brain-freeze sensation. The super-white pouch material is finer and softer than most, which means better moisture
+          control and a gentler experience against the gums.
+        </p>
+        <p><strong>Best for:</strong> Users who want strong mint without extreme cooling; those with sensitive gums.</p>
+
+        <h3>4. ZYN Cool Mint Strong — 6 mg</h3>
+        <p>
+          <a href="/brands/zyn">ZYN's</a> Cool Mint Strong is their flagship mint offering. It lands in the sweet spot
+          for newer users stepping up from light nicotine. The flavour is balanced spearmint, leaning slightly toward the
+          aromatic side without being floral. Cooling is moderate and consistent. Every pouch in a can delivers the same
+          hit. Flavour lasts a solid 30-35 minutes.
+        </p>
+        <p><strong>Best for:</strong> Users transitioning to <a href="/products/strength/regular">regular strength</a>; those who prefer balanced mint profiles.</p>
+
+        <h3>5. Nordic Spirit Frosty Mint — 9 mg</h3>
+        <p>
+          Nordic Spirit took a different approach — they blend menthol and peppermint rather than relying on one or the
+          other. The result is more complex than typical mints: you get the cooling menthol hit upfront, followed by a
+          peppermint backbone. Here's the standout: flavour duration consistently outlasts competitors by 5-10 minutes,
+          holding intensity past 40 minutes.
+        </p>
+        <p><strong>Best for:</strong> Users seeking extended flavour duration and a more complex mint experience.</p>
+
+        <h3>6. White Fox Slim Ice Mint — 12 mg</h3>
+        <p>
+          White Fox's Slim format paired with Ice Mint creates a concentrated mint experience. At 12 mg packed into a slim
+          pouch, the nicotine hit is immediate. The ice aspect is genuine — a legitimate freezing sensation that peaks around
+          5-10 minutes and gradually mellows. Flavour holds strong for 25-30 minutes.
+        </p>
+        <p><strong>Best for:</strong> Users wanting a rapid, powerful hit in a compact format; shorter session preferences.</p>
+
+        <h3>7. VELO Bright Spearmint — 4 mg</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Bright Spearmint is the mint pouch for someone starting out. At 4 mg, the
+          nicotine is gentle but noticeable. The spearmint is bright and clean, with slightly fruity undertones. Cooling
+          is subtle, almost background-level. A good transition pouch for users who aren't ready for the extreme mints.
+          Flavour duration is solid at 30+ minutes.
+        </p>
+        <p><strong>Best for:</strong> <a href="/blog/best-nicotine-pouches-for-beginners">Newcomers</a>; users rotating light-and-strong through the day.</p>
+
+        <h3>8. Glick Extreme Frozen Mint — 10 mg</h3>
+        <p>
+          Glick emerged as a serious player in 2024-2025, and their Extreme Frozen Mint shows why. The peppermint is clean
+          and bright — pure mint oil character. Frozen adds a cooling element that's present but controlled. Nicotine delivery
+          is remarkably consistent, settling predictably around 5 minutes and holding through 35+ minutes.
+        </p>
+        <p><strong>Best for:</strong> Users seeking reliable quality at mid-strength; those building mint variety into rotation.</p>
+
+        <h3>9. Skruf Superwhite Frozen Mint Xtra Strong — 13 mg</h3>
+        <p>
+          <a href="/brands/skruf">Skruf's</a> Xtra Strong tier in Frozen Mint is purpose-built for experienced users who
+          need serious nicotine and don't want to sacrifice mint flavour. There's a pronounced cooling effect that sits well
+          with the spearmint profile. The superwhite pouch material manages the moisture and nicotine load without degrading
+          mid-session.
+        </p>
+        <p><strong>Best for:</strong> Heavy users seeking maximum nicotine in a spearmint package; experienced pouch veterans.</p>
+
+        <h3>10. Vika Ice Cool Mint — 9 mg</h3>
+        <p>
+          Vika is the underdog brand that delivers disproportionate quality. The ice sensation is real without being gimmicky.
+          Peppermint sits slightly forward, giving you actual flavour rather than a cooling-only experience. Vika's
+          price-to-quality ratio remains hard to beat. Flavour consistency is solid through 30+ minutes.
+        </p>
+        <p><strong>Best for:</strong> Budget-conscious users; daily drivers; those seeking balance without brand premium pricing.</p>
+
+        <h2>How to Choose Your Mint Pouch</h2>
+
+        <h3>By Nicotine Strength</h3>
+        <p>
+          <strong><a href="/products/strength/mild">3-5 mg (Light)</a></strong> — VELO Bright Spearmint, ZYN Cool Mint.
+          Start here if you're new to pouches or rotating from cigarettes.
+        </p>
+        <p>
+          <strong><a href="/products/strength/regular">6-9 mg (Mid-Strong)</a></strong> — Glick Frozen Mint, Vika Ice Cool
+          Mint, Nordic Spirit Frosty Mint. The most versatile tier; works as a primary pouch or daily driver.
+        </p>
+        <p>
+          <strong><a href="/products/strength/strong">10-13 mg (Strong)</a></strong> — White Fox Double Mint, Skruf Fresh
+          Mint, VELO Crispy Peppermint. For experienced users; powerful nicotine delivery without extreme flavour trade-offs.
+        </p>
+
+        <h3>By Cooling Sensation</h3>
+        <p>
+          <strong>Subtle/None:</strong> Skruf Fresh Mint, ZYN Cool Mint. Mint character without overwhelming menthol.
+        </p>
+        <p>
+          <strong>Moderate:</strong> Glick Frozen Mint, Vika Ice Cool Mint, Nordic Spirit Frosty Mint. Balanced cooling
+          that enhances the mint experience.
+        </p>
+        <p>
+          <strong>Extreme:</strong> White Fox Double Mint, White Fox Ice Mint Slim. Maximum cooling effect; literally
+          feels like ice in your mouth.
+        </p>
+
+        <h3>By Session Duration</h3>
+        <p>
+          <strong>Short (20-25 min):</strong> White Fox Ice Mint Slim, Skruf Xtra Strong. High-intensity, shorter sessions.
+        </p>
+        <p>
+          <strong>Standard (30-35 min):</strong> Most mid-strong options (VELO Crispy, Glick Frozen, Vika Ice Cool).
+        </p>
+        <p>
+          <strong>Extended (40+ min):</strong> Nordic Spirit Frosty Mint, Skruf Fresh Mint. Flavour holds longer;
+          better for slow-burn sessions.
+        </p>
+
+        <h2>Spearmint vs Peppermint: What's the Difference?</h2>
+        <p>
+          Spearmint is softer, slightly fruity, and less intense than peppermint. Peppermint delivers a sharper, more
+          aggressive cooling sensation. For pouches, spearmint works better in lighter strengths (4-6 mg), while peppermint
+          shines at mid-strong and strong tiers (9 mg+).
+        </p>
+
+        <h2>Final Thoughts</h2>
+        <p>
+          Mint nicotine pouches in 2026 have matured past gimmick territory. Your choice comes down to how you want the
+          experience to feel: extreme cooling (White Fox), balanced and reliable (VELO Crispy Peppermint), longer sessions
+          (Nordic Spirit), or maximum strength (Skruf Xtra). Try a few, build your rotation, and find your go-to.
+          The quality is there to support it.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/best-mint-nicotine-pouches-2026` },
+        "description": description
+      })} />
+    </div>
+  </article>
+</Shop>
