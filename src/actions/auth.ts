@@ -17,12 +17,26 @@ function createSupabaseFromContext(ctx: { cookies: any; request: Request }) {
   return createServerClient(url, key, {
     cookies: {
       getAll() {
-        return ctx.cookies.getAll().map((c: any) => ({ name: c.name ?? '', value: c.value }));
+        // Astro action ctx.cookies may not have getAll() — use headers fallback
+        try {
+          if (typeof ctx.cookies.getAll === 'function') {
+            return ctx.cookies.getAll().map((c: any) => ({ name: c.name ?? '', value: c.value }));
+          }
+        } catch { /* fall through */ }
+
+        // Fallback: parse cookies from the request header
+        const header = ctx.request.headers.get('cookie') ?? '';
+        return header.split(';').filter(Boolean).map((pair) => {
+          const [name, ...rest] = pair.trim().split('=');
+          return { name: name ?? '', value: rest.join('=') };
+        });
       },
       setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
-        for (const { name, value, options } of cookiesToSet) {
-          ctx.cookies.set(name, value, options as any);
-        }
+        try {
+          for (const { name, value, options } of cookiesToSet) {
+            ctx.cookies.set(name, value, options as any);
+          }
+        } catch { /* cookies may be read-only in some contexts */ }
       },
     },
   });
