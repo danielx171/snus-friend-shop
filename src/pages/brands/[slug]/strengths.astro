@@ -1,0 +1,154 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import ProductCard from '@/components/astro/ProductCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const brands = await getCollection('brands');
+  const allProducts = await getCollection('products');
+
+  return brands
+    .filter((brand) => allProducts.some((p) => p.data.brandSlug === brand.id))
+    .map((brand) => {
+      const products = allProducts.filter((p) => p.data.brandSlug === brand.id);
+      return { params: { slug: brand.id }, props: { brand, products } };
+    });
+}
+
+const { brand, products } = Astro.props;
+const b = brand.data;
+
+const strengthOrder = ['light', 'normal', 'strong', 'extra-strong', 'super-strong'];
+const strengthLabels: Record<string, string> = {
+  light: 'Light (1-4mg)', normal: 'Normal (4-6mg)', strong: 'Strong (6-12mg)',
+  'extra-strong': 'Extra Strong (12-20mg)', 'super-strong': 'Super Strong (20mg+)',
+};
+const strengthBestFor: Record<string, string> = {
+  light: 'Beginners, light smokers',
+  normal: 'Daily use, most users',
+  strong: 'Experienced users, ex-smokers',
+  'extra-strong': 'High tolerance users',
+  'super-strong': 'Extreme — experienced only',
+};
+
+const strengthGroups = new Map<string, typeof products>();
+for (const p of products) {
+  const key = p.data.strengthKey;
+  if (!strengthGroups.has(key)) strengthGroups.set(key, []);
+  strengthGroups.get(key)!.push(p);
+}
+
+const nicotineValues = products.map((p) => p.data.nicotineContent).filter(Boolean);
+const minMg = nicotineValues.length ? Math.min(...nicotineValues) : 0;
+const maxMg = nicotineValues.length ? Math.max(...nicotineValues) : 0;
+
+const title = `${b.name} Nicotine Strengths: ${minMg}mg to ${maxMg}mg Guide`;
+const description = `Compare all ${b.name} nicotine pouch strengths from ${minMg}mg to ${maxMg}mg. ${products.length} products across ${strengthGroups.size} strength levels with detailed comparison.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${b.name} Nicotine Strengths`,
+  description,
+  url: `https://snusfriends.com/brands/${brand.id}/strengths`,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: products.length,
+    itemListElement: products.slice(0, 20).map((p: any, i: number) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://snusfriends.com/products/${p.id}`,
+      name: p.data.name,
+    })),
+  },
+};
+---
+
+<Shop title={title} description={description} canonical={`/brands/${brand.id}/strengths`}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="mx-auto max-w-7xl px-4 py-8">
+    <Breadcrumb items={[
+      { label: 'Brands', href: '/brands' },
+      { label: b.name, href: `/brands/${brand.id}` },
+      { label: 'Strengths' },
+    ]} />
+
+    <div class="mb-8 max-w-3xl">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        {b.name} Nicotine Strengths: {minMg}mg to {maxMg}mg
+      </h1>
+      <p class="mt-3 text-base leading-relaxed text-muted-foreground">
+        {b.name} offers nicotine pouches ranging from <strong class="text-foreground">{minMg}mg</strong> to
+        <strong class="text-foreground">{maxMg}mg</strong> per pouch across {strengthGroups.size} strength levels.
+        Not sure which strength is right for you? Read our
+        <a href="/blog/how-to-choose-your-strength" class="underline hover:text-foreground">strength guide</a> or
+        explore <a href={`/brands/${brand.id}/flavours`} class="underline hover:text-foreground">{b.name} flavours</a>.
+      </p>
+    </div>
+
+    <!-- Strength comparison table -->
+    <div class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-border rounded-lg">
+        <thead class="bg-muted/30">
+          <tr>
+            <th class="px-4 py-3 text-left font-semibold text-foreground">Strength Level</th>
+            <th class="px-4 py-3 text-left font-semibold text-foreground">Range</th>
+            <th class="px-4 py-3 text-left font-semibold text-foreground">Products</th>
+            <th class="px-4 py-3 text-left font-semibold text-foreground">Best For</th>
+          </tr>
+        </thead>
+        <tbody>
+          {strengthOrder.filter((k) => strengthGroups.has(k)).map((key) => (
+            <tr class="border-t border-border">
+              <td class="px-4 py-3 font-medium text-foreground">{strengthLabels[key]?.split(' (')[0]}</td>
+              <td class="px-4 py-3 text-muted-foreground">{strengthLabels[key]?.match(/\(([^)]+)\)/)?.[1]}</td>
+              <td class="px-4 py-3 text-muted-foreground">{strengthGroups.get(key)?.length}</td>
+              <td class="px-4 py-3 text-muted-foreground">{strengthBestFor[key]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    {strengthOrder.filter((k) => strengthGroups.has(k)).map((key) => {
+      const group = strengthGroups.get(key)!;
+      return (
+        <section class="mb-12">
+          <h2 class="mb-4 text-xl font-semibold text-foreground">
+            {strengthLabels[key]} ({group.length} {group.length === 1 ? 'product' : 'products'})
+          </h2>
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {group.sort((a: any, b: any) => a.data.nicotineContent - b.data.nicotineContent).map((p: any) => (
+              <ProductCard
+                slug={p.id}
+                name={p.data.name}
+                brand={p.data.brand}
+                brandSlug={p.data.brandSlug}
+                imageUrl={p.data.imageUrl}
+                prices={p.data.prices}
+                stock={p.data.stock}
+                nicotineContent={p.data.nicotineContent}
+                strengthKey={p.data.strengthKey}
+                flavorKey={p.data.flavorKey}
+                ratings={p.data.ratings}
+                badgeKeys={p.data.badgeKeys}
+              />
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <div class="mt-12 rounded-xl border border-border bg-card/60 p-8 text-center">
+      <h2 class="text-xl font-semibold text-foreground mb-3">Explore More {b.name}</h2>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href={`/brands/${brand.id}`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:border-primary/30">All {b.name} Products</a>
+        <a href={`/brands/${brand.id}/flavours`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:border-primary/30">{b.name} Flavours</a>
+        <a href={`/brands/${brand.id}/review`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:border-primary/30">{b.name} Review</a>
+      </div>
+    </div>
+  </div>
+</Shop>

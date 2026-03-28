@@ -1,0 +1,130 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const brands = await getCollection('brands');
+  const allProducts = await getCollection('products');
+
+  return brands
+    .filter((brand) => allProducts.some((p) => p.data.brandSlug === brand.id))
+    .map((brand) => {
+      const products = allProducts.filter((p) => p.data.brandSlug === brand.id);
+      return { params: { slug: brand.id }, props: { brand, products } };
+    });
+}
+
+const { brand, products } = Astro.props;
+const b = brand.data;
+
+const strengthKeys = [...new Set(products.map((p) => p.data.strengthKey))];
+const flavourKeys = [...new Set(products.map((p) => p.data.flavorKey))];
+const nicotineValues = products.map((p) => p.data.nicotineContent).filter(Boolean);
+const minMg = nicotineValues.length ? Math.min(...nicotineValues) : 0;
+const maxMg = nicotineValues.length ? Math.max(...nicotineValues) : 0;
+const prices = products.flatMap((p) => Object.values(p.data.prices).filter((v): v is number => typeof v === 'number' && v > 0));
+const minPrice = prices.length ? Math.min(...prices) : 0;
+
+const manufacturerNote = b.manufacturer ? ` Manufactured by ${b.manufacturer}.` : '';
+const bestForText =
+  maxMg <= 6 ? `${b.name} focuses on lighter strengths, making it an excellent choice for beginners and users who prefer a gentle nicotine experience with emphasis on flavour.` :
+  maxMg <= 14 ? `${b.name} covers the light to strong range, suitable for most regular pouch users. A solid all-rounder brand.` :
+  maxMg <= 25 ? `${b.name} offers a wide strength range that caters to both beginners and experienced users looking for a stronger kick.` :
+  `${b.name} includes ultra-strong options above 20mg — strictly for experienced users with established tolerance. Start with the lower strengths and work up.`;
+
+const flavourLabels: Record<string, string> = {
+  mint: 'Mint', citrus: 'Citrus', berry: 'Berry', fruit: 'Fruit',
+  coffee: 'Coffee', cola: 'Cola', menthol: 'Menthol', wintergreen: 'Wintergreen',
+  tropical: 'Tropical', ice: 'Ice', original: 'Original', licorice: 'Licorice',
+};
+const strengthLabels: Record<string, string> = {
+  light: 'Light', normal: 'Normal', strong: 'Strong',
+  'extra-strong': 'Extra Strong', 'super-strong': 'Super Strong',
+};
+
+const title = `${b.name} Nicotine Pouches Review: ${products.length} Products Rated`;
+const priceStr = minPrice > 0 ? minPrice.toFixed(2) : '0.00';
+const description = `Honest ${b.name} review — ${products.length} products, ${flavourKeys.length} flavours, ${minMg}-${maxMg}mg strength range. Prices from EUR ${priceStr}. Everything you need to know.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Review',
+  itemReviewed: {
+    '@type': 'Brand',
+    name: b.name,
+    ...(b.logoUrl && { logo: b.logoUrl }),
+  },
+  author: { '@type': 'Organization', name: 'SnusFriends Editorial' },
+  reviewBody: description,
+  publisher: { '@type': 'Organization', name: 'SnusFriend', url: 'https://snusfriends.com' },
+};
+---
+
+<Shop title={title} description={description} canonical={`/brands/${brand.id}/review`} ogType="article">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <Breadcrumb items={[
+      { label: 'Brands', href: '/brands' },
+      { label: b.name, href: `/brands/${brand.id}` },
+      { label: 'Review' },
+    ]} />
+
+    <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-6">
+      {b.name} Nicotine Pouches: Full Brand Review
+    </h1>
+
+    <!-- Quick stats -->
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
+      <div class="rounded-xl border border-border bg-card/60 p-4 text-center">
+        <div class="text-2xl font-bold text-foreground">{products.length}</div>
+        <div class="text-xs text-muted-foreground">Products</div>
+      </div>
+      <div class="rounded-xl border border-border bg-card/60 p-4 text-center">
+        <div class="text-2xl font-bold text-foreground">{flavourKeys.length}</div>
+        <div class="text-xs text-muted-foreground">Flavours</div>
+      </div>
+      <div class="rounded-xl border border-border bg-card/60 p-4 text-center">
+        <div class="text-2xl font-bold text-foreground">{minMg}-{maxMg}mg</div>
+        <div class="text-xs text-muted-foreground">Strength Range</div>
+      </div>
+      <div class="rounded-xl border border-border bg-card/60 p-4 text-center">
+        <div class="text-2xl font-bold text-foreground">€{minPrice.toFixed(2)}</div>
+        <div class="text-xs text-muted-foreground">From (per can)</div>
+      </div>
+    </div>
+
+    <div class="space-y-6 text-base leading-relaxed text-muted-foreground max-w-3xl">
+      {b.description ? <p>{b.description}</p> : null}
+
+      <h2 class="text-xl font-semibold text-foreground">What {b.name} Offers</h2>
+      <p>
+        {b.name} currently has <strong class="text-foreground">{products.length} products</strong> in our catalogue,
+        spanning {flavourKeys.length} flavour {flavourKeys.length === 1 ? 'category' : 'categories'}
+        ({flavourKeys.map((k) => flavourLabels[k] ?? k).join(', ')}) and
+        {strengthKeys.length} strength {strengthKeys.length === 1 ? 'level' : 'levels'}
+        ({strengthKeys.map((k) => strengthLabels[k] ?? k).join(', ')}).{manufacturerNote}
+      </p>
+
+      <h2 class="text-xl font-semibold text-foreground">Who Is {b.name} Best For?</h2>
+      <p>{bestForText}</p>
+
+      <h2 class="text-xl font-semibold text-foreground">Pricing</h2>
+      <p>
+        {b.name} pouches start from <strong class="text-foreground">€{minPrice.toFixed(2)}</strong> per can.
+        Multi-pack pricing brings the per-can cost down — check individual product pages for 3, 5, and 10-pack deals.
+        Free EU shipping on orders over €29.
+      </p>
+
+      <h2 class="text-xl font-semibold text-foreground">Explore {b.name}</h2>
+      <div class="flex flex-wrap gap-3">
+        <a href={`/brands/${brand.id}`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">All {b.name} Products</a>
+        <a href={`/brands/${brand.id}/flavours`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">{b.name} Flavours</a>
+        <a href={`/brands/${brand.id}/strengths`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">{b.name} Strengths</a>
+        <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">Beginner's Guide</a>
+      </div>
+    </div>
+  </div>
+</Shop>
