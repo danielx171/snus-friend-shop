@@ -16,10 +16,12 @@ interface CardAddToCartProps {
   badgeKeys: string[];
 }
 
-export default function CardAddToCart(props: CardAddToCartProps) {
+import { memo, useCallback } from 'react';
+
+const CardAddToCart = memo(function CardAddToCart(props: CardAddToCartProps) {
   const isOutOfStock = props.stock === 0;
 
-  function handleClick() {
+  const handleClick = useCallback(() => {
     if (isOutOfStock) return;
     const product: Product = {
       id: props.slug,
@@ -42,7 +44,7 @@ export default function CardAddToCart(props: CardAddToCartProps) {
     addToCart(product, 'pack1');
     openCart();
     cartToast(props.name);
-  }
+  }, [props.slug, props.name, props.brand, props.imageUrl, props.flavorKey, props.strengthKey, props.nicotineContent, props.ratings, props.badgeKeys, props.prices, props.stock, isOutOfStock]);
 
   return (
     <button
@@ -55,4 +57,6 @@ export default function CardAddToCart(props: CardAddToCartProps) {
       {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
     </button>
   );
-}
+});
+
+export default CardAddToCart;

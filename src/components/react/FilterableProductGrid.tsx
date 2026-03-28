@@ -584,7 +584,7 @@ export default function FilterableProductGrid({
       {/* Desktop: sidebar + grid */}
       <div className="flex gap-6">
         {/* Desktop sidebar */}
-        <aside className="hidden w-[240px] shrink-0 lg:block">
+        <aside className="hidden w-[240px] shrink-0 lg:block" aria-label="Product filters">
           <div className="sticky top-24 rounded-xl border border-border bg-card/40 p-4">
             <FilterSidebarContent
               filterGroups={filterGroups}

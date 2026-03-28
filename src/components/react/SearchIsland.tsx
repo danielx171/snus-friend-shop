@@ -118,6 +118,7 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
           value={query}
           onChange={handleChange}
           placeholder="Search pouches, brands, flavours..."
+          aria-label="Search products"
           autoComplete="off"
           className="w-full rounded-xl border border-border bg-card/60 py-4 pl-12 pr-5 text-lg text-foreground placeholder:text-muted-foreground backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         />

@@ -22,11 +22,11 @@ function PointsRedemptionInner() {
 
   if (!userId) {
     return (
-      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
-        <p class="text-muted-foreground mb-4">Sign in to redeem your points for rewards.</p>
+      <div className="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
+        <p className="text-muted-foreground mb-4">Sign in to redeem your points for rewards.</p>
         <a
           href="/login"
-          class="inline-flex items-center rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+          className="inline-flex items-center rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
         >
           Sign In
         </a>

@@ -28,14 +28,3 @@ export function setTheme(next: Theme) {
   }
 }
 
-export function cycleTheme() {
-  const current = $theme.get();
-  const idx = allThemes.indexOf(current);
-  const next = allThemes[(idx + 1) % allThemes.length];
-  setTheme(next);
-}
-
-/** Legacy toggle — kept for backward compat */
-export function toggleTheme() {
-  setTheme($theme.get() === 'forest' ? 'light' : 'forest');
-}

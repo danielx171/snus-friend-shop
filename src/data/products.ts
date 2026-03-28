@@ -1,22 +1,3 @@
-import productPlaceholder from '@/assets/product-placeholder.jpg';
-import productDark from '@/assets/product-dark.jpg';
-import productBerry from '@/assets/product-berry.jpg';
-import productCitrus from '@/assets/product-citrus.jpg';
-
-// Language-agnostic flavor keys mapped to images
-const flavorImages: Record<string, string> = {
-  'mint': productPlaceholder,
-  'fruit': productCitrus,
-  'berry': productBerry,
-  'citrus': productCitrus,
-  'licorice': productDark,
-  'coffee': productDark,
-  'cola': productDark,
-  'vanilla': productBerry,
-  'tropical': productCitrus,
-  'tobacco': productDark,
-};
-
 // Stable enum keys for translation (language-agnostic)
 export type FlavorKey = 'mint' | 'fruit' | 'berry' | 'citrus' | 'licorice' | 'coffee' | 'cola' | 'vanilla' | 'tropical' | 'tobacco';
 export type StrengthKey = 'normal' | 'strong' | 'extraStrong' | 'ultraStrong';

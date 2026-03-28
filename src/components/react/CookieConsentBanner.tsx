@@ -67,11 +67,11 @@ const CookieConsentBanner: React.FC = () => {
         </div>
       ) : (
         <div className="mx-auto max-w-4xl space-y-4">
-          <div className="flex items-center justify-between">
+          <label className="flex items-center justify-between">
             <span className="text-sm font-medium">Essential</span>
             <input type="checkbox" checked disabled className="h-4 w-4 accent-primary" />
-          </div>
-          <div className="flex items-center justify-between">
+          </label>
+          <label className="flex items-center justify-between">
             <span className="text-sm font-medium">Analytics</span>
             <input
               type="checkbox"
@@ -79,8 +79,8 @@ const CookieConsentBanner: React.FC = () => {
               onChange={(e) => setAnalytics(e.target.checked)}
               className="h-4 w-4 accent-primary"
             />
-          </div>
-          <div className="flex items-center justify-between">
+          </label>
+          <label className="flex items-center justify-between">
             <span className="text-sm font-medium">Marketing</span>
             <input
               type="checkbox"
@@ -88,7 +88,7 @@ const CookieConsentBanner: React.FC = () => {
               onChange={(e) => setMarketing(e.target.checked)}
               className="h-4 w-4 accent-primary"
             />
-          </div>
+          </label>
           <div className="flex items-center justify-between pt-2">
             <button
               onClick={rejectAll}
