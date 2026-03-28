@@ -17,20 +17,39 @@ for (const p of allProducts) {
 const brands = allBrands
   .filter((b) => (productCountByBrand.get(b.id) ?? 0) > 0)
   .sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Nicotine Pouch Brands',
+  description: `Browse all ${brands.length} nicotine pouch brands. VELO, ZYN, LOOP, Siberia, PABLO and many more.`,
+  url: 'https://snusfriends.com/brands',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: brands.length,
+    itemListElement: brands.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://snusfriends.com/brands/${b.id}`,
+      name: b.data.name,
+    })),
+  },
+};
 ---
 
 <Shop
-  title="All Brands | SnusFriend"
+  title="Nicotine Pouch Brands | SnusFriend"
   description={`Browse all ${brands.length} nicotine pouch brands we carry. VELO, ZYN, LOOP, Siberia, PABLO and many more. Find your favourite brand and shop the full range.`}
   canonical="/brands"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
   <div class="mx-auto max-w-7xl px-4 py-8">
     <Breadcrumb items={[{ label: 'Brands' }]} />
 
     <!-- Page header -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-        All Brands
+        Nicotine Pouch Brands
       </h1>
       <p class="mt-2 text-lg text-muted-foreground">
         {brands.length > 0 ? `Explore ${brands.length} nicotine pouch brands` : 'Explore our growing collection of nicotine pouch brands'}
@@ -71,9 +90,9 @@ const brands = allBrands
             )}
 
             {/* Brand name */}
-            <h2 class="mb-0.5 text-center text-sm font-semibold text-foreground group-hover:text-primary">
+            <h3 class="mb-0.5 text-center text-sm font-semibold text-foreground group-hover:text-primary">
               {brand.data.name}
-            </h2>
+            </h3>
 
             {/* Product count */}
             <p class="text-center text-xs text-muted-foreground">

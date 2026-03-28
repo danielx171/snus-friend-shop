@@ -127,17 +127,37 @@ const articles = [
     tag: 'Guide',
   },
 ];
+
+const blogJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Nicotine Pouch Guides & Reviews',
+  description: `Guides, reviews, and news about nicotine pouches from ${tenant.name}.`,
+  url: 'https://snusfriends.com/blog',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: articles.length,
+    itemListElement: articles.map((a, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://snusfriends.com/blog/${a.slug}`,
+      name: a.title,
+    })),
+  },
+};
 ---
 
 <Shop
-  title={`Blog | ${tenant.name}`}
+  title={`Nicotine Pouch Guides & Reviews | ${tenant.name}`}
   description={`Guides, reviews, and news about nicotine pouches from ${tenant.name}. Learn about strengths, flavours, brands, and more.`}
+  canonical="/blog"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(blogJsonLd)} />
   <section class="bg-background text-foreground">
     <div class="max-w-4xl mx-auto px-4 py-12">
       <Breadcrumb items={[{ label: 'Blog' }]} />
 
-      <h1 class="text-4xl font-bold tracking-tight mb-3">Blog</h1>
+      <h1 class="text-4xl font-bold tracking-tight mb-3">Nicotine Pouch Guides & Reviews</h1>
       <p class="text-lg text-muted-foreground mb-10">
         Guides, reviews, and tips to help you find the perfect pouch.
       </p>

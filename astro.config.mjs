@@ -8,6 +8,7 @@ import path from 'path';
 export default defineConfig({
   site: 'https://snusfriends.com',
   output: 'server',
+  trailingSlash: 'never',
   image: {
     remotePatterns: [
       { protocol: 'https', hostname: 'nycdn.nyehandel.se' },
@@ -31,9 +32,13 @@ export default defineConfig({
         const exclude = [
           '/account', '/cart', '/checkout', '/login', '/register',
           '/forgot-password', '/update-password', '/order-confirmation',
-          '/search', '/wishlist',
+          '/search', '/wishlist', '/404',
+          // Old blog URLs that have 301 redirects — only new versions should be in sitemap
+          '/blog/zyn-vs-velo/',
+          '/blog/strongest-nicotine-pouches/',
+          '/blog/best-nicotine-pouches-for-beginners/',
         ];
-        return !exclude.some((path) => page.includes(path));
+        return !exclude.some((p) => page.includes(p));
       },
     }),
   ],

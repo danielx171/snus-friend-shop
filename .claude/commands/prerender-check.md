@@ -52,11 +52,12 @@ Check how search engine crawlers see a page — verify SEO elements render corre
    - Is there cloaking (different content for bots vs browsers)?
    - File size comparison between responses
 
-7. **SPA-specific checks** (this is a Vite SPA):
-   - Warn that most content is client-rendered and invisible to crawlers without JS
-   - Check if `index.html` has hardcoded meta tags (it should)
-   - Check if `<noscript>` fallback exists
-   - Verify the `<div id="root">` is present
+7. **Astro SSG/SSR checks:**
+   - Verify full HTML content is present in the response (Astro pre-renders at build time)
+   - Check that React island placeholders have `astro-island` markers
+   - Verify structured data is in the static HTML, not injected by JS
+   - Check `<link rel="sitemap">` points to `/sitemap-index.xml`
+   - Verify `llms.txt` is accessible at `/llms.txt`
 
 8. **Report:**
 
@@ -69,7 +70,8 @@ Check how search engine crawlers see a page — verify SEO elements render corre
    | JSON-LD | PASS/FAIL | schema types found |
    | robots meta | PASS/WARN | content directive |
    | Bot vs Browser parity | PASS/WARN | same/different |
-   | Noscript fallback | PASS/WARN | present/missing |
+   | Static HTML content | PASS/FAIL | product/page content in HTML |
+   | Sitemap link | PASS/WARN | present/missing |
 
 9. **Flag critical issues:**
    - Missing title or description = FAIL
@@ -77,9 +79,11 @@ Check how search engine crawlers see a page — verify SEO elements render corre
    - Missing OG tags = WARN
    - No JSON-LD = WARN
    - Different content for bots = FAIL (possible cloaking)
-   - Empty body for bots = expected for SPA, but WARN
+   - Empty body for bots = FAIL (Astro should always serve full HTML)
+   - Missing static content = FAIL (SSG pages must have content without JS)
 
 ## Notes
-- This is a Vite SPA, so crawlers only see the initial HTML shell — not rendered React content
-- SEO meta tags must be in `index.html` or set via `<SEO>` component with `react-helmet-async`
+- This is an Astro 6 site (SSG + SSR hybrid) — crawlers receive fully-rendered HTML
+- SEO meta tags are set per-page in `.astro` layouts via `<head>` — no client-side injection needed
+- React islands hydrate interactivity but the static HTML is always present
 - For full rendered content checking, use `/lighthouse` which runs with JS enabled

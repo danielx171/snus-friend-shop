@@ -84,12 +84,13 @@ const jsonLd = {
     offerCount: Object.keys(p.prices).length,
     availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
   },
+  url: `https://snusfriends.com/products/${p.slug}`,
   ...(p.ratings > 0 && {
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: p.ratings.toFixed(1),
       bestRating: '5',
-      reviewCount: '1',
+      ratingCount: '1',
     },
   }),
 };
