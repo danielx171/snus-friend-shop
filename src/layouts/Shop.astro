@@ -3,6 +3,7 @@ import Base from './Base.astro';
 import Header from '@/components/astro/Header.astro';
 import Footer from '@/components/astro/Footer.astro';
 import AgeGate from '@/components/astro/AgeGate.astro';
+import AnnouncementBar from '@/components/astro/AnnouncementBar.astro';
 import { tenant } from '@/config/tenant';
 import ToastProvider from '@/components/react/ToastProvider';
 import CookieConsentBanner from '@/components/react/CookieConsentBanner';
@@ -32,10 +33,7 @@ const authUser = Astro.locals.user ? { id: Astro.locals.user.id, email: Astro.lo
     Skip to main content
   </a>
   <div class="flex min-h-screen flex-col">
-    <!-- Shipping banner -->
-    <div class="border-b border-border/30 bg-primary/5 px-4 py-1.5 text-center text-xs font-medium text-foreground">
-      Free EU shipping over &euro;{tenant.freeShippingThreshold} &bull; Dispatched same day before 2pm CET
-    </div>
+    <AnnouncementBar />
     <Header />
     <main id="main-content" class="flex-1">
       <slot />

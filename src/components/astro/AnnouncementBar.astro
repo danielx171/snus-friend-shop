@@ -1,0 +1,53 @@
+---
+/**
+ * Rotating announcement bar — cycles between trust, shipping, and catalog messages.
+ * Pure CSS animation, no JavaScript.
+ */
+---
+
+<div class="w-full bg-[#1a2e1a] text-[#faf8f5] overflow-hidden" role="banner" aria-label="Store announcements">
+  <div class="relative h-9 flex items-center justify-center text-xs sm:text-sm">
+    {/* Desktop: show all three inline */}
+    <div class="hidden md:flex items-center gap-3 text-[13px]">
+      <span class="flex items-center gap-1.5">
+        <span class="text-amber-400">★★★★★</span>
+        <span>Trusted by EU customers</span>
+      </span>
+      <span class="text-[#faf8f5]/30">•</span>
+      <span>Free Shipping Over €29</span>
+      <span class="text-[#faf8f5]/30">•</span>
+      <span>Same-Day Dispatch Before 2pm CET</span>
+    </div>
+
+    {/* Mobile: rotating messages */}
+    <div class="md:hidden relative w-full h-full">
+      <div class="announcement-rotate absolute inset-0 flex items-center justify-center text-[13px]">
+        <span class="announcement-msg">★★★★★ Trusted by EU customers</span>
+      </div>
+      <div class="announcement-rotate announcement-delay-1 absolute inset-0 flex items-center justify-center text-[13px]">
+        <span class="announcement-msg">Free EU Shipping Over €29</span>
+      </div>
+      <div class="announcement-rotate announcement-delay-2 absolute inset-0 flex items-center justify-center text-[13px]">
+        <span class="announcement-msg">Same-Day Dispatch Before 2pm CET</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes announcement-cycle {
+    0%, 30% { opacity: 1; }
+    33%, 97% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  .announcement-rotate {
+    animation: announcement-cycle 9s ease-in-out infinite;
+  }
+  .announcement-delay-1 {
+    animation-delay: 3s;
+  }
+  .announcement-delay-2 {
+    animation-delay: 6s;
+  }
+</style>
