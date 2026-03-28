@@ -3,13 +3,15 @@ import vercel from '@astrojs/vercel';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
-// PWA disabled — incompatible with output:'server' mode
-// import AstroPWA from '@vite-pwa/astro';
 import path from 'path';
 
 export default defineConfig({
   site: 'https://snusfriends.com',
   output: 'server',
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: 'hover',
+  },
   adapter: vercel({
     // ISR disabled — causes 404 on SSR pages (known Astro+Vercel bug)
     // Static pages are still cached by Vercel's CDN via Cache-Control headers
@@ -28,7 +30,6 @@ export default defineConfig({
         return !exclude.some((path) => page.includes(path));
       },
     }),
-    // PWA integration removed — incompatible with output:'server'
   ],
   vite: {
     plugins: [tailwindcss()],

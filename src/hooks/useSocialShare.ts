@@ -56,11 +56,11 @@ export function useSocialShare(userId: string | null) {
     queryKey: ['social-shares', userId],
     queryFn: async (): Promise<SocialShare[]> => {
       if (!userId) return [];
-      const { data, error } = await (supabase
-        .from('social_shares' as any)
+      const { data, error } = await supabase
+        .from('social_shares')
         .select('id, share_type, target_id, platform, points_awarded, created_at')
         .eq('user_id', userId)
-        .order('created_at', { ascending: false }) as any);
+        .order('created_at', { ascending: false });
       if (error) {
         console.error('social_shares query failed', error);
         return [];
@@ -101,15 +101,15 @@ export function useSocialShare(userId: string | null) {
       if (!userId) throw new Error('Not authenticated');
 
       // Record the share (unique constraint prevents duplicates)
-      const { error } = await (supabase
-        .from('social_shares' as any)
+      const { error } = await supabase
+        .from('social_shares')
         .insert({
           user_id: userId,
           share_type: type,
           target_id: targetId,
           platform,
           points_awarded: 10,
-        }) as any);
+        });
 
       if (error) {
         // 23505 = unique_violation — already shared, not an error

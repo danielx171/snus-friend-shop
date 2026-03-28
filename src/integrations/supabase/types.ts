@@ -515,6 +515,36 @@ export type Database = {
         Update: { id?: string; user_id?: string; order_id?: string | null; points?: number; reason?: string; created_at?: string }
         Relationships: []
       }
+      social_shares: {
+        Row: {
+          id: string
+          user_id: string
+          share_type: string
+          target_id: string
+          platform: string
+          points_awarded: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          share_type: string
+          target_id: string
+          platform: string
+          points_awarded?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          share_type?: string
+          target_id?: string
+          platform?: string
+          points_awarded?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
       pouch_parts: {
         Row: {
           id: string
