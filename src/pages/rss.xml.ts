@@ -21,6 +21,17 @@ const articles = [
   { title: 'What Are Nicotine Pouches? A Complete Guide', slug: 'what-are-nicotine-pouches', excerpt: 'A beginner-friendly guide to tobacco-free nicotine pouches — how they work, how to use them, and why millions of Europeans are making the switch.', date: '2026-03-26' },
   { title: 'How to Choose the Right Nicotine Strength', slug: 'how-to-choose-your-strength', excerpt: 'From light (2 mg) to super strong (20 mg+), picking the right strength matters. A practical framework based on your experience level.', date: '2026-03-26' },
   { title: 'Top 10 Mint Nicotine Pouches in 2026', slug: 'top-10-mint-flavours', excerpt: 'We ranked the best mint and menthol nicotine pouches from top European brands.', date: '2026-03-26' },
+  // New articles — March 28, 2026
+  { title: 'ZYN Flavours: The Complete 2026 Guide & Rankings', slug: 'zyn-flavours-complete-guide', excerpt: 'Every ZYN flavour available in Europe — grouped by category, ranked, with strength options and format details.', date: '2026-03-28' },
+  { title: 'VELO Flavours: Complete 2026 Guide & Rankings', slug: 'velo-flavours-complete-guide', excerpt: 'The full VELO flavour range — mint, citrus, berry, tropical and more. Rankings, strengths, and format comparisons.', date: '2026-03-28' },
+  { title: 'Best Nicotine Pouches 2026: Expert Picks', slug: 'best-nicotine-pouches-2026', excerpt: 'Our editorial team picks the best nicotine pouches of 2026 across every category.', date: '2026-03-28' },
+  { title: 'How to Use Nicotine Pouches: A Complete Guide', slug: 'how-to-use-nicotine-pouches', excerpt: 'Step-by-step guide to using nicotine pouches — placement, timing, what to expect.', date: '2026-03-28' },
+  { title: 'Nicotine Pouches vs Vaping: Which Is Better in 2026?', slug: 'nicotine-pouches-vs-vaping', excerpt: 'Head-to-head comparison of nicotine pouches and vaping — cost, health, convenience, discretion.', date: '2026-03-28' },
+  { title: 'Nicotine Pouches Legal in Europe: 2026 Country Guide', slug: 'nicotine-pouches-legal-europe-2026', excerpt: 'Country-by-country legal status of nicotine pouches across Europe including France ban and EU TPD3.', date: '2026-03-28' },
+  { title: 'Nicotine Pouch Flavour Guide: Every Category Explained', slug: 'nicotine-pouch-flavour-guide', excerpt: 'From mint to coffee to cola — every nicotine pouch flavour category explained.', date: '2026-03-28' },
+  { title: 'Pablo Nicotine Pouches: Complete Brand Guide', slug: 'pablo-nicotine-pouches-complete-guide', excerpt: 'Everything about Pablo — the ultra-strong brand. Product range, strengths, safety guidance.', date: '2026-03-28' },
+  { title: 'ICEBERG Nicotine Pouches: Complete Brand Guide', slug: 'iceberg-nicotine-pouches-complete-guide', excerpt: 'The full ICEBERG range — flavours, strengths, and who this brand is best for.', date: '2026-03-28' },
+  { title: 'Nicotine Pouches vs Gum vs Lozenges: Which NRT?', slug: 'nicotine-pouches-vs-gum-vs-lozenges', excerpt: 'Comparing nicotine pouches with traditional NRT — gum, lozenges, and patches.', date: '2026-03-28' },
 ];
 
 export async function GET(context: APIContext) {
