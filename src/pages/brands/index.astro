@@ -51,9 +51,36 @@ const collectionJsonLd = {
       <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
         Nicotine Pouch Brands
       </h1>
-      <p class="mt-2 text-lg text-muted-foreground">
-        {brands.length > 0 ? `Explore ${brands.length} nicotine pouch brands` : 'Explore our growing collection of nicotine pouch brands'}
-      </p>
+      <div class="mt-3 max-w-3xl space-y-3 text-base leading-relaxed text-muted-foreground">
+        <p>
+          We carry <strong class="text-foreground">{brands.length} nicotine pouch brands</strong> from
+          Scandinavia, the UK, the Baltics, and beyond — the widest selection of tobacco-free pouches
+          you'll find in one European shop. Whether you've used pouches for years or you're switching
+          from cigarettes for the first time, our brand wall makes it easy to compare manufacturers,
+          country of origin, strength ranges, and flavour profiles side by side.
+        </p>
+        <p>
+          Household names like <a href="/brands/zyn" class="underline hover:text-foreground">ZYN</a>,
+          <a href="/brands/velo" class="underline hover:text-foreground">VELO</a>, and
+          <a href="/brands/loop" class="underline hover:text-foreground">LOOP</a> sit alongside
+          specialist labels such as <a href="/brands/siberia" class="underline hover:text-foreground">Siberia</a>,
+          <a href="/brands/pablo" class="underline hover:text-foreground">Pablo</a>,
+          <a href="/brands/killa" class="underline hover:text-foreground">Killa</a>,
+          <a href="/brands/skruf" class="underline hover:text-foreground">Skruf</a>, and
+          <a href="/brands/fumi" class="underline hover:text-foreground">FUMI</a> — so you can
+          explore everything from mild 2 mg everyday pouches to ultra-strong 50 mg options.
+          Every brand page lists the full product range with available strengths, flavour
+          descriptions, and current pricing — plus the manufacturer and country of origin
+          so you always know exactly who makes the product you're buying.
+        </p>
+        <p>
+          Not sure where to start? Our
+          <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="underline hover:text-foreground">beginner's guide</a>
+          walks you through choosing the right brand and strength for your experience level,
+          or take the <a href="/flavor-quiz" class="underline hover:text-foreground">flavour quiz</a>
+          for a personalised recommendation in under a minute.
+        </p>
+      </div>
     </div>
 
     <!-- Brand grid -->
@@ -112,4 +139,15 @@ const collectionJsonLd = {
       </div>
     )}
   </div>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is the most popular nicotine pouch brand?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN by Swedish Match (now part of Philip Morris International) is the world's best-selling nicotine pouch brand, with approximately 61% volume share in the United States. In Europe, VELO by British American Tobacco is the volume leader in most markets, followed by brands like LOOP, Nordic Spirit, and Skruf." } },
+      { "@type": "Question", "name": "What is the difference between ZYN and VELO?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN and VELO are both tobacco-free nicotine pouches but differ in format, flavour range, and nicotine delivery. ZYN uses a drier pouch with a slower nicotine release, while VELO tends to be slightly moister with faster onset. ZYN offers fewer flavours but dominates in the US market; VELO has a wider flavour range and leads in most European markets." } },
+      { "@type": "Question", "name": "Which nicotine pouch brand is the strongest?", "acceptedAnswer": { "@type": "Answer", "text": "The strongest nicotine pouches come from brands like NOiS (up to 50 mg), Rabbit (up to 40 mg), CUBA (up to 43 mg), and Siberia (33 mg per gram). Most mainstream brands like ZYN and VELO max out around 10-17 mg per pouch." } },
+      { "@type": "Question", "name": "Are all nicotine pouch brands tobacco-free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, all brands sold at SnusFriend are 100% tobacco-free. Nicotine pouches use pharmaceutical-grade or synthetic nicotine combined with plant-based fibres, flavourings, and pH adjusters — there is no tobacco leaf in any product." } },
+      { "@type": "Question", "name": "How many nicotine pouch brands does SnusFriend carry?", "acceptedAnswer": { "@type": "Answer", "text": "SnusFriend currently stocks products from over 50 nicotine pouch brands, ranging from global manufacturers like ZYN, VELO, and ON! to independent Scandinavian labels like LOOP, Skruf, FUMI, and Kelly White. Our catalogue is updated regularly as new brands launch." } }
+    ]
+  })} />
 </Shop>

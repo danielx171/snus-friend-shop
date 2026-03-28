@@ -81,6 +81,55 @@ const brandCount = new Set(products.map(p => p.data.brand)).size;
           All Brands
         </a>
       </div>
+
+      <!-- Expanded landing copy -->
+      <div class="mt-10 max-w-3xl space-y-4 text-base leading-relaxed text-muted-foreground">
+        <h2 class="text-xl font-semibold text-foreground">
+          What Are Nicotine Pouches?
+        </h2>
+        <p>
+          Nicotine pouches are small, pre-portioned sachets containing food-grade plant fibre,
+          flavouring, and pharmaceutical-grade nicotine — with zero tobacco leaf. You place one
+          between your upper lip and gum, and the nicotine absorbs through the oral mucosa over
+          20 to 40 minutes. There is no smoke, no vapour, and no spit, which makes pouches one
+          of the most discreet nicotine formats available. Clinical research shows that peak
+          nicotine absorption typically occurs at
+          <a href="/blog/how-long-do-nicotine-pouches-last" class="underline hover:text-foreground">20 to 30 minutes</a>,
+          comparable to traditional snus but without the tobacco.
+        </p>
+        <h2 class="text-xl font-semibold text-foreground">
+          How to Choose the Right Pouch
+        </h2>
+        <p>
+          Two things matter most: <strong class="text-foreground">strength</strong> and
+          <strong class="text-foreground">flavour</strong>. Strengths range from light
+          (2–4 mg nicotine per pouch) through normal (6–8 mg), strong (10–14 mg), and
+          extra-strong (16–20 mg) up to super-strong (20 mg+). If you're new to pouches,
+          start at 4–6 mg — our
+          <a href="/blog/how-to-choose-your-strength" class="underline hover:text-foreground">strength guide</a>
+          explains why. Flavours span
+          <a href="/products/flavor/mint" class="underline hover:text-foreground">mint</a> (the most popular
+          category, making up an estimated 45–60% of sales),
+          <a href="/products/flavor/berry" class="underline hover:text-foreground">berry</a>,
+          <a href="/products/flavor/citrus" class="underline hover:text-foreground">citrus</a>,
+          <a href="/products/flavor/coffee" class="underline hover:text-foreground">coffee</a>, and
+          dozens of creative blends like jalapeño lime and habanero mint.
+        </p>
+        <h2 class="text-xl font-semibold text-foreground">
+          Buying Nicotine Pouches in Europe
+        </h2>
+        <p>
+          The European nicotine pouch market is growing rapidly — industry analysts project a
+          compound annual growth rate above 28% through 2033. Regulations vary by country:
+          pouches are widely available in Sweden, Germany, the UK, and most of the EU, but
+          France banned commercial sales in February 2025, and the Netherlands followed with
+          a retail ban the same month. The EU's upcoming Tobacco Products Directive 3 (TPD3),
+          expected in draft form by mid-2026, will bring pouches under harmonised regulation for
+          the first time. SnusFriend ships from within the EU with full compliance and tracking
+          on every order. For a country-by-country breakdown, read our
+          <a href="/blog/nicotine-pouch-buying-guide-europe" class="underline hover:text-foreground">European buying guide</a>.
+        </p>
+      </div>
     </article>
 
     <h2 class="sr-only">Product Catalog</h2>
@@ -103,5 +152,16 @@ const brandCount = new Set(products.map(p => p.data.brand)).size;
         "name": p.data.name,
       })),
     },
+  })} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Are nicotine pouches safer than cigarettes?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches contain no tobacco leaf and produce no smoke or vapour, which eliminates exposure to tar and combustion byproducts. While no nicotine product is risk-free, Public Health England and the Royal College of Physicians consider tobacco-free nicotine products significantly less harmful than smoking. Long-term studies specific to nicotine pouches are still ongoing." } },
+      { "@type": "Question", "name": "How long does a nicotine pouch last?", "acceptedAnswer": { "@type": "Answer", "text": "Most users keep a nicotine pouch in for 20 to 40 minutes. Nicotine absorption peaks at around 20 to 30 minutes, after which the flavour and effect gradually fade. Slim pouches tend to release flavour slightly faster than regular format pouches." } },
+      { "@type": "Question", "name": "What nicotine strength should a beginner start with?", "acceptedAnswer": { "@type": "Answer", "text": "Beginners should start with a light or normal strength pouch — typically 2 to 6 mg of nicotine per pouch. If you currently smoke fewer than 10 cigarettes a day, 4 mg is a common starting point. You can increase gradually if the effect feels too mild." } },
+      { "@type": "Question", "name": "Can I use nicotine pouches on a plane or indoors?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Because nicotine pouches produce no smoke, vapour, or odour, they can generally be used anywhere — including on flights, in offices, and in restaurants. There is no legal restriction on using them indoors in most European countries, though individual venues may set their own policies." } },
+      { "@type": "Question", "name": "Do nicotine pouches stain your teeth?", "acceptedAnswer": { "@type": "Answer", "text": "No. Unlike traditional snus or chewing tobacco, nicotine pouches are white and contain no tobacco leaf, so they do not cause the brown staining associated with tobacco-based oral products." } }
+    ]
   })} />
 </Shop>

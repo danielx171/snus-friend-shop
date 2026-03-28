@@ -158,9 +158,25 @@ const blogJsonLd = {
       <Breadcrumb items={[{ label: 'Blog' }]} />
 
       <h1 class="text-4xl font-bold tracking-tight mb-3">Nicotine Pouch Guides & Reviews</h1>
-      <p class="text-lg text-muted-foreground mb-10">
-        Guides, reviews, and tips to help you find the perfect pouch.
-      </p>
+      <div class="mb-10 max-w-2xl space-y-3 text-base leading-relaxed text-muted-foreground">
+        <p>
+          Honest, fact-checked content is the backbone of SnusFriend. Because nicotine advertising
+          is banned on most platforms, we built our reputation the old-fashioned way: by publishing
+          the most thorough guides, brand comparisons, and buying advice in the European nicotine
+          pouch space. Every article below is written by our editorial team, verified against
+          manufacturer data and independent sources, and updated whenever the market moves.
+        </p>
+        <p>
+          Whether you're a first-time buyer choosing your
+          <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="underline hover:text-foreground">starter pouch</a>,
+          an experienced user comparing
+          <a href="/blog/zyn-vs-velo-2026" class="underline hover:text-foreground">ZYN vs VELO</a>,
+          or just curious about
+          <a href="/blog/nicotine-pouch-side-effects" class="underline hover:text-foreground">side effects</a>
+          and <a href="/blog/nicotine-pouch-buying-guide-europe" class="underline hover:text-foreground">EU regulations</a>,
+          you'll find straightforward answers below — no filler, no upsell.
+        </p>
+      </div>
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {articles.map((article) => (
@@ -190,4 +206,15 @@ const blogJsonLd = {
       </div>
     </div>
   </section>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What are the side effects of nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Common side effects include a tingling or burning sensation under the lip, hiccups, and mild nausea — especially for new users or when using a higher strength than your tolerance allows. These effects are typically temporary and subside as you adjust." } },
+      { "@type": "Question", "name": "Are nicotine pouches legal in Europe?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches are legal to buy and use in most European countries, including Sweden, Germany, the UK, Spain, Italy, and Poland. However, France banned commercial sales in February 2025, the Netherlands introduced a retail ban the same month. The EU's Tobacco Products Directive 3 (TPD3), expected in draft form by mid-2026, will introduce harmonised regulation across member states." } },
+      { "@type": "Question", "name": "How do I switch from cigarettes to nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Start by matching your cigarette intake to an appropriate pouch strength: light smokers (under 10 per day) should try 4-6 mg pouches, moderate smokers (10-20 per day) should start at 6-10 mg. Use a pouch whenever you feel a craving. Most people adjust within one to two weeks." } },
+      { "@type": "Question", "name": "Which nicotine pouch flavour is best for beginners?", "acceptedAnswer": { "@type": "Answer", "text": "Mint is the most popular starting flavour — it accounts for an estimated 45-60% of all nicotine pouch sales and offers a familiar, refreshing taste. Spearmint and peppermint are milder options, while menthol provides more cooling. If you dislike mint, citrus flavours are the next most popular choice for newcomers." } },
+      { "@type": "Question", "name": "How should I store nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Store nicotine pouches in a cool, dry place away from direct sunlight. An unopened can typically stays fresh for 12 to 14 months from the production date. Once opened, the pouches are best used within a week or two, as they will gradually dry out and lose flavour intensity." } }
+    ]
+  })} />
 </Shop>
