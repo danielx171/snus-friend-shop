@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { getCollection } from 'astro:content';
@@ -53,11 +54,13 @@ const brands = allBrands
             {/* Brand logo or initials */}
             {brand.data.logoUrl ? (
               <div class="mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-muted/20">
-                <img
+                <Image
                   src={brand.data.logoUrl}
                   alt={`${brand.data.name} logo`}
+                  width={64}
+                  height={64}
                   loading="lazy"
-                  decoding="async"
+                  format="webp"
                   class="h-full w-full object-contain"
                 />
               </div>

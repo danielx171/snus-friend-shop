@@ -8,6 +8,12 @@ import path from 'path';
 export default defineConfig({
   site: 'https://snusfriends.com',
   output: 'server',
+  image: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'nycdn.nyehandel.se' },
+      { protocol: 'https', hostname: '**.supabase.co' },
+    ],
+  },
   prefetch: {
     prefetchAll: false,
     defaultStrategy: 'hover',

@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { getCollection } from 'astro:content';
@@ -87,11 +88,13 @@ const metaDescription = b.description
         {/* Brand logo or initials */}
         {b.logoUrl ? (
           <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted/20">
-            <img
+            <Image
               src={b.logoUrl}
               alt={`${b.name} logo`}
+              width={96}
+              height={96}
               loading="eager"
-              decoding="async"
+              format="webp"
               class="h-full w-full object-contain"
             />
           </div>
@@ -154,11 +157,14 @@ const metaDescription = b.description
             {/* Product image */}
             {product.data.imageUrl ? (
               <div class="mb-3 aspect-square overflow-hidden rounded-lg bg-muted/20">
-                <img
+                <Image
                   src={product.data.imageUrl}
                   alt={product.data.name}
+                  width={300}
+                  height={300}
                   loading="lazy"
-                  decoding="async"
+                  format="webp"
+                  quality={80}
                   class="h-full w-full object-contain transition group-hover:scale-105"
                 />
               </div>

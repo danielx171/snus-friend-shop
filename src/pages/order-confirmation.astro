@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 
+import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
@@ -149,9 +150,12 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
                 return (
                   <div class="flex items-center gap-4 py-3">
                     {itemImage ? (
-                      <img
+                      <Image
                         src={itemImage}
                         alt={itemName}
+                        width={56}
+                        height={56}
+                        format="webp"
                         class="h-14 w-14 rounded-lg object-cover border border-border bg-muted/20"
                         loading="lazy"
                       />

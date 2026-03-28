@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import CardAddToCart from '@/components/react/CardAddToCart';
 
 interface Props {
@@ -67,12 +68,14 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
   {/* Image */}
   <div class="product-card-image relative aspect-square w-full overflow-hidden bg-muted">
     {imageUrl ? (
-      <img
+      <Image
         src={imageUrl}
         alt={`${name}${brand ? ` by ${brand}` : ''}${strengthKey ? ` - ${strengthKey}` : ''}`}
         width={300}
         height={300}
         loading="lazy"
+        format="webp"
+        quality={80}
         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
       />
     ) : (

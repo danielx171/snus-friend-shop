@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import AddToCartButton from '@/components/react/AddToCartButton';
@@ -115,13 +116,14 @@ const jsonLd = {
         <div class="product-card-image-bg overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur">
           <div class="pdp-image-entrance relative aspect-square w-full">
             {p.imageUrl ? (
-              <img
+              <Image
                 src={p.imageUrl}
                 alt={p.name}
-                width="600"
-                height="600"
+                width={600}
+                height={600}
                 loading="eager"
-                decoding="async"
+                format="webp"
+                quality={85}
                 class="pdp-image-hover h-full w-full object-contain p-8"
               />
             ) : (
