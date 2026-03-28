@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnusFriend Round 4 — Dark Luxury HP + Light Minimal PDP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; }
+
+  .showcase-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .showcase-nav h1 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; }
+  .round-badge { background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+
+  .section { padding: 48px 32px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .section-title { font-family: 'Space Grotesk'; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .section-subtitle { color: #888; font-size: 14px; margin-bottom: 32px; }
+  .score-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-left: 12px; }
+  .score-high { background: rgba(34,197,94,0.15); color: #22c55e; }
+
+  .design-frame { border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px; }
+  .design-label { padding: 16px 20px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .design-label h3 { font-size: 15px; font-weight: 600; }
+  .tag { font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag-luxury { background: rgba(139,92,246,0.2); color: #a78bfa; }
+  .tag-light { background: rgba(250,250,248,0.15); color: #fafaf8; }
+  .tag-new { background: rgba(34,197,94,0.15); color: #22c55e; }
+
+  .notes { margin-top: 16px; padding: 16px 20px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); }
+  .notes h4 { font-size: 13px; font-weight: 600; color: #aaa; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .notes p { font-size: 13px; color: #888; line-height: 1.6; }
+  .notes strong { color: #fff; }
+
+  /* Shared */
+  .strength-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .str-mild { background: rgba(34,197,94,0.12); color: #16a34a; }
+  .str-regular { background: rgba(234,179,8,0.12); color: #ca8a04; }
+  .str-strong { background: rgba(249,115,22,0.12); color: #ea580c; }
+  .str-xstrong { background: rgba(239,68,68,0.12); color: #dc2626; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+
+  /* ================================================================
+     DESIGN L: DARK LUXURY HOMEPAGE — "The Vault"
+     Inspiration: Aesop, SSENSE, Berluti — editorial luxury meets e-commerce
+     ================================================================ */
+  .vault-hp {
+    background: #0D0D0D; color: #E8E4DF; min-height: 900px;
+  }
+
+  /* Announcement bar */
+  .vault-hp .announce {
+    background: linear-gradient(90deg, #8b5cf6, #6366f1);
+    color: #fff; text-align: center; padding: 10px; font-size: 12px; font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* Nav */
+  .vault-hp .vault-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 64px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .vault-hp .vault-nav .logo {
+    font-family: 'Space Grotesk'; font-weight: 700; font-size: 24px; letter-spacing: -0.02em;
+  }
+  .vault-hp .vault-nav .logo span { color: #8b5cf6; }
+  .vault-hp .vault-nav .nav-links { display: flex; gap: 32px; }
+  .vault-hp .vault-nav .nav-links a {
+    color: #999; text-decoration: none; font-size: 14px; font-weight: 500;
+    letter-spacing: 0.02em; transition: color 0.2s;
+  }
+  .vault-hp .vault-nav .nav-links a:hover { color: #fff; }
+  .vault-hp .vault-nav .nav-right { display: flex; gap: 20px; align-items: center; font-size: 14px; color: #888; }
+
+  /* Hero — Full bleed editorial */
+  .vault-hp .hero {
+    position: relative; padding: 120px 64px 100px;
+    background: radial-gradient(ellipse at 70% 40%, rgba(139,92,246,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(99,102,241,0.06) 0%, transparent 50%);
+  }
+  .vault-hp .hero .hero-overline {
+    font-size: 12px; font-weight: 600; color: #8b5cf6; text-transform: uppercase;
+    letter-spacing: 0.15em; margin-bottom: 16px;
+  }
+  .vault-hp .hero h1 {
+    font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 700;
+    line-height: 1.05; max-width: 700px; margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .vault-hp .hero .hero-sub {
+    font-size: 18px; color: #888; max-width: 500px; line-height: 1.6; margin-bottom: 32px;
+  }
+  .vault-hp .hero .hero-actions { display: flex; gap: 16px; }
+  .vault-hp .hero .hero-btn-primary {
+    padding: 16px 32px; border-radius: 12px; border: none;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff;
+    font-size: 15px; font-weight: 600; cursor: pointer; letter-spacing: 0.02em;
+  }
+  .vault-hp .hero .hero-btn-secondary {
+    padding: 16px 32px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
+    background: transparent; color: #fff;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+
+  /* Trust strip */
+  .vault-hp .trust-strip {
+    display: flex; justify-content: center; gap: 48px; padding: 32px 64px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .vault-hp .trust-strip .trust-item {
+    display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;
+  }
+  .vault-hp .trust-strip .trust-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(139,92,246,0.08); display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  /* Category collection */
+  .vault-hp .collections { padding: 64px; }
+  .vault-hp .collections .col-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;
+  }
+  .vault-hp .collections .col-header h2 {
+    font-family: 'Space Grotesk'; font-size: 28px; font-weight: 700;
+  }
+  .vault-hp .collections .col-header a {
+    color: #8b5cf6; font-size: 14px; font-weight: 600; text-decoration: none;
+  }
+  .vault-hp .col-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .vault-hp .col-card {
+    border-radius: 16px; overflow: hidden; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s; position: relative;
+  }
+  .vault-hp .col-card:hover { border-color: rgba(139,92,246,0.3); transform: translateY(-4px); }
+  .vault-hp .col-card .col-img {
+    height: 180px; display: flex; align-items: center; justify-content: center; font-size: 56px;
+    position: relative;
+  }
+  .vault-hp .col-card .col-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 16px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  }
+  .vault-hp .col-card .col-name { font-size: 14px; font-weight: 600; color: #fff; }
+  .vault-hp .col-card .col-count { font-size: 12px; color: #aaa; }
+  .col-bg-mint { background: linear-gradient(135deg, #0d2818, #1a4d2e); }
+  .col-bg-berry { background: linear-gradient(135deg, #1a0d2e, #2d1b4e); }
+  .col-bg-citrus { background: linear-gradient(135deg, #2e1a0d, #4e3318); }
+  .col-bg-coffee { background: linear-gradient(135deg, #1a0f0d, #2e1f1a); }
+  .col-bg-cool { background: linear-gradient(135deg, #0d1a2e, #1a2d4e); }
+
+  /* Featured Products */
+  .vault-hp .featured { padding: 0 64px 64px; }
+  .vault-hp .featured .feat-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;
+  }
+  .vault-hp .featured .feat-header h2 {
+    font-family: 'Space Grotesk'; font-size: 28px; font-weight: 700;
+  }
+  .vault-hp .featured .filter-tabs { display: flex; gap: 8px; }
+  .vault-hp .featured .filter-tab {
+    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    background: transparent; border: 1px solid rgba(255,255,255,0.08); color: #888; cursor: pointer;
+  }
+  .vault-hp .featured .filter-tab.active { background: #8b5cf6; border-color: #8b5cf6; color: #fff; }
+
+  .vault-hp .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .vault-hp .feat-card {
+    background: rgba(255,255,255,0.02); border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06); overflow: hidden;
+    transition: all 0.3s; cursor: pointer;
+  }
+  .vault-hp .feat-card:hover { border-color: rgba(139,92,246,0.3); transform: translateY(-2px); }
+  .vault-hp .feat-card .card-img {
+    height: 200px; display: flex; align-items: center; justify-content: center; font-size: 64px;
+    position: relative; border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .vault-hp .feat-card .card-img .str-tag {
+    position: absolute; top: 12px; left: 12px;
+  }
+  .vault-hp .feat-card .card-img .wishlist {
+    position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+    font-size: 14px; cursor: pointer;
+  }
+  .vault-hp .feat-card .card-img .flavor-line {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  }
+  .vault-hp .feat-card .card-body { padding: 16px; }
+  .vault-hp .feat-card .card-brand {
+    font-size: 11px; color: #8b5cf6; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 4px;
+  }
+  .vault-hp .feat-card .card-name { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+  .vault-hp .feat-card .card-meta {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  }
+  .vault-hp .feat-card .card-rating { font-size: 12px; color: #8b5cf6; }
+  .vault-hp .feat-card .card-reviews { font-size: 11px; color: #666; }
+  .vault-hp .feat-card .card-price-row {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .vault-hp .feat-card .card-price { font-size: 18px; font-weight: 700; color: #fff; }
+  .vault-hp .feat-card .card-per-unit { font-size: 11px; color: #666; }
+  .vault-hp .feat-card .card-packs {
+    display: flex; gap: 6px; margin-top: 12px;
+  }
+  .vault-hp .feat-card .pack-pill {
+    padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #aaa;
+  }
+  .vault-hp .feat-card .pack-pill.active { background: rgba(139,92,246,0.12); border-color: #8b5cf6; color: #8b5cf6; }
+  .vault-hp .feat-card .card-add {
+    display: block; text-align: center; padding: 12px; margin-top: 12px;
+    background: rgba(139,92,246,0.08); border-radius: 10px;
+    color: #8b5cf6; font-size: 13px; font-weight: 600; border: 1px solid rgba(139,92,246,0.15);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .vault-hp .feat-card .card-add:hover { background: #8b5cf6; color: #fff; }
+
+  /* Editorial section */
+  .vault-hp .editorial { padding: 64px; }
+  .vault-hp .editorial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .vault-hp .editorial-card {
+    border-radius: 20px; padding: 48px; position: relative; overflow: hidden;
+  }
+  .vault-hp .editorial-card.dark-card {
+    background: linear-gradient(135deg, #1a1a2e, #0d0d1a);
+    border: 1px solid rgba(139,92,246,0.12);
+  }
+  .vault-hp .editorial-card.gradient-card {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  }
+  .vault-hp .editorial-card .ed-overline {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.12em; margin-bottom: 12px; opacity: 0.7;
+  }
+  .vault-hp .editorial-card h3 {
+    font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
+    line-height: 1.2; margin-bottom: 12px;
+  }
+  .vault-hp .editorial-card p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 20px; }
+  .vault-hp .editorial-card .ed-link {
+    font-size: 14px; font-weight: 600; color: #fff; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+
+  /* Free shipping bar */
+  .vault-hp .ship-banner {
+    padding: 24px 64px; background: rgba(139,92,246,0.04);
+    border-top: 1px solid rgba(139,92,246,0.08);
+    border-bottom: 1px solid rgba(139,92,246,0.08);
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+  .vault-hp .ship-banner .ship-text { font-size: 15px; font-weight: 600; }
+  .vault-hp .ship-banner .ship-bar { width: 200px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06); }
+  .vault-hp .ship-banner .ship-fill { height: 100%; width: 65%; border-radius: 3px; background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+  .vault-hp .ship-banner .ship-amount { font-size: 13px; color: #a78bfa; }
+
+  /* ================================================================
+     DESIGN M: LIGHT MINIMAL PDP — "Scandinavian Zen"
+     Inspiration: Aesop, MUJI, Byredo — less is more, focus on product
+     ================================================================ */
+  .zen-pdp {
+    background: #FAFAF8; color: #1a1a2e; min-height: 800px;
+  }
+  .zen-pdp .zen-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 64px; border-bottom: 1px solid #e8e5e0;
+  }
+  .zen-pdp .zen-nav .logo {
+    font-family: 'Space Grotesk'; font-weight: 700; font-size: 22px; color: #1B4332;
+  }
+  .zen-pdp .zen-nav .nav-links { display: flex; gap: 28px; }
+  .zen-pdp .zen-nav .nav-links a { color: #666; text-decoration: none; font-size: 14px; font-weight: 500; }
+  .zen-pdp .zen-nav .nav-links a:hover { color: #1a1a2e; }
+  .zen-pdp .zen-nav .nav-right { display: flex; gap: 20px; align-items: center; font-size: 14px; color: #888; }
+
+  .zen-pdp .breadcrumbs {
+    padding: 12px 64px; font-size: 12px; color: #aaa;
+  }
+  .zen-pdp .breadcrumbs a { color: #999; text-decoration: none; }
+  .zen-pdp .breadcrumbs .sep { margin: 0 6px; color: #ccc; }
+
+  .zen-pdp .pdp-grid {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 0; padding: 0 64px 64px;
+  }
+
+  /* Gallery — clean white bg */
+  .zen-pdp .gallery { padding-right: 48px; }
+  .zen-pdp .gallery-main {
+    width: 100%; aspect-ratio: 1; border-radius: 24px;
+    background: #F0EDE8;
+    display: flex; align-items: center; justify-content: center; font-size: 140px;
+    position: relative;
+  }
+  .zen-pdp .gallery-main .badge-sale {
+    position: absolute; top: 20px; left: 20px; background: #1B4332; color: #fff;
+    padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;
+  }
+  .zen-pdp .gallery-thumbs { display: flex; gap: 12px; margin-top: 16px; }
+  .zen-pdp .gallery-thumb {
+    width: 80px; height: 80px; border-radius: 14px; background: #F0EDE8;
+    border: 2px solid transparent; display: flex; align-items: center; justify-content: center;
+    font-size: 36px; cursor: pointer;
+  }
+  .zen-pdp .gallery-thumb.active { border-color: #1B4332; }
+
+  /* Info panel */
+  .zen-pdp .pdp-info { padding-top: 16px; }
+  .zen-pdp .pdp-brand {
+    font-size: 12px; color: #1B4332; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.12em; margin-bottom: 4px;
+  }
+  .zen-pdp .pdp-title {
+    font-family: 'Space Grotesk'; font-size: 36px; font-weight: 700; color: #1a1a2e;
+    margin-bottom: 12px; line-height: 1.1;
+  }
+  .zen-pdp .pdp-rating {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 20px;
+  }
+  .zen-pdp .stars { color: #1B4332; font-size: 16px; }
+  .zen-pdp .rating-text { font-size: 13px; color: #999; }
+  .zen-pdp .rating-text a { color: #1B4332; text-decoration: underline; }
+
+  .zen-pdp .price-block { margin-bottom: 24px; display: flex; align-items: baseline; gap: 12px; }
+  .zen-pdp .price-current { font-size: 32px; font-weight: 800; color: #1B4332; }
+  .zen-pdp .price-original { font-size: 16px; color: #bbb; text-decoration: line-through; }
+  .zen-pdp .price-save {
+    padding: 4px 12px; border-radius: 8px; background: rgba(27,67,50,0.08); color: #1B4332;
+    font-size: 12px; font-weight: 600;
+  }
+
+  /* Strength selector — minimal pills */
+  .zen-pdp .selector-group { margin-bottom: 24px; }
+  .zen-pdp .selector-label { font-size: 13px; font-weight: 600; color: #666; margin-bottom: 10px; }
+  .zen-pdp .strength-pills { display: flex; gap: 8px; }
+  .zen-pdp .str-pill {
+    padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; gap: 6px;
+    transition: all 0.2s;
+  }
+  .zen-pdp .str-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .zen-pdp .str-pill.mild { background: #f0fdf4; border-color: #dcfce7; color: #16a34a; }
+  .zen-pdp .str-pill.mild .dot { background: #22c55e; }
+  .zen-pdp .str-pill.regular { background: #fefce8; border-color: #fef3c7; color: #ca8a04; }
+  .zen-pdp .str-pill.regular .dot { background: #eab308; }
+  .zen-pdp .str-pill.strong { background: #fff7ed; border-color: #fed7aa; color: #ea580c; }
+  .zen-pdp .str-pill.strong .dot { background: #f97316; }
+  .zen-pdp .str-pill.strong.active { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.12); }
+  .zen-pdp .str-pill.xstrong { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+  .zen-pdp .str-pill.xstrong .dot { background: #ef4444; }
+
+  /* Pack selector — clean cards */
+  .zen-pdp .pack-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .zen-pdp .pack-pill {
+    padding: 12px 20px; border-radius: 14px; border: 2px solid #e8e5e0;
+    background: #fff; cursor: pointer; text-align: center; min-width: 100px;
+    transition: all 0.2s;
+  }
+  .zen-pdp .pack-pill:hover { border-color: #1B4332; }
+  .zen-pdp .pack-pill.active { border-color: #1B4332; background: rgba(27,67,50,0.03); }
+  .zen-pdp .pack-pill .pack-label { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .zen-pdp .pack-pill .pack-price { font-size: 12px; color: #888; margin-top: 2px; }
+  .zen-pdp .pack-pill .pack-save { font-size: 11px; color: #1B4332; font-weight: 600; margin-top: 2px; }
+
+  /* Subscribe */
+  .zen-pdp .sub-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 18px; background: rgba(27,67,50,0.03); border-radius: 14px;
+    border: 1px solid rgba(27,67,50,0.1); margin-bottom: 24px;
+  }
+  .zen-pdp .sub-row .sub-text .title { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .zen-pdp .sub-row .sub-text .desc { font-size: 12px; color: #1B4332; }
+  .zen-pdp .sub-row .toggle {
+    width: 48px; height: 26px; border-radius: 13px; background: #1B4332;
+    position: relative; cursor: pointer;
+  }
+  .zen-pdp .sub-row .toggle::after {
+    content: ''; position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
+    border-radius: 50%; background: #fff;
+  }
+
+  /* ATC */
+  .zen-pdp .atc-section { display: flex; gap: 12px; margin-bottom: 20px; }
+  .zen-pdp .qty-stepper {
+    display: flex; align-items: center; border: 2px solid #e8e5e0; border-radius: 14px; overflow: hidden;
+  }
+  .zen-pdp .qty-btn {
+    width: 48px; height: 52px; background: #fff; border: none;
+    color: #1a1a2e; font-size: 18px; cursor: pointer;
+  }
+  .zen-pdp .qty-val {
+    width: 48px; text-align: center; font-size: 16px; font-weight: 600; color: #1a1a2e;
+  }
+  .zen-pdp .atc-btn {
+    flex: 1; padding: 16px 28px; border-radius: 14px; border: none;
+    background: #1B4332; color: #fff;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .zen-pdp .atc-btn:hover { background: #15372a; }
+
+  /* Trust */
+  .zen-pdp .trust-strip {
+    display: flex; gap: 24px; padding: 20px 0;
+    border-top: 1px solid #e8e5e0; border-bottom: 1px solid #e8e5e0; margin-bottom: 24px;
+  }
+  .zen-pdp .trust-chip {
+    display: flex; align-items: center; gap: 6px; font-size: 12px; color: #888;
+  }
+  .zen-pdp .trust-chip .t-icon { color: #1B4332; font-size: 14px; }
+
+  /* Low stock */
+  .zen-pdp .low-stock {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 16px;
+    font-size: 12px; color: #ea580c;
+  }
+  .zen-pdp .low-stock .pulse {
+    width: 8px; height: 8px; border-radius: 50%; background: #ea580c;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* Details accordion */
+  .zen-pdp .details-section { margin-top: 24px; }
+  .zen-pdp .detail-row {
+    padding: 16px 0; border-bottom: 1px solid #e8e5e0;
+    display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+  }
+  .zen-pdp .detail-row .detail-title { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .zen-pdp .detail-row .detail-arrow { color: #999; font-size: 16px; }
+  .zen-pdp .detail-open { padding: 0 0 16px; font-size: 14px; color: #666; line-height: 1.7; border-bottom: 1px solid #e8e5e0; }
+
+  /* Cross-sell */
+  .zen-pdp .cross-sell { padding: 64px; border-top: 1px solid #e8e5e0; }
+  .zen-pdp .cross-sell h3 { font-family: 'Space Grotesk'; font-size: 24px; font-weight: 700; margin-bottom: 28px; color: #1a1a2e; }
+  .zen-pdp .cs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .zen-pdp .cs-card {
+    background: #fff; border-radius: 16px; border: 1px solid #e8e5e0;
+    overflow: hidden; cursor: pointer; transition: all 0.2s;
+  }
+  .zen-pdp .cs-card:hover { border-color: #1B4332; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+  .zen-pdp .cs-card .cs-img {
+    height: 160px; background: #F0EDE8; display: flex; align-items: center; justify-content: center;
+    font-size: 48px; position: relative;
+  }
+  .zen-pdp .cs-card .cs-img .flavor-line {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  }
+  .zen-pdp .cs-card .cs-info { padding: 14px; }
+  .zen-pdp .cs-card .cs-brand { font-size: 10px; color: #1B4332; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+  .zen-pdp .cs-card .cs-name { font-size: 14px; font-weight: 600; color: #1a1a2e; margin: 2px 0; }
+  .zen-pdp .cs-card .cs-price { font-size: 16px; font-weight: 700; color: #1B4332; }
+  .zen-pdp .cs-card .cs-add {
+    display: block; text-align: center; padding: 10px; background: rgba(27,67,50,0.04);
+    color: #1B4332; font-size: 13px; font-weight: 600; border-top: 1px solid #e8e5e0;
+  }
+  .zen-pdp .cs-card .cs-add:hover { background: #1B4332; color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="showcase-nav">
+  <h1>SnusFriend Round 4 <span class="round-badge">EXTRAS</span></h1>
+  <div style="display:flex; gap:8px; font-size:13px; color:#888;">
+    Dark Luxury HP · Light Minimal PDP
+  </div>
+</div>
+
+<!-- ========== DESIGN L: DARK LUXURY HP ========== -->
+<div class="section">
+  <div class="section-title">Design L: "The Vault" — Dark Luxury Homepage <span class="score-badge score-high">8.65</span></div>
+  <div class="section-subtitle">Aesop × SSENSE energy — editorial luxury meets high-SKU e-commerce with a violet accent</div>
+
+  <div class="design-frame">
+    <div class="design-label">
+      <h3>🖤 Dark Luxury Homepage — Editorial meets E-commerce</h3>
+      <div style="display:flex;gap:6px;">
+        <span class="tag tag-luxury">LUXURY</span>
+        <span class="tag tag-new">NEW DIRECTION</span>
+      </div>
+    </div>
+
+    <div class="vault-hp">
+      <!-- Announce -->
+      <div class="announce">✨ FREE SHIPPING ON ALL ORDERS OVER €39 — SAME-DAY DISPATCH BEFORE 2PM</div>
+
+      <!-- Nav -->
+      <div class="vault-nav">
+        <div class="logo">Snus<span>Friend</span></div>
+        <div class="nav-links">
+          <a href="#">All Pouches</a>
+          <a href="#">Brands</a>
+          <a href="#">By Strength</a>
+          <a href="#">New Arrivals</a>
+          <a href="#">Deals</a>
+          <a href="#">Blog</a>
+        </div>
+        <div class="nav-right">
+          <span>🔍</span>
+          <span>♡</span>
+          <span>🛒 <span style="background:#8b5cf6;color:#fff;padding:1px 6px;border-radius:8px;font-size:11px;font-weight:700;">3</span></span>
+        </div>
+      </div>
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-overline">The Modern Nicotine Experience</div>
+        <h1>Curated Pouches for the Discerning Palate</h1>
+        <div class="hero-sub">Explore 2,200+ premium nicotine pouches from 139 brands. Tobacco-free, lab-tested, delivered to your door.</div>
+        <div class="hero-actions">
+          <button class="hero-btn-primary">Shop All Pouches →</button>
+          <button class="hero-btn-secondary">Take the Flavor Quiz</button>
+        </div>
+      </div>
+
+      <!-- Trust -->
+      <div class="trust-strip">
+        <div class="trust-item"><div class="trust-icon">🧪</div> Lab Tested & Certified</div>
+        <div class="trust-item"><div class="trust-icon">🚚</div> Free Shipping €39+</div>
+        <div class="trust-item"><div class="trust-icon">↩️</div> 30-Day Returns</div>
+        <div class="trust-item"><div class="trust-icon">🌿</div> 100% Tobacco Free</div>
+        <div class="trust-item"><div class="trust-icon">⭐</div> 4.8/5 Rating</div>
+      </div>
+
+      <!-- Collections -->
+      <div class="collections">
+        <div class="col-header">
+          <h2>Shop by Flavor</h2>
+          <a href="#">View All Categories →</a>
+        </div>
+        <div class="col-grid">
+          <div class="col-card">
+            <div class="col-img col-bg-mint">🌿
+              <div class="col-overlay">
+                <div class="col-name">Mint & Menthol</div>
+                <div class="col-count">680 products</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-card">
+            <div class="col-img col-bg-berry">🫐
+              <div class="col-overlay">
+                <div class="col-name">Berry</div>
+                <div class="col-count">420 products</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-card">
+            <div class="col-img col-bg-citrus">🍋
+              <div class="col-overlay">
+                <div class="col-name">Citrus</div>
+                <div class="col-count">340 products</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-card">
+            <div class="col-img col-bg-coffee">☕
+              <div class="col-overlay">
+                <div class="col-name">Coffee</div>
+                <div class="col-count">180 products</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-card">
+            <div class="col-img col-bg-cool">❄️
+              <div class="col-overlay">
+                <div class="col-name">Cool & Icy</div>
+                <div class="col-count">520 products</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Products -->
+      <div class="featured">
+        <div class="feat-header">
+          <h2>Staff Picks This Week</h2>
+          <div class="filter-tabs">
+            <div class="filter-tab active">All</div>
+            <div class="filter-tab">Mint</div>
+            <div class="filter-tab">Berry</div>
+            <div class="filter-tab">Strong</div>
+            <div class="filter-tab">New</div>
+          </div>
+        </div>
+
+        <div class="feat-grid">
+          <!-- Card 1 -->
+          <div class="feat-card">
+            <div class="card-img" style="background:linear-gradient(135deg,#0d1a2e,#1a2d4e);">
+              🫧
+              <div class="str-tag"><span class="strength-badge str-strong"><span class="dot" style="background:#f97316;"></span> Strong</span></div>
+              <div class="wishlist">♡</div>
+              <div class="flavor-line" style="background:linear-gradient(90deg,#06b6d4,#0ea5e9);"></div>
+            </div>
+            <div class="card-body">
+              <div class="card-brand">VELO</div>
+              <div class="card-name">Ice Cool Strong Slim</div>
+              <div class="card-meta">
+                <span class="card-rating">★★★★★</span>
+                <span class="card-reviews">(312)</span>
+              </div>
+              <div class="card-price-row">
+                <span class="card-price">€4.79</span>
+                <span class="card-per-unit">€0.32/pouch</span>
+              </div>
+              <div class="card-packs">
+                <span class="pack-pill active">1</span>
+                <span class="pack-pill">5</span>
+                <span class="pack-pill">10</span>
+              </div>
+              <div class="card-add">Add to Cart</div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="feat-card">
+            <div class="card-img" style="background:linear-gradient(135deg,#1a0d2e,#2d1b4e);">
+              🫐
+              <div class="str-tag"><span class="strength-badge str-xstrong"><span class="dot" style="background:#ef4444;"></span> X-Strong</span></div>
+              <div class="wishlist">♡</div>
+              <div class="flavor-line" style="background:linear-gradient(90deg,#8b5cf6,#6366f1);"></div>
+            </div>
+            <div class="card-body">
+              <div class="card-brand">LOOP</div>
+              <div class="card-name">Salty Liquorice</div>
+              <div class="card-meta">
+                <span class="card-rating">★★★★☆</span>
+                <span class="card-reviews">(187)</span>
+              </div>
+              <div class="card-price-row">
+                <span class="card-price">€4.20</span>
+                <span class="card-per-unit">€0.28/pouch</span>
+              </div>
+              <div class="card-packs">
+                <span class="pack-pill active">1</span>
+                <span class="pack-pill">5</span>
+                <span class="pack-pill">10</span>
+              </div>
+              <div class="card-add">Add to Cart</div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="feat-card">
+            <div class="card-img" style="background:linear-gradient(135deg,#2e1a0d,#4e3318);">
+              🍋
+              <div class="str-tag"><span class="strength-badge str-regular"><span class="dot" style="background:#eab308;"></span> Regular</span></div>
+              <div class="wishlist">♡</div>
+              <div class="flavor-line" style="background:linear-gradient(90deg,#eab308,#f59e0b);"></div>
+            </div>
+            <div class="card-body">
+              <div class="card-brand">ZYN</div>
+              <div class="card-name">Citrus</div>
+              <div class="card-meta">
+                <span class="card-rating">★★★★★</span>
+                <span class="card-reviews">(456)</span>
+              </div>
+              <div class="card-price-row">
+                <span class="card-price">€3.90</span>
+                <span class="card-per-unit">€0.26/pouch</span>
+              </div>
+              <div class="card-packs">
+                <span class="pack-pill">1</span>
+                <span class="pack-pill active">5</span>
+                <span class="pack-pill">10</span>
+              </div>
+              <div class="card-add">Add to Cart</div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="feat-card">
+            <div class="card-img" style="background:linear-gradient(135deg,#0d2818,#1a4d2e);">
+              🍉
+              <div class="str-tag"><span class="strength-badge str-mild"><span class="dot" style="background:#22c55e;"></span> Mild</span></div>
+              <div class="wishlist">♡</div>
+              <div class="flavor-line" style="background:linear-gradient(90deg,#22c55e,#16a34a);"></div>
+            </div>
+            <div class="card-body">
+              <div class="card-brand">ON!</div>
+              <div class="card-name">Watermelon Chill</div>
+              <div class="card-meta">
+                <span class="card-rating">★★★★☆</span>
+                <span class="card-reviews">(98)</span>
+              </div>
+              <div class="card-price-row">
+                <span class="card-price">€3.50</span>
+                <span class="card-per-unit">€0.23/pouch</span>
+              </div>
+              <div class="card-packs">
+                <span class="pack-pill active">1</span>
+                <span class="pack-pill">5</span>
+                <span class="pack-pill">10</span>
+              </div>
+              <div class="card-add">Add to Cart</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Free shipping bar -->
+      <div class="ship-banner">
+        <span class="ship-text">🚚 You're €14.20 away from FREE shipping</span>
+        <div class="ship-bar"><div class="ship-fill"></div></div>
+        <span class="ship-amount">€24.80 / €39.00</span>
+      </div>
+
+      <!-- Editorial -->
+      <div class="editorial">
+        <div class="editorial-grid">
+          <div class="editorial-card dark-card">
+            <div class="ed-overline">New In</div>
+            <h3>The 2026 Spring Collection</h3>
+            <p>Fresh flavors from VELO, ZYN, and LOOP — limited edition releases landing weekly through April.</p>
+            <a href="#" class="ed-link">Discover New Arrivals →</a>
+          </div>
+          <div class="editorial-card gradient-card">
+            <div class="ed-overline">Find Your Match</div>
+            <h3>Take the 3-Minute Flavor Quiz</h3>
+            <p>Answer a few questions about your taste preferences and we'll recommend the perfect pouch for you.</p>
+            <a href="#" class="ed-link">Start the Quiz →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h4>Design Notes — Vault HP (L)</h4>
+    <p><strong>New direction:</strong> Violet (#8b5cf6) accent replaces teal/copper — inspired by luxury fashion e-commerce (SSENSE, Berluti). Playfair Display serif for hero headlines adds editorial gravitas. Flavor-specific background gradients on product cards (dark mint, dark berry, etc.) create immersive browsing. Collection cards with gradient overlays for category discovery.</p>
+    <p><strong>All 5 signatures present:</strong> Color-coded strength badges ✓ · Pack selector pills ✓ · Free shipping progress bar ✓ · Flavor-coded card borders ✓ · Trust strip ✓. Plus: editorial sections, wishlist hearts, star ratings, per-unit pricing.</p>
+  </div>
+</div>
+
+<!-- ========== DESIGN M: LIGHT MINIMAL PDP ========== -->
+<div class="section">
+  <div class="section-title">Design M: "Scandinavian Zen" — Light Minimal PDP <span class="score-badge score-high">8.80</span></div>
+  <div class="section-subtitle">Aesop × MUJI × Byredo energy — less is more, the product speaks for itself</div>
+
+  <div class="design-frame">
+    <div class="design-label">
+      <h3>🌿 Light Minimal PDP — Scandinavian Clean</h3>
+      <div style="display:flex;gap:6px;">
+        <span class="tag tag-light">LIGHT THEME</span>
+        <span class="tag tag-new">NEW</span>
+      </div>
+    </div>
+
+    <div class="zen-pdp">
+      <!-- Nav -->
+      <div class="zen-nav">
+        <div class="logo">SnusFriend</div>
+        <div class="nav-links">
+          <a href="#">All Pouches</a>
+          <a href="#">Brands</a>
+          <a href="#">Strengths</a>
+          <a href="#">New Arrivals</a>
+          <a href="#">Deals</a>
+        </div>
+        <div class="nav-right">
+          <span>🔍</span>
+          <span>♡</span>
+          <span>🛒</span>
+        </div>
+      </div>
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs">
+        <a href="#">Home</a><span class="sep">›</span>
+        <a href="#">Mint</a><span class="sep">›</span>
+        <a href="#">VELO</a><span class="sep">›</span>
+        <span style="color:#555;">Ice Cool Strong</span>
+      </div>
+
+      <!-- PDP Grid -->
+      <div class="pdp-grid">
+        <!-- Gallery -->
+        <div class="gallery">
+          <div class="gallery-main">
+            🫧
+            <div class="badge-sale">−20% OFF</div>
+          </div>
+          <div class="gallery-thumbs">
+            <div class="gallery-thumb active">🫧</div>
+            <div class="gallery-thumb">📦</div>
+            <div class="gallery-thumb">📋</div>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="pdp-info">
+          <div class="pdp-brand">VELO</div>
+          <div class="pdp-title">Ice Cool Strong Slim</div>
+
+          <div class="pdp-rating">
+            <div class="stars">★★★★★</div>
+            <div class="rating-text">4.8 (312 reviews) · <a href="#">Read reviews</a></div>
+          </div>
+
+          <div class="price-block">
+            <span class="price-current">€3.83</span>
+            <span class="price-original">€4.79</span>
+            <span class="price-save">Save 20%</span>
+          </div>
+
+          <!-- Low stock -->
+          <div class="low-stock">
+            <div class="pulse"></div>
+            Only 8 left in stock
+          </div>
+
+          <!-- Strength -->
+          <div class="selector-group">
+            <div class="selector-label">Strength</div>
+            <div class="strength-pills">
+              <div class="str-pill mild"><div class="dot"></div> Mild 4mg</div>
+              <div class="str-pill regular"><div class="dot"></div> Regular 6mg</div>
+              <div class="str-pill strong active"><div class="dot"></div> Strong 10mg</div>
+              <div class="str-pill xstrong"><div class="dot"></div> X-Strong 14mg</div>
+            </div>
+          </div>
+
+          <!-- Pack selector -->
+          <div class="selector-group">
+            <div class="selector-label">Pack Size</div>
+            <div class="pack-pills">
+              <div class="pack-pill">
+                <div class="pack-label">1 Can</div>
+                <div class="pack-price">€3.83</div>
+              </div>
+              <div class="pack-pill active">
+                <div class="pack-label">5-Pack</div>
+                <div class="pack-price">€17.90</div>
+                <div class="pack-save">Save 6%</div>
+              </div>
+              <div class="pack-pill">
+                <div class="pack-label">10-Pack</div>
+                <div class="pack-price">€33.50</div>
+                <div class="pack-save">Save 12%</div>
+              </div>
+              <div class="pack-pill">
+                <div class="pack-label">Roll (20)</div>
+                <div class="pack-price">€61.80</div>
+                <div class="pack-save">Save 18%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subscribe -->
+          <div class="sub-row">
+            <div class="sub-text">
+              <div class="title">Subscribe & Save 15%</div>
+              <div class="desc">€15.22 every 2 weeks · Cancel anytime</div>
+            </div>
+            <div class="toggle"></div>
+          </div>
+
+          <!-- ATC -->
+          <div class="atc-section">
+            <div class="qty-stepper">
+              <button class="qty-btn">−</button>
+              <div class="qty-val">1</div>
+              <button class="qty-btn">+</button>
+            </div>
+            <button class="atc-btn">Add to Cart — €17.90</button>
+          </div>
+
+          <!-- Trust -->
+          <div class="trust-strip">
+            <div class="trust-chip"><span class="t-icon">🚚</span> Free shipping €39+</div>
+            <div class="trust-chip"><span class="t-icon">↩️</span> 30-day returns</div>
+            <div class="trust-chip"><span class="t-icon">🧪</span> Lab tested</div>
+            <div class="trust-chip"><span class="t-icon">🌿</span> Tobacco free</div>
+          </div>
+
+          <!-- Detail rows -->
+          <div class="details-section">
+            <div class="detail-open">
+              VELO Ice Cool Strong delivers a crisp, icy mint experience with a satisfying 10mg nicotine kick. Each slim pouch fits discreetly under your lip and releases flavor for up to 30 minutes. Made with pharmaceutical-grade nicotine and natural plant fibers — completely tobacco-free.<br><br>
+              <strong>Format:</strong> Slim · <strong>Weight:</strong> 0.7g/pouch · <strong>Pouches/can:</strong> 20 · <strong>Flavor:</strong> Spearmint + Menthol · <strong>Origin:</strong> Sweden 🇸🇪
+            </div>
+            <div class="detail-row">
+              <span class="detail-title">Ingredients</span>
+              <span class="detail-arrow">+</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-title">Reviews (312)</span>
+              <span class="detail-arrow">+</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-title">Shipping & Returns</span>
+              <span class="detail-arrow">+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cross-sell -->
+      <div class="cross-sell">
+        <h3>Customers Also Love</h3>
+        <div class="cs-grid">
+          <div class="cs-card">
+            <div class="cs-img">🍉<div class="flavor-line" style="background:linear-gradient(90deg,#f97316,#ef4444);"></div></div>
+            <div class="cs-info">
+              <div class="cs-brand">VELO</div>
+              <div class="cs-name">Watermelon Chill</div>
+              <div class="cs-price">€4.29</div>
+            </div>
+            <div class="cs-add">+ Add to Cart</div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-img">🫐<div class="flavor-line" style="background:linear-gradient(90deg,#8b5cf6,#6366f1);"></div></div>
+            <div class="cs-info">
+              <div class="cs-brand">ZYN</div>
+              <div class="cs-name">Cool Berry</div>
+              <div class="cs-price">€3.90</div>
+            </div>
+            <div class="cs-add">+ Add to Cart</div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-img">❄️<div class="flavor-line" style="background:linear-gradient(90deg,#06b6d4,#0ea5e9);"></div></div>
+            <div class="cs-info">
+              <div class="cs-brand">LOOP</div>
+              <div class="cs-name">Mint Mania</div>
+              <div class="cs-price">€4.20</div>
+            </div>
+            <div class="cs-add">+ Add to Cart</div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-img">☕<div class="flavor-line" style="background:linear-gradient(90deg,#92400e,#a16207);"></div></div>
+            <div class="cs-info">
+              <div class="cs-brand">ON!</div>
+              <div class="cs-name">Coffee 6mg</div>
+              <div class="cs-price">€3.50</div>
+            </div>
+            <div class="cs-add">+ Add to Cart</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h4>Design Notes — Zen PDP (M)</h4>
+    <p><strong>Philosophy:</strong> Scandinavian clean — off-white (#FAFAF8) background, forest green (#1B4332) accent, maximum whitespace. The product and information hierarchy do the selling, not visual noise. Accordion for secondary content (ingredients, reviews, shipping) keeps above-the-fold clean. Strength pills use pastel backgrounds that feel gentle but remain distinctly color-coded.</p>
+    <p><strong>Why this scores 8.80:</strong> All 5 signature UX patterns present · Accessibility-first color contrast on light background · Generous touch targets on selectors · Clean hierarchy guides the eye: Brand → Name → Rating → Price → Strength → Pack → Subscribe → Cart. Cross-sell has flavor-coded borders. Trust bar sits at the natural "decision point" right above the fold break.</p>
+  </div>
+</div>
+
+<!-- ========== UPDATED FULL RANKINGS ========== -->
+<div class="section" style="background: rgba(255,255,255,0.02);">
+  <div class="section-title">📊 Final Master Rankings — All 13 Designs</div>
+  <div class="section-subtitle">V=Visual Impact · UX=E-commerce UX · B=Brand · I=Implementability · M=Mobile | Weighted: V×0.25 + UX×0.25 + B×0.20 + I×0.20 + M×0.10</div>
+
+  <div style="max-width:920px;">
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <thead>
+        <tr style="border-bottom:2px solid rgba(139,92,246,0.3);">
+          <th style="text-align:left;padding:12px 8px;color:#a78bfa;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;">#</th>
+          <th style="text-align:left;padding:12px 8px;color:#a78bfa;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;">Design</th>
+          <th style="text-align:left;padding:12px 8px;color:#a78bfa;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;">Type</th>
+          <th style="text-align:left;padding:12px 8px;color:#a78bfa;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;">Theme</th>
+          <th style="text-align:center;padding:12px 4px;color:#a78bfa;font-size:11px;">V</th>
+          <th style="text-align:center;padding:12px 4px;color:#a78bfa;font-size:11px;">UX</th>
+          <th style="text-align:center;padding:12px 4px;color:#a78bfa;font-size:11px;">B</th>
+          <th style="text-align:center;padding:12px 4px;color:#a78bfa;font-size:11px;">I</th>
+          <th style="text-align:center;padding:12px 4px;color:#a78bfa;font-size:11px;">M</th>
+          <th style="text-align:right;padding:12px 8px;color:#a78bfa;font-size:11px;text-transform:uppercase;">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);background:rgba(139,92,246,0.06);">
+          <td style="padding:10px 8px;font-weight:700;color:#a78bfa;">🥇</td>
+          <td style="padding:10px 8px;font-weight:700;">K: Connoisseur Hybrid PDP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">PDP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Copper Dark</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9.5</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">10</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:800;color:#22c55e;font-size:16px;">9.18</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);background:rgba(139,92,246,0.03);">
+          <td style="padding:10px 8px;font-weight:700;color:#c4b5fd;">🥈</td>
+          <td style="padding:10px 8px;font-weight:700;">I: Copper Glass Checkout</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Checkout</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Copper Dark</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9.5</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:700;color:#22c55e;">8.93</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;font-weight:700;color:#ddd6fe;">🥉</td>
+          <td style="padding:10px 8px;font-weight:600;">M: Scandinavian Zen PDP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">PDP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Scandi Light</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8.5</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9.5</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8.5</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:700;color:#22c55e;">8.80</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;font-weight:700;color:#888;">4</td>
+          <td style="padding:10px 8px;font-weight:600;">J: Mobile Scandi Homepage</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Mobile HP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Scandi Light</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8.5</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9.5</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:700;color:#22c55e;">8.73</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;font-weight:700;color:#888;">5</td>
+          <td style="padding:10px 8px;font-weight:600;">L: The Vault Dark Luxury HP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Homepage</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Violet Dark</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8.5</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8.5</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:700;color:#22c55e;">8.65</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;font-weight:700;color:#888;">6</td>
+          <td style="padding:10px 8px;">6: Cart Drawer (R1)</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Cart</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Midnight Teal</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:600;color:#eab308;">8.45</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;font-weight:700;color:#888;">7</td>
+          <td style="padding:10px 8px;">H: Indigo Editorial PLP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">PLP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Indigo Light</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:600;color:#eab308;">8.15</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;color:#888;">8</td>
+          <td style="padding:10px 8px;">5: PDP (R1)</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">PDP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Midnight Teal</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:600;">7.95</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;color:#888;">9</td>
+          <td style="padding:10px 8px;">A: Scandi Forest HP (R2)</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Homepage</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Scandi Light</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:600;">7.90</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;color:#888;">10</td>
+          <td style="padding:10px 8px;">2: Clean Light HP (R1)</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Homepage</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Clean Ritual</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:right;padding:10px 8px;font-weight:600;">7.60</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;color:#888;">11</td>
+          <td style="padding:10px 8px;">3: Bold Playful HP (R1)</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Homepage</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Neon Pouch</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">9</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:right;padding:10px 8px;">7.50</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;color:#888;">12</td>
+          <td style="padding:10px 8px;">4: PLP (R1)</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">PLP</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Midnight Teal</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">6</td>
+          <td style="text-align:right;padding:10px 8px;">7.35</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:10px 8px;color:#888;">13</td>
+          <td style="padding:10px 8px;">1: Dark HP (R1)</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Homepage</td>
+          <td style="padding:10px 8px;color:#888;font-size:12px;">Midnight Teal</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">7</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">8</td>
+          <td style="text-align:center;padding:10px 4px;font-size:13px;">6</td>
+          <td style="text-align:right;padding:10px 8px;">7.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="notes" style="margin-top:32px;">
+    <h4>🏆 Final Recommendations — The SnusFriend Design System</h4>
+    <p><strong>Option A: "Scandinavian Premium" (recommended)</strong> — Light base (Scandi Forest #FAFAF8 + #1B4332) for homepage, PLP, and PDP. Use Design M (Zen PDP, 8.80) + Design J (Mobile HP, 8.73) + Design F (Light PLP). Cart drawer stays dark (R1 design, 8.45). Checkout uses Copper Glass (Design I, 8.93). This gives you the best accessibility scores, fastest perceived performance, and a clean editorial feel that builds trust.</p>
+    <p><strong>Option B: "Dark Connoisseur"</strong> — Dark base throughout. Use Design K (Hybrid PDP, 9.18) + Design L (Vault HP, 8.65) for a premium luxury feel. Copper accent throughout checkout. Higher visual impact but needs careful accessibility auditing.</p>
+    <p><strong>Option C: "Split Personality"</strong> — Light homepage + PLP (trust-building, scan-friendly), dark PDP + cart + checkout (immersive, conversion-optimized). Best of both worlds — visitors browse in light mode, then enter a "focused buying zone" when they commit to a product.</p>
+  </div>
+</div>
+
+</body>
+</html>

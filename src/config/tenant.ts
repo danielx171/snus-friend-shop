@@ -106,3 +106,6 @@ export const tenant: TenantConfig = {
   },
   freeShippingThreshold: 29,
 } as const satisfies TenantConfig;
+
+/** All valid theme class names — derived from the TenantConfig type. */
+export const validThemes: TenantConfig['theme']['defaultTheme'][] = ['velo', 'light', 'editorial', 'forest', 'copper'];

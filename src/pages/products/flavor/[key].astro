@@ -11,49 +11,67 @@ const FLAVOR_META: Record<string, { label: string; h1: string; desc: string; int
   'mint': {
     label: 'Mint',
     h1: 'Mint Nicotine Pouches',
-    desc: 'Shop mint nicotine pouches — the most popular flavour. Cool, refreshing options from VELO, ZYN, and more.',
-    intro: 'Mint is by far the most popular nicotine pouch flavour, and for good reason. These pouches deliver a cool, refreshing burst that pairs perfectly with the nicotine experience. From spearmint to peppermint and icy menthol blends, the mint category offers something for every preference.',
+    desc: 'Shop mint nicotine pouches from ZYN, VELO, White Fox, Loop and 50+ brands. Peppermint, spearmint, menthol and ice mint. Free EU delivery over \u20ac29.',
+    intro: 'Mint is the most popular nicotine pouch flavour category by a wide margin, accounting for roughly half of all pouches sold in Europe. The appeal is straightforward: mint provides a clean, cooling sensation that complements nicotine delivery and leaves your breath fresh. But not all mints are created equal. Peppermint pouches deliver a sharp, intense cool; spearmint is softer and slightly sweet; menthol blends hit with an icy blast that numbs the gum; and some brands like White Fox and ICEBERG push the cooling factor to extreme levels. Whether you want a gentle everyday mint from ZYN or HELWIT, a bold double mint from White Fox, or an icy menthol hit from VELO Mighty Peppermint, our mint collection spans every strength and intensity level from over 50 brands.',
   },
   'citrus': {
     label: 'Citrus',
     h1: 'Citrus Nicotine Pouches',
-    desc: 'Browse citrus nicotine pouches with zesty orange, lemon, and bergamot flavours. Fresh and uplifting.',
-    intro: 'Citrus nicotine pouches bring a zesty, uplifting twist to your nicotine experience. Featuring flavours like orange, lemon, bergamot, and grapefruit, these pouches are refreshing and bright — a favourite among users who want something different from mint.',
+    desc: 'Shop citrus nicotine pouches \u2014 lemon, orange, bergamot, grapefruit. Zesty flavours from ZYN, VELO, Klint and more. Free EU delivery over \u20ac29.',
+    intro: 'Citrus is the second most popular nicotine pouch flavour after mint, and it attracts users who want something bright and energising without the cooling intensity of menthol. The citrus category covers a surprising range of profiles: ZYN Citrus delivers a balanced lemon-orange blend that has become a modern classic, Klint Pink Grapefruit offers a tart, sophisticated twist, and VELO brings tropical citrus options with mango and passion fruit undertones. Bergamot flavours draw on the Earl Grey tea tradition for a more refined experience. Citrus pouches tend to pair particularly well with morning routines and outdoor activities. Strengths range from gentle 2mg options for beginners all the way to 20mg+ for experienced users, with slim and mini formats available across all major brands.',
   },
   'berry': {
     label: 'Berry',
     h1: 'Berry Nicotine Pouches',
-    desc: 'Shop berry nicotine pouches — blueberry, strawberry, mixed berries and more from top brands.',
-    intro: 'Berry nicotine pouches offer a sweet, fruity flavour profile that many users love. From blueberry and strawberry to mixed berry blends and wild forest berries, this category delivers a naturally sweet experience without being overpowering.',
+    desc: 'Shop berry nicotine pouches \u2014 blueberry, strawberry, mixed berries, raspberry. Top brands, all strengths. Free EU delivery over \u20ac29.',
+    intro: 'Berry flavoured nicotine pouches are a favourite among users who prefer a sweet, fruity experience over mint or citrus. The category is broader than you might expect: blueberry pouches tend to be sweet and mellow, strawberry leans brighter and more candy-like, mixed berry blends offer complexity, and raspberry delivers a tart edge that keeps things interesting. Brands like VELO, Loop, and XQS have invested heavily in their berry ranges, while FUMI takes an unconventional approach with salty raspberry that Nordic palates love. Berry pouches work well across all strength levels, from gentle everyday use to extra-strong options. If you find mint too intense and citrus too sharp, berry sits in a flavour sweet spot that many users settle on as their daily rotation.',
   },
   'coffee': {
     label: 'Coffee',
     h1: 'Coffee Nicotine Pouches',
-    desc: 'Discover coffee nicotine pouches with rich espresso and mocha flavours. Perfect morning pairing.',
-    intro: 'Coffee nicotine pouches combine the rich, roasted notes of espresso, mocha, and coffee bean with satisfying nicotine delivery. A perfect pairing for your morning routine or an afternoon pick-me-up, these pouches appeal to coffee lovers everywhere.',
+    desc: 'Shop coffee nicotine pouches \u2014 espresso, mocha, and roasted coffee flavours from ON!, HELWIT, VID and more. Free EU delivery over \u20ac29.',
+    intro: 'Coffee nicotine pouches are a niche but devoted category. They combine roasted coffee, espresso, and mocha notes with nicotine delivery for an experience that feels like pairing your morning coffee with your pouch in a single product. ON! has one of the more popular coffee offerings with its dry mini format that delivers concentrated flavour, while HELWIT brings a more refined espresso character and VID offers a balanced coffee-forward option. These pouches tend to work best at lower to medium strengths where the coffee flavour can shine without being overwhelmed by nicotine burn. If you are a coffee lover looking to round out your pouch rotation beyond the usual mint and fruit options, this category offers a genuinely different experience.',
+  },
+  'fruit': {
+    label: 'Fruit',
+    h1: 'Fruit Nicotine Pouches',
+    desc: 'Shop fruit nicotine pouches \u2014 apple, peach, mango, watermelon, banana and more. All strengths, 50+ brands. Free EU delivery over \u20ac29.',
+    intro: 'Fruit nicotine pouches cover the widest flavour territory of any category. Apple, peach, mango, watermelon, banana, passion fruit, and dozens of creative combinations mean there is always something new to try. Loop leads the innovation charge with unexpected pairings like jalapeno lime and habanero mint, while VELO and ZYN offer crowd-pleasing options like Tropical Mango and Apple Mint. Chainpop from Gothenburg has built its entire brand identity around premium fruit flavours. The best fruit pouches achieve a natural sweetness rather than an artificial candy taste, though some brands like XQS deliberately lean into candy-inspired profiles. Fruit pouches work across all strength levels and formats, making this the go-to category for users who want variety and enjoy rotating through different flavour experiences.',
+  },
+  'licorice': {
+    label: 'Licorice',
+    h1: 'Licorice Nicotine Pouches',
+    desc: 'Shop licorice nicotine pouches \u2014 Swedish salmiak, sweet liquorice, and bold Scandinavian flavours. Free EU delivery over \u20ac29.',
+    intro: 'Licorice nicotine pouches are a distinctly Scandinavian tradition. While mint dominates globally, licorice has deep cultural roots in Sweden, Finland, and Denmark where salty salmiak liquorice is a beloved flavour. Brands like Skruf, Lundgrens, and Smogen offer authentic Scandinavian licorice profiles, while Loop and XPCT provide more accessible sweet licorice variants. FUMI goes further with earthy, savoury licorice blends that draw on Nordic culinary traditions. The flavour tends to be polarising: people either love it or struggle with the intensity. If you grew up with Scandinavian candy traditions or you simply enjoy bold, distinctive flavours that stand out from the mint-and-berry mainstream, licorice pouches offer something genuinely different.',
+  },
+  'cola': {
+    label: 'Cola',
+    h1: 'Cola Nicotine Pouches',
+    desc: 'Shop cola nicotine pouches \u2014 fizzy cola, cherry cola, tropical cola flavours from CUBA, Loop, VID and more. Free EU delivery over \u20ac29.',
+    intro: 'Cola nicotine pouches capture that familiar fizzy sweetness in pouch form. The best ones genuinely evoke the taste of cracking open a cold cola, with some brands adding cherry, vanilla, or lime twists for extra character. CUBA, Apres, VID, and STNG all offer strong cola options, while MAGGIE brings an unexpected Caribbean cola twist with tonic wine-inspired profiles. Cola pouches tend to appeal to users who enjoy sweet flavours but find berry too fruity and candy too artificial. The cola category works particularly well at medium strengths where the sweetness balances nicely with nicotine delivery. A fun, flavourful alternative for anyone looking to branch out from the standard mint-citrus-berry rotation.',
+  },
+  'vanilla': {
+    label: 'Vanilla',
+    h1: 'Vanilla Nicotine Pouches',
+    desc: 'Shop vanilla nicotine pouches \u2014 smooth, creamy vanilla flavour. A mellow alternative to mint. Free EU delivery over \u20ac29.',
+    intro: 'Vanilla nicotine pouches are the mellow, warm option in a market dominated by cool and fruity profiles. The flavour delivers a smooth, creamy sweetness without the intensity of mint or the tartness of citrus, making it a natural fit for users who prefer something comforting rather than invigorating. Vanilla often appears as a supporting note in other flavour blends, but standalone vanilla pouches offer a purer experience that many users find surprisingly satisfying for all-day use. The sweetness tends to be subtle rather than overpowering, working well across light to medium strengths. If you enjoy dessert-inspired flavours or simply want something different from the usual mint rotation, vanilla pouches provide a warm, understated alternative.',
+  },
+  'tropical': {
+    label: 'Tropical',
+    h1: 'Tropical Nicotine Pouches',
+    desc: 'Shop tropical nicotine pouches \u2014 mango, passion fruit, pineapple, guava. Bold exotic flavours from VELO, Loop, RUSH. Free EU delivery over \u20ac29.',
+    intro: 'Tropical nicotine pouches bring bold, exotic flavours like mango, passion fruit, pineapple, and guava to the pouch experience. This is the category for users who want something vibrant and adventurous. VELO Tropical Mango is one of the best sellers in this space, while Loop pushes boundaries with jalapeno lime and other unexpected tropical combinations. RUSH builds its entire identity around tropical and fruity profiles with mango freeze leading the lineup. KUMA offers banana toffee for users who want tropical with a dessert twist. Tropical pouches tend to be bolder and sweeter than other categories, making them popular as an occasional rotation option rather than an all-day flavour for most users. Available across all strength levels from gentle beginner options to strong 20mg+ variants.',
   },
   'tobacco': {
     label: 'Tobacco',
     h1: 'Tobacco Flavour Nicotine Pouches',
-    desc: 'Classic tobacco flavour nicotine pouches for a traditional experience. Smooth and familiar.',
-    intro: 'Tobacco-flavoured nicotine pouches deliver the classic, familiar taste that traditional tobacco users appreciate — without the smoke, ash, or staining. These pouches offer a smooth, earthy flavour that makes the switch from cigarettes or snus feel natural.',
-  },
-  'exotic': {
-    label: 'Exotic',
-    h1: 'Exotic Nicotine Pouches',
-    desc: 'Explore exotic nicotine pouches — mango, passion fruit, watermelon and more unique flavours.',
-    intro: 'Exotic nicotine pouches push the boundaries of flavour with tropical and unique taste profiles. From mango and passion fruit to watermelon, lychee, and creative blends, these pouches are for adventurous users who want to explore beyond the classics.',
-  },
-  'unflavored': {
-    label: 'Unflavored',
-    h1: 'Unflavored Nicotine Pouches',
-    desc: 'Shop unflavored nicotine pouches for a pure, clean nicotine experience without added taste.',
-    intro: 'Unflavored nicotine pouches deliver a pure, clean nicotine experience with no added taste. Ideal for users who prefer simplicity or want to avoid sweeteners and flavourings, these pouches let you enjoy nicotine in its most straightforward form.',
+    desc: 'Shop tobacco flavour nicotine pouches \u2014 classic taste without the smoke. Smooth, earthy options from ZYN, Lundgrens. Free EU delivery over \u20ac29.',
+    intro: 'Tobacco-flavoured nicotine pouches deliver the familiar, earthy character of traditional tobacco without any actual tobacco in the pouch. This makes them the natural bridge for users switching from cigarettes or traditional snus who want the taste they know in a cleaner format. ZYN and Lundgrens are particularly strong in this category, with Lundgrens using a traditional large-format pouch that gives a genuinely snus-like mouth feel. The flavour profiles range from light, sweet Virginia-inspired blends to deeper, more robust options that echo dark-cured tobacco. If you have recently quit smoking or traditional snus and miss the taste, tobacco-flavoured pouches let you keep that familiar sensory experience while moving to a tobacco-free format.',
   },
 };
 
 export async function getStaticPaths() {
-  const keys = ['mint', 'citrus', 'berry', 'coffee', 'tobacco', 'exotic', 'unflavored'];
+  const keys = ['mint', 'fruit', 'berry', 'citrus', 'licorice', 'coffee', 'cola', 'vanilla', 'tropical', 'tobacco'];
   return keys.map((key) => ({ params: { key }, props: { key } }));
 }
 
@@ -122,6 +140,7 @@ const jsonLd = {
       </p>
     </header>
 
+    <h2 class="sr-only">Product Catalog</h2>
     <FilterableProductGrid
       client:idle
       productsJsonUrl="/data/products.json"

@@ -11,6 +11,7 @@ const footerLinks = {
     { href: '/brands', label: 'Brands' },
     { href: '/shipping', label: 'Shipping' },
     { href: '/returns', label: 'Returns' },
+    { href: '/membership', label: 'Membership' },
   ],
   company: [
     { href: '/about', label: 'About Us' },
@@ -41,6 +42,7 @@ const footerLinks = {
           <p class="text-sm font-semibold text-foreground">Stay in the loop</p>
           <p class="mt-1 text-xs text-muted-foreground">New drops, deals & guides — no spam.</p>
           <form id="newsletter-form" class="mt-2 flex gap-2">
+            <label for="newsletter-email" class="sr-only">Email address</label>
             <input
               id="newsletter-email"
               type="email"

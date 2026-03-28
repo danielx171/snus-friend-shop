@@ -3,6 +3,7 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import QuestBoardIsland from '@/components/react/QuestBoardIsland';
+import LeaderboardIsland from '@/components/react/LeaderboardIsland';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -19,30 +20,9 @@ import { tenant } from '@/config/tenant';
         Connect with fellow pouch enthusiasts. Share reviews, earn points, and climb the ranks.
       </p>
 
-      <!-- Leaderboard Preview -->
-      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-8">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-2xl font-semibold">Leaderboard</h2>
-          <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-            Coming Soon
-          </span>
-        </div>
-        <div class="space-y-3">
-          {[1, 2, 3].map((rank) => (
-            <div class="flex items-center gap-4 rounded-lg bg-muted/40 p-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                {rank}
-              </span>
-              <div class="flex-1">
-                <div class="h-4 w-32 rounded bg-muted animate-pulse" />
-              </div>
-              <div class="h-4 w-16 rounded bg-muted animate-pulse" />
-            </div>
-          ))}
-        </div>
-        <p class="text-xs text-muted-foreground/60 mt-4 text-center">
-          Leaderboard launches with our community beta.
-        </p>
+      <!-- Leaderboard -->
+      <div class="mb-8">
+        <LeaderboardIsland client:visible />
       </div>
 
       <!-- Recent Reviews -->
@@ -69,7 +49,7 @@ import { tenant } from '@/config/tenant';
             </div>
           ))}
         </div>
-        <p class="text-xs text-muted-foreground/60 mt-4 text-center">
+        <p class="text-xs text-muted-foreground mt-4 text-center">
           Be the first to leave a review when we launch.
         </p>
       </div>

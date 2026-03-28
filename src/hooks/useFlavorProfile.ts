@@ -93,6 +93,7 @@ const FLAVOR_SCORE_MAP: Record<FlavorKey, keyof FlavorProfileInput> = {
   cola: 'sweet_score',
   coffee: 'bold_score',
   licorice: 'bold_score',
+  tobacco: 'bold_score',
 };
 
 const STRENGTH_MAP: Record<StrengthKey, StrengthPref> = {

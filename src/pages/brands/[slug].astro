@@ -188,7 +188,7 @@ const metaDescription = b.description
             </h3>
 
             {/* Strength dots */}
-            <div class="mb-2 flex items-center gap-1" aria-label={`Strength: ${product.data.strengthKey}`}>
+            <div class="mb-2 flex items-center gap-1" role="img" aria-label={`Strength: ${product.data.strengthKey}`}>
               {Array.from({ length: 5 }).map((_, i) => (
                 <span
                   class={`inline-block h-1.5 w-1.5 rounded-full ${

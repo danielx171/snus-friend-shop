@@ -38,6 +38,7 @@ fs.writeFileSync(path.join(outDir, 'products.json'), JSON.stringify(productData)
       </p>
     </div>
 
+    <h2 class="sr-only">Product Catalog</h2>
     <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
   </div>
 </Shop>

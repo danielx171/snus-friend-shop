@@ -59,7 +59,7 @@ const ReviewSummaryCard = React.memo(function ReviewSummaryCard({
               {summaryText}
             </p>
             {dateStr && (
-              <p className="text-xs text-muted-foreground/60">
+              <p className="text-xs text-muted-foreground">
                 Last updated {dateStr}
               </p>
             )}

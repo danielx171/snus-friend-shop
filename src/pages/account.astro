@@ -4,6 +4,7 @@ export const prerender = false;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import ProfileCardIsland from '@/components/react/ProfileCardIsland';
+import AvatarSelectorIsland from '@/components/react/AvatarSelectorIsland';
 import AchievementGridIsland from '@/components/react/AchievementGridIsland';
 import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
@@ -97,6 +98,11 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
           reviewsCount={reviewsCount ?? 0}
           snusPoints={balance}
         />
+      </div>
+
+      <!-- Avatar Selector -->
+      <div class="mb-8 rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+        <AvatarSelectorIsland client:visible />
       </div>
 
       <!-- Tab Navigation -->

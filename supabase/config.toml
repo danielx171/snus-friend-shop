@@ -63,6 +63,9 @@ verify_jwt = false
 [functions.send-email]
 verify_jwt = false
 
+[functions.contact-form]
+verify_jwt = false
+
 [functions.redeem-points]
 verify_jwt = false
 
@@ -74,3 +77,6 @@ verify_jwt = true
 
 [functions.batch-review-summaries]
 verify_jwt = true
+
+[functions.send-welcome-email]
+verify_jwt = false

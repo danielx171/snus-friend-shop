@@ -564,6 +564,58 @@ Deno.serve(async (req) => {
     );
   }
 
+  /* ---------- fire-and-forget: send order confirmation email ---------- */
+
+  const internalSecret = Deno.env.get("INTERNAL_FUNCTIONS_SECRET");
+  const supabaseFunctionsUrl = supabaseUrl?.replace(".supabase.co", ".supabase.co/functions/v1");
+
+  if (customer.email && internalSecret && supabaseFunctionsUrl) {
+    const emailItems = items.map((i) => ({
+      name: i.product_name ?? i.sku,
+      qty: i.quantity,
+      price: i.unit_price != null
+        ? `${display_currency ?? "EUR"} ${Number(i.unit_price).toFixed(2)}`
+        : "",
+    }));
+
+    const totalDisplay = display_total != null
+      ? `${display_currency ?? "EUR"} ${Number(display_total).toFixed(2)}`
+      : "";
+
+    fetch(`${supabaseFunctionsUrl}/send-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-function-secret": internalSecret,
+      },
+      body: JSON.stringify({
+        to: customer.email,
+        subject: `Order confirmed — #${nyehandelOrderId}`,
+        template: "order_confirmed",
+        data: {
+          orderId: String(nyehandelOrderId),
+          customerName: `${customer.firstname} ${customer.lastname}`.trim(),
+          total: totalDisplay,
+          currency: display_currency ?? "EUR",
+          items: emailItems,
+          shippingMethod: shipping_method,
+        },
+      }),
+    }).catch((err) => {
+      console.error(JSON.stringify({
+        requestId,
+        event: "checkout_confirmation_email_fire_failed",
+        error: String(err),
+      }));
+    });
+  } else {
+    console.log(JSON.stringify({
+      requestId,
+      event: "checkout_confirmation_email_skipped",
+      reason: !customer.email ? "no_email" : !internalSecret ? "no_internal_secret" : "no_functions_url",
+    }));
+  }
+
   /* ---------- success ---------- */
 
   return jsonResponse({

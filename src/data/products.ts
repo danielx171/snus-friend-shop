@@ -14,10 +14,11 @@ const flavorImages: Record<string, string> = {
   'cola': productDark,
   'vanilla': productBerry,
   'tropical': productCitrus,
+  'tobacco': productDark,
 };
 
 // Stable enum keys for translation (language-agnostic)
-export type FlavorKey = 'mint' | 'fruit' | 'berry' | 'citrus' | 'licorice' | 'coffee' | 'cola' | 'vanilla' | 'tropical';
+export type FlavorKey = 'mint' | 'fruit' | 'berry' | 'citrus' | 'licorice' | 'coffee' | 'cola' | 'vanilla' | 'tropical' | 'tobacco';
 export type StrengthKey = 'normal' | 'strong' | 'extraStrong' | 'ultraStrong';
 export type FormatKey = 'slim' | 'mini' | 'original' | 'large';
 export type BadgeKey = 'newPrice' | 'new' | 'popular' | 'limited';
@@ -74,6 +75,7 @@ export const flavorKeys: FlavorKey[] = [
   'cola',
   'vanilla',
   'tropical',
+  'tobacco',
 ];
 
 export const strengthKeys: StrengthKey[] = ['normal', 'strong', 'extraStrong', 'ultraStrong'];

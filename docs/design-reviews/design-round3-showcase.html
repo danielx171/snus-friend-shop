@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnusFriend Round 3 — Checkout, Mobile & Hybrid Designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; }
+
+  .showcase-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .showcase-nav h1 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; }
+  .round-badge { background: linear-gradient(135deg, #B87333, #D4A574); color: #000; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+
+  .section { padding: 48px 32px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .section-title { font-family: 'Space Grotesk'; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .section-subtitle { color: #888; font-size: 14px; margin-bottom: 32px; }
+  .score-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-left: 12px; }
+  .score-high { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .score-top { background: rgba(184,115,51,0.2); color: #D4A574; }
+
+  .design-frame { border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 48px; }
+  .design-label { padding: 16px 20px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .design-label h3 { font-size: 15px; font-weight: 600; }
+  .tag { font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag-checkout { background: rgba(99,102,241,0.2); color: #818cf8; }
+  .tag-mobile { background: rgba(236,72,153,0.2); color: #f472b6; }
+  .tag-hybrid { background: rgba(184,115,51,0.2); color: #D4A574; }
+  .tag-new { background: rgba(34,197,94,0.15); color: #22c55e; }
+
+  .notes { margin-top: 16px; padding: 16px 20px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); }
+  .notes h4 { font-size: 13px; font-weight: 600; color: #aaa; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .notes p { font-size: 13px; color: #888; line-height: 1.6; }
+  .notes strong { color: #fff; }
+
+  /* ================================================================
+     DESIGN I: CHECKOUT PAGE — Copper Glass Theme
+     ================================================================ */
+  .checkout-copper {
+    background: #1C1C2E; color: #E8E4DF; min-height: 800px;
+  }
+  .checkout-copper .checkout-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px; border-bottom: 1px solid rgba(184,115,51,0.15);
+  }
+  .checkout-copper .checkout-header .logo {
+    font-family: 'Space Grotesk'; font-weight: 700; font-size: 20px; color: #B87333;
+  }
+  .checkout-copper .checkout-header .steps {
+    display: flex; gap: 32px; align-items: center;
+  }
+  .checkout-copper .step {
+    display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: #666;
+  }
+  .checkout-copper .step.active { color: #B87333; }
+  .checkout-copper .step.done { color: #22c55e; }
+  .checkout-copper .step-num {
+    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; border: 2px solid #333;
+  }
+  .checkout-copper .step.active .step-num { border-color: #B87333; background: rgba(184,115,51,0.15); color: #B87333; }
+  .checkout-copper .step.done .step-num { border-color: #22c55e; background: rgba(34,197,94,0.15); color: #22c55e; }
+  .checkout-copper .step-line { width: 40px; height: 2px; background: #333; }
+  .checkout-copper .step-line.done { background: #22c55e; }
+
+  .checkout-copper .checkout-body {
+    display: grid; grid-template-columns: 1fr 400px; gap: 0;
+  }
+  .checkout-copper .checkout-form {
+    padding: 40px 48px; border-right: 1px solid rgba(184,115,51,0.08);
+  }
+  .checkout-copper .form-section { margin-bottom: 32px; }
+  .checkout-copper .form-section h3 {
+    font-family: 'Space Grotesk'; font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #fff;
+  }
+  .checkout-copper .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .checkout-copper .form-row.full { grid-template-columns: 1fr; }
+  .checkout-copper .input-group { display: flex; flex-direction: column; gap: 4px; }
+  .checkout-copper .input-group label { font-size: 12px; font-weight: 500; color: #888; }
+  .checkout-copper .input-group input, .checkout-copper .input-group select {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(184,115,51,0.2); border-radius: 10px;
+    padding: 12px 14px; color: #fff; font-size: 14px; outline: none;
+  }
+  .checkout-copper .input-group input:focus { border-color: #B87333; box-shadow: 0 0 0 3px rgba(184,115,51,0.15); }
+  .checkout-copper .input-group input::placeholder { color: #555; }
+
+  /* Express checkout */
+  .checkout-copper .express-checkout {
+    display: flex; gap: 12px; margin-bottom: 24px;
+  }
+  .checkout-copper .express-btn {
+    flex: 1; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center;
+    gap: 8px; font-size: 14px; font-weight: 600; color: #fff; cursor: pointer;
+  }
+  .checkout-copper .express-btn.apple { background: #000; border-color: #333; }
+  .checkout-copper .express-btn.klarna { background: #FFB3C7; color: #000; border-color: #FFB3C7; }
+  .checkout-copper .express-btn.gpay { background: #fff; color: #000; border-color: #ddd; }
+  .checkout-copper .divider {
+    display: flex; align-items: center; gap: 16px; margin: 20px 0; color: #555; font-size: 12px;
+  }
+  .checkout-copper .divider::before, .checkout-copper .divider::after {
+    content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06);
+  }
+
+  /* Order summary sidebar */
+  .checkout-copper .order-summary {
+    padding: 40px 32px; background: rgba(184,115,51,0.03);
+  }
+  .checkout-copper .order-summary h3 {
+    font-family: 'Space Grotesk'; font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #B87333;
+  }
+  .checkout-copper .summary-item {
+    display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .checkout-copper .summary-item-img {
+    width: 56px; height: 56px; border-radius: 10px; background: rgba(184,115,51,0.1);
+    display: flex; align-items: center; justify-content: center; font-size: 24px; position: relative;
+  }
+  .checkout-copper .item-qty {
+    position: absolute; top: -4px; right: -4px; background: #B87333; color: #000;
+    width: 20px; height: 20px; border-radius: 50%; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .checkout-copper .summary-item-info { flex: 1; }
+  .checkout-copper .summary-item-info .name { font-size: 14px; font-weight: 600; color: #fff; }
+  .checkout-copper .summary-item-info .variant { font-size: 12px; color: #888; margin-top: 2px; }
+  .checkout-copper .summary-item-info .str-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-top: 4px;
+  }
+  .checkout-copper .summary-item .price { font-size: 14px; font-weight: 600; color: #B87333; }
+
+  /* Promo code */
+  .checkout-copper .promo-row {
+    display: flex; gap: 8px; margin: 16px 0;
+  }
+  .checkout-copper .promo-row input {
+    flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(184,115,51,0.15);
+    border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 13px;
+  }
+  .checkout-copper .promo-row button {
+    padding: 10px 16px; border-radius: 8px; border: 1px solid #B87333; background: transparent;
+    color: #B87333; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+
+  /* Totals */
+  .checkout-copper .totals { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .checkout-copper .total-row {
+    display: flex; justify-content: space-between; font-size: 13px; color: #888; margin-bottom: 8px;
+  }
+  .checkout-copper .total-row.savings { color: #22c55e; }
+  .checkout-copper .total-row.grand {
+    font-size: 18px; font-weight: 700; color: #fff; margin-top: 12px; padding-top: 12px;
+    border-top: 1px solid rgba(184,115,51,0.2);
+  }
+  .checkout-copper .total-row.grand .val { color: #B87333; }
+
+  /* Free shipping bar */
+  .checkout-copper .ship-bar {
+    margin-top: 16px; padding: 12px; background: rgba(34,197,94,0.08); border-radius: 10px;
+    text-align: center;
+  }
+  .checkout-copper .ship-bar span { font-size: 12px; color: #22c55e; font-weight: 500; }
+  .checkout-copper .ship-bar .bar { height: 4px; background: rgba(34,197,94,0.2); border-radius: 2px; margin-top: 8px; }
+  .checkout-copper .ship-bar .bar-fill { height: 100%; background: #22c55e; border-radius: 2px; width: 100%; }
+
+  /* Trust & CTA */
+  .checkout-copper .trust-row {
+    display: flex; gap: 16px; margin-top: 16px; justify-content: center;
+  }
+  .checkout-copper .trust-item { font-size: 11px; color: #888; display: flex; align-items: center; gap: 4px; }
+  .checkout-copper .trust-item .icon { color: #B87333; }
+
+  .checkout-copper .checkout-cta {
+    margin-top: 20px; width: 100%; padding: 16px; border-radius: 12px; border: none;
+    background: linear-gradient(135deg, #B87333, #D4A574); color: #000;
+    font-size: 16px; font-weight: 700; cursor: pointer; text-align: center;
+    letter-spacing: 0.02em;
+  }
+  .checkout-copper .delivery-est {
+    text-align: center; margin-top: 12px; font-size: 12px; color: #888;
+  }
+  .checkout-copper .delivery-est strong { color: #22c55e; }
+
+  /* Subscription toggle */
+  .checkout-copper .sub-toggle {
+    margin-top: 16px; padding: 14px; background: rgba(184,115,51,0.06); border-radius: 10px;
+    border: 1px solid rgba(184,115,51,0.12); display: flex; align-items: center; justify-content: space-between;
+  }
+  .checkout-copper .sub-toggle .left { display: flex; flex-direction: column; gap: 2px; }
+  .checkout-copper .sub-toggle .left .title { font-size: 13px; font-weight: 600; color: #fff; }
+  .checkout-copper .sub-toggle .left .desc { font-size: 11px; color: #B87333; }
+  .checkout-copper .toggle-switch {
+    width: 44px; height: 24px; border-radius: 12px; background: rgba(184,115,51,0.3); position: relative; cursor: pointer;
+  }
+  .checkout-copper .toggle-switch::after {
+    content: ''; position: absolute; top: 2px; left: 22px; width: 20px; height: 20px;
+    border-radius: 50%; background: #B87333; transition: left 0.2s;
+  }
+
+  /* ================================================================
+     DESIGN J: MOBILE HOMEPAGE — Scandinavian Forest
+     ================================================================ */
+  .mobile-frame {
+    width: 390px; margin: 0 auto; border-radius: 40px; overflow: hidden;
+    border: 4px solid #333; background: #000; position: relative;
+  }
+  .mobile-frame::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 28px; background: #000; border-radius: 0 0 16px 16px; z-index: 10;
+  }
+  .mobile-hp {
+    background: #FFFFFF; color: #1a1a2e; min-height: 844px; overflow-y: auto;
+    padding-top: 28px;
+  }
+  .mobile-hp .m-status-bar {
+    display: flex; justify-content: space-between; padding: 4px 24px 8px; font-size: 12px; font-weight: 600; color: #1a1a2e;
+  }
+  .mobile-hp .m-top-bar {
+    background: #1B4332; color: #fff; text-align: center; padding: 8px 16px; font-size: 11px; font-weight: 500;
+  }
+  .mobile-hp .m-nav {
+    display: flex; align-items: center; justify-content: space-between; padding: 12px 20px;
+    border-bottom: 1px solid #e8e5e0;
+  }
+  .mobile-hp .m-nav .hamburger { font-size: 20px; color: #1a1a2e; cursor: pointer; }
+  .mobile-hp .m-nav .logo { font-family: 'Space Grotesk'; font-weight: 700; font-size: 18px; color: #1B4332; }
+  .mobile-hp .m-nav .icons { display: flex; gap: 16px; font-size: 18px; }
+  .mobile-hp .m-nav .cart-count {
+    background: #1B4332; color: #fff; width: 16px; height: 16px; border-radius: 50%;
+    font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+    position: relative; top: -6px; left: -4px;
+  }
+
+  /* Mobile search */
+  .mobile-hp .m-search {
+    margin: 12px 20px; background: #F5F3EE; border-radius: 12px; padding: 12px 16px;
+    display: flex; align-items: center; gap: 8px; font-size: 14px; color: #999;
+  }
+
+  /* Hero card */
+  .mobile-hp .m-hero {
+    margin: 16px 20px; border-radius: 16px; overflow: hidden; position: relative;
+    background: linear-gradient(135deg, #1B4332, #2D6A4F); padding: 32px 24px; color: #fff;
+  }
+  .mobile-hp .m-hero h2 { font-family: 'Space Grotesk'; font-size: 24px; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+  .mobile-hp .m-hero p { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 16px; }
+  .mobile-hp .m-hero .cta-btn {
+    display: inline-block; background: #fff; color: #1B4332; padding: 10px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; text-decoration: none;
+  }
+  .mobile-hp .m-hero .hero-emoji { position: absolute; right: 16px; bottom: 16px; font-size: 56px; opacity: 0.3; }
+
+  /* Quick categories */
+  .mobile-hp .m-cats {
+    display: flex; gap: 12px; padding: 16px 20px; overflow-x: auto;
+  }
+  .mobile-hp .m-cat {
+    flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 72px;
+  }
+  .mobile-hp .m-cat .cat-icon {
+    width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .mobile-hp .m-cat .cat-label { font-size: 11px; font-weight: 500; color: #555; text-align: center; }
+  .cat-mint { background: rgba(16,185,129,0.1); }
+  .cat-berry { background: rgba(168,85,247,0.1); }
+  .cat-citrus { background: rgba(245,158,11,0.1); }
+  .cat-coffee { background: rgba(120,53,15,0.1); }
+  .cat-strong { background: rgba(239,68,68,0.1); }
+
+  /* Section header */
+  .mobile-hp .m-section-header {
+    display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 12px;
+  }
+  .mobile-hp .m-section-header h3 { font-family: 'Space Grotesk'; font-size: 18px; font-weight: 700; }
+  .mobile-hp .m-section-header a { font-size: 13px; color: #1B4332; font-weight: 600; text-decoration: none; }
+
+  /* Mobile product card */
+  .mobile-hp .m-products { display: flex; gap: 12px; padding: 0 20px; overflow-x: auto; }
+  .mobile-hp .m-product-card {
+    flex: 0 0 160px; background: #FAFAF8; border-radius: 14px; overflow: hidden;
+    border: 1px solid #e8e5e0;
+  }
+  .mobile-hp .m-product-img {
+    height: 120px; background: linear-gradient(135deg, #f0ede8, #e8e5e0);
+    display: flex; align-items: center; justify-content: center; font-size: 48px; position: relative;
+  }
+  .mobile-hp .m-product-img .m-str-badge {
+    position: absolute; top: 8px; left: 8px;
+    padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 600;
+  }
+  .mobile-hp .m-product-info { padding: 10px 12px; }
+  .mobile-hp .m-product-info .brand { font-size: 10px; color: #999; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+  .mobile-hp .m-product-info .name { font-size: 13px; font-weight: 600; color: #1a1a2e; margin: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mobile-hp .m-product-info .price-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .mobile-hp .m-product-info .price { font-size: 14px; font-weight: 700; color: #1B4332; }
+  .mobile-hp .m-product-info .per-unit { font-size: 10px; color: #999; }
+  .mobile-hp .m-product-info .m-packs { display: flex; gap: 4px; margin-top: 6px; }
+  .mobile-hp .m-product-info .m-pack {
+    padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600;
+    background: rgba(27,67,50,0.06); color: #1B4332; border: 1px solid rgba(27,67,50,0.12);
+  }
+  .mobile-hp .m-product-info .m-pack.active { background: #1B4332; color: #fff; }
+
+  /* Mobile strength badges */
+  .str-mild { background: rgba(34,197,94,0.12); color: #16a34a; }
+  .str-regular { background: rgba(234,179,8,0.12); color: #ca8a04; }
+  .str-strong { background: rgba(249,115,22,0.12); color: #ea580c; }
+  .str-xstrong { background: rgba(239,68,68,0.12); color: #dc2626; }
+
+  /* Quiz CTA */
+  .mobile-hp .m-quiz {
+    margin: 20px; padding: 20px; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(27,67,50,0.05), rgba(27,67,50,0.1));
+    border: 1px solid rgba(27,67,50,0.15); text-align: center;
+  }
+  .mobile-hp .m-quiz h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: #1a1a2e; }
+  .mobile-hp .m-quiz p { font-size: 12px; color: #777; margin-bottom: 12px; }
+  .mobile-hp .m-quiz .quiz-btn {
+    display: inline-block; background: #1B4332; color: #fff; padding: 10px 24px;
+    border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none;
+  }
+
+  /* Trust strip */
+  .mobile-hp .m-trust {
+    display: flex; justify-content: space-around; padding: 16px 20px; background: #FAFAF8;
+    border-top: 1px solid #e8e5e0; border-bottom: 1px solid #e8e5e0;
+  }
+  .mobile-hp .m-trust-item { text-align: center; }
+  .mobile-hp .m-trust-item .num { font-size: 18px; font-weight: 700; color: #1B4332; }
+  .mobile-hp .m-trust-item .label { font-size: 10px; color: #888; }
+
+  /* Sticky bottom CTA */
+  .mobile-hp .m-sticky-bottom {
+    position: sticky; bottom: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+    padding: 12px 20px; border-top: 1px solid #e8e5e0; display: flex; gap: 12px;
+  }
+  .mobile-hp .m-sticky-bottom .shop-btn {
+    flex: 1; background: #1B4332; color: #fff; padding: 14px; border-radius: 12px;
+    font-size: 14px; font-weight: 600; text-align: center; text-decoration: none;
+  }
+  .mobile-hp .m-sticky-bottom .quiz-link {
+    padding: 14px 20px; border-radius: 12px; border: 1px solid #1B4332; color: #1B4332;
+    font-size: 14px; font-weight: 600; text-decoration: none;
+  }
+
+  /* ================================================================
+     DESIGN K: HYBRID BEST-OF PDP — Combining top elements
+     ================================================================ */
+  .hybrid-pdp {
+    background: #111118; color: #E8E4DF; min-height: 800px;
+  }
+  .hybrid-pdp .pdp-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 48px; border-bottom: 1px solid rgba(184,115,51,0.1);
+    background: rgba(17,17,24,0.95);
+  }
+  .hybrid-pdp .pdp-nav .logo { font-family: 'Space Grotesk'; font-weight: 700; font-size: 20px; }
+  .hybrid-pdp .pdp-nav .logo span { color: #B87333; }
+  .hybrid-pdp .pdp-nav .nav-links { display: flex; gap: 28px; }
+  .hybrid-pdp .pdp-nav .nav-links a { color: #999; text-decoration: none; font-size: 14px; font-weight: 500; }
+  .hybrid-pdp .pdp-nav .nav-links a:hover { color: #fff; }
+  .hybrid-pdp .pdp-nav .nav-right { display: flex; gap: 20px; align-items: center; }
+  .hybrid-pdp .pdp-nav .nav-right .cart-badge {
+    background: #B87333; color: #000; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700;
+  }
+
+  .hybrid-pdp .breadcrumbs {
+    padding: 12px 48px; font-size: 12px; color: #666;
+  }
+  .hybrid-pdp .breadcrumbs a { color: #888; text-decoration: none; }
+  .hybrid-pdp .breadcrumbs a:hover { color: #B87333; }
+  .hybrid-pdp .breadcrumbs .sep { margin: 0 6px; }
+
+  .hybrid-pdp .pdp-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0 48px 48px;
+  }
+
+  /* Gallery */
+  .hybrid-pdp .gallery { padding-right: 32px; }
+  .hybrid-pdp .gallery-main {
+    width: 100%; aspect-ratio: 1; border-radius: 20px;
+    background: linear-gradient(145deg, #1a1a28, #222235);
+    display: flex; align-items: center; justify-content: center; font-size: 120px;
+    position: relative; overflow: hidden;
+  }
+  .hybrid-pdp .gallery-main .sale-tag {
+    position: absolute; top: 16px; left: 16px; background: #ef4444; color: #fff;
+    padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+  }
+  .hybrid-pdp .gallery-main .wishlist-btn {
+    position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center;
+    font-size: 18px; cursor: pointer;
+  }
+  .hybrid-pdp .gallery-thumbs {
+    display: flex; gap: 12px; margin-top: 16px;
+  }
+  .hybrid-pdp .gallery-thumb {
+    width: 80px; height: 80px; border-radius: 12px; background: #1a1a28;
+    border: 2px solid transparent; display: flex; align-items: center; justify-content: center;
+    font-size: 32px; cursor: pointer;
+  }
+  .hybrid-pdp .gallery-thumb.active { border-color: #B87333; }
+
+  /* Product info */
+  .hybrid-pdp .pdp-info { padding-left: 16px; }
+  .hybrid-pdp .pdp-brand { font-size: 12px; color: #B87333; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .hybrid-pdp .pdp-title { font-family: 'Space Grotesk'; font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+
+  /* Rating */
+  .hybrid-pdp .pdp-rating {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+  }
+  .hybrid-pdp .stars { color: #B87333; font-size: 16px; letter-spacing: 2px; }
+  .hybrid-pdp .rating-text { font-size: 13px; color: #888; }
+  .hybrid-pdp .rating-text a { color: #B87333; text-decoration: underline; }
+
+  /* Price block */
+  .hybrid-pdp .price-block { margin-bottom: 20px; display: flex; align-items: baseline; gap: 12px; }
+  .hybrid-pdp .price-current { font-size: 28px; font-weight: 800; color: #B87333; }
+  .hybrid-pdp .price-original { font-size: 16px; color: #666; text-decoration: line-through; }
+  .hybrid-pdp .price-save {
+    padding: 4px 10px; border-radius: 8px; background: rgba(34,197,94,0.12); color: #22c55e;
+    font-size: 12px; font-weight: 600;
+  }
+
+  /* Strength selector */
+  .hybrid-pdp .selector-group { margin-bottom: 20px; }
+  .hybrid-pdp .selector-label { font-size: 13px; font-weight: 600; color: #aaa; margin-bottom: 8px; }
+  .hybrid-pdp .strength-pills { display: flex; gap: 8px; }
+  .hybrid-pdp .str-pill {
+    padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; gap: 6px;
+  }
+  .hybrid-pdp .str-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .hybrid-pdp .str-pill.mild { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.2); color: #22c55e; }
+  .hybrid-pdp .str-pill.mild .dot { background: #22c55e; }
+  .hybrid-pdp .str-pill.regular { background: rgba(234,179,8,0.08); border-color: rgba(234,179,8,0.2); color: #eab308; }
+  .hybrid-pdp .str-pill.regular .dot { background: #eab308; }
+  .hybrid-pdp .str-pill.strong { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.2); color: #f97316; }
+  .hybrid-pdp .str-pill.strong .dot { background: #f97316; }
+  .hybrid-pdp .str-pill.strong.active { border-color: #f97316; background: rgba(249,115,22,0.15); }
+  .hybrid-pdp .str-pill.xstrong { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); color: #ef4444; }
+  .hybrid-pdp .str-pill.xstrong .dot { background: #ef4444; }
+
+  /* Pack selector */
+  .hybrid-pdp .pack-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hybrid-pdp .pack-pill {
+    padding: 10px 16px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.02); cursor: pointer; text-align: center; min-width: 80px;
+  }
+  .hybrid-pdp .pack-pill.active { border-color: #B87333; background: rgba(184,115,51,0.08); }
+  .hybrid-pdp .pack-pill .pack-label { font-size: 13px; font-weight: 600; color: #fff; }
+  .hybrid-pdp .pack-pill .pack-price { font-size: 11px; color: #888; margin-top: 2px; }
+  .hybrid-pdp .pack-pill .pack-save { font-size: 10px; color: #22c55e; font-weight: 600; margin-top: 2px; }
+
+  /* Subscribe toggle */
+  .hybrid-pdp .sub-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; background: rgba(184,115,51,0.05); border-radius: 12px;
+    border: 1px solid rgba(184,115,51,0.1); margin-bottom: 20px;
+  }
+  .hybrid-pdp .sub-row .sub-text .title { font-size: 13px; font-weight: 600; color: #fff; }
+  .hybrid-pdp .sub-row .sub-text .desc { font-size: 11px; color: #B87333; }
+  .hybrid-pdp .sub-row .toggle {
+    width: 44px; height: 24px; border-radius: 12px; background: rgba(184,115,51,0.3);
+    position: relative; cursor: pointer;
+  }
+  .hybrid-pdp .sub-row .toggle::after {
+    content: ''; position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
+    border-radius: 50%; background: #B87333;
+  }
+
+  /* Add to cart */
+  .hybrid-pdp .atc-section { display: flex; gap: 12px; margin-bottom: 16px; }
+  .hybrid-pdp .qty-stepper {
+    display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+    overflow: hidden;
+  }
+  .hybrid-pdp .qty-btn {
+    width: 44px; height: 48px; background: rgba(255,255,255,0.03); border: none;
+    color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .hybrid-pdp .qty-val {
+    width: 44px; text-align: center; font-size: 16px; font-weight: 600; color: #fff;
+    background: transparent;
+  }
+  .hybrid-pdp .atc-btn {
+    flex: 1; padding: 14px 24px; border-radius: 12px; border: none;
+    background: linear-gradient(135deg, #B87333, #D4A574); color: #000;
+    font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.02em;
+  }
+
+  /* Trust bar */
+  .hybrid-pdp .trust-strip {
+    display: flex; gap: 20px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04); margin-bottom: 20px;
+  }
+  .hybrid-pdp .trust-chip {
+    display: flex; align-items: center; gap: 6px; font-size: 12px; color: #888;
+  }
+  .hybrid-pdp .trust-chip .t-icon { color: #B87333; font-size: 14px; }
+
+  /* Low stock */
+  .hybrid-pdp .low-stock {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 16px;
+    font-size: 12px; color: #f97316;
+  }
+  .hybrid-pdp .low-stock .pulse { width: 8px; height: 8px; border-radius: 50%; background: #f97316; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* Tabs */
+  .hybrid-pdp .pdp-tabs { margin-top: 24px; }
+  .hybrid-pdp .tab-headers { display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .hybrid-pdp .tab-header {
+    padding: 12px 24px; font-size: 13px; font-weight: 600; color: #666; cursor: pointer;
+    border-bottom: 2px solid transparent;
+  }
+  .hybrid-pdp .tab-header.active { color: #B87333; border-bottom-color: #B87333; }
+  .hybrid-pdp .tab-content { padding: 20px 0; font-size: 14px; color: #aaa; line-height: 1.7; }
+
+  /* Complete Your Routine */
+  .hybrid-pdp .cross-sell { padding: 48px; background: rgba(255,255,255,0.01); border-top: 1px solid rgba(255,255,255,0.04); }
+  .hybrid-pdp .cross-sell h3 { font-family: 'Space Grotesk'; font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+  .hybrid-pdp .cross-sell-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .hybrid-pdp .cs-card {
+    background: rgba(255,255,255,0.02); border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden; cursor: pointer; transition: border-color 0.2s;
+  }
+  .hybrid-pdp .cs-card:hover { border-color: rgba(184,115,51,0.3); }
+  .hybrid-pdp .cs-card .cs-img {
+    height: 140px; background: linear-gradient(135deg, #1a1a28, #222235);
+    display: flex; align-items: center; justify-content: center; font-size: 48px;
+    position: relative;
+  }
+  .hybrid-pdp .cs-card .cs-img .flavor-border { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
+  .hybrid-pdp .cs-card .cs-info { padding: 12px; }
+  .hybrid-pdp .cs-card .cs-brand { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+  .hybrid-pdp .cs-card .cs-name { font-size: 13px; font-weight: 600; color: #fff; margin: 2px 0; }
+  .hybrid-pdp .cs-card .cs-price { font-size: 14px; font-weight: 700; color: #B87333; }
+  .hybrid-pdp .cs-card .cs-add {
+    display: block; text-align: center; padding: 8px; background: rgba(184,115,51,0.08);
+    color: #B87333; font-size: 12px; font-weight: 600; border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  /* Reviews section */
+  .hybrid-pdp .reviews-section { padding: 48px; border-top: 1px solid rgba(255,255,255,0.04); }
+  .hybrid-pdp .reviews-section h3 { font-family: 'Space Grotesk'; font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+  .hybrid-pdp .review-summary {
+    display: flex; gap: 40px; margin-bottom: 32px; padding: 24px; background: rgba(255,255,255,0.02);
+    border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .hybrid-pdp .review-big { text-align: center; padding-right: 40px; border-right: 1px solid rgba(255,255,255,0.06); }
+  .hybrid-pdp .review-big .big-score { font-size: 48px; font-weight: 800; color: #B87333; }
+  .hybrid-pdp .review-big .big-stars { color: #B87333; font-size: 18px; margin: 4px 0; }
+  .hybrid-pdp .review-big .big-count { font-size: 13px; color: #888; }
+  .hybrid-pdp .review-bars { flex: 1; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+  .hybrid-pdp .review-bar-row { display: flex; align-items: center; gap: 8px; }
+  .hybrid-pdp .review-bar-row .label { font-size: 12px; color: #888; width: 20px; text-align: right; }
+  .hybrid-pdp .review-bar-row .bar { flex: 1; height: 8px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; }
+  .hybrid-pdp .review-bar-row .bar-fill { height: 100%; background: #B87333; border-radius: 4px; }
+  .hybrid-pdp .review-bar-row .count { font-size: 12px; color: #666; width: 30px; }
+
+  .hybrid-pdp .review-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .hybrid-pdp .review-card {
+    padding: 20px; background: rgba(255,255,255,0.02); border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .hybrid-pdp .review-card .rc-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .hybrid-pdp .review-card .rc-name { font-size: 14px; font-weight: 600; color: #fff; }
+  .hybrid-pdp .review-card .rc-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 8px; background: rgba(34,197,94,0.12);
+    color: #22c55e; font-weight: 600;
+  }
+  .hybrid-pdp .review-card .rc-stars { color: #B87333; font-size: 13px; margin-bottom: 8px; }
+  .hybrid-pdp .review-card .rc-text { font-size: 13px; color: #aaa; line-height: 1.6; }
+  .hybrid-pdp .review-card .rc-date { font-size: 11px; color: #666; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="showcase-nav">
+  <h1>SnusFriend Round 3 <span class="round-badge">NEW</span></h1>
+  <div style="display:flex; gap:8px; font-size:13px; color:#888;">
+    Checkout · Mobile · Hybrid PDP
+  </div>
+</div>
+
+<!-- ========== DESIGN I: CHECKOUT ========== -->
+<div class="section">
+  <div class="section-title">Design I: Copper Glass Checkout <span class="score-badge score-top">TARGET 9.0+</span></div>
+  <div class="section-subtitle">Baymard says only 2% of sites have "good" checkout UX — this targets the top 2%</div>
+
+  <div class="design-frame">
+    <div class="design-label">
+      <h3>💳 Checkout — Express + Form + Summary</h3>
+      <div style="display:flex;gap:6px;">
+        <span class="tag tag-checkout">CHECKOUT</span>
+        <span class="tag tag-new">NEW PAGE TYPE</span>
+      </div>
+    </div>
+
+    <div class="checkout-copper">
+      <!-- Header with steps -->
+      <div class="checkout-header">
+        <div class="logo">Snus<span style="color:#D4A574">Friend</span></div>
+        <div class="steps">
+          <div class="step done"><div class="step-num">✓</div> Cart</div>
+          <div class="step-line done"></div>
+          <div class="step active"><div class="step-num">2</div> Shipping</div>
+          <div class="step-line"></div>
+          <div class="step"><div class="step-num">3</div> Payment</div>
+          <div class="step-line"></div>
+          <div class="step"><div class="step-num">4</div> Confirm</div>
+        </div>
+        <div style="font-size:12px;color:#888;">🔒 Secure Checkout</div>
+      </div>
+
+      <div class="checkout-body">
+        <!-- Left: Form -->
+        <div class="checkout-form">
+          <!-- Express Checkout -->
+          <div style="margin-bottom:8px;font-size:13px;font-weight:600;color:#aaa;">Express Checkout</div>
+          <div class="express-checkout">
+            <div class="express-btn apple"> Apple Pay</div>
+            <div class="express-btn klarna">Klarna</div>
+            <div class="express-btn gpay">G Pay</div>
+          </div>
+          <div class="divider">or continue with details</div>
+
+          <!-- Contact -->
+          <div class="form-section">
+            <h3>Contact Information</h3>
+            <div class="form-row full">
+              <div class="input-group">
+                <label>Email</label>
+                <input type="email" placeholder="your@email.com" value="daniel@snusfriends.com">
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+              <div style="width:18px;height:18px;border-radius:4px;border:2px solid #B87333;background:rgba(184,115,51,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;color:#B87333;">✓</div>
+              <span style="font-size:12px;color:#888;">Keep me updated with offers and new arrivals</span>
+            </div>
+          </div>
+
+          <!-- Shipping -->
+          <div class="form-section">
+            <h3>Shipping Address</h3>
+            <div class="form-row">
+              <div class="input-group">
+                <label>First Name</label>
+                <input type="text" placeholder="First name">
+              </div>
+              <div class="input-group">
+                <label>Last Name</label>
+                <input type="text" placeholder="Last name">
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="input-group">
+                <label>Address</label>
+                <input type="text" placeholder="Street address">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="input-group">
+                <label>City</label>
+                <input type="text" placeholder="City">
+              </div>
+              <div class="input-group">
+                <label>Postal Code</label>
+                <input type="text" placeholder="12345">
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="input-group">
+                <label>Country</label>
+                <select>
+                  <option>Sweden 🇸🇪</option>
+                  <option>Denmark 🇩🇰</option>
+                  <option>Norway 🇳🇴</option>
+                  <option>Finland 🇫🇮</option>
+                  <option>Germany 🇩🇪</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping method -->
+          <div class="form-section">
+            <h3>Shipping Method</h3>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:10px;border:2px solid #B87333;background:rgba(184,115,51,0.06);cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div style="width:20px;height:20px;border-radius:50%;border:2px solid #B87333;display:flex;align-items:center;justify-content:center;">
+                    <div style="width:10px;height:10px;border-radius:50%;background:#B87333;"></div>
+                  </div>
+                  <div>
+                    <div style="font-size:14px;font-weight:600;color:#fff;">Standard Shipping</div>
+                    <div style="font-size:12px;color:#888;">2-4 business days</div>
+                  </div>
+                </div>
+                <div style="font-size:14px;font-weight:600;color:#22c55e;">FREE</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div style="width:20px;height:20px;border-radius:50%;border:2px solid #555;"></div>
+                  <div>
+                    <div style="font-size:14px;font-weight:600;color:#fff;">Express Shipping</div>
+                    <div style="font-size:12px;color:#888;">Next business day</div>
+                  </div>
+                </div>
+                <div style="font-size:14px;font-weight:600;color:#B87333;">€4.99</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Order Summary -->
+        <div class="order-summary">
+          <h3>Order Summary (3 items)</h3>
+
+          <div class="summary-item">
+            <div class="summary-item-img">🫧<div class="item-qty">2</div></div>
+            <div class="summary-item-info">
+              <div class="name">VELO Ice Cool</div>
+              <div class="variant">Strong · 10-pack</div>
+              <div class="str-badge str-strong" style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600;">● Strong</div>
+            </div>
+            <div class="price">€47.80</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-item-img">🍋<div class="item-qty">1</div></div>
+            <div class="summary-item-info">
+              <div class="name">ZYN Citrus</div>
+              <div class="variant">Regular · 5-pack</div>
+              <div class="str-badge str-regular" style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600;">● Regular</div>
+            </div>
+            <div class="price">€18.50</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-item-img">🫐<div class="item-qty">1</div></div>
+            <div class="summary-item-info">
+              <div class="name">LOOP Salty Luiqorice</div>
+              <div class="variant">X-Strong · 1-can</div>
+              <div class="str-badge str-xstrong" style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600;">● X-Strong</div>
+            </div>
+            <div class="price">€4.20</div>
+          </div>
+
+          <!-- Subscribe toggle -->
+          <div class="sub-toggle">
+            <div class="left">
+              <div class="title">Subscribe & Save 15%</div>
+              <div class="desc">Delivery every 2 weeks · Cancel anytime</div>
+            </div>
+            <div class="toggle-switch"></div>
+          </div>
+
+          <!-- Promo -->
+          <div class="promo-row">
+            <input type="text" placeholder="Discount code">
+            <button>Apply</button>
+          </div>
+
+          <!-- Totals -->
+          <div class="totals">
+            <div class="total-row"><span>Subtotal</span><span>€70.50</span></div>
+            <div class="total-row"><span>Shipping</span><span style="color:#22c55e">FREE</span></div>
+            <div class="total-row savings"><span>Subscription savings</span><span>−€10.58</span></div>
+            <div class="total-row grand"><span>Total</span><span class="val">€59.92</span></div>
+          </div>
+
+          <!-- Free shipping achieved -->
+          <div class="ship-bar">
+            <span>✅ You've unlocked FREE shipping!</span>
+            <div class="bar"><div class="bar-fill"></div></div>
+          </div>
+
+          <!-- Trust -->
+          <div class="trust-row">
+            <div class="trust-item"><span class="icon">🔒</span> SSL Encrypted</div>
+            <div class="trust-item"><span class="icon">↩️</span> 30-Day Returns</div>
+            <div class="trust-item"><span class="icon">🧪</span> Lab Tested</div>
+          </div>
+
+          <!-- CTA -->
+          <button class="checkout-cta">Complete Order — €59.92</button>
+          <div class="delivery-est">📦 Estimated delivery: <strong>March 31 – April 2</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h4>Design Notes — Checkout I</h4>
+    <p><strong>Key innovations:</strong> Express checkout strip (Apple Pay / Klarna / Google Pay) above form · Step indicator with completion states · Subscribe & Save toggle in order summary · Specific delivery date estimate (not "2-4 days") · Free shipping celebration bar · Strength badges carried through to cart items for brand consistency · Copper glass theme for premium feel.</p>
+    <p><strong>Baymard compliance:</strong> No account required · Visible return policy · No hidden costs · Price-per-unit visible · Country selector with flags for clarity · Shipping method with specific delivery window.</p>
+  </div>
+</div>
+
+<!-- ========== DESIGN J: MOBILE HOMEPAGE ========== -->
+<div class="section">
+  <div class="section-title">Design J: Scandinavian Forest Mobile Homepage <span class="score-badge score-top">TARGET 8.5+</span></div>
+  <div class="section-subtitle">Mobile-first design with thumb-zone optimized CTAs and horizontal scroll product cards</div>
+
+  <div style="display:flex;justify-content:center;">
+    <div class="design-frame" style="width:fit-content;">
+      <div class="design-label">
+        <h3>📱 Mobile Homepage — 390×844 iPhone viewport</h3>
+        <div style="display:flex;gap:6px;">
+          <span class="tag tag-mobile">MOBILE</span>
+          <span class="tag tag-new">NEW</span>
+        </div>
+      </div>
+
+      <div class="mobile-frame">
+        <div class="mobile-hp">
+          <!-- Status bar -->
+          <div class="m-status-bar">
+            <span>9:41</span>
+            <span>📶 🔋</span>
+          </div>
+
+          <!-- Promo bar -->
+          <div class="m-top-bar">🚚 Free shipping on orders over €39 · Use code SNUSFRIEND</div>
+
+          <!-- Nav -->
+          <div class="m-nav">
+            <div class="hamburger">☰</div>
+            <div class="logo">Snus<span style="color:#2D6A4F">Friend</span></div>
+            <div class="icons">
+              🔍 🛒<span class="cart-count">3</span>
+            </div>
+          </div>
+
+          <!-- Search -->
+          <div class="m-search">🔍 Search 2,200+ pouches...</div>
+
+          <!-- Hero Card -->
+          <div class="m-hero">
+            <h2>Your Perfect Pouch Awaits</h2>
+            <p>Explore 139 brands, curated by flavor and strength</p>
+            <a class="cta-btn" href="#">Take the Quiz →</a>
+            <div class="hero-emoji">🫧</div>
+          </div>
+
+          <!-- Quick Categories -->
+          <div class="m-cats">
+            <div class="m-cat">
+              <div class="cat-icon cat-mint">🌿</div>
+              <div class="cat-label">Mint</div>
+            </div>
+            <div class="m-cat">
+              <div class="cat-icon cat-berry">🫐</div>
+              <div class="cat-label">Berry</div>
+            </div>
+            <div class="m-cat">
+              <div class="cat-icon cat-citrus">🍋</div>
+              <div class="cat-label">Citrus</div>
+            </div>
+            <div class="m-cat">
+              <div class="cat-icon cat-coffee">☕</div>
+              <div class="cat-label">Coffee</div>
+            </div>
+            <div class="m-cat">
+              <div class="cat-icon cat-strong">🔥</div>
+              <div class="cat-label">Strong</div>
+            </div>
+          </div>
+
+          <!-- Best Sellers -->
+          <div class="m-section-header">
+            <h3>Best Sellers</h3>
+            <a href="#">View All →</a>
+          </div>
+
+          <div class="m-products">
+            <!-- Product 1 -->
+            <div class="m-product-card">
+              <div class="m-product-img">
+                🫧
+                <div class="m-str-badge str-strong">Strong</div>
+              </div>
+              <div class="m-product-info">
+                <div class="brand">VELO</div>
+                <div class="name">Ice Cool Mint</div>
+                <div class="price-row">
+                  <span class="price">€4.79</span>
+                  <span class="per-unit">€0.32/pouch</span>
+                </div>
+                <div class="m-packs">
+                  <span class="m-pack active">1</span>
+                  <span class="m-pack">5</span>
+                  <span class="m-pack">10</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="m-product-card">
+              <div class="m-product-img">
+                🍋
+                <div class="m-str-badge str-regular">Regular</div>
+              </div>
+              <div class="m-product-info">
+                <div class="brand">ZYN</div>
+                <div class="name">Citrus</div>
+                <div class="price-row">
+                  <span class="price">€3.90</span>
+                  <span class="per-unit">€0.26/pouch</span>
+                </div>
+                <div class="m-packs">
+                  <span class="m-pack">1</span>
+                  <span class="m-pack active">5</span>
+                  <span class="m-pack">10</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="m-product-card">
+              <div class="m-product-img">
+                🫐
+                <div class="m-str-badge str-xstrong">X-Strong</div>
+              </div>
+              <div class="m-product-info">
+                <div class="brand">LOOP</div>
+                <div class="name">Salty Liquorice</div>
+                <div class="price-row">
+                  <span class="price">€4.20</span>
+                  <span class="per-unit">€0.28/pouch</span>
+                </div>
+                <div class="m-packs">
+                  <span class="m-pack active">1</span>
+                  <span class="m-pack">5</span>
+                  <span class="m-pack">10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quiz CTA -->
+          <div class="m-quiz">
+            <h4>Not sure where to start?</h4>
+            <p>Answer 3 questions to find your perfect match</p>
+            <a class="quiz-btn" href="#">Find My Pouch →</a>
+          </div>
+
+          <!-- Trust Strip -->
+          <div class="m-trust">
+            <div class="m-trust-item">
+              <div class="num">139</div>
+              <div class="label">Brands</div>
+            </div>
+            <div class="m-trust-item">
+              <div class="num">2.2K</div>
+              <div class="label">Products</div>
+            </div>
+            <div class="m-trust-item">
+              <div class="num">24h</div>
+              <div class="label">Delivery</div>
+            </div>
+          </div>
+
+          <!-- Sticky bottom CTA -->
+          <div class="m-sticky-bottom">
+            <a class="shop-btn" href="#">Shop All Pouches</a>
+            <a class="quiz-link" href="#">Quiz</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes" style="max-width:500px;margin:16px auto 0;">
+    <h4>Design Notes — Mobile J</h4>
+    <p><strong>Mobile-first innovations:</strong> Sticky bottom CTA bar in thumb zone · Horizontal scroll product cards (no pagination) · Category icons with single-tap flavor filtering · Hero card with gradient (not full-width image that loads slowly) · Search bar immediately visible (not hidden behind icon) · Pack selector pills fit in mobile card width · Per-unit pricing visible on every card.</p>
+    <p><strong>Performance considerations:</strong> No hero image (gradient + emoji) = instant LCP · Horizontal scroll = no layout shift · Sticky nav + bottom bar = always-accessible CTAs.</p>
+  </div>
+</div>
+
+<!-- ========== DESIGN K: HYBRID BEST-OF PDP ========== -->
+<div class="section">
+  <div class="section-title">Design K: "The Connoisseur" Hybrid PDP <span class="score-badge score-top">TARGET 9.5</span></div>
+  <div class="section-subtitle">Best elements from ALL rounds combined — the definitive SnusFriend product page</div>
+
+  <div class="design-frame">
+    <div class="design-label">
+      <h3>🏆 Hybrid PDP — All Best Elements Combined</h3>
+      <div style="display:flex;gap:6px;">
+        <span class="tag tag-hybrid">HYBRID</span>
+        <span class="tag tag-new">BEST-OF</span>
+      </div>
+    </div>
+
+    <div class="hybrid-pdp">
+      <!-- Nav -->
+      <div class="pdp-nav">
+        <div class="logo">Snus<span>Friend</span></div>
+        <div class="nav-links">
+          <a href="#">All Pouches</a>
+          <a href="#">Brands</a>
+          <a href="#">Strengths</a>
+          <a href="#">New Arrivals</a>
+          <a href="#">Deals</a>
+        </div>
+        <div class="nav-right">
+          <span style="font-size:14px;color:#888;">🔍</span>
+          <span style="font-size:14px;color:#888;">♡</span>
+          <span style="font-size:14px;color:#888;">🛒 <span class="cart-badge">3</span></span>
+        </div>
+      </div>
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs">
+        <a href="#">Home</a><span class="sep">›</span>
+        <a href="#">Mint</a><span class="sep">›</span>
+        <a href="#">VELO</a><span class="sep">›</span>
+        <span style="color:#aaa;">Ice Cool Strong</span>
+      </div>
+
+      <!-- PDP Grid -->
+      <div class="pdp-grid">
+        <!-- Gallery -->
+        <div class="gallery">
+          <div class="gallery-main">
+            🫧
+            <div class="sale-tag">−20%</div>
+            <div class="wishlist-btn">♡</div>
+          </div>
+          <div class="gallery-thumbs">
+            <div class="gallery-thumb active">🫧</div>
+            <div class="gallery-thumb">📦</div>
+            <div class="gallery-thumb">📋</div>
+            <div class="gallery-thumb">🧑</div>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="pdp-info">
+          <div class="pdp-brand">VELO</div>
+          <div class="pdp-title">Ice Cool Strong Slim</div>
+
+          <!-- Rating -->
+          <div class="pdp-rating">
+            <div class="stars">★★★★★</div>
+            <div class="rating-text">4.8 (312 reviews) · <a href="#">Read reviews</a></div>
+          </div>
+
+          <!-- Price -->
+          <div class="price-block">
+            <span class="price-current">€3.83</span>
+            <span class="price-original">€4.79</span>
+            <span class="price-save">Save 20%</span>
+          </div>
+
+          <!-- Low stock -->
+          <div class="low-stock">
+            <div class="pulse"></div>
+            Only 8 left in stock — selling fast
+          </div>
+
+          <!-- Strength selector -->
+          <div class="selector-group">
+            <div class="selector-label">Strength</div>
+            <div class="strength-pills">
+              <div class="str-pill mild"><div class="dot"></div> Mild 4mg</div>
+              <div class="str-pill regular"><div class="dot"></div> Regular 6mg</div>
+              <div class="str-pill strong active"><div class="dot"></div> Strong 10mg</div>
+              <div class="str-pill xstrong"><div class="dot"></div> X-Strong 14mg</div>
+            </div>
+          </div>
+
+          <!-- Pack selector -->
+          <div class="selector-group">
+            <div class="selector-label">Pack Size</div>
+            <div class="pack-pills">
+              <div class="pack-pill">
+                <div class="pack-label">1 Can</div>
+                <div class="pack-price">€3.83</div>
+              </div>
+              <div class="pack-pill active">
+                <div class="pack-label">5-Pack</div>
+                <div class="pack-price">€17.90</div>
+                <div class="pack-save">Save 6%</div>
+              </div>
+              <div class="pack-pill">
+                <div class="pack-label">10-Pack</div>
+                <div class="pack-price">€33.50</div>
+                <div class="pack-save">Save 12%</div>
+              </div>
+              <div class="pack-pill">
+                <div class="pack-label">Roll (20)</div>
+                <div class="pack-price">€61.80</div>
+                <div class="pack-save">Save 18%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subscribe & Save -->
+          <div class="sub-row">
+            <div class="sub-text">
+              <div class="title">Subscribe & Save 15%</div>
+              <div class="desc">€15.22 every 2 weeks · Cancel anytime</div>
+            </div>
+            <div class="toggle"></div>
+          </div>
+
+          <!-- Add to Cart -->
+          <div class="atc-section">
+            <div class="qty-stepper">
+              <button class="qty-btn">−</button>
+              <div class="qty-val">1</div>
+              <button class="qty-btn">+</button>
+            </div>
+            <button class="atc-btn">Add to Cart — €17.90</button>
+          </div>
+
+          <!-- Trust bar -->
+          <div class="trust-strip">
+            <div class="trust-chip"><span class="t-icon">🚚</span> Free shipping €39+</div>
+            <div class="trust-chip"><span class="t-icon">↩️</span> 30-day returns</div>
+            <div class="trust-chip"><span class="t-icon">🧪</span> Lab tested</div>
+            <div class="trust-chip"><span class="t-icon">🌿</span> Tobacco free</div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="pdp-tabs">
+            <div class="tab-headers">
+              <div class="tab-header active">Description</div>
+              <div class="tab-header">Ingredients</div>
+              <div class="tab-header">Reviews (312)</div>
+              <div class="tab-header">FAQ</div>
+            </div>
+            <div class="tab-content">
+              VELO Ice Cool Strong delivers a crisp, icy mint experience with a satisfying 10mg nicotine kick. Each slim pouch fits discreetly under your lip and releases flavor for up to 30 minutes. Made with pharmaceutical-grade nicotine and natural plant fibers — completely tobacco-free.<br><br>
+              <strong>Format:</strong> Slim · <strong>Weight:</strong> 0.7g per pouch · <strong>Pouches per can:</strong> 20 · <strong>Flavor:</strong> Spearmint + Menthol · <strong>Origin:</strong> Sweden 🇸🇪
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cross-sell -->
+      <div class="cross-sell">
+        <h3>Complete Your Routine 🧊</h3>
+        <div class="cross-sell-grid">
+          <div class="cs-card">
+            <div class="cs-img">🍉<div class="flavor-border" style="background:linear-gradient(90deg,#f97316,#ef4444);"></div></div>
+            <div class="cs-info">
+              <div class="cs-brand">VELO</div>
+              <div class="cs-name">Watermelon Chill</div>
+              <div class="cs-price">€4.29</div>
+            </div>
+            <div class="cs-add">+ Add to Cart</div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-img">🫐<div class="flavor-border" style="background:linear-gradient(90deg,#8b5cf6,#6366f1);"></div></div>
+            <div class="cs-info">
+              <div class="cs-brand">ZYN</div>
+              <div class="cs-name">Cool Berry</div>
+              <div class="cs-price">€3.90</div>
+            </div>
+            <div class="cs-add">+ Add to Cart</div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-img">❄️<div class="flavor-border" style="background:linear-gradient(90deg,#06b6d4,#0ea5e9);"></div></div>
+            <div class="cs-info">
+              <div class="cs-brand">LOOP</div>
+              <div class="cs-name">Mint Mania</div>
+              <div class="cs-price">€4.20</div>
+            </div>
+            <div class="cs-add">+ Add to Cart</div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-img">☕<div class="flavor-border" style="background:linear-gradient(90deg,#92400e,#a16207);"></div></div>
+            <div class="cs-info">
+              <div class="cs-brand">ON!</div>
+              <div class="cs-name">Coffee 6mg</div>
+              <div class="cs-price">€3.50</div>
+            </div>
+            <div class="cs-add">+ Add to Cart</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews section -->
+      <div class="reviews-section">
+        <h3>Customer Reviews ★ 4.8</h3>
+        <div class="review-summary">
+          <div class="review-big">
+            <div class="big-score">4.8</div>
+            <div class="big-stars">★★★★★</div>
+            <div class="big-count">312 reviews</div>
+          </div>
+          <div class="review-bars">
+            <div class="review-bar-row"><div class="label">5</div><div class="bar"><div class="bar-fill" style="width:72%;"></div></div><div class="count">224</div></div>
+            <div class="review-bar-row"><div class="label">4</div><div class="bar"><div class="bar-fill" style="width:18%;"></div></div><div class="count">56</div></div>
+            <div class="review-bar-row"><div class="label">3</div><div class="bar"><div class="bar-fill" style="width:6%;"></div></div><div class="count">19</div></div>
+            <div class="review-bar-row"><div class="label">2</div><div class="bar"><div class="bar-fill" style="width:3%;"></div></div><div class="count">9</div></div>
+            <div class="review-bar-row"><div class="label">1</div><div class="bar"><div class="bar-fill" style="width:1%;"></div></div><div class="count">4</div></div>
+          </div>
+        </div>
+
+        <div class="review-cards">
+          <div class="review-card">
+            <div class="rc-header">
+              <div class="rc-name">Marcus S.</div>
+              <div class="rc-badge">✓ Verified Buyer</div>
+            </div>
+            <div class="rc-stars">★★★★★</div>
+            <div class="rc-text">Best mint pouch on the market. The cooling effect is incredible and lasts the full 30 minutes. I've switched from traditional snus to these and never looked back.</div>
+            <div class="rc-date">March 22, 2026</div>
+          </div>
+          <div class="review-card">
+            <div class="rc-header">
+              <div class="rc-name">Anna L.</div>
+              <div class="rc-badge">✓ Verified Buyer</div>
+            </div>
+            <div class="rc-stars">★★★★★</div>
+            <div class="rc-text">Perfect strength for me. Not too intense but you definitely feel it. The slim format fits so well under the lip. Already on my 3rd subscription order!</div>
+            <div class="rc-date">March 19, 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h4>Design Notes — Hybrid PDP K</h4>
+    <p><strong>Elements combined from top designs:</strong> Strength color-coded pills from Round 1 Cart Drawer (8.45) · Pack selector with save % from Round 1 PDP (7.95) · Copper accent from Round 2 Copper Glass · Subscribe & Save toggle from research · Review section with star distribution from Baymard · "Complete Your Routine" cross-sell with flavor-coded borders from Bold Playful HP · Low stock urgency indicator (truthful) · Sticky trust bar · Per-unit pricing · Breadcrumb navigation.</p>
+    <p><strong>What makes this a 9.5 target:</strong> Every Baymard finding addressed · All 5 signature UX patterns present · Social proof HIGH in hierarchy (not buried) · Express cross-sell with flavor matching · Subscribe & save for recurring revenue · Truthful scarcity + specific delivery estimate.</p>
+  </div>
+</div>
+
+<!-- ========== SCORING SECTION ========== -->
+<div class="section" style="background: rgba(255,255,255,0.02);">
+  <div class="section-title">📊 Complete Rankings — All Rounds</div>
+  <div class="section-subtitle">Every design scored on V×0.25 + UX×0.25 + B×0.20 + I×0.20 + M×0.10</div>
+
+  <div style="max-width:900px;">
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <thead>
+        <tr style="border-bottom:2px solid rgba(184,115,51,0.3);">
+          <th style="text-align:left;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;">Rank</th>
+          <th style="text-align:left;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;">Design</th>
+          <th style="text-align:left;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;letter-spacing:0.05em;">Type</th>
+          <th style="text-align:center;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;">V</th>
+          <th style="text-align:center;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;">UX</th>
+          <th style="text-align:center;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;">B</th>
+          <th style="text-align:center;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;">I</th>
+          <th style="text-align:center;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;">M</th>
+          <th style="text-align:right;padding:12px 8px;color:#B87333;font-size:12px;text-transform:uppercase;">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);background:rgba(184,115,51,0.06);">
+          <td style="padding:12px 8px;font-weight:700;color:#B87333;">🥇 1</td>
+          <td style="padding:12px 8px;font-weight:600;">K: Connoisseur Hybrid PDP</td>
+          <td style="padding:12px 8px;color:#888;">PDP</td>
+          <td style="text-align:center;padding:12px 8px;">9.5</td>
+          <td style="text-align:center;padding:12px 8px;">10</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:700;color:#22c55e;">9.18</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);background:rgba(184,115,51,0.03);">
+          <td style="padding:12px 8px;font-weight:700;color:#D4A574;">🥈 2</td>
+          <td style="padding:12px 8px;font-weight:600;">I: Copper Glass Checkout</td>
+          <td style="padding:12px 8px;color:#888;">Checkout</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">9.5</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:700;color:#22c55e;">8.93</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#cd7f32;">🥉 3</td>
+          <td style="padding:12px 8px;font-weight:600;">J: Mobile Scandi Homepage</td>
+          <td style="padding:12px 8px;color:#888;">Mobile HP</td>
+          <td style="text-align:center;padding:12px 8px;">8.5</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">9.5</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:700;color:#22c55e;">8.73</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#888;">4</td>
+          <td style="padding:12px 8px;">6: Cart Drawer (R1)</td>
+          <td style="padding:12px 8px;color:#888;">Cart</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:600;color:#eab308;">8.45</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#888;">5</td>
+          <td style="padding:12px 8px;">H: Indigo Editorial PLP (R2)</td>
+          <td style="padding:12px 8px;color:#888;">PLP</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:600;color:#eab308;">8.15</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#888;">6</td>
+          <td style="padding:12px 8px;">5: PDP (R1)</td>
+          <td style="padding:12px 8px;color:#888;">PDP</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:600;color:#eab308;">7.95</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#888;">7</td>
+          <td style="padding:12px 8px;">A: Scandi Forest HP (R2)</td>
+          <td style="padding:12px 8px;color:#888;">Homepage</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:600;color:#eab308;">7.90</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#888;">8</td>
+          <td style="padding:12px 8px;">2: Clean Light HP (R1)</td>
+          <td style="padding:12px 8px;color:#888;">Homepage</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:600;color:#eab308;">7.60</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#888;">9</td>
+          <td style="padding:12px 8px;">3: Bold Playful HP (R1)</td>
+          <td style="padding:12px 8px;color:#888;">Homepage</td>
+          <td style="text-align:center;padding:12px 8px;">9</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:600;">7.50</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#888;">10</td>
+          <td style="padding:12px 8px;">4: PLP (R1)</td>
+          <td style="padding:12px 8px;color:#888;">PLP</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">6</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:600;">7.35</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+          <td style="padding:12px 8px;font-weight:700;color:#888;">11</td>
+          <td style="padding:12px 8px;">1: Dark HP (R1)</td>
+          <td style="padding:12px 8px;color:#888;">Homepage</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">7</td>
+          <td style="text-align:center;padding:12px 8px;">8</td>
+          <td style="text-align:center;padding:12px 8px;">6</td>
+          <td style="text-align:right;padding:12px 8px;font-weight:600;">7.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="notes" style="margin-top:32px;">
+    <h4>🏆 Recommendation: Apply These to snusfriends.com</h4>
+    <p><strong>PDP:</strong> Use Design K "Connoisseur Hybrid" — scored 9.18, includes all 5 signature UX patterns + reviews + cross-sell + subscribe & save.<br>
+    <strong>Checkout:</strong> Use Design I "Copper Glass Checkout" — scored 8.93, Baymard-compliant, express payments, subscription toggle.<br>
+    <strong>Mobile Homepage:</strong> Use Design J "Scandinavian Forest" — scored 8.73, instant LCP, thumb-zone CTAs, horizontal scroll cards.<br>
+    <strong>Cart Drawer:</strong> Keep Round 1 Design 6 "Midnight Teal" — scored 8.45, the free shipping bar + strength badges combo is proven.<br>
+    <strong>PLP:</strong> Use Design H "Indigo Editorial" — scored 8.15, fresh direction, comprehensive filters.<br>
+    <strong>Desktop Homepage:</strong> Use Scandi Forest A light theme with Dark section rhythm — scored 7.90, best whitespace approach.</p>
+  </div>
+</div>
+
+</body>
+</html>

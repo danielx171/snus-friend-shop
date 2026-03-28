@@ -111,6 +111,15 @@ Deno.serve(async (req) => {
       parsed = textBody;
     }
 
+    // For upstream errors, log details server-side but return a generic message to the client
+    if (!resp.ok) {
+      console.error('Nyehandel upstream error:', JSON.stringify({ status: resp.status, resource, body: parsed }));
+      return new Response(
+        JSON.stringify({ error: 'upstream_error', status: resp.status }),
+        { status: resp.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      );
+    }
+
     return new Response(
       JSON.stringify({ data: parsed, status: resp.status }),
       { status: resp.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },

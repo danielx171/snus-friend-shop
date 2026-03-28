@@ -59,7 +59,8 @@ Backend: Supabase (already hosted)
 - [ ] Set `DEEPSEEK_API_KEY` for AI-powered review summary generation (`generate-review-summary`).
 - [ ] Set `DISCORD_WEBHOOK_REVIEWS` — Discord webhook URL for #reviews channel (`discord-webhook`).
 - [ ] Set `DISCORD_WEBHOOK_ACHIEVEMENTS` — Discord webhook URL for #achievements channel (`discord-webhook`).
-- [x] Confirm `supabase/config.toml` has explicit entries for all 16 functions.
+- [x] Store Vault secret `INTERNAL_FUNCTIONS_SECRET` for welcome email trigger (pg_net calls `send-welcome-email`).
+- [x] Confirm `supabase/config.toml` has explicit entries for all edge functions.
 - [x] Deploy DB migrations in order.
 - [x] Deploy Edge Functions.
 - [x] Register Nyehandel webhook URL pointing to `/functions/v1/nyehandel-webhook`.

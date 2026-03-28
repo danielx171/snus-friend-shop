@@ -58,19 +58,45 @@ function getSpec(specs: Array<{ key?: string; value?: string }> | undefined, key
   return match?.value ?? null;
 }
 
-/** Map a Nyehandel spec value to our flavor_key enum */
-function toFlavorKey(spec: string | null): string {
-  if (!spec) return 'mint';
-  const lower = spec.toLowerCase();
-  if (lower.includes('berry') || lower.includes('blueberry') || lower.includes('raspberry')) return 'berry';
-  if (lower.includes('citrus') || lower.includes('lemon') || lower.includes('orange')) return 'citrus';
-  if (lower.includes('coffee') || lower.includes('espresso')) return 'coffee';
-  if (lower.includes('licorice') || lower.includes('liquorice')) return 'licorice';
-  if (lower.includes('cola')) return 'cola';
-  if (lower.includes('tropical') || lower.includes('mango')) return 'tropical';
+/** Detect flavor from a text string (spec value or product name) */
+function detectFlavor(text: string): string | null {
+  const lower = text.toLowerCase();
+  if (lower.includes('tobacco')) return 'tobacco';
+  if (lower.includes('berry') || lower.includes('blueberry') || lower.includes('raspberry')
+    || lower.includes('strawberry') || lower.includes('blackcurrant') || lower.includes('cranberry')) return 'berry';
+  if (lower.includes('citrus') || lower.includes('lemon') || lower.includes('lime')
+    || lower.includes('orange') || lower.includes('grapefruit') || lower.includes('mandarin')
+    || lower.includes('bergamot')) return 'citrus';
+  if (lower.includes('coffee') || lower.includes('espresso') || lower.includes('mocha')
+    || lower.includes('caffe')) return 'coffee';
+  if (lower.includes('licorice') || lower.includes('liquorice') || lower.includes('salmiak')) return 'licorice';
+  if (lower.includes('cola') && !lower.includes('colada')) return 'cola';
+  if (lower.includes('tropical') || lower.includes('mango')) return 'fruit';
   if (lower.includes('vanilla')) return 'vanilla';
-  if (lower.includes('fruit')) return 'fruit';
-  return 'mint'; // default
+  if (lower.includes('fruit') || lower.includes('apple') || lower.includes('peach')
+    || lower.includes('watermelon') || lower.includes('melon') || lower.includes('grape')
+    || lower.includes('pineapple') || lower.includes('cherry') || lower.includes('passion')
+    || lower.includes('kiwi') || lower.includes('pear') || lower.includes('banana')
+    || lower.includes('guava') || lower.includes('cucumber') || lower.includes('coconut')) return 'fruit';
+  if (lower.includes('mint') || lower.includes('menthol') || lower.includes('spearmint')
+    || lower.includes('peppermint')) return 'mint';
+  return null;
+}
+
+/** Map a Nyehandel spec value to our flavor_key enum.
+ *  Falls back to product name analysis when spec is missing. */
+function toFlavorKey(spec: string | null, productName?: string): string {
+  // Try spec first
+  if (spec) {
+    const fromSpec = detectFlavor(spec);
+    if (fromSpec) return fromSpec;
+  }
+  // Fall back to product name
+  if (productName) {
+    const fromName = detectFlavor(productName);
+    if (fromName) return fromName;
+  }
+  return 'mint'; // default for truly ambiguous products
 }
 
 /** Map nicotine mg/pouch to our strength_key enum.
@@ -280,8 +306,9 @@ Deno.serve(async (req) => {
         const description = rawDescription && rawDescription.length > 20 ? rawDescription : null;
 
         // Compare/MSRP price from first variant's first price tier (wholesale, frontend applies markup)
-        const firstVariantCompare = product.variants?.[0]?.prices?.[0]?.compare_price ?? 0;
-        const comparePriceDecimal = firstVariantCompare > 0
+        const rawCompare = product.variants?.[0]?.prices?.[0]?.compare_price ?? 0;
+        const firstVariantCompare = Number(rawCompare);
+        const comparePriceDecimal = Number.isFinite(firstVariantCompare) && firstVariantCompare > 0
           ? +(firstVariantCompare / 100).toFixed(4)
           : null;
 
@@ -294,7 +321,7 @@ Deno.serve(async (req) => {
           name: product.name,
           image_url: imageUrl,
           is_active: isActive,
-          flavor_key: toFlavorKey(flavorSpec),
+          flavor_key: toFlavorKey(flavorSpec, product.name),
           strength_key: toStrengthKey(nicotineMg),
           format_key: toFormatKey(formatSpec),
           category_key: toCategoryKey(typeSpec),

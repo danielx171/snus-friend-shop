@@ -176,7 +176,7 @@ const ReviewCard = React.memo(function ReviewCard({
                   type="button"
                   onClick={() => onFlag(review.id)}
                   aria-label={`Report review by ${displayName}`}
-                  className="inline-flex items-center gap-1 text-xs text-muted-foreground/50 transition-colors hover:text-destructive"
+                  className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-destructive"
                   title="Report this review"
                 >
                   <Flag className="h-3 w-3" />

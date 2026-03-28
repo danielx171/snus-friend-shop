@@ -37,12 +37,15 @@ const STRENGTH_LABELS: Record<string, string> = {
 
 const FLAVOR_LABELS: Record<string, string> = {
   mint: 'Mint',
-  citrus: 'Citrus',
+  fruit: 'Fruit',
   berry: 'Berry',
+  citrus: 'Citrus',
+  licorice: 'Licorice',
   coffee: 'Coffee',
+  cola: 'Cola',
+  vanilla: 'Vanilla',
+  tropical: 'Tropical',
   tobacco: 'Tobacco',
-  exotic: 'Exotic',
-  unflavored: 'Unflavored',
 };
 
 const FORMAT_LABELS: Record<string, string> = {

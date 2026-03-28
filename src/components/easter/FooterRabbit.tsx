@@ -20,7 +20,7 @@ export function FooterRabbit() {
   return (
     <button
       onClick={handleClick}
-      className="inline-flex items-center gap-1 text-xs text-muted-foreground/50 hover:text-primary transition-colors"
+      className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
       aria-label="Deactivate Easter mode"
     >
       <span className="animate-bounce">{'\u{1F407}'}</span>

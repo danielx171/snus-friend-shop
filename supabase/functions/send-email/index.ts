@@ -105,6 +105,7 @@ function renderOrderConfirmed(data: Record<string, unknown>): string {
   const customerName = escapeHtml(String(data.customerName ?? "Customer"));
   const total = escapeHtml(String(data.total ?? "0.00"));
   const currency = escapeHtml(String(data.currency ?? "EUR"));
+  const shippingMethod = data.shippingMethod ? String(data.shippingMethod) : "";
   const items = Array.isArray(data.items) ? (data.items as LineItem[]) : [];
 
   const itemRows = items
@@ -134,6 +135,7 @@ function renderOrderConfirmed(data: Record<string, unknown>): string {
       ${itemRows}
     </table>
     ` : ""}
+    ${shippingMethod ? `<p style="margin:0 0 16px;font-size:14px;color:#475569;"><strong>Shipping:</strong> ${escapeHtml(shippingMethod)}</p>` : ""}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td style="padding:16px;background-color:#f0fdf4;border-radius:8px;text-align:center;">
@@ -142,6 +144,9 @@ function renderOrderConfirmed(data: Record<string, unknown>): string {
         </td>
       </tr>
     </table>
+    <p style="margin:24px 0 0;text-align:center;">
+      <a href="https://snusfriends.com" style="display:inline-block;padding:12px 28px;background-color:#0f172a;color:#a3e635;font-size:15px;font-weight:600;text-decoration:none;border-radius:8px;">View Your Orders</a>
+    </p>
   `);
 }
 
@@ -178,17 +183,38 @@ function renderWelcome(data: Record<string, unknown>): string {
   return wrapInLayout(`
     <h1 style="margin:0 0 16px;font-size:22px;color:#0f172a;">Welcome to SnusFriend!</h1>
     <p style="margin:0 0 24px;font-size:15px;color:#475569;line-height:1.6;">
-      Hi ${customerName}, welcome aboard! We're glad to have you.
+      Hi ${customerName}, welcome aboard! We're stoked to have you in the SnusFriend community.
     </p>
-    <p style="margin:0 0 24px;font-size:15px;color:#475569;line-height:1.6;">
-      At SnusFriend, you'll find a curated selection of premium nicotine pouches
-      from top brands. Browse our collection, leave reviews, and join the community.
+    <p style="margin:0 0 16px;font-size:15px;color:#475569;line-height:1.6;">
+      Here's what's waiting for you:
     </p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+      <tr>
+        <td style="padding:12px 16px;background-color:#f0fdf4;border-radius:8px;margin-bottom:8px;">
+          <strong style="color:#0f172a;">Spin the Wheel</strong>
+          <span style="color:#475569;font-size:14px;"> — Daily free spins for discounts and rewards</span>
+        </td>
+      </tr>
+      <tr><td style="padding:4px;"></td></tr>
+      <tr>
+        <td style="padding:12px 16px;background-color:#eff6ff;border-radius:8px;margin-bottom:8px;">
+          <strong style="color:#0f172a;">Earn SnusPoints</strong>
+          <span style="color:#475569;font-size:14px;"> — Complete quests, leave reviews, and earn points on every order</span>
+        </td>
+      </tr>
+      <tr><td style="padding:4px;"></td></tr>
+      <tr>
+        <td style="padding:12px 16px;background-color:#fdf4ff;border-radius:8px;">
+          <strong style="color:#0f172a;">Unlock Achievements</strong>
+          <span style="color:#475569;font-size:14px;"> — Collect avatars and climb the leaderboard</span>
+        </td>
+      </tr>
+    </table>
     <p style="margin:0 0 24px;text-align:center;">
-      <a href="https://snusfriends.com" style="display:inline-block;padding:12px 28px;background-color:#0f172a;color:#a3e635;font-size:15px;font-weight:600;text-decoration:none;border-radius:8px;">Start Browsing</a>
+      <a href="https://snusfriends.com/products" style="display:inline-block;padding:12px 28px;background-color:#0f172a;color:#a3e635;font-size:15px;font-weight:600;text-decoration:none;border-radius:8px;">Browse Products</a>
     </p>
     <p style="margin:0;font-size:14px;color:#94a3b8;">
-      Got questions? Visit <a href="https://snusfriends.com" style="color:#0f172a;">snusfriends.com</a> any time.
+      Got questions? Reply to this email or visit <a href="https://snusfriends.com/contact" style="color:#0f172a;">snusfriends.com/contact</a>.
     </p>
   `);
 }

@@ -1,6 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import { tenant } from '@/config/tenant';
+import { tenant, validThemes } from '@/config/tenant';
 import SEO from '@/components/astro/SEO.astro';
 import Analytics from '@/components/astro/Analytics.astro';
 import '@/index.css';
@@ -42,14 +42,14 @@ const props = Astro.props;
   <Analytics />
   <ClientRouter />
 
-  <script is:inline define:vars={{ storageKey: tenant.storage.themeKey, defaultTheme: tenant.theme.darkModeClass }}>
+  <script is:inline define:vars={{ storageKey: tenant.storage.themeKey, defaultTheme: tenant.theme.darkModeClass, validThemeList: validThemes }}>
     (function() {
       try {
         var raw = localStorage.getItem(storageKey);
         var stored = raw ? JSON.parse(raw) : null;
-        var valid = ['velo','light','editorial','forest','copper'];
-        var theme = (stored && valid.indexOf(stored) !== -1) ? stored : defaultTheme;
+        var theme = (stored && validThemeList.indexOf(stored) !== -1) ? stored : defaultTheme;
         document.documentElement.classList.add(theme);
+        window.__validThemes = validThemeList;
       } catch(e) {
         document.documentElement.classList.add(defaultTheme);
       }
@@ -65,7 +65,7 @@ const props = Astro.props;
     document.addEventListener('astro:page-load', () => {
       const theme = $theme.get();
       const root = document.documentElement;
-      root.classList.remove('velo', 'light', 'editorial', 'forest', 'copper');
+      root.classList.remove(...(window.__validThemes ?? ['velo', 'light', 'editorial', 'forest', 'copper']));
       root.classList.add(theme);
 
       // Fire PostHog page view on SPA-style navigations (View Transitions)

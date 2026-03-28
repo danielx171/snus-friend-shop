@@ -256,7 +256,7 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
             className={isExhausted || spinning ? '' : 'cursor-pointer'}
             onClick={handleSpin}
             role="button"
-            aria-label={isExhausted ? 'Already spun today' : 'Spin the wheel'}
+            aria-label={isExhausted ? 'Done — already spun today' : spinning ? 'Spinning the wheel' : 'Spin the wheel'}
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') handleSpin();

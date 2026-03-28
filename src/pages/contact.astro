@@ -19,7 +19,7 @@ import { tenant } from '@/config/tenant';
         and typically reply within a few hours during business days.
       </p>
 
-      <div class="grid gap-8 md:grid-cols-2 mb-12">
+      <div class="grid gap-8 md:grid-cols-2 mb-12" data-support-email={tenant.supportEmail}>
         <!-- Email -->
         <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
           <h2 class="text-lg font-semibold mb-2">Email</h2>
@@ -50,7 +50,12 @@ import { tenant } from '@/config/tenant';
       <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 md:p-8">
         <h2 class="text-2xl font-semibold mb-6">Send Us a Message</h2>
 
-        <form class="space-y-5" data-contact-form>
+        <form
+          class="space-y-5"
+          data-contact-form
+          data-fn-url={`${import.meta.env.VITE_SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL ?? ''}functions/v1/contact-form`}
+          data-api-key={import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? ''}
+        >
           <div>
             <label for="contact-name" class="block text-sm font-medium mb-1.5">Name</label>
             <input
@@ -102,9 +107,16 @@ import { tenant } from '@/config/tenant';
               name="message"
               required
               rows="5"
+              maxlength="5000"
               class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-y"
               placeholder="How can we help?"
             ></textarea>
+          </div>
+
+          <!-- Honeypot field — hidden from real users, bots will fill it -->
+          <div class="absolute opacity-0 -z-10" aria-hidden="true">
+            <label for="contact-website">Website</label>
+            <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off" />
           </div>
 
           <div id="contact-status" class="hidden rounded-lg px-4 py-3 text-sm"></div>
@@ -129,49 +141,104 @@ import { tenant } from '@/config/tenant';
 
 <script is:inline>
 (function() {
-  var form = document.querySelector('[data-contact-form]');
-  if (!form) return;
-  var btn = document.getElementById('contact-submit-btn');
-  var status = document.getElementById('contact-status');
-  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function initContactForm() {
+    var form = document.querySelector('[data-contact-form]');
+    if (!form || form.hasAttribute('data-initialized')) return;
+    form.setAttribute('data-initialized', 'true');
+    var btn = document.getElementById('contact-submit-btn');
+    var status = document.getElementById('contact-status');
+    var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var data = new FormData(form);
-    var name = (data.get('name') || '').toString().trim();
-    var email = (data.get('email') || '').toString().trim();
-    var subject = (data.get('subject') || '').toString();
-    var message = (data.get('message') || '').toString().trim();
+    // Read edge function URL and API key from data attributes (set at build time)
+    var functionUrl = form.getAttribute('data-fn-url') || '';
+    var apiKey = form.getAttribute('data-api-key') || '';
 
-    if (!name || !email || !subject || !message) {
-      showStatus('Please fill in all fields.', true);
-      return;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData(form);
+      var name = (fd.get('name') || '').toString().trim();
+      var email = (fd.get('email') || '').toString().trim();
+      var subject = (fd.get('subject') || '').toString();
+      var message = (fd.get('message') || '').toString().trim();
+      var website = (fd.get('website') || '').toString().trim();
+
+      if (!name || !email || !subject || !message) {
+        showStatus('Please fill in all fields.', true);
+        return;
+      }
+      if (!emailRe.test(email)) {
+        showStatus('Please enter a valid email address.', true);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending\u2026';
+      hideStatus();
+
+      // If edge function URL not available, fall back to mailto
+      if (!functionUrl) {
+        fallbackMailto(name, email, subject, message);
+        return;
+      }
+
+      fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': apiKey
+        },
+        body: JSON.stringify({ name: name, email: email, subject: subject, message: message, website: website })
+      })
+      .then(function(res) {
+        return res.json().then(function(body) {
+          return { ok: res.ok, status: res.status, body: body };
+        });
+      })
+      .then(function(result) {
+        if (result.ok && result.body.success) {
+          showStatus('Message sent! We will get back to you within 4 hours during business days.', false);
+          form.reset();
+        } else if (result.status === 429) {
+          showStatus(result.body.message || 'Too many submissions. Please wait a moment and try again.', true);
+        } else {
+          showStatus(result.body.message || 'Something went wrong. Please try again or email us directly.', true);
+        }
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      })
+      .catch(function() {
+        showStatus('Network error. Please check your connection and try again.', true);
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      });
+    });
+
+    function fallbackMailto(name, email, subject, message) {
+      var supportEmail = document.querySelector('[data-support-email]');
+      var emailAddr = supportEmail ? supportEmail.getAttribute('data-support-email') : 'support@snusfriends.com';
+      var mailtoBody = 'Name: ' + name + '\nSubject: ' + subject + '\n\n' + message;
+      var mailto = 'mailto:' + emailAddr + '?subject=' + encodeURIComponent(subject + ' \u2014 ' + name) + '&body=' + encodeURIComponent(mailtoBody);
+      window.location.href = mailto;
+      setTimeout(function() {
+        showStatus('Your email client should open shortly. If it does not, email us directly at ' + emailAddr + '.', false);
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }, 500);
     }
-    if (!emailRe.test(email)) {
-      showStatus('Please enter a valid email address.', true);
-      return;
+
+    function showStatus(text, isError) {
+      status.textContent = text;
+      status.className = 'rounded-lg px-4 py-3 text-sm ' + (isError ? 'bg-destructive/10 text-destructive border border-destructive/20' : 'bg-primary/10 text-primary border border-primary/20');
     }
 
-    btn.disabled = true;
-    btn.textContent = 'Sending...';
-
-    // Send via mailto link as fallback (no backend form handler yet)
-    var mailtoBody = 'Name: ' + name + '\nSubject: ' + subject + '\n\n' + message;
-    var mailto = 'mailto:support@snusfriends.com?subject=' + encodeURIComponent(subject + ' — ' + name) + '&body=' + encodeURIComponent(mailtoBody);
-
-    // Open mailto and show success
-    window.location.href = mailto;
-
-    setTimeout(function() {
-      showStatus('Your email client should open shortly. If it does not, email us directly at support@snusfriends.com.', false);
-      btn.disabled = false;
-      btn.textContent = 'Send Message';
-    }, 500);
-  });
-
-  function showStatus(text, isError) {
-    status.textContent = text;
-    status.className = 'rounded-lg px-4 py-3 text-sm ' + (isError ? 'bg-destructive/10 text-destructive border border-destructive/20' : 'bg-primary/10 text-primary border border-primary/20');
+    function hideStatus() {
+      status.textContent = '';
+      status.className = 'hidden rounded-lg px-4 py-3 text-sm';
+    }
   }
+
+  // Support Astro View Transitions
+  initContactForm();
+  document.addEventListener('astro:page-load', initContactForm);
 })();
 </script>

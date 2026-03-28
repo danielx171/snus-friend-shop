@@ -84,7 +84,7 @@ const EventCard = React.memo(function EventCard({
                 <Trophy className="h-3 w-3 shrink-0" style={{ color: event.theme_color }} />
                 <span>{reward.name ?? 'Reward'}</span>
                 {reward.description && (
-                  <span className="text-muted-foreground/60 ml-auto text-right">{reward.description}</span>
+                  <span className="text-muted-foreground ml-auto text-right">{reward.description}</span>
                 )}
               </div>
             ))}

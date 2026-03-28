@@ -21,9 +21,7 @@ const strengthMap: Record<string, number> = {
   normal: 2,
   strong: 3,
   'extra-strong': 4,
-  extraStrong: 4,
   'super-strong': 5,
-  ultraStrong: 5,
 };
 const strengthLevel = strengthMap[p.strengthKey] ?? 2;
 
@@ -31,9 +29,7 @@ const strengthLabels: Record<string, string> = {
   normal: 'Normal',
   strong: 'Strong',
   'extra-strong': 'Extra Strong',
-  extraStrong: 'Extra Strong',
   'super-strong': 'Super Strong',
-  ultraStrong: 'Ultra Strong',
 };
 const strengthLabel = strengthLabels[p.strengthKey] ?? 'Normal';
 
@@ -200,7 +196,7 @@ const jsonLd = {
           </span>
 
           <div class="flex items-center gap-2">
-            <div class="flex items-center gap-0.5" aria-label={`Strength ${strengthLevel} of 5`}>
+            <div class="flex items-center gap-0.5" role="img" aria-label={`Strength ${strengthLevel} of 5`}>
               {Array.from({ length: 5 }, (_, i) => (
                 <span
                   class={`inline-block h-2 w-2 rounded-full ${i < strengthLevel ? 'bg-primary' : 'bg-muted-foreground/25'}`}

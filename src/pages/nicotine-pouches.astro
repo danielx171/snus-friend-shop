@@ -83,6 +83,7 @@ const brandCount = new Set(products.map(p => p.data.brand)).size;
       </div>
     </article>
 
+    <h2 class="sr-only">Product Catalog</h2>
     <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
   </div>
 
