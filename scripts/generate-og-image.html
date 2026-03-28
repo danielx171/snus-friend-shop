@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 630px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2d3b2d 0%, #1a2e1a 50%, #0f1f0f 100%);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: white;
+    overflow: hidden;
+  }
+  .container {
+    text-align: center;
+    padding: 60px;
+  }
+  .brand {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+    background: linear-gradient(180deg, #ffffff 0%, #c8d8c0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .tagline {
+    font-size: 28px;
+    font-weight: 400;
+    color: #a8c0a0;
+    margin-bottom: 40px;
+  }
+  .stats {
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  .stat-label {
+    font-size: 16px;
+    color: #8aaa80;
+    margin-top: 4px;
+  }
+  .domain {
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    font-size: 18px;
+    color: #6a8a60;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <!-- Nordic diamond/leaf mark -->
+    <div style="margin-bottom: 20px;">
+      <svg viewBox="0 0 32 32" width="64" height="64" xmlns="http://www.w3.org/2000/svg" style="display: inline-block;">
+        <g transform="translate(10, 8)">
+          <path d="M 6 0 L 12 6 L 6 12 L 0 6 Z" fill="none" stroke="#a8c0a0" stroke-width="1.2"/>
+          <path d="M 6 3.5 Q 4.5 6 6 9 Q 7.5 6 6 3.5 Z" fill="#a8c0a0"/>
+        </g>
+      </svg>
+    </div>
+    <div class="brand">SnusFriend</div>
+    <div class="tagline">Premium Nicotine Pouches</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">731+</div>
+        <div class="stat-label">Products</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">57</div>
+        <div class="stat-label">Brands</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">Free</div>
+        <div class="stat-label">EU Shipping</div>
+      </div>
+    </div>
+  </div>
+  <div class="domain">snusfriends.com</div>
+</body>
+</html>

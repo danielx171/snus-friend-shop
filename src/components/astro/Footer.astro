@@ -1,6 +1,7 @@
 ---
 import { tenant } from '@/config/tenant';
 import ThemePicker from '@/components/react/ThemePicker';
+import Logo from '@/components/astro/Logo.astro';
 
 const currentYear = new Date().getFullYear();
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
@@ -32,7 +33,7 @@ const footerLinks = {
   <div class="container">
     <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
       <div class="col-span-2 md:col-span-1">
-        <p class="font-bold text-lg text-primary">{tenant.name}</p>
+        <Logo variant="full" color="dark" />
         <p class="mt-2 text-sm text-muted-foreground">{tenant.tagline}</p>
         <p class="mt-4 text-xs text-muted-foreground">
           <a href={`mailto:${tenant.supportEmail}`} class="hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary">{tenant.supportEmail}</a>
