@@ -32,6 +32,22 @@ const articles = [
   { title: 'Pablo Nicotine Pouches: Complete Brand Guide', slug: 'pablo-nicotine-pouches-complete-guide', excerpt: 'Everything about Pablo — the ultra-strong brand. Product range, strengths, safety guidance.', date: '2026-03-28' },
   { title: 'ICEBERG Nicotine Pouches: Complete Brand Guide', slug: 'iceberg-nicotine-pouches-complete-guide', excerpt: 'The full ICEBERG range — flavours, strengths, and who this brand is best for.', date: '2026-03-28' },
   { title: 'Nicotine Pouches vs Gum vs Lozenges: Which NRT?', slug: 'nicotine-pouches-vs-gum-vs-lozenges', excerpt: 'Comparing nicotine pouches with traditional NRT — gum, lozenges, and patches.', date: '2026-03-28' },
+  // Brand spotlights batch 2
+  { title: 'Skruf Nicotine Pouches: Complete Brand Guide', slug: 'skruf-nicotine-pouches-complete-guide', excerpt: 'Imperial Brands\' Swedish pouch brand — strength system, flavours, and full review.', date: '2026-03-28' },
+  { title: 'White Fox Nicotine Pouches: Complete Brand Guide', slug: 'white-fox-nicotine-pouches-complete-guide', excerpt: 'GN Tobacco\'s extreme mint specialist — Full Charge, Double Mint, and more.', date: '2026-03-28' },
+  { title: 'Siberia Nicotine Pouches & Snus: Complete Guide', slug: 'siberia-nicotine-pouches-complete-guide', excerpt: 'The legendary ultra-strong brand — up to 49.5mg per pouch.', date: '2026-03-28' },
+  { title: 'Nordic Spirit Nicotine Pouches: Complete Brand Guide', slug: 'nordic-spirit-nicotine-pouches-complete-guide', excerpt: 'JTI\'s smooth pouch brand, popular in the UK.', date: '2026-03-28' },
+  { title: 'KLAR Nicotine Pouches: Complete Brand Guide', slug: 'klar-nicotine-pouches-complete-guide', excerpt: 'Swedish craft pouches with bioceramic technology.', date: '2026-03-28' },
+  { title: 'FUMI Nicotine Pouches: Complete Brand Guide', slug: 'fumi-nicotine-pouches-complete-guide', excerpt: 'Unconventional Nordic flavours — salty raspberry, rhubarb, and more.', date: '2026-03-28' },
+  // Buying guides
+  { title: 'Best Nicotine Pouches for Quitting Smoking (2026)', slug: 'best-nicotine-pouches-for-quitting-smoking', excerpt: 'Match cigarette intake to pouch strength with a week-by-week plan.', date: '2026-03-28' },
+  { title: 'Best Budget Nicotine Pouches Under €3', slug: 'best-budget-nicotine-pouches', excerpt: 'Price-per-pouch comparison of the best value pouches.', date: '2026-03-28' },
+  { title: 'Best Strong Nicotine Pouches (10-20mg)', slug: 'best-strong-nicotine-pouches', excerpt: 'For experienced users — strong pouches compared across brands.', date: '2026-03-28' },
+  { title: 'Best Nicotine Pouches with No Aftertaste', slug: 'best-nicotine-pouches-no-aftertaste', excerpt: 'Clean flavour, no chemical aftertaste.', date: '2026-03-28' },
+  { title: 'Best Nicotine Pouches for All-Day Use', slug: 'best-nicotine-pouches-all-day-use', excerpt: 'Comfort and long duration for extended wear.', date: '2026-03-28' },
+  { title: 'Best Slim Nicotine Pouches', slug: 'best-slim-nicotine-pouches', excerpt: 'The most comfortable and discreet pouches ranked.', date: '2026-03-28' },
+  { title: 'Best Nicotine Pouches for Women in 2026', slug: 'best-nicotine-pouches-for-women', excerpt: 'Data-driven picks based on discretion, strength, and flavour.', date: '2026-03-28' },
+  { title: 'Nicotine Pouch Subscription Guide 2026', slug: 'nicotine-pouch-subscription-guide', excerpt: 'Compare subscriptions, calculate savings, and decide if auto-delivery is worth it.', date: '2026-03-28' },
 ];
 
 export async function GET(context: APIContext) {
