@@ -1,0 +1,119 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import ProductCard from '@/components/astro/ProductCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const brands = await getCollection('brands');
+  const allProducts = await getCollection('products');
+
+  return brands
+    .filter((brand) => allProducts.some((p) => p.data.brandSlug === brand.id))
+    .map((brand) => {
+      const products = allProducts.filter((p) => p.data.brandSlug === brand.id);
+      const flavourGroups = new Map<string, typeof products>();
+      for (const p of products) {
+        const key = p.data.flavorKey;
+        if (!flavourGroups.has(key)) flavourGroups.set(key, []);
+        flavourGroups.get(key)!.push(p);
+      }
+      return {
+        params: { slug: brand.id },
+        props: { brand, products, flavourGroups: Object.fromEntries(flavourGroups) },
+      };
+    });
+}
+
+const { brand, products, flavourGroups } = Astro.props;
+const b = brand.data;
+const flavourCount = Object.keys(flavourGroups).length;
+
+const flavourLabels: Record<string, string> = {
+  mint: 'Mint', citrus: 'Citrus', berry: 'Berry', fruit: 'Fruit',
+  coffee: 'Coffee', cola: 'Cola', menthol: 'Menthol', wintergreen: 'Wintergreen',
+  tropical: 'Tropical', ice: 'Ice', original: 'Original', licorice: 'Licorice',
+};
+
+const title = `${b.name} Flavours: Complete Guide & Full Range`;
+const description = `Explore all ${products.length} ${b.name} nicotine pouches across ${flavourCount} flavour categories. Compare tastes, strengths, and find your perfect ${b.name} pouch.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${b.name} Flavours`,
+  description,
+  url: `https://snusfriends.com/brands/${brand.id}/flavours`,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: products.length,
+    itemListElement: products.slice(0, 20).map((p: any, i: number) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://snusfriends.com/products/${p.id}`,
+      name: p.data.name,
+    })),
+  },
+};
+---
+
+<Shop title={title} description={description} canonical={`/brands/${brand.id}/flavours`}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="mx-auto max-w-7xl px-4 py-8">
+    <Breadcrumb items={[
+      { label: 'Brands', href: '/brands' },
+      { label: b.name, href: `/brands/${brand.id}` },
+      { label: 'Flavours' },
+    ]} />
+
+    <div class="mb-8 max-w-3xl">
+      <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        {b.name} Flavours: Complete Range
+      </h1>
+      <p class="mt-3 text-base leading-relaxed text-muted-foreground">
+        {b.name} offers <strong class="text-foreground">{products.length} nicotine pouches</strong> across
+        <strong class="text-foreground">{flavourCount} flavour {flavourCount === 1 ? 'category' : 'categories'}</strong>.
+        Browse by flavour below to find your perfect {b.name} pouch, or visit the
+        <a href={`/brands/${brand.id}/strengths`} class="underline hover:text-foreground">strength guide</a> to
+        compare nicotine levels across the range.
+      </p>
+    </div>
+
+    {Object.entries(flavourGroups).sort(([, a]: any, [, b]: any) => b.length - a.length).map(([key, group]: [string, any]) => (
+      <section class="mb-12">
+        <h2 class="mb-4 text-xl font-semibold text-foreground">
+          {flavourLabels[key] ?? key} ({group.length} {group.length === 1 ? 'product' : 'products'})
+        </h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {group.sort((a: any, b: any) => a.data.nicotineContent - b.data.nicotineContent).map((p: any) => (
+            <ProductCard
+              slug={p.id}
+              name={p.data.name}
+              brand={p.data.brand}
+              brandSlug={p.data.brandSlug}
+              imageUrl={p.data.imageUrl}
+              prices={p.data.prices}
+              stock={p.data.stock}
+              nicotineContent={p.data.nicotineContent}
+              strengthKey={p.data.strengthKey}
+              flavorKey={p.data.flavorKey}
+              ratings={p.data.ratings}
+              badgeKeys={p.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <div class="mt-12 rounded-xl border border-border bg-card/60 p-8 text-center">
+      <h2 class="text-xl font-semibold text-foreground mb-3">Explore More {b.name}</h2>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href={`/brands/${brand.id}`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:border-primary/30">All {b.name} Products</a>
+        <a href={`/brands/${brand.id}/strengths`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:border-primary/30">{b.name} Strength Guide</a>
+        <a href={`/brands/${brand.id}/review`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:border-primary/30">{b.name} Review</a>
+      </div>
+    </div>
+  </div>
+</Shop>
