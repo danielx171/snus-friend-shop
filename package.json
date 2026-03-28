@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev --port 8080",
     "build": "astro build",
+    "check": "astro check",
     "preview": "astro preview",
     "lint": "eslint .",
     "test": "vitest run",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^5.0.1",
+    "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.1",
     "@astrojs/vercel": "^10.0.2",
     "@nanostores/persistent": "^1.3.3",
