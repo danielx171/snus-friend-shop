@@ -3,7 +3,7 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
-import ProductCard from '@/components/react/ProductCard';
+import ProductCard from '@/components/astro/ProductCard.astro';
 
 const allProducts = await getCollection('products');
 const allBrands = await getCollection('brands');
@@ -78,7 +78,6 @@ const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${bra
         {bestSellers.length > 0 ? (
           bestSellers.map((product) => (
             <ProductCard
-              client:visible
               slug={product.id}
               name={product.data.name}
               brand={product.data.brand}
