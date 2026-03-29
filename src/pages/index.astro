@@ -10,14 +10,23 @@ import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 const allProducts = await getCollection('products');
 const allBrands = await getCollection('brands');
 
-// Best sellers: top-rated products, max 2 per brand for diversity
-const sortedByRating = [...allProducts].sort((a, b) => (b.data.ratings ?? 0) - (a.data.ratings ?? 0));
-const bestSellers: typeof sortedByRating = [];
+// Best sellers: products tagged "popular" by Nyehandel (real sales data),
+// with brand diversity (max 1 per brand) so the grid showcases variety.
+// Secondary sort by name for stable ordering when badges are equal.
+const sortedByPopularity = [...allProducts]
+  .filter((p) => p.data.imageUrl)
+  .sort((a, b) => {
+    const aPopular = a.data.badgeKeys.includes('popular') ? 1 : 0;
+    const bPopular = b.data.badgeKeys.includes('popular') ? 1 : 0;
+    if (bPopular !== aPopular) return bPopular - aPopular;
+    return a.data.name.localeCompare(b.data.name);
+  });
+const bestSellers: typeof sortedByPopularity = [];
 const brandCount: Record<string, number> = {};
-for (const p of sortedByRating) {
+for (const p of sortedByPopularity) {
   if (bestSellers.length >= 8) break;
   const b = p.data.brand;
-  if ((brandCount[b] ?? 0) >= 2) continue;
+  if ((brandCount[b] ?? 0) >= 1) continue;
   brandCount[b] = (brandCount[b] ?? 0) + 1;
   bestSellers.push(p);
 }
@@ -38,7 +47,7 @@ const newArrivals = allProducts
 const staffPickBrands = ['zyn', 'velo', 'loop', 'skruf'];
 const staffPicks = staffPickBrands
   .map((slug) => {
-    const brandProducts = sortedByRating.filter((p) => p.data.brandSlug === slug && p.data.imageUrl);
+    const brandProducts = sortedByPopularity.filter((p) => p.data.brandSlug === slug && p.data.imageUrl);
     return brandProducts[0];
   })
   .filter(Boolean);
@@ -50,9 +59,9 @@ const heroProducts = heroBrandTargets
   .filter(Boolean)
   .slice(0, 4);
 
-// Fallback: if we don't have those brands, pick top-rated with images
+// Fallback: if we don't have those brands, pick popular ones with images
 if (heroProducts.length < 4) {
-  for (const p of sortedByRating) {
+  for (const p of sortedByPopularity) {
     if (heroProducts.length >= 4) break;
     if (p.data.imageUrl && !heroProducts.some((h) => h!.data.brandSlug === p.data.brandSlug)) {
       heroProducts.push(p);
