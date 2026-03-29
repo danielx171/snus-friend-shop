@@ -27,6 +27,21 @@ const activeBrands = allBrands.filter((b) => brandSlugsWithProducts.has(b.id));
 const brands = [...activeBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
 const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${brands.length || 57} leading brands. Fast EU-wide delivery, loyalty rewards, and the best prices online.`;
 
+// New Arrivals: products with 'new' badge or most recently updated
+const newArrivals = allProducts
+  .filter((p) => p.data.badgeKeys.includes('new') || p.data.badgeKeys.includes('NewPrice'))
+  .sort((a, b) => (b.data.updatedAt ?? '').localeCompare(a.data.updatedAt ?? ''))
+  .slice(0, 4);
+
+// Staff Picks: curated top-rated products across diverse brands (1 per brand)
+const staffPickBrands = ['zyn', 'velo', 'loop', 'skruf'];
+const staffPicks = staffPickBrands
+  .map((slug) => {
+    const brandProducts = sortedByRating.filter((p) => p.data.brandSlug === slug && p.data.imageUrl);
+    return brandProducts[0];
+  })
+  .filter(Boolean);
+
 // Pick 4 hero products with diverse brand colors for the hero image cluster
 const heroBrandTargets = ['zyn', 'velo', 'siberia', 'loop'];
 const heroProducts = heroBrandTargets
@@ -212,6 +227,71 @@ if (heroProducts.length < 4) {
       </div>
     </div>
   </section>
+
+  <!-- Staff Picks -->
+  {staffPicks.length > 0 && (
+    <section class="border-b border-border bg-card/30 py-16 sm:py-20">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="mb-10">
+          <h2 class="text-2xl font-bold text-foreground sm:text-3xl">Staff Picks</h2>
+          <p class="mt-2 text-muted-foreground">Curated by our editorial team — one standout from each top brand</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
+          {staffPicks.map((product) => product && (
+            <ProductCard
+              slug={product.id}
+              name={product.data.name}
+              brand={product.data.brand}
+              brandSlug={product.data.brandSlug}
+              imageUrl={product.data.imageUrl}
+              prices={product.data.prices}
+              stock={product.data.stock}
+              nicotineContent={product.data.nicotineContent}
+              strengthKey={product.data.strengthKey}
+              flavorKey={product.data.flavorKey}
+              ratings={product.data.ratings}
+              badgeKeys={product.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- New Arrivals -->
+  {newArrivals.length > 0 && (
+    <section class="border-b border-border bg-background py-16 sm:py-20">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="mb-10 flex items-end justify-between">
+          <div>
+            <h2 class="text-2xl font-bold text-foreground sm:text-3xl">New Arrivals</h2>
+            <p class="mt-2 text-muted-foreground">Latest additions and updated products</p>
+          </div>
+          <a href="/products" class="hidden text-sm font-medium text-primary hover:underline sm:block">
+            View all &rarr;
+          </a>
+        </div>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
+          {newArrivals.map((product) => (
+            <ProductCard
+              slug={product.id}
+              name={product.data.name}
+              brand={product.data.brand}
+              brandSlug={product.data.brandSlug}
+              imageUrl={product.data.imageUrl}
+              prices={product.data.prices}
+              stock={product.data.stock}
+              nicotineContent={product.data.nicotineContent}
+              strengthKey={product.data.strengthKey}
+              flavorKey={product.data.flavorKey}
+              ratings={product.data.ratings}
+              badgeKeys={product.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- Why SnusFriend -->
   <section class="border-b border-border bg-background py-16 sm:py-20">
