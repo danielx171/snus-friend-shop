@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --port 8080",
-    "build": "astro build",
+    "build": "astro build && npx pagefind --site dist/client",
+    "build:astro": "astro build",
     "check": "astro check",
     "preview": "astro preview",
     "lint": "eslint .",
@@ -43,6 +44,7 @@
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.462.0",
     "nanostores": "^1.2.0",
+    "pagefind": "^1.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sonner": "^1.7.4",
