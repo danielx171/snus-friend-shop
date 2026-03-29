@@ -1,0 +1,188 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { ensureProductsJson } from '@/lib/product-json';
+
+const products = await getCollection('products');
+ensureProductsJson(products);
+---
+
+<Shop
+  title="Compare Nicotine Pouches Side by Side | SnusFriend"
+  description="Compare nicotine pouches side by side — strength, flavour, price, format, and brand. Select 2-4 products and see how they stack up."
+  canonical="/compare"
+>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <Breadcrumb items={[{ label: 'Compare' }]} />
+
+    <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-3">
+      Compare Nicotine Pouches
+    </h1>
+    <p class="text-base text-muted-foreground mb-8 max-w-2xl">
+      Select 2-4 products to compare side by side. See how they stack up on strength, flavour, price per can, and format.
+    </p>
+
+    <div id="compare-app">
+      <noscript>
+        <p class="text-muted-foreground">JavaScript is required for the comparison tool. Please enable JavaScript and refresh.</p>
+      </noscript>
+    </div>
+  </div>
+
+  <script is:inline>
+    fetch('/data/products.json').then(r => r.json()).then(products => {
+        const app = document.getElementById('compare-app');
+        if (!app) return;
+
+        var selected = [];
+        const params = new URLSearchParams(window.location.search);
+        const initial = params.get('products');
+        if (initial) selected = initial.split(',').filter(Boolean).slice(0, 4);
+
+        function getProduct(slug: string) {
+          return products.find((p: any) => p.slug === slug);
+        }
+
+        function updateURL() {
+          const url = new URL(window.location.href);
+          if (selected.length > 0) {
+            url.searchParams.set('products', selected.join(','));
+          } else {
+            url.searchParams.delete('products');
+          }
+          history.replaceState(null, '', url.toString());
+        }
+
+        function render() {
+          updateURL();
+          const selectedProducts = selected.map(getProduct).filter(Boolean);
+
+          app.innerHTML = `
+            <div style="margin-bottom:24px;">
+              <label for="compare-search" style="display:block;font-size:14px;font-weight:500;margin-bottom:6px;color:var(--foreground);">
+                Add a product to compare ${selected.length >= 4 ? '(max 4)' : ''}
+              </label>
+              <input
+                id="compare-search"
+                type="text"
+                placeholder="Type a product name..."
+                ${selected.length >= 4 ? 'disabled' : ''}
+                style="width:100%;max-width:400px;padding:10px 14px;border-radius:8px;border:1px solid hsl(var(--border));background:hsl(var(--background));color:hsl(var(--foreground));font-size:14px;"
+              />
+              <div id="compare-results" style="max-height:200px;overflow-y:auto;border:1px solid hsl(var(--border));border-radius:8px;margin-top:4px;display:none;background:hsl(var(--card));"></div>
+            </div>
+
+            ${selected.length > 0 ? `
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+                ${selectedProducts.map((p: any) => `
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid hsl(var(--border));background:hsl(var(--card));font-size:13px;">
+                    ${p.name}
+                    <button onclick="window.__removeCompare('${p.slug}')" style="background:none;border:none;cursor:pointer;color:hsl(var(--muted-foreground));font-size:16px;line-height:1;">&times;</button>
+                  </span>
+                `).join('')}
+                <button onclick="window.__clearCompare()" style="padding:6px 12px;border-radius:8px;border:1px solid hsl(var(--border));background:none;font-size:12px;cursor:pointer;color:hsl(var(--muted-foreground));">Clear all</button>
+              </div>
+            ` : ''}
+
+            ${selectedProducts.length >= 2 ? `
+              <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:14px;">
+                  <thead>
+                    <tr style="border-bottom:2px solid hsl(var(--border));">
+                      <th style="text-align:left;padding:12px 8px;color:hsl(var(--muted-foreground));font-weight:600;">Attribute</th>
+                      ${selectedProducts.map((p: any) => `
+                        <th style="text-align:left;padding:12px 8px;font-weight:600;">
+                          <a href="/products/${p.slug}" style="color:hsl(var(--primary));text-decoration:underline;">${p.name}</a>
+                        </th>
+                      `).join('')}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid hsl(var(--border));">
+                      <td style="padding:10px 8px;color:hsl(var(--muted-foreground));">Brand</td>
+                      ${selectedProducts.map((p: any) => `<td style="padding:10px 8px;"><a href="/brands/${p.brandSlug}" style="color:hsl(var(--foreground));">${p.brand}</a></td>`).join('')}
+                    </tr>
+                    <tr style="border-bottom:1px solid hsl(var(--border));">
+                      <td style="padding:10px 8px;color:hsl(var(--muted-foreground));">Nicotine</td>
+                      ${selectedProducts.map((p: any) => `<td style="padding:10px 8px;font-weight:600;">${p.nicotineContent} mg/pouch</td>`).join('')}
+                    </tr>
+                    <tr style="border-bottom:1px solid hsl(var(--border));">
+                      <td style="padding:10px 8px;color:hsl(var(--muted-foreground));">Strength</td>
+                      ${selectedProducts.map((p: any) => `<td style="padding:10px 8px;text-transform:capitalize;">${p.strengthKey?.replace('-', ' ') || 'Normal'}</td>`).join('')}
+                    </tr>
+                    <tr style="border-bottom:1px solid hsl(var(--border));">
+                      <td style="padding:10px 8px;color:hsl(var(--muted-foreground));">Flavour</td>
+                      ${selectedProducts.map((p: any) => `<td style="padding:10px 8px;text-transform:capitalize;">${p.flavorKey || '-'}</td>`).join('')}
+                    </tr>
+                    <tr style="border-bottom:1px solid hsl(var(--border));">
+                      <td style="padding:10px 8px;color:hsl(var(--muted-foreground));">Format</td>
+                      ${selectedProducts.map((p: any) => `<td style="padding:10px 8px;text-transform:capitalize;">${p.formatKey || 'Slim'}</td>`).join('')}
+                    </tr>
+                    <tr style="border-bottom:1px solid hsl(var(--border));">
+                      <td style="padding:10px 8px;color:hsl(var(--muted-foreground));">Price (1 can)</td>
+                      ${selectedProducts.map((p: any) => `<td style="padding:10px 8px;font-weight:700;">€${(p.prices?.pack1 || 0).toFixed(2)}</td>`).join('')}
+                    </tr>
+                    <tr style="border-bottom:1px solid hsl(var(--border));">
+                      <td style="padding:10px 8px;color:hsl(var(--muted-foreground));">Rating</td>
+                      ${selectedProducts.map((p: any) => `<td style="padding:10px 8px;">${p.ratings > 0 ? p.ratings.toFixed(1) + '/5' : 'No reviews'}</td>`).join('')}
+                    </tr>
+                    <tr>
+                      <td style="padding:10px 8px;color:hsl(var(--muted-foreground));">In Stock</td>
+                      ${selectedProducts.map((p: any) => `<td style="padding:10px 8px;">${p.stock > 0 ? '<span style="color:hsl(var(--primary));">✓ In Stock</span>' : '<span style="color:red;">Out of Stock</span>'}</td>`).join('')}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div style="margin-top:16px;text-align:center;">
+                <p style="font-size:12px;color:hsl(var(--muted-foreground));">Share this comparison: <a href="/compare?products=${selected.join(',')}" style="color:hsl(var(--primary));">snusfriends.com/compare?products=${selected.join(',')}</a></p>
+              </div>
+            ` : selected.length === 1 ? `
+              <p style="color:hsl(var(--muted-foreground));font-size:14px;">Add at least one more product to start comparing.</p>
+            ` : `
+              <p style="color:hsl(var(--muted-foreground));font-size:14px;">Search and select products above to compare them side by side.</p>
+            `}
+          `;
+
+          // Wire up search
+          const input = document.getElementById('compare-search') as HTMLInputElement;
+          const results = document.getElementById('compare-results') as HTMLElement;
+          if (input && results) {
+            input.addEventListener('input', () => {
+              const q = input.value.toLowerCase().trim();
+              if (q.length < 2) { results.style.display = 'none'; return; }
+              const matches = products
+                .filter((p: any) => !selected.includes(p.slug) && (p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q)))
+                .slice(0, 8);
+              if (matches.length === 0) { results.style.display = 'none'; return; }
+              results.style.display = 'block';
+              results.innerHTML = matches.map((p: any) => `
+                <div onclick="window.__addCompare('${p.slug}')" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid hsl(var(--border));font-size:13px;display:flex;justify-content:space-between;" onmouseover="this.style.background='hsl(var(--muted))'" onmouseout="this.style.background=''">
+                  <span>${p.name}</span>
+                  <span style="color:hsl(var(--muted-foreground));">${p.brand} · ${p.nicotineContent}mg</span>
+                </div>
+              `).join('');
+            });
+          }
+        }
+
+        (window as any).__addCompare = (slug: string) => {
+          if (selected.length >= 4 || selected.includes(slug)) return;
+          selected.push(slug);
+          render();
+        };
+        (window as any).__removeCompare = (slug: string) => {
+          selected = selected.filter(s => s !== slug);
+          render();
+        };
+        (window as any).__clearCompare = () => {
+          selected = [];
+          render();
+        };
+
+        render();
+      });
+  </script>
+</Shop>
