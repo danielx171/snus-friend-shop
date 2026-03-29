@@ -10,6 +10,8 @@ import {
   closeCart,
   removeFromCart,
   updateCartQuantity,
+  upgradePackSize,
+  getPackSavings,
 } from '@/stores/cart';
 import type { CartItem } from '@/stores/cart';
 import type { PackSize } from '@/data/products';
@@ -236,6 +238,26 @@ export default function CartDrawer() {
               {/* Body — scrollable */}
               <div className="flex-1 overflow-y-auto px-4 py-3">
                 <FreeShippingBar />
+                {/* Pack upsell nudges */}
+                {items.map((item) => {
+                  const savings = getPackSavings(item);
+                  if (!savings) return null;
+                  const packLabel = savings.bestPack.replace('pack', '') + '-pack';
+                  return (
+                    <div key={`upsell-${item.product.id}`} className="mb-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
+                      <p className="text-xs text-foreground">
+                        <strong>Save {savings.savingsPercent}%</strong> — switch {item.product.name} to a {packLabel} (€{savings.pricePerCan.toFixed(2)}/can)
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => upgradePackSize(item.product.id, item.packSize, savings.bestPack)}
+                        className="mt-1.5 rounded-md bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90"
+                      >
+                        Upgrade to {packLabel}
+                      </button>
+                    </div>
+                  );
+                })}
                 <div className="divide-y divide-border">
                   {items.map((item) => (
                     <CartItemRow

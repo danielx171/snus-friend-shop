@@ -73,3 +73,47 @@ export function updateCartQuantity(productId: string, packSize: PackSize, quanti
 export function clearCart() { $cartItems.set([]); }
 export function openCart() { $cartOpen.set(true); }
 export function closeCart() { $cartOpen.set(false); }
+
+/** Upgrade a cart item from pack1 to a larger pack size. */
+export function upgradePackSize(productId: string, fromPack: PackSize, toPack: PackSize) {
+  $cartItems.set(
+    $cartItems.get().map((item) =>
+      item.product.id === productId && item.packSize === fromPack
+        ? { ...item, packSize: toPack }
+        : item,
+    ),
+  );
+}
+
+/** Compute pack savings for a cart item. Returns null if no savings available. */
+export function getPackSavings(item: CartItem): { bestPack: PackSize; savingsPercent: number; pricePerCan: number } | null {
+  if (item.packSize !== 'pack1') return null;
+  const pack1Price = item.product.prices.pack1;
+  if (!pack1Price || pack1Price <= 0) return null;
+
+  // Find the best pack deal
+  const packs: { key: PackSize; qty: number }[] = [
+    { key: 'pack3', qty: 3 },
+    { key: 'pack5', qty: 5 },
+    { key: 'pack10', qty: 10 },
+  ];
+
+  let bestSaving = 0;
+  let bestPack: PackSize = 'pack1';
+  let bestPerCan = pack1Price;
+
+  for (const { key, qty } of packs) {
+    const packPrice = item.product.prices[key];
+    if (!packPrice || packPrice <= 0) continue;
+    const perCan = packPrice / qty;
+    const saving = Math.round((1 - perCan / pack1Price) * 100);
+    if (saving > bestSaving) {
+      bestSaving = saving;
+      bestPack = key;
+      bestPerCan = perCan;
+    }
+  }
+
+  if (bestSaving < 5) return null; // Only show if >5% savings
+  return { bestPack, savingsPercent: bestSaving, pricePerCan: bestPerCan };
+}
