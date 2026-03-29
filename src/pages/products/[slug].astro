@@ -246,7 +246,7 @@ const jsonLd = {
         </div>
 
         {/* Quick Specs */}
-        <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
             <p class="text-xs text-muted-foreground">Nicotine</p>
             <p class="text-sm font-semibold text-foreground">{p.nicotineContent} mg/pouch</p>
@@ -258,6 +258,10 @@ const jsonLd = {
           <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
             <p class="text-xs text-muted-foreground">Format</p>
             <p class="text-sm font-semibold text-foreground capitalize">{p.formatKey}</p>
+          </div>
+          <div class="rounded-lg border border-primary/20 bg-primary/5 p-3 text-center backdrop-blur">
+            <p class="text-xs text-muted-foreground">Price/Pouch</p>
+            <p class="text-sm font-semibold text-primary">&euro;{(singlePrice / (p.portionsPerCan || 20)).toFixed(2)}</p>
           </div>
         </div>
 
@@ -331,6 +335,12 @@ const jsonLd = {
         class="rounded-lg border border-border bg-card/50 px-4 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5"
       >
         All {p.brand} Cans
+      </a>
+      <a
+        href={`/compare?products=${product.id}`}
+        class="rounded-lg border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition hover:bg-primary/10"
+      >
+        Compare
       </a>
     </nav>
 
