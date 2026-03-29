@@ -5,6 +5,7 @@ import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import RecentlyViewedIsland from '@/components/react/RecentlyViewedIsland';
+import RecommendationsIsland from '@/components/react/RecommendationsIsland';
 import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
 const allProducts = await getCollection('products');
@@ -192,6 +193,21 @@ if (heroProducts.length < 4) {
       </div>
     </div>
   </section>
+
+  <!-- Purchase-based recommendations (logged-in users only) -->
+  <RecommendationsIsland
+    client:idle
+    productsJson={JSON.stringify(allProducts.slice(0, 200).map((p) => ({
+      slug: p.id,
+      name: p.data.name,
+      brand: p.data.brand,
+      brandSlug: p.data.brandSlug,
+      flavorKey: p.data.flavorKey,
+      imageUrl: p.data.imageUrl,
+      ratings: p.data.ratings,
+      prices: { pack1: p.data.prices.pack1 },
+    })))}
+  />
 
   <!-- Recently Viewed (client-side, shows only if user has browsing history) -->
   <RecentlyViewedIsland
