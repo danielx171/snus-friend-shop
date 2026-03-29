@@ -261,28 +261,6 @@ const jsonLd = {
           </div>
         </div>
 
-        {/* Price Tiers */}
-        <div class="mb-6 rounded-xl border border-border bg-card/50 p-4 backdrop-blur">
-          <h2 class="mb-3 text-sm font-semibold text-foreground">Pack Pricing</h2>
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {packTiers.map(({ key, label, qty }) => {
-              const price = p.prices[key];
-              if (!price) return null;
-              const perCan = (price / qty).toFixed(2);
-              const isBase = key === 'pack1';
-              return (
-                <div class={`rounded-lg border p-3 text-center transition ${isBase ? 'border-primary/40 bg-primary/5' : 'border-border bg-card/30 hover:border-primary/20'}`}>
-                  <p class="text-xs text-muted-foreground">{label}</p>
-                  <p class="text-lg font-bold text-foreground">&euro;{price.toFixed(2)}</p>
-                  {!isBase && (
-                    <p class="text-xs text-primary">&euro;{perCan}/can</p>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
         {/* Stock Status */}
         <div class="mb-6 flex items-center gap-2">
           {inStock ? (
