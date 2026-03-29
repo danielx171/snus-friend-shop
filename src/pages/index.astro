@@ -96,7 +96,7 @@ if (heroProducts.length < 4) {
         <div class="mt-8 flex justify-center gap-8 lg:justify-start">
           <div>
             <div class="text-2xl font-bold text-[#faf8f5]">{allProducts.length}+</div>
-            <div class="text-xs text-[#a8c0a0]">Products</div>
+            <div class="text-xs text-[#a8c0a0]">Cans</div>
           </div>
           <div class="h-10 w-px bg-[#faf8f5]/10" />
           <div>
@@ -236,7 +236,7 @@ if (heroProducts.length < 4) {
             />
           ))
         ) : (
-          <div role="status" aria-label="Loading products" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+          <div role="status" aria-label="Loading cans" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-6">
             {Array.from({ length: 8 }).map(() => (
               <div class="group rounded-xl border border-border bg-card/50 p-4 backdrop-blur">
                 <div class="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
@@ -287,7 +287,7 @@ if (heroProducts.length < 4) {
         <div class="mb-10 flex items-end justify-between">
           <div>
             <h2 class="text-2xl font-bold text-foreground sm:text-3xl">New Arrivals</h2>
-            <p class="mt-2 text-muted-foreground">Latest additions and updated products</p>
+            <p class="mt-2 text-muted-foreground">Latest additions and updated cans</p>
           </div>
           <a href="/products" class="hidden text-sm font-medium text-primary hover:underline sm:block">
             View all &rarr;
@@ -325,7 +325,7 @@ if (heroProducts.length < 4) {
         <p>
           SnusFriend exists for one reason: to give nicotine pouch users the selection, the
           information, and the service that mainstream tobacco retailers never bothered with.
-          We stock <strong class="text-foreground">{allProducts.length}+ products</strong> from
+          We stock <strong class="text-foreground">{allProducts.length}+ cans</strong> from
           <strong class="text-foreground">{brands.length} brands</strong> — from global leaders
           like ZYN and VELO to cult favourites like Siberia, LOOP, and Pablo — all in one place,
           all with transparent pricing and honest product descriptions.
@@ -364,25 +364,37 @@ if (heroProducts.length < 4) {
         {brands.length > 0 ? (
           brands.slice(0, 15).map((brand) => {
             const bColor = brandColors[brand.id] ?? defaultBrandColor;
-            const initials = brand.data.name.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('');
+            const tinAbbr = { 'white-fox': 'WF', 'nordic-spirit': 'NS', 'chainpop': 'CHAIN' } as any;
+            const tLabel = tinAbbr[brand.id] ?? brand.data.name.toUpperCase();
+            const tLen = tLabel.length;
+            const tSize = tLen <= 2 ? '11px' : tLen <= 3 ? '10px' : tLen <= 4 ? '9px' : tLen <= 5 ? '8px' : '7px';
+            const tColor = brand.id === '77-pouches' ? 'rgba(0,0,0,0.7)' : 'white';
+            const dr = bColor.replace(/^#/, '');
+            const dR = Math.max(0, parseInt(dr.substring(0, 2), 16) - 40);
+            const dG = Math.max(0, parseInt(dr.substring(2, 4), 16) - 40);
+            const dB = Math.max(0, parseInt(dr.substring(4, 6), 16) - 40);
             return (
               <a
                 href={`/brands/${brand.id}`}
-                class="flex items-center gap-3 rounded-xl border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-md"
-                style={`border-left: 3px solid ${bColor};`}
+                class="group flex items-center gap-3 rounded-xl border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-md"
               >
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style={`background: ${bColor}18;`}>
-                  <span class="text-sm font-bold" style={`color: ${bColor};`}>{initials}</span>
+                <div
+                  class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full relative overflow-hidden"
+                  style={`background: linear-gradient(135deg, ${bColor}, rgb(${dR},${dG},${dB}));`}
+                >
+                  <div class="absolute inset-[2px] rounded-full border border-white/25 pointer-events-none"></div>
+                  <span class="relative z-[1] font-extrabold uppercase leading-none" style={`font-size: ${tSize}; color: ${tColor}; letter-spacing: 0.3px;`}>{tLabel}</span>
                 </div>
-                <span class="text-sm font-medium text-foreground">{brand.data.name}</span>
+                <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{brand.data.name}</span>
               </a>
             );
           })
         ) : (
           ['VELO', 'ZYN', 'LOOP', 'Siberia', 'PABLO'].map((name) => (
             <div class="flex items-center gap-3 rounded-xl border border-border bg-card/60 p-3">
-              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                <span class="text-sm font-bold text-primary">{name[0]}</span>
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/20 relative overflow-hidden">
+                <div class="absolute inset-[2px] rounded-full border border-white/25 pointer-events-none"></div>
+                <span class="relative z-[1] text-sm font-extrabold text-white">{name.substring(0, 3).toUpperCase()}</span>
               </div>
               <span class="text-sm font-medium text-foreground">{name}</span>
             </div>
@@ -455,7 +467,7 @@ if (heroProducts.length < 4) {
           href="/products"
           class="inline-flex h-12 items-center rounded-lg border border-border bg-card/60 px-8 text-base font-semibold text-foreground backdrop-blur transition hover:bg-card"
         >
-          Browse All Products
+          Browse All Cans
         </a>
       </div>
     </div>

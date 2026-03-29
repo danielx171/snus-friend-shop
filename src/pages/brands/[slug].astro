@@ -88,8 +88,9 @@ const metaDescription = b.description
       { label: b.name },
     ]} />
 
-    <!-- Brand hero banner -->
-    <div class="mb-8 overflow-hidden rounded-2xl" style={`background: linear-gradient(135deg, ${bColor}dd, ${bColor}88);`}>
+    <!-- Brand hero banner with tin lid ring effect -->
+    <div class="mb-8 overflow-hidden rounded-2xl relative" style={`background: linear-gradient(135deg, ${bColor}dd, ${bColor}88);`}>
+      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.06) 0%, transparent 30%), radial-gradient(circle at 80% 50%, transparent 28%, rgba(255,255,255,0.04) 29%, transparent 31%), radial-gradient(circle at 80% 50%, transparent 38%, rgba(255,255,255,0.03) 39%, transparent 41%);"></div>
       <div class="flex flex-col items-start gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
         {/* Brand logo or styled name */}
         {b.logoUrl ? (
@@ -130,7 +131,7 @@ const metaDescription = b.description
               </span>
             )}
             <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
-              {products.length} products
+              {products.length} cans
             </span>
             {minMg > 0 && (
               <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
@@ -144,7 +145,7 @@ const metaDescription = b.description
 
     {/* Sub-page navigation */}
     <div class="mb-6 flex flex-wrap gap-2">
-      <a href={`/brands/${brand.id}`} class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">All Products</a>
+      <a href={`/brands/${brand.id}`} class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">All Cans</a>
       <a href={`/brands/${brand.id}/flavours`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Flavours</a>
       <a href={`/brands/${brand.id}/strengths`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Strengths</a>
       <a href={`/brands/${brand.id}/review`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Review</a>
@@ -169,7 +170,7 @@ const metaDescription = b.description
         {products.length > 0 ? `${b.name} Products` : 'Products'}
       </h2>
       <p class="text-sm text-muted-foreground">
-        {products.length} {products.length === 1 ? 'product' : 'products'}
+        {products.length} {products.length === 1 ? 'can' : 'cans'}
       </p>
     </div>
 

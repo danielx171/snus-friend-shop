@@ -118,7 +118,7 @@ const jsonLd = {
       return (
         <section class="mb-12">
           <h2 class="mb-4 text-xl font-semibold text-foreground">
-            {strengthLabels[key]} ({group.length} {group.length === 1 ? 'product' : 'products'})
+            {strengthLabels[key]} ({group.length} {group.length === 1 ? 'can' : 'cans'})
           </h2>
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {group.sort((a: any, b: any) => a.data.nicotineContent - b.data.nicotineContent).map((p: any) => (

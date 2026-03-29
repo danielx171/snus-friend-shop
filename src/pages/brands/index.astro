@@ -92,32 +92,22 @@ const collectionJsonLd = {
         const bColor = brandColors[brand.id] ?? defaultBrandColor;
 
         // Tin lid label: full brand name if it fits, else abbreviation
-        const tinAbbreviations: Record<string, string> = {
-          'white-fox': 'WF',
-          'nordic-spirit': 'NS',
-          'chainpop': 'CHAIN',
-        };
-        const tinLabel = tinAbbreviations[brand.id] ?? brand.data.name.toUpperCase();
+        const tinAbbrs = { 'white-fox': 'WF', 'nordic-spirit': 'NS', 'chainpop': 'CHAIN' };
+        const tinLabel = (tinAbbrs as any)[brand.id] ?? brand.data.name.toUpperCase();
 
-        // Auto-size: shorter names get larger text
-        const len = tinLabel.length;
-        const tinTextClass = len <= 2 ? 'text-[17px]'
-          : len <= 3 ? 'text-[15px]'
-          : len <= 4 ? 'text-[13px]'
-          : len <= 5 ? 'text-[11px]'
-          : len <= 6 ? 'text-[10px]'
-          : 'text-[8px]';
+        // Auto-size: shorter names get larger font
+        const sizes = ['text-[8px]','text-[8px]','text-[17px]','text-[15px]','text-[13px]','text-[11px]','text-[10px]'];
+        const tinTextClass = sizes[Math.min(tinLabel.length, 6)] || 'text-[8px]';
 
         // Light background brands need dark text
-        const lightBgBrands = ['77-pouches'];
-        const textColor = lightBgBrands.includes(brand.id) ? 'rgba(0,0,0,0.7)' : 'white';
+        const textColor = brand.id === '77-pouches' ? 'rgba(0,0,0,0.7)' : 'white';
 
         // Darker shade for gradient
-        const darkerColor = bColor.replace(/^#/, '');
-        const r = Math.max(0, parseInt(darkerColor.substring(0, 2), 16) - 40);
-        const g = Math.max(0, parseInt(darkerColor.substring(2, 4), 16) - 40);
-        const b = Math.max(0, parseInt(darkerColor.substring(4, 6), 16) - 40);
-        const darker = `rgb(${r},${g},${b})`;
+        const hex = bColor.replace(/^#/, '');
+        const dr = Math.max(0, parseInt(hex.substring(0, 2), 16) - 40);
+        const dg = Math.max(0, parseInt(hex.substring(2, 4), 16) - 40);
+        const db = Math.max(0, parseInt(hex.substring(4, 6), 16) - 40);
+        const darker = `rgb(${dr},${dg},${db})`;
 
         return (
           <a
