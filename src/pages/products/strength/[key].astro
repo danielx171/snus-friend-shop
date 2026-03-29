@@ -4,7 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
-import { ensureProductsJson } from '@/lib/product-json';
+import { ensureProductsJson, slimProductData } from '@/lib/product-json';
 
 const STRENGTH_META: Record<string, { label: string; range: string; h1: string; desc: string; intro: string }> = {
   'light': {
@@ -113,7 +113,7 @@ const jsonLd = {
     <h2 class="sr-only">Product Catalog</h2>
     <FilterableProductGrid
       client:idle
-      productsJsonUrl="/data/products.json"
+      productsJson={JSON.stringify(slimProductData(products))}
       initialFilters={JSON.stringify({ strengths: [key] })}
     />
 

@@ -93,4 +93,34 @@ const tiers = [
       </div>
     </div>
   </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `${tenant.loyaltyProgramName} — Earn Points & Perks`,
+    description: `Earn points on every purchase and redeem them for discounts, free products, and exclusive perks with ${tenant.name} Rewards.`,
+    url: 'https://snusfriends.com/rewards',
+    mainEntity: {
+      '@type': 'Service',
+      name: tenant.loyaltyProgramName,
+      provider: {
+        '@type': 'Organization',
+        name: tenant.name,
+        url: 'https://snusfriends.com',
+      },
+      description: 'Free loyalty rewards program. Earn points on purchases, reviews, and community activities. Redeem for discounts and exclusive perks.',
+      offers: tiers.map((t) => ({
+        '@type': 'Offer',
+        name: `${t.name} Tier`,
+        description: t.perks.join(', '),
+      })),
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://snusfriends.com' },
+        { '@type': 'ListItem', position: 2, name: 'Rewards', item: 'https://snusfriends.com/rewards' },
+      ],
+    },
+  })} />
 </Shop>

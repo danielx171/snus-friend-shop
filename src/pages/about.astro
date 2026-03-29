@@ -135,4 +135,28 @@ const activeBrandCount = allBrands.filter((b) => brandSlugsWithProducts.has(b.id
       </div>
     </div>
   </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: `About ${tenant.name}`,
+    description: `Learn about ${tenant.name} — Europe's premium nicotine pouch shop.`,
+    url: 'https://snusfriends.com/about',
+    mainEntity: {
+      '@type': 'Organization',
+      name: tenant.name,
+      url: 'https://snusfriends.com',
+      logo: { '@type': 'ImageObject', url: 'https://snusfriends.com/logo.svg' },
+      description: `Europe's leading online shop for premium nicotine pouches. ${allProducts.length}+ products from ${activeBrandCount} brands.`,
+      foundingDate: '2025',
+      sameAs: ['https://snusfriends.com'],
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://snusfriends.com' },
+        { '@type': 'ListItem', position: 2, name: 'About Us', item: 'https://snusfriends.com/about' },
+      ],
+    },
+  })} />
 </Shop>
