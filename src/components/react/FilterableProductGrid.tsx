@@ -466,6 +466,32 @@ export default function FilterableProductGrid({
     filtersToURL(filters);
   }, [filters]);
 
+  // Scroll position memory — restore saved position after products load
+  useEffect(() => {
+    if (loading || allProducts.length === 0) return;
+    const key = 'scroll_products';
+    const saved = sessionStorage.getItem(key);
+    if (saved) {
+      sessionStorage.removeItem(key);
+      // Delay to ensure grid has rendered
+      requestAnimationFrame(() => {
+        window.scrollTo(0, parseInt(saved, 10));
+      });
+    }
+  }, [loading, allProducts.length]);
+
+  // Save scroll position when clicking any product link
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      const link = (e.target as HTMLElement).closest('a[href*="/products/"]');
+      if (link && link.getAttribute('href')?.startsWith('/products/')) {
+        sessionStorage.setItem('scroll_products', String(window.scrollY));
+      }
+    };
+    document.addEventListener('click', handler, true);
+    return () => document.removeEventListener('click', handler, true);
+  }, []);
+
   // Toggle a single filter value
   const handleToggle = useCallback(
     (group: keyof Omit<FilterState, 'sort'>, value: string, checked: boolean) => {

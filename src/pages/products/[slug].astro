@@ -373,6 +373,20 @@ const jsonLd = {
     )}
   </div>
 
+  <!-- Record product view for browsing history -->
+  <script is:inline define:vars={{ viewData: { slug: product.id, brand: p.brand, flavorKey: p.flavorKey, strengthKey: p.strengthKey } }}>
+    document.addEventListener('astro:page-load', () => {
+      try {
+        const key = 'snusfriend_history';
+        const raw = localStorage.getItem(key);
+        const history = raw ? JSON.parse(raw) : [];
+        const filtered = history.filter(h => h.slug !== viewData.slug);
+        const updated = [{ ...viewData, viewedAt: new Date().toISOString() }, ...filtered].slice(0, 30);
+        localStorage.setItem(key, JSON.stringify(updated));
+      } catch { /* ignore */ }
+    }, { once: true });
+  </script>
+
   <!-- Image zoom script -->
   <script is:inline>
     document.addEventListener('astro:page-load', () => {
