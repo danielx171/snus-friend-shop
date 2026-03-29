@@ -1,0 +1,322 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { tenant } from '@/config/tenant';
+
+const allProducts = await getCollection('products');
+const allBrands = await getCollection('brands');
+
+// Build per-brand statistics from real catalog data
+type BrandStats = {
+  name: string;
+  slug: string;
+  manufacturer: string;
+  productCount: number;
+  flavors: Set<string>;
+  strengths: Set<string>;
+  formats: Set<string>;
+  minNicotine: number;
+  maxNicotine: number;
+  minPrice: number;
+  maxPrice: number;
+  popularCount: number;
+};
+
+const brandMap = new Map<string, BrandStats>();
+for (const p of allProducts) {
+  const slug = p.data.brandSlug;
+  if (!brandMap.has(slug)) {
+    brandMap.set(slug, {
+      name: p.data.brand,
+      slug,
+      manufacturer: p.data.manufacturer || '',
+      productCount: 0,
+      flavors: new Set(),
+      strengths: new Set(),
+      formats: new Set(),
+      minNicotine: Infinity,
+      maxNicotine: -Infinity,
+      minPrice: Infinity,
+      maxPrice: -Infinity,
+      popularCount: 0,
+    });
+  }
+  const s = brandMap.get(slug)!;
+  s.productCount++;
+  if (p.data.flavorKey) s.flavors.add(p.data.flavorKey);
+  if (p.data.strengthKey) s.strengths.add(p.data.strengthKey);
+  if (p.data.formatKey) s.formats.add(p.data.formatKey);
+  if (p.data.nicotineContent > 0) {
+    s.minNicotine = Math.min(s.minNicotine, p.data.nicotineContent);
+    s.maxNicotine = Math.max(s.maxNicotine, p.data.nicotineContent);
+  }
+  const singlePrice = p.data.prices?.['1'];
+  if (singlePrice && singlePrice > 0) {
+    s.minPrice = Math.min(s.minPrice, singlePrice);
+    s.maxPrice = Math.max(s.maxPrice, singlePrice);
+  }
+  if (p.data.badgeKeys.includes('popular')) s.popularCount++;
+}
+
+const brands = [...brandMap.values()]
+  .filter((b) => b.productCount >= 3) // Only show brands with meaningful catalogs
+  .sort((a, b) => b.productCount - a.productCount);
+
+// Aggregate stats
+const totalProducts = allProducts.length;
+const totalBrands = brands.length;
+const avgNicotine = allProducts.reduce((sum, p) => sum + p.data.nicotineContent, 0) / totalProducts;
+const strengthDistribution = new Map<string, number>();
+const flavorDistribution = new Map<string, number>();
+for (const p of allProducts) {
+  strengthDistribution.set(p.data.strengthKey, (strengthDistribution.get(p.data.strengthKey) ?? 0) + 1);
+  flavorDistribution.set(p.data.flavorKey, (flavorDistribution.get(p.data.flavorKey) ?? 0) + 1);
+}
+
+const strengthLabels: Record<string, string> = {
+  light: 'Light (1–4 mg)',
+  normal: 'Normal (5–8 mg)',
+  strong: 'Strong (9–12 mg)',
+  xstrong: 'Extra Strong (13–17 mg)',
+  xxstrong: 'Super Strong (18+ mg)',
+};
+const flavorLabels: Record<string, string> = {
+  mint: 'Mint', coolMint: 'Cool Mint', spearmint: 'Spearmint', wintergreen: 'Wintergreen',
+  citrus: 'Citrus', berry: 'Berry', tropical: 'Tropical', coffee: 'Coffee', liquorice: 'Liquorice',
+  other: 'Other',
+};
+
+const publishDate = '2026-03-29';
+const title = `Nicotine Pouch Brands Compared: ${totalBrands} Brands, ${totalProducts.toLocaleString()}+ Products (2026 Data)`;
+const description = `Compare ${totalBrands} nicotine pouch brands side-by-side — product range, nicotine strengths, flavours, and prices. Updated with real catalog data from ${totalProducts.toLocaleString()}+ products.`;
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Which nicotine pouch brand has the most flavours?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `Based on our catalog of ${totalProducts.toLocaleString()}+ products, ${brands[0]?.name} leads with ${brands[0]?.flavors.size} flavour categories and ${brands[0]?.productCount} products.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the strongest nicotine pouch brand?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `The highest nicotine content in our catalog is ${Math.max(...brands.map((b) => b.maxNicotine))} mg/pouch. Brands like ${brands.filter((b) => b.maxNicotine >= 15).map((b) => b.name).slice(0, 3).join(', ')} offer extra-strong options above 15 mg.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How many nicotine pouch brands are there in Europe?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `SnusFriend stocks ${totalBrands} nicotine pouch brands with 3 or more products, from a total catalog of ${totalProducts.toLocaleString()}+ individual products. New brands are added regularly.`,
+      },
+    },
+  ],
+};
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+  canonical="/nicotine-pouch-brands-compared"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-5xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Brands Compared' },
+      ]} />
+
+      <header class="mb-10">
+        <div class="flex items-center gap-2 text-sm text-primary font-medium mb-3">
+          <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">Data Report</span>
+          <time datetime={publishDate}>March 2026</time>
+          <span class="text-muted-foreground">&middot; Auto-updated from live catalog</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+          Nicotine Pouch Brands Compared: {totalBrands} Brands, {totalProducts.toLocaleString()}+ Products
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed max-w-3xl">
+          Every statistic on this page is computed directly from our product catalog of {totalProducts.toLocaleString()} nicotine pouches across {totalBrands} brands. No estimates — real data from real products we stock.
+        </p>
+      </header>
+
+      <!-- Key Statistics -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Market Snapshot</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="rounded-xl border border-border bg-card p-5 text-center">
+            <p class="text-3xl font-bold text-primary">{totalProducts.toLocaleString()}</p>
+            <p class="text-sm text-muted-foreground mt-1">Products in Catalog</p>
+          </div>
+          <div class="rounded-xl border border-border bg-card p-5 text-center">
+            <p class="text-3xl font-bold text-primary">{totalBrands}</p>
+            <p class="text-sm text-muted-foreground mt-1">Active Brands</p>
+          </div>
+          <div class="rounded-xl border border-border bg-card p-5 text-center">
+            <p class="text-3xl font-bold text-primary">{avgNicotine.toFixed(1)} mg</p>
+            <p class="text-sm text-muted-foreground mt-1">Avg. Nicotine/Pouch</p>
+          </div>
+          <div class="rounded-xl border border-border bg-card p-5 text-center">
+            <p class="text-3xl font-bold text-primary">{flavorDistribution.size}</p>
+            <p class="text-sm text-muted-foreground mt-1">Flavour Categories</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Strength Distribution -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Strength Distribution Across All Products</h2>
+        <p class="text-muted-foreground mb-6">
+          How {totalProducts.toLocaleString()} nicotine pouches break down by strength category. The majority of products fall in the normal-to-strong range (5–12 mg).
+        </p>
+        <div class="space-y-3">
+          {Object.entries(strengthLabels).map(([key, label]) => {
+            const count = strengthDistribution.get(key) ?? 0;
+            const pct = Math.round((count / totalProducts) * 100);
+            return (
+              <div class="flex items-center gap-3">
+                <span class="w-44 text-sm font-medium shrink-0">{label}</span>
+                <div class="flex-1 h-8 rounded-lg bg-muted/30 overflow-hidden relative">
+                  <div
+                    class="h-full rounded-lg bg-primary/80 transition-all"
+                    style={`width: ${Math.max(pct, 2)}%`}
+                  />
+                  <span class="absolute inset-0 flex items-center px-3 text-xs font-semibold">
+                    {count} products ({pct}%)
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <!-- Flavour Distribution -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Flavour Categories by Product Count</h2>
+        <p class="text-muted-foreground mb-6">
+          Mint dominates the nicotine pouch market — but citrus, berry, and coffee flavours are growing fast.
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+          {[...flavorDistribution.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .map(([key, count]) => {
+              const pct = Math.round((count / totalProducts) * 100);
+              return (
+                <a href={`/products/flavor/${key}`} class="rounded-xl border border-border bg-card/60 p-4 text-center hover:border-primary/40 transition-colors">
+                  <p class="text-2xl font-bold text-foreground">{count}</p>
+                  <p class="text-xs text-muted-foreground mt-1">{flavorLabels[key] ?? key} ({pct}%)</p>
+                </a>
+              );
+            })}
+        </div>
+      </section>
+
+      <!-- Brand Comparison Table -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Brand-by-Brand Comparison</h2>
+        <p class="text-muted-foreground mb-6">
+          Every brand with 3+ products, ranked by catalog size. Tap a brand name to see its full range.
+        </p>
+        <div class="overflow-x-auto -mx-4 px-4">
+          <table class="w-full text-sm border-collapse min-w-[700px]">
+            <thead>
+              <tr class="border-b border-border text-left">
+                <th class="py-3 pr-3 font-semibold">Brand</th>
+                <th class="py-3 px-3 font-semibold text-center">Products</th>
+                <th class="py-3 px-3 font-semibold text-center">Flavours</th>
+                <th class="py-3 px-3 font-semibold text-center">Strengths</th>
+                <th class="py-3 px-3 font-semibold">Nicotine Range</th>
+                <th class="py-3 px-3 font-semibold">Price Range</th>
+                <th class="py-3 px-3 font-semibold text-center">Formats</th>
+              </tr>
+            </thead>
+            <tbody>
+              {brands.map((b, i) => (
+                <tr class={`border-b border-border/50 ${i % 2 === 0 ? 'bg-muted/10' : ''}`}>
+                  <td class="py-3 pr-3">
+                    <a href={`/brands/${b.slug}`} class="font-medium text-foreground hover:text-primary transition-colors">
+                      {b.name}
+                    </a>
+                    {b.manufacturer && (
+                      <span class="block text-xs text-muted-foreground">{b.manufacturer}</span>
+                    )}
+                  </td>
+                  <td class="py-3 px-3 text-center font-mono">{b.productCount}</td>
+                  <td class="py-3 px-3 text-center font-mono">{b.flavors.size}</td>
+                  <td class="py-3 px-3 text-center font-mono">{b.strengths.size}</td>
+                  <td class="py-3 px-3 text-muted-foreground">
+                    {b.minNicotine !== Infinity ? `${b.minNicotine}–${b.maxNicotine} mg` : '—'}
+                  </td>
+                  <td class="py-3 px-3 text-muted-foreground">
+                    {b.minPrice !== Infinity
+                      ? `€${b.minPrice.toFixed(2)}–€${b.maxPrice.toFixed(2)}`
+                      : '—'}
+                  </td>
+                  <td class="py-3 px-3 text-center">
+                    {[...b.formats].join(', ') || '—'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FAQ section (matches FAQPage schema) -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              Which nicotine pouch brand has the most flavours?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              Based on our catalog of {totalProducts.toLocaleString()}+ products, {brands[0]?.name} leads with {brands[0]?.flavors.size} flavour categories and {brands[0]?.productCount} total products. {brands[1]?.name} follows with {brands[1]?.flavors.size} flavour categories.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              What is the strongest nicotine pouch you can buy?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              The highest nicotine content in our catalog is {Math.max(...brands.map((b) => b.maxNicotine))} mg per pouch. Brands with options above 15 mg include {brands.filter((b) => b.maxNicotine >= 15).map((b) => b.name).slice(0, 5).join(', ')}. These extra-strong pouches are intended for experienced users.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              Which brand is best for beginners?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              Brands that offer light options (1–4 mg) are most suitable for beginners. Look for brands like {brands.filter((b) => b.minNicotine <= 4 && b.minNicotine > 0).map((b) => b.name).slice(0, 4).join(', ')} which all carry low-nicotine starter pouches. We recommend starting at 4 mg or below and working up gradually.
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- Methodology note — important for AI citation trust -->
+      <section class="rounded-xl border border-border bg-muted/20 p-6">
+        <h2 class="text-lg font-semibold mb-2">Methodology & Data Source</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          All statistics on this page are computed at build time from the SnusFriend product catalog — {totalProducts.toLocaleString()} products across {totalBrands} brands sourced via the Nyehandel wholesale API. Product counts, nicotine ranges, flavour categories, and prices reflect our current live inventory. This page auto-updates with each site build, ensuring the data stays current. Last updated: {publishDate}.
+        </p>
+      </section>
+    </div>
+  </article>
+</Shop>

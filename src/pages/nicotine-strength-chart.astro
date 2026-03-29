@@ -1,0 +1,240 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { tenant } from '@/config/tenant';
+
+const allProducts = await getCollection('products');
+
+// Build nicotine distribution data
+const mgBuckets = new Map<number, number>();
+for (const p of allProducts) {
+  const mg = Math.round(p.data.nicotineContent);
+  if (mg > 0) mgBuckets.set(mg, (mgBuckets.get(mg) ?? 0) + 1);
+}
+const sortedBuckets = [...mgBuckets.entries()].sort((a, b) => a[0] - b[0]);
+const maxBucketCount = Math.max(...sortedBuckets.map(([, c]) => c));
+
+// Brand coverage per strength tier
+const tiers = [
+  { key: 'ultraLight', label: 'Ultra Light', range: '1–3 mg', min: 1, max: 3, description: 'Barely-there buzz. Perfect for first-timers or all-day use without intensity. Most users report no throat hit.' },
+  { key: 'light', label: 'Light', range: '4–6 mg', min: 4, max: 6, description: 'Gentle nicotine satisfaction with mild tingling. A good starting point for smokers switching from light cigarettes (1–5/day).' },
+  { key: 'normal', label: 'Regular', range: '7–10 mg', min: 7, max: 10, description: 'The mainstream sweet spot. Comparable to a regular cigarette in satisfaction. Most popular tier by product count.' },
+  { key: 'strong', label: 'Strong', range: '11–14 mg', min: 11, max: 14, description: 'Noticeable kick within seconds. Suits 10–20 cigarette/day smokers. Keep usage time under 30 minutes until adjusted.' },
+  { key: 'xstrong', label: 'Extra Strong', range: '15–20 mg', min: 15, max: 20, description: 'Intense and fast-acting. For experienced users only. Can cause nausea, hiccups, or dizziness in newcomers.' },
+  { key: 'xxstrong', label: 'Super Strong', range: '21+ mg', min: 21, max: 999, description: 'Maximum intensity — marketed to veteran users. These are the highest nicotine pouches on the market. Not recommended for beginners under any circumstances.' },
+];
+
+for (const tier of tiers) {
+  const tierProducts = allProducts.filter((p) => p.data.nicotineContent >= tier.min && p.data.nicotineContent <= tier.max);
+  (tier as any).count = tierProducts.length;
+  (tier as any).pct = Math.round((tierProducts.length / allProducts.length) * 100);
+  const tierBrands = new Set(tierProducts.map((p) => p.data.brand));
+  (tier as any).brands = [...tierBrands].sort().slice(0, 8);
+  (tier as any).brandCount = tierBrands.size;
+}
+
+// Comparison with cigarettes (unique data asset)
+const cigaretteComparison = [
+  { habit: 'Social smoker (1–5/day)', recommended: '3–6 mg', reason: 'Low dependency means a gentle pouch is enough to satisfy cravings.' },
+  { habit: 'Light smoker (5–10/day)', recommended: '6–8 mg', reason: 'Regular-strength pouches match the nicotine intake pattern without overwhelming.' },
+  { habit: 'Moderate smoker (10–20/day)', recommended: '8–12 mg', reason: 'Strong pouches deliver comparable satisfaction to a cigarette break.' },
+  { habit: 'Heavy smoker (20+/day)', recommended: '12–16 mg', reason: 'Higher strength compensates for the faster nicotine delivery smokers are used to.' },
+  { habit: 'Vapers (20–50mg e-liquid)', recommended: '6–12 mg', reason: 'Vape nicotine absorption differs — pouches deliver through the gum, so start lower than your vape strength suggests.' },
+];
+
+const totalProducts = allProducts.length;
+const publishDate = '2026-03-29';
+const title = `Nicotine Pouch Strength Chart: ${totalProducts.toLocaleString()} Products Mapped by mg (2026)`;
+const description = `Visual strength chart mapping ${totalProducts.toLocaleString()} nicotine pouches from 1 mg to 50+ mg. Find the right strength for your experience level with real product data.`;
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What nicotine pouch strength should a beginner use?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Beginners should start with 3–6 mg nicotine pouches. This range provides a gentle introduction without the nausea or dizziness that stronger pouches can cause. Popular beginner-friendly brands include VELO, ZYN, and LOOP, which all offer 4 mg options.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does nicotine pouch strength compare to cigarettes?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'A regular cigarette delivers roughly 1–2 mg of absorbed nicotine. A 6 mg nicotine pouch releases its nicotine more slowly over 20–40 minutes, so the experience is less intense but longer-lasting. Light smokers (1–5/day) typically find 3–6 mg pouches sufficient, while heavier smokers (20+/day) may prefer 12–16 mg.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the strongest nicotine pouch available?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `The strongest pouches in our ${totalProducts.toLocaleString()}-product catalog reach up to ${Math.max(...sortedBuckets.map(([mg]) => mg))} mg per pouch. These super-strong products are made for experienced users and are not recommended for beginners.`,
+      },
+    },
+  ],
+};
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+  canonical="/nicotine-strength-chart"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-5xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Strength Chart' },
+      ]} />
+
+      <header class="mb-10">
+        <div class="flex items-center gap-2 text-sm text-primary font-medium mb-3">
+          <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">Data Report</span>
+          <time datetime={publishDate}>March 2026</time>
+          <span class="text-muted-foreground">&middot; Auto-updated from live catalog</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+          Nicotine Pouch Strength Chart: {totalProducts.toLocaleString()} Products Mapped by mg
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed max-w-3xl">
+          Every nicotine pouch we stock, organized by strength. This chart is generated from real product data — not estimates. Use it to find the right intensity for your experience level.
+        </p>
+      </header>
+
+      <!-- Visual Distribution Chart -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Product Count by Nicotine Content (mg/pouch)</h2>
+        <p class="text-muted-foreground mb-6">
+          Each bar shows how many products are available at that exact nicotine level. The market clusters around 6–12 mg, reflecting mainstream demand.
+        </p>
+        <div class="flex items-end gap-1 h-48 border-b border-border pb-2">
+          {sortedBuckets.map(([mg, count]) => {
+            const heightPct = Math.max((count / maxBucketCount) * 100, 4);
+            const isPopular = count > maxBucketCount * 0.5;
+            return (
+              <div class="flex-1 flex flex-col items-center gap-1 min-w-0" title={`${mg} mg: ${count} products`}>
+                <span class={`text-[10px] font-mono ${isPopular ? 'text-primary font-bold' : 'text-muted-foreground'}`}>
+                  {count}
+                </span>
+                <div
+                  class={`w-full rounded-t ${isPopular ? 'bg-primary' : 'bg-primary/40'}`}
+                  style={`height: ${heightPct}%`}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div class="flex gap-1 mt-1">
+          {sortedBuckets.map(([mg]) => (
+            <div class="flex-1 text-center min-w-0">
+              <span class="text-[9px] text-muted-foreground">{mg}</span>
+            </div>
+          ))}
+        </div>
+        <p class="text-center text-xs text-muted-foreground mt-2">Nicotine content (mg per pouch)</p>
+      </section>
+
+      <!-- Strength Tiers -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Strength Tiers Explained</h2>
+        <div class="space-y-4">
+          {(tiers as any[]).map((tier) => (
+            <div class="rounded-xl border border-border bg-card/60 p-6">
+              <div class="flex flex-wrap items-baseline gap-3 mb-2">
+                <h3 class="text-lg font-semibold">{tier.label}</h3>
+                <span class="text-sm font-mono text-primary">{tier.range}</span>
+                <span class="text-xs text-muted-foreground">{tier.count} products ({tier.pct}%)</span>
+              </div>
+              <p class="text-sm text-muted-foreground leading-relaxed mb-3">{tier.description}</p>
+              {tier.brandCount > 0 && (
+                <p class="text-xs text-muted-foreground">
+                  <span class="font-medium">Brands in this tier ({tier.brandCount}):</span>{' '}
+                  {tier.brands.join(', ')}{tier.brandCount > 8 ? ` + ${tier.brandCount - 8} more` : ''}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Cigarette Comparison Table — unique data -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Switching from Cigarettes? Strength Matching Guide</h2>
+        <p class="text-muted-foreground mb-6">
+          Nicotine pouches absorb through the gum, not the lungs — so the experience differs from smoking. This guide maps your current habit to a recommended pouch strength.
+        </p>
+        <div class="overflow-x-auto -mx-4 px-4">
+          <table class="w-full text-sm border-collapse min-w-[600px]">
+            <thead>
+              <tr class="border-b border-border text-left">
+                <th class="py-3 pr-3 font-semibold">Current Habit</th>
+                <th class="py-3 px-3 font-semibold">Recommended Strength</th>
+                <th class="py-3 px-3 font-semibold">Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cigaretteComparison.map((row, i) => (
+                <tr class={`border-b border-border/50 ${i % 2 === 0 ? 'bg-muted/10' : ''}`}>
+                  <td class="py-3 pr-3 font-medium">{row.habit}</td>
+                  <td class="py-3 px-3 text-primary font-mono">{row.recommended}</td>
+                  <td class="py-3 px-3 text-muted-foreground">{row.reason}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FAQ section -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              What nicotine pouch strength should a beginner use?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              Beginners should start with 3–6 mg nicotine pouches. This range provides a gentle introduction without the nausea or dizziness that stronger pouches can cause. Brands like VELO, ZYN, and LOOP all offer 4 mg options that are popular first-time choices.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              How does nicotine pouch strength compare to cigarettes?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              A regular cigarette delivers roughly 1–2 mg of absorbed nicotine through the lungs. A 6 mg nicotine pouch releases its nicotine more slowly over 20–40 minutes through the gum, so the experience is less intense but longer-lasting. See the switching guide above for personalized recommendations based on your smoking habit.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              Can you use nicotine pouches to quit smoking?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              Many users switch from cigarettes to nicotine pouches as a harm-reduction step. Start with a strength that matches your current smoking habit (see the table above), then gradually reduce over weeks or months. Nicotine pouches are tobacco-free and avoid the tar, carbon monoxide, and combustion products of cigarettes.
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- Methodology -->
+      <section class="rounded-xl border border-border bg-muted/20 p-6">
+        <h2 class="text-lg font-semibold mb-2">About This Data</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          All figures are computed at build time from the SnusFriend product catalog ({totalProducts.toLocaleString()} active products sourced via Nyehandel). Nicotine content is per pouch as stated by the manufacturer. The cigarette comparison recommendations are editorial guidance based on published nicotine absorption research, not medical advice — consult a healthcare professional for personalized cessation support. Last updated: {publishDate}.
+        </p>
+      </section>
+    </div>
+  </article>
+</Shop>

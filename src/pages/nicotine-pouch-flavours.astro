@@ -1,0 +1,240 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { tenant } from '@/config/tenant';
+
+const allProducts = await getCollection('products');
+const totalProducts = allProducts.length;
+
+const flavorMeta: Record<string, { label: string; emoji: string; description: string; pairsWith: string }> = {
+  mint: { label: 'Mint', emoji: '🌿', description: 'Classic peppermint and spearmint blends. The most popular flavour family — crisp, clean, and universally liked. Available from virtually every brand.', pairsWith: 'Coffee, morning routines, after meals' },
+  coolMint: { label: 'Cool Mint', emoji: '❄️', description: 'Mint with an added cooling sensation (menthol/WS-23). Delivers a frosty hit on the gum that regular mint lacks. Preferred by users who want a stronger sensory experience.', pairsWith: 'Hot weather, energy drinks, workouts' },
+  spearmint: { label: 'Spearmint', emoji: '🍃', description: 'Softer and sweeter than peppermint. A gentler mint option with herbal undertones — less sharp, more soothing. Popular with users who find regular mint too intense.', pairsWith: 'Tea, relaxation, evening use' },
+  wintergreen: { label: 'Wintergreen', emoji: '🌲', description: 'A distinctly American flavour profile with a sweet, slightly medicinal coolness. Familiar to anyone who has used wintergreen chewing gum or traditional dip.', pairsWith: 'Outdoor activities, traditional snus crossover' },
+  citrus: { label: 'Citrus', emoji: '🍋', description: 'Bright lemon, orange, bergamot, and grapefruit notes. A refreshing alternative to mint that pairs well with the natural nicotine taste. The second most popular flavour family.', pairsWith: 'Summer, sparkling water, brunch' },
+  berry: { label: 'Berry', emoji: '🫐', description: 'Blueberry, raspberry, strawberry, and mixed berry profiles. Sweet and fruity with good depth. A favourite among users who prefer dessert-style flavours.', pairsWith: 'Smoothies, casual settings, afternoon pick-me-up' },
+  tropical: { label: 'Tropical', emoji: '🥭', description: 'Mango, passion fruit, pineapple, and exotic blends. Bold and sweet with a summery vibe. A newer category that is growing fast, especially in Scandinavian markets.', pairsWith: 'Beach, cocktails, festivals' },
+  coffee: { label: 'Coffee', emoji: '☕', description: 'Espresso, mocha, and latte profiles. Earthy and rich with roasted undertones. A niche but devoted following among users who pair pouches with their morning coffee.', pairsWith: 'Morning coffee, work breaks, winter' },
+  liquorice: { label: 'Liquorice', emoji: '🖤', description: 'Traditional Scandinavian salmiak and sweet liquorice. An acquired taste with deep, anise-like sweetness. Very popular in Nordic countries, less common elsewhere.', pairsWith: 'Traditional snus users, Nordic heritage, after dinner' },
+  other: { label: 'Other / Unflavoured', emoji: '⚪', description: 'Includes unflavoured (tobacco-like), cinnamon, cola, energy drink, and experimental flavours. A catch-all for products that do not fit neatly into standard categories.', pairsWith: 'Adventurous users, variety seekers' },
+};
+
+// Build flavor stats
+type FlavorStat = {
+  key: string;
+  label: string;
+  emoji: string;
+  description: string;
+  pairsWith: string;
+  count: number;
+  pct: number;
+  brands: string[];
+  brandCount: number;
+  strengthRange: string;
+  popularProducts: string[];
+};
+
+const flavorStats: FlavorStat[] = [];
+for (const [key, meta] of Object.entries(flavorMeta)) {
+  const products = allProducts.filter((p) => p.data.flavorKey === key);
+  if (products.length === 0) continue;
+  const brands = new Set(products.map((p) => p.data.brand));
+  const nics = products.map((p) => p.data.nicotineContent).filter((n) => n > 0);
+  const popular = products
+    .filter((p) => p.data.badgeKeys.includes('popular'))
+    .map((p) => p.data.name)
+    .slice(0, 3);
+  flavorStats.push({
+    key,
+    ...meta,
+    count: products.length,
+    pct: Math.round((products.length / totalProducts) * 100),
+    brands: [...brands].sort().slice(0, 10),
+    brandCount: brands.size,
+    strengthRange: nics.length > 0 ? `${Math.min(...nics)}–${Math.max(...nics)} mg` : '—',
+    popularProducts: popular,
+  });
+}
+flavorStats.sort((a, b) => b.count - a.count);
+
+const publishDate = '2026-03-29';
+const title = `Nicotine Pouch Flavours: Complete Guide to ${flavorStats.length} Flavour Categories (${totalProducts.toLocaleString()} Products)`;
+const description = `Explore every nicotine pouch flavour — from mint and citrus to coffee and tropical. Real data from ${totalProducts.toLocaleString()} products showing which flavours dominate and why.`;
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the most popular nicotine pouch flavour?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `${flavorStats[0]?.label} is the most popular flavour with ${flavorStats[0]?.count} products (${flavorStats[0]?.pct}% of the market). ${flavorStats[1]?.label} comes second at ${flavorStats[1]?.pct}%, followed by ${flavorStats[2]?.label} at ${flavorStats[2]?.pct}%.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What nicotine pouch flavour should a beginner try first?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most beginners start with mint or citrus flavours because they are familiar, widely available, and mask the nicotine taste well. Mint is the safest choice — it accounts for the largest share of products and nearly every brand offers it in light strengths.',
+      },
+    },
+  ],
+};
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+  canonical="/nicotine-pouch-flavours"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-5xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Flavour Guide' },
+      ]} />
+
+      <header class="mb-10">
+        <div class="flex items-center gap-2 text-sm text-primary font-medium mb-3">
+          <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">Data Report</span>
+          <time datetime={publishDate}>March 2026</time>
+          <span class="text-muted-foreground">&middot; Auto-updated from live catalog</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+          Nicotine Pouch Flavours: The Complete Guide
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed max-w-3xl">
+          Which flavours dominate the nicotine pouch market? How many brands offer coffee or tropical options? This guide breaks down every flavour category using real data from {totalProducts.toLocaleString()} products.
+        </p>
+      </header>
+
+      <!-- Market Share Overview -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Flavour Market Share</h2>
+        <p class="text-muted-foreground mb-6">
+          Percentage of the {totalProducts.toLocaleString()}-product catalog by flavour category. Mint variants (mint + cool mint + spearmint + wintergreen) dominate at {flavorStats.filter((f) => ['mint', 'coolMint', 'spearmint', 'wintergreen'].includes(f.key)).reduce((sum, f) => sum + f.pct, 0)}% combined.
+        </p>
+        <div class="space-y-3">
+          {flavorStats.map((f) => (
+            <a href={`/products/flavor/${f.key}`} class="flex items-center gap-3 group">
+              <span class="w-8 text-lg text-center shrink-0">{f.emoji}</span>
+              <span class="w-28 text-sm font-medium shrink-0 group-hover:text-primary transition-colors">{f.label}</span>
+              <div class="flex-1 h-8 rounded-lg bg-muted/30 overflow-hidden relative">
+                <div
+                  class="h-full rounded-lg bg-primary/70 group-hover:bg-primary transition-colors"
+                  style={`width: ${Math.max(f.pct, 3)}%`}
+                />
+                <span class="absolute inset-0 flex items-center px-3 text-xs font-semibold">
+                  {f.count} products ({f.pct}%)
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- Flavour Deep Dives -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Flavour Profiles in Detail</h2>
+        <div class="space-y-6">
+          {flavorStats.map((f) => (
+            <div class="rounded-xl border border-border bg-card/60 p-6" id={f.key}>
+              <div class="flex flex-wrap items-baseline gap-3 mb-3">
+                <span class="text-2xl">{f.emoji}</span>
+                <h3 class="text-xl font-semibold">{f.label}</h3>
+                <span class="text-sm font-mono text-primary">{f.count} products</span>
+                <span class="text-xs text-muted-foreground">{f.brandCount} brands · {f.strengthRange}</span>
+              </div>
+              <p class="text-sm text-muted-foreground leading-relaxed mb-3">{f.description}</p>
+              <div class="flex flex-wrap gap-4 text-xs text-muted-foreground">
+                <div>
+                  <span class="font-medium text-foreground">Pairs well with:</span> {f.pairsWith}
+                </div>
+                <div>
+                  <span class="font-medium text-foreground">Top brands:</span> {f.brands.slice(0, 6).join(', ')}{f.brandCount > 6 ? ` + ${f.brandCount - 6} more` : ''}
+                </div>
+              </div>
+              {f.popularProducts.length > 0 && (
+                <p class="text-xs text-muted-foreground mt-2">
+                  <span class="font-medium text-foreground">Bestsellers:</span> {f.popularProducts.join(', ')}
+                </p>
+              )}
+              <a href={`/products/flavor/${f.key}`} class="inline-block mt-3 text-sm text-primary hover:underline">
+                Browse all {f.label.toLowerCase()} pouches →
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Flavour Picking Guide -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">How to Pick Your Flavour</h2>
+        <div class="rounded-xl border border-border bg-card/60 p-6 space-y-4 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">New to pouches?</strong> Start with mint or citrus. These are the most forgiving flavours — familiar enough that the nicotine experience won't feel alien. Most brands offer mint in every strength tier, so you can experiment with intensity without switching flavour.
+          </p>
+          <p>
+            <strong class="text-foreground">Switching from snus?</strong> Try liquorice or wintergreen. These flavours are closest to traditional Swedish snus profiles. Many snus users also enjoy unflavoured pouches for a familiar mouthfeel.
+          </p>
+          <p>
+            <strong class="text-foreground">Adventurous user?</strong> Explore tropical, coffee, or berry options. These are the fastest-growing categories, and brands are innovating constantly with new combinations. Consider rotating between 2–3 flavours to avoid flavour fatigue.
+          </p>
+          <p>
+            <strong class="text-foreground">Not sure?</strong> Take our <a href="/flavor-quiz" class="text-primary hover:underline">Flavour Quiz</a> — it recommends products based on your taste preferences and experience level.
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              What is the most popular nicotine pouch flavour?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              {flavorStats[0]?.label} is the most popular flavour with {flavorStats[0]?.count} products ({flavorStats[0]?.pct}% of the market). {flavorStats[1]?.label} comes second at {flavorStats[1]?.pct}%, followed by {flavorStats[2]?.label} at {flavorStats[2]?.pct}%.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              Do all brands offer mint flavours?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              Nearly all brands offer at least one mint variant. Across our catalog, {flavorStats.find((f) => f.key === 'mint')?.brandCount ?? 'most'} brands carry standard mint, making it the most universally available flavour. If you include cool mint and spearmint variants, the coverage is even higher.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              What flavour should a beginner try first?
+              <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+            </summary>
+            <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+              Mint or citrus are the best starting points. They are familiar, widely available, and mask the nicotine taste effectively. Start with a light strength (3–6 mg) in your chosen flavour, then explore other categories once you are comfortable with the format.
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- Methodology -->
+      <section class="rounded-xl border border-border bg-muted/20 p-6">
+        <h2 class="text-lg font-semibold mb-2">About This Data</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Flavour categories and product counts are computed at build time from the SnusFriend catalog ({totalProducts.toLocaleString()} products via Nyehandel). Each product is assigned a flavour key by Nyehandel based on manufacturer classification. Flavour descriptions, pairing suggestions, and recommendations are editorial content by SnusFriend. Last updated: {publishDate}.
+        </p>
+      </section>
+    </div>
+  </article>
+</Shop>

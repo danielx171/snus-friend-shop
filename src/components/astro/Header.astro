@@ -62,17 +62,17 @@ const moreLinks = [
       </div>
     </nav>
 
-    <div class="flex items-center gap-3">
-      <a href="/search" class="text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="Search products">
+    <div class="flex items-center gap-1">
+      <a href="/search" class="p-3 -m-1 text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="Search products">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       </a>
 
       {user ? (
-        <a href="/account" class="text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="My account">
+        <a href="/account" class="p-3 -m-1 text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="My account">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </a>
       ) : (
-        <a href="/login" class="text-muted-foreground hover:text-foreground text-sm font-medium focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="Login">
+        <a href="/login" class="p-3 -m-1 text-muted-foreground hover:text-foreground text-sm font-medium focus:outline-2 focus:outline-offset-2 focus:outline-primary" aria-label="Login">
           Login
         </a>
       )}
@@ -82,7 +82,7 @@ const moreLinks = [
       </div>
 
       <button
-        class="md:hidden text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary"
+        class="md:hidden p-3 -m-1 text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary"
         aria-label="Open menu"
         data-mobile-menu-toggle
       >
