@@ -2,11 +2,11 @@
 import { tenant } from '@/config/tenant';
 import HeaderCartButton from '@/components/react/HeaderCartButton';
 import Logo from '@/components/astro/Logo.astro';
+import MegaMenu from '@/components/astro/MegaMenu.astro';
 
 const user = Astro.locals.user;
 
 const navLinks = [
-  { href: '/nicotine-pouches', label: 'Shop' },
   { href: '/brands', label: 'Brands' },
   { href: '/rewards', label: 'Rewards' },
   { href: '/about', label: 'About' },
@@ -26,7 +26,23 @@ const moreLinks = [
       <Logo variant="full" color="dark" />
     </a>
 
-    <nav class="hidden md:flex items-center gap-6" aria-label="Main navigation">
+    <nav class="hidden lg:flex items-center gap-6" aria-label="Main navigation">
+      <!-- Mega menu for Shop -->
+      <div class="relative group">
+        <a
+          href="/nicotine-pouches"
+          data-astro-prefetch
+          class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary inline-flex items-center gap-1"
+          aria-haspopup="true"
+        >
+          Shop
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-200 absolute top-full left-0 pt-2 z-50">
+          <MegaMenu />
+        </div>
+      </div>
+
       {navLinks.map(({ href, label }) => (
         <a
           href={href}
