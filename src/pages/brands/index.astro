@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { getCollection } from 'astro:content';
+import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
 const allBrands = await getCollection('brands');
 const allProducts = await getCollection('products');
@@ -93,6 +94,7 @@ const collectionJsonLd = {
           .map((w: string) => w[0]?.toUpperCase() ?? '')
           .join('');
         const count = productCountByBrand.get(brand.id) ?? 0;
+        const bColor = brandColors[brand.id] ?? defaultBrandColor;
         return (
           <a
             href={`/brands/${brand.id}`}
@@ -112,8 +114,8 @@ const collectionJsonLd = {
                 />
               </div>
             ) : (
-              <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                <span class="text-lg font-bold text-primary">{initials}</span>
+              <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={`background: ${bColor}18;`}>
+                <span class="text-lg font-bold" style={`color: ${bColor};`}>{initials}</span>
               </div>
             )}
 

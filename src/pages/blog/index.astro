@@ -205,6 +205,16 @@ const articles = [
   { title: 'Nicotine Pouch Subscription: Is It Worth It in 2026?', excerpt: 'Compare subscription offerings, calculate savings, and find out if auto-delivery makes sense for you.', slug: 'nicotine-pouch-subscription-guide', tag: 'Buying Guide' },
 ];
 
+const tagColors: Record<string, string> = {
+  'Brand Spotlight': '#2E7D32',
+  'Comparison': '#1565C0',
+  'Buying Guide': '#E65100',
+  'Guide': '#1a2e1a',
+  'Ranking': '#6A1B9A',
+  'Flavour Guide': '#00838F',
+  'FAQ': '#37474F',
+};
+
 const blogJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
@@ -257,8 +267,10 @@ const blogJsonLd = {
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {articles.map((article) => (
-          <a href={`/blog/${article.slug}`} class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 flex flex-col transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-            <span class="inline-flex self-start items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary mb-3">
+          <a href={`/blog/${article.slug}`} class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden flex flex-col transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+            <div class="h-1.5 w-full" style={`background: ${tagColors[article.tag] ?? '#1a2e1a'};`} />
+            <div class="p-6 flex flex-col flex-1">
+            <span class="inline-flex self-start items-center rounded-full px-2.5 py-0.5 text-xs font-medium mb-3" style={`background: ${tagColors[article.tag] ?? '#1a2e1a'}15; color: ${tagColors[article.tag] ?? '#1a2e1a'};`}>
               {article.tag}
             </span>
             <h2 class="text-lg font-semibold mb-2 text-foreground group-hover:text-primary transition-colors">{article.title}</h2>
@@ -267,6 +279,7 @@ const blogJsonLd = {
             </p>
             <div class="mt-4 pt-4 border-t border-border">
               <span class="text-sm font-medium text-primary">Read article &rarr;</span>
+            </div>
             </div>
           </a>
         ))}
