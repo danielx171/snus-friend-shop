@@ -16,7 +16,7 @@ const HeaderCartButton = React.memo(function HeaderCartButton() {
     <button
       type="button"
       onClick={openCart}
-      className="relative text-foreground hover:text-primary transition"
+      className="relative p-3 -m-3 text-foreground hover:text-primary transition"
       aria-label={`Shopping cart${displayCount > 0 ? `, ${displayCount} items` : ''}`}
     >
       <svg

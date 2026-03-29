@@ -241,7 +241,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
             onClick={handleAddToCart}
             disabled={isOutOfStock}
             aria-label={isOutOfStock ? `Sold Out – ${name}` : `Add to Cart – ${name}`}
-            className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-[44px] rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0 sm:px-3 sm:py-1.5 sm:text-xs"
           >
             {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
           </button>
