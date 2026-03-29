@@ -92,8 +92,8 @@ const collectionJsonLd = {
         const bColor = brandColors[brand.id] ?? defaultBrandColor;
 
         // Tin lid label: full brand name if it fits, else abbreviation
-        const tinAbbrs = { 'white-fox': 'WF', 'nordic-spirit': 'NS', 'chainpop': 'CHAIN' };
-        const tinLabel = (tinAbbrs as any)[brand.id] ?? brand.data.name.toUpperCase();
+        const tinAbbrs = { 'white-fox': 'WF', 'nordic-spirit': 'NS', 'chainpop': 'CHAIN' } as any;
+        const tinLabel = tinAbbrs[brand.id] ?? brand.data.name.toUpperCase();
 
         // Auto-size: shorter names get larger font
         const sizes = ['text-[8px]','text-[8px]','text-[17px]','text-[15px]','text-[13px]','text-[11px]','text-[10px]'];

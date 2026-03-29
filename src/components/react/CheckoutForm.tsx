@@ -141,6 +141,20 @@ export default function CheckoutForm({ userEmail }: Props) {
       }
 
       if (data?.redirect_url) {
+        // Validate redirect URL to prevent open redirect attacks
+        const allowedHosts = ['nyehandel.se', 'www.nyehandel.se', 'snusfriends.com', 'www.snusfriends.com'];
+        try {
+          const redirectUrl = new URL(data.redirect_url);
+          if (!allowedHosts.some(host => redirectUrl.hostname === host || redirectUrl.hostname.endsWith('.' + host))) {
+            setError('Invalid redirect URL received. Please contact support.');
+            setSubmitting(false);
+            return;
+          }
+        } catch {
+          setError('Invalid redirect URL received. Please contact support.');
+          setSubmitting(false);
+          return;
+        }
         clearCart();
         window.location.href = data.redirect_url;
       }

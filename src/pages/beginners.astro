@@ -1,0 +1,245 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import ProductCard from '@/components/astro/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { tenant } from '@/config/tenant';
+import BeginnerModeToggle from '@/components/react/BeginnerModeToggle';
+
+const allProducts = await getCollection('products');
+
+// Curated beginner products: ≤6mg, has image, diverse brands
+const beginnerProducts = allProducts
+  .filter((p) => p.data.nicotineContent <= 6 && p.data.nicotineContent > 0 && p.data.imageUrl && p.data.stock > 0)
+  .sort((a, b) => (b.data.ratings ?? 0) - (a.data.ratings ?? 0));
+
+const starterPicks: typeof beginnerProducts = [];
+const brandUsed: Record<string, number> = {};
+for (const p of beginnerProducts) {
+  if (starterPicks.length >= 8) break;
+  const b = p.data.brand;
+  if ((brandUsed[b] ?? 0) >= 1) continue;
+  brandUsed[b] = (brandUsed[b] ?? 0) + 1;
+  starterPicks.push(p);
+}
+
+const faqItems = [
+  { q: 'What strength should I start with?', a: 'Start with 2-4mg (light) or 4-6mg (normal). These strengths deliver a gentle, comfortable nicotine experience similar to a light cigarette. You can always increase later — but starting too high causes nausea and dizziness.' },
+  { q: 'How do I use a nicotine pouch?', a: 'Place the pouch between your upper lip and gum. You\'ll feel a tingling sensation — that\'s normal and fades after a few minutes. Keep it in for 20-40 minutes, then remove and bin it. No spitting, no smoke, no vapour.' },
+  { q: 'Will nicotine pouches make me sick?', a: 'Only if you use a strength that\'s too high for your tolerance. At 2-6mg, most first-time users experience mild tingling and a gentle buzz. If you feel nauseous, remove the pouch immediately — you\'ve gone too strong.' },
+  { q: 'What flavour should I start with?', a: 'Mint is the most popular starting flavour — it\'s familiar, refreshing, and works well with the tingling sensation. Citrus is the second most popular. Avoid strong menthol or extreme flavours for your first pouch.' },
+  { q: 'Are nicotine pouches safer than cigarettes?', a: 'Nicotine pouches contain no tobacco leaf and produce no smoke or vapour, eliminating exposure to tar and combustion byproducts. Public Health England considers tobacco-free nicotine products significantly less harmful than smoking. Long-term studies specific to pouches are still ongoing.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Shop
+  title="New to Nicotine Pouches? Start Here | SnusFriend"
+  description="Your complete beginner's guide to nicotine pouches. Learn how they work, what strength to start with, and browse our curated starter picks — all gentle, all recommended for first-time users."
+  canonical="/beginners"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <!-- Hero -->
+  <section class="bg-[#1a2e1a] text-[#faf8f5]">
+    <div class="mx-auto max-w-4xl px-4 py-16 sm:py-20 text-center">
+      <Breadcrumb items={[{ label: 'Beginners' }]} />
+      <p class="mt-4 text-sm font-medium uppercase tracking-widest text-[#a8c0a0]">First Time?</p>
+      <h1 class="mt-2 text-4xl font-bold tracking-tight sm:text-5xl" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
+        New to Nicotine Pouches?
+      </h1>
+      <p class="mt-4 text-lg text-[#a8c0a0] max-w-2xl mx-auto leading-relaxed">
+        No pressure. We'll help you find the right pouch for your first experience — gentle strengths only, clear guidance, and honest recommendations.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/flavor-quiz" class="inline-flex h-12 items-center justify-center rounded-lg bg-[#faf8f5] px-8 text-base font-semibold text-[#1a2e1a] transition hover:bg-[#e8e6e0]">
+          Take the Flavour Quiz
+        </a>
+        <a href="#starter-picks" class="inline-flex h-12 items-center justify-center rounded-lg border border-[#faf8f5]/20 px-8 text-base font-semibold text-[#faf8f5] transition hover:bg-[#faf8f5]/10">
+          Browse Starter Picks
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="border-b border-border bg-background py-16">
+    <div class="mx-auto max-w-4xl px-4">
+      <h2 class="text-2xl font-bold text-foreground text-center sm:text-3xl mb-10">How Nicotine Pouches Work</h2>
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div class="rounded-xl border border-border bg-card/60 p-6 text-center">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">1</div>
+          <h3 class="font-semibold text-foreground mb-2">Place Under Your Lip</h3>
+          <p class="text-sm text-muted-foreground">Tuck the pouch between your upper lip and gum. It sits discreetly — nobody will notice.</p>
+        </div>
+        <div class="rounded-xl border border-border bg-card/60 p-6 text-center">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">2</div>
+          <h3 class="font-semibold text-foreground mb-2">Wait 20-40 Minutes</h3>
+          <p class="text-sm text-muted-foreground">You'll feel a gentle tingling — that's the nicotine releasing. The flavour peaks around 5-10 minutes.</p>
+        </div>
+        <div class="rounded-xl border border-border bg-card/60 p-6 text-center">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">3</div>
+          <h3 class="font-semibold text-foreground mb-2">Remove & Bin</h3>
+          <p class="text-sm text-muted-foreground">When the flavour fades, take it out and dispose. No spitting, no smoke, no residue.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Strength Guide -->
+  <section class="border-b border-border bg-card/30 py-16">
+    <div class="mx-auto max-w-4xl px-4">
+      <h2 class="text-2xl font-bold text-foreground text-center sm:text-3xl mb-4">Choose Your Strength</h2>
+      <p class="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+        Start gentle. You can always go stronger later — but you can't undo going too strong on your first try.
+      </p>
+      <div class="space-y-3">
+        <div class="rounded-xl border-2 border-primary bg-primary/5 p-5 flex items-center gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#22c55e] text-white font-bold text-sm">2-4mg</div>
+          <div>
+            <h3 class="font-semibold text-foreground">Light — Perfect Starting Point</h3>
+            <p class="text-sm text-muted-foreground">Gentle and barely-there. You'll taste the flavour clearly with a subtle nicotine background. Ideal for your very first pouch.</p>
+          </div>
+          <span class="hidden sm:inline-flex rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">Start Here</span>
+        </div>
+        <div class="rounded-xl border border-border bg-card/60 p-5 flex items-center gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#3b82f6] text-white font-bold text-sm">4-6mg</div>
+          <div>
+            <h3 class="font-semibold text-foreground">Normal — After Your First Week</h3>
+            <p class="text-sm text-muted-foreground">A clear, satisfying nicotine sensation without being overwhelming. Move here once you're comfortable with light.</p>
+          </div>
+        </div>
+        <div class="rounded-xl border border-border/50 bg-muted/30 p-5 flex items-center gap-4 opacity-50">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#f97316] text-white font-bold text-sm">6-12mg</div>
+          <div>
+            <h3 class="font-semibold text-muted-foreground">Strong — Not for Beginners</h3>
+            <p class="text-sm text-muted-foreground">For experienced users only. Can cause nausea and dizziness if you haven't built tolerance.</p>
+          </div>
+        </div>
+        <div class="rounded-xl border border-border/50 bg-muted/30 p-5 flex items-center gap-4 opacity-30">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#ef4444] text-white font-bold text-sm">12mg+</div>
+          <div>
+            <h3 class="font-semibold text-muted-foreground">Extra Strong & Above — Experienced Only</h3>
+            <p class="text-sm text-muted-foreground">These strengths are for users who have built tolerance over months. Never start here.</p>
+          </div>
+        </div>
+      </div>
+      <p class="mt-6 text-center text-sm text-muted-foreground">
+        Read our detailed <a href="/blog/how-to-choose-your-strength" class="text-primary underline hover:text-foreground">strength selection guide</a> for more information.
+      </p>
+    </div>
+  </section>
+
+  <!-- Starter Picks -->
+  <section id="starter-picks" class="border-b border-border bg-background py-16">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="text-2xl font-bold text-foreground text-center sm:text-3xl mb-3">Starter Picks</h2>
+      <p class="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+        Hand-picked for first-time users. All ≤6mg, diverse brands, proven flavours. Every one of these is a safe, enjoyable first pouch.
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        {starterPicks.map((product) => (
+          <ProductCard
+            slug={product.id}
+            name={product.data.name}
+            brand={product.data.brand}
+            brandSlug={product.data.brandSlug}
+            imageUrl={product.data.imageUrl}
+            prices={product.data.prices}
+            stock={product.data.stock}
+            nicotineContent={product.data.nicotineContent}
+            strengthKey={product.data.strengthKey}
+            flavorKey={product.data.flavorKey}
+            ratings={product.data.ratings}
+            badgeKeys={product.data.badgeKeys}
+          />
+        ))}
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/products/strength/light" class="text-sm font-medium text-primary hover:underline">
+          View all light strength cans &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Flavour Guide -->
+  <section class="border-b border-border bg-card/30 py-16">
+    <div class="mx-auto max-w-4xl px-4">
+      <h2 class="text-2xl font-bold text-foreground text-center sm:text-3xl mb-10">Best Flavours for Beginners</h2>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <a href="/products/flavor/mint" class="rounded-xl border border-border bg-card/60 p-5 text-center transition hover:border-primary/30 hover:shadow-md">
+          <div class="text-3xl mb-3">🌿</div>
+          <h3 class="font-semibold text-foreground mb-1">Mint</h3>
+          <p class="text-xs text-muted-foreground">The #1 starting flavour. Fresh, cooling, and familiar. Works at every strength.</p>
+        </a>
+        <a href="/products/flavor/citrus" class="rounded-xl border border-border bg-card/60 p-5 text-center transition hover:border-primary/30 hover:shadow-md">
+          <div class="text-3xl mb-3">🍋</div>
+          <h3 class="font-semibold text-foreground mb-1">Citrus</h3>
+          <p class="text-xs text-muted-foreground">Bright and energising. Lemon, orange, bergamot — a refreshing alternative to mint.</p>
+        </a>
+        <a href="/products/flavor/berry" class="rounded-xl border border-border bg-card/60 p-5 text-center transition hover:border-primary/30 hover:shadow-md">
+          <div class="text-3xl mb-3">🫐</div>
+          <h3 class="font-semibold text-foreground mb-1">Berry</h3>
+          <p class="text-xs text-muted-foreground">Sweet and fruity without being overwhelming. Blueberry and strawberry are popular starters.</p>
+        </a>
+        <a href="/products/flavor/coffee" class="rounded-xl border border-border bg-card/60 p-5 text-center transition hover:border-primary/30 hover:shadow-md">
+          <div class="text-3xl mb-3">☕</div>
+          <h3 class="font-semibold text-foreground mb-1">Coffee</h3>
+          <p class="text-xs text-muted-foreground">Rich and comforting. Pairs naturally with the nicotine ritual for morning users.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="border-b border-border bg-background py-16">
+    <div class="mx-auto max-w-3xl px-4">
+      <h2 class="text-2xl font-bold text-foreground text-center sm:text-3xl mb-10">Beginner FAQ</h2>
+      <div class="space-y-3">
+        {faqItems.map((item) => (
+          <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+            <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+              {item.q}
+              <span class="text-muted-foreground transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <div class="px-6 pb-4 text-sm text-muted-foreground leading-relaxed">
+              {item.a}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-[#1a2e1a] py-16">
+    <div class="mx-auto max-w-3xl px-4 text-center">
+      <h2 class="text-2xl font-bold text-[#faf8f5] sm:text-3xl" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
+        Ready to Try Your First Pouch?
+      </h2>
+      <p class="mt-4 text-base text-[#a8c0a0] max-w-xl mx-auto">
+        Take our 60-second flavour quiz for a personalised recommendation, or browse our full beginner-friendly collection.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/flavor-quiz" class="inline-flex h-12 items-center justify-center rounded-lg bg-[#faf8f5] px-8 text-base font-semibold text-[#1a2e1a] transition hover:bg-[#e8e6e0]">
+          Take the Flavour Quiz
+        </a>
+        <BeginnerModeToggle client:load />
+        <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="inline-flex h-12 items-center justify-center rounded-lg border border-[#faf8f5]/20 px-8 text-base font-semibold text-[#faf8f5] transition hover:bg-[#faf8f5]/10">
+          Read the Guide
+        </a>
+      </div>
+    </div>
+  </section>
+</Shop>

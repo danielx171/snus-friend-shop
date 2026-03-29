@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import { useStore } from '@nanostores/react';
+import { $beginnerMode, BEGINNER_MAX_MG } from '@/stores/beginner-mode';
 import ProductCard from './ProductCard';
 import {
   filterProducts,
@@ -399,7 +401,14 @@ export default function FilterableProductGrid({
       .catch(() => setLoading(false));
   }, [productsJsonUrl, productsJson]);
 
-  const allProducts = productsJson ? inlineProducts : fetchedProducts;
+  const rawProducts = productsJson ? inlineProducts : fetchedProducts;
+
+  // Beginner mode: filter to gentle products only
+  const isBeginner = useStore($beginnerMode);
+  const allProducts = useMemo(() => {
+    if (!isBeginner) return rawProducts;
+    return rawProducts.filter((p) => (p.nicotineContent ?? 99) <= BEGINNER_MAX_MG);
+  }, [rawProducts, isBeginner]);
 
   // Parse optional initial filters prop
   const parsedInitial = useMemo<Partial<FilterState> | undefined>(() => {
@@ -432,14 +441,17 @@ export default function FilterableProductGrid({
       .sort((a, b) => a[1].localeCompare(b[1]))
       .map(([value, label]) => ({ value, label }));
 
-    // Fixed strength options in order
-    const strengthOptions = [
+    // Fixed strength options in order — hide strong+ in beginner mode
+    const allStrengthOptions = [
       { value: 'light', label: STRENGTH_LABELS.light },
       { value: 'normal', label: STRENGTH_LABELS.normal },
       { value: 'strong', label: STRENGTH_LABELS.strong },
       { value: 'extra-strong', label: STRENGTH_LABELS['extra-strong'] },
       { value: 'super-strong', label: STRENGTH_LABELS['super-strong'] },
     ];
+    const strengthOptions = isBeginner
+      ? allStrengthOptions.filter((o) => o.value === 'light' || o.value === 'normal')
+      : allStrengthOptions;
 
     // Fixed flavor options
     const flavorOptions = Object.entries(FLAVOR_LABELS).map(([value, label]) => ({
@@ -459,7 +471,7 @@ export default function FilterableProductGrid({
       { key: 'flavors' as const, label: 'Flavor', options: flavorOptions },
       { key: 'formats' as const, label: 'Format', options: formatOptions },
     ];
-  }, [allProducts]);
+  }, [allProducts, isBeginner]);
 
   // Sync filters to URL whenever they change
   useEffect(() => {
