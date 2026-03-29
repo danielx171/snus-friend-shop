@@ -81,16 +81,6 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
     window.history.replaceState(null, '', url);
   }, [debouncedQuery]);
 
-  // PostHog: track search after results are computed
-  const prevQueryRef = useRef('');
-  useEffect(() => {
-    const trimmed = debouncedQuery.trim();
-    if (trimmed && trimmed !== prevQueryRef.current) {
-      prevQueryRef.current = trimmed;
-      trackSearchPerformed({ query: trimmed, resultCount: results.length });
-    }
-  }, [debouncedQuery, results.length]);
-
   // Score and filter results
   const results = useMemo(() => {
     const trimmed = debouncedQuery.trim();
@@ -103,6 +93,16 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
 
     return scored.map((r) => r.product);
   }, [allProducts, debouncedQuery]);
+
+  // PostHog: track search after results are computed
+  const prevQueryRef = useRef('');
+  useEffect(() => {
+    const trimmed = debouncedQuery.trim();
+    if (trimmed && trimmed !== prevQueryRef.current) {
+      prevQueryRef.current = trimmed;
+      trackSearchPerformed({ query: trimmed, resultCount: results.length });
+    }
+  }, [debouncedQuery, results.length]);
 
   const trimmedQuery = debouncedQuery.trim();
 
