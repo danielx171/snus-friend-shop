@@ -67,10 +67,22 @@ const FLAVOR_META: Record<string, { label: string; h1: string; desc: string; int
     desc: 'Shop tobacco flavour nicotine pouches \u2014 classic taste without the smoke. Smooth, earthy options from ZYN, Lundgrens. Free EU delivery over \u20ac29.',
     intro: 'Tobacco-flavoured nicotine pouches deliver the familiar, earthy character of traditional tobacco without any actual tobacco in the pouch. This makes them the natural bridge for users switching from cigarettes or traditional snus who want the taste they know in a cleaner format. ZYN and Lundgrens are particularly strong in this category, with Lundgrens using a traditional large-format pouch that gives a genuinely snus-like mouth feel. The flavour profiles range from light, sweet Virginia-inspired blends to deeper, more robust options that echo dark-cured tobacco. If you have recently quit smoking or traditional snus and miss the taste, tobacco-flavoured pouches let you keep that familiar sensory experience while moving to a tobacco-free format.',
   },
+  'exotic': {
+    label: 'Exotic',
+    h1: 'Exotic Nicotine Pouches',
+    desc: 'Shop exotic nicotine pouches \u2014 unique and adventurous flavours like cactus, chilli, ginger, wasabi, tonic and more. Free EU delivery over \u20ac29.',
+    intro: 'Exotic nicotine pouches are for users who have tried the usual mint, citrus, and berry rotation and want something genuinely different. This category covers the creative edges of the flavour spectrum: cactus, chilli, ginger, wasabi, tonic water, cinnamon, and other unconventional profiles that brands like Loop, FUMI, and Chainpop have pioneered. Loop in particular has built a reputation for pushing boundaries with unexpected combinations like jalapeno lime and habanero. FUMI draws on Japanese-inspired flavour profiles, while Chainpop brings Gothenburg street-food creativity to their exotic range. These pouches tend to be conversation starters, and many users keep one or two exotic cans in rotation alongside their everyday mint or citrus for variety. If you are bored of mainstream flavours and want to explore what nicotine pouches can actually taste like, this is the category to browse.',
+  },
+  'unflavored': {
+    label: 'Unflavored',
+    h1: 'Unflavored Nicotine Pouches',
+    desc: 'Shop unflavored nicotine pouches \u2014 pure, no-flavour options for a clean nicotine experience. ZYN, HELWIT, ON! and more. Free EU delivery over \u20ac29.',
+    intro: 'Unflavored nicotine pouches strip everything back to the essentials: nicotine delivery without any added flavour. These pouches appeal to users who find flavoured options too sweet, too intense, or simply distracting from the nicotine experience itself. ZYN and ON! both offer unflavored variants in their mini and slim formats, and HELWIT has a clean, neutral option that has found a dedicated following. Unflavored pouches are also popular with users who switch between flavoured options throughout the day and want a palate cleanser, or with former traditional snus users who are accustomed to the natural, earthy taste of tobacco-free pouches without added flavourings. The lack of flavour makes these pouches particularly discreet since there is no lingering scent. If you want a no-nonsense nicotine pouch that stays out of the way, unflavored is as straightforward as it gets.',
+  },
 };
 
 export async function getStaticPaths() {
-  const keys = ['mint', 'fruit', 'berry', 'citrus', 'licorice', 'coffee', 'cola', 'vanilla', 'tropical', 'tobacco'];
+  const keys = ['mint', 'fruit', 'berry', 'citrus', 'licorice', 'coffee', 'cola', 'vanilla', 'tropical', 'tobacco', 'exotic', 'unflavored'];
   return keys.map((key) => ({ params: { key }, props: { key } }));
 }
 

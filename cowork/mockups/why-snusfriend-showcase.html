@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why SnusFriend — The Best Pouch Shop in Europe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Forest Green (Light) */
+      --bg: hsl(40, 20%, 97%);
+      --fg: hsl(150, 20%, 10%);
+      --card: hsl(0, 0%, 100%);
+      --primary: hsl(153, 55%, 18%);
+      --primary-fg: white;
+      --muted: hsl(140, 10%, 91%);
+      --muted-fg: hsl(150, 10%, 38%);
+      --border: hsl(140, 10%, 86%);
+      --accent: hsl(40, 80%, 55%);
+      --hero-bg: linear-gradient(135deg, #1a2e1a, #0f1f0f);
+      --hero-text: #faf8f5;
+      --hero-muted: #a8c0a0;
+      --tag-live: hsl(120, 70%, 45%);
+      --tag-coming: hsl(38, 92%, 50%);
+      --tag-new: hsl(210, 100%, 50%);
+      --transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    :root.dark {
+      /* Copper Glass (Dark) */
+      --bg: hsl(240, 15%, 9%);
+      --fg: hsl(30, 15%, 90%);
+      --card: hsl(240, 12%, 14%);
+      --primary: hsl(28, 55%, 46%);
+      --primary-fg: hsl(240, 15%, 6%);
+      --muted: hsl(240, 8%, 22%);
+      --muted-fg: hsl(30, 8%, 62%);
+      --border: hsl(240, 10%, 20%);
+      --accent: hsl(28, 70%, 55%);
+      --hero-bg: linear-gradient(135deg, #1a1520, #0f0d18);
+      --hero-text: hsl(30, 20%, 92%);
+      --hero-muted: hsl(28, 30%, 60%);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      transition: background-color var(--transition), color var(--transition);
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--hero-bg);
+      color: var(--hero-text);
+      padding: 3rem 1.5rem 2rem;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,200,87,0.05) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      color: var(--hero-muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--hero-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Section Container */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    /* Feature Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      transition: all var(--transition);
+      opacity: 0;
+      animation: fadeUp 0.6s ease-out forwards;
+    }
+
+    .feature-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .feature-card:nth-child(1) { animation-delay: 0.1s; }
+    .feature-card:nth-child(2) { animation-delay: 0.2s; }
+    .feature-card:nth-child(3) { animation-delay: 0.3s; }
+    .feature-card:nth-child(4) { animation-delay: 0.1s; }
+    .feature-card:nth-child(5) { animation-delay: 0.2s; }
+    .feature-card:nth-child(6) { animation-delay: 0.3s; }
+    .feature-card:nth-child(7) { animation-delay: 0.1s; }
+    .feature-card:nth-child(8) { animation-delay: 0.2s; }
+    .feature-card:nth-child(9) { animation-delay: 0.3s; }
+    .feature-card:nth-child(10) { animation-delay: 0.1s; }
+    .feature-card:nth-child(11) { animation-delay: 0.2s; }
+    .feature-card:nth-child(12) { animation-delay: 0.3s; }
+
+    .feature-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .feature-desc {
+      font-size: 0.95rem;
+      color: var(--muted-fg);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .feature-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.375rem;
+      letter-spacing: 0.05em;
+    }
+
+    .tag-live {
+      background-color: var(--tag-live);
+      color: white;
+    }
+
+    .tag-coming {
+      background-color: var(--tag-coming);
+      color: white;
+    }
+
+    .tag-new {
+      background-color: var(--tag-new);
+      color: white;
+    }
+
+    /* Section Title */
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.75rem, 6vw, 2.5rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--muted-fg);
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    /* Built Different Section */
+    .built-different {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2.5rem 2rem;
+      margin-top: 2rem;
+    }
+
+    .built-different p {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      color: var(--fg);
+    }
+
+    .build-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .build-stat {
+      text-align: left;
+    }
+
+    .build-stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .build-stat-label {
+      font-size: 0.875rem;
+      color: var(--muted-fg);
+      margin-top: 0.25rem;
+    }
+
+    /* Beginner Mode Section */
+    .beginner-section {
+      background: var(--card);
+      border: 2px solid var(--primary);
+      border-radius: 1rem;
+      padding: 2.5rem 2rem;
+      margin-top: 2rem;
+    }
+
+    .beginner-toggle {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 2rem 0 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .switch {
+      width: 56px;
+      height: 32px;
+      background-color: var(--muted);
+      border: 2px solid var(--border);
+      border-radius: 9999px;
+      position: relative;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .switch.active {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .switch::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background-color: white;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: all var(--transition);
+    }
+
+    .switch.active::after {
+      left: 27px;
+    }
+
+    .toggle-label {
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .beginner-features {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .beginner-feature {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--muted-fg);
+    }
+
+    .beginner-feature-check {
+      color: var(--primary);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Rewards Tier Section */
+    .rewards-tiers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .rewards-tiers {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tier {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      position: relative;
+      transition: all var(--transition);
+    }
+
+    .tier::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 0.75rem 0.75rem 0 0;
+    }
+
+    .tier:nth-child(2)::before {
+      background: hsl(120, 70%, 45%);
+    }
+
+    .tier:nth-child(3)::before {
+      background: hsl(40, 80%, 55%);
+    }
+
+    .tier:nth-child(4)::before {
+      background: hsl(28, 55%, 46%);
+    }
+
+    .tier-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 0.25rem;
+    }
+
+    .tier-range {
+      font-size: 0.875rem;
+      color: var(--muted-fg);
+      margin-bottom: 1rem;
+    }
+
+    .tier-perks {
+      display: grid;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .tier-perk {
+      color: var(--muted-fg);
+      padding-left: 1.25rem;
+      position: relative;
+    }
+
+    .tier-perk::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      text-align: left;
+      padding: 2rem 1.5rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.75rem 1.75rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--primary-fg);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--primary);
+      color: var(--primary-fg);
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--fg);
+      transition: all var(--transition);
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--primary);
+    }
+
+    .theme-toggle-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--muted-fg);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero {
+        padding: 2rem 1rem 1.5rem;
+      }
+
+      .hero h1 {
+        margin-bottom: 0.75rem;
+      }
+
+      .hero-stats {
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .section {
+        padding: 2rem 1rem;
+      }
+
+      .theme-toggle {
+        bottom: 1rem;
+        right: 1rem;
+      }
+
+      button {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Why 12,000+ Europeans Choose SnusFriend</h1>
+    <p>We built the pouch shop we wished existed — fast, honest, and rewarding.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-value">708+</span>
+        <span class="stat-label">Products</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">55</span>
+        <span class="stat-label">Brands</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="section">
+  <h2>Our Superpowers</h2>
+  <p class="section-subtitle">Everything you need to browse, learn, and earn rewards — built from scratch.</p>
+
+  <div class="features-grid">
+    <!-- 1. Beginner Mode -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12h14M12 2a10 10 0 110 20 10 10 0 010-20z"/>
+      </svg>
+      <h3 class="feature-title">Beginner Mode</h3>
+      <p class="feature-desc">New to pouches? Toggle Beginner Mode and we'll filter everything to ≤6mg, show only mild flavours, and add helpful tooltips.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 2. Reward Points -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M9 9l3-3 3 3"/>
+      </svg>
+      <h3 class="feature-title">Reward Points</h3>
+      <p class="feature-desc">Earn points with every purchase. Redeem for discounts, free cans, and exclusive drops. Bronze → Platinum tiers with multipliers.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 3. Spin Wheel -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20M12 2a10 10 0 0110 10M12 2a10 10 0 00-10 10"/>
+      </svg>
+      <h3 class="feature-title">Daily Spin Wheel</h3>
+      <p class="feature-desc">Spin once a day for free points, vouchers, or even a free can. The jackpot? A free month of pouches.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 4. Quests & Achievements -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      <h3 class="feature-title">Quests & Achievements</h3>
+      <p class="feature-desc">Complete challenges like 'Try 5 Different Brands' or 'Write 3 Reviews' to earn bonus points and unlock rare badges.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 5. Flavour Quiz -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 5v7m-3-1h6"/>
+      </svg>
+      <h3 class="feature-title">Flavour Quiz</h3>
+      <p class="feature-desc">Answer 5 quick questions and get personalised recommendations from our 708+ products in under a minute.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 6. Lightning-Fast Browsing -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+      <h3 class="feature-title">Lightning-Fast Browsing</h3>
+      <p class="feature-desc">Pages load in under 200ms. Server-rendered HTML, optimised images, zero bloat. Works great on 3G.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 7. Expert Guides -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5h16a2 2 0 002-2V6.5a2 2 0 00-2-2H4a2 2 0 00-2 2v10.5a2 2 0 002 2z"/><path d="M12 9v6m-3-3h6"/>
+      </svg>
+      <h3 class="feature-title">43+ Expert Guides</h3>
+      <p class="feature-desc">Real editorial content written by pouch enthusiasts — not generic AI filler. Brand deep-dives, strength charts, comparisons.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 8. Free EU Shipping -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 21V5M8 21V5M2 11h20"/>
+      </svg>
+      <h3 class="feature-title">Free EU Shipping</h3>
+      <p class="feature-desc">Free shipping on orders over €29. Same-day dispatch before 2pm CET. Tracked parcels from our EU warehouse.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 9. Brand Comparison -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 3v18a2 2 0 002 2h14a2 2 0 002-2V3M3 9h18M3 15h18"/>
+      </svg>
+      <h3 class="feature-title">Brand Comparison Tools</h3>
+      <p class="feature-desc">Compare brands side-by-side: strength ranges, flavour profiles, pricing, origin. 171 comparison pages auto-generated.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 10. Two Premium Themes -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20 10 10 0 010-20z"/><path d="M12 2v20"/>
+      </svg>
+      <h3 class="feature-title">Two Premium Themes</h3>
+      <p class="feature-desc">Switch between Forest Green (light, natural) and Copper Glass (dark, premium) with one click. Your pick is remembered.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 11. Honest Reviews -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/>
+      </svg>
+      <h3 class="feature-title">Honest Reviews</h3>
+      <p class="feature-desc">No fake reviews, no incentivised ratings. Real customer feedback on every product. Write a review and earn points.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+
+    <!-- 12. Community Leaderboard -->
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+      <h3 class="feature-title">Community Leaderboard</h3>
+      <p class="feature-desc">See who's earning the most points, completing quests, and climbing the ranks. Custom avatars and profile cards.</p>
+      <span class="feature-tag tag-live">LIVE</span>
+    </div>
+  </div>
+</section>
+
+<!-- Built Different Section -->
+<section class="section">
+  <div class="built-different">
+    <h2>Built Different</h2>
+    <p>Every other pouch shop is a Shopify template with a cart. We built a custom platform from scratch — Astro 6, server-rendered, with gamification baked into every page.</p>
+
+    <div class="build-stats">
+      <div class="build-stat">
+        <div class="build-stat-value">100</div>
+        <div class="build-stat-label">Lighthouse SEO</div>
+      </div>
+      <div class="build-stat">
+        <div class="build-stat-value">&lt;200ms</div>
+        <div class="build-stat-label">LCP (page load)</div>
+      </div>
+      <div class="build-stat">
+        <div class="build-stat-value">1,122</div>
+        <div class="build-stat-label">Pages</div>
+      </div>
+      <div class="build-stat">
+        <div class="build-stat-value">&lt;20KB</div>
+        <div class="build-stat-label">Avg page weight</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Beginner Mode Spotlight -->
+<section class="section">
+  <h2>First Time? We've Got You.</h2>
+  <p class="section-subtitle">Beginner Mode filters out the strong stuff, explains the jargon, and recommends mild flavours. It's like having a friend who knows pouches walk you through the shop.</p>
+
+  <div class="beginner-section">
+    <div class="beginner-toggle">
+      <span class="toggle-label">Beginner Mode:</span>
+      <label class="toggle-switch">
+        <div class="switch active">
+          <span id="toggle-state">ON</span>
+        </div>
+      </label>
+    </div>
+
+    <div class="beginner-features">
+      <div class="beginner-feature">
+        <span class="beginner-feature-check">✓</span>
+        <span>Filters to ≤6mg products only</span>
+      </div>
+      <div class="beginner-feature">
+        <span class="beginner-feature-check">✓</span>
+        <span>Adds "What is this?" tooltips everywhere</span>
+      </div>
+      <div class="beginner-feature">
+        <span class="beginner-feature-check">✓</span>
+        <span>Shows the Beginner Guide prominently</span>
+      </div>
+      <div class="beginner-feature">
+        <span class="beginner-feature-check">✓</span>
+        <span>Recommends mild, fruit/mint flavours first</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Rewards Tier Section -->
+<section class="section">
+  <h2>Earn as You Go</h2>
+  <p class="section-subtitle">Your rewards tier increases with every purchase. Unlock better multipliers, exclusive drops, and surprise boxes.</p>
+
+  <div class="rewards-tiers">
+    <div class="tier">
+      <div class="tier-name">Bronze</div>
+      <div class="tier-range">0 pts</div>
+      <div class="tier-perks">
+        <div class="tier-perk">1x points</div>
+        <div class="tier-perk">Birthday bonus</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-name">Silver</div>
+      <div class="tier-range">500 pts</div>
+      <div class="tier-perks">
+        <div class="tier-perk">1.5x points</div>
+        <div class="tier-perk">Early access</div>
+        <div class="tier-perk">Birthday bonus</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-name">Gold</div>
+      <div class="tier-range">2,000 pts</div>
+      <div class="tier-perks">
+        <div class="tier-perk">2x points</div>
+        <div class="tier-perk">Exclusive drops</div>
+        <div class="tier-perk">Birthday bonus</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-name">Platinum</div>
+      <div class="tier-range">5,000 pts</div>
+      <div class="tier-perks">
+        <div class="tier-perk">3x points</div>
+        <div class="tier-perk">Free shipping always</div>
+        <div class="tier-perk">Surprise boxes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section cta-section">
+  <h2>Ready to try the best pouch shop in Europe?</h2>
+  <div class="cta-buttons">
+    <button class="btn-primary">Shop All Pouches</button>
+    <button class="btn-secondary">Take the Flavour Quiz</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  SnusFriend v1.5.0 — Astro 6, React Islands, &lt;20KB pages. Built with care in Europe.
+</footer>
+
+<!-- Theme Toggle Button -->
+<button class="theme-toggle" id="theme-toggle">
+  <svg class="theme-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+  <span id="theme-label">Dark</span>
+</button>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+  const themeLabel = document.getElementById('theme-label');
+  let isDark = false;
+
+  themeToggle.addEventListener('click', () => {
+    isDark = !isDark;
+    if (isDark) {
+      html.classList.add('dark');
+      themeLabel.textContent = 'Light';
+    } else {
+      html.classList.remove('dark');
+      themeLabel.textContent = 'Dark';
+    }
+  });
+
+  // IntersectionObserver for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.classList.contains('observed')) {
+        entry.target.classList.add('observed');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.feature-card').forEach(card => {
+    observer.observe(card);
+  });
+
+  // Beginner Mode toggle
+  const toggle = document.querySelector('.toggle-switch');
+  const toggleState = document.getElementById('toggle-state');
+  let beginnerActive = true;
+
+  toggle.addEventListener('click', () => {
+    beginnerActive = !beginnerActive;
+    const switchEl = toggle.querySelector('.switch');
+    if (beginnerActive) {
+      switchEl.classList.add('active');
+      toggleState.textContent = 'ON';
+    } else {
+      switchEl.classList.remove('active');
+      toggleState.textContent = 'OFF';
+    }
+  });
+</script>
+
+</body>
+</html>

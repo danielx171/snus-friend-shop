@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnusFriend Theme Comparison: Forest Green vs Copper Glass</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
+        }
+
+        .comparison-container {
+            max-width: 2400px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .header-title p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .theme-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-label {
+            padding: 16px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Forest Green Theme */
+        .forest-theme .theme-label {
+            background: hsl(153, 55%, 18%);
+            color: hsl(40, 20%, 97%);
+        }
+
+        .forest-wrapper {
+            background: hsl(40, 20%, 97%);
+            color: hsl(150, 20%, 10%);
+        }
+
+        .forest-wrapper {
+            --primary: hsl(153, 55%, 18%);
+            --muted-bg: hsl(140, 10%, 91%);
+            --border-color: hsl(140, 10%, 86%);
+            --card-bg: white;
+            --foreground: hsl(150, 20%, 10%);
+            --background: hsl(40, 20%, 97%);
+        }
+
+        /* Copper Glass Theme */
+        .copper-theme .theme-label {
+            background: hsl(240, 12%, 14%);
+            color: hsl(30, 15%, 90%);
+        }
+
+        .copper-wrapper {
+            background: hsl(240, 15%, 9%);
+            color: hsl(30, 15%, 90%);
+        }
+
+        .copper-wrapper {
+            --primary: hsl(28, 55%, 46%);
+            --muted-bg: hsl(240, 8%, 22%);
+            --border-color: hsl(240, 10%, 20%);
+            --card-bg: hsl(240, 12%, 14%);
+            --foreground: hsl(30, 15%, 90%);
+            --background: hsl(240, 15%, 9%);
+        }
+
+        /* Header Component */
+        .header {
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .forest-wrapper .header {
+            border-bottom-color: var(--border-color);
+        }
+
+        .copper-wrapper .header {
+            border-bottom-color: var(--border-color);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .header-search {
+            width: 140px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            background: var(--card-bg);
+            color: var(--foreground);
+        }
+
+        .header-search::placeholder {
+            color: var(--muted-bg);
+            opacity: 0.6;
+        }
+
+        .icon-button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--muted-bg);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        .forest-wrapper .icon-button {
+            color: var(--foreground);
+        }
+
+        .copper-wrapper .icon-button {
+            color: var(--foreground);
+        }
+
+        .icon-button:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 48px 28px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--muted-bg), transparent);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .copper-wrapper .hero {
+            background: linear-gradient(135deg, var(--muted-bg), transparent);
+        }
+
+        .hero h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 28px;
+            padding: 20px 0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 22px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--background);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--muted-bg);
+            color: var(--foreground);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            opacity: 0.8;
+        }
+
+        /* Product Grid */
+        .products-section {
+            padding: 40px 28px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            background: var(--muted-bg);
+            color: var(--foreground);
+        }
+
+        .product-brand {
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .product-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .product-strength {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .strength-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .product-flavor {
+            display: inline-block;
+            font-size: 11px;
+            background: var(--muted-bg);
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .product-price {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .btn-add-cart {
+            background: var(--primary);
+            color: var(--background);
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-add-cart:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer-preview {
+            padding: 24px 28px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+        }
+
+        .footer-links a {
+            color: var(--foreground);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        .theme-toggle {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Bottom Note */
+        .note-section {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .note-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .note-section p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .deprecated-themes {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .themes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="comparison-container">
+        <div class="header-title">
+            <h1>SnusFriend Theme Comparison</h1>
+            <p>Forest Green (Main) vs Copper Glass (Dark) — Side-by-Side Preview</p>
+        </div>
+
+        <div class="themes-grid">
+            <!-- FOREST GREEN THEME -->
+            <div class="theme-wrapper forest-theme">
+                <div class="theme-label">Forest Green (Main)</div>
+                <div class="forest-wrapper">
+                    <!-- Header -->
+                    <div class="header">
+                        <div class="logo">SnusFriend</div>
+                        <div class="header-actions">
+                            <input type="text" class="header-search" placeholder="Search products...">
+                            <button class="icon-button">🔍</button>
+                            <button class="icon-button">♡</button>
+                            <button class="icon-button">🛒</button>
+                        </div>
+                    </div>
+
+                    <!-- Hero -->
+                    <div class="hero">
+                        <h2>Premium Nicotine Pouches</h2>
+                        <p class="hero-subtitle">Scandinavian quality, trusted by thousands</p>
+                        <div class="hero-stats">
+                            <div class="stat">
+                                <span class="stat-number">5K+</span>
+                                <span class="stat-label">Happy Customers</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">50+</span>
+                                <span class="stat-label">Brands</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">24h</span>
+                                <span class="stat-label">Fast Shipping</span>
+                            </div>
+                        </div>
+                        <div class="hero-ctas">
+                            <button class="btn btn-primary">Shop Now</button>
+                            <button class="btn btn-secondary">Learn More</button>
+                        </div>
+                    </div>
+
+                    <!-- Products -->
+                    <div class="products-section">
+                        <h3 class="section-title">New Arrivals</h3>
+                        <div class="product-grid">
+                            <div class="product-card">
+                                <div class="product-image" style="background: linear-gradient(135deg, #f5e6d3 0%, #e8d4c0 100%);">Tin Lid</div>
+                                <div class="product-brand">Nordic Pouch</div>
+                                <div class="product-name">Classic Mint</div>
+                                <div class="product-strength">
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                </div>
+                                <div class="product-flavor">Mint</div>
+                                <div class="product-footer">
+                                    <span class="product-price">49 kr</span>
+                                    <button class="btn-add-cart">Add</button>
+                                </div>
+                            </div>
+
+                            <div class="product-card">
+                                <div class="product-image" style="background: linear-gradient(135deg, #fff4e6 0%, #ffe8cc 100%);">Tin Lid</div>
+                                <div class="product-brand">Velo</div>
+                                <div class="product-name">Smooth Citrus</div>
+                                <div class="product-strength">
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                </div>
+                                <div class="product-flavor">Citrus</div>
+                                <div class="product-footer">
+                                    <span class="product-price">59 kr</span>
+                                    <button class="btn-add-cart">Add</button>
+                                </div>
+                            </div>
+
+                            <div class="product-card">
+                                <div class="product-image" style="background: linear-gradient(135deg, #e8f0f5 0%, #d6e4ec 100%);">Tin Lid</div>
+                                <div class="product-brand">On!X</div>
+                                <div class="product-name">Peppermint Ice</div>
+                                <div class="product-strength">
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                </div>
+                                <div class="product-flavor">Ice Mint</div>
+                                <div class="product-footer">
+                                    <span class="product-price">69 kr</span>
+                                    <button class="btn-add-cart">Add</button>
+                                </div>
+                            </div>
+
+                            <div class="product-card">
+                                <div class="product-image" style="background: linear-gradient(135deg, #f0e6f5 0%, #e6d6ec 100%);">Tin Lid</div>
+                                <div class="product-brand">Epok</div>
+                                <div class="product-name">Warm Vanilla</div>
+                                <div class="product-strength">
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                </div>
+                                <div class="product-flavor">Vanilla</div>
+                                <div class="product-footer">
+                                    <span class="product-price">59 kr</span>
+                                    <button class="btn-add-cart">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="footer-preview">
+                        <div class="footer-links">
+                            <a href="#">About</a>
+                            <a href="#">Privacy</a>
+                            <a href="#">Shipping</a>
+                            <a href="#">Contact</a>
+                        </div>
+                        <div class="theme-toggle">Theme: Light</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COPPER GLASS THEME -->
+            <div class="theme-wrapper copper-theme">
+                <div class="theme-label">Copper Glass (Dark)</div>
+                <div class="copper-wrapper">
+                    <!-- Header -->
+                    <div class="header">
+                        <div class="logo">SnusFriend</div>
+                        <div class="header-actions">
+                            <input type="text" class="header-search" placeholder="Search products...">
+                            <button class="icon-button">🔍</button>
+                            <button class="icon-button">♡</button>
+                            <button class="icon-button">🛒</button>
+                        </div>
+                    </div>
+
+                    <!-- Hero -->
+                    <div class="hero">
+                        <h2>Premium Nicotine Pouches</h2>
+                        <p class="hero-subtitle">Scandinavian quality, trusted by thousands</p>
+                        <div class="hero-stats">
+                            <div class="stat">
+                                <span class="stat-number">5K+</span>
+                                <span class="stat-label">Happy Customers</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">50+</span>
+                                <span class="stat-label">Brands</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">24h</span>
+                                <span class="stat-label">Fast Shipping</span>
+                            </div>
+                        </div>
+                        <div class="hero-ctas">
+                            <button class="btn btn-primary">Shop Now</button>
+                            <button class="btn btn-secondary">Learn More</button>
+                        </div>
+                    </div>
+
+                    <!-- Products -->
+                    <div class="products-section">
+                        <h3 class="section-title">New Arrivals</h3>
+                        <div class="product-grid">
+                            <div class="product-card">
+                                <div class="product-image" style="background: linear-gradient(135deg, #b67a35 0%, #8f5e28 100%);">Tin Lid</div>
+                                <div class="product-brand">Nordic Pouch</div>
+                                <div class="product-name">Classic Mint</div>
+                                <div class="product-strength">
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                </div>
+                                <div class="product-flavor">Mint</div>
+                                <div class="product-footer">
+                                    <span class="product-price">49 kr</span>
+                                    <button class="btn-add-cart">Add</button>
+                                </div>
+                            </div>
+
+                            <div class="product-card">
+                                <div class="product-image" style="background: linear-gradient(135deg, #c98b47 0%, #a0673a 100%);">Tin Lid</div>
+                                <div class="product-brand">Velo</div>
+                                <div class="product-name">Smooth Citrus</div>
+                                <div class="product-strength">
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                </div>
+                                <div class="product-flavor">Citrus</div>
+                                <div class="product-footer">
+                                    <span class="product-price">59 kr</span>
+                                    <button class="btn-add-cart">Add</button>
+                                </div>
+                            </div>
+
+                            <div class="product-card">
+                                <div class="product-image" style="background: linear-gradient(135deg, #b99c5e 0%, #8f7650 100%);">Tin Lid</div>
+                                <div class="product-brand">On!X</div>
+                                <div class="product-name">Peppermint Ice</div>
+                                <div class="product-strength">
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                </div>
+                                <div class="product-flavor">Ice Mint</div>
+                                <div class="product-footer">
+                                    <span class="product-price">69 kr</span>
+                                    <button class="btn-add-cart">Add</button>
+                                </div>
+                            </div>
+
+                            <div class="product-card">
+                                <div class="product-image" style="background: linear-gradient(135deg, #c9865a 0%, #9f6947 100%);">Tin Lid</div>
+                                <div class="product-brand">Epok</div>
+                                <div class="product-name">Warm Vanilla</div>
+                                <div class="product-strength">
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                    <div class="strength-dot"></div>
+                                </div>
+                                <div class="product-flavor">Vanilla</div>
+                                <div class="product-footer">
+                                    <span class="product-price">59 kr</span>
+                                    <button class="btn-add-cart">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="footer-preview">
+                        <div class="footer-links">
+                            <a href="#">About</a>
+                            <a href="#">Privacy</a>
+                            <a href="#">Shipping</a>
+                            <a href="#">Contact</a>
+                        </div>
+                        <div class="theme-toggle">Theme: Dark</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Note -->
+        <div class="note-section">
+            <h3>Theme Selection Summary</h3>
+            <p>
+                <strong>Daniel:</strong> These are the 2 winning themes selected for SnusFriend after design validation testing.<br>
+                All other themes (Scandinavian Light, Editorial Warm, Midnight Blue, Dark Premium) will be removed from the codebase.
+            </p>
+            <div class="deprecated-themes">
+                Themes to remove: Scandinavian Light, Editorial Warm, Midnight Blue, Dark Premium
+            </div>
+        </div>
+    </div>
+</body>
+</html>

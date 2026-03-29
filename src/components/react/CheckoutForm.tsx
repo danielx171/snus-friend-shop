@@ -187,7 +187,7 @@ export default function CheckoutForm({ userEmail }: Props) {
       <h1 className="text-3xl font-bold tracking-tight mb-8">Checkout</h1>
 
       {error && (
-        <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 mb-6 text-sm text-destructive">
+        <div role="alert" aria-live="assertive" className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 mb-6 text-sm text-destructive">
           {error}
         </div>
       )}

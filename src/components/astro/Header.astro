@@ -1,6 +1,7 @@
 ---
 import { tenant } from '@/config/tenant';
 import HeaderCartButton from '@/components/react/HeaderCartButton';
+import HeaderPointsBadge from '@/components/react/HeaderPointsBadge';
 import Logo from '@/components/astro/Logo.astro';
 import MegaMenu from '@/components/astro/MegaMenu.astro';
 
@@ -94,7 +95,8 @@ const moreLinks = [
         </a>
       )}
 
-      <div id="header-islands" class="flex items-center gap-3">
+      <div id="header-islands" class="flex items-center gap-2">
+        <HeaderPointsBadge client:idle />
         <HeaderCartButton client:load />
       </div>
 

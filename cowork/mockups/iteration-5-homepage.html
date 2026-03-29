@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnusFriend - Premium Nicotine Pouches | Europe's #1 Pouch Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a2e1a;
+            --primary-light: #2d4a2d;
+            --accent: #4a6741;
+            --accent-light: #e8f4e8;
+            --background: #faf8f5;
+            --surface: #ffffff;
+            --text: #1a1a1a;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            --font-heading: "Space Grotesk", sans-serif;
+            --font-body: "Inter", sans-serif;
+            --strength-light: #22c55e;
+            --strength-normal: #3b82f6;
+            --strength-strong: #f97316;
+            --strength-extra: #ef4444;
+            --strength-super: #a855f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text);
+            background: var(--background);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence baseFrequency="0.8" numOctaves="4" result="noise"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.02"/></svg>');
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* === ANNOUNCEMENT BAR === */
+        .announcement-bar {
+            background: var(--primary);
+            color: var(--surface);
+            padding: 12px 24px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            height: 48px;
+        }
+
+        .announcement-bar .text {
+            position: absolute;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .announcement-bar .text.fade-out {
+            opacity: 0;
+        }
+
+        .announcement-bar .text.fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .announcement-bar .close-btn {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--surface);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px 8px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .announcement-bar .close-btn:hover {
+            opacity: 1;
+        }
+
+        /* === STICKY NAV === */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 700;
+            font-family: var(--font-heading);
+            font-size: 18px;
+            min-width: fit-content;
+        }
+
+        .nav-logo svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-search {
+            flex: 0.4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--background);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .nav-search input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: var(--font-body);
+            color: var(--text);
+        }
+
+        .nav-search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--background);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: var(--text);
+            font-size: 18px;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--error);
+            color: var(--surface);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .cart-badge.bounce {
+            animation: cartBounce 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes cartBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--background);
+            border-radius: 8px;
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .mobile-menu-btn span {
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s;
+            display: block;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.2;
+            font-family: var(--font-heading);
+            color: var(--text);
+            animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+        }
+
+        .btn-primary {
+            padding: 14px 32px;
+            background: var(--primary);
+            color: var(--surface);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(26, 46, 26, 0.15);
+        }
+
+        .btn-secondary {
+            padding: 14px 32px;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* === HERO CANS WITH PARALLAX === */
+        .hero-right {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 30% 50%, rgba(74, 103, 65, 0.08), transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(74, 103, 65, 0.05), transparent 50%);
+            border-radius: 20px;
+        }
+
+        .can {
+            position: absolute;
+            width: 120px;
+            height: 160px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .can::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+            border-radius: 12px 12px 0 0;
+            z-index: 2;
+        }
+
+        .can-label {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .can-1 { top: 60px; left: 20px; animation-delay: 0s; background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); }
+        .can-2 { top: 100px; right: 30px; animation-delay: 0.2s; background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%); }
+        .can-3 { top: 20px; left: 50%; transform: translateX(-50%); animation-delay: 0.4s; background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); }
+        .can-4 { bottom: 80px; left: 40px; animation-delay: 0.6s; background: linear-gradient(135deg, #FF6F00 0%, #E65100 100%); }
+        .can-5 { bottom: 100px; right: 40px; animation-delay: 0.8s; background: linear-gradient(135deg, #7B1FA2 0%, #4A148C 100%); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* === CATEGORY PILLS === */
+        .category-pills {
+            max-width: 1280px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .pills-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .pills-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .pills-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .pills-scroll::-webkit-scrollbar-track {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .pills-scroll::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .pill {
+            padding: 10px 20px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s;
+            scroll-snap-align: center;
+            flex-shrink: 0;
+        }
+
+        .pill:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--surface);
+        }
+
+        /* === PRODUCT GRID === */
+        .products-section {
+            max-width: 1280px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .product-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            animation: fadeUp 0.6s ease-out;
+        }
+
+        .product-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 12px 32px rgba(74, 103, 65, 0.12);
+            transform: translateY(-4px);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent-light) 0%, rgba(232, 244, 232, 0.5) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image.strength-light { background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%); }
+        .product-image.strength-normal { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%); }
+        .product-image.strength-strong { background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%); }
+        .product-image.strength-extra { background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%); }
+        .product-image.strength-super { background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%); }
+
+        .product-image::before {
+            content: attr(data-product);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .strength-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--border);
+        }
+
+        .strength-bar.light { background: var(--strength-light); }
+        .strength-bar.normal { background: var(--strength-normal); }
+        .strength-bar.strong { background: var(--strength-strong); }
+        .strength-bar.extra { background: var(--strength-extra); }
+        .strength-bar.super { background: var(--strength-super); }
+
+        .urgency-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--error);
+            color: var(--surface);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 5;
+        }
+
+        .urgency-badge.limited { background: var(--error); }
+        .urgency-badge.sale { background: var(--warning); }
+        .urgency-badge.new { background: var(--info); }
+
+        .product-body {
+            padding: 16px;
+        }
+
+        .product-brand {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            height: 2.8em;
+            overflow: hidden;
+        }
+
+        .product-strength {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .strength-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .strength-dot.filled { opacity: 1; }
+        .strength-dot.empty { opacity: 0.25; }
+
+        .product-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .price-per-unit {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        .pack-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .pack-pill {
+            flex: 1;
+            padding: 6px;
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pack-pill:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .pack-pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--surface);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            padding: 10px;
+            background: var(--accent);
+            color: var(--surface);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add-cart:hover {
+            background: var(--primary);
+        }
+
+        .btn-wishlist {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-wishlist:hover {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .btn-wishlist.active {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .btn-quick-view {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .btn-quick-view:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        /* === QUICK VIEW MODAL === */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .modal-image {
+            background: linear-gradient(135deg, var(--accent-light) 0%, rgba(232, 244, 232, 0.5) 100%);
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 24px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .modal-image {
+                height: 250px;
+            }
+        }
+
+        .modal-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: var(--background);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--border);
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+        }
+
+        .modal-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .modal-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .modal-strength-section {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+
+        .modal-strength-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .modal-strength-meter {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .modal-strength-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+            animation: fillStrength 0.8s ease-out;
+        }
+
+        @keyframes fillStrength {
+            from { width: 0%; }
+            to { width: var(--fill-amount, 60%); }
+        }
+
+        .modal-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .modal-pack-pills {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .modal-pack-pill {
+            padding: 10px;
+            background: var(--background);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-pack-pill:hover {
+            border-color: var(--accent);
+        }
+
+        .modal-pack-pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--surface);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-actions .btn-primary {
+            flex: 1;
+        }
+
+        .modal-actions .btn-wishlist {
+            width: auto;
+            padding: 14px 20px;
+        }
+
+        /* === SOCIAL PROOF TOAST === */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            z-index: 500;
+            animation: slideIn 0.4s ease-out;
+            max-width: 280px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            to {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+        }
+
+        .toast.exit {
+            animation: slideOut 0.4s ease-out forwards;
+        }
+
+        .toast-content {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .toast-customer {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .toast-action {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* === STICKY ADD TO CART BAR === */
+        .sticky-cart-bar {
+            position: fixed;
+            bottom: -100px;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 12px 24px;
+            z-index: 90;
+            transition: bottom 0.3s ease-out;
+            box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .sticky-cart-bar.visible {
+            bottom: 0;
+        }
+
+        .sticky-cart-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .sticky-product-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .sticky-product-thumbnail {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-light);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .sticky-product-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sticky-product-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .sticky-product-price {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .sticky-cart-btn {
+            padding: 10px 24px;
+            background: var(--accent);
+            color: var(--surface);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* === RECENTLY VIEWED === */
+        .recently-viewed {
+            max-width: 1280px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+
+        .recently-viewed-title {
+            font-size: 20px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            margin-bottom: 20px;
+        }
+
+        .recently-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .recently-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .recently-scroll::-webkit-scrollbar-track {
+            background: var(--border);
+        }
+
+        .recently-scroll::-webkit-scrollbar-thumb {
+            background: var(--accent);
+        }
+
+        .recently-item {
+            flex-shrink: 0;
+            width: 140px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+            scroll-snap-align: center;
+        }
+
+        .recently-item:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 16px rgba(74, 103, 65, 0.1);
+        }
+
+        .recently-thumb {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, var(--accent-light) 0%, rgba(232, 244, 232, 0.5) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--text-muted);
+        }
+
+        .recently-name {
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+            height: 2.6em;
+            overflow: hidden;
+        }
+
+        .recently-price {
+            padding: 8px 10px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .continue-shopping {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            flex-shrink: 0;
+            background: var(--background);
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .continue-shopping:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .continue-shopping-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-align: center;
+            padding: 16px;
+            line-height: 1.4;
+        }
+
+        /* === TRUST BAR === */
+        .trust-bar {
+            background: var(--primary);
+            color: var(--surface);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .trust-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .star {
+            color: #fbbf24;
+        }
+
+        /* === CUSTOMERS ALSO BOUGHT === */
+        .cross-sell {
+            max-width: 1280px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+
+        .cross-sell-title {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            margin-bottom: 32px;
+        }
+
+        .cross-sell-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        /* === DISPATCH COUNTDOWN === */
+        .dispatch-section {
+            max-width: 1280px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+
+        .dispatch-card {
+            background: linear-gradient(135deg, var(--accent-light) 0%, rgba(232, 244, 232, 0.3) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .dispatch-left {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .dispatch-title {
+            font-size: 22px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+        }
+
+        .dispatch-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .countdown {
+            display: flex;
+            gap: 12px;
+            font-family: "Courier New", monospace;
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--accent);
+            margin-top: 8px;
+        }
+
+        .countdown-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .countdown-number {
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .countdown-separator {
+            align-self: flex-start;
+            margin-top: 12px;
+        }
+
+        .dispatch-progress {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, var(--accent) 100%);
+            width: 40%;
+            border-radius: 6px;
+            animation: fillProgress 0.8s ease-out;
+        }
+
+        @keyframes fillProgress {
+            from { width: 0%; }
+            to { width: 40%; }
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* === NEWSLETTER === */
+        .newsletter {
+            background: var(--primary);
+            color: var(--surface);
+            padding: 60px 24px;
+            margin-top: 60px;
+        }
+
+        .newsletter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .newsletter-title {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            margin-bottom: 16px;
+        }
+
+        .newsletter-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .newsletter-step1 {
+            display: flex;
+            gap: 12px;
+        }
+
+        .newsletter-step1 input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 14px;
+        }
+
+        .newsletter-step1 button {
+            padding: 12px 32px;
+            background: var(--accent);
+            color: var(--surface);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .newsletter-step1 button:hover {
+            background: var(--accent-light);
+            color: var(--primary);
+        }
+
+        .newsletter-step2 {
+            display: none;
+            gap: 12px;
+            flex-direction: column;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .newsletter-step2.active {
+            display: flex;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .newsletter-success {
+            display: none;
+            text-align: center;
+            padding: 24px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .newsletter-success.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .success-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* === FOOTER === */
+        footer {
+            background: var(--primary);
+            color: var(--surface);
+            padding: 40px 24px;
+            margin-top: 40px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: var(--surface);
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: block;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-section a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 40px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* === SVG ICONS === */
+        svg.icon {
+            width: 20px;
+            height: 20px;
+            display: inline;
+        }
+
+        /* === MOBILE RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 40px 24px;
+            }
+
+            .hero-right {
+                height: 350px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .dispatch-card {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+
+            .nav-search {
+                display: none;
+            }
+
+            .cross-sell-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pills-label {
+                padding-left: 0;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .cross-sell-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dispatch-card {
+                padding: 16px;
+            }
+
+            .dispatch-title {
+                font-size: 18px;
+            }
+
+            .countdown {
+                font-size: 20px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .trust-bar {
+                gap: 20px;
+            }
+
+            .toast {
+                left: 16px;
+                right: 16px;
+                max-width: none;
+                bottom: 16px;
+            }
+
+            .sticky-cart-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .sticky-product-info {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+                max-height: 85vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .hero-subtitle {
+                font-size: 15px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .dispatch-progress {
+                gap: 16px;
+            }
+
+            .newsletter-step1 {
+                flex-direction: column;
+            }
+
+            .modal-pack-pills {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .recently-scroll {
+                gap: 12px;
+            }
+
+            .trust-bar {
+                flex-direction: column;
+                gap: 16px;
+                padding: 12px 24px;
+            }
+
+            .trust-item {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-section {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <span class="text fade-in">Free delivery on orders over €29 — Same-day dispatch until 3 PM</span>
+        <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky-nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="8" y="8" width="32" height="32" rx="6" fill="#1a2e1a"/>
+                    <path d="M24 12 L28 22 L24 28 L20 22 Z" fill="#4a6741"/>
+                </svg>
+                <span>SnusFriend</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#brands">Brands</a></li>
+                <li><a href="#products">Shop</a></li>
+                <li><a href="#strengths">Strengths</a></li>
+                <li><a href="#blog">Blog</a></li>
+            </ul>
+            <div class="nav-search">
+                <svg viewBox="0 0 20 20" fill="currentColor" class="icon">
+                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                </svg>
+                <input type="text" placeholder="Search pouches...">
+            </div>
+            <div class="nav-icons">
+                <button class="icon-btn">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" onclick="document.querySelector('.modal').classList.add('active')">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 6H6.28l-.31-1.243A1 1 0 005 4H3z"/>
+                        <path d="M16 16a2 2 0 11-4 0 2 2 0 014 0zM4 12a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span class="cart-badge">3</span>
+                </button>
+            </div>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-left">
+            <h1 class="hero-title">Europe's Most Trusted Pouch Shop</h1>
+            <p class="hero-subtitle">Premium nicotine pouches from all major brands. Fast delivery, expert guidance, and 50,000+ happy customers since 2023.</p>
+            <div class="hero-ctas">
+                <button class="btn-primary">Shop Now</button>
+                <button class="btn-secondary">Browse Brands</button>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="can can-1"><div class="can-label">ZYN</div></div>
+            <div class="can can-2"><div class="can-label">VELO</div></div>
+            <div class="can can-3"><div class="can-label">Siberia</div></div>
+            <div class="can can-4"><div class="can-label">LOOP</div></div>
+            <div class="can can-5"><div class="can-label">White Fox</div></div>
+        </div>
+    </section>
+
+    <!-- Category Pills -->
+    <div class="category-pills">
+        <div class="pills-label">Browse by Category</div>
+        <div class="pills-scroll">
+            <div class="pill active" onclick="this.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); this.classList.add('active');">All</div>
+            <div class="pill" onclick="this.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); this.classList.add('active');">Mint</div>
+            <div class="pill" onclick="this.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); this.classList.add('active');">Berry</div>
+            <div class="pill" onclick="this.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); this.classList.add('active');">Citrus</div>
+            <div class="pill" onclick="this.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); this.classList.add('active');">Strong</div>
+            <div class="pill" onclick="this.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); this.classList.add('active');">Beginner</div>
+            <div class="pill" onclick="this.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); this.classList.add('active');">On Sale</div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section class="products-section" id="products">
+        <h2 class="section-title">Best Sellers This Week</h2>
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-image strength-light" data-product="ZYN Cool Mint">
+                    <div class="strength-bar light"></div>
+                    <div class="urgency-badge sale">20% Off</div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">ZYN</div>
+                    <div class="product-name">Cool Mint Slim</div>
+                    <div class="product-strength">
+                        <span class="strength-dot light filled" style="background: var(--strength-light);"></span>
+                        <span class="strength-dot light empty" style="background: var(--strength-light);"></span>
+                        <span class="strength-dot light empty" style="background: var(--strength-light);"></span>
+                        <span class="strength-dot light empty" style="background: var(--strength-light);"></span>
+                        <span class="strength-dot light empty" style="background: var(--strength-light);"></span>
+                    </div>
+                    <div class="product-meta">Light · Mint · Slim</div>
+                    <div class="product-price">€3.49<span class="price-per-unit">/ 1 can</span></div>
+                    <div class="pack-selector">
+                        <div class="pack-pill active" onclick="updatePrice(this, '€3.49', '€6.99', '€12.49')">1</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€6.99', '€6.99', '€12.49')">5</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€12.49', '€6.99', '€12.49')">10</div>
+                    </div>
+                    <div style="margin-bottom: 10px; font-size: 12px; color: var(--text-muted);">
+                        <input type="checkbox" id="sub1"> <label for="sub1">Subscribe & Save 10%</label>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart" onclick="addToCart(this)">Add to Cart</button>
+                        <button class="btn-wishlist" onclick="toggleWishlist(this)">
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-quick-view" onclick="openQuickView('ZYN Cool Mint', 'Premium slim format from Sweden. Light strength, perfect for beginners.')">⊡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-image strength-strong" data-product="VELO Freeze Max">
+                    <div class="strength-bar strong"></div>
+                    <div class="urgency-badge limited">Only 3 Left</div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">VELO</div>
+                    <div class="product-name">Freeze Max</div>
+                    <div class="product-strength">
+                        <span class="strength-dot strong filled" style="background: var(--strength-strong);"></span>
+                        <span class="strength-dot strong filled" style="background: var(--strength-strong);"></span>
+                        <span class="strength-dot strong filled" style="background: var(--strength-strong);"></span>
+                        <span class="strength-dot strong empty" style="background: var(--strength-strong);"></span>
+                        <span class="strength-dot strong empty" style="background: var(--strength-strong);"></span>
+                    </div>
+                    <div class="product-meta">Strong · Mint · Full</div>
+                    <div class="product-price">€3.89<span class="price-per-unit">/ 1 can</span></div>
+                    <div class="pack-selector">
+                        <div class="pack-pill active" onclick="updatePrice(this, '€3.89', '€7.79', '€13.99')">1</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€7.79', '€7.79', '€13.99')">5</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€13.99', '€7.79', '€13.99')">10</div>
+                    </div>
+                    <div style="margin-bottom: 10px; font-size: 12px; color: var(--text-muted);">
+                        <input type="checkbox" id="sub2"> <label for="sub2">Subscribe & Save 10%</label>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart" onclick="addToCart(this)">Add to Cart</button>
+                        <button class="btn-wishlist" onclick="toggleWishlist(this)">
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-quick-view" onclick="openQuickView('VELO Freeze Max', 'Intense cooling sensation. Strong nicotine hit. Popular with experienced users.')">⊡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-image strength-super" data-product="Siberia -80°C">
+                    <div class="strength-bar super"></div>
+                    <div class="urgency-badge new">New</div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">Siberia</div>
+                    <div class="product-name">-80°C Black</div>
+                    <div class="product-strength">
+                        <span class="strength-dot super filled" style="background: var(--strength-super);"></span>
+                        <span class="strength-dot super filled" style="background: var(--strength-super);"></span>
+                        <span class="strength-dot super filled" style="background: var(--strength-super);"></span>
+                        <span class="strength-dot super filled" style="background: var(--strength-super);"></span>
+                        <span class="strength-dot super filled" style="background: var(--strength-super);"></span>
+                    </div>
+                    <div class="product-meta">Super Strong · Mint</div>
+                    <div class="product-price">€4.29<span class="price-per-unit">/ 1 can</span></div>
+                    <div class="pack-selector">
+                        <div class="pack-pill active" onclick="updatePrice(this, '€4.29', '€8.59', '€15.49')">1</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€8.59', '€8.59', '€15.49')">5</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€15.49', '€8.59', '€15.49')">10</div>
+                    </div>
+                    <div style="margin-bottom: 10px; font-size: 12px; color: var(--text-muted);">
+                        <input type="checkbox" id="sub3"> <label for="sub3">Subscribe & Save 10%</label>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart" onclick="addToCart(this)">Add to Cart</button>
+                        <button class="btn-wishlist" onclick="toggleWishlist(this)">
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-quick-view" onclick="openQuickView('Siberia -80°C', 'The original extreme strength pouch. Not for beginners. Extreme cooling effect.')">⊡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-image strength-strong" data-product="LOOP Breeze">
+                    <div class="strength-bar strong"></div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">LOOP</div>
+                    <div class="product-name">Breeze Regular</div>
+                    <div class="product-strength">
+                        <span class="strength-dot strong filled" style="background: var(--strength-strong);"></span>
+                        <span class="strength-dot strong filled" style="background: var(--strength-strong);"></span>
+                        <span class="strength-dot strong filled" style="background: var(--strength-strong);"></span>
+                        <span class="strength-dot strong empty" style="background: var(--strength-strong);"></span>
+                        <span class="strength-dot strong empty" style="background: var(--strength-strong);"></span>
+                    </div>
+                    <div class="product-meta">Strong · Mint · Regular</div>
+                    <div class="product-price">€3.59<span class="price-per-unit">/ 1 can</span></div>
+                    <div class="pack-selector">
+                        <div class="pack-pill active" onclick="updatePrice(this, '€3.59', '€7.19', '€12.99')">1</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€7.19', '€7.19', '€12.99')">5</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€12.99', '€7.19', '€12.99')">10</div>
+                    </div>
+                    <div style="margin-bottom: 10px; font-size: 12px; color: var(--text-muted);">
+                        <input type="checkbox" id="sub4"> <label for="sub4">Subscribe & Save 10%</label>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart" onclick="addToCart(this)">Add to Cart</button>
+                        <button class="btn-wishlist" onclick="toggleWishlist(this)">
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-quick-view" onclick="openQuickView('LOOP Breeze', 'Refreshing citrus blend. Good strength. Great value for daily use.')">⊡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-image strength-normal" data-product="White Fox Slim">
+                    <div class="strength-bar normal"></div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">White Fox</div>
+                    <div class="product-name">Slim Mint</div>
+                    <div class="product-strength">
+                        <span class="strength-dot normal filled" style="background: var(--strength-normal);"></span>
+                        <span class="strength-dot normal filled" style="background: var(--strength-normal);"></span>
+                        <span class="strength-dot normal empty" style="background: var(--strength-normal);"></span>
+                        <span class="strength-dot normal empty" style="background: var(--strength-normal);"></span>
+                        <span class="strength-dot normal empty" style="background: var(--strength-normal);"></span>
+                    </div>
+                    <div class="product-meta">Normal · Mint · Slim</div>
+                    <div class="product-price">€3.19<span class="price-per-unit">/ 1 can</span></div>
+                    <div class="pack-selector">
+                        <div class="pack-pill active" onclick="updatePrice(this, '€3.19', '€6.39', '€11.59')">1</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€6.39', '€6.39', '€11.59')">5</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€11.59', '€6.39', '€11.59')">10</div>
+                    </div>
+                    <div style="margin-bottom: 10px; font-size: 12px; color: var(--text-muted);">
+                        <input type="checkbox" id="sub5"> <label for="sub5">Subscribe & Save 10%</label>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart" onclick="addToCart(this)">Add to Cart</button>
+                        <button class="btn-wishlist" onclick="toggleWishlist(this)">
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-quick-view" onclick="openQuickView('White Fox Slim', 'Swedish classic. Balanced strength and flavour. Great for all-day use.')">⊡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-image strength-extra" data-product="ON! Explosive">
+                    <div class="strength-bar extra"></div>
+                    <div class="urgency-badge sale">15% Off</div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">ON!</div>
+                    <div class="product-name">Explosive Mint</div>
+                    <div class="product-strength">
+                        <span class="strength-dot extra filled" style="background: var(--strength-extra);"></span>
+                        <span class="strength-dot extra filled" style="background: var(--strength-extra);"></span>
+                        <span class="strength-dot extra filled" style="background: var(--strength-extra);"></span>
+                        <span class="strength-dot extra filled" style="background: var(--strength-extra);"></span>
+                        <span class="strength-dot extra empty" style="background: var(--strength-extra);"></span>
+                    </div>
+                    <div class="product-meta">Extra Strong · Mint</div>
+                    <div class="product-price">€3.79<span class="price-per-unit">/ 1 can</span></div>
+                    <div class="pack-selector">
+                        <div class="pack-pill active" onclick="updatePrice(this, '€3.79', '€7.59', '€13.99')">1</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€7.59', '€7.59', '€13.99')">5</div>
+                        <div class="pack-pill" onclick="updatePrice(this, '€13.99', '€7.59', '€13.99')">10</div>
+                    </div>
+                    <div style="margin-bottom: 10px; font-size: 12px; color: var(--text-muted);">
+                        <input type="checkbox" id="sub6"> <label for="sub6">Subscribe & Save 10%</label>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart" onclick="addToCart(this)">Add to Cart</button>
+                        <button class="btn-wishlist" onclick="toggleWishlist(this)">
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-quick-view" onclick="openQuickView('ON! Explosive', 'Intense mint burst. Strong nicotine. For experienced users who want maximum flavour.')">⊡</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dispatch Section -->
+    <section class="dispatch-section">
+        <div class="dispatch-card">
+            <div class="dispatch-left">
+                <div class="dispatch-title">Order in the next 3 hours for same-day dispatch</div>
+                <div class="dispatch-text">Orders placed before 3 PM are dispatched same day. Delivered within 2–4 working days across Europe.</div>
+                <div class="countdown">
+                    <div class="countdown-unit">
+                        <div class="countdown-number">3</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-unit">
+                        <div class="countdown-number">42</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-unit">
+                        <div class="countdown-number">18</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dispatch-progress">
+                <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Free Shipping Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="--width: 40%;"></div>
+                </div>
+                <div class="progress-text">Your cart: €11.60 · Add €17.40 for free delivery</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+        <div class="trust-item">
+            <svg viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px;">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            Lab-tested & Authentic
+        </div>
+        <div class="trust-item">
+            <div class="trust-rating">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span style="margin-left: 4px; color: var(--surface); font-size: 12px;">4.8 (2,200+ reviews)</span>
+            </div>
+        </div>
+        <div class="trust-item">
+            <svg viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px;">
+                <path d="M10.5 1.5H5.75A2.25 2.25 0 003.5 3.75v12.5A2.25 2.25 0 005.75 18.5h8.5a2.25 2.25 0 002.25-2.25V6.5m-11-5v5h5m-5 6h8m-8 3h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            UK & EU Compliance
+        </div>
+        <div class="trust-item">
+            <svg viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px;">
+                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+            </svg>
+            Secure Payments
+        </div>
+    </div>
+
+    <!-- Customers Also Bought -->
+    <section class="cross-sell">
+        <h3 class="cross-sell-title">Customers Also Bought</h3>
+        <div class="cross-sell-grid">
+            <div class="product-card">
+                <div class="product-image strength-light" data-product="ZYN Cinnamon">
+                    <div class="strength-bar light"></div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">ZYN</div>
+                    <div class="product-name">Cinnamon Slim</div>
+                    <div class="product-meta">Light · Spice</div>
+                    <div class="product-price">€3.49</div>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                        <button class="btn-add-cart" style="flex: 1;">Add</button>
+                        <button class="btn-quick-view" style="width: auto; padding: 10px 12px;">⊡</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image strength-normal" data-product="VELO Spearmint">
+                    <div class="strength-bar normal"></div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">VELO</div>
+                    <div class="product-name">Spearmint Regular</div>
+                    <div class="product-meta">Normal · Mint</div>
+                    <div class="product-price">€3.69</div>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                        <button class="btn-add-cart" style="flex: 1;">Add</button>
+                        <button class="btn-quick-view" style="width: auto; padding: 10px 12px;">⊡</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image strength-strong" data-product="LOOP Punch">
+                    <div class="strength-bar strong"></div>
+                </div>
+                <div class="product-body">
+                    <div class="product-brand">LOOP</div>
+                    <div class="product-name">Fruit Punch Max</div>
+                    <div class="product-meta">Strong · Fruit</div>
+                    <div class="product-price">€3.79</div>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                        <button class="btn-add-cart" style="flex: 1;">Add</button>
+                        <button class="btn-quick-view" style="width: auto; padding: 10px 12px;">⊡</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recently Viewed -->
+    <section class="recently-viewed">
+        <h3 class="recently-viewed-title">Your Browsing History</h3>
+        <div class="recently-scroll">
+            <div class="recently-item">
+                <div class="recently-thumb">ZYN</div>
+                <div class="recently-name">Cool Mint</div>
+                <div class="recently-price">€3.49</div>
+            </div>
+            <div class="recently-item">
+                <div class="recently-thumb">VELO</div>
+                <div class="recently-name">Freeze Max</div>
+                <div class="recently-price">€3.89</div>
+            </div>
+            <div class="recently-item">
+                <div class="recently-thumb">LOOP</div>
+                <div class="recently-name">Breeze</div>
+                <div class="recently-price">€3.59</div>
+            </div>
+            <div class="recently-item">
+                <div class="recently-thumb">Siberia</div>
+                <div class="recently-name">-80°C Black</div>
+                <div class="recently-price">€4.29</div>
+            </div>
+            <div class="recently-item">
+                <div class="recently-thumb">White Fox</div>
+                <div class="recently-name">Slim Mint</div>
+                <div class="recently-price">€3.19</div>
+            </div>
+            <div class="recently-item">
+                <div class="recently-thumb">ON!</div>
+                <div class="recently-name">Explosive</div>
+                <div class="recently-price">€3.79</div>
+            </div>
+            <div class="continue-shopping">
+                <div class="continue-shopping-text">Browse All<br>Brands</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="newsletter-container">
+            <h2 class="newsletter-title">Join 50,000+ Happy Customers</h2>
+            <p class="newsletter-subtitle">Get deals, new arrivals, and expert pouch guides delivered to your inbox.</p>
+            <form class="newsletter-form" onsubmit="return handleNewsletter(event)">
+                <div class="newsletter-step1">
+                    <input type="email" placeholder="your@email.com" required>
+                    <button type="submit">Subscribe</button>
+                </div>
+                <div class="newsletter-step2">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="deals" checked>
+                            <label for="deals">Exclusive deals & flash sales</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="arrivals" checked>
+                            <label for="arrivals">New arrivals & limited editions</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="blog">
+                            <label for="blog">Weekly pouch guides & blog</label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="finishNewsletter()" style="width: 100%; margin-top: 12px;">Confirm Preferences</button>
+                </div>
+                <div class="newsletter-success">
+                    <div class="success-icon">✓</div>
+                    <div class="success-text">Welcome! Check your email for a 10% welcome code.</div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Shop</h3>
+                <ul>
+                    <li><a href="#">Browse All Brands</a></li>
+                    <li><a href="#">New Arrivals</a></li>
+                    <li><a href="#">On Sale</a></li>
+                    <li><a href="#">Best Sellers</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Help</h3>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Age Verification</a></li>
+                    <li><a href="#">Compliance</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Brand Partnerships</a></li>
+                    <li><a href="#">B2B Wholesale</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 SnusFriend. All rights reserved. • Licenced seller of nicotine pouches for adults 18+</p>
+        </div>
+    </footer>
+
+    <!-- Quick View Modal -->
+    <div class="modal" onclick="if(event.target === this) closeModal()">
+        <div class="modal-content">
+            <div class="modal-image" id="modalImage">ZYN</div>
+            <div class="modal-body">
+                <button class="modal-close" onclick="closeModal()">×</button>
+                <h2 class="modal-title" id="modalTitle">Product Name</h2>
+                <div class="modal-rating">
+                    <span>★★★★★ 4.8</span> · <span>140 reviews</span>
+                </div>
+                <p class="modal-desc" id="modalDesc">Product description goes here.</p>
+                <div class="modal-strength-section">
+                    <div class="modal-strength-label">Nicotine Strength</div>
+                    <div class="modal-strength-meter">
+                        <div class="modal-strength-fill" id="modalStrengthFill" style="--fill-amount: 40%;"></div>
+                    </div>
+                </div>
+                <div class="modal-price" id="modalPrice">€3.49</div>
+                <div>
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 10px;">Pack Size</div>
+                    <div class="modal-pack-pills">
+                        <div class="modal-pack-pill active" onclick="updateModalPrice(this)">1 Can<br>€3.49</div>
+                        <div class="modal-pack-pill" onclick="updateModalPrice(this)">5-Pack<br>€6.99</div>
+                        <div class="modal-pack-pill" onclick="updateModalPrice(this)">10-Pack<br>€12.49</div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="addToCart(); closeModal();">Add to Cart</button>
+                    <button class="btn-wishlist" onclick="toggleWishlist(this)">
+                        <svg viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px;">
+                            <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Add to Cart Bar -->
+    <div class="sticky-cart-bar" id="stickyCartBar">
+        <div class="sticky-cart-content">
+            <div class="sticky-product-info">
+                <div class="sticky-product-thumbnail">📦</div>
+                <div class="sticky-product-text">
+                    <div class="sticky-product-name" id="stickyProductName">Last Viewed Product</div>
+                    <div class="sticky-product-price" id="stickyProductPrice">€3.49</div>
+                </div>
+            </div>
+            <button class="sticky-cart-btn" onclick="addToCart()">Quick Add</button>
+        </div>
+    </div>
+
+    <!-- Social Proof Toast -->
+    <div class="toast" id="toast" style="display: none;">
+        <div class="toast-content">
+            <div class="toast-customer" id="toastCustomer">Sarah in Manchester</div>
+            <div class="toast-action" id="toastAction">just bought ZYN Cool Mint 5-Pack</div>
+        </div>
+    </div>
+
+    <script>
+        // Toast notifications
+        const toastMessages = [
+            { name: 'Sarah in Manchester', action: 'just bought ZYN Cool Mint 5-Pack' },
+            { name: 'James in London', action: 'just bought VELO Freeze Max' },
+            { name: 'Emma in Berlin', action: 'just bought Siberia -80°C Black' },
+            { name: 'Lucas in Paris', action: 'just bought LOOP Breeze 10-Pack' },
+            { name: 'Anna in Stockholm', action: 'just bought White Fox Slim' },
+            { name: 'Mike in Dublin', action: 'just bought ON! Explosive' }
+        ];
+
+        let toastIndex = 0;
+        setInterval(() => {
+            const toast = document.getElementById('toast');
+            const msg = toastMessages[toastIndex % toastMessages.length];
+            document.getElementById('toastCustomer').textContent = msg.name;
+            document.getElementById('toastAction').textContent = msg.action;
+
+            toast.classList.remove('exit');
+            toast.style.display = 'block';
+
+            setTimeout(() => {
+                toast.classList.add('exit');
+                setTimeout(() => toast.style.display = 'none', 400);
+            }, 4000);
+
+            toastIndex++;
+        }, 8000);
+
+        // Quick view modal
+        function openQuickView(title, desc) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDesc').textContent = desc;
+            document.querySelector('.modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.querySelector('.modal').classList.remove('active');
+        }
+
+        function updateModalPrice(el) {
+            document.querySelectorAll('.modal-pack-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            const price = el.textContent.split('\n')[1];
+            document.getElementById('modalPrice').textContent = price;
+        }
+
+        // Sticky cart bar
+        let lastProductName = 'ZYN Cool Mint';
+        let lastProductPrice = '€3.49';
+
+        window.addEventListener('scroll', () => {
+            const stickyBar = document.getElementById('stickyCartBar');
+            if (window.scrollY > 400) {
+                stickyBar.classList.add('visible');
+            } else {
+                stickyBar.classList.remove('visible');
+            }
+        });
+
+        // Pack selector
+        function updatePrice(el, price1, price2, price3) {
+            const card = el.closest('.product-card');
+            const prices = [price1, price2, price3];
+            const index = Array.from(el.parentElement.children).indexOf(el);
+            const newPrice = prices[index];
+
+            card.querySelector('.product-price').innerHTML = newPrice + '<span class="price-per-unit">/ ' + (index === 0 ? '1 can' : index === 1 ? '5-pack' : '10-pack') + '</span>';
+
+            el.parentElement.querySelectorAll('.pack-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+
+            lastProductPrice = newPrice;
+            document.getElementById('stickyProductPrice').textContent = newPrice;
+        }
+
+        // Wishlist
+        function toggleWishlist(btn) {
+            btn.classList.toggle('active');
+        }
+
+        // Add to cart
+        function addToCart(btn) {
+            const badge = document.querySelector('.cart-badge');
+            let count = parseInt(badge.textContent);
+            badge.textContent = count + 1;
+            badge.classList.add('bounce');
+            setTimeout(() => badge.classList.remove('bounce'), 300);
+
+            if (btn) {
+                const originalText = btn.textContent;
+                btn.textContent = 'Added!';
+                setTimeout(() => btn.textContent = originalText, 1500);
+            }
+        }
+
+        // Newsletter
+        function handleNewsletter(e) {
+            e.preventDefault();
+            document.querySelector('.newsletter-step1').style.display = 'none';
+            document.querySelector('.newsletter-step2').classList.add('active');
+            return false;
+        }
+
+        function finishNewsletter() {
+            document.querySelector('.newsletter-step2').style.display = 'none';
+            document.querySelector('.newsletter-success').classList.add('active');
+        }
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeUp 0.6s ease-out';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.product-card').forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>

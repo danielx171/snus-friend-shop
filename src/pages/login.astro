@@ -35,7 +35,7 @@ const errorMessage = result?.error?.message;
           </p>
 
           {errorMessage && (
-            <div class="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-center">
+            <div role="alert" aria-live="assertive" class="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-center">
               <p class="text-sm text-destructive font-medium">{errorMessage}</p>
             </div>
           )}

@@ -307,6 +307,26 @@ export default function CartDrawer() {
                   </span>
                 </div>
 
+                {/* Points preview */}
+                {total > 0 && (
+                  <div className="flex items-center gap-1.5 rounded-lg bg-primary/5 px-3 py-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="text-primary flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    <span className="text-xs font-medium text-primary">
+                      You&apos;ll earn {Math.floor(total * 10).toLocaleString()} SnusPoints with this order
+                    </span>
+                  </div>
+                )}
+
                 <div className="flex gap-2">
                   <a
                     href="/cart"

@@ -392,7 +392,15 @@
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__resize_page",
       "mcp__plugin_chrome-devtools-mcp_chrome-devtools__emulate",
       "Bash(npx pagefind --site dist/client\":*)",
-      "mcp__gsc__get_performance_overview"
+      "mcp__gsc__get_performance_overview",
+      "Bash(cp \"/Users/Daniel/Library/Application Support/Claude/local-agent-mode-sessions/127964b3-c2d8-4a9e-a01b-bfd67f700b01/f76f68bd-0ba5-4e1d-a481-f4f97996d035/agent/local_ditto_f76f68bd-0ba5-4e1d-a481-f4f97996d035/outputs/\"*.html /Users/Daniel/Projects/snus-friend-shop/designs/)",
+      "Bash(cp \"/Users/Daniel/Library/Application Support/Claude/local-agent-mode-sessions/127964b3-c2d8-4a9e-a01b-bfd67f700b01/f76f68bd-0ba5-4e1d-a481-f4f97996d035/agent/local_ditto_f76f68bd-0ba5-4e1d-a481-f4f97996d035/outputs/\"*.md /Users/Daniel/Projects/snus-friend-shop/designs/)",
+      "mcp__claude_ai_Vercel__list_deployments",
+      "Bash(find /Users/Daniel/Projects/snus-friend-shop/cowork -name *.md -o -name *.txt)",
+      "mcp__claude_ai_Supabase__deploy_edge_function",
+      "mcp__gsc__get_search_analytics",
+      "mcp__gsc__submit_sitemap",
+      "mcp__claude_ai_Vercel__get_deployment_build_logs"
     ]
   }
 }

@@ -230,11 +230,18 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
           {nicotineContent} mg/pouch
         </span>
 
-        {/* Price + Cart */}
+        {/* Price + Points + Cart */}
         <div className="mt-auto flex items-end justify-between pt-2">
-          <span className="text-lg font-bold text-foreground">
-            &euro;{displayPrice.toFixed(2)}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold text-foreground">
+              &euro;{displayPrice.toFixed(2)}
+            </span>
+            {displayPrice > 0 && (
+              <span className="text-[10px] font-medium text-primary">
+                Earn {Math.floor(displayPrice * 10)} pts
+              </span>
+            )}
+          </div>
 
           <button
             type="button"
