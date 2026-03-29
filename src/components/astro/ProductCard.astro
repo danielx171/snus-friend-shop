@@ -97,14 +97,13 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
 
   {/* Content */}
   <div class="flex flex-1 flex-col gap-1.5 p-3">
-    {/* Brand */}
-    <a
-      href={`/brands/${brandSlug}`}
-      class="text-xs text-muted-foreground hover:text-primary transition-colors py-1"
-      onclick="event.stopPropagation()"
+    {/* Brand — span instead of <a> to avoid nested links (breaks HTML) */}
+    <span
+      class="text-xs text-muted-foreground hover:text-primary cursor-pointer transition-colors py-1"
+      onclick={`event.preventDefault();event.stopPropagation();window.location.href='/brands/${brandSlug}'`}
     >
       {brand}
-    </a>
+    </span>
 
     {/* Name */}
     <h3 class="text-sm font-bold leading-tight text-foreground line-clamp-2">{name}</h3>
