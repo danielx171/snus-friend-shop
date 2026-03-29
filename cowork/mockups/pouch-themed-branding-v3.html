@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnusFriend — Design Upgrade Plan v3</title>
+<style>
+  :root {
+    --bg: #0c1a0c; --card: #142214; --card-alt: #1a2e1a; --border: #2a3f2a;
+    --text: #e8f0e8; --muted: #8fa88f; --primary: #4CAF50; --primary-light: #66BB6A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .page-header { max-width: 1200px; margin: 0 auto; padding: 48px 24px 24px; text-align: center; }
+  .page-header h1 { font-size: 32px; font-weight: 800; }
+  .page-header p { color: var(--muted); font-size: 15px; margin-top: 8px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .section { max-width: 1200px; margin: 0 auto; padding: 48px 24px; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-label { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); background: rgba(76,175,80,0.1); padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; }
+  h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .section-desc { color: var(--muted); font-size: 14px; margin-bottom: 28px; max-width: 650px; }
+  .note { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 12px; }
+
+  /* ===== TIN LID LOGOS ===== */
+  .brand-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+  @media (max-width: 900px) { .brand-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 560px) { .brand-grid { grid-template-columns: repeat(3, 1fr); } }
+  .brand-card {
+    display: flex; flex-direction: column; align-items: center;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px 8px 14px; transition: all 0.25s;
+    cursor: pointer; text-decoration: none; color: var(--text);
+  }
+  .brand-card:hover { border-color: rgba(76,175,80,0.35); box-shadow: 0 6px 24px rgba(76,175,80,0.08); transform: translateY(-2px); }
+  .brand-card .count { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .tin {
+    width: 68px; height: 68px; border-radius: 50%; position: relative;
+    display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;
+  }
+  .tin .bg { position: absolute; inset: 0; border-radius: 50%; }
+  .tin .rim { position: absolute; inset: 2px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); }
+  .tin .grip { position: absolute; inset: 8px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); }
+  .tin .label { position: relative; z-index: 1; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; line-height: 1; }
+  .tin::after { content: ''; position: absolute; top: 4px; left: 18%; right: 34%; height: 20%; background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 100%); border-radius: 50%; z-index: 2; pointer-events: none; }
+  .brand-card:hover .tin { transform: rotate(-3deg); transition: transform 0.3s ease; }
+  .label-xs { font-size: 9px; } .label-sm { font-size: 11px; } .label-md { font-size: 13px; } .label-lg { font-size: 15px; } .label-xl { font-size: 17px; }
+  /* Dark text for light backgrounds */
+  .label-dark { color: rgba(0,0,0,0.7) !important; }
+
+  /* ===== IMPROVEMENT CARDS ===== */
+  .improvements { display: flex; flex-direction: column; gap: 20px; }
+  .imp {
+    display: flex; gap: 20px; align-items: flex-start;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px; transition: border-color 0.2s;
+  }
+  .imp:hover { border-color: rgba(76,175,80,0.2); }
+  .imp-badge {
+    flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .imp-content { flex: 1; }
+  .imp-content h3 { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+  .imp-content .where { font-size: 11px; color: var(--primary); margin-bottom: 8px; }
+  .imp-content p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .imp-content .demo { margin-top: 14px; background: var(--card-alt); border-radius: 10px; padding: 16px; }
+  .effort { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+  .effort-low { background: rgba(76,175,80,0.12); color: #66BB6A; }
+  .effort-med { background: rgba(249,168,37,0.12); color: #F9A825; }
+
+  /* ===== DEMO ELEMENTS ===== */
+  /* Product card demo */
+  .card-demo {
+    width: 180px; border-radius: 12px; overflow: hidden;
+    background: var(--card); border: 1px solid var(--border); flex-shrink: 0;
+  }
+  .card-demo .img-area { height: 100px; background: var(--card-alt); position: relative; display: flex; align-items: center; justify-content: center; }
+  .card-demo .img-area span { color: var(--muted); font-size: 11px; }
+  .card-demo .strength-strip { height: 3px; }
+  .card-demo .card-body { padding: 10px; }
+  .card-demo .card-body .brand-line { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+  .card-demo .card-body .name { font-size: 12px; font-weight: 600; line-height: 1.3; }
+  .card-demo .card-body .meta { font-size: 10px; color: var(--muted); margin-top: 3px; }
+  .card-demo .card-body .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+  .card-demo .card-body .price { font-size: 13px; font-weight: 700; color: var(--primary-light); }
+  .card-demo .card-body .qty { font-size: 9px; color: var(--muted); }
+  .card-demo .card-body .cart-btn { background: var(--primary); color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; }
+
+  /* Strength dots unified */
+  .dots { display: inline-flex; gap: 3px; align-items: center; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* Compare side by side */
+  .compare { display: flex; gap: 24px; flex-wrap: wrap; }
+  .compare-side { flex: 1; min-width: 200px; }
+  .compare-side h4 { font-size: 12px; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
+
+  /* Breadcrumb demo */
+  .bread { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .bread a { color: var(--muted); text-decoration: none; }
+  .bread .current { color: var(--text); font-weight: 500; }
+
+  /* Priority table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { border-bottom: 2px solid var(--border); }
+  th { text-align: left; padding: 10px 8px; color: var(--muted); font-weight: 600; font-size: 12px; }
+  td { padding: 12px 8px; border-bottom: 1px solid var(--border); }
+  .p-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+  .p1 { background: rgba(76,175,80,0.15); color: #66BB6A; }
+  .p2 { background: rgba(249,168,37,0.15); color: #F9A825; }
+  .p3 { background: rgba(156,163,175,0.15); color: #9ca3af; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>SnusFriend Design Upgrade Plan</h1>
+  <p>Tin lid brand logos + high-impact UX improvements found through a full site audit. Sorted by user impact, not novelty.</p>
+</div>
+
+<!-- ==================== 1: TIN LID BRAND LOGOS ==================== -->
+<div class="section">
+  <span class="section-label">Brand Identity</span>
+  <h2>Tin Lid Brand Logos</h2>
+  <p class="section-desc">Full brand names inside tin lid shapes using existing brand colours. Only abbreviate when the name genuinely can't fit (White Fox → WF, Nordic Spirit → NS).</p>
+
+  <div class="brand-grid">
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#4CAF50,#2E7D32);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg">ZYN</span></div><span class="count">47 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#1565C0,#0D47A1);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">VELO</span></div><span class="count">38 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#FF6F00,#E65100);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">LOOP</span></div><span class="count">24 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#D32F2F,#B71C1C);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xs">SIBERIA</span></div><span class="count">12 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#1B5E20,#0a3a0a);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">SKRUF</span></div><span class="count">18 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#0D47A1,#0a2a60);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xl">WF</span></div><span class="count">10 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#B71C1C,#7f0000);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">PABLO</span></div><span class="count">15 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#37474F,#263238);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xl">NS</span></div><span class="count">22 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#004D40,#00332b);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">KLAR</span></div><span class="count">8 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#6A1B9A,#4A148C);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">FUMI</span></div><span class="count">9 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#E65100,#BF360C);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">CUBA</span></div><span class="count">20 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#00838F,#006064);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xs">ICEBERG</span></div><span class="count">16 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#2E7D32,#1B5E20);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg">ACE</span></div><span class="count">11 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#558B2F,#33691E);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xs">HELWIT</span></div><span class="count">7 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#F9A825,#F57F17);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg label-dark">77</span></div><span class="count">13 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#B71C1C,#880E4F);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">KILLA</span></div><span class="count">14 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#E53935,#C62828);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xl">ON!</span></div><span class="count">19 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#795548,#5D4037);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">APRÈS</span></div><span class="count">6 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#BF360C,#8B2500);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">AVANT</span></div><span class="count">4 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#1A237E,#0D1259);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg">FIX</span></div><span class="count">5 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#33691E,#1B5E20);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">FOLD</span></div><span class="count">4 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#00695C,#004D40);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">KLINT</span></div><span class="count">8 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#4A148C,#311B92);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg">XQS</span></div><span class="count">10 cans</span></div>
+    <div class="brand-card"><div class="tin"><div class="bg" style="background:linear-gradient(135deg,#0277BD,#01579B);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">CLEW</span></div><span class="count">5 cans</span></div>
+  </div>
+  <p class="note">Also: use "cans" instead of "products" everywhere — it's niche language that signals expertise.</p>
+</div>
+
+<!-- ==================== 2: HIGH-IMPACT UX IMPROVEMENTS ==================== -->
+<div class="section">
+  <span class="section-label">UX Improvements</span>
+  <h2>High-Impact Fixes from Site Audit</h2>
+  <p class="section-desc">Found by reviewing homepage, product cards, PDP, brands page, header, and footer. Ranked by user impact, not complexity.</p>
+
+  <div class="improvements">
+
+    <!-- 1: Strength colour strip -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(239,68,68,0.12);">🎯</div>
+      <div class="imp-content">
+        <h3>Strength Colour Strip on Product Cards <span class="effort effort-low">30 min</span></h3>
+        <div class="where">Every product card across the entire site</div>
+        <p>A 3px colour band at the bottom of each product image. Green = light, blue = normal, orange = strong, red = extra strong, purple = super strong. No label needed — users learn the system in one browse. This mirrors how real tin lids use colour to signal strength, and it makes scanning a grid of 20+ products instant instead of reading each card's text.</p>
+        <div class="demo">
+          <div style="display:flex;gap:14px;flex-wrap:wrap;">
+            <div class="card-demo">
+              <div class="img-area"><span>ZYN Cool Mint</span></div>
+              <div class="strength-strip" style="background:#22c55e;"></div>
+              <div class="card-body"><div class="brand-line">ZYN</div><div class="name">Cool Mint Mini</div><div class="meta"><span class="dots"><span class="dot" style="background:#22c55e;"></span><span class="dot" style="background:#22c55e55;"></span><span class="dot" style="background:#22c55e22;"></span><span class="dot" style="background:#22c55e22;"></span><span class="dot" style="background:#22c55e22;"></span></span> Light · mint</div><div class="price-row"><span class="price">€3.49</span><span class="qty">1 can</span></div></div>
+            </div>
+            <div class="card-demo">
+              <div class="img-area"><span>VELO Freeze Max</span></div>
+              <div class="strength-strip" style="background:#f97316;"></div>
+              <div class="card-body"><div class="brand-line">VELO</div><div class="name">Freeze Max</div><div class="meta"><span class="dots"><span class="dot" style="background:#f97316;"></span><span class="dot" style="background:#f97316;"></span><span class="dot" style="background:#f97316;"></span><span class="dot" style="background:#f9731622;"></span><span class="dot" style="background:#f9731622;"></span></span> Strong · mint</div><div class="price-row"><span class="price">€3.89</span><span class="qty">1 can</span></div></div>
+            </div>
+            <div class="card-demo">
+              <div class="img-area"><span>Siberia -80°C</span></div>
+              <div class="strength-strip" style="background:#a855f7;"></div>
+              <div class="card-body"><div class="brand-line">Siberia</div><div class="name">-80°C Black</div><div class="meta"><span class="dots"><span class="dot" style="background:#a855f7;"></span><span class="dot" style="background:#a855f7;"></span><span class="dot" style="background:#a855f7;"></span><span class="dot" style="background:#a855f7;"></span><span class="dot" style="background:#a855f7;"></span></span> Super Strong · mint</div><div class="price-row"><span class="price">€4.29</span><span class="qty">1 can</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2: Unified 5-dot strength -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(59,130,246,0.12);">📊</div>
+      <div class="imp-content">
+        <h3>Unified 5-Dot Strength Scale <span class="effort effort-low">20 min</span></h3>
+        <div class="where">Product cards + PDP — replace current single coloured dot + text label</div>
+        <p>Right now cards show a single coloured dot with "Normal" or "Strong" text, but the PDP shows a 5-dot scale. This inconsistency means users learn the system on the detail page, then can't find it on the card. Unify to 5 dots everywhere — filled dots = strength level, colour matches the strength tier. Scannable at a glance without reading.</p>
+        <div class="demo">
+          <div style="display:flex;gap:28px;align-items:center;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Light (1/5)</div>
+              <span class="dots"><span class="dot" style="background:#22c55e;"></span><span class="dot" style="background:#22c55e33;"></span><span class="dot" style="background:#22c55e33;"></span><span class="dot" style="background:#22c55e33;"></span><span class="dot" style="background:#22c55e33;"></span></span>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Normal (2/5)</div>
+              <span class="dots"><span class="dot" style="background:#3b82f6;"></span><span class="dot" style="background:#3b82f6;"></span><span class="dot" style="background:#3b82f633;"></span><span class="dot" style="background:#3b82f633;"></span><span class="dot" style="background:#3b82f633;"></span></span>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Strong (3/5)</div>
+              <span class="dots"><span class="dot" style="background:#f97316;"></span><span class="dot" style="background:#f97316;"></span><span class="dot" style="background:#f97316;"></span><span class="dot" style="background:#f9731633;"></span><span class="dot" style="background:#f9731633;"></span></span>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Extra Strong (4/5)</div>
+              <span class="dots"><span class="dot" style="background:#ef4444;"></span><span class="dot" style="background:#ef4444;"></span><span class="dot" style="background:#ef4444;"></span><span class="dot" style="background:#ef4444;"></span><span class="dot" style="background:#ef444433;"></span></span>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Super Strong (5/5)</div>
+              <span class="dots"><span class="dot" style="background:#a855f7;"></span><span class="dot" style="background:#a855f7;"></span><span class="dot" style="background:#a855f7;"></span><span class="dot" style="background:#a855f7;"></span><span class="dot" style="background:#a855f7;"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: Show quantity on card -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(76,175,80,0.12);">💰</div>
+      <div class="imp-content">
+        <h3>Show "1 can" Next to Price on Cards <span class="effort effort-low">15 min</span></h3>
+        <div class="where">Product cards — price area</div>
+        <p>Cards show "€3.08" but don't say what that gets you. Is that per pouch? Per can? Per 10-pack? Users have to click through to find out. Adding "1 can" in tiny muted text next to the price eliminates a friction point before add-to-cart. The PDP already calculates multi-pack savings — this primes users for the upsell.</p>
+        <div class="demo">
+          <div class="compare">
+            <div class="compare-side">
+              <h4>Current</h4>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:18px;font-weight:700;">€3.08</span>
+                <button style="background:var(--primary);color:white;border:none;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Add to Cart</button>
+              </div>
+            </div>
+            <div class="compare-side">
+              <h4>Improved</h4>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div>
+                  <span style="font-size:18px;font-weight:700;">€3.08</span>
+                  <span style="font-size:10px;color:var(--muted);margin-left:4px;">/ 1 can</span>
+                </div>
+                <button style="background:var(--primary);color:white;border:none;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: Capitalise flavor labels -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(168,85,247,0.12);">🏷️</div>
+      <div class="imp-content">
+        <h3>Capitalise Flavour Labels on Cards <span class="effort effort-low">10 min</span></h3>
+        <div class="where">Product cards — flavour badge</div>
+        <p>Cards show raw data keys like "fruit", "mint", "berry" but the PDP shows proper labels "Fruit", "Mint", "Berry". Small inconsistency, but it makes the cards look unfinished. Apply the same flavorLabels map that the PDP uses.</p>
+        <div class="demo">
+          <div class="compare">
+            <div class="compare-side">
+              <h4>Current</h4>
+              <div style="display:flex;gap:6px;">
+                <span style="font-size:11px;padding:2px 8px;border-radius:8px;background:rgba(76,175,80,0.1);color:#66BB6A;">mint</span>
+                <span style="font-size:11px;padding:2px 8px;border-radius:8px;background:rgba(96,165,250,0.1);color:#60a5fa;">berry</span>
+                <span style="font-size:11px;padding:2px 8px;border-radius:8px;background:rgba(251,191,36,0.1);color:#fbbf24;">fruit</span>
+              </div>
+            </div>
+            <div class="compare-side">
+              <h4>Fixed</h4>
+              <div style="display:flex;gap:6px;">
+                <span style="font-size:11px;padding:2px 8px;border-radius:8px;background:rgba(76,175,80,0.1);color:#66BB6A;">Mint</span>
+                <span style="font-size:11px;padding:2px 8px;border-radius:8px;background:rgba(96,165,250,0.1);color:#60a5fa;">Berry</span>
+                <span style="font-size:11px;padding:2px 8px;border-radius:8px;background:rgba(251,191,36,0.1);color:#fbbf24;">Fruit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5: Brand page concentric rings -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(21,101,192,0.12);">🔵</div>
+      <div class="imp-content">
+        <h3>Brand Page Header — Tin Lid Ring Pattern <span class="effort effort-low">20 min</span></h3>
+        <div class="where">Individual brand pages (/brands/zyn, /brands/velo, etc.)</div>
+        <p>The brand page header already uses a gradient with the brand colour. Add faint concentric ring lines (like the grip rings on a real tin lid viewed from above) as a CSS-only background detail. No new assets needed — just 3 positioned circles with ~4% white opacity. Grounds the header in the product without being flashy.</p>
+        <div class="demo">
+          <div style="position:relative;height:100px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#1565C0dd,#0D47A1aa);display:flex;align-items:center;padding:0 20px;">
+            <div style="position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);"></div>
+            <div style="position:absolute;right:-10px;top:-10px;width:120px;height:120px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);"></div>
+            <div style="position:absolute;right:10px;top:10px;width:80px;height:80px;border-radius:50%;border:1px solid rgba(255,255,255,0.03);"></div>
+            <div style="position:relative;z-index:1;">
+              <div style="font-size:20px;font-weight:800;color:white;">VELO</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px;">by British American Tobacco · Sweden · 38 cans</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6: Add-to-cart snap animation -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(76,175,80,0.12);">✨</div>
+      <div class="imp-content">
+        <h3>Add-to-Cart "Snap" Micro-Animation <span class="effort effort-low">15 min</span></h3>
+        <div class="where">All Add to Cart buttons</div>
+        <p>When you open a real pouch tin, the lid snaps. Mimic that with a 250ms CSS scale animation (1 → 0.94 → 1.03 → 1) on click. No sound, no confetti — just a tactile mechanical feeling through motion. Currently the button gives zero visual feedback on click, so users don't know if their click registered.</p>
+        <div class="demo">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <button id="snap-btn" style="background:var(--primary);color:white;border:none;padding:8px 18px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;" onclick="this.style.animation='snap 0.25s ease';this.textContent='Added ✓';setTimeout(()=>{this.style.animation='';this.textContent='Add to Cart'},1200)">Add to Cart</button>
+            <span style="font-size:11px;color:var(--muted);">← click to test</span>
+          </div>
+          <style>@keyframes snap { 0%{transform:scale(1)} 30%{transform:scale(0.94)} 60%{transform:scale(1.03)} 100%{transform:scale(1)} }</style>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7: Brand discoverability on cards -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(249,168,37,0.12);">👆</div>
+      <div class="imp-content">
+        <h3>Make Brand Name Clickable & Visible on Cards <span class="effort effort-med">45 min</span></h3>
+        <div class="where">Product cards — brand name line</div>
+        <p>Currently the brand name on product cards is tiny (text-xs), muted, and uses a JS onclick handler instead of a proper &lt;a&gt; tag. Users don't realize it's clickable, and keyboard navigation skips it entirely. Fix: make it a proper link, increase to text-sm, and add an underline on hover. This drives brand page traffic and helps users browse by brand from any grid.</p>
+        <div class="demo">
+          <div class="compare">
+            <div class="compare-side">
+              <h4>Current</h4>
+              <div style="font-size:10px;color:var(--muted);cursor:default;">VELO</div>
+              <div style="font-size:13px;font-weight:600;">Arctic Grapefruit Normal</div>
+            </div>
+            <div class="compare-side">
+              <h4>Improved</h4>
+              <a href="#" style="font-size:11px;color:var(--primary);text-decoration:none;display:inline-block;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">VELO →</a>
+              <div style="font-size:13px;font-weight:600;">Arctic Grapefruit Normal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8: "Cans" language -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(76,175,80,0.12);">💬</div>
+      <div class="imp-content">
+        <h3>Niche Language: "Cans" Not "Products" <span class="effort effort-low">30 min</span></h3>
+        <div class="where">Brand cards, filter counts, search results, cart, everywhere</div>
+        <p>Replace "47 products" with "47 cans". Replace "3 items in your cart" with "3 cans in your cart". Replace "Showing 24 products" with "Showing 24 cans". Pure copy change, zero code on the design side. It's how the community talks — no real pouch user says "I bought 5 nicotine pouch products". They say "I grabbed 5 cans".</p>
+      </div>
+    </div>
+
+    <!-- 9: Pouch breadcrumb separator -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(156,163,175,0.12);">🥖</div>
+      <div class="imp-content">
+        <h3>Pouch Silhouette Breadcrumb Separator <span class="effort effort-low">10 min</span></h3>
+        <div class="where">Breadcrumbs on every page</div>
+        <p>Replace the "/" breadcrumb separator with a tiny inline pouch silhouette SVG. At body-text size it reads as a soft oval — barely noticeable until you look closely. The kind of detail that gets mentioned in "attention to detail" comments. Zero visual clutter, pure brand signal.</p>
+        <div class="demo">
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div>
+              <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Current</div>
+              <div class="bread"><a href="#">Home</a><span style="color:var(--border);">/</span><a href="#">Brands</a><span style="color:var(--border);">/</span><span class="current">ZYN</span></div>
+            </div>
+            <div>
+              <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">With pouch</div>
+              <div class="bread"><a href="#">Home</a><svg width="14" height="10" viewBox="0 0 14 10" style="opacity:0.2;"><ellipse cx="7" cy="5" rx="5.5" ry="4" fill="currentColor"/></svg><a href="#">Brands</a><svg width="14" height="10" viewBox="0 0 14 10" style="opacity:0.2;"><ellipse cx="7" cy="5" rx="5.5" ry="4" fill="currentColor"/></svg><span class="current">ZYN</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10: Sticky ATC on PDP -->
+    <div class="imp">
+      <div class="imp-badge" style="background:rgba(239,68,68,0.12);">📌</div>
+      <div class="imp-content">
+        <h3>Activate Sticky Add-to-Cart on PDP <span class="effort effort-med">45 min</span></h3>
+        <div class="where">Product detail pages — when main CTA scrolls out of view</div>
+        <p>The StickyAddToCart component already exists in the codebase but isn't rendered. When a user scrolls past the main Add to Cart button on a long PDP, a compact sticky bar should appear at the bottom with the product name, price, and an Add to Cart button. This is the single highest-conversion UX fix for product pages — users currently have to scroll back up to buy.</p>
+        <div class="demo">
+          <div style="border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+            <div style="background:var(--card-alt);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+              <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                <div style="width:36px;height:36px;border-radius:8px;background:var(--card);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                  <span style="font-size:10px;color:var(--muted);">img</span>
+                </div>
+                <div style="min-width:0;">
+                  <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">ZYN Cool Mint Mini S2</div>
+                  <div style="font-size:11px;color:var(--muted);">3mg · Light</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+                <span style="font-size:15px;font-weight:700;">€3.49</span>
+                <button style="background:var(--primary);color:white;border:none;padding:7px 14px;border-radius:8px;font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap;">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:6px;">Appears when main Add to Cart scrolls out of viewport. Uses IntersectionObserver.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== 3: PRIORITY TABLE ==================== -->
+<div class="section">
+  <span class="section-label">Priority</span>
+  <h2>Implementation Order</h2>
+  <p class="section-desc">Sorted by conversion impact. Everything above the line is a single coding session.</p>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Change</th><th>Effort</th><th>Impact</th><th>Priority</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td style="font-weight:600;">Tin lid brand logos</td><td style="color:var(--muted);">1 hour</td><td style="color:var(--muted);">Replaces weakest visual on the site</td><td><span class="p-tag p1">P1</span></td></tr>
+      <tr><td>2</td><td style="font-weight:600;">Sticky Add-to-Cart on PDP</td><td style="color:var(--muted);">45 min</td><td style="color:var(--muted);">Direct conversion lift — component exists, just needs wiring</td><td><span class="p-tag p1">P1</span></td></tr>
+      <tr><td>3</td><td style="font-weight:600;">Strength colour strip</td><td style="color:var(--muted);">30 min</td><td style="color:var(--muted);">Makes product grid instantly scannable</td><td><span class="p-tag p1">P1</span></td></tr>
+      <tr><td>4</td><td style="font-weight:600;">"1 can" price clarity</td><td style="color:var(--muted);">15 min</td><td style="color:var(--muted);">Reduces pre-purchase confusion</td><td><span class="p-tag p1">P1</span></td></tr>
+      <tr><td>5</td><td style="font-weight:600;">"Cans" language</td><td style="color:var(--muted);">30 min</td><td style="color:var(--muted);">Niche authority, zero design effort</td><td><span class="p-tag p1">P1</span></td></tr>
+      <tr><td>6</td><td style="font-weight:600;">Unified 5-dot strength</td><td style="color:var(--muted);">20 min</td><td style="color:var(--muted);">Consistency between cards and PDP</td><td><span class="p-tag p1">P1</span></td></tr>
+      <tr><td>7</td><td style="font-weight:600;">Add-to-cart snap animation</td><td style="color:var(--muted);">15 min</td><td style="color:var(--muted);">Click feedback — costs nothing, feels premium</td><td><span class="p-tag p1">P1</span></td></tr>
+      <tr><td>8</td><td style="font-weight:600;">Capitalise flavour labels</td><td style="color:var(--muted);">10 min</td><td style="color:var(--muted);">Polish — looks unfinished without it</td><td><span class="p-tag p1">P1</span></td></tr>
+      <tr style="border-top:2px solid var(--border);"><td>9</td><td style="font-weight:600;">Brand name clickability</td><td style="color:var(--muted);">45 min</td><td style="color:var(--muted);">Drives brand page traffic + accessibility fix</td><td><span class="p-tag p2">P2</span></td></tr>
+      <tr><td>10</td><td style="font-weight:600;">Brand page concentric rings</td><td style="color:var(--muted);">20 min</td><td style="color:var(--muted);">Subtle tin-lid visual on brand pages</td><td><span class="p-tag p2">P2</span></td></tr>
+      <tr><td>11</td><td style="font-weight:600;">Pouch breadcrumb separator</td><td style="color:var(--muted);">10 min</td><td style="color:var(--muted);">Easter egg detail, niche polish</td><td><span class="p-tag p3">P3</span></td></tr>
+    </tbody>
+  </table>
+
+  <p class="note" style="margin-top:20px;">P1 items total ~3.5 hours of work. All are CSS/copy changes except the sticky ATC (which already has a component built). No new dependencies, no new APIs, no database changes.</p>
+</div>
+
+</body>
+</html>

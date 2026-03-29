@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gamification CTA Mockup — SnusFriend</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: { DEFAULT: '#2E7D32', foreground: '#faf8f5' },
+        background: '#faf8f5',
+        foreground: '#1a2e1a',
+        card: '#ffffff',
+        muted: { DEFAULT: '#f0ece5', foreground: '#6b7a5e' },
+        border: '#d4cfc5',
+        accent: '#FFD700',
+      },
+    },
+  },
+};
+</script>
+<style>
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.4), 0 4px 16px rgba(0,0,0,0.1); }
+  50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 4px 16px rgba(0,0,0,0.15); }
+}
+@keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.spin-slow { animation: spin-slow 8s linear infinite; }
+.bounce-subtle { animation: bounce-subtle 2s ease-in-out infinite; }
+</style>
+</head>
+<body class="bg-background text-foreground font-sans">
+
+<div class="max-w-5xl mx-auto px-4 py-12">
+  <h1 class="text-3xl font-bold mb-2">Gamification Visibility Mockups</h1>
+  <p class="text-muted-foreground mb-10">Three approaches to make the gamification system visible to visitors without being intrusive.</p>
+
+  <!-- OPTION A: Floating Spin-to-Win CTA -->
+  <section class="mb-16">
+    <h2 class="text-xl font-semibold mb-4 text-primary">Option A: Floating Spin-to-Win Button (Bottom-Right)</h2>
+    <p class="text-sm text-muted-foreground mb-6">A subtle floating button that pulses gently, drawing attention without blocking content. Expands on hover to show the reward. Sits above the cookie banner.</p>
+
+    <div class="relative bg-card rounded-xl border border-border h-96 overflow-hidden">
+      <!-- Fake page content -->
+      <div class="p-6">
+        <div class="h-4 w-48 bg-muted rounded mb-3"></div>
+        <div class="h-3 w-full bg-muted/50 rounded mb-2"></div>
+        <div class="h-3 w-3/4 bg-muted/50 rounded mb-6"></div>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="h-32 bg-muted/30 rounded-lg"></div>
+          <div class="h-32 bg-muted/30 rounded-lg"></div>
+          <div class="h-32 bg-muted/30 rounded-lg"></div>
+        </div>
+      </div>
+
+      <!-- The floating CTA -->
+      <div class="absolute bottom-6 right-6 group cursor-pointer">
+        <div class="pulse-glow flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 pl-3 pr-4 py-2.5 text-white font-semibold text-sm shadow-lg transition-all duration-300 group-hover:pr-6">
+          <span class="text-lg spin-slow inline-block">🎡</span>
+          <span class="whitespace-nowrap">Spin & Win!</span>
+          <span class="hidden group-hover:inline text-xs opacity-90 ml-1">Free pouches</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION B: Header Points Indicator -->
+  <section class="mb-16">
+    <h2 class="text-xl font-semibold mb-4 text-primary">Option B: Header Points Indicator</h2>
+    <p class="text-sm text-muted-foreground mb-6">A compact points display in the header next to the cart icon. Shows points balance for logged-in users, or "Join & Earn" for guests. Links to /rewards.</p>
+
+    <div class="bg-card rounded-xl border border-border overflow-hidden">
+      <!-- Header mockup -->
+      <nav class="flex items-center justify-between px-6 py-3 border-b border-border bg-background">
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded bg-primary flex items-center justify-center text-white text-xs font-bold">SF</div>
+          <span class="font-bold text-lg">SnusFriend</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- Points indicator (guest) -->
+          <a href="#" class="flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1.5 text-xs font-medium text-amber-800 hover:bg-amber-100 transition-colors">
+            <svg class="h-3.5 w-3.5 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span>Join & Earn</span>
+          </a>
+
+          <!-- Points indicator (logged in variant) -->
+          <a href="#" class="flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1.5 text-xs font-medium text-amber-800 hover:bg-amber-100 transition-colors">
+            <svg class="h-3.5 w-3.5 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span>1,240 pts</span>
+          </a>
+
+          <!-- Cart -->
+          <div class="relative p-2">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span class="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center">3</span>
+          </div>
+        </div>
+      </nav>
+      <div class="p-6 text-center text-sm text-muted-foreground">
+        <p>← Guest sees "Join & Earn" | Logged-in user sees "1,240 pts" →</p>
+        <p class="mt-1 text-xs">Both link to /rewards. Points badge uses amber accent to stand out from green navigation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION C: Homepage Gamification Bar -->
+  <section class="mb-16">
+    <h2 class="text-xl font-semibold mb-4 text-primary">Option C: Homepage Gamification Strip</h2>
+    <p class="text-sm text-muted-foreground mb-6">A horizontal strip below the hero showing three gamification entry points. Replaces generic trust bar on homepage only.</p>
+
+    <div class="bg-card rounded-xl border border-border overflow-hidden">
+      <div class="bg-gradient-to-r from-primary/5 to-amber-50 border-b border-border px-6 py-4">
+        <div class="flex flex-wrap items-center justify-center gap-6 md:gap-10 text-sm">
+          <!-- Spin to Win -->
+          <a href="#" class="flex items-center gap-2 text-foreground hover:text-primary transition-colors group">
+            <span class="text-xl bounce-subtle inline-block">🎡</span>
+            <div>
+              <span class="font-semibold block leading-tight">Spin to Win</span>
+              <span class="text-xs text-muted-foreground">Free pouches & discounts</span>
+            </div>
+          </a>
+          <div class="h-8 w-px bg-border hidden md:block"></div>
+          <!-- Daily Quests -->
+          <a href="#" class="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+            <span class="text-xl">⚔️</span>
+            <div>
+              <span class="font-semibold block leading-tight">Daily Quests</span>
+              <span class="text-xs text-muted-foreground">Complete tasks, earn points</span>
+            </div>
+          </a>
+          <div class="h-8 w-px bg-border hidden md:block"></div>
+          <!-- Loyalty Tiers -->
+          <a href="#" class="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+            <span class="text-xl">🏆</span>
+            <div>
+              <span class="font-semibold block leading-tight">Loyalty Rewards</span>
+              <span class="text-xs text-muted-foreground">Bronze → Platinum tiers</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="p-6 text-center text-sm text-muted-foreground">
+        <p>Shows below hero section on homepage. Each link opens the relevant feature.</p>
+        <p class="mt-1 text-xs">Recommendation: Use Option A + B together. The floating CTA catches scrollers, the header badge retains logged-in users.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATION -->
+  <section class="rounded-xl border-2 border-primary/30 bg-primary/5 p-6">
+    <h2 class="text-lg font-semibold mb-2">Recommended Approach</h2>
+    <p class="text-sm text-muted-foreground leading-relaxed">
+      <strong>Combine A + B:</strong> The floating Spin-to-Win button (Option A) drives first engagement — it's visible to every visitor regardless of page. The header points indicator (Option B) keeps returning users engaged with their balance visible at all times. Option C can be added to the homepage as a secondary enhancement. The floating button should dismiss after the user interacts with it (either spins or explicitly closes), and shouldn't reappear for 24 hours.
+    </p>
+  </section>
+</div>
+
+</body>
+</html>

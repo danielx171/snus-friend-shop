@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnusFriend — Pouch Branding v2</title>
+<style>
+  :root {
+    --bg: #0c1a0c;
+    --card: #142214;
+    --card-alt: #1a2e1a;
+    --border: #2a3f2a;
+    --text: #e8f0e8;
+    --muted: #8fa88f;
+    --primary: #4CAF50;
+    --primary-light: #66BB6A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .section { max-width: 1200px; margin: 0 auto; padding: 60px 24px; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-label { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); background: rgba(76,175,80,0.1); padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .section-desc { color: var(--muted); font-size: 15px; margin-bottom: 32px; max-width: 700px; }
+  .note { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 12px; }
+
+  /* ========== TIN LID LOGOS ========== */
+  .brand-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .brand-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 560px) { .brand-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .brand-card {
+    display: flex; flex-direction: column; align-items: center;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px 8px 16px; transition: all 0.25s;
+    cursor: pointer; text-decoration: none; color: var(--text);
+  }
+  .brand-card:hover {
+    border-color: rgba(76,175,80,0.4);
+    box-shadow: 0 8px 32px rgba(76,175,80,0.08);
+    transform: translateY(-2px);
+  }
+  .brand-card .count { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* Tin lid — the core shape */
+  .tin {
+    width: 72px; height: 72px; border-radius: 50%; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0;
+  }
+  .tin .bg {
+    position: absolute; inset: 0; border-radius: 50%;
+  }
+  /* Outer rim */
+  .tin .rim {
+    position: absolute; inset: 2px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.35);
+  }
+  /* Inner circle — like the grip ring on a real tin */
+  .tin .grip {
+    position: absolute; inset: 9px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  /* The brand name text — auto-sizes */
+  .tin .label {
+    position: relative; z-index: 1; font-weight: 800;
+    color: white; text-transform: uppercase; letter-spacing: 0.5px;
+    white-space: nowrap; line-height: 1;
+  }
+  /* Shine highlight */
+  .tin::after {
+    content: ''; position: absolute;
+    top: 5px; left: 18%; right: 32%;
+    height: 22%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+    border-radius: 50%; z-index: 2; pointer-events: none;
+  }
+  /* Hover: subtle rotate like opening a tin */
+  .brand-card:hover .tin {
+    transform: rotate(-3deg);
+    transition: transform 0.3s ease;
+  }
+
+  /* Text sizing classes */
+  .label-xs { font-size: 10px; letter-spacing: 0.3px; }
+  .label-sm { font-size: 12px; letter-spacing: 0.3px; }
+  .label-md { font-size: 14px; }
+  .label-lg { font-size: 16px; }
+  .label-xl { font-size: 18px; }
+
+  /* ========== SIDE-BY-SIDE COMPARISON ========== */
+  .compare-row { display: flex; gap: 48px; margin-bottom: 48px; flex-wrap: wrap; }
+  .compare-col { flex: 1; min-width: 260px; }
+  .compare-col h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; color: var(--primary-light); }
+  .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+  /* Current plain circles */
+  .plain-circle {
+    width: 64px; height: 64px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto;
+  }
+  .plain-circle span { font-weight: 700; font-size: 20px; }
+
+  /* ========== IDEAS SECTION ========== */
+  .ideas-list { display: flex; flex-direction: column; gap: 24px; }
+  .idea {
+    display: flex; gap: 24px; align-items: flex-start;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px; transition: border-color 0.2s;
+  }
+  .idea:hover { border-color: rgba(76,175,80,0.25); }
+  .idea-num {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(76,175,80,0.1); color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .idea-content { flex: 1; }
+  .idea-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .idea-content .where { font-size: 12px; color: var(--primary); margin-bottom: 8px; }
+  .idea-content p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .idea-content .demo { margin-top: 16px; background: var(--card-alt); border-radius: 12px; padding: 20px; }
+
+  /* Strength as a subtle gradient strip */
+  .card-demo {
+    width: 200px; border-radius: 14px; overflow: hidden;
+    background: var(--card); border: 1px solid var(--border);
+  }
+  .card-demo .img-area { height: 120px; background: var(--card-alt); position: relative; display:flex;align-items:center;justify-content:center; }
+  .card-demo .img-area span { color:var(--muted);font-size:12px; }
+  .card-demo .strength-strip { height: 3px; }
+  .card-demo .card-body { padding: 12px; }
+  .card-demo .card-body .name { font-size: 13px; font-weight: 600; }
+  .card-demo .card-body .meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .card-demo .card-body .price { font-size: 14px; font-weight: 700; margin-top: 6px; color: var(--primary-light); }
+
+  /* Breadcrumb with pouch separator */
+  .bread { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .bread a { color: var(--muted); text-decoration: none; }
+  .bread a:hover { color: var(--text); }
+  .bread .current { color: var(--text); font-weight: 500; }
+
+  /* Product count as cans */
+  .can-count { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
+
+  /* Tin lid favicon / identity mark in footer */
+  .footer-mark {
+    width: 36px; height: 36px; border-radius: 50%; position: relative;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .footer-mark .bg { position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #2E7D32); }
+  .footer-mark .rim { position: absolute; inset: 2px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.3); }
+  .footer-mark .txt { position: relative; z-index:1; color: white; font-weight: 800; font-size: 11px; }
+  .footer-mark::after {
+    content:''; position:absolute; top:3px; left:18%; right:32%; height:20%;
+    background:linear-gradient(180deg,rgba(255,255,255,0.15) 0%,transparent 100%);
+    border-radius:50%; z-index:2;
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== SECTION 1: TIN LID BRAND LOGOS ==================== -->
+<div class="section">
+  <span class="section-label">Brand Logos</span>
+  <h2>Tin Lid Logos — Full Brand Names</h2>
+  <p class="section-desc">Each brand gets a tin lid with its full name. Text auto-sizes to fit. Only abbreviate when the name genuinely won't fit (e.g. "Nordic Spirit" → "NS", "White Fox" → "WF").</p>
+
+  <!-- Before / After comparison -->
+  <div class="compare-row">
+    <div class="compare-col">
+      <h3>Before (plain circles)</h3>
+      <div class="mini-grid">
+        <div style="text-align:center;">
+          <div class="plain-circle" style="background:rgba(76,175,80,0.1);"><span style="color:#4CAF50;">Z</span></div>
+          <div style="font-size:12px;margin-top:6px;">ZYN</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="plain-circle" style="background:rgba(21,101,192,0.1);"><span style="color:#1565C0;">V</span></div>
+          <div style="font-size:12px;margin-top:6px;">VELO</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="plain-circle" style="background:rgba(255,111,0,0.1);"><span style="color:#FF6F00;">L</span></div>
+          <div style="font-size:12px;margin-top:6px;">LOOP</div>
+        </div>
+      </div>
+    </div>
+    <div class="compare-col">
+      <h3>After (tin lids with names)</h3>
+      <div class="mini-grid">
+        <div style="text-align:center;">
+          <div class="tin" style="width:64px;height:64px;margin:0 auto;">
+            <div class="bg" style="background:linear-gradient(135deg,#4CAF50,#2E7D32);"></div>
+            <div class="rim"></div><div class="grip"></div>
+            <span class="label label-lg">ZYN</span>
+          </div>
+          <div style="font-size:12px;margin-top:8px;">ZYN</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="tin" style="width:64px;height:64px;margin:0 auto;">
+            <div class="bg" style="background:linear-gradient(135deg,#1565C0,#0D47A1);"></div>
+            <div class="rim"></div><div class="grip"></div>
+            <span class="label label-md">VELO</span>
+          </div>
+          <div style="font-size:12px;margin-top:8px;">VELO</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="tin" style="width:64px;height:64px;margin:0 auto;">
+            <div class="bg" style="background:linear-gradient(135deg,#FF6F00,#E65100);"></div>
+            <div class="rim"></div><div class="grip"></div>
+            <span class="label label-md">LOOP</span>
+          </div>
+          <div style="font-size:12px;margin-top:8px;">LOOP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full brand grid -->
+  <h3 style="margin-bottom:20px; font-size:17px;">Full Grid</h3>
+  <div class="brand-grid">
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#4CAF50,#2E7D32);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg">ZYN</span></div>
+      <span class="count">47 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#1565C0,#0D47A1);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">VELO</span></div>
+      <span class="count">38 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#FF6F00,#E65100);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">LOOP</span></div>
+      <span class="count">24 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#D32F2F,#B71C1C);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xs">SIBERIA</span></div>
+      <span class="count">12 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#1B5E20,#0a3a0a);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">SKRUF</span></div>
+      <span class="count">18 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#0D47A1,#0a2a60);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xl">WF</span></div>
+      <span class="count">10 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#B71C1C,#7f0000);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">PABLO</span></div>
+      <span class="count">15 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#37474F,#263238);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xl">NS</span></div>
+      <span class="count">22 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#004D40,#00332b);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">KLAR</span></div>
+      <span class="count">8 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#6A1B9A,#4A148C);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">FUMI</span></div>
+      <span class="count">9 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#E65100,#BF360C);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">CUBA</span></div>
+      <span class="count">20 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#00838F,#006064);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xs">ICEBERG</span></div>
+      <span class="count">16 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#2E7D32,#1B5E20);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg">ACE</span></div>
+      <span class="count">11 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#558B2F,#33691E);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xs">HELWIT</span></div>
+      <span class="count">7 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#F9A825,#F57F17);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg" style="color:rgba(0,0,0,0.75);">77</span></div>
+      <span class="count">13 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#B71C1C,#880E4F);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">KILLA</span></div>
+      <span class="count">14 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#E53935,#C62828);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xl">ON!</span></div>
+      <span class="count">19 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#AD1457,#880E4F);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xs" style="font-size:8px;letter-spacing:0;">CHAIN</span></div>
+      <span class="count">6 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#1A237E,#0D1259);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg">FIX</span></div>
+      <span class="count">5 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#33691E,#1B5E20);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">FOLD</span></div>
+      <span class="count">4 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#00695C,#004D40);"></div><div class="rim"></div><div class="grip"></div><span class="label label-sm">KLINT</span></div>
+      <span class="count">8 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#4A148C,#311B92);"></div><div class="rim"></div><div class="grip"></div><span class="label label-lg">XQS</span></div>
+      <span class="count">10 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#283593,#1A237E);"></div><div class="rim"></div><div class="grip"></div><span class="label label-xs">DENSSI</span></div>
+      <span class="count">3 products</span>
+    </div>
+
+    <div class="brand-card">
+      <div class="tin"><div class="bg" style="background:linear-gradient(135deg,#0277BD,#01579B);"></div><div class="rim"></div><div class="grip"></div><span class="label label-md">CLEW</span></div>
+      <span class="count">5 products</span>
+    </div>
+
+  </div>
+
+  <p class="note">Abbreviation rules: full name if it fits in the grip ring. Shorten only when 7+ characters (White Fox → WF, Nordic Spirit → NS, Chainpop → CHAIN). The brand name still appears below the tin as text.</p>
+</div>
+
+<!-- ==================== SECTION 2: REFINED POUCH-THEMED IDEAS ==================== -->
+<div class="section">
+  <span class="section-label">Design Touches</span>
+  <h2>Subtle Pouch-Themed Details</h2>
+  <p class="section-desc">Not novelty gimmicks — these are small, earned design details that make the site feel like it was built by people who actually know the product.</p>
+
+  <div class="ideas-list">
+
+    <!-- IDEA 1: Strength color strip on product cards -->
+    <div class="idea">
+      <div class="idea-num">1</div>
+      <div class="idea-content">
+        <h3>Strength Colour Strip</h3>
+        <div class="where">Product cards — bottom edge of the image area</div>
+        <p>A 3px colour band at the bottom of each product card image, using the existing strength colours. No label, no icon — just colour. Anyone who's browsed pouches for 5 minutes will learn the system. Green = light, blue = normal, orange = strong, red = extra strong, purple = super strong. It's how the real tins differentiate strength visually.</p>
+        <div class="demo">
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <div class="card-demo">
+              <div class="img-area"><span>Product image</span></div>
+              <div class="strength-strip" style="background:linear-gradient(90deg,#22c55e,#22c55e);"></div>
+              <div class="card-body"><div class="name">ZYN Cool Mint</div><div class="meta">Light · 3mg</div><div class="price">€3.49</div></div>
+            </div>
+            <div class="card-demo">
+              <div class="img-area"><span>Product image</span></div>
+              <div class="strength-strip" style="background:linear-gradient(90deg,#f97316,#f97316);"></div>
+              <div class="card-body"><div class="name">VELO Freeze Max</div><div class="meta">Strong · 11mg</div><div class="price">€3.89</div></div>
+            </div>
+            <div class="card-demo">
+              <div class="img-area"><span>Product image</span></div>
+              <div class="strength-strip" style="background:linear-gradient(90deg,#a855f7,#a855f7);"></div>
+              <div class="card-body"><div class="name">Siberia -80°C</div><div class="meta">Super Strong · 33mg</div><div class="price">€4.29</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEA 2: Tin lid as SnusFriend identity mark -->
+    <div class="idea">
+      <div class="idea-num">2</div>
+      <div class="idea-content">
+        <h3>SnusFriend Tin Mark</h3>
+        <div class="where">Footer, favicon, email signature, packaging</div>
+        <p>Use a miniature tin lid shape as the SnusFriend identity mark — the "SF" lockup rendered inside a circular tin lid with rim and shine. This becomes the recurring brand element: footer logo, favicon, social avatar, email header. It ties the SnusFriend identity to the product form factor itself.</p>
+        <div class="demo">
+          <div style="display:flex;gap:24px;align-items:center;">
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Footer / favicon</div>
+              <div class="footer-mark">
+                <div class="bg"></div><div class="rim"></div>
+                <span class="txt">SF</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Larger (about page)</div>
+              <div class="footer-mark" style="width:56px;height:56px;">
+                <div class="bg"></div><div class="rim"></div>
+                <span class="txt" style="font-size:16px;">SF</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">With site name</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="footer-mark">
+                  <div class="bg"></div><div class="rim"></div>
+                  <span class="txt">SF</span>
+                </div>
+                <span style="font-weight:700;font-size:16px;">SnusFriend</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEA 3: Tin as the product image container shape -->
+    <div class="idea">
+      <div class="idea-num">3</div>
+      <div class="idea-content">
+        <h3>Circular Product Image Containers</h3>
+        <div class="where">Product cards (grid view)</div>
+        <p>Instead of square product image containers, use circular ones — the actual shape of a pouch tin viewed from above. The product images are already cans shot from top-ish angles, so they naturally fit a circle. This makes the grid feel product-native rather than generic e-commerce.</p>
+        <div class="demo">
+          <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+            <div style="text-align:center;width:140px;">
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Current (square)</div>
+              <div style="width:120px;height:120px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+                <span style="font-size:11px;color:var(--muted);">Product img</span>
+              </div>
+            </div>
+            <div style="text-align:center;width:140px;">
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Circular (tin view)</div>
+              <div style="width:120px;height:120px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto;position:relative;overflow:hidden;">
+                <!-- Subtle ring detail -->
+                <div style="position:absolute;inset:4px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);"></div>
+                <span style="font-size:11px;color:var(--muted);">Product img</span>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-top:12px;">Worth testing — depends on whether product photos crop well to circles. Could be optional per brand.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEA 4: Pouch separator in breadcrumbs -->
+    <div class="idea">
+      <div class="idea-num">4</div>
+      <div class="idea-content">
+        <h3>Tiny Pouch Breadcrumb Separator</h3>
+        <div class="where">Breadcrumbs (every page)</div>
+        <p>Replace the "/" or ">" breadcrumb separator with a tiny inline SVG of a pouch silhouette. Almost invisible at body-text size, but when you notice it, it's a nice "aha" moment. This is the kind of detail that gets mentioned in design reviews and Reddit threads.</p>
+        <div class="demo">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Current</div>
+              <div class="bread">
+                <a href="#">Home</a>
+                <span style="color:var(--border);">/</span>
+                <a href="#">Brands</a>
+                <span style="color:var(--border);">/</span>
+                <span class="current">ZYN</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">With pouch</div>
+              <div class="bread">
+                <a href="#">Home</a>
+                <svg width="14" height="10" viewBox="0 0 14 10" style="opacity:0.25;"><ellipse cx="7" cy="5" rx="6" ry="4.5" fill="currentColor"/></svg>
+                <a href="#">Brands</a>
+                <svg width="14" height="10" viewBox="0 0 14 10" style="opacity:0.25;"><ellipse cx="7" cy="5" rx="6" ry="4.5" fill="currentColor"/></svg>
+                <span class="current">ZYN</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEA 5: "X cans" instead of "X products" -->
+    <div class="idea">
+      <div class="idea-num">5</div>
+      <div class="idea-content">
+        <h3>Language: "Cans" Instead of "Products"</h3>
+        <div class="where">Brand cards, filter counts, search results, cart</div>
+        <p>Across the site, replace "47 products" with "47 cans". Replace "Add to cart" with "Add to tin" or keep "Add to cart" but say "3 cans in your cart". This is pure copy — zero code change on the design side — but it makes the whole site feel like it's written by someone in the niche, not a generic Shopify template.</p>
+        <div class="demo">
+          <div style="display:flex;gap:32px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Brand card</div>
+              <div class="can-count">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1"/><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="0.5" opacity="0.4"/></svg>
+                47 cans
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Filter result</div>
+              <span style="font-size:13px;">Showing <strong>24 cans</strong> in Mint</span>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Cart</div>
+              <span style="font-size:13px;">3 cans in your cart</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEA 6: Brand page header as tin top-down view -->
+    <div class="idea">
+      <div class="idea-num">6</div>
+      <div class="idea-content">
+        <h3>Brand Page Hero — Tin Top-Down</h3>
+        <div class="where">Individual brand pages (/brands/zyn, /brands/velo, etc.)</div>
+        <p>The brand page header already uses a gradient with the brand colour. Enhance it by adding subtle concentric ring lines (like the grip rings on a tin lid viewed from above) as a CSS background pattern. Very faint, barely visible, but it grounds the header in the product. No floating shapes, no gimmicks — just geometry that echoes the product.</p>
+        <div class="demo">
+          <div style="position:relative;height:120px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#1565C0dd,#0D47A1aa);display:flex;align-items:center;padding:0 24px;">
+            <!-- Concentric rings -->
+            <div style="position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);"></div>
+            <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);"></div>
+            <div style="position:absolute;right:0px;top:0px;width:120px;height:120px;border-radius:50%;border:1px solid rgba(255,255,255,0.03);"></div>
+            <div style="position:relative;z-index:1;">
+              <div style="font-size:24px;font-weight:800;color:white;">VELO</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:2px;">by British American Tobacco · Sweden</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px;">38 cans · 12 flavours · 4mg–17mg</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEA 7: Micro-interaction on Add to Cart -->
+    <div class="idea">
+      <div class="idea-num">7</div>
+      <div class="idea-content">
+        <h3>Add-to-Cart "Snap" Feedback</h3>
+        <div class="where">Add-to-cart button</div>
+        <p>When you open a real tin, the lid makes a satisfying snap/click. On the add-to-cart button, play a tiny 50ms CSS scale animation (scale from 1 → 0.95 → 1.02 → 1) that mimics that mechanical snap. No sound, no confetti — just a subtle physical feeling through motion. It's the kind of micro-interaction that makes repeat buyers feel at home.</p>
+        <div class="demo">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <button onclick="this.style.animation='snap 0.25s ease';setTimeout(()=>this.style.animation='',300)" style="background:var(--primary);color:white;border:none;padding:10px 20px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;">
+              Add to Cart
+            </button>
+            <span style="font-size:12px;color:var(--muted);">← click to feel the snap</span>
+          </div>
+          <style>
+            @keyframes snap {
+              0% { transform: scale(1); }
+              30% { transform: scale(0.94); }
+              60% { transform: scale(1.03); }
+              100% { transform: scale(1); }
+            }
+          </style>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEA 8: Portion count ring -->
+    <div class="idea">
+      <div class="idea-num">8</div>
+      <div class="idea-content">
+        <h3>Portions-per-Can Ring on PDP</h3>
+        <div class="where">Product detail page — specs section</div>
+        <p>On the PDP, show "20 portions per can" as a ring of 20 tiny dots arranged in a circle — like looking down into an open tin and seeing the pouches arranged in a ring. It communicates quantity through the product's actual form. Much more memorable than "Portions: 20" in a specs table.</p>
+        <div class="demo">
+          <div style="display:flex;gap:32px;align-items:center;flex-wrap:wrap;">
+            <div style="text-align:center;">
+              <svg width="80" height="80" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="35" fill="none" stroke="var(--border)" stroke-width="0.5"/>
+                <!-- 20 dots in a ring -->
+                <g fill="var(--primary)" opacity="0.7">
+                  <circle cx="40" cy="7" r="3"/><circle cx="50.2" cy="7.9" r="3"/><circle cx="59.1" cy="11.8" r="3"/>
+                  <circle cx="65.8" cy="18.2" r="3"/><circle cx="69.8" cy="26.5" r="3"/><circle cx="71" cy="36" r="3"/>
+                  <circle cx="69.2" cy="45.5" r="3"/><circle cx="64.8" cy="53.8" r="3"/><circle cx="58.2" cy="60" r="3"/>
+                  <circle cx="49.8" cy="63.5" r="3"/><circle cx="40" cy="64.5" r="3"/><circle cx="30.2" cy="63.5" r="3"/>
+                  <circle cx="21.8" cy="60" r="3"/><circle cx="15.2" cy="53.8" r="3"/><circle cx="10.8" cy="45.5" r="3"/>
+                  <circle cx="9" cy="36" r="3"/><circle cx="10.2" cy="26.5" r="3"/><circle cx="14.2" cy="18.2" r="3"/>
+                  <circle cx="20.9" cy="11.8" r="3"/><circle cx="29.8" cy="7.9" r="3"/>
+                </g>
+                <text x="40" y="42" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="700">20</text>
+              </svg>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">portions per can</div>
+            </div>
+            <div style="text-align:center;">
+              <svg width="80" height="80" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="35" fill="none" stroke="var(--border)" stroke-width="0.5"/>
+                <!-- 24 dots in a ring -->
+                <g fill="var(--primary)" opacity="0.7">
+                  <circle cx="40" cy="7" r="2.5"/><circle cx="48.8" cy="7.7" r="2.5"/><circle cx="56.8" cy="10.5" r="2.5"/>
+                  <circle cx="63.2" cy="15.5" r="2.5"/><circle cx="67.5" cy="22.2" r="2.5"/><circle cx="69.5" cy="30" r="2.5"/>
+                  <circle cx="69.5" cy="38" r="2.5"/><circle cx="67.5" cy="45.8" r="2.5"/><circle cx="63.2" cy="52.5" r="2.5"/>
+                  <circle cx="56.8" cy="57.5" r="2.5"/><circle cx="48.8" cy="60.3" r="2.5"/><circle cx="40" cy="61" r="2.5"/>
+                  <circle cx="31.2" cy="60.3" r="2.5"/><circle cx="23.2" cy="57.5" r="2.5"/><circle cx="16.8" cy="52.5" r="2.5"/>
+                  <circle cx="12.5" cy="45.8" r="2.5"/><circle cx="10.5" cy="38" r="2.5"/><circle cx="10.5" cy="30" r="2.5"/>
+                  <circle cx="12.5" cy="22.2" r="2.5"/><circle cx="16.8" cy="15.5" r="2.5"/><circle cx="23.2" cy="10.5" r="2.5"/>
+                  <circle cx="31.2" cy="7.7" r="2.5"/><circle cx="36" cy="7.2" r="2.5"/><circle cx="44" cy="7.2" r="2.5"/>
+                </g>
+                <text x="40" y="42" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="700">24</text>
+              </svg>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">portions per can</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== SECTION 3: PRIORITY ==================== -->
+<div class="section">
+  <span class="section-label">Priority</span>
+  <h2>What to Build</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-size:14px;">
+    <thead>
+      <tr style="border-bottom:2px solid var(--border);">
+        <th style="text-align:left;padding:12px 8px;color:var(--muted);font-weight:600;">Element</th>
+        <th style="text-align:left;padding:12px 8px;color:var(--muted);font-weight:600;">Effort</th>
+        <th style="text-align:left;padding:12px 8px;color:var(--muted);font-weight:600;">Why it works</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 8px;font-weight:600;">Tin lid brand logos</td>
+        <td style="padding:14px 8px;color:var(--muted);">1 hour — CSS + existing brand colours</td>
+        <td style="padding:14px 8px;color:var(--muted);">Replaces the weakest visual on the site. Instant brand identity lift.</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 8px;font-weight:600;">"Cans" language</td>
+        <td style="padding:14px 8px;color:var(--muted);">30 min — find-and-replace</td>
+        <td style="padding:14px 8px;color:var(--muted);">Zero design effort, huge authenticity gain. Signals niche expertise.</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 8px;font-weight:600;">Strength colour strip</td>
+        <td style="padding:14px 8px;color:var(--muted);">30 min — 3px CSS bar</td>
+        <td style="padding:14px 8px;color:var(--muted);">Instantly scannable strength at a glance. Uses existing colour system.</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 8px;font-weight:600;">Add-to-cart snap</td>
+        <td style="padding:14px 8px;color:var(--muted);">15 min — CSS keyframe</td>
+        <td style="padding:14px 8px;color:var(--muted);">Tactile micro-interaction. Feels premium. Costs nothing.</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 8px;font-weight:600;">Brand page concentric rings</td>
+        <td style="padding:14px 8px;color:var(--muted);">20 min — CSS circles in header</td>
+        <td style="padding:14px 8px;color:var(--muted);">Subtle depth on brand pages. No new assets needed.</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 8px;font-weight:600;">SnusFriend tin mark</td>
+        <td style="padding:14px 8px;color:var(--muted);">20 min — SVG component</td>
+        <td style="padding:14px 8px;color:var(--muted);">Ties the brand identity to the product category. Reusable everywhere.</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 8px;font-weight:600;">Pouch breadcrumb separator</td>
+        <td style="padding:14px 8px;color:var(--muted);">10 min — SVG swap</td>
+        <td style="padding:14px 8px;color:var(--muted);">Easter-egg level detail. Gets noticed by enthusiasts.</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 8px;font-weight:600;">Portions ring on PDP</td>
+        <td style="padding:14px 8px;color:var(--muted);">45 min — SVG generation</td>
+        <td style="padding:14px 8px;color:var(--muted);">Unique data viz. No competitor does this.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

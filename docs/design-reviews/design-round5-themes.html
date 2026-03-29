@@ -1,0 +1,2216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnusFriend Design Round 5: New Themes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Cormorant+Garant:wght@400;600;700&family=Inter:wght@400;500;600;700&family=DM+Serif+Display:wght@400;700&family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
+        }
+
+        .showcase-nav {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 2px solid #ddd;
+            padding: 16px 0;
+            z-index: 1000;
+            margin-bottom: 40px;
+        }
+
+        .showcase-nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .showcase-nav a {
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            color: #333;
+            background: #f0f0f0;
+        }
+
+        .showcase-nav a:hover {
+            background: #e0e0e0;
+        }
+
+        .design-container {
+            max-width: 1280px;
+            margin: 0 auto 60px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .design-header {
+            padding: 20px;
+            background: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .design-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .design-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .design-score-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .score-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+        }
+
+        .design-canvas {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .homepage {
+            width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* ==================== ARCTIC FROST ==================== */
+
+        .arctic-nav {
+            background: #FEFEFE;
+            border-bottom: 1px solid hsl(210, 20%, 90%);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .arctic-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: hsl(210, 45%, 55%);
+            letter-spacing: -0.5px;
+        }
+
+        .arctic-nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .arctic-hero {
+            background: linear-gradient(135deg, #FEFEFE 0%, hsl(210, 20%, 95%) 100%);
+            padding: 60px 40px;
+            text-align: center;
+            font-family: 'Manrope', sans-serif;
+            border-bottom: 1px solid hsl(210, 20%, 90%);
+        }
+
+        .arctic-headline {
+            font-size: 48px;
+            font-weight: 700;
+            color: #080808;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .arctic-subheading {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .arctic-search {
+            display: inline-flex;
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border: 2px solid hsl(210, 45%, 55%);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .arctic-search input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .arctic-trust-bar {
+            background: hsl(210, 20%, 90%);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 13px;
+            color: #444;
+            font-weight: 600;
+        }
+
+        .arctic-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arctic-trust-icon {
+            width: 20px;
+            height: 20px;
+            background: hsl(210, 45%, 55%);
+            border-radius: 50%;
+        }
+
+        .arctic-products {
+            padding: 40px;
+            background: #FEFEFE;
+        }
+
+        .arctic-products-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #080808;
+            margin-bottom: 32px;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .product-card-arctic {
+            background: white;
+            border: 1px solid hsl(210, 20%, 90%);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, hsl(210, 20%, 95%) 0%, hsl(210, 20%, 85%) 100%);
+            border-radius: 6px;
+            margin-bottom: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: hsl(210, 45%, 55%);
+            font-weight: 600;
+        }
+
+        .can-shape {
+            width: 40px;
+            height: 80px;
+            background: hsl(210, 45%, 55%);
+            border-radius: 3px;
+            opacity: 0.8;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #080808;
+            margin-bottom: 4px;
+        }
+
+        .product-brand {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .strength-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .strength-mild { background: #E8F5E9; color: #2E7D32; }
+        .strength-regular { background: #FFF9C4; color: #F57F17; }
+        .strength-strong { background: #FFE0B2; color: #E65100; }
+        .strength-xstrong { background: #FFCCBC; color: #BF360C; }
+
+        .pack-pills {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pack-pill {
+            padding: 4px 10px;
+            border: 1px solid hsl(210, 20%, 90%);
+            border-radius: 4px;
+            font-size: 11px;
+            color: hsl(210, 45%, 55%);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pack-pill:hover {
+            background: hsl(210, 20%, 95%);
+            border-color: hsl(210, 45%, 55%);
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: hsl(210, 45%, 55%);
+        }
+
+        .product-price-small {
+            font-size: 11px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .arctic-section {
+            padding: 40px;
+            background: #FEFEFE;
+            border-top: 1px solid hsl(210, 20%, 90%);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .shipping-bar {
+            background: hsl(210, 20%, 90%);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .shipping-progress {
+            width: 100%;
+            height: 8px;
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .shipping-progress-fill {
+            height: 100%;
+            background: hsl(210, 45%, 55%);
+            width: 35%;
+        }
+
+        .shipping-text {
+            font-size: 12px;
+            color: #666;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 600;
+        }
+
+        .cta-button {
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .cta-button-primary-arctic {
+            background: hsl(210, 45%, 55%);
+            color: white;
+        }
+
+        .cta-button-primary-arctic:hover {
+            background: hsl(210, 45%, 45%);
+        }
+
+        .arctic-footer {
+            background: hsl(210, 20%, 95%);
+            padding: 40px;
+            border-top: 1px solid hsl(210, 20%, 90%);
+            font-family: 'Manrope', sans-serif;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 24px;
+        }
+
+        .footer-col h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: hsl(210, 45%, 55%);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid hsl(210, 20%, 90%);
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        /* ==================== NOIR LUXE ==================== */
+
+        .noir-nav {
+            background: #080808;
+            border-bottom: 2px solid #D4AF37;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .noir-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #D4AF37;
+            letter-spacing: 2px;
+        }
+
+        .noir-nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: #FAF7F0;
+        }
+
+        .noir-hero {
+            background: linear-gradient(135deg, #080808 0%, #1a1a1a 100%);
+            padding: 80px 40px;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            border-bottom: 2px solid #D4AF37;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .noir-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .noir-headline {
+            font-family: 'Cormorant Garant', serif;
+            font-size: 56px;
+            font-weight: 700;
+            color: #FAF7F0;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .noir-subheading {
+            font-size: 15px;
+            color: #D4AF37;
+            margin-bottom: 32px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .noir-search {
+            display: inline-flex;
+            width: 100%;
+            max-width: 550px;
+            background: rgba(250, 247, 240, 0.05);
+            border: 2px solid #D4AF37;
+            border-radius: 0;
+            padding: 14px 20px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .noir-search input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 14px;
+            font-family: inherit;
+            background: transparent;
+            color: #FAF7F0;
+        }
+
+        .noir-search input::placeholder {
+            color: rgba(250, 247, 240, 0.5);
+        }
+
+        .noir-trust-bar {
+            background: #1a1a1a;
+            padding: 28px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: #D4AF37;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .noir-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .noir-trust-icon {
+            width: 20px;
+            height: 20px;
+            background: #D4AF37;
+            border-radius: 50%;
+        }
+
+        .noir-products {
+            padding: 50px 40px;
+            background: #080808;
+        }
+
+        .noir-products-title {
+            font-family: 'Cormorant Garant', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #FAF7F0;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .product-card-noir {
+            background: #1a1a1a;
+            border: 1px solid #D4AF37;
+            border-radius: 0;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .product-image-noir {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #151515 100%);
+            border: 1px solid #D4AF37;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #D4AF37;
+            font-weight: 600;
+        }
+
+        .product-name-noir {
+            font-size: 14px;
+            font-weight: 700;
+            color: #FAF7F0;
+            margin-bottom: 4px;
+        }
+
+        .product-brand-noir {
+            font-size: 12px;
+            color: #D4AF37;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .strength-badge-noir {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 0;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            background: #D4AF37;
+            color: #080808;
+        }
+
+        .noir-section {
+            padding: 50px 40px;
+            background: #080808;
+            border-top: 2px solid #D4AF37;
+        }
+
+        .noir-section-title {
+            font-family: 'Cormorant Garant', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #FAF7F0;
+            margin-bottom: 28px;
+            letter-spacing: 1px;
+        }
+
+        .shipping-bar-noir {
+            background: #1a1a1a;
+            border: 1px solid #D4AF37;
+            border-radius: 0;
+            padding: 20px;
+            margin-bottom: 28px;
+        }
+
+        .shipping-progress-noir {
+            width: 100%;
+            height: 8px;
+            background: #2a2a2a;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .shipping-progress-fill-noir {
+            height: 100%;
+            background: #D4AF37;
+            width: 35%;
+        }
+
+        .shipping-text-noir {
+            font-size: 12px;
+            color: #D4AF37;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .cta-button-primary-noir {
+            background: #D4AF37;
+            color: #080808;
+            border: none;
+        }
+
+        .cta-button-primary-noir:hover {
+            background: #E5C158;
+        }
+
+        .noir-footer {
+            background: #1a1a1a;
+            padding: 50px 40px;
+            border-top: 2px solid #D4AF37;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .noir-footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .noir-footer-col h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #D4AF37;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .noir-footer-col ul {
+            list-style: none;
+        }
+
+        .noir-footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .noir-footer-col a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .noir-footer-col a:hover {
+            color: #D4AF37;
+        }
+
+        .noir-footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 24px;
+            text-align: center;
+        }
+
+        /* ==================== SUNSET TERRACOTTA ==================== */
+
+        .sunset-nav {
+            background: #FDF6EC;
+            border-bottom: 2px solid hsl(16, 65%, 48%);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .sunset-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: hsl(16, 65%, 48%);
+            letter-spacing: 0;
+        }
+
+        .sunset-nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: #3a3a3a;
+        }
+
+        .sunset-hero {
+            background: linear-gradient(135deg, #FDF6EC 0%, #FAF0E0 100%);
+            padding: 70px 40px;
+            text-align: center;
+            font-family: 'DM Sans', sans-serif;
+            border-bottom: 2px solid hsl(16, 65%, 48%);
+        }
+
+        .sunset-headline {
+            font-family: 'DM Serif Display', serif;
+            font-size: 52px;
+            font-weight: 700;
+            color: #2a2a2a;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .sunset-subheading {
+            font-size: 15px;
+            color: hsl(150, 25%, 45%);
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
+
+        .sunset-search {
+            display: inline-flex;
+            width: 100%;
+            max-width: 520px;
+            background: white;
+            border: 2px solid hsl(16, 65%, 48%);
+            border-radius: 16px;
+            padding: 12px 18px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .sunset-search input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .sunset-trust-bar {
+            background: hsl(150, 25%, 90%);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 45px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            color: hsl(150, 25%, 35%);
+            font-weight: 600;
+        }
+
+        .sunset-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .sunset-trust-icon {
+            width: 20px;
+            height: 20px;
+            background: hsl(16, 65%, 48%);
+            border-radius: 50%;
+        }
+
+        .sunset-products {
+            padding: 48px 40px;
+            background: #FDF6EC;
+        }
+
+        .sunset-products-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #2a2a2a;
+            margin-bottom: 36px;
+        }
+
+        .product-card-sunset {
+            background: white;
+            border: 1px solid #E8DCC8;
+            border-radius: 16px;
+            padding: 18px;
+            font-family: 'DM Sans', sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .product-image-sunset {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #F5EDDF 0%, #EEE2D0 100%);
+            border-radius: 12px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: hsl(16, 65%, 48%);
+            font-weight: 600;
+        }
+
+        .product-name-sunset {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2a2a2a;
+            margin-bottom: 4px;
+        }
+
+        .product-brand-sunset {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .strength-badge-sunset {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .strength-mild-sunset { background: #E8F5E9; color: #558B2F; }
+        .strength-regular-sunset { background: #FFF9C4; color: #9E6D00; }
+        .strength-strong-sunset { background: #FFE0B2; color: #D84315; }
+        .strength-xstrong-sunset { background: #D7CCC8; color: #5D4037; }
+
+        .sunset-section {
+            padding: 48px 40px;
+            background: #FDF6EC;
+            border-top: 2px solid hsl(16, 65%, 48%);
+        }
+
+        .sunset-section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: #2a2a2a;
+            margin-bottom: 28px;
+        }
+
+        .shipping-bar-sunset {
+            background: hsl(150, 25%, 90%);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 28px;
+        }
+
+        .shipping-progress-sunset {
+            width: 100%;
+            height: 8px;
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .shipping-progress-fill-sunset {
+            height: 100%;
+            background: hsl(16, 65%, 48%);
+            width: 35%;
+        }
+
+        .shipping-text-sunset {
+            font-size: 12px;
+            color: hsl(150, 25%, 35%);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+        }
+
+        .cta-button-primary-sunset {
+            background: hsl(16, 65%, 48%);
+            color: white;
+            border: none;
+        }
+
+        .cta-button-primary-sunset:hover {
+            background: hsl(16, 65%, 40%);
+        }
+
+        .sunset-footer {
+            background: hsl(150, 25%, 90%);
+            padding: 48px 40px;
+            border-top: 2px solid hsl(16, 65%, 48%);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .sunset-footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 36px;
+            margin-bottom: 28px;
+        }
+
+        .sunset-footer-col h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #2a2a2a;
+            margin-bottom: 14px;
+        }
+
+        .sunset-footer-col ul {
+            list-style: none;
+        }
+
+        .sunset-footer-col li {
+            margin-bottom: 9px;
+        }
+
+        .sunset-footer-col a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .sunset-footer-col a:hover {
+            color: hsl(16, 65%, 48%);
+        }
+
+        .sunset-footer-bottom {
+            border-top: 1px solid #D7CCC8;
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        /* ==================== OCEAN DEPTH ==================== */
+
+        .ocean-nav {
+            background: #0A1628;
+            border-bottom: 3px solid hsl(16, 85%, 60%);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .ocean-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: hsl(16, 85%, 60%);
+            letter-spacing: -0.5px;
+        }
+
+        .ocean-nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: #E8F4F8;
+        }
+
+        .ocean-hero {
+            background: linear-gradient(135deg, #0A1628 0%, #0D1F38 50%, #051729 100%);
+            padding: 70px 40px;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            border-bottom: 3px solid hsl(16, 85%, 60%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ocean-hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(27, 195, 231, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .ocean-headline {
+            font-size: 50px;
+            font-weight: 700;
+            color: #E8F4F8;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .ocean-subheading {
+            font-size: 15px;
+            color: hsl(16, 85%, 60%);
+            margin-bottom: 28px;
+            font-weight: 600;
+        }
+
+        .ocean-search {
+            display: inline-flex;
+            width: 100%;
+            max-width: 530px;
+            background: rgba(27, 195, 231, 0.08);
+            border: 2px solid hsl(16, 85%, 60%);
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .ocean-search input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 14px;
+            font-family: inherit;
+            background: transparent;
+            color: #E8F4F8;
+        }
+
+        .ocean-search input::placeholder {
+            color: rgba(232, 244, 248, 0.5);
+        }
+
+        .ocean-trust-bar {
+            background: rgba(27, 195, 231, 0.08);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 42px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            color: hsl(175, 50%, 75%);
+            font-weight: 700;
+        }
+
+        .ocean-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ocean-trust-icon {
+            width: 20px;
+            height: 20px;
+            background: hsl(16, 85%, 60%);
+            border-radius: 50%;
+        }
+
+        .ocean-products {
+            padding: 48px 40px;
+            background: #0A1628;
+        }
+
+        .ocean-products-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #E8F4F8;
+            margin-bottom: 36px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .product-card-ocean {
+            background: rgba(27, 195, 231, 0.04);
+            border: 1px solid rgba(27, 195, 231, 0.15);
+            border-radius: 8px;
+            padding: 18px;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .product-card-ocean:hover {
+            border-color: hsl(16, 85%, 60%);
+            background: rgba(27, 195, 231, 0.08);
+        }
+
+        .product-image-ocean {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #0D1F38 0%, #051729 100%);
+            border-radius: 6px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: hsl(16, 85%, 60%);
+            font-weight: 600;
+        }
+
+        .product-name-ocean {
+            font-size: 14px;
+            font-weight: 700;
+            color: #E8F4F8;
+            margin-bottom: 4px;
+        }
+
+        .product-brand-ocean {
+            font-size: 12px;
+            color: hsl(175, 50%, 75%);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .strength-badge-ocean {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            background: hsl(16, 85%, 60%);
+            color: #0A1628;
+        }
+
+        .ocean-section {
+            padding: 48px 40px;
+            background: #0A1628;
+            border-top: 3px solid hsl(16, 85%, 60%);
+        }
+
+        .ocean-section-title {
+            font-size: 30px;
+            font-weight: 700;
+            color: #E8F4F8;
+            margin-bottom: 28px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .shipping-bar-ocean {
+            background: rgba(27, 195, 231, 0.08);
+            border: 1px solid rgba(27, 195, 231, 0.15);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 28px;
+        }
+
+        .shipping-progress-ocean {
+            width: 100%;
+            height: 8px;
+            background: rgba(27, 195, 231, 0.15);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .shipping-progress-fill-ocean {
+            height: 100%;
+            background: linear-gradient(90deg, hsl(175, 50%, 75%), hsl(16, 85%, 60%));
+            width: 35%;
+        }
+
+        .shipping-text-ocean {
+            font-size: 12px;
+            color: hsl(175, 50%, 75%);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+
+        .cta-button-primary-ocean {
+            background: hsl(16, 85%, 60%);
+            color: #0A1628;
+            border: none;
+            font-weight: 700;
+        }
+
+        .cta-button-primary-ocean:hover {
+            background: hsl(16, 85%, 70%);
+        }
+
+        .ocean-footer {
+            background: rgba(27, 195, 231, 0.04);
+            padding: 48px 40px;
+            border-top: 3px solid hsl(16, 85%, 60%);
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .ocean-footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 36px;
+            margin-bottom: 28px;
+        }
+
+        .ocean-footer-col h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: hsl(175, 50%, 75%);
+            margin-bottom: 14px;
+        }
+
+        .ocean-footer-col ul {
+            list-style: none;
+        }
+
+        .ocean-footer-col li {
+            margin-bottom: 9px;
+        }
+
+        .ocean-footer-col a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .ocean-footer-col a:hover {
+            color: hsl(16, 85%, 60%);
+        }
+
+        .ocean-footer-bottom {
+            border-top: 1px solid rgba(27, 195, 231, 0.15);
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        /* ==================== COMPARISON TABLE ==================== */
+
+        .comparison-section {
+            max-width: 1400px;
+            margin: 80px auto 40px;
+            padding: 40px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .comparison-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .comparison-table th {
+            background: #f5f5f5;
+            padding: 14px;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .comparison-table td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table tr:hover {
+            background: #fafafa;
+        }
+
+        .theme-name {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .palette-swatch {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="showcase-nav">
+    <div class="showcase-nav-content">
+        <strong>Design Round 5: New Themes</strong>
+        <a href="#arctic">Arctic Frost (N)</a>
+        <a href="#noir">Noir Luxe (O)</a>
+        <a href="#sunset">Sunset Terracotta (P)</a>
+        <a href="#ocean">Ocean Depth (Q)</a>
+        <a href="#comparison">Comparison</a>
+    </div>
+</div>
+
+<!-- ==================== ARCTIC FROST ==================== -->
+<div class="design-container" id="arctic">
+    <div class="design-header">
+        <div class="design-title">Design N: Arctic Frost</div>
+        <div class="design-meta">Scandinavian luxury pharmacy — clinical elegance, frosted glass, steel blue accents</div>
+        <div class="design-score-badges">
+            <div class="score-badge">Conversion: —</div>
+            <div class="score-badge">Uniqueness: —</div>
+            <div class="score-badge">Accessibility: —</div>
+            <div class="score-badge">Loading: —</div>
+        </div>
+    </div>
+    <div class="design-canvas">
+        <div class="homepage">
+            <!-- Nav -->
+            <div class="arctic-nav">
+                <div class="arctic-logo">SnusFriend</div>
+                <ul class="arctic-nav-links">
+                    <li>Shop</li>
+                    <li>Brands</li>
+                    <li>Learn</li>
+                    <li>Account</li>
+                </ul>
+            </div>
+
+            <!-- Hero -->
+            <div class="arctic-hero">
+                <h1 class="arctic-headline">Premium Pouches, Pure Experience</h1>
+                <p class="arctic-subheading">Discover 2,200+ premium nicotine pouches from 139 European brands</p>
+                <div class="arctic-search">
+                    <input type="text" placeholder="Search by brand, strength, flavor...">
+                </div>
+            </div>
+
+            <!-- Trust Bar -->
+            <div class="arctic-trust-bar">
+                <div class="arctic-trust-item">
+                    <div class="arctic-trust-icon"></div>
+                    <span>139 Brands</span>
+                </div>
+                <div class="arctic-trust-item">
+                    <div class="arctic-trust-icon"></div>
+                    <span>Same-Day Shipping</span>
+                </div>
+                <div class="arctic-trust-item">
+                    <div class="arctic-trust-icon"></div>
+                    <span>Rewards Points</span>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="arctic-products">
+                <h2 class="arctic-products-title">Featured Products</h2>
+                <div class="product-grid">
+                    <div class="product-card-arctic">
+                        <div class="product-image">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name">Velo Freeze Mint</div>
+                        <div class="product-brand">Swedish Match</div>
+                        <div class="strength-badge strength-strong">Strong</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.99 <span class="product-price-small">/ €0.41 per unit</span></div>
+                    </div>
+                    <div class="product-card-arctic">
+                        <div class="product-image">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name">Siberia Red</div>
+                        <div class="product-brand">GN Tobacco</div>
+                        <div class="strength-badge strength-xstrong">X-Strong</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€5.49 <span class="product-price-small">/ €0.46 per unit</span></div>
+                    </div>
+                    <div class="product-card-arctic">
+                        <div class="product-image">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name">Zyn Cool Mint</div>
+                        <div class="product-brand">Swedish Match</div>
+                        <div class="strength-badge strength-regular">Regular</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.29 <span class="product-price-small">/ €0.36 per unit</span></div>
+                    </div>
+                    <div class="product-card-arctic">
+                        <div class="product-image">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name">Lyft Ice Cool</div>
+                        <div class="product-brand">V2 Cigs</div>
+                        <div class="strength-badge strength-strong">Strong</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.79 <span class="product-price-small">/ €0.40 per unit</span></div>
+                    </div>
+                    <div class="product-card-arctic">
+                        <div class="product-image">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name">Pablo Mint</div>
+                        <div class="product-brand">Gotlandssnus</div>
+                        <div class="strength-badge strength-mild">Mild</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€3.99 <span class="product-price-small">/ €0.33 per unit</span></div>
+                    </div>
+                    <div class="product-card-arctic">
+                        <div class="product-image">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name">Onico Midn. Sun</div>
+                        <div class="product-brand">V2 Cigs</div>
+                        <div class="strength-badge strength-strong">Strong</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€5.19 <span class="product-price-small">/ €0.43 per unit</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Free Shipping -->
+            <div class="arctic-section">
+                <h2 class="section-title">Free Shipping on Orders Over €29</h2>
+                <div class="shipping-bar">
+                    <div class="shipping-progress">
+                        <div class="shipping-progress-fill"></div>
+                    </div>
+                    <div class="shipping-text">You need €18.43 more to qualify for free shipping</div>
+                </div>
+            </div>
+
+            <!-- Quiz CTA -->
+            <div class="arctic-section">
+                <h2 class="section-title">Not Sure What to Choose?</h2>
+                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">Take our flavor & strength quiz to find your perfect match in 60 seconds.</p>
+                <button class="cta-button cta-button-primary-arctic">Start the Quiz</button>
+            </div>
+
+            <!-- Rewards -->
+            <div class="arctic-section">
+                <h2 class="section-title">Join the Rewards Club</h2>
+                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">Earn 1 point per €1 spent. Unlock free products, exclusive drops & early access.</p>
+                <button class="cta-button cta-button-primary-arctic">Sign Up Now</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="arctic-footer">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h4>Shop</h4>
+                        <ul>
+                            <li><a href="#">All Products</a></li>
+                            <li><a href="#">By Strength</a></li>
+                            <li><a href="#">By Flavor</a></li>
+                            <li><a href="#">New Arrivals</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Press</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">Returns</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 SnusFriend. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== NOIR LUXE ==================== -->
+<div class="design-container" id="noir">
+    <div class="design-header">
+        <div class="design-title">Design O: Noir Luxe</div>
+        <div class="design-meta">Ultra-premium dark luxury — gold accents, editorial serif headlines, exclusive members' club aesthetic</div>
+        <div class="design-score-badges">
+            <div class="score-badge">Conversion: —</div>
+            <div class="score-badge">Uniqueness: —</div>
+            <div class="score-badge">Accessibility: —</div>
+            <div class="score-badge">Loading: —</div>
+        </div>
+    </div>
+    <div class="design-canvas">
+        <div class="homepage">
+            <!-- Nav -->
+            <div class="noir-nav">
+                <div class="noir-logo">SNUSFRIEND</div>
+                <ul class="noir-nav-links">
+                    <li>COLLECTIONS</li>
+                    <li>BRANDS</li>
+                    <li>JOURNAL</li>
+                    <li>ACCOUNT</li>
+                </ul>
+            </div>
+
+            <!-- Hero -->
+            <div class="noir-hero">
+                <h1 class="noir-headline">The Art of the Perfect Pouch</h1>
+                <p class="noir-subheading">CURATED SELECTION FROM 139 EUROPEAN MASTERS</p>
+                <div class="noir-search">
+                    <input type="text" placeholder="Discover your signature blend...">
+                </div>
+            </div>
+
+            <!-- Trust Bar -->
+            <div class="noir-trust-bar">
+                <div class="noir-trust-item">
+                    <div class="noir-trust-icon"></div>
+                    <span>139 ARTISAN BRANDS</span>
+                </div>
+                <div class="noir-trust-item">
+                    <div class="noir-trust-icon"></div>
+                    <span>SAME-DAY DISPATCH</span>
+                </div>
+                <div class="noir-trust-item">
+                    <div class="noir-trust-icon"></div>
+                    <span>MEMBERS REWARDS</span>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="noir-products">
+                <h2 class="noir-products-title">Featured Selection</h2>
+                <div class="product-grid">
+                    <div class="product-card-noir">
+                        <div class="product-image-noir">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-noir">Velo Freeze Mint</div>
+                        <div class="product-brand-noir">Swedish Match</div>
+                        <div class="strength-badge-noir">STRONG</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.99 <span class="product-price-small">/ €0.41 per unit</span></div>
+                    </div>
+                    <div class="product-card-noir">
+                        <div class="product-image-noir">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-noir">Siberia Red</div>
+                        <div class="product-brand-noir">GN Tobacco</div>
+                        <div class="strength-badge-noir">X-STRONG</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€5.49 <span class="product-price-small">/ €0.46 per unit</span></div>
+                    </div>
+                    <div class="product-card-noir">
+                        <div class="product-image-noir">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-noir">Zyn Cool Mint</div>
+                        <div class="product-brand-noir">Swedish Match</div>
+                        <div class="strength-badge-noir">REGULAR</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.29 <span class="product-price-small">/ €0.36 per unit</span></div>
+                    </div>
+                    <div class="product-card-noir">
+                        <div class="product-image-noir">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-noir">Lyft Ice Cool</div>
+                        <div class="product-brand-noir">V2 Cigs</div>
+                        <div class="strength-badge-noir">STRONG</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.79 <span class="product-price-small">/ €0.40 per unit</span></div>
+                    </div>
+                    <div class="product-card-noir">
+                        <div class="product-image-noir">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-noir">Pablo Mint</div>
+                        <div class="product-brand-noir">Gotlandssnus</div>
+                        <div class="strength-badge-noir">MILD</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€3.99 <span class="product-price-small">/ €0.33 per unit</span></div>
+                    </div>
+                    <div class="product-card-noir">
+                        <div class="product-image-noir">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-noir">Onico Midn. Sun</div>
+                        <div class="product-brand-noir">V2 Cigs</div>
+                        <div class="strength-badge-noir">STRONG</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€5.19 <span class="product-price-small">/ €0.43 per unit</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Free Shipping -->
+            <div class="noir-section">
+                <h2 class="noir-section-title">Complimentary Shipping</h2>
+                <div class="shipping-bar-noir">
+                    <div class="shipping-progress-noir">
+                        <div class="shipping-progress-fill-noir"></div>
+                    </div>
+                    <div class="shipping-text-noir">€18.43 until complimentary shipping</div>
+                </div>
+            </div>
+
+            <!-- Quiz CTA -->
+            <div class="noir-section">
+                <h2 class="noir-section-title">Discover Your Profile</h2>
+                <p style="color: #999; margin-bottom: 20px; font-size: 14px; font-family: 'Inter', sans-serif;">Complete our sensory assessment to receive personalized recommendations.</p>
+                <button class="cta-button cta-button-primary-noir">Begin Discovery</button>
+            </div>
+
+            <!-- Rewards -->
+            <div class="noir-section">
+                <h2 class="noir-section-title">The Collective</h2>
+                <p style="color: #999; margin-bottom: 20px; font-size: 14px; font-family: 'Inter', sans-serif;">Earn one point per euro. Access exclusive releases and VIP previews.</p>
+                <button class="cta-button cta-button-primary-noir">Join the Collective</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="noir-footer">
+                <div class="noir-footer-grid">
+                    <div class="noir-footer-col">
+                        <h4>COLLECTIONS</h4>
+                        <ul>
+                            <li><a href="#">All Products</a></li>
+                            <li><a href="#">Curated Sets</a></li>
+                            <li><a href="#">New Releases</a></li>
+                            <li><a href="#">Limited Edition</a></li>
+                        </ul>
+                    </div>
+                    <div class="noir-footer-col">
+                        <h4>COMPANY</h4>
+                        <ul>
+                            <li><a href="#">Our Story</a></li>
+                            <li><a href="#">Journal</a></li>
+                            <li><a href="#">Press Kit</a></li>
+                            <li><a href="#">Jobs</a></li>
+                        </ul>
+                    </div>
+                    <div class="noir-footer-col">
+                        <h4>SUPPORT</h4>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Guides</a></li>
+                            <li><a href="#">Shipping Info</a></li>
+                            <li><a href="#">Returns</a></li>
+                        </ul>
+                    </div>
+                    <div class="noir-footer-col">
+                        <h4>LEGAL</h4>
+                        <ul>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="noir-footer-bottom">
+                    <p>&copy; 2026 SnusFriend. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== SUNSET TERRACOTTA ==================== -->
+<div class="design-container" id="sunset">
+    <div class="design-header">
+        <div class="design-title">Design P: Sunset Terracotta</div>
+        <div class="design-meta">Warm, tactile, artisanal — Kinfolk meets Aesop, earthy tones, handcrafted feeling</div>
+        <div class="design-score-badges">
+            <div class="score-badge">Conversion: —</div>
+            <div class="score-badge">Uniqueness: —</div>
+            <div class="score-badge">Accessibility: —</div>
+            <div class="score-badge">Loading: —</div>
+        </div>
+    </div>
+    <div class="design-canvas">
+        <div class="homepage">
+            <!-- Nav -->
+            <div class="sunset-nav">
+                <div class="sunset-logo">SnusFriend</div>
+                <ul class="sunset-nav-links">
+                    <li>Shop</li>
+                    <li>Discover</li>
+                    <li>Stories</li>
+                    <li>Account</li>
+                </ul>
+            </div>
+
+            <!-- Hero -->
+            <div class="sunset-hero">
+                <h1 class="sunset-headline">Crafted for Your Ritual</h1>
+                <p class="sunset-subheading">Explore 2,200+ artisanal pouches from 139 European makers</p>
+                <div class="sunset-search">
+                    <input type="text" placeholder="Search by craft, strength, essence...">
+                </div>
+            </div>
+
+            <!-- Trust Bar -->
+            <div class="sunset-trust-bar">
+                <div class="sunset-trust-item">
+                    <div class="sunset-trust-icon"></div>
+                    <span>139 Master Makers</span>
+                </div>
+                <div class="sunset-trust-item">
+                    <div class="sunset-trust-icon"></div>
+                    <span>Next-Day Delivery</span>
+                </div>
+                <div class="sunset-trust-item">
+                    <div class="sunset-trust-icon"></div>
+                    <span>Rewards for Regulars</span>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="sunset-products">
+                <h2 class="sunset-products-title">Seasonal Selection</h2>
+                <div class="product-grid">
+                    <div class="product-card-sunset">
+                        <div class="product-image-sunset">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-sunset">Velo Freeze Mint</div>
+                        <div class="product-brand-sunset">Swedish Match</div>
+                        <div class="strength-badge strength-badge-sunset strength-strong-sunset">Strong</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.99 <span class="product-price-small">/ €0.41 per unit</span></div>
+                    </div>
+                    <div class="product-card-sunset">
+                        <div class="product-image-sunset">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-sunset">Siberia Red</div>
+                        <div class="product-brand-sunset">GN Tobacco</div>
+                        <div class="strength-badge strength-badge-sunset strength-xstrong-sunset">X-Strong</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€5.49 <span class="product-price-small">/ €0.46 per unit</span></div>
+                    </div>
+                    <div class="product-card-sunset">
+                        <div class="product-image-sunset">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-sunset">Zyn Cool Mint</div>
+                        <div class="product-brand-sunset">Swedish Match</div>
+                        <div class="strength-badge strength-badge-sunset strength-regular-sunset">Regular</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.29 <span class="product-price-small">/ €0.36 per unit</span></div>
+                    </div>
+                    <div class="product-card-sunset">
+                        <div class="product-image-sunset">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-sunset">Lyft Ice Cool</div>
+                        <div class="product-brand-sunset">V2 Cigs</div>
+                        <div class="strength-badge strength-badge-sunset strength-strong-sunset">Strong</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.79 <span class="product-price-small">/ €0.40 per unit</span></div>
+                    </div>
+                    <div class="product-card-sunset">
+                        <div class="product-image-sunset">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-sunset">Pablo Mint</div>
+                        <div class="product-brand-sunset">Gotlandssnus</div>
+                        <div class="strength-badge strength-badge-sunset strength-mild-sunset">Mild</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€3.99 <span class="product-price-small">/ €0.33 per unit</span></div>
+                    </div>
+                    <div class="product-card-sunset">
+                        <div class="product-image-sunset">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-sunset">Onico Midn. Sun</div>
+                        <div class="product-brand-sunset">V2 Cigs</div>
+                        <div class="strength-badge strength-badge-sunset strength-strong-sunset">Strong</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€5.19 <span class="product-price-small">/ €0.43 per unit</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Free Shipping -->
+            <div class="sunset-section">
+                <h2 class="sunset-section-title">Complimentary Delivery</h2>
+                <div class="shipping-bar-sunset">
+                    <div class="shipping-progress-sunset">
+                        <div class="shipping-progress-fill-sunset"></div>
+                    </div>
+                    <div class="shipping-text-sunset">€18.43 more for free delivery</div>
+                </div>
+            </div>
+
+            <!-- Quiz CTA -->
+            <div class="sunset-section">
+                <h2 class="sunset-section-title">Find Your Match</h2>
+                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">Our sensory guide helps you discover the essence that resonates with you.</p>
+                <button class="cta-button cta-button-primary-sunset">Explore Now</button>
+            </div>
+
+            <!-- Rewards -->
+            <div class="sunset-section">
+                <h2 class="sunset-section-title">Become a Patron</h2>
+                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">Earn one point per euro spent. Unlock early access to maker collaborations and exclusive blends.</p>
+                <button class="cta-button cta-button-primary-sunset">Join Today</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="sunset-footer">
+                <div class="sunset-footer-grid">
+                    <div class="sunset-footer-col">
+                        <h4>Shop</h4>
+                        <ul>
+                            <li><a href="#">All Products</a></li>
+                            <li><a href="#">By Maker</a></li>
+                            <li><a href="#">New</a></li>
+                            <li><a href="#">Curated Sets</a></li>
+                        </ul>
+                    </div>
+                    <div class="sunset-footer-col">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="#">Our Story</a></li>
+                            <li><a href="#">Stories</a></li>
+                            <li><a href="#">Journal</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="sunset-footer-col">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div class="sunset-footer-col">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="sunset-footer-bottom">
+                    <p>&copy; 2026 SnusFriend. Handcrafted with care.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== OCEAN DEPTH ==================== -->
+<div class="design-container" id="ocean">
+    <div class="design-header">
+        <div class="design-title">Design Q: Ocean Depth</div>
+        <div class="design-meta">Deep navy + vibrant coral — premium surf/outdoor brand vibes, dynamic and energetic</div>
+        <div class="design-score-badges">
+            <div class="score-badge">Conversion: —</div>
+            <div class="score-badge">Uniqueness: —</div>
+            <div class="score-badge">Accessibility: —</div>
+            <div class="score-badge">Loading: —</div>
+        </div>
+    </div>
+    <div class="design-canvas">
+        <div class="homepage">
+            <!-- Nav -->
+            <div class="ocean-nav">
+                <div class="ocean-logo">SnusFriend</div>
+                <ul class="ocean-nav-links">
+                    <li>Shop</li>
+                    <li>Explore</li>
+                    <li>Rewards</li>
+                    <li>Account</li>
+                </ul>
+            </div>
+
+            <!-- Hero -->
+            <div class="ocean-hero">
+                <h1 class="ocean-headline">Dive Into Flavor</h1>
+                <p class="ocean-subheading">2,200+ premium pouches from 139 brands — delivered to your door</p>
+                <div class="ocean-search">
+                    <input type="text" placeholder="Search products, brands, flavors...">
+                </div>
+            </div>
+
+            <!-- Trust Bar -->
+            <div class="ocean-trust-bar">
+                <div class="ocean-trust-item">
+                    <div class="ocean-trust-icon"></div>
+                    <span>139 Premium Brands</span>
+                </div>
+                <div class="ocean-trust-item">
+                    <div class="ocean-trust-icon"></div>
+                    <span>Fast Shipping</span>
+                </div>
+                <div class="ocean-trust-item">
+                    <div class="ocean-trust-icon"></div>
+                    <span>Points Rewards</span>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="ocean-products">
+                <h2 class="ocean-products-title">Trending Now</h2>
+                <div class="product-grid">
+                    <div class="product-card-ocean">
+                        <div class="product-image-ocean">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-ocean">Velo Freeze Mint</div>
+                        <div class="product-brand-ocean">Swedish Match</div>
+                        <div class="strength-badge-ocean">STRONG</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.99 <span class="product-price-small">/ €0.41 per unit</span></div>
+                    </div>
+                    <div class="product-card-ocean">
+                        <div class="product-image-ocean">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-ocean">Siberia Red</div>
+                        <div class="product-brand-ocean">GN Tobacco</div>
+                        <div class="strength-badge-ocean">X-STRONG</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€5.49 <span class="product-price-small">/ €0.46 per unit</span></div>
+                    </div>
+                    <div class="product-card-ocean">
+                        <div class="product-image-ocean">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-ocean">Zyn Cool Mint</div>
+                        <div class="product-brand-ocean">Swedish Match</div>
+                        <div class="strength-badge-ocean">REGULAR</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.29 <span class="product-price-small">/ €0.36 per unit</span></div>
+                    </div>
+                    <div class="product-card-ocean">
+                        <div class="product-image-ocean">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-ocean">Lyft Ice Cool</div>
+                        <div class="product-brand-ocean">V2 Cigs</div>
+                        <div class="strength-badge-ocean">STRONG</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€4.79 <span class="product-price-small">/ €0.40 per unit</span></div>
+                    </div>
+                    <div class="product-card-ocean">
+                        <div class="product-image-ocean">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-ocean">Pablo Mint</div>
+                        <div class="product-brand-ocean">Gotlandssnus</div>
+                        <div class="strength-badge-ocean">MILD</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€3.99 <span class="product-price-small">/ €0.33 per unit</span></div>
+                    </div>
+                    <div class="product-card-ocean">
+                        <div class="product-image-ocean">
+                            <div class="can-shape"></div>
+                        </div>
+                        <div class="product-name-ocean">Onico Midn. Sun</div>
+                        <div class="product-brand-ocean">V2 Cigs</div>
+                        <div class="strength-badge-ocean">STRONG</div>
+                        <div class="pack-pills">
+                            <div class="pack-pill">1 Can</div>
+                            <div class="pack-pill">5-Pack</div>
+                            <div class="pack-pill">10-Pack</div>
+                        </div>
+                        <div class="product-price">€5.19 <span class="product-price-small">/ €0.43 per unit</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Free Shipping -->
+            <div class="ocean-section">
+                <h2 class="ocean-section-title">Free Shipping Over €29</h2>
+                <div class="shipping-bar-ocean">
+                    <div class="shipping-progress-ocean">
+                        <div class="shipping-progress-fill-ocean"></div>
+                    </div>
+                    <div class="shipping-text-ocean">€18.43 away from free delivery</div>
+                </div>
+            </div>
+
+            <!-- Quiz CTA -->
+            <div class="ocean-section">
+                <h2 class="ocean-section-title">Find Your Vibe</h2>
+                <p style="color: #999; margin-bottom: 20px; font-size: 14px; font-family: 'Outfit', sans-serif;">Take 60 seconds to discover the perfect pouch for your style.</p>
+                <button class="cta-button cta-button-primary-ocean">Take the Quiz</button>
+            </div>
+
+            <!-- Rewards -->
+            <div class="ocean-section">
+                <h2 class="ocean-section-title">Join the Community</h2>
+                <p style="color: #999; margin-bottom: 20px; font-size: 14px; font-family: 'Outfit', sans-serif;">Earn 1 point per euro. Get exclusive drops, early access & member perks.</p>
+                <button class="cta-button cta-button-primary-ocean">Sign Up Free</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="ocean-footer">
+                <div class="ocean-footer-grid">
+                    <div class="ocean-footer-col">
+                        <h4>Shop</h4>
+                        <ul>
+                            <li><a href="#">All Products</a></li>
+                            <li><a href="#">By Strength</a></li>
+                            <li><a href="#">New Arrivals</a></li>
+                            <li><a href="#">Bestsellers</a></li>
+                        </ul>
+                    </div>
+                    <div class="ocean-footer-col">
+                        <h4>About</h4>
+                        <ul>
+                            <li><a href="#">Our Story</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Partnerships</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div class="ocean-footer-col">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">Shipping & Returns</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div class="ocean-footer-col">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ocean-footer-bottom">
+                    <p>&copy; 2026 SnusFriend. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== COMPARISON TABLE ==================== -->
+<div class="comparison-section" id="comparison">
+    <h2 class="comparison-title">Design Comparison</h2>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Theme</th>
+                <th>Primary Color</th>
+                <th>Typography</th>
+                <th>Feel</th>
+                <th>Best For</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="theme-name">Design N: Arctic Frost</td>
+                <td><span class="palette-swatch" style="background: hsl(210, 45%, 55%);"></span> Steel Blue</td>
+                <td>Manrope (geometric sans)</td>
+                <td>Scandinavian luxury pharmacy, clinical elegance</td>
+                <td>Trust + Minimalism</td>
+            </tr>
+            <tr>
+                <td class="theme-name">Design O: Noir Luxe</td>
+                <td><span class="palette-swatch" style="background: #D4AF37;"></span> Gold</td>
+                <td>Cormorant Garant + Inter</td>
+                <td>Ultra-premium dark luxury, editorial members' club</td>
+                <td>Exclusivity + Premium</td>
+            </tr>
+            <tr>
+                <td class="theme-name">Design P: Sunset Terracotta</td>
+                <td><span class="palette-swatch" style="background: hsl(16, 65%, 48%);"></span> Terracotta</td>
+                <td>DM Serif Display + DM Sans</td>
+                <td>Warm, tactile, artisanal — Kinfolk meets Aesop</td>
+                <td>Authenticity + Warmth</td>
+            </tr>
+            <tr>
+                <td class="theme-name">Design Q: Ocean Depth</td>
+                <td><span class="palette-swatch" style="background: hsl(16, 85%, 60%);"></span> Coral</td>
+                <td>Outfit (modern geometric)</td>
+                <td>Premium surf/outdoor brand, deep ocean + vibrant pops</td>
+                <td>Energy + Adventure</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

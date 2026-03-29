@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Page Redesign — SnusFriend</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: { DEFAULT: '#2E7D32', foreground: '#faf8f5' },
+        background: '#faf8f5',
+        foreground: '#1a2e1a',
+        card: '#ffffff',
+        muted: { DEFAULT: '#f0ece5', foreground: '#6b7a5e' },
+        border: '#d4cfc5',
+      },
+    },
+  },
+};
+</script>
+</head>
+<body class="bg-background text-foreground font-sans">
+
+<!-- Community Page Redesign -->
+<div class="max-w-5xl mx-auto px-4 py-12">
+  <p class="text-xs text-muted-foreground mb-8 bg-muted/30 px-4 py-2 rounded-lg">
+    <strong>Mockup:</strong> Community page redesign. Current page only shows Quests + Leaderboard. This version adds a hero, stats, recent reviews, and social proof to make it feel alive.
+  </p>
+
+  <!-- Hero -->
+  <section class="rounded-2xl bg-gradient-to-br from-[#1a2e1a] to-[#2d4a2d] text-white p-8 md:p-12 mb-8">
+    <div class="max-w-2xl">
+      <span class="inline-block px-3 py-1 rounded-full bg-white/10 text-xs font-medium text-white/80 mb-4">Community</span>
+      <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+        Join 2,400+ Pouch Enthusiasts
+      </h1>
+      <p class="text-lg text-white/70 leading-relaxed mb-6">
+        Earn points, complete quests, write reviews, and climb the leaderboard. The SnusFriend community rewards you for being an active member.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="#" class="inline-flex items-center gap-2 rounded-lg bg-white text-primary px-5 py-2.5 text-sm font-semibold hover:bg-white/90 transition-colors">
+          Create Account
+        </a>
+        <a href="#quests" class="inline-flex items-center gap-2 rounded-lg border border-white/30 text-white px-5 py-2.5 text-sm font-medium hover:bg-white/10 transition-colors">
+          View Quests ↓
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community Stats Strip -->
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+    <div class="rounded-xl border border-border bg-card p-5 text-center">
+      <p class="text-2xl font-bold text-primary">2,431</p>
+      <p class="text-xs text-muted-foreground mt-1">Members</p>
+    </div>
+    <div class="rounded-xl border border-border bg-card p-5 text-center">
+      <p class="text-2xl font-bold text-primary">847</p>
+      <p class="text-xs text-muted-foreground mt-1">Reviews Written</p>
+    </div>
+    <div class="rounded-xl border border-border bg-card p-5 text-center">
+      <p class="text-2xl font-bold text-primary">12,340</p>
+      <p class="text-xs text-muted-foreground mt-1">Quests Completed</p>
+    </div>
+    <div class="rounded-xl border border-border bg-card p-5 text-center">
+      <p class="text-2xl font-bold text-primary">438K</p>
+      <p class="text-xs text-muted-foreground mt-1">Points Earned</p>
+    </div>
+  </section>
+
+  <!-- Two-column: Quests + Leaderboard -->
+  <div class="grid md:grid-cols-2 gap-8 mb-10">
+    <!-- Daily Quests -->
+    <section id="quests">
+      <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+        ⚔️ Today's Quests
+        <span class="text-xs font-normal text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">Resets in 8h</span>
+      </h2>
+      <div class="space-y-3">
+        <div class="rounded-xl border border-border bg-card p-4 flex items-center gap-4">
+          <div class="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl shrink-0">📝</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium">Write a product review</p>
+            <p class="text-xs text-muted-foreground">Share your thoughts on any product</p>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="text-xs font-semibold text-primary">+50 pts</span>
+          </div>
+        </div>
+        <div class="rounded-xl border border-border bg-card p-4 flex items-center gap-4">
+          <div class="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl shrink-0">🛒</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium">Add 3 items to your cart</p>
+            <p class="text-xs text-muted-foreground">Browse and discover new products</p>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="text-xs font-semibold text-primary">+20 pts</span>
+          </div>
+        </div>
+        <div class="rounded-xl border border-border bg-card p-4 flex items-center gap-4 opacity-60">
+          <div class="h-10 w-10 rounded-lg bg-green-100 flex items-center justify-center text-xl shrink-0">✅</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium line-through">Visit 5 product pages</p>
+            <p class="text-xs text-muted-foreground">Completed!</p>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="text-xs font-semibold text-green-600">Done</span>
+          </div>
+        </div>
+        <a href="#" class="block text-center text-sm text-primary font-medium hover:underline py-2">
+          View all quests →
+        </a>
+      </div>
+    </section>
+
+    <!-- Leaderboard -->
+    <section>
+      <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+        🏆 This Month's Top Members
+      </h2>
+      <div class="rounded-xl border border-border bg-card overflow-hidden">
+        <div class="divide-y divide-border">
+          <div class="flex items-center gap-3 px-4 py-3 bg-amber-50/50">
+            <span class="text-lg font-bold text-amber-500 w-6 text-center">1</span>
+            <div class="h-8 w-8 rounded-full bg-amber-200 flex items-center justify-center text-sm font-bold text-amber-800">🥇</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold truncate">NordicPouch_King</p>
+              <p class="text-xs text-muted-foreground">Platinum · 47 reviews</p>
+            </div>
+            <span class="text-sm font-mono font-bold text-amber-600">8,420 pts</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-3">
+            <span class="text-lg font-bold text-gray-400 w-6 text-center">2</span>
+            <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">🥈</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold truncate">MintLover_EU</p>
+              <p class="text-xs text-muted-foreground">Gold · 32 reviews</p>
+            </div>
+            <span class="text-sm font-mono font-bold text-muted-foreground">6,890 pts</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-3">
+            <span class="text-lg font-bold text-orange-400 w-6 text-center">3</span>
+            <div class="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center text-sm font-bold text-orange-600">🥉</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold truncate">SwedeSnuser</p>
+              <p class="text-xs text-muted-foreground">Gold · 28 reviews</p>
+            </div>
+            <span class="text-sm font-mono font-bold text-muted-foreground">5,210 pts</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-3">
+            <span class="text-lg font-bold text-muted-foreground w-6 text-center">4</span>
+            <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm">👤</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold truncate">CitrusFan99</p>
+              <p class="text-xs text-muted-foreground">Silver · 19 reviews</p>
+            </div>
+            <span class="text-sm font-mono text-muted-foreground">3,450 pts</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-3">
+            <span class="text-lg font-bold text-muted-foreground w-6 text-center">5</span>
+            <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm">👤</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold truncate">BerryBlast_DE</p>
+              <p class="text-xs text-muted-foreground">Silver · 15 reviews</p>
+            </div>
+            <span class="text-sm font-mono text-muted-foreground">2,870 pts</span>
+          </div>
+        </div>
+        <div class="border-t border-border px-4 py-3 bg-muted/20 text-center">
+          <a href="#" class="text-xs text-primary font-medium hover:underline">View full leaderboard →</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Recent Reviews Feed -->
+  <section class="mb-10">
+    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+      📝 Latest Community Reviews
+    </h2>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="rounded-xl border border-border bg-card p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs">👤</div>
+          <div>
+            <p class="text-xs font-semibold">NordicPouch_King</p>
+            <p class="text-[10px] text-muted-foreground">2 hours ago</p>
+          </div>
+        </div>
+        <a href="#" class="text-sm font-medium text-foreground hover:text-primary transition-colors">ZYN Cool Mint 6mg</a>
+        <div class="flex gap-0.5 my-1.5">
+          <span class="text-amber-400 text-xs">★★★★★</span>
+        </div>
+        <p class="text-xs text-muted-foreground leading-relaxed">"Perfect everyday pouch. Clean mint flavour that lasts 30+ minutes. My go-to for the office."</p>
+      </div>
+      <div class="rounded-xl border border-border bg-card p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs">👤</div>
+          <div>
+            <p class="text-xs font-semibold">MintLover_EU</p>
+            <p class="text-[10px] text-muted-foreground">5 hours ago</p>
+          </div>
+        </div>
+        <a href="#" class="text-sm font-medium text-foreground hover:text-primary transition-colors">VELO Mighty Peppermint 11mg</a>
+        <div class="flex gap-0.5 my-1.5">
+          <span class="text-amber-400 text-xs">★★★★</span><span class="text-gray-300 text-xs">★</span>
+        </div>
+        <p class="text-xs text-muted-foreground leading-relaxed">"Strong kick with great flavour. Only reason it's 4 stars is the pouch feels a bit dry initially."</p>
+      </div>
+      <div class="rounded-xl border border-border bg-card p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs">👤</div>
+          <div>
+            <p class="text-xs font-semibold">CitrusFan99</p>
+            <p class="text-[10px] text-muted-foreground">Yesterday</p>
+          </div>
+        </div>
+        <a href="#" class="text-sm font-medium text-foreground hover:text-primary transition-colors">LOOP Jalapeño Lime Strong</a>
+        <div class="flex gap-0.5 my-1.5">
+          <span class="text-amber-400 text-xs">★★★★★</span>
+        </div>
+        <p class="text-xs text-muted-foreground leading-relaxed">"Totally unique. The lime-chilli combo shouldn't work but it absolutely does. Can't stop reordering."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rewards Tiers Preview -->
+  <section class="mb-10">
+    <h2 class="text-xl font-semibold mb-4">🎖️ Loyalty Tiers</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="rounded-xl border border-border bg-gradient-to-br from-orange-50 to-orange-100/50 p-4 text-center">
+        <div class="text-2xl mb-1">🥉</div>
+        <p class="text-sm font-semibold">Bronze</p>
+        <p class="text-xs text-muted-foreground">0+ points</p>
+        <p class="text-[10px] text-muted-foreground mt-1">1x points multiplier</p>
+      </div>
+      <div class="rounded-xl border border-border bg-gradient-to-br from-gray-50 to-gray-100/50 p-4 text-center">
+        <div class="text-2xl mb-1">🥈</div>
+        <p class="text-sm font-semibold">Silver</p>
+        <p class="text-xs text-muted-foreground">500+ points</p>
+        <p class="text-[10px] text-muted-foreground mt-1">1.5x multiplier + free shipping</p>
+      </div>
+      <div class="rounded-xl border border-border bg-gradient-to-br from-amber-50 to-amber-100/50 p-4 text-center">
+        <div class="text-2xl mb-1">🥇</div>
+        <p class="text-sm font-semibold">Gold</p>
+        <p class="text-xs text-muted-foreground">2,000+ points</p>
+        <p class="text-[10px] text-muted-foreground mt-1">2x multiplier + exclusives</p>
+      </div>
+      <div class="rounded-xl border border-border bg-gradient-to-br from-purple-50 to-purple-100/50 p-4 text-center">
+        <div class="text-2xl mb-1">💎</div>
+        <p class="text-sm font-semibold">Platinum</p>
+        <p class="text-xs text-muted-foreground">5,000+ points</p>
+        <p class="text-[10px] text-muted-foreground mt-1">3x multiplier + surprise box</p>
+      </div>
+    </div>
+    <p class="text-center mt-3">
+      <a href="#" class="text-sm text-primary font-medium hover:underline">Learn more about rewards →</a>
+    </p>
+  </section>
+
+  <!-- CTA -->
+  <section class="rounded-2xl bg-gradient-to-br from-[#1a2e1a] to-[#2d4a2d] text-white p-8 text-center">
+    <h2 class="text-2xl font-bold mb-2">Ready to Join?</h2>
+    <p class="text-white/70 mb-6 max-w-md mx-auto">Create a free account, start earning points on your first order, and unlock exclusive perks.</p>
+    <a href="#" class="inline-flex items-center gap-2 rounded-lg bg-white text-primary px-6 py-3 text-sm font-semibold hover:bg-white/90 transition-colors">
+      Create Free Account
+    </a>
+  </section>
+
+  <!-- Implementation notes -->
+  <section class="mt-10 rounded-xl border border-border bg-muted/20 p-6">
+    <h2 class="text-lg font-semibold mb-2">Implementation Notes</h2>
+    <ul class="text-sm text-muted-foreground space-y-1.5">
+      <li>• Community stats can be pulled from Supabase aggregate queries (count members, reviews, total points).</li>
+      <li>• Recent reviews are a new React island querying product_reviews with user join.</li>
+      <li>• Leaderboard already exists as LeaderboardIsland — just needs better styling.</li>
+      <li>• QuestBoardIsland already exists — just needs the new card layout from this mockup.</li>
+      <li>• The hero uses the same dark green gradient as the About page for brand consistency.</li>
+      <li>• Stats strip could use ISR or a client-side fetch to stay fresh between builds.</li>
+    </ul>
+  </section>
+</div>
+
+</body>
+</html>
