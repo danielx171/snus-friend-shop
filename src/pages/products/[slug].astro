@@ -3,20 +3,40 @@ export const prerender = true;
 import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import ProductCard from '@/components/astro/ProductCard.astro';
 import AddToCartButton from '@/components/react/AddToCartButton';
 import ProductReviewsIsland from '@/components/react/ProductReviewsIsland';
 import { getCollection } from 'astro:content';
+import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
 export async function getStaticPaths() {
-  const products = await getCollection('products');
-  return products.map((product) => ({
+  const allProducts = await getCollection('products');
+  return allProducts.map((product) => ({
     params: { slug: product.id },
-    props: { product },
+    props: {
+      product,
+      relatedProducts: allProducts
+        .filter((rp) => rp.data.brandSlug === product.data.brandSlug && rp.id !== product.id)
+        .slice(0, 4),
+    },
   }));
 }
 
-const { product } = Astro.props;
+const { product, relatedProducts } = Astro.props;
 const p = product.data;
+const bColor = brandColors[p.brandSlug] ?? defaultBrandColor;
+
+// Calculate savings for pack pricing
+const singlePrice = p.prices.pack1;
+const packSavings: Record<string, number> = {};
+for (const [key, price] of Object.entries(p.prices)) {
+  if (key === 'pack1' || typeof price !== 'number' || price <= 0) continue;
+  const qty = parseInt(key.replace('pack', ''));
+  if (!qty || qty <= 1) continue;
+  const perCan = price / qty;
+  const saving = Math.round((1 - perCan / singlePrice) * 100);
+  if (saving > 0) packSavings[key] = saving;
+}
 
 const strengthMap: Record<string, number> = {
   normal: 2,
@@ -114,8 +134,8 @@ const jsonLd = {
 
       <!-- Left: Product Image -->
       <div class="group/img relative">
-        <div class="product-card-image-bg overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur">
-          <div class="pdp-image-entrance relative aspect-square w-full">
+        <div class="overflow-hidden rounded-2xl border border-border cursor-zoom-in" style={`background: linear-gradient(135deg, ${bColor}15, ${bColor}08);`} id="pdp-image-container">
+          <div class="relative aspect-square w-full">
             {p.imageUrl ? (
               <Image
                 src={p.imageUrl}
@@ -125,7 +145,8 @@ const jsonLd = {
                 loading="eager"
                 format="webp"
                 quality={85}
-                class="pdp-image-hover h-full w-full object-contain p-8"
+                class="h-full w-full object-contain p-8 transition-transform duration-200"
+                id="pdp-image"
               />
             ) : (
               <div class="flex h-full w-full items-center justify-center text-muted-foreground/40">
@@ -325,5 +346,51 @@ const jsonLd = {
     <section class="mt-12">
       <ProductReviewsIsland client:visible productId={product.id} />
     </section>
+
+    <!-- Related Products -->
+    {relatedProducts.length > 0 && (
+      <section class="mt-16">
+        <h2 class="mb-6 text-xl font-bold text-foreground">More from {p.brand}</h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {relatedProducts.map((rp: any) => (
+            <ProductCard
+              slug={rp.id}
+              name={rp.data.name}
+              brand={rp.data.brand}
+              brandSlug={rp.data.brandSlug}
+              imageUrl={rp.data.imageUrl}
+              prices={rp.data.prices}
+              stock={rp.data.stock}
+              nicotineContent={rp.data.nicotineContent}
+              strengthKey={rp.data.strengthKey}
+              flavorKey={rp.data.flavorKey}
+              ratings={rp.data.ratings}
+              badgeKeys={rp.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </section>
+    )}
   </div>
+
+  <!-- Image zoom script -->
+  <script is:inline>
+    document.addEventListener('astro:page-load', () => {
+      const container = document.getElementById('pdp-image-container');
+      const img = document.getElementById('pdp-image');
+      if (!container || !img) return;
+
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        img.style.transformOrigin = x + '% ' + y + '%';
+        img.style.transform = 'scale(2)';
+      });
+
+      container.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale(1)';
+      });
+    });
+  </script>
 </Shop>
