@@ -522,4 +522,19 @@ if (heroProducts.length < 4) {
       "query-input": "required name=search_term_string"
     }
   })} />
+
+  <!-- Beginner mode: hide strong products from static sections -->
+  <script is:inline>
+  (function() {
+    try {
+      var raw = localStorage.getItem('snusfriend_beginner');
+      if (!raw || raw !== 'true') return;
+      var cards = document.querySelectorAll('[data-nicotine-mg]');
+      for (var i = 0; i < cards.length; i++) {
+        var mg = parseFloat(cards[i].getAttribute('data-nicotine-mg'));
+        if (mg > 6) cards[i].style.display = 'none';
+      }
+    } catch(e) {}
+  })();
+  </script>
 </Shop>

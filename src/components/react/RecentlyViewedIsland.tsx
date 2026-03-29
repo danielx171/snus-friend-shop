@@ -1,7 +1,6 @@
 import { useState, useEffect, memo } from 'react';
-import { addToCart, openCart } from '@/stores/cart';
-import { cartToast } from '@/lib/toast';
-import type { Product } from '@/data/products';
+import { useStore } from '@nanostores/react';
+import { $beginnerMode, BEGINNER_MAX_MG } from '@/stores/beginner-mode';
 
 interface RecentlyViewedProps {
   /** All products as JSON string — parsed client-side to match browsing history */
@@ -20,6 +19,7 @@ const HISTORY_KEY = 'snusfriend_history';
 
 function RecentlyViewedInner({ productsJson }: RecentlyViewedProps) {
   const [products, setProducts] = useState<any[]>([]);
+  const isBeginner = useStore($beginnerMode);
 
   useEffect(() => {
     try {
@@ -30,13 +30,17 @@ function RecentlyViewedInner({ productsJson }: RecentlyViewedProps) {
 
       const allProducts = JSON.parse(productsJson);
       const slugs = history.slice(0, 6).map((h) => h.slug);
-      const matched = slugs
+      let matched = slugs
         .map((slug) => allProducts.find((p: any) => p.slug === slug))
         .filter(Boolean);
 
+      if (isBeginner) {
+        matched = matched.filter((p: any) => (p.nicotineContent ?? 99) <= BEGINNER_MAX_MG);
+      }
+
       setProducts(matched);
     } catch { /* ignore */ }
-  }, [productsJson]);
+  }, [productsJson, isBeginner]);
 
   if (products.length < 2) return null;
 

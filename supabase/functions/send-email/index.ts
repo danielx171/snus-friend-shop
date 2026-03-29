@@ -219,10 +219,127 @@ function renderWelcome(data: Record<string, unknown>): string {
   `);
 }
 
+function renderReviewRequest(data: Record<string, unknown>): string {
+  const customerName = escapeHtml(String(data.customerName ?? "Friend"));
+  const productName = escapeHtml(String(data.productName ?? "your recent purchase"));
+  const productImageUrl = String(data.productImageUrl ?? "");
+  const reviewUrl = escapeHtml(String(data.reviewUrl ?? "https://snusfriends.com"));
+  const orderDate = escapeHtml(String(data.orderDate ?? ""));
+
+  const productImageBlock = productImageUrl
+    ? `<td style="width:80px;vertical-align:top;">
+        <img src="${escapeHtml(productImageUrl)}" alt="${productName}" width="80" height="80" style="display:block;width:80px;height:80px;object-fit:cover;border:1px solid #e0e0e0;border-radius:6px;background-color:#ffffff;" />
+      </td>
+      <td style="width:16px;"></td>`
+    : "";
+
+  // Self-contained layout matching Cowork design — does NOT use wrapInLayout()
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>We'd love to hear what you think</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
+    <tr>
+      <td align="center" style="padding:20px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:8px;overflow:hidden;">
+          <!-- Header -->
+          <tr>
+            <td style="background-color:#1a2e1a;padding:40px 20px;text-align:center;">
+              <span style="font-size:24px;font-weight:600;color:#ffffff;letter-spacing:0.5px;">Snus</span><span style="font-size:24px;font-weight:600;color:#4a6741;letter-spacing:0.5px;">Friend</span>
+            </td>
+          </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px 30px;">
+              <h2 style="font-size:18px;font-weight:600;color:#1a2e1a;margin:0 0 20px 0;line-height:1.4;">Hey ${customerName},</h2>
+
+              <p style="font-size:15px;line-height:1.6;color:#333333;margin:0 0 16px 0;">We hope you're enjoying ${productName}! A few days have passed since it arrived, and we'd love to know what you think.</p>
+
+              <p style="font-size:15px;line-height:1.6;color:#333333;margin:0 0 16px 0;">Genuine reviews from real customers help our community find the right products &mdash; and your honest thoughts make a real difference.</p>
+
+              <!-- Product Section -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9f9f9;border-left:4px solid #4a6741;border-radius:4px;margin:28px 0;">
+                <tr>
+                  <td style="padding:20px;">
+                    <p style="font-size:13px;font-weight:600;color:#666666;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 12px 0;">You purchased</p>
+                    <table role="presentation" cellpadding="0" cellspacing="0">
+                      <tr>
+                        ${productImageBlock}
+                        <td style="vertical-align:top;">
+                          <p style="font-size:15px;font-weight:600;color:#1a2e1a;margin:0 0 4px 0;line-height:1.4;">${productName}</p>
+                          <p style="font-size:13px;color:#999999;margin:0;">Ordered ${orderDate}</p>
+                          <p style="font-size:14px;line-height:1.5;color:#555555;margin:16px 0 0 0;">If you ordered multiple items, just pick your favourite one to review first.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="padding:32px 0;">
+                    <a href="${reviewUrl}" style="display:inline-block;background-color:#4a6741;color:#ffffff;padding:14px 32px;text-decoration:none;border-radius:6px;font-size:15px;font-weight:600;">Leave a Review</a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Why Reviews -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9f9f9;border-radius:6px;margin:0 0 28px 0;">
+                <tr>
+                  <td style="padding:24px;">
+                    <h3 style="font-size:15px;font-weight:600;color:#1a2e1a;margin:0 0 12px 0;">Why your review matters</h3>
+                    <p style="font-size:14px;line-height:1.6;color:#555555;margin:0;">Every review helps other shoppers make confident choices. We publish all honest opinions &mdash; the good, the brilliant, and the constructive. Your voice is part of what makes SnusFriend a real community.</p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="font-size:15px;line-height:1.6;color:#333333;margin:0 0 16px 0;">Questions or issues with your order? Just reply to this email or reach out to <a href="mailto:support@snusfriends.com" style="color:#4a6741;text-decoration:none;">support@snusfriends.com</a>.</p>
+
+              <p style="font-size:14px;color:#555555;margin:28px 0 0 0;line-height:1.6;">
+                Cheers,<br />
+                <span style="font-weight:600;color:#1a2e1a;">The SnusFriend Team</span>
+              </p>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#f5f5f5;padding:30px;text-align:center;border-top:1px solid #e0e0e0;">
+              <p style="font-size:12px;line-height:1.6;color:#999999;margin:0 0 12px 0;">We only ask for honest reviews &mdash; we never incentivise positive feedback. Your authentic experience helps everyone.</p>
+              <p style="font-size:12px;color:#e0e0e0;margin:0 0 12px 0;">&mdash;&mdash;&mdash;</p>
+              <p style="font-size:12px;line-height:1.6;color:#999999;margin:0 0 12px 0;">
+                <strong>SnusFriend</strong><br />
+                Your nicotine pouch community<br />
+                <a href="https://snusfriends.com" style="color:#4a6741;text-decoration:none;">snusfriends.com</a>
+              </p>
+              <p style="font-size:12px;margin:0 0 12px 0;">
+                <a href="https://snusfriends.com/legal/privacy" style="color:#4a6741;text-decoration:none;">Privacy</a> &nbsp;&bull;&nbsp;
+                <a href="https://snusfriends.com/legal/terms" style="color:#4a6741;text-decoration:none;">Terms</a> &nbsp;&bull;&nbsp;
+                <a href="https://snusfriends.com/contact" style="color:#4a6741;text-decoration:none;">Contact</a>
+              </p>
+              <p style="font-size:11px;line-height:1.6;color:#999999;margin:16px 0 0 0;">
+                You're receiving this because you purchased from SnusFriend.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
 const TEMPLATE_RENDERERS: Record<string, (data: Record<string, unknown>) => string> = {
   order_confirmed: renderOrderConfirmed,
   order_shipped: renderOrderShipped,
   welcome: renderWelcome,
+  review_request: renderReviewRequest,
 };
 
 /* ------------------------------------------------------------------ */

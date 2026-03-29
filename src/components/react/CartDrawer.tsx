@@ -85,7 +85,7 @@ const CartItemRow = React.memo<CartItemRowProps>(function CartItemRow({ item }) 
             type="button"
             onClick={handleDecrement}
             aria-label={`Decrease quantity of ${product.name}`}
-            className="flex h-6 w-6 items-center justify-center rounded border border-border text-sm transition-colors hover:bg-muted"
+            className="flex h-8 w-8 items-center justify-center rounded border border-border text-sm transition-colors hover:bg-muted sm:h-6 sm:w-6"
           >
             -
           </button>
@@ -96,7 +96,7 @@ const CartItemRow = React.memo<CartItemRowProps>(function CartItemRow({ item }) 
             type="button"
             onClick={handleIncrement}
             aria-label={`Increase quantity of ${product.name}`}
-            className="flex h-6 w-6 items-center justify-center rounded border border-border text-sm transition-colors hover:bg-muted"
+            className="flex h-8 w-8 items-center justify-center rounded border border-border text-sm transition-colors hover:bg-muted sm:h-6 sm:w-6"
           >
             +
           </button>

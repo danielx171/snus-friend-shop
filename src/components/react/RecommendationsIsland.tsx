@@ -1,4 +1,6 @@
 import { useState, useEffect, memo } from 'react';
+import { useStore } from '@nanostores/react';
+import { $beginnerMode, BEGINNER_MAX_MG } from '@/stores/beginner-mode';
 import QueryProvider from './QueryProvider';
 import { useOrders, getPurchasedSlugs } from '@/hooks/useOrders';
 import { supabase } from '@/integrations/supabase/client';
@@ -24,6 +26,8 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
   if (!mounted || !userId || isLoading) return null;
   if (purchasedSlugs.length === 0) return null;
 
+  const isBeginner = useStore($beginnerMode);
+
   let allProducts: any[] = [];
   try {
     allProducts = JSON.parse(productsJson);
@@ -31,16 +35,21 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
     return null;
   }
 
+  // In beginner mode, filter to gentle products only
+  const pool = isBeginner
+    ? allProducts.filter((p: any) => (p.nicotineContent ?? 99) <= BEGINNER_MAX_MG)
+    : allProducts;
+
   // "Buy Again" — products the user has ordered before
   const buyAgain = purchasedSlugs
-    .map((slug) => allProducts.find((p: any) => p.slug === slug))
+    .map((slug) => pool.find((p: any) => p.slug === slug))
     .filter(Boolean)
     .slice(0, 4);
 
   // "You Might Like" — same brand/flavour as purchased, but not purchased
   const purchasedBrands = new Set(buyAgain.map((p: any) => p.brandSlug));
   const purchasedFlavours = new Set(buyAgain.map((p: any) => p.flavorKey));
-  const recommendations = allProducts
+  const recommendations = pool
     .filter((p: any) =>
       !purchasedSlugs.includes(p.slug) &&
       (purchasedBrands.has(p.brandSlug) || purchasedFlavours.has(p.flavorKey)) &&
