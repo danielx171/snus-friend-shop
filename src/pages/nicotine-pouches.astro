@@ -5,18 +5,10 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
-import fs from 'node:fs';
-import path from 'node:path';
+import { ensureProductsJson } from '@/lib/product-json';
 
 const products = await getCollection('products');
-
-// Ensure the shared products.json exists (may run before /products/index.astro)
-const outDir = path.resolve('./public/data');
-fs.mkdirSync(outDir, { recursive: true });
-const jsonPath = path.join(outDir, 'products.json');
-if (!fs.existsSync(jsonPath)) {
-  fs.writeFileSync(jsonPath, JSON.stringify(products.map(p => ({ ...p.data, slug: p.id }))));
-}
+ensureProductsJson(products);
 
 const totalProducts = products.length;
 const brandCount = new Set(products.map(p => p.data.brand)).size;

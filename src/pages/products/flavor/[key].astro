@@ -4,8 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
-import fs from 'node:fs';
-import path from 'node:path';
+import { ensureProductsJson } from '@/lib/product-json';
 
 const FLAVOR_META: Record<string, { label: string; h1: string; desc: string; intro: string }> = {
   'mint': {
@@ -89,13 +88,7 @@ const meta = FLAVOR_META[key as keyof typeof FLAVOR_META];
 const allProducts = await getCollection('products');
 const products = allProducts.filter((p) => p.data.flavorKey === key);
 
-// Ensure the shared products.json exists (may run before /products/index.astro)
-const outDir = path.resolve('./public/data');
-fs.mkdirSync(outDir, { recursive: true });
-const jsonPath = path.join(outDir, 'products.json');
-if (!fs.existsSync(jsonPath)) {
-  fs.writeFileSync(jsonPath, JSON.stringify(allProducts.map(p => ({ ...p.data, slug: p.id }))));
-}
+ensureProductsJson(allProducts);
 
 const jsonLd = {
   '@context': 'https://schema.org',

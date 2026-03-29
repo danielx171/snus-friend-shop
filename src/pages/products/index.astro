@@ -4,11 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
-import fs from 'node:fs';
-import path from 'node:path';
+import { writeProductsJson } from '@/lib/product-json';
 
 const products = await getCollection('products');
-const productData = products.map(p => ({ ...p.data, slug: p.id }));
 
 const collectionJsonLd = {
   '@context': 'https://schema.org',
@@ -29,10 +27,8 @@ const collectionJsonLd = {
   },
 };
 
-// Write product catalog to a static JSON file — keeps HTML under 200KB
-const outDir = path.resolve('./public/data');
-fs.mkdirSync(outDir, { recursive: true });
-fs.writeFileSync(path.join(outDir, 'products.json'), JSON.stringify(productData));
+// Write slim product catalog to a static JSON file (~300KB instead of ~688KB)
+writeProductsJson(products);
 ---
 
 <Shop
