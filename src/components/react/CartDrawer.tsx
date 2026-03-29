@@ -266,6 +266,29 @@ export default function CartDrawer() {
                     />
                   ))}
                 </div>
+
+                {/* Quick add suggestion */}
+                {items.length > 0 && items.length < 5 && (
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">Complete your order</p>
+                    <div className="flex gap-2">
+                      <a
+                        href="/products"
+                        onClick={closeCart}
+                        className="flex-1 rounded-lg border border-border bg-card/60 p-2 text-center text-xs font-medium text-foreground transition hover:border-primary/30"
+                      >
+                        Browse more pouches
+                      </a>
+                      <a
+                        href="/flavor-quiz"
+                        onClick={closeCart}
+                        className="flex-1 rounded-lg border border-primary/20 bg-primary/5 p-2 text-center text-xs font-medium text-primary transition hover:bg-primary/10"
+                      >
+                        Take the flavour quiz
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Footer — sticky bottom */}

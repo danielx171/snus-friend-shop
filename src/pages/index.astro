@@ -4,6 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import ProductCard from '@/components/astro/ProductCard.astro';
+import RecentlyViewedIsland from '@/components/react/RecentlyViewedIsland';
 import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
 const allProducts = await getCollection('products');
@@ -182,6 +183,18 @@ if (heroProducts.length < 4) {
       </div>
     </div>
   </section>
+
+  <!-- Recently Viewed (client-side, shows only if user has browsing history) -->
+  <RecentlyViewedIsland
+    client:idle
+    productsJson={JSON.stringify(allProducts.slice(0, 200).map((p) => ({
+      slug: p.id,
+      name: p.data.name,
+      brand: p.data.brand,
+      imageUrl: p.data.imageUrl,
+      prices: { pack1: p.data.prices.pack1 },
+    })))}
+  />
 
   <!-- Best Sellers -->
   <section class="border-b border-border bg-background py-16 sm:py-20">
