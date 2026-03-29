@@ -18,10 +18,17 @@ interface HistoryItem {
 const HISTORY_KEY = 'snusfriend_history';
 
 function RecentlyViewedInner({ productsJson }: RecentlyViewedProps) {
+  const [mounted, setMounted] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
   const isBeginner = useStore($beginnerMode);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     try {
       const raw = localStorage.getItem(HISTORY_KEY);
       if (!raw) return;
@@ -40,9 +47,9 @@ function RecentlyViewedInner({ productsJson }: RecentlyViewedProps) {
 
       setProducts(matched);
     } catch { /* ignore */ }
-  }, [productsJson, isBeginner]);
+  }, [mounted, productsJson, isBeginner]);
 
-  if (products.length < 2) return null;
+  if (!mounted || products.length < 2) return null;
 
   return (
     <section className="border-b border-border bg-background py-12 sm:py-16">

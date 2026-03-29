@@ -17,14 +17,14 @@ interface Segment {
 }
 
 const SEGMENTS: Segment[] = [
-  { key: 'points_5',      label: '5 Points',    shortLabel: '5 pts',   bgFrom: '#0c2d4a', bgTo: '#0a2440', accent: '#22d3ee', emoji: '💰' },
-  { key: 'points_10',     label: '10 Points',   shortLabel: '10 pts',  bgFrom: '#0e1f3d', bgTo: '#0b1a33', accent: '#38bdf8', emoji: '💰' },
-  { key: 'voucher_15pct', label: '15% Off',     shortLabel: '15%',     bgFrom: '#1a0f30', bgTo: '#150b28', accent: '#a855f7', emoji: '🎟️' },
-  { key: 'points_25',     label: '25 Points',   shortLabel: '25 pts',  bgFrom: '#0c2d4a', bgTo: '#0a2440', accent: '#22d3ee', emoji: '⚡' },
-  { key: 'points_5b',     label: '5 Points',    shortLabel: '5 pts',   bgFrom: '#0e1f3d', bgTo: '#0b1a33', accent: '#38bdf8', emoji: '💰' },
-  { key: 'free_can',      label: 'Free Can',    shortLabel: 'Free!',   bgFrom: '#1e0a0a', bgTo: '#180808', accent: '#ef4444', emoji: '🎁' },
-  { key: 'points_50',     label: '50 Points',   shortLabel: '50 pts',  bgFrom: '#0c2d4a', bgTo: '#0a2440', accent: '#10b981', emoji: '⭐' },
-  { key: 'free_month',    label: 'Free Month!', shortLabel: 'JACKPOT', bgFrom: '#1c1505', bgTo: '#161003', accent: '#fbbf24', emoji: '🏆' },
+  { key: 'points_5',      label: '5 Points',    shortLabel: '5 pts',   bgFrom: 'hsl(240 12% 18%)', bgTo: 'hsl(240 12% 14%)', accent: 'hsl(var(--primary))', emoji: '💰' },
+  { key: 'points_10',     label: '10 Points',   shortLabel: '10 pts',  bgFrom: 'hsl(240 12% 20%)', bgTo: 'hsl(240 12% 16%)', accent: 'hsl(var(--primary) / 0.9)', emoji: '💰' },
+  { key: 'voucher_15pct', label: '15% Off',     shortLabel: '15%',     bgFrom: 'hsl(270 35% 22%)', bgTo: 'hsl(270 35% 18%)', accent: 'hsl(270 50% 60%)', emoji: '🎟️' },
+  { key: 'points_25',     label: '25 Points',   shortLabel: '25 pts',  bgFrom: 'hsl(240 12% 19%)', bgTo: 'hsl(240 12% 15%)', accent: 'hsl(var(--primary) / 0.85)', emoji: '⚡' },
+  { key: 'points_5b',     label: '5 Points',    shortLabel: '5 pts',   bgFrom: 'hsl(240 12% 21%)', bgTo: 'hsl(240 12% 17%)', accent: 'hsl(var(--primary))', emoji: '💰' },
+  { key: 'free_can',      label: 'Free Can',    shortLabel: 'Free!',   bgFrom: 'hsl(0 50% 22%)', bgTo: 'hsl(0 50% 18%)', accent: 'hsl(var(--destructive) / 0.8)', emoji: '🎁' },
+  { key: 'points_50',     label: '50 Points',   shortLabel: '50 pts',  bgFrom: 'hsl(240 12% 18%)', bgTo: 'hsl(240 12% 14%)', accent: 'hsl(var(--success))', emoji: '⭐' },
+  { key: 'free_month',    label: 'Free Month!', shortLabel: 'JACKPOT', bgFrom: 'hsl(44 95% 24%)', bgTo: 'hsl(44 95% 20%)', accent: 'hsl(44 100% 60%)', emoji: '🏆' },
 ];
 
 const SEGMENT_COUNT = SEGMENTS.length;
@@ -134,11 +134,11 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
           <defs>
             {/* Metallic outer ring gradient */}
             <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#374151" />
-              <stop offset="30%" stopColor="#4b5563" />
-              <stop offset="50%" stopColor="#6b7280" />
-              <stop offset="70%" stopColor="#4b5563" />
-              <stop offset="100%" stopColor="#374151" />
+              <stop offset="0%" stopColor="hsl(var(--muted) / 0.6)" />
+              <stop offset="30%" stopColor="hsl(var(--muted) / 0.5)" />
+              <stop offset="50%" stopColor="hsl(var(--muted) / 0.45)" />
+              <stop offset="70%" stopColor="hsl(var(--muted) / 0.5)" />
+              <stop offset="100%" stopColor="hsl(var(--muted) / 0.6)" />
             </linearGradient>
             {/* Center button gradient */}
             <radialGradient id="center-grad" cx="50%" cy="35%" r="60%">
@@ -163,7 +163,7 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
               r={2.5}
               className="led-dot"
               style={{
-                fill: i % 3 === 0 ? '#fbbf24' : i % 3 === 1 ? '#22d3ee' : '#a855f7',
+                fill: i % 3 === 0 ? 'hsl(44 100% 60%)' : i % 3 === 1 ? 'hsl(var(--primary))' : 'hsl(270 50% 60%)',
                 animationDelay: `${i * 80}ms`,
               }}
             />
@@ -248,7 +248,7 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
             })}
 
             {/* Inner ring shadow */}
-            <circle cx={cx} cy={cy} r={34} fill="#0f172a" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" />
+            <circle cx={cx} cy={cy} r={34} fill="hsl(var(--card) / 0.8)" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" />
           </motion.g>
 
           {/* Center hub button (stays still) */}
@@ -281,7 +281,7 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
               cx={cx}
               cy={cy}
               r={32}
-              fill={isExhausted ? '#374151' : 'url(#center-grad)'}
+              fill={isExhausted ? 'hsl(var(--muted))' : 'url(#center-grad)'}
               stroke="rgba(255,255,255,0.2)"
               strokeWidth="1.5"
               opacity={spinning ? 0.5 : 1}

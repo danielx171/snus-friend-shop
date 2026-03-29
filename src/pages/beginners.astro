@@ -51,21 +51,21 @@ const jsonLd = {
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
   <!-- Hero -->
-  <section class="bg-[#1a2e1a] text-[#faf8f5]">
+  <section style={`background: hsl(var(--hero-bg)); color: hsl(var(--hero-text));`}>
     <div class="mx-auto max-w-4xl px-4 py-16 sm:py-20 text-center">
       <Breadcrumb items={[{ label: 'Beginners' }]} />
-      <p class="mt-4 text-sm font-medium uppercase tracking-widest text-[#a8c0a0]">First Time?</p>
+      <p class="mt-4 text-sm font-medium uppercase tracking-widest" style={`color: hsl(var(--hero-muted));`}>First Time?</p>
       <h1 class="mt-2 text-4xl font-bold tracking-tight sm:text-5xl" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
         New to Nicotine Pouches?
       </h1>
-      <p class="mt-4 text-lg text-[#a8c0a0] max-w-2xl mx-auto leading-relaxed">
+      <p class="mt-4 text-lg max-w-2xl mx-auto leading-relaxed" style={`color: hsl(var(--hero-muted));`}>
         No pressure. We'll help you find the right pouch for your first experience — gentle strengths only, clear guidance, and honest recommendations.
       </p>
       <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/flavor-quiz" class="inline-flex h-12 items-center justify-center rounded-lg bg-[#faf8f5] px-8 text-base font-semibold text-[#1a2e1a] transition hover:bg-[#e8e6e0]">
+        <a href="/flavor-quiz" class="inline-flex h-12 items-center justify-center rounded-lg px-8 text-base font-semibold transition" style={`background: hsl(var(--hero-cta-bg)); color: hsl(var(--hero-cta-text));`}>
           Take the Flavour Quiz
         </a>
-        <a href="#starter-picks" class="inline-flex h-12 items-center justify-center rounded-lg border border-[#faf8f5]/20 px-8 text-base font-semibold text-[#faf8f5] transition hover:bg-[#faf8f5]/10">
+        <a href="#starter-picks" class="inline-flex h-12 items-center justify-center rounded-lg border px-8 text-base font-semibold transition" style={`border-color: hsl(var(--hero-text) / 0.2); color: hsl(var(--hero-text));`}>
           Browse Starter Picks
         </a>
       </div>
@@ -223,20 +223,20 @@ const jsonLd = {
   </section>
 
   <!-- CTA -->
-  <section class="bg-[#1a2e1a] py-16">
+  <section class="py-16" style={`background: hsl(var(--hero-bg));`}>
     <div class="mx-auto max-w-3xl px-4 text-center">
-      <h2 class="text-2xl font-bold text-[#faf8f5] sm:text-3xl" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
+      <h2 class="text-2xl font-bold sm:text-3xl" style={`color: hsl(var(--hero-text)); font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;`}>
         Ready to Try Your First Pouch?
       </h2>
-      <p class="mt-4 text-base text-[#a8c0a0] max-w-xl mx-auto">
+      <p class="mt-4 text-base max-w-xl mx-auto" style={`color: hsl(var(--hero-muted));`}>
         Take our 60-second flavour quiz for a personalised recommendation, or browse our full beginner-friendly collection.
       </p>
       <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/flavor-quiz" class="inline-flex h-12 items-center justify-center rounded-lg bg-[#faf8f5] px-8 text-base font-semibold text-[#1a2e1a] transition hover:bg-[#e8e6e0]">
+        <a href="/flavor-quiz" class="inline-flex h-12 items-center justify-center rounded-lg px-8 text-base font-semibold transition" style={`background: hsl(var(--hero-cta-bg)); color: hsl(var(--hero-cta-text));`}>
           Take the Flavour Quiz
         </a>
         <BeginnerModeToggle client:load />
-        <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="inline-flex h-12 items-center justify-center rounded-lg border border-[#faf8f5]/20 px-8 text-base font-semibold text-[#faf8f5] transition hover:bg-[#faf8f5]/10">
+        <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="inline-flex h-12 items-center justify-center rounded-lg border px-8 text-base font-semibold transition" style={`border-color: hsl(var(--hero-text) / 0.2); color: hsl(var(--hero-text));`}>
           Read the Guide
         </a>
       </div>

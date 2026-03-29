@@ -2,6 +2,7 @@ import { useStore } from '@nanostores/react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { $mobileMenuOpen, closeMobileMenu } from '@/stores/ui';
 import { tenant } from '@/config/tenant';
+import ThemePicker from '@/components/react/ThemePicker';
 
 const navSections = [
   {
@@ -95,6 +96,14 @@ export default function MobileMenu() {
                 </ul>
               </div>
             ))}
+
+            {/* Theme switcher */}
+            <div>
+              <h3 className="text-xs uppercase text-muted-foreground font-semibold tracking-wider mb-2">
+                Theme
+              </h3>
+              <ThemePicker />
+            </div>
           </nav>
         </Dialog.Content>
       </Dialog.Portal>

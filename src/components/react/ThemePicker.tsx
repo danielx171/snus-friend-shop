@@ -3,9 +3,6 @@ import { useStore } from '@nanostores/react';
 import { $theme, setTheme, allThemes, themeLabels, type Theme } from '@/stores/theme';
 
 const themeColors: Record<Theme, string> = {
-  velo: 'hsl(218 100% 55%)',
-  light: 'hsl(213 65% 32%)',
-  editorial: 'hsl(28 80% 44%)',
   forest: 'hsl(153 55% 18%)',
   copper: 'hsl(28 55% 46%)',
 };

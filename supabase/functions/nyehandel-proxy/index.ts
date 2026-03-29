@@ -92,6 +92,7 @@ Deno.serve(async (req) => {
       headers: {
         'Authorization': `Bearer ${nyehandelToken}`,
         'Accept': 'application/json',
+        'X-Language': 'en',
         'X-identifier': Deno.env.get('NYEHANDEL_X_IDENTIFIER') ?? '',
       },
     });

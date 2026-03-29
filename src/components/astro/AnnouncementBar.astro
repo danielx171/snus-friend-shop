@@ -5,7 +5,7 @@
  */
 ---
 
-<div class="w-full bg-[#1a2e1a] text-[#faf8f5] overflow-hidden" role="banner" aria-label="Store announcements">
+<div class="w-full overflow-hidden" role="banner" aria-label="Store announcements" style={`background: hsl(var(--hero-bg)); color: hsl(var(--hero-text));`}>
   <div class="relative h-9 flex items-center justify-center text-xs sm:text-sm">
     {/* Desktop: show all three inline */}
     <div class="hidden md:flex items-center gap-3 text-[13px]">
@@ -13,9 +13,9 @@
         <span class="text-amber-400">★★★★★</span>
         <span>Trusted by EU customers</span>
       </span>
-      <span class="text-[#faf8f5]/30">•</span>
+      <span style={`color: hsl(var(--hero-text) / 0.3);`}>•</span>
       <span>Free Shipping Over €29</span>
-      <span class="text-[#faf8f5]/30">•</span>
+      <span style={`color: hsl(var(--hero-text) / 0.3);`}>•</span>
       <span>Same-Day Dispatch Before 2pm CET</span>
     </div>
 

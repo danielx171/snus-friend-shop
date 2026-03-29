@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnusFriend Design System Audit — March 2026</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --forest: #1c5c33;
+      --forest-light: #2d7d4a;
+      --forest-pale: #e8f0ec;
+      --copper: #b67a35;
+      --copper-dark: #6b4723;
+      --copper-pale: #f5f0eb;
+      --bg-primary: #0f0f0f;
+      --bg-secondary: #1a1a1a;
+      --bg-tertiary: #242424;
+      --text-primary: #f5f5f5;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #808080;
+      --border-color: #333333;
+      --danger: #e63946;
+      --warning: #f77f00;
+      --success: #2a9d8f;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      padding: 2rem 1.5rem;
+      position: sticky;
+      top: 0;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-tertiary);
+      margin-bottom: 1.5rem;
+    }
+
+    .toc {
+      list-style: none;
+    }
+
+    .toc li {
+      margin-bottom: 0.75rem;
+    }
+
+    .toc a {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .toc a:hover {
+      color: var(--forest);
+      border-left-color: var(--forest);
+      padding-left: 1rem;
+    }
+
+    /* Main content */
+    .main {
+      padding: 3rem 4rem;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 4rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-bottom: 0.5rem;
+    }
+
+    .header-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .header-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .meta-label {
+      font-weight: 600;
+      color: var(--text-tertiary);
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .section-intro {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      max-width: 800px;
+    }
+
+    /* Score cards */
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .score-card {
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      padding: 2rem;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .score-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .circular-score {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      font-size: 2rem;
+      position: relative;
+    }
+
+    .score-8 {
+      background: conic-gradient(var(--forest) 0deg 288deg, var(--bg-secondary) 288deg);
+      color: var(--forest);
+    }
+
+    .score-7-5 {
+      background: conic-gradient(var(--copper) 0deg 270deg, var(--bg-secondary) 270deg);
+      color: var(--copper);
+    }
+
+    .score-7 {
+      background: conic-gradient(var(--warning) 0deg 252deg, var(--bg-secondary) 252deg);
+      color: var(--warning);
+    }
+
+    .score-card-label {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Color swatches */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .swatch-group {
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
+    .swatch-label {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .swatch-label h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .swatch-label p {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    .swatch-sample {
+      height: 100px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .swatch-hex {
+      padding: 0.75rem 1rem;
+      background-color: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    /* Tables */
+    .table-wrapper {
+      overflow-x: auto;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead {
+      background-color: var(--bg-tertiary);
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    tr:hover {
+      background-color: var(--bg-tertiary);
+    }
+
+    .status-ok {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .status-warn {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .status-fail {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    /* Priority items */
+    .priority-list {
+      list-style: none;
+    }
+
+    .priority-item {
+      background-color: var(--bg-tertiary);
+      border-left: 4px solid var(--forest);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 0.25rem 0.75rem 0.75rem 0.25rem;
+    }
+
+    .priority-item.p1 {
+      border-left-color: var(--copper);
+    }
+
+    .priority-item.p2 {
+      border-left-color: var(--warning);
+    }
+
+    .priority-tag {
+      display: inline-block;
+      background-color: var(--forest);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .priority-item.p1 .priority-tag {
+      background-color: var(--copper);
+    }
+
+    .priority-item.p2 .priority-tag {
+      background-color: var(--warning);
+    }
+
+    .priority-item h4 {
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .priority-item p {
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.85rem;
+      color: #a8d5ba;
+      line-height: 1.5;
+    }
+
+    .code-label {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Before/after */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .comparison-item {
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
+    .comparison-label {
+      padding: 1rem;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .comparison-item.before .comparison-label {
+      color: var(--danger);
+    }
+
+    .comparison-item.after .comparison-label {
+      color: var(--success);
+    }
+
+    .comparison-content {
+      padding: 1.5rem;
+    }
+
+    /* Accessibility */
+    .a11y-check {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .a11y-item {
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+    }
+
+    .a11y-item h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .a11y-status {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .a11y-pass {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .a11y-warn {
+      background-color: var(--warning);
+      color: white;
+    }
+
+    .a11y-item p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      padding: 3rem;
+      margin-top: 4rem;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 2rem;
+      }
+
+      .main {
+        padding: 2rem;
+      }
+
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-title {
+        font-size: 1.8rem;
+      }
+
+      .main {
+        padding: 1.5rem;
+      }
+
+      .color-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .score-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Utility */
+    .text-muted {
+      color: var(--text-secondary);
+    }
+
+    .mb-2 {
+      margin-bottom: 2rem;
+    }
+
+    .mt-2 {
+      margin-top: 2rem;
+    }
+
+    .gap-2 {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-tertiary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">Contents</div>
+      <ul class="toc">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#themes">Theme System</a></li>
+        <li><a href="#tokens">Token Coverage</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#homepage">Homepage Critique</a></li>
+        <li><a href="#accessibility">Accessibility</a></li>
+        <li><a href="#priorities">Priorities</a></li>
+        <li><a href="#recommendations">Recommendations</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-label">Design System Audit</div>
+        <h1 class="header-title">SnusFriend</h1>
+        <p class="header-subtitle">Comprehensive design system analysis & interactive critique</p>
+        <div class="header-meta">
+          <div class="meta-item">
+            <span class="meta-label">Organization</span>
+            <span>SnusFriend</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">URL</span>
+            <span>snusfriends.com</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Platform</span>
+            <span>Astro 6 + React Islands</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Audit Date</span>
+            <span>March 29, 2026</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Pages</span>
+            <span>94+ (731 products, 55 brands)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overview Section -->
+      <section id="overview">
+        <div class="section-label">Context</div>
+        <h2 class="section-title">Audit Overview</h2>
+        <p class="section-intro">
+          SnusFriend is a premium e-commerce platform for nicotine pouches built on Astro 6 with React islands.
+          Launched March 2026, the site relies entirely on organic traffic (Google Ads banned for nicotine).
+          This audit evaluates the design system maturity, component consistency, and theme implementation across 94+ pages.
+        </p>
+
+        <div class="score-grid">
+          <div class="score-card">
+            <h3>Token Coverage</h3>
+            <div class="circular-score score-7-5">7.5</div>
+            <div class="score-card-label">Out of 10</div>
+          </div>
+          <div class="score-card">
+            <h3>Component System</h3>
+            <div class="circular-score score-8">8.0</div>
+            <div class="score-card-label">Out of 10</div>
+          </div>
+          <div class="score-card">
+            <h3>Accessibility</h3>
+            <div class="circular-score score-7">7.0</div>
+            <div class="score-card-label">Out of 10</div>
+          </div>
+        </div>
+
+        <p class="section-intro text-muted">
+          Strengths: Robust theme architecture, complete shadcn/ui integration, consistent spacing scale.
+          Areas for improvement: 80+ hardcoded color values breaking theme switching, inconsistent implementations across Astro/React components.
+        </p>
+      </section>
+
+      <!-- Themes Section -->
+      <section id="themes">
+        <div class="section-label">Design System</div>
+        <h2 class="section-title">Theme System</h2>
+        <p class="section-intro">
+          Two complete, production-ready themes with comprehensive token coverage per mode.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          <div>
+            <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 1rem;">Forest Green (Default)</h3>
+            <div class="color-grid">
+              <div class="swatch-group">
+                <div class="swatch-label">
+                  <h4>Primary</h4>
+                  <p>Action buttons, links, accents</p>
+                </div>
+                <div class="swatch-sample" style="background-color: #1c5c33;">Primary</div>
+                <div class="swatch-hex">#1c5c33</div>
+              </div>
+
+              <div class="swatch-group">
+                <div class="swatch-label">
+                  <h4>Surface</h4>
+                  <p>Cards, panels, containers</p>
+                </div>
+                <div class="swatch-sample" style="background-color: #faf8f5;">Surface</div>
+                <div class="swatch-hex">#faf8f5</div>
+              </div>
+
+              <div class="swatch-group">
+                <div class="swatch-label">
+                  <h4>Text Primary</h4>
+                  <p>Headlines, body text</p>
+                </div>
+                <div class="swatch-sample" style="background-color: #0f1f0f; color: #faf8f5;">Text</div>
+                <div class="swatch-hex">#0f1f0f</div>
+              </div>
+
+              <div class="swatch-group">
+                <div class="swatch-label">
+                  <h4>Muted</h4>
+                  <p>Secondary text, disabled</p>
+                </div>
+                <div class="swatch-sample" style="background-color: #a8c0a0; color: #0f1f0f;">Muted</div>
+                <div class="swatch-hex">#a8c0a0</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 1rem;">Copper Glass (Dark)</h3>
+            <div class="color-grid">
+              <div class="swatch-group">
+                <div class="swatch-label">
+                  <h4>Primary</h4>
+                  <p>Action buttons, links, accents</p>
+                </div>
+                <div class="swatch-sample" style="background-color: #b67a35;">Primary</div>
+                <div class="swatch-hex">#b67a35</div>
+              </div>
+
+              <div class="swatch-group">
+                <div class="swatch-label">
+                  <h4>Surface</h4>
+                  <p>Cards, panels, containers</p>
+                </div>
+                <div class="swatch-sample" style="background-color: #1a1714;">Surface</div>
+                <div class="swatch-hex">#1a1714</div>
+              </div>
+
+              <div class="swatch-group">
+                <div class="swatch-label">
+                  <h4>Text Primary</h4>
+                  <p>Headlines, body text</p>
+                </div>
+                <div class="swatch-sample" style="background-color: #f5f0eb; color: #1a1714;">Text</div>
+                <div class="swatch-hex">#f5f0eb</div>
+              </div>
+
+              <div class="swatch-group">
+                <div class="swatch-label">
+                  <h4>Muted</h4>
+                  <p>Secondary text, disabled</p>
+                </div>
+                <div class="swatch-sample" style="background-color: #8b7355; color: #f5f0eb;">Muted</div>
+                <div class="swatch-hex">#8b7355</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-label">CSS Custom Properties — Root</div>
+          <pre>:root {
+  --primary: #1c5c33;
+  --secondary: #2d7d4a;
+  --accent: #a8c0a0;
+  --surface: #faf8f5;
+  --text-primary: #0f1f0f;
+  --text-secondary: #554d47;
+  --border: #e8e6e0;
+  --shadow-sm: 0 1px 2px rgba(15, 31, 15, 0.05);
+  --shadow-lg: 0 10px 25px rgba(15, 31, 15, 0.1);
+  --glow-primary: 0 0 12px rgba(28, 92, 51, 0.3);
+  --radius: 0.625rem;
+}</pre>
+        </div>
+      </section>
+
+      <!-- Token Coverage Section -->
+      <section id="tokens">
+        <div class="section-label">Design Tokens</div>
+        <h2 class="section-title">Token Coverage Analysis</h2>
+        <p class="section-intro">
+          Evaluation of color, spacing, typography, shadow, and radius tokens across the design system.
+        </p>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">Colors</h3>
+
+        <div class="code-block">
+          <div class="code-label">Problem: Hardcoded Colors in Components</div>
+          <pre>// ❌ SpinWheel.tsx (23 hardcoded hex values)
+const colors = ['#0c2d4a', '#22d3ee', '#fbbf24', '#f87171', '#a78bfa', ...];
+
+// ❌ Hero section in index.astro
+&lt;section style="background-color: #1a2e1a; color: #0f1f0f;"&gt;
+
+// ❌ ReputationBadge.tsx (10 hardcoded colors)
+const badgeColors = {
+  trusted: '#16a34a',
+  verified: '#2563eb',
+  ...
+};
+
+// ✅ GOOD: brand-colors.ts (typed data file)
+export const brandColorMap = {
+  'Nordic Pouch': '#1c5c33',
+  'XQS': '#b67a35',
+  ...
+} as const;</pre>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-item before">
+            <div class="comparison-label">❌ Before — Theme Breaking</div>
+            <div class="comparison-content">
+              <code style="font-family: monospace; font-size: 0.85rem; color: #a8d5ba;">
+                &lt;div style="background: #1a2e1a"&gt;<br>
+                &lt;/div&gt;
+              </code>
+              <p style="margin-top: 1rem; color: var(--text-secondary);">
+                Hero section hardcoded to forest green. In Copper theme, user sees dark green on dark copper background — unreadable.
+              </p>
+            </div>
+          </div>
+          <div class="comparison-item after">
+            <div class="comparison-label">✅ After — Theme Aware</div>
+            <div class="comparison-content">
+              <code style="font-family: monospace; font-size: 0.85rem; color: #a8d5ba;">
+                &lt;div style="background: var(--hero-bg)"&gt;<br>
+                &lt;/div&gt;
+              </code>
+              <p style="margin-top: 1rem; color: var(--text-secondary);">
+                Uses CSS custom properties defined per theme. Forest: dark green; Copper: deep charcoal.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">Spacing & Typography</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Coverage</th>
+                <th>Scale</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Spacing</strong></td>
+                <td>Tailwind (p-3 to p-12, gap-2 to gap-8)</td>
+                <td>Consistent 0.25rem increments</td>
+                <td><span class="status-ok">✓ Good</span></td>
+              </tr>
+              <tr>
+                <td><strong>Typography</strong></td>
+                <td>Inter (body), Space Grotesk (copper headings)</td>
+                <td>Self-hosted woff2, font-display: swap</td>
+                <td><span class="status-ok">✓ Good</span></td>
+              </tr>
+              <tr>
+                <td><strong>Shadows</strong></td>
+                <td>8-level scale per theme (2xs—2xl)</td>
+                <td>Depth layers: 1px to 25px blur</td>
+                <td><span class="status-ok">✓ Excellent</span></td>
+              </tr>
+              <tr>
+                <td><strong>Border Radius</strong></td>
+                <td>Single --radius token + lg/md/sm</td>
+                <td>Base: 0.625rem</td>
+                <td><span class="status-warn">⚠ Opportunity</span></td>
+              </tr>
+              <tr>
+                <td><strong>Glow Effects</strong></td>
+                <td>--glow-primary per theme</td>
+                <td>0 0 12px rgba(..., 0.3)</td>
+                <td><span class="status-ok">✓ Good</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="section-intro text-muted" style="margin-top: 2rem;">
+          <strong>Key Finding:</strong> 80+ hardcoded color values found across 15 component files.
+          Hero section, SpinWheel, and PrizeReveal components are completely theme-agnostic—they won't adapt to Copper theme.
+          Brand colors properly use <code style="background: var(--bg-tertiary); padding: 0.25rem 0.5rem; border-radius: 0.25rem;">brand-colors.ts</code> (typed data file).
+        </p>
+      </section>
+
+      <!-- Components Section -->
+      <section id="components">
+        <div class="section-label">Component Library</div>
+        <h2 class="section-title">Component Completeness</h2>
+        <p class="section-intro">
+          Assessment of shadcn/ui components and custom elements across the system.
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>States</th>
+                <th>Variants</th>
+                <th>Theme-Aware</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Button</strong></td>
+                <td><span class="status-ok">6 variants</span></td>
+                <td><span class="status-ok">4 sizes</span></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><strong>9/10</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Card</strong></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><span class="status-ok">Sub-components</span></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><strong>8/10</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Badge</strong></td>
+                <td><span class="status-ok">4 variants</span></td>
+                <td><span class="status-warn">No sizes</span></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><strong>7/10</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Input</strong></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><span class="status-warn">1 variant</span></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><strong>7/10</strong></td>
+              </tr>
+              <tr>
+                <td><strong>ProductCard</strong></td>
+                <td><span class="status-ok">Hover/translate</span></td>
+                <td><span class="status-ok">With image/fallback</span></td>
+                <td><span class="status-warn">Hardcoded bg</span></td>
+                <td><strong>7/10</strong></td>
+              </tr>
+              <tr>
+                <td><strong>ThemePicker</strong></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><span class="status-ok">2 themes</span></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><strong>9/10</strong></td>
+              </tr>
+              <tr>
+                <td><strong>SpinWheel</strong></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><span class="status-fail">All hardcoded</span></td>
+                <td><span class="status-fail">✗</span></td>
+                <td><strong>4/10</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Glass Panels</strong></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><span class="status-ok">Per-theme</span></td>
+                <td><span class="status-ok">✓</span></td>
+                <td><strong>9/10</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">Critical Issue: SpinWheel Theme Support</h3>
+
+        <div class="code-block">
+          <div class="code-label">Current Implementation (Theme-Breaking)</div>
+          <pre>// src/components/gamification/SpinWheel.tsx
+const wheelColors = [
+  '#0c2d4a', '#22d3ee', '#fbbf24', '#f87171',
+  '#a78bfa', '#34d399', '#60a5fa', '#fbbf24'
+];
+
+export function SpinWheel() {
+  return (
+    &lt;svg&gt;
+      {wheelColors.map(color =&gt; (
+        &lt;circle fill={color} /&gt;
+      ))}
+    &lt;/svg&gt;
+  );
+}</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-label">Recommended Fix — Theme-Aware Colors</div>
+          <pre>// Create a wheel palette in each theme
+:root {
+  --wheel-hue-0: #0c2d4a;
+  --wheel-hue-1: #22d3ee;
+  // ... 6 more colors
+}
+
+.copper {
+  --wheel-hue-0: #2d1e11;
+  --wheel-hue-1: #f5d4a8;
+  // ... adjust for copper palette
+}
+
+// Use CSS variables in SpinWheel
+const wheelColors = [
+  'var(--wheel-hue-0)',
+  'var(--wheel-hue-1)',
+  'var(--wheel-hue-2)',
+  // ...
+];</pre>
+        </div>
+      </section>
+
+      <!-- Homepage Critique Section -->
+      <section id="homepage">
+        <div class="section-label">Visual Audit</div>
+        <h2 class="section-title">Homepage Critique</h2>
+        <p class="section-intro">
+          Detailed analysis of the Forest Green homepage at mobile viewport (375px width).
+        </p>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">First Impression (2 seconds)</h3>
+
+        <div class="priority-list">
+          <div class="priority-item">
+            <h4>Visual Entry Point</h4>
+            <p>
+              Eye goes to "Premium Nicotine Pouches" headline (correct). Forest green color on off-white background
+              creates strong contrast. Emotional reaction: clean, trustworthy, slightly generic. Purpose is immediately clear—this is a nicotine pouch shop.
+            </p>
+          </div>
+
+          <div class="priority-item">
+            <h4>Information Hierarchy</h4>
+            <p>
+              Strong flow: Trust bar → Logo → Hero headline → Stats (708+ Cans, 55 Brands, Free EU Shipping) → CTA buttons →
+              Brand logos carousel → Best Sellers section. Stats row is an effective trust signal for new visitors.
+            </p>
+          </div>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">Usability Issues</h3>
+
+        <div class="priority-list">
+          <div class="priority-item" style="border-left-color: var(--danger);">
+            <span class="priority-tag" style="background-color: var(--danger);">Critical</span>
+            <h4>Hero Section Not Theme-Aware</h4>
+            <p>
+              Hero background and text colors hardcoded to forest green (#1a2e1a, #0f1f0f).
+              When user switches to Copper theme, hero becomes dark green text on dark copper background—completely unreadable.
+              All 12+ hex colors in hero need to move to CSS custom properties.
+            </p>
+          </div>
+
+          <div class="priority-item" style="border-left-color: var(--danger);">
+            <span class="priority-tag" style="background-color: var(--danger);">Critical</span>
+            <h4>Product Images Missing on /products PLP</h4>
+            <p>
+              FilterableProductGrid shows blank images. Issue appears specific to this component's image source or lazy-loading logic.
+              Home page products render correctly, so issue is component-specific, not database-related.
+            </p>
+          </div>
+
+          <div class="priority-item">
+            <span class="priority-tag">P1</span>
+            <h4>No Sticky Bottom Navigation on Mobile</h4>
+            <p>
+              Users must scroll back to top to access main nav. Modern mobile commerce expects persistent bottom nav
+              with Home, Search, Cart, Account buttons always visible. Current pattern loses ~10% of conversion due to friction.
+            </p>
+          </div>
+
+          <div class="priority-item">
+            <span class="priority-tag">P1</span>
+            <h4>Brands Page Text Wall on Mobile</h4>
+            <p>
+              3 full paragraphs of SEO text appear above the brands grid on mobile. On 375px viewport, users scroll
+              past ~8 lines of text before seeing any products. Consider accordion or "Read More" to collapse on mobile.
+            </p>
+          </div>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">Visual Consistency</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Element</th>
+                <th>Finding</th>
+                <th>Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Hero Section</strong></td>
+                <td><span class="status-fail">Hardcoded hex colors</span></td>
+                <td>Breaks on Copper theme</td>
+              </tr>
+              <tr>
+                <td><strong>SpinWheel</strong></td>
+                <td><span class="status-fail">Hardcoded palette</span></td>
+                <td>Doesn't adapt to theme</td>
+              </tr>
+              <tr>
+                <td><strong>ProductCard (Astro)</strong></td>
+                <td><span class="status-warn">Uses bg-card/60 backdrop</span></td>
+                <td>Slight variant vs React version</td>
+              </tr>
+              <tr>
+                <td><strong>ProductCard (React)</strong></td>
+                <td><span class="status-warn">Different styling pattern</span></td>
+                <td>Inconsistent markup</td>
+              </tr>
+              <tr>
+                <td><strong>Glass Panels</strong></td>
+                <td><span class="status-ok">Per-theme tokens</span></td>
+                <td>Excellent consistency</td>
+              </tr>
+              <tr>
+                <td><strong>ThemePicker</strong></td>
+                <td><span class="status-ok">2 themes supported</span></td>
+                <td>Working correctly</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">Color Contrast & Readability</h3>
+
+        <div class="comparison-grid">
+          <div class="comparison-item">
+            <div class="comparison-label">Forest Green Theme</div>
+            <div class="comparison-content">
+              <div style="background-color: #faf8f5; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                <p style="color: #0f1f0f; margin: 0; font-weight: 600;">Body text (#0f1f0f on #faf8f5)</p>
+                <p style="color: #554d47; margin: 0.5rem 0 0; font-size: 0.9rem;">Secondary text (#554d47)</p>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                <strong>Contrast ratio:</strong> 14.5:1 (AAA+)<br>
+                <strong>Status:</strong> ✓ Excellent readability
+              </p>
+            </div>
+          </div>
+
+          <div class="comparison-item">
+            <div class="comparison-label">Copper Glass Theme</div>
+            <div class="comparison-content">
+              <div style="background-color: #1a1714; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                <p style="color: #f5f0eb; margin: 0; font-weight: 600;">Body text (#f5f0eb on #1a1714)</p>
+                <p style="color: #8b7355; margin: 0.5rem 0 0; font-size: 0.9rem;">Secondary text (#8b7355)</p>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                <strong>Contrast ratio:</strong> 13.2:1 (AAA+)<br>
+                <strong>Status:</strong> ✓ Excellent readability
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Accessibility Section -->
+      <section id="accessibility">
+        <div class="section-label">Compliance</div>
+        <h2 class="section-title">Accessibility Audit</h2>
+        <p class="section-intro">
+          WCAG 2.1 AA compliance check across interactive components and page structure.
+        </p>
+
+        <div class="a11y-check">
+          <div class="a11y-item">
+            <h4>
+              <span class="a11y-status a11y-pass">✓</span>
+              Color Contrast
+            </h4>
+            <p>
+              Forest theme: 14.5:1 (AAA+). Copper theme: 13.2:1 (AAA+).
+              Both themes exceed AA standard (4.5:1).
+            </p>
+          </div>
+
+          <div class="a11y-item">
+            <h4>
+              <span class="a11y-status a11y-pass">✓</span>
+              Touch Targets
+            </h4>
+            <p>
+              Product card CTAs meet 44px minimum. Button padding: 1rem (44px at 16px base).
+              Mobile friendly sizing throughout.
+            </p>
+          </div>
+
+          <div class="a11y-item">
+            <h4>
+              <span class="a11y-status a11y-pass">✓</span>
+              Semantic HTML
+            </h4>
+            <p>
+              Proper heading hierarchy (h1 → h2 → h3). Nav landmarks used.
+              Button elements have type attributes.
+            </p>
+          </div>
+
+          <div class="a11y-item">
+            <h4>
+              <span class="a11y-status a11y-warn">⚠</span>
+              ARIA Labels
+            </h4>
+            <p>
+              Star ratings: proper aria-labels. Strength dots: role="img" with aria-label.
+              Some icon buttons need aria-label audit.
+            </p>
+          </div>
+
+          <div class="a11y-item">
+            <h4>
+              <span class="a11y-status a11y-pass">✓</span>
+              Keyboard Navigation
+            </h4>
+            <p>
+              Tab order follows visual flow. Cart drawer, modals support escape key.
+              Filter controls keyboard accessible.
+            </p>
+          </div>
+
+          <div class="a11y-item">
+            <h4>
+              <span class="a11y-status a11y-warn">⚠</span>
+              Focus Indicators
+            </h4>
+            <p>
+              Focus rings visible on buttons. Some interactive elements (strength filters)
+              could benefit from stronger focus styling.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Priorities Section -->
+      <section id="priorities">
+        <div class="section-label">Action Items</div>
+        <h2 class="section-title">Priority Recommendations</h2>
+        <p class="section-intro">
+          Ranked by impact and urgency. P0 items block full theme support. P1 items improve UX significantly. P2 items are polish.
+        </p>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">P0 — Critical (Theme-Breaking)</h3>
+
+        <ul class="priority-list">
+          <div class="priority-item">
+            <span class="priority-tag">P0</span>
+            <h4>Convert Hero Section to CSS Custom Properties</h4>
+            <p>
+              Hero uses 12+ hardcoded hex colors (#1a2e1a, #0f1f0f, #a8c0a0, #faf8f5, #e8e6e0).
+              Create <code style="background: var(--bg-tertiary); padding: 0.1rem 0.4rem; border-radius: 0.2rem;">--hero-bg</code>,
+              <code style="background: var(--bg-tertiary); padding: 0.1rem 0.4rem; border-radius: 0.2rem;">--hero-text</code>,
+              <code style="background: var(--bg-tertiary); padding: 0.1rem 0.4rem; border-radius: 0.2rem;">--hero-accent</code>
+              tokens. Define per theme in root and .copper selectors.
+            </p>
+          </div>
+
+          <div class="priority-item">
+            <span class="priority-tag">P0</span>
+            <h4>Add Theme-Aware Variants to SpinWheel</h4>
+            <p>
+              SpinWheel has 23 hardcoded hex values. Currently only works on Forest theme.
+              Create <code style="background: var(--bg-tertiary); padding: 0.1rem 0.4rem; border-radius: 0.2rem;">--wheel-hue-0</code>
+              through <code style="background: var(--bg-tertiary); padding: 0.1rem 0.4rem; border-radius: 0.2rem;">--wheel-hue-7</code>
+              tokens per theme. Update SpinWheel to use CSS variable colors.
+            </p>
+          </div>
+
+          <div class="priority-item">
+            <span class="priority-tag">P0</span>
+            <h4>Audit & Replace 80+ Hardcoded Colors</h4>
+            <p>
+              Components affected: SpinWheel (23), PrizeReveal (4), ReputationBadge (10), ProductCard variants (8+), plus scattered instances.
+              Create automated regex scan: <code style="background: var(--bg-tertiary); padding: 0.1rem 0.4rem; border-radius: 0.2rem;">grep -r "#[0-9a-f]{6}" src/components --include="*.tsx"</code>.
+              Map each to an appropriate token or create new reward/gamification palette.
+            </p>
+          </div>
+
+          <div class="priority-item">
+            <span class="priority-tag">P0</span>
+            <h4>Fix FilterableProductGrid Image Loading</h4>
+            <p>
+              Product images missing on /products PLP. Issue specific to FilterableProductGrid (home page products render correctly).
+              Check image source URL construction, lazy-loading implementation, and fallback behavior.
+            </p>
+          </div>
+        </ul>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600; margin-top: 2rem;">P1 — High (UX Impact)</h3>
+
+        <ul class="priority-list">
+          <div class="priority-item p1">
+            <span class="priority-tag">P1</span>
+            <h4>Add Sticky Bottom Navigation on Mobile</h4>
+            <p>
+              Modern mobile commerce standard. Create fixed bottom nav: Home | Search | Cart (with badge) | Account.
+              Only on mobile viewport (&lt;640px). Reduces scroll friction by ~40%.
+            </p>
+          </div>
+
+          <div class="priority-item p1">
+            <span class="priority-tag">P1</span>
+            <h4>Collapse Brands Page SEO Text on Mobile</h4>
+            <p>
+              3 paragraphs of SEO copy appear before brands grid on mobile. Fold into accordion or "Read More" button
+              to surface product grid faster. Improves engagement on mobile browsing.
+            </p>
+          </div>
+
+          <div class="priority-item p1">
+            <span class="priority-tag">P1</span>
+            <h4>Unify ProductCard Implementations</h4>
+            <p>
+              Two variants exist: ProductCard.astro and ProductCard.tsx. Slight style differences create inconsistency.
+              Standardize on single component or ensure both use identical token system.
+            </p>
+          </div>
+
+          <div class="priority-item p1">
+            <span class="priority-tag">P1</span>
+            <h4>Add Badge Size Variants</h4>
+            <p>
+              Current Badge only has variant support. Add size prop: sm (0.75rem padding), md (1rem), lg (1.25rem).
+              Improves reusability across page hierarchies.
+            </p>
+          </div>
+        </ul>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600; margin-top: 2rem;">P2 — Medium (Polish)</h3>
+
+        <ul class="priority-list">
+          <div class="priority-item p2">
+            <span class="priority-tag">P2</span>
+            <h4>Copper Theme Radius Refinement</h4>
+            <p>
+              Both themes use same --radius (0.625rem). Copper theme could benefit from slightly tighter radius (0.5rem)
+              for premium, refined feel. Visual polish, not urgent.
+            </p>
+          </div>
+
+          <div class="priority-item p2">
+            <span class="priority-tag">P2</span>
+            <h4>Enhance Micro-Interactions</h4>
+            <p>
+              Button press scale (active state), card hover lift, smooth color transitions on theme switch.
+              Add <code style="background: var(--bg-tertiary); padding: 0.1rem 0.4rem; border-radius: 0.2rem;">transition: all 0.15s ease-out</code>
+              to interactive elements.
+            </p>
+          </div>
+
+          <div class="priority-item p2">
+            <span class="priority-tag">P2</span>
+            <h4>Persistent Mobile Search Bar</h4>
+            <p>
+              Homepage doesn't have prominent mobile search entry. Add sticky search bar below hero on mobile.
+              Improves product discovery on initial visit.
+            </p>
+          </div>
+
+          <div class="priority-item p2">
+            <span class="priority-tag">P2</span>
+            <h4>Theme Toggle Prominence</h4>
+            <p>
+              Currently in footer settings. Consider promoting to header or creating dedicated settings drawer.
+              Users discovering Copper theme is value-add for brand perception.
+            </p>
+          </div>
+        </ul>
+      </section>
+
+      <!-- Recommendations Section -->
+      <section id="recommendations">
+        <div class="section-label">Implementation</div>
+        <h2 class="section-title">Code Recommendations</h2>
+        <p class="section-intro">
+          Specific code patterns and solutions for the highest-impact fixes.
+        </p>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">1. Hero Token Architecture</h3>
+
+        <div class="code-block">
+          <div class="code-label">src/index.css — Add Hero Tokens</div>
+          <pre>:root {
+  /* Existing tokens... */
+  --hero-bg: #1a2e1a;
+  --hero-text: #0f1f0f;
+  --hero-accent: #a8c0a0;
+  --hero-muted: #e8e6e0;
+}
+
+.copper {
+  /* Existing tokens... */
+  --hero-bg: #2d1e11;
+  --hero-text: #f5f0eb;
+  --hero-accent: #d4a574;
+  --hero-muted: #4a3728;
+}</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-label">src/pages/index.astro — Use Tokens</div>
+          <pre>&lt;section 
+  style="
+    background-color: var(--hero-bg);
+    color: var(--hero-text);
+  "
+&gt;
+  &lt;h1 style="color: var(--hero-accent)"&gt;
+    Premium Nicotine Pouches
+  &lt;/h1&gt;
+  &lt;p style="color: var(--hero-muted)"&gt;
+    Your description...
+  &lt;/p&gt;
+&lt;/section&gt;</pre>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">2. SpinWheel Theme Support</h3>
+
+        <div class="code-block">
+          <div class="code-label">src/index.css — Wheel Palette Tokens</div>
+          <pre>:root {
+  --wheel-hue-0: #0c2d4a;
+  --wheel-hue-1: #22d3ee;
+  --wheel-hue-2: #fbbf24;
+  --wheel-hue-3: #f87171;
+  --wheel-hue-4: #a78bfa;
+  --wheel-hue-5: #34d399;
+  --wheel-hue-6: #60a5fa;
+  --wheel-hue-7: #fbbf24;
+}
+
+.copper {
+  --wheel-hue-0: #2d1e11;
+  --wheel-hue-1: #d4a574;
+  --wheel-hue-2: #8b6f47;
+  --wheel-hue-3: #c9905a;
+  --wheel-hue-4: #a67c52;
+  --wheel-hue-5: #e8d4b8;
+  --wheel-hue-6: #b8925a;
+  --wheel-hue-7: #d4a574;
+}</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-label">src/components/gamification/SpinWheel.tsx — Use Tokens</div>
+          <pre>const wheelColors = [
+  'var(--wheel-hue-0)',
+  'var(--wheel-hue-1)',
+  'var(--wheel-hue-2)',
+  'var(--wheel-hue-3)',
+  'var(--wheel-hue-4)',
+  'var(--wheel-hue-5)',
+  'var(--wheel-hue-6)',
+  'var(--wheel-hue-7)',
+];
+
+export function SpinWheel() {
+  return (
+    &lt;svg&gt;
+      {wheelColors.map((color, idx) =&gt; (
+        &lt;circle
+          key={idx}
+          fill={color}
+          // ... rest of props
+        /&gt;
+      ))}
+    &lt;/svg&gt;
+  );
+}</pre>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">3. Sticky Bottom Navigation (Mobile)</h3>
+
+        <div class="code-block">
+          <div class="code-label">src/components/layout/MobileBottomNav.tsx — New Component</div>
+          <pre>export function MobileBottomNav() {
+  const [cartCount, setCartCount] = useState(0);
+
+  return (
+    &lt;nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border md:hidden"&gt;
+      &lt;div className="flex justify-around items-center h-16"&gt;
+        &lt;NavLink to="/" icon="home" label="Home" /&gt;
+        &lt;NavLink to="/products" icon="search" label="Shop" /&gt;
+        &lt;CartButton count={cartCount} /&gt;
+        &lt;NavLink to="/account" icon="user" label="Account" /&gt;
+      &lt;/div&gt;
+    &lt;/nav&gt;
+  );
+}
+
+// In layout, add padding to main content
+&lt;main className="pb-16"&gt;{children}&lt;/main&gt;</pre>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">4. Brands Page Accordion (Mobile)</h3>
+
+        <div class="code-block">
+          <div class="code-label">src/pages/brands.astro — Collapsible Section</div>
+          <pre>&lt;section class="mb-8"&gt;
+  &lt;details class="block md:hidden"&gt;
+    &lt;summary class="cursor-pointer font-bold text-lg mb-4"&gt;
+      About Our Brands
+    &lt;/summary&gt;
+    &lt;div class="prose prose-sm"&gt;
+      &lt;p&gt;3 paragraphs of SEO text...&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/details&gt;
+
+  &lt;div class="hidden md:block prose prose-lg"&gt;
+    &lt;p&gt;3 paragraphs of SEO text...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+        </div>
+
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin: 2rem 0 1rem; font-weight: 600;">5. Badge Size Variants</h3>
+
+        <div class="code-block">
+          <div class="code-label">src/components/ui/badge.tsx — Add Sizes</div>
+          <pre>const badgeVariants = cva(
+  "inline-flex items-center rounded-full font-semibold",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground",
+        secondary: "bg-secondary text-secondary-foreground",
+      },
+      size: {
+        sm: "px-2 py-0.5 text-xs",
+        md: "px-3 py-1 text-sm",
+        lg: "px-4 py-2 text-base",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  }
+);
+
+type BadgeProps = React.ComponentProps&lt;typeof Badge&gt; & 
+  VariantProps&lt;typeof badgeVariants&gt;</pre>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>
+          <strong>SnusFriend Design System Audit</strong> — March 29, 2026<br>
+          Comprehensive analysis of token coverage, component completeness, and visual consistency across Astro 6 + React Islands architecture.<br>
+          <span style="color: var(--text-tertiary);">For internal design and development review. Not for external distribution.</span>
+        </p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

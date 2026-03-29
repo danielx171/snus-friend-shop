@@ -111,7 +111,7 @@
   --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
-  /* Box shadows — use initial values, overridden per-theme in :root/.light/.velo/.editorial */
+  /* Box shadows — use initial values, overridden per-theme in :root/.forest/.copper */
   --shadow-2xs: 0 1px 2px 0px hsl(0 0% 0% / 0.3);
   --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.4);
   --shadow-sm: 0 2px 6px 0px hsl(0 0% 0% / 0.4), 0 1px 2px -1px hsl(0 0% 0% / 0.3);
@@ -204,211 +204,25 @@
     --color-rarity-rare: 210 65% 50%;
     --color-rarity-epic: 270 55% 55%;
     --color-rarity-legendary: 43 85% 50%;
+
+    /* Hero section — theme-aware tokens */
+    --hero-bg: 153 40% 10%;
+    --hero-gradient-from: 153 40% 10%;
+    --hero-gradient-via: 153 45% 6%;
+    --hero-gradient-to: 153 40% 10%;
+    --hero-text: 40 20% 97%;
+    --hero-muted: 140 20% 72%;
+    --hero-cta-bg: 40 20% 97%;
+    --hero-cta-text: 153 40% 10%;
+    --hero-cta-hover-bg: 40 10% 88%;
+    --hero-divider: 40 20% 97%;
   }
 
-  .dark {
-    --background: 220 16% 8%;
-    --foreground: 210 20% 95%;
+  /* Themes removed: Dark (A), see git history */
 
-    --card: 220 14% 13%;
-    --card-foreground: 210 20% 96%;
+  /* Themes removed: Light (B), see git history */
 
-    --popover: 220 14% 14%;
-    --popover-foreground: 210 20% 95%;
-
-    --primary: 174 90% 50%;
-    --primary-foreground: 220 16% 6%;
-
-    --secondary: 220 14% 18%;
-    --secondary-foreground: 210 20% 90%;
-
-    --muted: 220 10% 22%;
-    --muted-foreground: 215 15% 70%;
-
-    --accent: 220 14% 15%;
-    --accent-foreground: 210 20% 90%;
-
-    --destructive: 0 85% 55%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 12% 22%;
-    --input: 220 12% 22%;
-    --ring: 174 90% 50%;
-
-    --success: 160 70% 42%;
-    --success-foreground: 0 0% 100%;
-    --info: 200 85% 55%;
-
-    --shadow-2xs: 0 1px 2px 0px hsl(0 0% 0% / 0.3);
-    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.4);
-    --shadow-sm: 0 2px 6px 0px hsl(0 0% 0% / 0.4), 0 1px 2px -1px hsl(0 0% 0% / 0.3);
-    --shadow: 0 4px 12px 0px hsl(0 0% 0% / 0.4), 0 2px 4px -1px hsl(0 0% 0% / 0.3);
-    --shadow-md: 0 6px 16px 0px hsl(0 0% 0% / 0.4), 0 3px 6px -1px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 10px 24px 0px hsl(0 0% 0% / 0.5), 0 4px 8px -1px hsl(0 0% 0% / 0.3);
-    --shadow-xl: 0 16px 40px 0px hsl(0 0% 0% / 0.5), 0 8px 16px -1px hsl(0 0% 0% / 0.3);
-    --shadow-2xl: 0 24px 50px 0px hsl(0 0% 0% / 0.6);
-
-    --glow-primary: 0 0 20px hsl(174 90% 50% / 0.25), 0 0 40px hsl(174 90% 50% / 0.1);
-
-    /* Status colors */
-    --color-success: 160 84% 39%;
-    --color-warning: 38 92% 50%;
-    --color-error: 0 84% 60%;
-    --color-info: 199 89% 48%;
-
-    /* Tier system */
-    --color-tier-bronze: 25 70% 45%;
-    --color-tier-silver: 215 15% 55%;
-    --color-tier-gold: 43 96% 56%;
-    --color-tier-diamond: 185 80% 55%;
-    --color-tier-epic: 270 60% 60%;
-
-    /* Rarity system */
-    --color-rarity-common: 215 15% 50%;
-    --color-rarity-uncommon: 142 71% 45%;
-    --color-rarity-rare: 217 91% 60%;
-    --color-rarity-epic: 270 60% 60%;
-    --color-rarity-legendary: 43 96% 56%;
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     THEME B — Scandinavian Premium (Light Glacier)
-     Bright, airy, clean. Glacier navy + ice blue.
-     ═══════════════════════════════════════════════════════ */
-  .light {
-    --background: 210 25% 97%;
-    --foreground: 220 30% 10%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 220 30% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 30% 10%;
-
-    --primary: 213 65% 32%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 30% 94%;
-    --secondary-foreground: 213 65% 22%;
-
-    --muted: 210 18% 93%;
-    --muted-foreground: 220 12% 46%;
-
-    --accent: 210 25% 90%;
-    --accent-foreground: 213 65% 22%;
-
-    --destructive: 0 72% 48%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 160 65% 38%;
-    --success-foreground: 0 0% 100%;
-    --info: 205 60% 45%;
-
-    --border: 210 18% 87%;
-    --input: 210 18% 87%;
-    --ring: 213 65% 32%;
-
-    --shadow-2xs: 0 1px 2px 0px hsl(220 20% 60% / 0.06);
-    --shadow-xs: 0 1px 3px 0px hsl(220 20% 60% / 0.08);
-    --shadow-sm: 0 2px 8px 0px hsl(220 20% 60% / 0.08), 0 1px 2px -1px hsl(220 20% 60% / 0.06);
-    --shadow: 0 4px 12px 0px hsl(220 20% 60% / 0.08), 0 2px 4px -1px hsl(220 20% 60% / 0.06);
-    --shadow-md: 0 6px 16px 0px hsl(220 20% 60% / 0.08), 0 3px 6px -1px hsl(220 20% 60% / 0.06);
-    --shadow-lg: 0 10px 24px 0px hsl(220 20% 60% / 0.10), 0 4px 8px -1px hsl(220 20% 60% / 0.06);
-    --shadow-xl: 0 16px 40px 0px hsl(220 20% 60% / 0.12), 0 8px 16px -1px hsl(220 20% 60% / 0.06);
-    --shadow-2xl: 0 24px 50px 0px hsl(220 20% 60% / 0.14);
-
-    --glow-primary: 0 0 20px hsl(213 65% 32% / 0.12), 0 0 40px hsl(213 65% 32% / 0.06);
-
-    /* Status colors */
-    --color-success: 152 55% 38%;
-    --color-warning: 38 88% 48%;
-    --color-error: 0 70% 50%;
-    --color-info: 213 65% 45%;
-
-    /* Tier system */
-    --color-tier-bronze: 25 55% 42%;
-    --color-tier-silver: 210 12% 58%;
-    --color-tier-gold: 43 80% 48%;
-    --color-tier-diamond: 190 65% 45%;
-    --color-tier-epic: 268 50% 52%;
-
-    /* Rarity system */
-    --color-rarity-common: 210 12% 55%;
-    --color-rarity-uncommon: 152 50% 38%;
-    --color-rarity-rare: 213 65% 45%;
-    --color-rarity-epic: 268 50% 52%;
-    --color-rarity-legendary: 43 80% 48%;
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     THEME C — Editorial Luxury
-     Magazine meets boutique. Warm cream, rich type, amber accents.
-     ═══════════════════════════════════════════════════════ */
-  .editorial {
-    --background: 40 30% 96%;
-    --foreground: 30 15% 12%;
-
-    --card: 40 25% 99%;
-    --card-foreground: 30 15% 12%;
-
-    --popover: 40 25% 99%;
-    --popover-foreground: 30 15% 12%;
-
-    /* Warm amber/cognac accent */
-    --primary: 28 80% 44%;
-    --primary-foreground: 40 30% 98%;
-
-    --secondary: 35 20% 91%;
-    --secondary-foreground: 30 30% 25%;
-
-    --muted: 35 15% 90%;
-    --muted-foreground: 30 10% 48%;
-
-    --accent: 35 20% 88%;
-    --accent-foreground: 30 30% 20%;
-
-    --destructive: 0 65% 48%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 155 55% 38%;
-    --success-foreground: 0 0% 100%;
-    --info: 210 50% 48%;
-
-    --border: 35 15% 84%;
-    --input: 35 15% 84%;
-    --ring: 28 80% 44%;
-
-    --shadow-2xs: 0 1px 2px 0px hsl(30 20% 40% / 0.05);
-    --shadow-xs: 0 1px 3px 0px hsl(30 20% 40% / 0.07);
-    --shadow-sm: 0 2px 8px 0px hsl(30 20% 40% / 0.07), 0 1px 2px -1px hsl(30 20% 40% / 0.05);
-    --shadow: 0 4px 14px 0px hsl(30 20% 40% / 0.08), 0 2px 4px -1px hsl(30 20% 40% / 0.05);
-    --shadow-md: 0 6px 18px 0px hsl(30 20% 40% / 0.08), 0 3px 6px -1px hsl(30 20% 40% / 0.05);
-    --shadow-lg: 0 12px 28px 0px hsl(30 20% 40% / 0.10), 0 4px 8px -1px hsl(30 20% 40% / 0.05);
-    --shadow-xl: 0 18px 44px 0px hsl(30 20% 40% / 0.12), 0 8px 16px -1px hsl(30 20% 40% / 0.05);
-    --shadow-2xl: 0 24px 50px 0px hsl(30 20% 40% / 0.14);
-
-    --glow-primary: 0 0 20px hsl(28 80% 44% / 0.15), 0 0 40px hsl(28 80% 44% / 0.07);
-
-    /* Status colors */
-    --color-success: 145 50% 38%;
-    --color-warning: 35 85% 50%;
-    --color-error: 0 65% 50%;
-    --color-info: 210 55% 48%;
-
-    /* Tier system */
-    --color-tier-bronze: 28 60% 42%;
-    --color-tier-silver: 220 8% 58%;
-    --color-tier-gold: 40 80% 50%;
-    --color-tier-diamond: 188 60% 48%;
-    --color-tier-epic: 265 50% 55%;
-
-    /* Rarity system */
-    --color-rarity-common: 220 8% 55%;
-    --color-rarity-uncommon: 145 45% 38%;
-    --color-rarity-rare: 210 55% 48%;
-    --color-rarity-epic: 265 50% 55%;
-    --color-rarity-legendary: 40 80% 50%;
-  }
+  /* Themes removed: Editorial (C), see git history */
 
   /* ═══════════════════════════════════════════════════════
      THEME D — Scandinavian Forest
@@ -477,6 +291,18 @@
     --color-rarity-rare: 210 65% 50%;
     --color-rarity-epic: 270 55% 55%;
     --color-rarity-legendary: 43 85% 50%;
+
+    /* Hero section — same as :root for Forest */
+    --hero-bg: 153 40% 10%;
+    --hero-gradient-from: 153 40% 10%;
+    --hero-gradient-via: 153 45% 6%;
+    --hero-gradient-to: 153 40% 10%;
+    --hero-text: 40 20% 97%;
+    --hero-muted: 140 20% 72%;
+    --hero-cta-bg: 40 20% 97%;
+    --hero-cta-text: 153 40% 10%;
+    --hero-cta-hover-bg: 40 10% 88%;
+    --hero-divider: 40 20% 97%;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -546,84 +372,21 @@
     --color-rarity-rare: 200 60% 50%;
     --color-rarity-epic: 268 55% 58%;
     --color-rarity-legendary: 40 82% 52%;
+
+    /* Hero section — warm copper/bronze tones */
+    --hero-bg: 20 30% 8%;
+    --hero-gradient-from: 20 30% 8%;
+    --hero-gradient-via: 15 25% 5%;
+    --hero-gradient-to: 20 30% 8%;
+    --hero-text: 30 15% 92%;
+    --hero-muted: 28 25% 60%;
+    --hero-cta-bg: 28 55% 46%;
+    --hero-cta-text: 30 15% 92%;
+    --hero-cta-hover-bg: 28 55% 40%;
+    --hero-divider: 30 15% 92%;
   }
 
-  /* ═══════════════════════════════════════════════════════
-     THEME F — Velo
-     Deep navy, electric blue, clinical sharp edges.
-     Space Grotesk headlines, Plus Jakarta Sans body.
-     ═══════════════════════════════════════════════════════ */
-  .velo {
-    --background: 220 100% 12%;
-    --foreground: 210 30% 95%;
-
-    --card: 220 80% 16%;
-    --card-foreground: 210 30% 95%;
-
-    --popover: 220 80% 18%;
-    --popover-foreground: 210 30% 95%;
-
-    --primary: 218 100% 55%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 60% 20%;
-    --secondary-foreground: 210 30% 90%;
-
-    --muted: 220 50% 22%;
-    --muted-foreground: 215 25% 58%;
-
-    --accent: 65 80% 62%;
-    --accent-foreground: 220 100% 12%;
-
-    --destructive: 0 80% 55%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 74 78% 66%;
-    --success-foreground: 220 100% 12%;
-    --info: 218 100% 55%;
-
-    --border: 220 60% 18%;
-    --input: 220 60% 30%;
-    --ring: 65 80% 62%;
-
-    --radius: 0.25rem;
-
-    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-serif: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-    --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-    /* Blue-tinted ambient shadows */
-    --shadow-2xs: 0 1px 2px 0px hsl(220 80% 20% / 0.25);
-    --shadow-xs: 0 1px 3px 0px hsl(220 80% 20% / 0.30);
-    --shadow-sm: 0 2px 6px 0px hsl(220 80% 20% / 0.30), 0 1px 2px -1px hsl(220 80% 20% / 0.25);
-    --shadow: 0 4px 12px 0px hsl(220 80% 20% / 0.30), 0 2px 4px -1px hsl(220 80% 20% / 0.25);
-    --shadow-md: 0 6px 16px 0px hsl(220 80% 20% / 0.30), 0 3px 6px -1px hsl(220 80% 20% / 0.25);
-    --shadow-lg: 0 10px 24px 0px hsl(220 80% 20% / 0.40), 0 4px 8px -1px hsl(220 80% 20% / 0.25);
-    --shadow-xl: 0 16px 40px 0px hsl(220 80% 20% / 0.40), 0 8px 16px -1px hsl(220 80% 20% / 0.25);
-    --shadow-2xl: 0 24px 50px 0px hsl(220 80% 20% / 0.50);
-
-    --glow-primary: 0 0 20px hsl(218 100% 55% / 0.30), 0 0 40px hsl(218 100% 55% / 0.15);
-
-    /* Status colors */
-    --color-success: 160 84% 39%;
-    --color-warning: 38 92% 50%;
-    --color-error: 0 84% 60%;
-    --color-info: 217 91% 60%;
-
-    /* Tier system */
-    --color-tier-bronze: 25 70% 45%;
-    --color-tier-silver: 218 15% 55%;
-    --color-tier-gold: 43 96% 56%;
-    --color-tier-diamond: 188 80% 55%;
-    --color-tier-epic: 271 60% 60%;
-
-    /* Rarity system */
-    --color-rarity-common: 218 15% 50%;
-    --color-rarity-uncommon: 142 71% 45%;
-    --color-rarity-rare: 218 100% 55%;
-    --color-rarity-epic: 271 60% 60%;
-    --color-rarity-legendary: 43 96% 56%;
-  }
+  /* Themes removed: Velo (F), see git history */
 }
 
 @layer base {
@@ -633,14 +396,6 @@
 
   body {
     @apply bg-background text-foreground;
-  }
-
-  /* Editorial theme uses serif for headings */
-  .editorial h1,
-  .editorial h2,
-  .editorial h3 {
-    font-family: var(--font-serif);
-    letter-spacing: -0.02em;
   }
 
   /* Forest theme — clean Inter headings with tight tracking */
@@ -660,18 +415,7 @@
     letter-spacing: -0.02em;
   }
 
-  /* Velo theme — Space Grotesk 800 headings, Plus Jakarta Sans body */
-  .velo {
-    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
-
-  .velo h1,
-  .velo h2,
-  .velo h3 {
-    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
+  /* Removed: Velo theme heading overrides — see git history */
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -707,36 +451,6 @@
     border: 1px solid hsl(220 12% 20% / 0.6);
   }
 
-  /* === Light / Glacier glass === */
-  .light .glass-panel {
-    background: hsl(0 0% 100% / 0.72);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(210 18% 87% / 0.7);
-  }
-
-  .light .glass-panel-strong {
-    background: hsl(0 0% 100% / 0.88);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid hsl(210 18% 87% / 0.8);
-  }
-
-  /* === Editorial glass — warmer, more opaque, elegant === */
-  .editorial .glass-panel {
-    background: hsl(40 25% 99% / 0.80);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid hsl(35 15% 84% / 0.6);
-  }
-
-  .editorial .glass-panel-strong {
-    background: hsl(40 25% 99% / 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(35 15% 84% / 0.7);
-  }
-
   /* === Forest glass — bright, nature-tinted blur === */
   .forest .glass-panel {
     background: hsl(0 0% 100% / 0.74);
@@ -765,21 +479,6 @@
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid hsl(28 30% 30% / 0.25);
-  }
-
-  /* === Velo glass — solid deep navy, ghost borders 15% === */
-  .velo .glass-panel {
-    background: hsl(220 80% 14% / 0.88);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(220 60% 40% / 0.15);
-  }
-
-  .velo .glass-panel-strong {
-    background: hsl(220 80% 14% / 0.94);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid hsl(220 60% 40% / 0.15);
   }
 
   /* Theme overrides moved outside @layer — see below */
@@ -815,92 +514,6 @@
    so !important is not needed here.
    ═══════════════════════════════════════════════════════ */
 
-/* === Velo overrides — solid surfaces, consistent navy === */
-
-/* Header: solid navy, no glass */
-.velo header.sticky {
-  background: hsl(220 100% 8%);
-  border-color: hsl(220 60% 30% / 0.15);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-/* Sub-nav: solid dark navy */
-.velo header.sticky + nav,
-.velo nav.border-b {
-  background: hsl(220 100% 10%);
-  border-color: hsl(220 60% 30% / 0.15);
-}
-
-/* Hero: override warm cream slide backgrounds.
-   Uses !important because it must beat inline style="" attributes
-   which outrank any selector specificity. */
-.velo .grain[style] {
-  background-color: hsl(220 100% 10%) !important;
-}
-
-/* Hero text: override hardcoded warm/dark colors for navy bg */
-.velo .grain .font-serif {
-  color: hsl(210 30% 95%);
-}
-.velo .grain p {
-  color: hsl(215 25% 70%);
-}
-/* Trust pill: navy-tinted instead of warm beige */
-.velo .grain .rounded-full[class*="border-[hsl(30"] {
-  background: hsl(220 60% 20% / 0.5);
-  border-color: hsl(220 60% 40% / 0.2);
-  color: hsl(210 30% 90%);
-}
-/* Secondary CTA on hero */
-.velo .grain .border-\[hsl\(220_15\%_30\%\/0\.2\)\] {
-  border-color: hsl(220 60% 40% / 0.3);
-  color: hsl(210 30% 90%);
-}
-.velo .grain .text-\[hsl\(220_10\%_45\%\)\] {
-  color: hsl(215 25% 70%);
-}
-.velo .grain .text-\[hsl\(220_20\%_15\%\)\] {
-  color: hsl(210 30% 95%);
-}
-/* Trust signals below hero text */
-.velo .grain .text-\[hsl\(220_10\%_45\%\)\] span {
-  color: hsl(215 25% 75%);
-}
-/* Arrow buttons */
-.velo .grain button[class*="bg-white"] {
-  background: hsl(220 60% 20% / 0.5);
-  border-color: hsl(220 60% 40% / 0.2);
-  color: hsl(210 30% 90%);
-}
-
-.velo .bg-card\/20 {
-  background: hsl(220 80% 10% / 0.3);
-}
-.velo .bg-card\/30 {
-  background: hsl(220 80% 10% / 0.4);
-}
-
-/* Product card: solid dark surface */
-.velo .product-card {
-  background: hsl(220 60% 14%);
-  border-color: hsl(220 60% 30% / 0.15);
-  backdrop-filter: none;
-}
-.velo .product-card:hover {
-  border-color: hsl(218 100% 55% / 0.4);
-  box-shadow: 0 8px 30px hsl(220 80% 15% / 0.4);
-}
-
-/* Light theme: product card hover — visible border + shadow lift */
-.light .product-card {
-  border-color: hsl(210 18% 90%);
-}
-.light .product-card:hover {
-  border-color: hsl(213 65% 32% / 0.25);
-  box-shadow: 0 8px 24px hsl(220 20% 60% / 0.12), 0 2px 6px hsl(220 20% 60% / 0.06);
-}
-
 /* Forest theme: product card hover — earthy green glow */
 .forest .product-card:hover {
   border-color: hsl(153 55% 18% / 0.25);
@@ -911,16 +524,6 @@
 .copper .product-card:hover {
   border-color: hsl(28 55% 46% / 0.25);
   box-shadow: 0 8px 24px hsl(28 40% 20% / 0.25), 0 2px 6px hsl(28 40% 20% / 0.1);
-}
-
-/* Product image area: dark with subtle light center for product visibility */
-.velo .product-card-image {
-  background: radial-gradient(circle at 50% 40%, hsl(220 60% 18%), hsl(220 80% 10%));
-}
-
-/* Featured section: navy tint instead of warm */
-.velo .featured-section {
-  background: hsl(220 80% 10% / 0.3);
 }
 
 /* Cart progress bar pulse glow at 80-99% */

@@ -16,13 +16,13 @@ const activeBrandCount = allBrands.filter((b) => brandSlugsWithProducts.has(b.id
   description={`Learn about ${tenant.name} — Europe's premium nicotine pouch shop with ${allProducts.length}+ cans from ${activeBrandCount} brands. Fast EU-wide delivery and unbeatable prices.`}
 >
   <!-- Hero banner -->
-  <section class="bg-[#1a2e1a] text-[#faf8f5]">
+  <section style={`background: hsl(var(--hero-bg)); color: hsl(var(--hero-text));`}>
     <div class="max-w-4xl mx-auto px-4 py-16 sm:py-20 text-center">
       <Breadcrumb items={[{ label: 'About Us' }]} />
       <h1 class="text-4xl font-bold tracking-tight sm:text-5xl mt-4" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
         About {tenant.name}
       </h1>
-      <p class="mt-4 text-lg text-[#a8c0a0] max-w-2xl mx-auto leading-relaxed">
+      <p class="mt-4 text-lg max-w-2xl mx-auto leading-relaxed" style={`color: hsl(var(--hero-muted));`}>
         We started {tenant.name} with a simple belief: buying nicotine pouches online should
         be easy, affordable, and enjoyable.
       </p>

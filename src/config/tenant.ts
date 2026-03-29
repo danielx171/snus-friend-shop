@@ -18,7 +18,7 @@ export interface TenantConfig {
     readonly borderRadius: string;
     readonly darkModeClass: string;
     readonly lightModeClass: string;
-    readonly defaultTheme: 'velo' | 'light' | 'editorial' | 'forest' | 'copper';
+    readonly defaultTheme: 'forest' | 'copper';
   };
   readonly features: {
     readonly loyaltyProgram: boolean;
@@ -108,4 +108,4 @@ export const tenant: TenantConfig = {
 } as const satisfies TenantConfig;
 
 /** All valid theme class names — derived from the TenantConfig type. */
-export const validThemes: TenantConfig['theme']['defaultTheme'][] = ['velo', 'light', 'editorial', 'forest', 'copper'];
+export const validThemes: TenantConfig['theme']['defaultTheme'][] = ['forest', 'copper'];
