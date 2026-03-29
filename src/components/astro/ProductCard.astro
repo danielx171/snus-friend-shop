@@ -94,6 +94,8 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
       </div>
     )}
   </div>
+  {/* Strength color strip */}
+  <div class="h-[3px] w-full" style={`background-color: ${strengthColor};`} />
 
   {/* Content */}
   <div class="flex flex-1 flex-col gap-1.5 p-3">
@@ -111,10 +113,12 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
     {/* Strength + Flavor */}
     <div class="flex items-center gap-2">
       <div class="flex items-center gap-1" role="img" aria-label={`${strengthLabels[strengthKey] ?? 'Normal'} strength`}>
-        <span class="inline-block h-2 w-2 rounded-full" style={`background-color: ${strengthColor};`} />
-        <span class="text-xs font-medium text-muted-foreground">{strengthLabels[strengthKey] ?? 'Normal'}</span>
+        {Array.from({ length: 5 }, (_, i) => (
+          <span class={`inline-block h-1.5 w-1.5 rounded-full ${i < strengthLevel ? '' : 'opacity-25'}`} style={`background-color: ${strengthColor};`} />
+        ))}
+        <span class="text-xs font-medium text-muted-foreground ml-0.5">{strengthLabels[strengthKey] ?? 'Normal'}</span>
       </div>
-      <span class="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
+      <span class="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground capitalize">
         {flavorKey}
       </span>
     </div>
@@ -154,7 +158,10 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
 
     {/* Price + Cart */}
     <div class="mt-auto flex items-end justify-between pt-2">
-      <span class="text-lg font-bold text-foreground">&euro;{displayPrice.toFixed(2)}</span>
+      <div>
+        <span class="text-lg font-bold text-foreground">&euro;{displayPrice.toFixed(2)}</span>
+        <span class="text-[10px] text-muted-foreground ml-1">/ can</span>
+      </div>
       <CardAddToCart
         client:visible
         slug={slug}
