@@ -270,7 +270,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
         {/* Quest trigger — fires order_placed progress update */}
         {order && user && orderId && (
-          <OrderQuestTrigger client:load orderId={orderId} />
+          <OrderQuestTrigger client:idle orderId={orderId} />
         )}
 
         {/* Actions */}
