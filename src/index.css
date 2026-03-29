@@ -191,12 +191,12 @@
     --color-error: 0 72% 51%;
     --color-info: 200 65% 45%;
 
-    /* Tier system */
-    --color-tier-bronze: 25 60% 40%;
-    --color-tier-silver: 210 10% 60%;
-    --color-tier-gold: 43 85% 50%;
-    --color-tier-diamond: 185 70% 50%;
-    --color-tier-epic: 270 55% 55%;
+    /* Tier system — forest green progression */
+    --color-tier-bronze: 140 25% 55%;
+    --color-tier-silver: 150 30% 40%;
+    --color-tier-gold: 153 45% 28%;
+    --color-tier-diamond: 153 55% 18%;
+    --color-tier-epic: 45 80% 50%;
 
     /* Rarity system */
     --color-rarity-common: 210 10% 55%;
@@ -464,12 +464,12 @@
     --color-error: 0 72% 51%;
     --color-info: 200 65% 45%;
 
-    /* Tier system */
-    --color-tier-bronze: 25 60% 40%;
-    --color-tier-silver: 210 10% 60%;
-    --color-tier-gold: 43 85% 50%;
-    --color-tier-diamond: 185 70% 50%;
-    --color-tier-epic: 270 55% 55%;
+    /* Tier system — forest green progression */
+    --color-tier-bronze: 140 25% 55%;
+    --color-tier-silver: 150 30% 40%;
+    --color-tier-gold: 153 45% 28%;
+    --color-tier-diamond: 153 55% 18%;
+    --color-tier-epic: 45 80% 50%;
 
     /* Rarity system */
     --color-rarity-common: 210 10% 55%;
