@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { getCollection } from 'astro:content';
+import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
 export async function getStaticPaths() {
   const brands = await getCollection('brands');
@@ -42,6 +43,11 @@ const countryNames: Record<string, string> = {
 };
 
 const countryLabel = b.countryCode ? (countryNames[b.countryCode] ?? b.countryCode) : '';
+const bColor = brandColors[brand.id] ?? defaultBrandColor;
+
+const nicotineValues = products.map((p) => p.data.nicotineContent).filter(Boolean);
+const minMg = nicotineValues.length ? Math.min(...nicotineValues) : 0;
+const maxMg = nicotineValues.length ? Math.max(...nicotineValues) : 0;
 
 const metaDescription = b.description
   ? (b.description.length > 160 ? b.description.slice(0, 157) + '...' : b.description)
@@ -82,57 +88,80 @@ const metaDescription = b.description
       { label: b.name },
     ]} />
 
-    <!-- Brand hero -->
-    <div class="mb-10 rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm sm:p-8">
-      <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-        {/* Brand logo or initials */}
+    <!-- Brand hero banner -->
+    <div class="mb-8 overflow-hidden rounded-2xl" style={`background: linear-gradient(135deg, ${bColor}dd, ${bColor}88);`}>
+      <div class="flex flex-col items-start gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
+        {/* Brand logo or styled name */}
         {b.logoUrl ? (
-          <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted/20">
+          <div class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/20 backdrop-blur">
             <Image
               src={b.logoUrl}
               alt={`${b.name} logo`}
-              width={96}
-              height={96}
+              width={80}
+              height={80}
               loading="eager"
               format="webp"
               class="h-full w-full object-contain"
             />
           </div>
         ) : (
-          <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
-            <span class="text-3xl font-bold text-primary">
+          <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
+            <span class="text-2xl font-bold text-white">
               {b.name.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
             </span>
           </div>
         )}
 
         <div class="flex-1">
-          <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h1 class="text-3xl font-bold tracking-tight text-white sm:text-4xl" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
             {b.name}
           </h1>
 
-          {/* Manufacturer and country */}
-          <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-            {b.manufacturer && (
-              <span>by {b.manufacturer}</span>
-            )}
-            {b.manufacturer && countryLabel && (
-              <span class="text-muted-foreground/40">&middot;</span>
-            )}
+          {/* Metadata chips */}
+          <div class="mt-3 flex flex-wrap items-center gap-2">
             {countryLabel && (
-              <span>{countryLabel}</span>
+              <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+                {countryLabel}
+              </span>
+            )}
+            {b.manufacturer && (
+              <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+                {b.manufacturer}
+              </span>
+            )}
+            <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+              {products.length} products
+            </span>
+            {minMg > 0 && (
+              <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+                {minMg}-{maxMg} mg
+              </span>
             )}
           </div>
-
-          {/* Description */}
-          {b.description && (
-            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-              {b.description}
-            </p>
-          )}
         </div>
       </div>
     </div>
+
+    {/* Sub-page navigation */}
+    <div class="mb-6 flex flex-wrap gap-2">
+      <a href={`/brands/${brand.id}`} class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">All Products</a>
+      <a href={`/brands/${brand.id}/flavours`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Flavours</a>
+      <a href={`/brands/${brand.id}/strengths`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Strengths</a>
+      <a href={`/brands/${brand.id}/review`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Review</a>
+    </div>
+
+    {/* Collapsible description */}
+    {b.description && (
+      <details class="mb-8 group">
+        <summary class="cursor-pointer text-sm font-medium text-primary hover:underline list-none">
+          <span class="group-open:hidden">About {b.name} — Read more</span>
+          <span class="hidden group-open:inline">About {b.name} — Show less</span>
+        </summary>
+        <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          {b.description}
+        </p>
+      </details>
+    )}
 
     <!-- Products section -->
     <div class="mb-6 flex items-center justify-between">
