@@ -368,11 +368,15 @@ if (heroProducts.length < 4) {
             const tLabel = tinAbbr[brand.id] ?? brand.data.name.toUpperCase();
             const tLen = tLabel.length;
             const tSize = tLen <= 2 ? '11px' : tLen <= 3 ? '10px' : tLen <= 4 ? '9px' : tLen <= 5 ? '8px' : '7px';
-            const tColor = brand.id === '77-pouches' ? 'rgba(0,0,0,0.7)' : 'white';
-            const dr = bColor.replace(/^#/, '');
-            const dR = Math.max(0, parseInt(dr.substring(0, 2), 16) - 40);
-            const dG = Math.max(0, parseInt(dr.substring(2, 4), 16) - 40);
-            const dB = Math.max(0, parseInt(dr.substring(4, 6), 16) - 40);
+            const hexStr = bColor.replace(/^#/, '');
+            const rVal = parseInt(hexStr.substring(0, 2), 16);
+            const gVal = parseInt(hexStr.substring(2, 4), 16);
+            const bVal = parseInt(hexStr.substring(4, 6), 16);
+            const lum = (0.299 * rVal + 0.587 * gVal + 0.114 * bVal) / 255;
+            const tColor = lum > 0.55 ? 'rgba(0,0,0,0.75)' : 'white';
+            const dR = Math.max(0, rVal - 40);
+            const dG = Math.max(0, gVal - 40);
+            const dB = Math.max(0, bVal - 40);
             return (
               <a
                 href={`/brands/${brand.id}`}

@@ -44,9 +44,9 @@ const strengthLabels: Record<string, string> = {
   'extra-strong': 'Extra Strong', 'super-strong': 'Super Strong',
 };
 
-const title = `${b.name} Nicotine Pouches Review: ${products.length} Products Rated`;
+const title = `${b.name} Nicotine Pouches Review: ${products.length} Cans Rated`;
 const priceStr = minPrice > 0 ? minPrice.toFixed(2) : '0.00';
-const description = `Honest ${b.name} review — ${products.length} products, ${flavourKeys.length} flavours, ${minMg}-${maxMg}mg strength range. Prices from EUR ${priceStr}. Everything you need to know.`;
+const description = `Honest ${b.name} review — ${products.length} cans, ${flavourKeys.length} flavours, ${minMg}-${maxMg}mg strength range. Prices from EUR ${priceStr}. Everything you need to know.`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -80,7 +80,7 @@ const jsonLd = {
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
       <div class="rounded-xl border border-border bg-card/60 p-4 text-center">
         <div class="text-2xl font-bold text-foreground">{products.length}</div>
-        <div class="text-xs text-muted-foreground">Products</div>
+        <div class="text-xs text-muted-foreground">Cans</div>
       </div>
       <div class="rounded-xl border border-border bg-card/60 p-4 text-center">
         <div class="text-2xl font-bold text-foreground">{flavourKeys.length}</div>
@@ -120,7 +120,7 @@ const jsonLd = {
 
       <h2 class="text-xl font-semibold text-foreground">Explore {b.name}</h2>
       <div class="flex flex-wrap gap-3">
-        <a href={`/brands/${brand.id}`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">All {b.name} Products</a>
+        <a href={`/brands/${brand.id}`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">All {b.name} Cans</a>
         <a href={`/brands/${brand.id}/flavours`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">{b.name} Flavours</a>
         <a href={`/brands/${brand.id}/strengths`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">{b.name} Strengths</a>
         <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30">Beginner's Guide</a>

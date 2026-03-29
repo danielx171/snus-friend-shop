@@ -99,11 +99,15 @@ const collectionJsonLd = {
         const sizes = ['text-[8px]','text-[8px]','text-[17px]','text-[15px]','text-[13px]','text-[11px]','text-[10px]'];
         const tinTextClass = sizes[Math.min(tinLabel.length, 6)] || 'text-[8px]';
 
-        // Light background brands need dark text
-        const textColor = brand.id === '77-pouches' ? 'rgba(0,0,0,0.7)' : 'white';
+        // Color calculations
+        const hex = bColor.replace(/^#/, '');
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const bVal = parseInt(hex.substring(4, 6), 16);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * bVal) / 255;
+        const textColor = luminance > 0.55 ? 'rgba(0,0,0,0.75)' : 'white';
 
         // Darker shade for gradient
-        const hex = bColor.replace(/^#/, '');
         const dr = Math.max(0, parseInt(hex.substring(0, 2), 16) - 40);
         const dg = Math.max(0, parseInt(hex.substring(2, 4), 16) - 40);
         const db = Math.max(0, parseInt(hex.substring(4, 6), 16) - 40);
@@ -129,7 +133,7 @@ const collectionJsonLd = {
               </div>
             ) : (
               <div
-                class="tin-lid group-hover:tin-lid-hover mb-3"
+                class={`tin-lid group-hover:tin-lid-hover mb-3 ${luminance > 0.55 ? 'tin-lid-light' : ''}`}
                 style={`background: linear-gradient(135deg, ${bColor}, ${darker});`}
               >
                 <span class={`tin-lid-label ${tinTextClass}`} style={`color: ${textColor};`}>
@@ -196,6 +200,19 @@ const collectionJsonLd = {
         letter-spacing: 0.3px;
         white-space: nowrap;
         line-height: 1;
+      }
+      /* Light-background tins: swap white accents for dark */
+      .tin-lid-light::before {
+        border-color: rgba(0, 0, 0, 0.12) !important;
+      }
+      .tin-lid-light::after {
+        border-color: rgba(0, 0, 0, 0.08) !important;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.25) 0%,
+          transparent 40%,
+          transparent 100%
+        ) !important;
       }
       .group:hover .tin-lid {
         transform: rotate(-3deg);
