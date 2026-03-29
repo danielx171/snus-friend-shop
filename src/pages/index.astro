@@ -25,6 +25,23 @@ const brandSlugsWithProducts = new Set(allProducts.map((p) => p.data.brandSlug))
 const activeBrands = allBrands.filter((b) => brandSlugsWithProducts.has(b.id));
 const brands = [...activeBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
 const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${brands.length || 57} leading brands. Fast EU-wide delivery, loyalty rewards, and the best prices online.`;
+
+// Pick 4 hero products with diverse brand colors for the hero image cluster
+const heroBrandTargets = ['zyn', 'velo', 'siberia', 'loop'];
+const heroProducts = heroBrandTargets
+  .map((slug) => allProducts.find((p) => p.data.brandSlug === slug && p.data.imageUrl))
+  .filter(Boolean)
+  .slice(0, 4);
+
+// Fallback: if we don't have those brands, pick top-rated with images
+if (heroProducts.length < 4) {
+  for (const p of sortedByRating) {
+    if (heroProducts.length >= 4) break;
+    if (p.data.imageUrl && !heroProducts.some((h) => h!.data.brandSlug === p.data.brandSlug)) {
+      heroProducts.push(p);
+    }
+  }
+}
 ---
 
 <Shop
@@ -32,32 +49,120 @@ const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${bra
   description={heroDescription}
   ogImage={tenant.seo.ogImage}
 >
-  <!-- Hero -->
-  <section class="relative overflow-hidden border-b border-border bg-background">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_70%)]" />
-    <div class="relative mx-auto max-w-6xl px-4 py-24 text-center sm:py-32 lg:py-40">
-      <p class="mb-4 text-sm font-medium uppercase tracking-widest text-primary">
-        Europe's Nicotine Pouch Shop
-      </p>
-      <h1 class="mx-auto max-w-3xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-        {tenant.tagline}
-      </h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-        {heroDescription}
-      </p>
-      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <a
-          href="/products"
-          class="inline-flex h-12 items-center rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90"
-        >
-          Shop All Pouches
-        </a>
-        <a
-          href="/brands"
-          class="inline-flex h-12 items-center rounded-lg border border-border bg-card/60 px-8 text-base font-semibold text-foreground backdrop-blur transition hover:bg-card"
-        >
-          Browse Brands
-        </a>
+  <!-- Hero — Split layout: text left, product images right -->
+  <section class="relative overflow-hidden border-b border-border bg-[#1a2e1a]">
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1a2e1a] via-[#0f1f0f] to-[#1a2e1a]" />
+    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 py-16 sm:py-20 lg:flex-row lg:gap-12 lg:py-24">
+
+      <!-- Left: text + stats + CTAs -->
+      <div class="flex-1 text-center lg:text-left">
+        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-[#a8c0a0]">
+          Europe's Nicotine Pouch Shop
+        </p>
+        <h1 class="text-4xl font-bold tracking-tight text-[#faf8f5] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
+          Premium Nicotine Pouches
+        </h1>
+        <p class="mx-auto mt-4 max-w-xl text-lg text-[#a8c0a0] lg:mx-0">
+          {heroDescription}
+        </p>
+
+        <!-- Stats row -->
+        <div class="mt-8 flex justify-center gap-8 lg:justify-start">
+          <div>
+            <div class="text-2xl font-bold text-[#faf8f5]">{allProducts.length}+</div>
+            <div class="text-xs text-[#a8c0a0]">Products</div>
+          </div>
+          <div class="h-10 w-px bg-[#faf8f5]/10" />
+          <div>
+            <div class="text-2xl font-bold text-[#faf8f5]">{brands.length}</div>
+            <div class="text-xs text-[#a8c0a0]">Brands</div>
+          </div>
+          <div class="h-10 w-px bg-[#faf8f5]/10" />
+          <div>
+            <div class="text-2xl font-bold text-[#faf8f5]">Free</div>
+            <div class="text-xs text-[#a8c0a0]">EU Shipping</div>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
+          <a
+            href="/nicotine-pouches"
+            class="inline-flex h-12 items-center rounded-lg bg-[#faf8f5] px-8 text-base font-semibold text-[#1a2e1a] shadow-lg transition hover:bg-[#e8e6e0]"
+          >
+            Shop All Pouches
+          </a>
+          <a
+            href="/flavor-quiz"
+            class="inline-flex h-12 items-center rounded-lg border border-[#faf8f5]/20 px-8 text-base font-semibold text-[#faf8f5] transition hover:bg-[#faf8f5]/10"
+          >
+            Take the Flavour Quiz
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: product can cluster -->
+      <div class="hidden flex-1 items-center justify-center lg:flex">
+        <div class="relative h-80 w-80">
+          {heroProducts[0] && (
+            <img
+              src={`/_vercel/image?url=${encodeURIComponent(heroProducts[0]!.data.imageUrl)}&w=256&q=80`}
+              alt={heroProducts[0]!.data.name}
+              width="180"
+              height="180"
+              class="absolute left-4 top-2 rounded-2xl shadow-2xl shadow-black/30"
+              style="transform: rotate(-6deg);"
+              loading="eager"
+            />
+          )}
+          {heroProducts[1] && (
+            <img
+              src={`/_vercel/image?url=${encodeURIComponent(heroProducts[1]!.data.imageUrl)}&w=256&q=80`}
+              alt={heroProducts[1]!.data.name}
+              width="160"
+              height="160"
+              class="absolute right-0 top-8 rounded-2xl shadow-2xl shadow-black/30"
+              style="transform: rotate(4deg);"
+              loading="eager"
+            />
+          )}
+          {heroProducts[2] && (
+            <img
+              src={`/_vercel/image?url=${encodeURIComponent(heroProducts[2]!.data.imageUrl)}&w=256&q=80`}
+              alt={heroProducts[2]!.data.name}
+              width="150"
+              height="150"
+              class="absolute bottom-4 left-12 rounded-2xl shadow-2xl shadow-black/30"
+              style="transform: rotate(3deg);"
+              loading="eager"
+            />
+          )}
+          {heroProducts[3] && (
+            <img
+              src={`/_vercel/image?url=${encodeURIComponent(heroProducts[3]!.data.imageUrl)}&w=256&q=80`}
+              alt={heroProducts[3]!.data.name}
+              width="140"
+              height="140"
+              class="absolute bottom-0 right-8 rounded-2xl shadow-2xl shadow-black/30"
+              style="transform: rotate(-3deg);"
+              loading="eager"
+            />
+          )}
+        </div>
+      </div>
+
+      <!-- Mobile: horizontal product strip -->
+      <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory">
+        {heroProducts.map((p) => p && (
+          <img
+            src={`/_vercel/image?url=${encodeURIComponent(p.data.imageUrl)}&w=128&q=80`}
+            alt={p.data.name}
+            width="96"
+            height="96"
+            class="flex-shrink-0 snap-center rounded-xl shadow-lg shadow-black/20"
+            loading="eager"
+          />
+        ))}
       </div>
     </div>
   </section>
@@ -103,64 +208,6 @@ const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${bra
             ))}
           </div>
         )}
-      </div>
-    </div>
-  </section>
-
-  <!-- Trust Signals -->
-  <section class="border-b border-border bg-card/30 py-16 sm:py-20">
-    <div class="mx-auto max-w-6xl px-4">
-      <h2 class="mb-12 text-center text-2xl font-bold text-foreground sm:text-3xl">
-        Why Shop With Us
-      </h2>
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
-          <h3 class="mb-2 font-semibold text-foreground">Free Shipping</h3>
-          <p class="text-sm text-muted-foreground">
-            Free delivery on orders over &euro;{tenant.freeShippingThreshold}. No hidden fees, ever.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-          </div>
-          <h3 class="mb-2 font-semibold text-foreground">{allProducts.length}+ Products</h3>
-          <p class="text-sm text-muted-foreground">
-            The largest selection of nicotine pouches from {brands.length > 0 ? brands.length : 57} leading brands in Europe.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <h3 class="mb-2 font-semibold text-foreground">Fast EU Delivery</h3>
-          <p class="text-sm text-muted-foreground">
-            Dispatched within 24 hours. Delivered across the EU in 2-5 business days.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h3 class="mb-2 font-semibold text-foreground">Verified Reviews</h3>
-          <p class="text-sm text-muted-foreground">
-            Real ratings from real customers. Every review is verified by our community.
-          </p>
-        </div>
       </div>
     </div>
   </section>
