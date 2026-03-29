@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -41,10 +42,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Legal Guide Europe 2026' },
     ]} />
 
-    <header>
-      <h1>Nicotine Pouches Legal in Europe: 2026 Country-by-Country Guide</h1>
-      <p><em>Last updated: 28 March 2026</em></p>
-    </header>
+    <BlogHero
+      category="Guide"
+      title="Nicotine Pouches Legal in Europe: 2026 Country-by-Country Guide"
+      description="Are nicotine pouches legal where you live? Updated 2026 country-by-country guide covering 14 European countries, bans, age limits, and the TPD3 outlook."
+      date="28 March 2026"
+      readTime="10 min read"
+    />
 
     <section>
       <h2>Key Takeaways</h2>

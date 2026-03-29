@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -41,10 +42,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Pablo Complete Guide' },
     ]} />
 
-    <header>
-      <h1>Pablo Nicotine Pouches: Complete Brand Guide</h1>
-      <p class="text-sm text-muted-foreground">Published 28 March 2026 | Updated 28 March 2026</p>
-    </header>
+    <BlogHero
+      category="Brand Spotlight"
+      title="Pablo Nicotine Pouches: Complete Brand Guide"
+      description="Everything about Pablo nicotine pouches — the high-strength brand from NGP Empire. Flavours, strengths from 10 to 50 mg, safety notes, and honest reviews."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <section class="key-takeaways">
       <h2>Key Takeaways</h2>

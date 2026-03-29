@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -21,11 +22,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Best for Quitting Smoking' },
     ]} />
 
-    <div>
-        <p class="text-sm text-muted-foreground">Published 28 March 2026 | 8 minute read</p>
-        <h1>Best Nicotine Pouches for Quitting Smoking (2026)</h1>
-        <p>Thinking about switching from cigarettes to nicotine pouches? This evidence-informed guide covers strength matching, week-by-week transition strategies, and our top product picks for smokers ready to make the change.</p>
-    </div>
+    <BlogHero
+      category="Guide"
+      title="Best Nicotine Pouches for Quitting Smoking (2026)"
+      description="Discover the best nicotine pouches for quitting smoking in 2026. Expert guide to strength matching, transition strategies, and real product recommendations."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <aside class="key-takeaways" style="background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f6 100%); border-left: 4px solid #4caf50; padding: 24px; border-radius: 6px; margin: 32px 0;">
         <h3 style="color: #2e7d32; margin-top: 0;">Key Takeaways</h3>

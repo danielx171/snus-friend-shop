@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -21,10 +22,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Best Budget Pouches' },
     ]} />
 
-    <header>
-        <h1>Best Budget Nicotine Pouches: Top Picks Under €3 Per Can</h1>
-        <p class="text-sm text-muted-foreground"><strong>Published:</strong> 28 March 2026 | <strong>Read time:</strong> 8 minutes</p>
-    </header>
+    <BlogHero
+      category="Buying Guide"
+      title="Best Budget Nicotine Pouches: Top Picks Under €3 Per Can"
+      description="Discover the best budget nicotine pouches under €3 per can. Top picks, honest reviews, and value comparisons to help you save without sacrificing quality."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <aside class="key-takeaways" style="background: linear-gradient(135deg, #0d5d32 0%, #0a4625 100%); border-radius: 8px; padding: 24px; margin: 40px 0; color: white;">
         <h2 style="margin-top: 0; color: white;">Key Takeaways</h2>

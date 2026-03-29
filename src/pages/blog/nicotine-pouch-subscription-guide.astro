@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -21,8 +22,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Subscription Guide' },
     ]} />
 
-    <h1>Nicotine Pouch Subscription: Is It Worth It in 2026?</h1>
-    <p class="text-sm text-muted-foreground">Published: 28 March 2026 | Reading time: 6 minutes | By SnusFriend Editorial</p>
+    <BlogHero
+      category="Guide"
+      title="Nicotine Pouch Subscription: Is It Worth It in 2026?"
+      description="Is a nicotine pouch subscription worth it in 2026? Compare subscription costs vs bulk buying, explore pros and cons, and discover how SnusFriend's low prices rival subscription savings."
+      date="28 March 2026"
+      readTime="6 min read"
+    />
 
     <div class="key-takeaways" style="background: #f0f7f4; border-left: 4px solid #2d7f5e; padding: 20px; margin: 32px 0; border-radius: 4px;">
         <h3 style="margin-top: 0;">Key Takeaways</h3>

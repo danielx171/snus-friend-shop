@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -42,8 +43,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Siberia Complete Guide' },
     ]} />
 
-    <h1>Siberia Nicotine Pouches & Snus: Complete Brand Guide</h1>
-    <p><strong>Published:</strong> 28 March 2026 | <strong>Updated:</strong> 28 March 2026</p>
+    <BlogHero
+      category="Brand Spotlight"
+      title="Siberia Nicotine Pouches & Snus: Complete Brand Guide"
+      description="Siberia — the legendary ultra-strong brand. From 16.5 mg slim to 49.5 mg maxi, every product explained with essential safety guidance for extreme-strength users."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <section class="key-takeaways" style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 20px; margin: 30px 0; border-radius: 4px;">
         <h2 style="margin-top: 0;">Key Takeaways</h2>

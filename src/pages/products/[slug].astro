@@ -72,7 +72,20 @@ const flavorLabel = flavorLabels[p.flavorKey] ?? p.flavorKey;
 // Theme-aware flavor colors — no hardcoded Tailwind palette colors
 const flavorColor = 'bg-primary/10 text-primary border-primary/20';
 
-const description = p.description || `${p.name} by ${p.brand}. ${p.nicotineContent} mg/pouch nicotine pouches with ${flavorLabel.toLowerCase()} flavour. ${p.portionsPerCan} portions per can.`;
+// Generate an accurate fallback description from real product attributes
+const generatedDescription = `${p.name} by ${p.brand}. ${p.nicotineContent} mg/pouch nicotine pouches in ${p.formatKey || 'slim'} format with ${flavorLabel.toLowerCase()} flavour. ${strengthLabel} strength. ${p.portionsPerCan} portions per can.`;
+
+// Detect bad template descriptions: if the stored description mentions a different
+// format or contains "cool mint" for a non-cool-mint product, use the generated one instead
+const storedDesc = (p.description || '').toLowerCase();
+const nameLower = p.name.toLowerCase();
+const isBadDescription = !p.description
+  || (storedDesc.includes('cool mint') && !nameLower.includes('cool mint'))
+  || (storedDesc.includes('slim format') && p.formatKey !== 'slim')
+  || (storedDesc.includes('mini format') && p.formatKey !== 'mini')
+  || storedDesc.includes('shop snusfriends.com');
+
+const description = isBadDescription ? generatedDescription : p.description;
 const metaDescription = description.length > 160 ? description.slice(0, 157) + '...' : description;
 
 const packTiers = [

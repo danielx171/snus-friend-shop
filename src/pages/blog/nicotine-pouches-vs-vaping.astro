@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -41,19 +42,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Pouches vs Vaping' },
     ]} />
 
-    <header>
-      <h1>Nicotine Pouches vs Vaping: Which Is Better in 2026?</h1>
-
-      <div class="key-takeaways">
-        <h2>Key Takeaways</h2>
-        <ul>
-          <li>Both are far safer than smoking; nicotine pouches avoid inhaled aerosol entirely, vaping is 95% less harmful than cigarettes</li>
-          <li>Pouches cost 40–60% less annually and require no device maintenance or charging</li>
-          <li>Pouches win on discretion and legality; vaping offers thousands of flavour options</li>
-          <li>Choice depends on your priorities: cost and convenience favour pouches; flavour variety favours vaping</li>
-        </ul>
-      </div>
-    </header>
+    <BlogHero
+      category="Comparison"
+      title="Nicotine Pouches vs Vaping: Which Is Better in 2026?"
+      description="Nicotine pouches vs vaping compared on health, cost, convenience, flavour, and legality. Data-driven guide to choosing the right nicotine format for you."
+      date="28 March 2026"
+      readTime="10 min read"
+    />
 
     <section>
       <h2>Quick Comparison Table</h2>

@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -41,19 +42,13 @@ import { tenant } from '@/config/tenant';
       { label: 'How to Use Nicotine Pouches' },
     ]} />
 
-    <header>
-      <h1>How to Use Nicotine Pouches: A Complete Guide</h1>
-
-      <div class="key-takeaways">
-        <h2>Key Takeaways</h2>
-        <ul>
-          <li>Place the pouch between your upper gum and lip, keep it there for 20–40 minutes, then dispose responsibly</li>
-          <li>Expect a slight tingling sensation and subtle nicotine buzz; start with light strength if new to nicotine</li>
-          <li>Avoid common mistakes: starting too strong, chewing the pouch, swallowing, or using multiple pouches at once</li>
-          <li>Store in a cool, dry place and keep used pouches in the lid compartment for proper disposal</li>
-        </ul>
-      </div>
-    </header>
+    <BlogHero
+      category="Guide"
+      title="How to Use Nicotine Pouches: A Complete Guide"
+      description="Learn how to use nicotine pouches correctly. Step-by-step instructions, what to expect your first time, tips for comfort, and common mistakes to avoid."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <section>
       <h2>What Are Nicotine Pouches?</h2>

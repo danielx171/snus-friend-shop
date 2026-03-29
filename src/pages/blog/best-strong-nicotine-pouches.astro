@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -19,10 +20,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Best Strong Pouches' },
     ]} />
 
-    <header>
-        <h1>Best Strong Nicotine Pouches (10–20mg): 2026 Guide</h1>
-        <p class="text-sm text-muted-foreground">Published 28 March 2026 | 8 min read</p>
-    </header>
+    <BlogHero
+      category="Ranking"
+      title="Best Strong Nicotine Pouches (10–20mg): 2026 Guide"
+      description="Discover the best strong nicotine pouches (10-20mg) for 2026. Expert rankings, safety guidance, and recommendations for experienced users seeking that powerful kick."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <div class="key-takeaways" style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 12px; padding: 24px; margin: 32px 0;">
         <h3 style="color: #15803d; margin-top: 0;">Key Takeaways</h3>

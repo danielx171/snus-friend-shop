@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -40,18 +41,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Flavour Guide' },
     ]} />
 
-    <div class="key-takeaways">
-      <h3>Key Takeaways</h3>
-      <ul>
-        <li>Mint and peppermint account for 45–60% of all nicotine pouch sales — the dominant category</li>
-        <li>Ten main flavour categories exist: mint, spearmint, menthol/ice, berry, citrus, tropical/fruit, coffee, licorice, cola/energy, and unflavoured</li>
-        <li>Flavour does not affect nicotine absorption — strength is determined by milligrams per pouch, not taste</li>
-        <li>Best brands by category: ZYN and VELO for variety; LOOP for berry; ICEBERG for menthol/ice; Skruf for citrus</li>
-        <li>Choose flavours by taste preference, desired nicotine strength, and time of day — coffee in the morning, mint after meals</li>
-      </ul>
-    </div>
-
-    <h1>Nicotine Pouch Flavour Guide: Every Flavour Category Explained</h1>
+    <BlogHero
+      category="Flavour Guide"
+      title="Nicotine Pouch Flavour Guide: Every Flavour Category Explained"
+      description="Every nicotine pouch flavour category explained — mint, berry, citrus, coffee, fruit, licorice, and more. Best brands for each flavour plus strength ranges."
+      date="28 March 2026"
+      readTime="12 min read"
+    />
 
     <p>Choosing the right nicotine pouch flavour is one of the most personal decisions a user makes. While strength and format matter, <strong>flavour is what keeps you reaching for a pouch again and again</strong>. With over ten distinct flavour categories now available — from cool mint to bold coffee and Scandinavian licorice — understanding what each offers is essential to finding your perfect match. Research from Eurobarometer and consumer surveys shows that flavour preference is the second-most important purchasing factor after nicotine strength.</p>
 

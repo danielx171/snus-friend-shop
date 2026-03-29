@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -21,8 +22,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Best Pouches for Women' },
     ]} />
 
-    <h1>Best Nicotine Pouches for Women in 2026</h1>
-    <p class="text-sm text-muted-foreground">Published: 28 March 2026 | Reading time: 8 minutes</p>
+    <BlogHero
+      category="Buying Guide"
+      title="Best Nicotine Pouches for Women in 2026"
+      description="Discover the best nicotine pouches for women in 2026. From low-strength options to discreet mini formats, find the perfect pouch for your preferences."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <div class="key-takeaways" style="background: linear-gradient(135deg, #f0f7f4 0%, #e8f5f2 100%); border-left: 5px solid #2d8659; padding: 24px; margin: 30px 0; border-radius: 6px;">
         <h2 style="margin-top: 0;">Key Takeaways</h2>

@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -21,10 +22,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Best Slim Pouches' },
     ]} />
 
-    <header>
-        <h1>Best Slim Nicotine Pouches: Comfortable & Discreet (2026)</h1>
-        <p class="text-sm text-muted-foreground">Published: 28 March 2026 | Reading time: 8 min</p>
-    </header>
+    <BlogHero
+      category="Buying Guide"
+      title="Best Slim Nicotine Pouches: Comfortable & Discreet (2026)"
+      description="Discover the best slim nicotine pouches for comfort and discretion. Compare premium, mid-range, budget, and strong options. 92% of our catalogue is slim — here's why."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <div class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #2d5016; border-radius: 8px; padding: 24px; margin: 32px 0;">
         <h2 style="margin-top: 0; color: #2d5016;">Key Takeaways</h2>

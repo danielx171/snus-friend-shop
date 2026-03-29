@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -21,10 +22,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Nordic Spirit Complete Guide' },
     ]} />
 
-    <header>
-        <h1>Nordic Spirit Nicotine Pouches: Complete Brand Guide</h1>
-        <p class="text-sm text-muted-foreground">Published: March 2026 | Reading time: 6 minutes</p>
-    </header>
+    <BlogHero
+      category="Brand Spotlight"
+      title="Nordic Spirit Nicotine Pouches: Complete Brand Guide"
+      description="Nordic Spirit by JTI reviewed — the UK's favourite nicotine pouch brand. 12 flavours from Bergamot Wildberry to Frosty Mint, strengths 6-17 mg."
+      date="March 2026"
+      readTime="6 min read"
+    />
 
     <aside class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
         <h2 style="margin-top: 0;">Key Takeaways</h2>

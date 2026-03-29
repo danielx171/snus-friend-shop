@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -43,17 +44,13 @@ import { tenant } from '@/config/tenant';
       { label: 'ZYN Flavours Guide' },
     ]} />
 
-    <section class="key-takeaways">
-      <h2>Key Takeaways</h2>
-      <ul>
-        <li>ZYN offers 56+ flavours across 7 categories, with strengths ranging from 1.5&nbsp;mg to 16.5&nbsp;mg nicotine per pouch</li>
-        <li>Cool Mint Ice and Menthol Ice dominate the strong-pouch market; Spearmint Mini and Citrus are ideal for beginners</li>
-        <li>FDA-authorized products (January 2025) are available in 20 ZYN variants, confirming safety and quality standards</li>
-        <li>Choose your flavour based on taste preference first, then match strength to your nicotine tolerance and usage patterns</li>
-      </ul>
-    </section>
-
-    <h1>ZYN Flavours: The Complete 2026 Guide &amp; Rankings</h1>
+    <BlogHero
+      category="Flavour Guide"
+      title="ZYN Flavours: The Complete 2026 Guide & Rankings"
+      description="Every ZYN flavour ranked and reviewed. Mint, citrus, coffee, berry, licorice — strengths from 1.5 to 16.5 mg. Find your perfect ZYN at SnusFriend."
+      date="28 March 2026"
+      readTime="10 min read"
+    />
 
     <p><strong>ZYN is the world's leading oral nicotine product, with 56+ markets and FDA authorization (January 2025) for 20 distinct products.</strong> Manufactured by Swedish Match (now majority-owned by Philip Morris International), ZYN offers an unmatched range of flavours and strengths designed to suit every palate and preference. In January 2025, the FDA authorised 20 ZYN products following extensive scientific review, cementing the brand's commitment to quality and consumer safety. For expert comparisons, see our <a href="/blog/zyn-vs-velo-2026">ZYN vs VELO analysis</a>.</p>
 

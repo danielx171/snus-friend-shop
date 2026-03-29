@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -40,17 +41,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Pouches vs Gum vs Lozenges' },
     ]} />
 
-    <div class="key-takeaways">
-      <h3>Key Takeaways</h3>
-      <ul>
-        <li><strong>Nicotine pouches</strong> deliver relief in 20–30 minutes with hundreds of flavours and maximum discretion.</li>
-        <li><strong>Nicotine gum</strong> requires jaw effort but offers tactile engagement; side effects include jaw fatigue and hiccups.</li>
-        <li><strong>Nicotine lozenges</strong> dissolve slowly, suit those avoiding chewing, but may irritate the throat.</li>
-        <li><strong>Nicotine patches</strong> provide steady, hands-free coverage over 16–24 hours but lack rapid relief and may irritate skin.</li>
-      </ul>
-    </div>
-
-    <h1>Nicotine Pouches vs Gum vs Lozenges: Which NRT Is Right for You?</h1>
+    <BlogHero
+      category="Comparison"
+      title="Nicotine Pouches vs Gum vs Lozenges: Which NRT Is Right for You?"
+      description="Nicotine pouches, gum, lozenges, and patches compared. Cost, speed, flavour, discretion, and side effects — find the right nicotine format for you."
+      date="28 March 2026"
+      readTime="8 min read"
+    />
 
     <p>Millions of Europeans are switching away from smoking, and nicotine replacement therapy (NRT) products are at the forefront of that transition. But with four main nicotine formats to choose from — pouches, gum, lozenges, and patches — many people are unsure which is the best fit. According to Public Health England, these products are all considered 95% safer than smoking.</p>
     <p>Each format has distinct advantages. Some deliver nicotine faster; others offer wider flavour choice. Some suit busy professionals; others work better for those managing oral cravings. This guide compares all four on cost, speed, convenience, and side effects so you can find the option that aligns with your lifestyle and preferences.</p>

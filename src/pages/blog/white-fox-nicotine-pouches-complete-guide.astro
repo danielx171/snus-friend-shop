@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -42,8 +43,13 @@ import { tenant } from '@/config/tenant';
       { label: 'White Fox Complete Guide' },
     ]} />
 
-    <h1>White Fox Nicotine Pouches: Complete Brand Guide</h1>
-    <p><strong>Published:</strong> 28 March 2026 | <strong>Updated:</strong> 28 March 2026</p>
+    <BlogHero
+      category="Brand Spotlight"
+      title="White Fox Nicotine Pouches: Complete Brand Guide"
+      description="White Fox nicotine pouches reviewed — GN Tobacco's mint-focused powerhouse. From 12 mg to Black Edition 24 mg, every product ranked and explained."
+      date="28 March 2026"
+      readTime="7 min read"
+    />
 
     <section class="key-takeaways" style="background: #f0f9ff; border-left: 4px solid #0284c7; padding: 20px; margin: 30px 0; border-radius: 4px;">
         <h2 style="margin-top: 0;">Key Takeaways</h2>

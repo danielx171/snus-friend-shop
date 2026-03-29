@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -21,10 +22,13 @@ import { tenant } from '@/config/tenant';
       { label: 'FUMI Complete Guide' },
     ]} />
 
-    <header>
-        <h1>FUMI Nicotine Pouches: Complete Brand Guide</h1>
-        <p class="text-sm text-muted-foreground">Published: March 2026 | Reading time: 7 minutes</p>
-    </header>
+    <BlogHero
+      category="Brand Spotlight"
+      title="FUMI Nicotine Pouches: Complete Brand Guide"
+      description="FUMI nicotine pouches reviewed — Swedish-made with eccentric Nordic flavours. Salty Raspberry, Fiery Mango, Zingy Ginger and more. Plant-based and vegan."
+      date="March 2026"
+      readTime="7 min read"
+    />
 
     <aside class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
         <h2 style="margin-top: 0;">Key Takeaways</h2>

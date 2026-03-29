@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -41,10 +42,13 @@ import { tenant } from '@/config/tenant';
       { label: 'ICEBERG Complete Guide' },
     ]} />
 
-    <header>
-      <h1>ICEBERG Nicotine Pouches: Complete Brand Guide</h1>
-      <p class="text-sm text-muted-foreground">Published 28 March 2026 | Updated 28 March 2026</p>
-    </header>
+    <BlogHero
+      category="Brand Spotlight"
+      title="ICEBERG Nicotine Pouches: Complete Brand Guide"
+      description="ICEBERG nicotine pouches reviewed — strengths from 6 to 40 mg, 13 products, bold icy flavours. The Polish brand built for experienced users."
+      date="28 March 2026"
+      readTime="7 min read"
+    />
 
     <section class="key-takeaways">
       <h2>Key Takeaways</h2>

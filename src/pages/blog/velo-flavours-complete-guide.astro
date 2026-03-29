@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -42,17 +43,13 @@ import { tenant } from '@/config/tenant';
       { label: 'VELO Flavours Guide' },
     ]} />
 
-    <div class="key-takeaways">
-      <h3>Key Takeaways</h3>
-      <ul>
-        <li><strong>VELO dominates the EU market</strong> with 60+ flavour variants across six main categories: Mint, Berry, Fruit, Citrus, Licorice, and Zero/Nicotine-Free.</li>
-        <li><strong>Strength ranges from 0 mg to 17 mg</strong> — beginners should start with Zero or Mini (4-6 mg), experienced users explore 10–17 mg ranges.</li>
-        <li><strong>Freezing Peppermint and Tropical Mango</strong> are the most popular VELO lines, each with 4–5 strength variants to suit different preferences.</li>
-        <li><strong>The Shift Collection (2025)</strong> introduces "Hot" and flavour-forward blends — Dragonfruit, Peach, Grape — offering a premium alternative to classic ranges.</li>
-      </ul>
-    </div>
-
-    <h1>VELO Flavours: Complete 2026 Guide &amp; Rankings</h1>
+    <BlogHero
+      category="Flavour Guide"
+      title="VELO Flavours: Complete 2026 Guide & Rankings"
+      description="Every VELO flavour reviewed and ranked. From Freezing Peppermint to Tropical Mango, strengths 0-17 mg. Find your perfect VELO at SnusFriend."
+      date="28 March 2026"
+      readTime="10 min read"
+    />
 
     <p>VELO is <strong>British American Tobacco's (BAT) flagship nicotine pouch brand</strong>, distributed across Europe and beyond. Since its complete global rebrand in 2022, VELO has solidified its position as the market leader in most EU countries, with a reputation for consistency, taste innovation, and rigorous strength labelling in accordance with EU TPD 2014/40/EU. Whether you're new to nicotine pouches or a seasoned user looking to explore the full range, this guide covers every VELO flavour available at SnusFriend—along with strength levels, tasting notes, and which products suit different user profiles.</p>
 

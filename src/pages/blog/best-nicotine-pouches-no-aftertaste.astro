@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -19,10 +20,13 @@ import { tenant } from '@/config/tenant';
       { label: 'No Aftertaste Pouches' },
     ]} />
 
-    <header>
-        <h1>Best Nicotine Pouches with No Aftertaste (2026)</h1>
-        <p class="text-sm text-muted-foreground"><em>Published 28 March 2026 | Updated regularly with new product testing</em></p>
-    </header>
+    <BlogHero
+      category="Buying Guide"
+      title="Best Nicotine Pouches with No Aftertaste (2026)"
+      description="Discover the best nicotine pouches with no aftertaste in 2026. Top-rated clean-tasting brands, tips to avoid chemical flavours, and expert recommendations for smooth nicotine pouch use."
+      date="28 March 2026"
+      readTime="7 min read"
+    />
 
     <div class="key-takeaways" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-left: 4px solid #22c55e; border-radius: 6px; padding: 24px; margin: 32px 0;">
         <h3 style="color: #15803d; margin-top: 0;">Key Takeaways</h3>

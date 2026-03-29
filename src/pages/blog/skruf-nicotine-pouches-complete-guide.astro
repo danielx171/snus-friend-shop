@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -42,8 +43,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Skruf Complete Guide' },
     ]} />
 
-    <h1>Skruf Nicotine Pouches: Complete Brand Guide</h1>
-    <p><strong>Published:</strong> 28 March 2026 | <strong>Updated:</strong> 28 March 2026</p>
+    <BlogHero
+      category="Brand Spotlight"
+      title="Skruf Nicotine Pouches: Complete Brand Guide"
+      description="Skruf nicotine pouches reviewed — Sweden's craft brand by Imperial Brands. 15 products, strengths 6-11.5 mg, flavours from Purple Cassice to Fresh Freeze."
+      date="28 March 2026"
+      readTime="7 min read"
+    />
 
     <section class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
         <h2 style="margin-top: 0;">Key Takeaways</h2>

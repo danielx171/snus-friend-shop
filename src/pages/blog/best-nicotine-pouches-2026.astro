@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -42,19 +43,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Best Nicotine Pouches 2026' },
     ]} />
 
-    <header>
-      <div class="key-takeaways">
-        <h3>Key Takeaways</h3>
-        <ul>
-          <li><strong>Best Overall:</strong> ZYN Cool Mint — the world's #1 brand for consistency and availability</li>
-          <li><strong>Best for Beginners:</strong> VELO Simply Spearmint Mini 4 mg — mild, approachable small format</li>
-          <li><strong>Best Mint:</strong> ZYN Menthol Ice Slim S5 13.5 mg — intense cooling and high strength</li>
-          <li><strong>Best Strong:</strong> Siberia −80°C at 33 mg/g — legendary potency for experienced users only</li>
-        </ul>
-      </div>
-    </header>
-
-    <h1>Best Nicotine Pouches 2026: Expert Picks Across Every Category</h1>
+    <BlogHero
+      category="Ranking"
+      title="Best Nicotine Pouches 2026: Expert Picks Across Every Category"
+      description="Our expert picks for the best nicotine pouches of 2026. Winners in 7 categories — best overall, beginner, mint, strong, value, variety, and premium."
+      date="28 March 2026"
+      readTime="12 min read"
+    />
 
     <p>The nicotine pouch market has exploded. <strong>In 2023, Europe alone hit EUR 1.6 billion — and the category is growing at 28.8% annually</strong> (source: <a href="https://www.grandviewresearch.com/industry-analysis/nicotine-pouches-market-report">Grand View Research</a>). With more than 50 brands now competing for shelf space, choosing the right pouch has become harder, not easier.</p>
 

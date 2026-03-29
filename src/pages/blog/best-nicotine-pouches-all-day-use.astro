@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -21,8 +22,13 @@ import { tenant } from '@/config/tenant';
       { label: 'Best All-Day Pouches' },
     ]} />
 
-    <h1>Best Nicotine Pouches for All-Day Use (2026)</h1>
-    <p class="text-sm text-muted-foreground"><strong>Published:</strong> 28 March 2026 | <strong>Reading time:</strong> 8–10 minutes</p>
+    <BlogHero
+      category="Buying Guide"
+      title="Best Nicotine Pouches for All-Day Use (2026)"
+      description="Find the best nicotine pouches for all-day use. Expert recommendations for strength, format, and cost-per-day. Compare slim, mini, and budget options for office workers and drivers."
+      date="28 March 2026"
+      readTime="9 min read"
+    />
 
     <div class="key-takeaways" style="background: linear-gradient(135deg, #1a4d2e 0%, #2d7a3a 100%); color: white; padding: 25px; border-radius: 8px; margin: 30px 0;">
         <h2 style="margin-top: 0; color: white;">Key Takeaways</h2>
