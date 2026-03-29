@@ -443,7 +443,7 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
               Your personalised picks
             </h2>
             <p className="text-muted-foreground">
-              Based on your preferences, here are the products we think you'll love.
+              Based on your preferences, here are the cans we think you'll love.
             </p>
           </div>
 
@@ -514,7 +514,7 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
               href="/products"
               className="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-3 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-colors hover:bg-primary/90"
             >
-              Browse All Products
+              Browse All Cans
             </a>
           </div>
         </div>

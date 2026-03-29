@@ -89,8 +89,8 @@ const flavorLabels: Record<string, string> = {
 };
 
 const publishDate = '2026-03-29';
-const title = `Nicotine Pouch Brands Compared: ${totalBrands} Brands, ${totalProducts.toLocaleString()}+ Products (2026 Data)`;
-const description = `Compare ${totalBrands} nicotine pouch brands side-by-side — product range, nicotine strengths, flavours, and prices. Updated with real catalog data from ${totalProducts.toLocaleString()}+ products.`;
+const title = `Nicotine Pouch Brands Compared: ${totalBrands} Brands, ${totalProducts.toLocaleString()}+ Cans (2026 Data)`;
+const description = `Compare ${totalBrands} nicotine pouch brands side-by-side — product range, nicotine strengths, flavours, and prices. Updated with real catalog data from ${totalProducts.toLocaleString()}+ cans.`;
 
 const faqJsonLd = {
   '@context': 'https://schema.org',
@@ -101,7 +101,7 @@ const faqJsonLd = {
       name: 'Which nicotine pouch brand has the most flavours?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: `Based on our catalog of ${totalProducts.toLocaleString()}+ products, ${brands[0]?.name} leads with ${brands[0]?.flavors.size} flavour categories and ${brands[0]?.productCount} products.`,
+        text: `Based on our catalog of ${totalProducts.toLocaleString()}+ cans, ${brands[0]?.name} leads with ${brands[0]?.flavors.size} flavour categories and ${brands[0]?.productCount} cans.`,
       },
     },
     {
@@ -117,7 +117,7 @@ const faqJsonLd = {
       name: 'How many nicotine pouch brands are there in Europe?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: `SnusFriend stocks ${totalBrands} nicotine pouch brands with 3 or more products, from a total catalog of ${totalProducts.toLocaleString()}+ individual products. New brands are added regularly.`,
+        text: `SnusFriend stocks ${totalBrands} nicotine pouch brands with 3 or more cans, from a total catalog of ${totalProducts.toLocaleString()}+ individual cans. New brands are added regularly.`,
       },
     },
   ],
@@ -146,10 +146,10 @@ const faqJsonLd = {
           <span class="text-muted-foreground">&middot; Auto-updated from live catalog</span>
         </div>
         <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-          Nicotine Pouch Brands Compared: {totalBrands} Brands, {totalProducts.toLocaleString()}+ Products
+          Nicotine Pouch Brands Compared: {totalBrands} Brands, {totalProducts.toLocaleString()}+ Cans
         </h1>
         <p class="text-lg text-muted-foreground leading-relaxed max-w-3xl">
-          Every statistic on this page is computed directly from our product catalog of {totalProducts.toLocaleString()} nicotine pouches across {totalBrands} brands. No estimates — real data from real products we stock.
+          Every statistic on this page is computed directly from our catalog of {totalProducts.toLocaleString()} nicotine pouches across {totalBrands} brands. No estimates — real data from real cans we stock.
         </p>
       </header>
 
@@ -159,7 +159,7 @@ const faqJsonLd = {
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div class="rounded-xl border border-border bg-card p-5 text-center">
             <p class="text-3xl font-bold text-primary">{totalProducts.toLocaleString()}</p>
-            <p class="text-sm text-muted-foreground mt-1">Products in Catalog</p>
+            <p class="text-sm text-muted-foreground mt-1">Cans in Catalog</p>
           </div>
           <div class="rounded-xl border border-border bg-card p-5 text-center">
             <p class="text-3xl font-bold text-primary">{totalBrands}</p>
@@ -178,9 +178,9 @@ const faqJsonLd = {
 
       <!-- Strength Distribution -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold mb-4">Strength Distribution Across All Products</h2>
+        <h2 class="text-2xl font-semibold mb-4">Strength Distribution Across All Cans</h2>
         <p class="text-muted-foreground mb-6">
-          How {totalProducts.toLocaleString()} nicotine pouches break down by strength category. The majority of products fall in the normal-to-strong range (5–12 mg).
+          How {totalProducts.toLocaleString()} nicotine pouches break down by strength category. The majority of cans fall in the normal-to-strong range (5–12 mg).
         </p>
         <div class="space-y-3">
           {Object.entries(strengthLabels).map(([key, label]) => {
@@ -195,7 +195,7 @@ const faqJsonLd = {
                     style={`width: ${Math.max(pct, 2)}%`}
                   />
                   <span class="absolute inset-0 flex items-center px-3 text-xs font-semibold">
-                    {count} products ({pct}%)
+                    {count} cans ({pct}%)
                   </span>
                 </div>
               </div>
@@ -206,7 +206,7 @@ const faqJsonLd = {
 
       <!-- Flavour Distribution -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold mb-4">Flavour Categories by Product Count</h2>
+        <h2 class="text-2xl font-semibold mb-4">Flavour Categories by Can Count</h2>
         <p class="text-muted-foreground mb-6">
           Mint dominates the nicotine pouch market — but citrus, berry, and coffee flavours are growing fast.
         </p>
@@ -229,14 +229,14 @@ const faqJsonLd = {
       <section class="mb-12">
         <h2 class="text-2xl font-semibold mb-4">Brand-by-Brand Comparison</h2>
         <p class="text-muted-foreground mb-6">
-          Every brand with 3+ products, ranked by catalog size. Tap a brand name to see its full range.
+          Every brand with 3+ cans, ranked by catalog size. Tap a brand name to see its full range.
         </p>
         <div class="overflow-x-auto -mx-4 px-4">
           <table class="w-full text-sm border-collapse min-w-[700px]">
             <thead>
               <tr class="border-b border-border text-left">
                 <th class="py-3 pr-3 font-semibold">Brand</th>
-                <th class="py-3 px-3 font-semibold text-center">Products</th>
+                <th class="py-3 px-3 font-semibold text-center">Cans</th>
                 <th class="py-3 px-3 font-semibold text-center">Flavours</th>
                 <th class="py-3 px-3 font-semibold text-center">Strengths</th>
                 <th class="py-3 px-3 font-semibold">Nicotine Range</th>
@@ -286,7 +286,7 @@ const faqJsonLd = {
               <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
             </summary>
             <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
-              Based on our catalog of {totalProducts.toLocaleString()}+ products, {brands[0]?.name} leads with {brands[0]?.flavors.size} flavour categories and {brands[0]?.productCount} total products. {brands[1]?.name} follows with {brands[1]?.flavors.size} flavour categories.
+              Based on our catalog of {totalProducts.toLocaleString()}+ cans, {brands[0]?.name} leads with {brands[0]?.flavors.size} flavour categories and {brands[0]?.productCount} total cans. {brands[1]?.name} follows with {brands[1]?.flavors.size} flavour categories.
             </div>
           </details>
           <details class="group rounded-xl border border-border bg-card/60">

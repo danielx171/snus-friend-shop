@@ -60,8 +60,8 @@ for (const [key, meta] of Object.entries(flavorMeta)) {
 flavorStats.sort((a, b) => b.count - a.count);
 
 const publishDate = '2026-03-29';
-const title = `Nicotine Pouch Flavours: Complete Guide to ${flavorStats.length} Flavour Categories (${totalProducts.toLocaleString()} Products)`;
-const description = `Explore every nicotine pouch flavour — from mint and citrus to coffee and tropical. Real data from ${totalProducts.toLocaleString()} products showing which flavours dominate and why.`;
+const title = `Nicotine Pouch Flavours: Complete Guide to ${flavorStats.length} Flavour Categories (${totalProducts.toLocaleString()} Cans)`;
+const description = `Explore every nicotine pouch flavour — from mint and citrus to coffee and tropical. Real data from ${totalProducts.toLocaleString()} cans showing which flavours dominate and why.`;
 
 const faqJsonLd = {
   '@context': 'https://schema.org',
@@ -72,7 +72,7 @@ const faqJsonLd = {
       name: 'What is the most popular nicotine pouch flavour?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: `${flavorStats[0]?.label} is the most popular flavour with ${flavorStats[0]?.count} products (${flavorStats[0]?.pct}% of the market). ${flavorStats[1]?.label} comes second at ${flavorStats[1]?.pct}%, followed by ${flavorStats[2]?.label} at ${flavorStats[2]?.pct}%.`,
+        text: `${flavorStats[0]?.label} is the most popular flavour with ${flavorStats[0]?.count} cans (${flavorStats[0]?.pct}% of the market). ${flavorStats[1]?.label} comes second at ${flavorStats[1]?.pct}%, followed by ${flavorStats[2]?.label} at ${flavorStats[2]?.pct}%.`,
       },
     },
     {
@@ -80,7 +80,7 @@ const faqJsonLd = {
       name: 'What nicotine pouch flavour should a beginner try first?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Most beginners start with mint or citrus flavours because they are familiar, widely available, and mask the nicotine taste well. Mint is the safest choice — it accounts for the largest share of products and nearly every brand offers it in light strengths.',
+        text: 'Most beginners start with mint or citrus flavours because they are familiar, widely available, and mask the nicotine taste well. Mint is the safest choice — it accounts for the largest share of cans and nearly every brand offers it in light strengths.',
       },
     },
   ],
@@ -112,7 +112,7 @@ const faqJsonLd = {
           Nicotine Pouch Flavours: The Complete Guide
         </h1>
         <p class="text-lg text-muted-foreground leading-relaxed max-w-3xl">
-          Which flavours dominate the nicotine pouch market? How many brands offer coffee or tropical options? This guide breaks down every flavour category using real data from {totalProducts.toLocaleString()} products.
+          Which flavours dominate the nicotine pouch market? How many brands offer coffee or tropical options? This guide breaks down every flavour category using real data from {totalProducts.toLocaleString()} cans.
         </p>
       </header>
 
@@ -120,7 +120,7 @@ const faqJsonLd = {
       <section class="mb-12">
         <h2 class="text-2xl font-semibold mb-4">Flavour Market Share</h2>
         <p class="text-muted-foreground mb-6">
-          Percentage of the {totalProducts.toLocaleString()}-product catalog by flavour category. Mint variants (mint + cool mint + spearmint + wintergreen) dominate at {flavorStats.filter((f) => ['mint', 'coolMint', 'spearmint', 'wintergreen'].includes(f.key)).reduce((sum, f) => sum + f.pct, 0)}% combined.
+          Percentage of the {totalProducts.toLocaleString()}-can catalog by flavour category. Mint variants (mint + cool mint + spearmint + wintergreen) dominate at {flavorStats.filter((f) => ['mint', 'coolMint', 'spearmint', 'wintergreen'].includes(f.key)).reduce((sum, f) => sum + f.pct, 0)}% combined.
         </p>
         <div class="space-y-3">
           {flavorStats.map((f) => (
@@ -133,7 +133,7 @@ const faqJsonLd = {
                   style={`width: ${Math.max(f.pct, 3)}%`}
                 />
                 <span class="absolute inset-0 flex items-center px-3 text-xs font-semibold">
-                  {f.count} products ({f.pct}%)
+                  {f.count} cans ({f.pct}%)
                 </span>
               </div>
             </a>
@@ -150,7 +150,7 @@ const faqJsonLd = {
               <div class="flex flex-wrap items-baseline gap-3 mb-3">
                 <span class="text-2xl">{f.emoji}</span>
                 <h3 class="text-xl font-semibold">{f.label}</h3>
-                <span class="text-sm font-mono text-primary">{f.count} products</span>
+                <span class="text-sm font-mono text-primary">{f.count} cans</span>
                 <span class="text-xs text-muted-foreground">{f.brandCount} brands · {f.strengthRange}</span>
               </div>
               <p class="text-sm text-muted-foreground leading-relaxed mb-3">{f.description}</p>

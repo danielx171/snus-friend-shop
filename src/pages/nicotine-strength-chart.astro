@@ -46,8 +46,8 @@ const cigaretteComparison = [
 
 const totalProducts = allProducts.length;
 const publishDate = '2026-03-29';
-const title = `Nicotine Pouch Strength Chart: ${totalProducts.toLocaleString()} Products Mapped by mg (2026)`;
-const description = `Visual strength chart mapping ${totalProducts.toLocaleString()} nicotine pouches from 1 mg to 50+ mg. Find the right strength for your experience level with real product data.`;
+const title = `Nicotine Pouch Strength Chart: ${totalProducts.toLocaleString()} Cans Mapped by mg (2026)`;
+const description = `Visual strength chart mapping ${totalProducts.toLocaleString()} nicotine pouches from 1 mg to 50+ mg. Find the right strength for your experience level with real catalog data.`;
 
 const faqJsonLd = {
   '@context': 'https://schema.org',
@@ -74,7 +74,7 @@ const faqJsonLd = {
       name: 'What is the strongest nicotine pouch available?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: `The strongest pouches in our ${totalProducts.toLocaleString()}-product catalog reach up to ${Math.max(...sortedBuckets.map(([mg]) => mg))} mg per pouch. These super-strong products are made for experienced users and are not recommended for beginners.`,
+        text: `The strongest pouches in our ${totalProducts.toLocaleString()}-can catalog reach up to ${Math.max(...sortedBuckets.map(([mg]) => mg))} mg per pouch. These super-strong cans are made for experienced users and are not recommended for beginners.`,
       },
     },
   ],
@@ -103,7 +103,7 @@ const faqJsonLd = {
           <span class="text-muted-foreground">&middot; Auto-updated from live catalog</span>
         </div>
         <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-          Nicotine Pouch Strength Chart: {totalProducts.toLocaleString()} Products Mapped by mg
+          Nicotine Pouch Strength Chart: {totalProducts.toLocaleString()} Cans Mapped by mg
         </h1>
         <p class="text-lg text-muted-foreground leading-relaxed max-w-3xl">
           Every nicotine pouch we stock, organized by strength. This chart is generated from real product data — not estimates. Use it to find the right intensity for your experience level.
@@ -112,16 +112,16 @@ const faqJsonLd = {
 
       <!-- Visual Distribution Chart -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold mb-4">Product Count by Nicotine Content (mg/pouch)</h2>
+        <h2 class="text-2xl font-semibold mb-4">Can Count by Nicotine Content (mg/pouch)</h2>
         <p class="text-muted-foreground mb-6">
-          Each bar shows how many products are available at that exact nicotine level. The market clusters around 6–12 mg, reflecting mainstream demand.
+          Each bar shows how many cans are available at that exact nicotine level. The market clusters around 6–12 mg, reflecting mainstream demand.
         </p>
         <div class="flex items-end gap-1 h-48 border-b border-border pb-2">
           {sortedBuckets.map(([mg, count]) => {
             const heightPct = Math.max((count / maxBucketCount) * 100, 4);
             const isPopular = count > maxBucketCount * 0.5;
             return (
-              <div class="flex-1 flex flex-col items-center gap-1 min-w-0" title={`${mg} mg: ${count} products`}>
+              <div class="flex-1 flex flex-col items-center gap-1 min-w-0" title={`${mg} mg: ${count} cans`}>
                 <span class={`text-[10px] font-mono ${isPopular ? 'text-primary font-bold' : 'text-muted-foreground'}`}>
                   {count}
                 </span>
@@ -152,7 +152,7 @@ const faqJsonLd = {
               <div class="flex flex-wrap items-baseline gap-3 mb-2">
                 <h3 class="text-lg font-semibold">{tier.label}</h3>
                 <span class="text-sm font-mono text-primary">{tier.range}</span>
-                <span class="text-xs text-muted-foreground">{tier.count} products ({tier.pct}%)</span>
+                <span class="text-xs text-muted-foreground">{tier.count} cans ({tier.pct}%)</span>
               </div>
               <p class="text-sm text-muted-foreground leading-relaxed mb-3">{tier.description}</p>
               {tier.brandCount > 0 && (
