@@ -88,34 +88,63 @@ const collectionJsonLd = {
     <h2 class="sr-only">Browse All Brands</h2>
     <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:gap-4 lg:grid-cols-6 lg:gap-5">
       {brands.map((brand) => {
-        const initials = brand.data.name
-          .split(/[\s-]+/)
-          .slice(0, 2)
-          .map((w: string) => w[0]?.toUpperCase() ?? '')
-          .join('');
         const count = productCountByBrand.get(brand.id) ?? 0;
         const bColor = brandColors[brand.id] ?? defaultBrandColor;
+
+        // Tin lid label: full brand name if it fits, else abbreviation
+        const tinAbbreviations: Record<string, string> = {
+          'white-fox': 'WF',
+          'nordic-spirit': 'NS',
+          'chainpop': 'CHAIN',
+        };
+        const tinLabel = tinAbbreviations[brand.id] ?? brand.data.name.toUpperCase();
+
+        // Auto-size: shorter names get larger text
+        const len = tinLabel.length;
+        const tinTextClass = len <= 2 ? 'text-[17px]'
+          : len <= 3 ? 'text-[15px]'
+          : len <= 4 ? 'text-[13px]'
+          : len <= 5 ? 'text-[11px]'
+          : len <= 6 ? 'text-[10px]'
+          : 'text-[8px]';
+
+        // Light background brands need dark text
+        const lightBgBrands = ['77-pouches'];
+        const textColor = lightBgBrands.includes(brand.id) ? 'rgba(0,0,0,0.7)' : 'white';
+
+        // Darker shade for gradient
+        const darkerColor = bColor.replace(/^#/, '');
+        const r = Math.max(0, parseInt(darkerColor.substring(0, 2), 16) - 40);
+        const g = Math.max(0, parseInt(darkerColor.substring(2, 4), 16) - 40);
+        const b = Math.max(0, parseInt(darkerColor.substring(4, 6), 16) - 40);
+        const darker = `rgb(${r},${g},${b})`;
+
         return (
           <a
             href={`/brands/${brand.id}`}
             class="group flex flex-col items-center rounded-xl border border-border bg-card/60 p-4 backdrop-blur-sm transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
           >
-            {/* Brand logo or initials */}
+            {/* Tin lid brand logo */}
             {brand.data.logoUrl ? (
-              <div class="mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-muted/20">
+              <div class="mb-3 flex h-[68px] w-[68px] items-center justify-center overflow-hidden rounded-full bg-muted/20">
                 <Image
                   src={brand.data.logoUrl}
                   alt={`${brand.data.name} logo`}
-                  width={64}
-                  height={64}
+                  width={68}
+                  height={68}
                   loading="lazy"
                   format="webp"
                   class="h-full w-full object-contain"
                 />
               </div>
             ) : (
-              <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full" style={`background: ${bColor}18;`}>
-                <span class="text-lg font-bold" style={`color: ${bColor};`}>{initials}</span>
+              <div
+                class="tin-lid group-hover:tin-lid-hover mb-3"
+                style={`background: linear-gradient(135deg, ${bColor}, ${darker});`}
+              >
+                <span class={`tin-lid-label ${tinTextClass}`} style={`color: ${textColor};`}>
+                  {tinLabel}
+                </span>
               </div>
             )}
 
@@ -126,12 +155,62 @@ const collectionJsonLd = {
 
             {/* Product count */}
             <p class="text-center text-xs text-muted-foreground">
-              {count} {count === 1 ? 'product' : 'products'}
+              {count} {count === 1 ? 'can' : 'cans'}
             </p>
           </a>
         );
       })}
     </div>
+
+    <style>
+      .tin-lid {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+      /* Outer rim */
+      .tin-lid::before {
+        content: '';
+        position: absolute;
+        inset: 2px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        pointer-events: none;
+      }
+      /* Inner grip ring + lid shine */
+      .tin-lid::after {
+        content: '';
+        position: absolute;
+        inset: 8px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        pointer-events: none;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.15) 0%,
+          transparent 40%,
+          transparent 100%
+        );
+      }
+      .tin-lid-label {
+        position: relative;
+        z-index: 1;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+        line-height: 1;
+      }
+      .group:hover .tin-lid {
+        transform: rotate(-3deg);
+      }
+    </style>
 
     {/* Empty state */}
     {brands.length === 0 && (
