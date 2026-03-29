@@ -1,0 +1,172 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import { tenant } from '@/config/tenant';
+---
+
+<Shop
+  title="Nicotine Pouch Ingredients Explained: What's Actually Inside?"
+  description="What's inside a nicotine pouch? Complete breakdown of every ingredient — nicotine source, fillers, pH adjusters, flavourings, and sweeteners. No tobacco, no smoke."
+  canonical="/blog/nicotine-pouch-ingredients-explained"
+  ogType="article"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"Nicotine Pouch Ingredients Explained: What's Actually Inside?","description":"What's inside a nicotine pouch? Complete breakdown of every ingredient — nicotine source, fillers, pH adjusters, flavourings, and sweeteners.","datePublished":"2026-03-30","dateModified":"2026-03-30","author":{"@type":"Organization","name":"SnusFriends","url":"https://snusfriends.com"},"publisher":{"@type":"Organization","name":"SnusFriends","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}}})} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What ingredients are in nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Nicotine pouches typically contain five core ingredients: nicotine (synthetic or tobacco-derived, purified), plant-based fillers (cellulose, pine or eucalyptus fibre), pH adjusters (sodium carbonate or sodium bicarbonate), flavourings (food-grade natural and artificial), and humectants (propylene glycol or glycerol to maintain moisture). Some brands add sweeteners like acesulfame K or xylitol."}},{"@type":"Question","name":"Is the nicotine in pouches synthetic or from tobacco?","acceptedAnswer":{"@type":"Answer","text":"Both types exist. Some brands use tobacco-derived nicotine that has been extracted and purified (removing all tobacco matter). Others use synthetic nicotine (nicotine salt produced in a lab without any tobacco plant involvement). Both deliver identical pharmacological effects. The label or brand website usually specifies which type is used."}},{"@type":"Question","name":"Are nicotine pouch ingredients food-safe?","acceptedAnswer":{"@type":"Answer","text":"Most ingredients in nicotine pouches are food-grade or pharmaceutical-grade. Cellulose is used in thousands of food products, sodium carbonate is common in baking, and the flavourings are typically the same compounds used in food and beverage manufacturing. Nicotine itself is the only pharmacologically active substance and is not food-safe in isolation. The pouch material is usually non-woven food-grade fleece."}},{"@type":"Question","name":"Do nicotine pouches contain tobacco?","acceptedAnswer":{"@type":"Answer","text":"No. Nicotine pouches are tobacco-free by definition. While the nicotine may be originally derived from the tobacco plant, all tobacco leaf matter, stems, and residue are removed during extraction and purification. The final product contains only purified nicotine in a cellulose-based filler — no tobacco is present in the pouch."}},{"@type":"Question","name":"What gives nicotine pouches their flavour?","acceptedAnswer":{"@type":"Answer","text":"Nicotine pouches use food-grade flavouring compounds — the same type used in sweets, beverages, and chewing gum. Mint flavours use menthol and related cooling agents (often WS-3 or WS-23 for intense cold sensation). Fruit flavours use natural and artificial fruit esters. Some brands use essential oils. The specific flavouring blend is usually proprietary."}},{"@type":"Question","name":"Why do nicotine pouches tingle?","acceptedAnswer":{"@type":"Answer","text":"The tingling sensation comes from pH adjusters (sodium carbonate or sodium bicarbonate) that create an alkaline environment in the mouth. This alkalinity converts nicotine into its freebase form, which passes through the oral mucosa more efficiently. The higher the pH adjuster concentration (typically in stronger pouches), the more pronounced the tingle. This is the same chemical principle used in nicotine gum."}}]})} />
+
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <Breadcrumb items={[
+      { label: 'Blog', href: '/blog' },
+      { label: 'Nicotine Pouch Ingredients Explained' },
+    ]} />
+
+    <BlogHero
+      category="Guide"
+      title="Nicotine Pouch Ingredients Explained: What's Actually Inside?"
+      description="A complete breakdown of every ingredient in a nicotine pouch — from the nicotine source to the fillers, pH adjusters, flavourings, and sweeteners."
+      date="30 March 2026"
+      readTime="10 min read"
+    />
+
+    <div class="key-takeaways" style="background: linear-gradient(135deg, #0d5d32 0%, #0a4625 100%); border-radius: 8px; padding: 24px; margin: 40px 0; color: white;">
+      <h2 style="margin-top: 0; color: white;">Key Takeaways</h2>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 10px 0;"><strong>Nicotine pouches contain no tobacco leaf</strong> — only purified nicotine (synthetic or tobacco-derived) in a plant fibre base.</li>
+        <li style="padding: 10px 0;"><strong>Five core ingredients</strong>: nicotine, cellulose filler, pH adjuster, flavouring, and humectant. Most are food-grade or pharmaceutical-grade.</li>
+        <li style="padding: 10px 0;"><strong>The pH adjuster is what creates the tingle</strong> — it converts nicotine to freebase form for efficient absorption through the gum.</li>
+        <li style="padding: 10px 0;"><strong>Nicotine strengths range from 1mg to 50mg+ per pouch</strong>, measured in mg/pouch. Brand labelling varies, so always check the per-pouch figure.</li>
+        <li style="padding: 10px 0;"><strong>Flavourings are the same food-grade compounds</strong> used in gum, sweets, and beverages — menthol, fruit esters, and cooling agents.</li>
+        <li style="padding: 10px 0;"><strong>Pouch material is non-woven plant fibre</strong> (cellulose fleece), designed to be porous enough for nicotine release but strong enough to hold its shape.</li>
+      </ul>
+    </div>
+
+    <h2>Why Ingredients Matter</h2>
+    <p>If you are going to put something between your gum and lip for 30 minutes at a time, multiple times a day, you should know exactly what is in it. Nicotine pouches are a relatively simple product — far simpler than a cigarette, which generates thousands of chemical compounds during combustion. But "simple" does not mean you should not understand what each ingredient does and why it is there.</p>
+    <p>This guide breaks down every component of a typical nicotine pouch, explains the science behind how they work together, and highlights the differences between brands.</p>
+
+    <h2>Anatomy of a Nicotine Pouch</h2>
+    <p>A nicotine pouch is a small, pre-portioned sachet containing a moist or semi-dry powder or granulate. The pouch itself is made from non-woven fleece (plant-based cellulose fibre), and the filling inside contains the active and inactive ingredients. Here is what goes into each component:</p>
+
+    <h3>1. Nicotine — The Active Ingredient</h3>
+    <p>Nicotine is the reason the product exists. It is a naturally occurring alkaloid found in the tobacco plant (<em>Nicotiana tabacum</em>), but it can also be synthesised in a laboratory.</p>
+
+    <h4>Tobacco-Derived Nicotine</h4>
+    <p>Most major brands (ZYN, VELO, Skruf, Loop) use tobacco-derived nicotine. The nicotine is extracted from tobacco leaves using a solvent process, then purified to pharmaceutical grade. All tobacco plant matter — leaves, stems, TSNAs — is removed during purification. The resulting nicotine is chemically identical to synthetic nicotine.</p>
+
+    <h4>Synthetic Nicotine (Tobacco-Free Nicotine / TFN)</h4>
+    <p>Some brands use nicotine produced entirely in a laboratory without any tobacco plant involvement. This is marketed as "tobacco-free nicotine" or TFN. The pharmacological effect is identical. Synthetic nicotine was originally more expensive to produce but costs have fallen as manufacturing scales up. Brands using synthetic nicotine sometimes highlight this as a differentiator.</p>
+
+    <h4>Nicotine Salt vs. Freebase</h4>
+    <p>Nicotine in pouches is typically stored in its salt form (bound to an organic acid) for stability. The pH adjuster in the pouch converts it to freebase form upon moistening in the mouth, which is the form that permeates the oral mucosa most efficiently. This is why the pH adjuster is such a critical ingredient — without it, absorption would be dramatically slower.</p>
+
+    <div style="overflow-x: auto; margin: 24px 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <thead>
+          <tr style="background: hsl(var(--muted)); text-align: left;">
+            <th style="padding: 12px; border: 1px solid hsl(var(--border));">Strength Category</th>
+            <th style="padding: 12px; border: 1px solid hsl(var(--border));">mg/pouch</th>
+            <th style="padding: 12px; border: 1px solid hsl(var(--border));">Typical User</th>
+            <th style="padding: 12px; border: 1px solid hsl(var(--border));">Example Products</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding: 10px; border: 1px solid hsl(var(--border));">Light</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">1–4 mg</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">Beginners, light smokers</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">ZYN Mini (1.5mg), HELWIT (3.5mg)</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid hsl(var(--border));">Normal</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">4–6 mg</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">Regular daily users</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">ZYN (6mg), VELO (6mg), Skruf (4mg)</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid hsl(var(--border));">Strong</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">6–12 mg</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">Experienced users, ex-smokers</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">VELO Strong (10mg), Loop Strong (9.4mg)</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid hsl(var(--border));">Extra Strong</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">12–20 mg</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">High-tolerance users</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">White Fox (16mg), KUMA (13.75mg)</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid hsl(var(--border));">Super Strong</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">20–50+ mg</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">Very high tolerance only</td><td style="padding: 10px; border: 1px solid hsl(var(--border));">Siberia (49.5mg), CUBA Black (43mg)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2. Plant-Based Filler — The Body of the Pouch</h3>
+    <p>The filler gives the pouch its physical substance and acts as a carrier for the other ingredients. The most common fillers are:</p>
+    <ul>
+      <li><strong>Microcrystalline cellulose (MCC)</strong> — purified wood pulp processed into fine granules. This is the same material used as a filler in pharmaceutical tablets and as an anti-caking agent in food products (E460). It is biologically inert.</li>
+      <li><strong>Hydroxypropyl cellulose (HPC)</strong> — a modified cellulose that absorbs moisture well, used in some brands to improve mouthfeel and nicotine release rate.</li>
+      <li><strong>Pine or eucalyptus fibre</strong> — natural plant fibres that provide a traditional snus-like texture. Brands like Lundgrens use these for an authentic Scandinavian feel.</li>
+    </ul>
+    <p>The filler is typically 60–70% of the pouch's total weight. It absorbs the liquid ingredients (nicotine solution, flavouring, humectant) and releases them slowly when moistened by saliva.</p>
+
+    <h3>3. pH Adjuster — The Absorption Enabler</h3>
+    <p>This is the ingredient that makes nicotine pouches actually work. Without a pH adjuster, very little nicotine would cross the oral mucosa.</p>
+    <p><strong>Sodium carbonate (Na₂CO₃)</strong> and <strong>sodium bicarbonate (NaHCO₃)</strong> are the two most common pH adjusters. They raise the pH inside the pouch to approximately 8–10, converting nicotine from its protonated salt form to its neutral freebase form. Freebase nicotine is lipophilic (fat-soluble) and passes easily through the lipid-rich cell membranes of the oral mucosa.</p>
+    <p>This is the same chemical principle used in nicotine gum (which uses sodium carbonate as a "buffering agent") and the same reason that crack cocaine is more rapidly absorbed than cocaine hydrochloride — freebase forms of alkaloids cross membranes more efficiently than their salt forms.</p>
+    <p><strong>The pH adjuster is also what causes the characteristic tingle</strong> you feel when placing a pouch. Higher-strength pouches use more pH adjuster, which is why they tingle more. Some users enjoy this sensation; others find it irritating. If the tingle is uncomfortable, try a lower strength or a brand known for a gentler formulation (HELWIT and Kelly White are notably mild).</p>
+
+    <h3>4. Flavourings — The Taste Experience</h3>
+    <p>Nicotine pouches use the same food-grade flavouring compounds found in chewing gum, sweets, soft drinks, and baked goods. The specific blend is usually proprietary, but the main flavouring categories are:</p>
+    <ul>
+      <li><strong>Menthol and mint oils</strong> — for <a href="/products/flavor/mint">mint-flavoured pouches</a> (the most popular category). Menthol provides the cooling sensation. Some brands add synthetic cooling agents like WS-3 and WS-23 for extra intensity without the sharp menthol taste.</li>
+      <li><strong>Fruit esters</strong> — for <a href="/products/flavor/berry">berry</a>, <a href="/products/flavor/citrus">citrus</a>, and <a href="/products/flavor/tropical">tropical flavours</a>. These are the same volatile compounds that give fruits their aroma — ethyl butyrate for pineapple, isoamyl acetate for banana, citral for lemon.</li>
+      <li><strong>Essential oils</strong> — spearmint oil, peppermint oil, eucalyptus oil, and bergamot oil appear in premium formulations.</li>
+      <li><strong>Flavour enhancers</strong> — some brands use vanillin, ethyl maltol (cotton candy note), or other enhancers to round out the flavour profile.</li>
+    </ul>
+
+    <h3>5. Humectant — The Moisture Keeper</h3>
+    <p>Humectants prevent the pouch from drying out in the can and during use. The two main humectants used are:</p>
+    <ul>
+      <li><strong>Propylene glycol (PG)</strong> — the same humectant used in food products, cosmetics, and pharmaceutical preparations. It is "generally recognised as safe" (GRAS) by the FDA for food use. PG also acts as a flavour carrier, helping distribute the flavouring evenly through the filler.</li>
+      <li><strong>Glycerol (vegetable glycerine / VG)</strong> — derived from vegetable oils. Also GRAS and widely used in food and personal care products. Glycerol adds a slight sweetness to the pouch.</li>
+    </ul>
+    <p>The humectant makes up roughly 5–15% of the pouch filling by weight. Without it, the pouch would feel papery and dry, and the flavouring would not distribute properly.</p>
+
+    <h3>6. Sweeteners (Optional)</h3>
+    <p>Not all brands use sweeteners, but many do to balance the bitterness of nicotine and the alkalinity of the pH adjuster. Common sweeteners include:</p>
+    <ul>
+      <li><strong>Acesulfame potassium (Ace-K)</strong> — a zero-calorie artificial sweetener, approximately 200× sweeter than sugar. Very common in nicotine pouches.</li>
+      <li><strong>Sucralose</strong> — another zero-calorie sweetener found in some brands.</li>
+      <li><strong>Xylitol</strong> — a sugar alcohol with dental benefits (reduces cavity-causing bacteria). Used by brands marketing a more natural formulation.</li>
+    </ul>
+
+    <h3>7. The Pouch Material</h3>
+    <p>The pouch itself is made from <strong>non-woven cellulose fleece</strong> — essentially a tea-bag-like material made from plant fibres. It is food-grade, porous enough to allow saliva in and nicotine out, but strong enough to hold its shape during a 30–45 minute session. The pouch material is not designed to dissolve or be consumed. After use, it should be disposed of in the waste compartment in the can lid or in a bin.</p>
+
+    <h2>How These Ingredients Work Together</h2>
+    <p>When you place a nicotine pouch under your lip, here is what happens at the molecular level:</p>
+    <ol>
+      <li><strong>Saliva moistens the pouch</strong>, dissolving the outer layers of the filling and beginning to release ingredients.</li>
+      <li><strong>The pH adjuster activates</strong>, raising the local pH to 8–10. This converts nicotine from its salt form to freebase form. You feel this as the characteristic tingle.</li>
+      <li><strong>Freebase nicotine permeates the oral mucosa</strong>, passing through the gum tissue into the capillary network below, and enters the bloodstream. First effects are felt within 5–15 minutes.</li>
+      <li><strong>Flavourings release simultaneously</strong>, carried by the humectant and saliva. The flavour experience typically peaks in the first 10 minutes and gradually fades.</li>
+      <li><strong>Over 20–40 minutes</strong>, the pouch steadily releases its remaining nicotine. Most of the available nicotine is delivered within this window.</li>
+    </ol>
+
+    <h2>What's NOT in a Nicotine Pouch</h2>
+    <p>It is worth explicitly listing what nicotine pouches do <strong>not</strong> contain, because the absence of these substances is the primary safety argument for pouches over cigarettes and traditional smokeless tobacco:</p>
+    <ul>
+      <li><strong>No tobacco leaf</strong> — no plant matter from the tobacco plant.</li>
+      <li><strong>No TSNAs</strong> — tobacco-specific nitrosamines are the primary carcinogens in smokeless tobacco. Absent or at trace levels in pouches.</li>
+      <li><strong>No tar</strong> — tar is a product of combustion. No combustion means no tar.</li>
+      <li><strong>No carbon monoxide</strong> — also a combustion product.</li>
+      <li><strong>No heavy metals</strong> — tobacco leaves accumulate cadmium and lead from soil. No tobacco means no heavy metal accumulation.</li>
+      <li><strong>No polycyclic aromatic hydrocarbons (PAHs)</strong> — formed during tobacco curing and combustion.</li>
+    </ul>
+
+    <h2>Brand Differences: Not All Pouches Are Made Equal</h2>
+    <p>While the core ingredients are similar across brands, there are meaningful differences in formulation philosophy:</p>
+    <ul>
+      <li><strong>ZYN</strong> (Philip Morris / Swedish Match) — uses tobacco-derived nicotine, microcrystalline cellulose filler, sodium carbonate pH adjuster. Known for consistent, pharmaceutical-grade quality control.</li>
+      <li><strong>VELO</strong> (BAT) — tobacco-derived nicotine, cellulose filler, with a range of proprietary flavour technologies including cooling agents for their mint lines.</li>
+      <li><strong>HELWIT</strong> — positions itself as a "cleaner" option with simpler ingredient lists and lower pH adjuster levels, resulting in less gum irritation.</li>
+      <li><strong>Loop</strong> — uses an "Instant Rush" technology with faster nicotine release and bold flavour combinations.</li>
+      <li><strong>KLAR</strong> — uses bioceramic technology for more efficient nicotine delivery, meaning lower nicotine content can achieve the same perceived strength.</li>
+    </ul>
+
+    <div style="background: hsl(var(--muted)); border-radius: 8px; padding: 24px; margin: 40px 0;">
+      <h2 style="margin-top: 0;">Explore by Ingredient Priority</h2>
+      <p>Looking for specific characteristics? Browse our collection by what matters to you:</p>
+      <ul>
+        <li>Prefer gentle formulations? Start with <a href="/products/strength/light">light strength pouches (1–4mg)</a></li>
+        <li>Want bold flavour? Explore our <a href="/products/flavor/mint">mint</a> or <a href="/products/flavor/tropical">tropical</a> collections</li>
+        <li>Care about natural ingredients? Try HELWIT, Kelly White, or Lundgrens</li>
+        <li>New to pouches? Visit our <a href="/beginners">beginner's guide</a> for personalised recommendations</li>
+      </ul>
+      <p style="margin-bottom: 0;">All <a href="/nicotine-pouches">700+ products</a> ship free across the EU on orders over €29.</p>
+    </div>
+
+    <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px;"><em>Disclaimer: This article is for informational purposes only. Ingredient compositions may vary between brands and product lines. Always check the product packaging for the specific ingredient list. Nicotine is addictive. Products are for adult use only.</em></p>
+  </article>
+</Shop>

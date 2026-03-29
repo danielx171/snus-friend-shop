@@ -48,6 +48,10 @@ const articles = [
   { title: 'Best Slim Nicotine Pouches', slug: 'best-slim-nicotine-pouches', excerpt: 'The most comfortable and discreet pouches ranked.', date: '2026-03-28' },
   { title: 'Best Nicotine Pouches for Women in 2026', slug: 'best-nicotine-pouches-for-women', excerpt: 'Data-driven picks based on discretion, strength, and flavour.', date: '2026-03-28' },
   { title: 'Nicotine Pouch Subscription Guide 2026', slug: 'nicotine-pouch-subscription-guide', excerpt: 'Compare subscriptions, calculate savings, and decide if auto-delivery is worth it.', date: '2026-03-28' },
+  // New articles — March 30, 2026 (SEO gap targets)
+  { title: 'Are Nicotine Pouches Safe? Evidence-Based Health Guide', slug: 'are-nicotine-pouches-safe', excerpt: 'Clinical evidence on nicotine pouch safety — comparison with cigarettes, snus, and vaping.', date: '2026-03-30' },
+  { title: 'Nicotine Pouch Ingredients Explained', slug: 'nicotine-pouch-ingredients-explained', excerpt: 'Complete breakdown of every ingredient — nicotine source, fillers, pH adjusters, flavourings, and sweeteners.', date: '2026-03-30' },
+  { title: 'How to Spot Fake Nicotine Pouches', slug: 'how-to-spot-fake-nicotine-pouches', excerpt: 'Authentication guide — packaging, batch codes, holograms, and authorised retailers.', date: '2026-03-30' },
 ];
 
 export async function GET(context: APIContext) {

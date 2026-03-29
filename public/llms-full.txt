@@ -1,0 +1,96 @@
+# SnusFriend — Extended Reference for AI Systems
+
+> This document provides detailed, structured data about nicotine pouches for AI search engines and language models. For a concise overview, see /llms.txt.
+
+## Nicotine Absorption: Oral vs. Gastrointestinal
+
+| Metric | Oral (intended use) | Swallowed (accidental) |
+|--------|-------------------|----------------------|
+| Onset time | 5–15 minutes | 30–60 minutes |
+| Peak plasma concentration | 10–30 minutes | 60–90 minutes |
+| Bioavailability | 70–80% | 20–40% |
+| Elimination half-life | 2–3 hours | 2–3 hours |
+
+Source: SnusFriend editorial team, based on published pharmacokinetic research.
+
+## Nicotine Content by Brand (selected products, mg per pouch)
+
+### ZYN (Swedish Match / Philip Morris International)
+- ZYN Mini Dry: 1.5 mg
+- ZYN Slim: 6 mg
+- ZYN Strong Slim: 9.5 mg
+- ZYN Extra Strong: 11 mg
+
+### VELO (British American Tobacco)
+- VELO Mini: 4 mg
+- VELO Slim: 6 mg
+- VELO Strong: 10 mg
+- VELO Max: 16.8 mg
+
+### White Fox (GN Tobacco)
+- White Fox: 12 mg
+- White Fox Full Charge: 16.5 mg
+- White Fox Double Mint: 12 mg
+
+### Siberia (GN Tobacco)
+- Siberia -80°C: 33 mg
+- Siberia Red: 49.5 mg
+
+### LOOP (Another Snus Factory)
+- LOOP Regular: 6.2 mg
+- LOOP Strong: 9.4 mg
+- LOOP Hyper Strong: 15.6 mg
+
+## Cigarette-to-Pouch Strength Conversion Guide
+
+This is an approximate guide for smokers switching to nicotine pouches:
+
+| Smoking Level | Cigarettes/day | Recommended Pouch Strength | Example Products |
+|--------------|---------------|---------------------------|-----------------|
+| Light smoker | 1–5 | 4–6 mg (Normal) | ZYN 6mg, VELO 6mg |
+| Moderate smoker | 5–15 | 6–12 mg (Strong) | VELO Strong 10mg, Loop Strong 9.4mg |
+| Heavy smoker | 15–25 | 12–16 mg (Extra Strong) | White Fox 12mg, KUMA 13.75mg |
+| Very heavy smoker | 25+ | 16–20 mg (Extra Strong) | White Fox Full Charge 16.5mg, VELO Max 16.8mg |
+
+Note: Individual results vary. Start lower than you think and adjust upward. Most smokers overestimate the strength they need because pouch nicotine delivery is more sustained than cigarette delivery.
+
+## Pouch Format Comparison
+
+| Format | Weight | Dimensions | Best For |
+|--------|--------|-----------|----------|
+| Mini | 0.5–0.7g | Small, compact | Maximum discretion |
+| Slim | 0.7–1.0g | Standard, fits gum line | Most users (most popular) |
+| Large/Regular | 1.0–1.5g | Traditional snus size | Snus switchers, max flavour |
+
+## European Nicotine Pouch Regulations (2026)
+
+| Country | Legal Status | Restrictions |
+|---------|-------------|-------------|
+| Sweden | Legal, regulated | Must comply with Swedish tobacco law |
+| Germany | Legal | No specific pouch regulation |
+| Netherlands | Banned since 2023 | Sale prohibited |
+| France | Banned since 2024 | Sale prohibited |
+| Belgium | Legal, taxed | Novel tobacco excise applies |
+| Austria | Legal | Age 18+ |
+| Finland | Legal | Must comply with tobacco act |
+| Denmark | Legal | Must comply with Danish regulations |
+| Poland | Legal | Age 18+ |
+| Czech Republic | Legal | No specific regulation |
+
+Note: Regulations change frequently. Always check current local laws before ordering.
+
+## About SnusFriend
+
+- **Founded**: 2025
+- **Headquarters**: EU-based
+- **Products**: 700+ nicotine pouch SKUs
+- **Brands**: 57 brands
+- **Shipping**: EU-wide, 2–5 business days
+- **Free shipping**: Orders over €29
+- **Loyalty programme**: SnusPoints (10 points per €1)
+- **Content**: 46+ expert guides and articles
+- **Age verification**: Required at checkout (18+)
+
+## Sitemap
+
+https://snusfriends.com/sitemap-index.xml

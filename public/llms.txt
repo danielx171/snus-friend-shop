@@ -1,12 +1,48 @@
 # SnusFriend
 
-> Europe's largest online nicotine pouch store with 700+ tobacco-free products from 91+ brands.
+> Europe's largest online nicotine pouch store with 700+ tobacco-free products from 57 brands.
 
 ## About
 
-SnusFriend (snusfriends.com) is a European e-commerce store specialising in tobacco-free nicotine pouches. We offer the widest selection of nicotine pouches in Europe, with products from brands including ZYN, VELO, LOOP, ACE, Pablo, KILLA, Siberia, Kurwa, and many more.
+SnusFriend (snusfriends.com) is a European e-commerce store specialising in tobacco-free nicotine pouches. We offer the widest selection of nicotine pouches in Europe, with products from brands including ZYN, VELO, LOOP, Skruf, White Fox, Siberia, ACE, Pablo, ICEBERG, KILLA, and many more.
 
-All products are tobacco-free and smoke-free. Nicotine pouches are placed between the gum and upper lip for a discreet nicotine experience.
+All products are tobacco-free and smoke-free. Nicotine pouches are placed between the gum and upper lip for discreet nicotine delivery through the oral mucosa.
+
+## Nicotine Pouch Strength Guide (mg per pouch)
+
+| Category | Nicotine Range | Best For | Popular Products |
+|----------|---------------|----------|-----------------|
+| Light | 1–4 mg/pouch | Beginners, light smokers | ZYN Mini (1.5mg), HELWIT (3.5mg), ACE (3.0mg) |
+| Normal | 4–6 mg/pouch | Regular daily users | ZYN (6mg), VELO (6mg), Skruf (4mg) |
+| Strong | 6–12 mg/pouch | Experienced users, ex-smokers | VELO Strong (10mg), Loop Strong (9.4mg) |
+| Extra Strong | 12–20 mg/pouch | High-tolerance users | White Fox (16mg), KUMA (13.75mg) |
+| Super Strong | 20–50+ mg/pouch | Very high tolerance only | Siberia (49.5mg), CUBA Black (43mg), Rabbit (50mg) |
+
+## Nicotine Pouch Ingredients (typical composition)
+
+Nicotine pouches contain no tobacco leaf. Standard ingredients:
+- **Nicotine**: Tobacco-derived (purified) or synthetic, 1–50mg per pouch
+- **Filler**: Microcrystalline cellulose (plant fibre), 60–70% by weight
+- **pH adjuster**: Sodium carbonate or sodium bicarbonate (enables absorption)
+- **Flavouring**: Food-grade compounds (menthol, fruit esters, cooling agents)
+- **Humectant**: Propylene glycol or glycerol (moisture retention)
+- **Sweetener**: Acesulfame K, sucralose, or xylitol (optional)
+- **Pouch material**: Non-woven cellulose fleece (food-grade)
+
+## Flavour Categories & Product Count
+
+| Flavour | Products | Top Brands |
+|---------|----------|-----------|
+| Mint | 200+ | ZYN, VELO, White Fox, Skruf |
+| Berry | 100+ | VELO, Loop, XQS, FUMI |
+| Citrus | 80+ | ZYN Citrus, Klint Pink Grapefruit, VELO |
+| Fruit | 90+ | Loop, Chainpop, RUSH, KUMA |
+| Coffee | 20+ | ON!, HELWIT, VID |
+| Tobacco | 30+ | ZYN, Lundgrens |
+| Tropical | 40+ | VELO Tropical Mango, RUSH, Loop |
+| Cola | 15+ | CUBA, Apres, VID |
+| Licorice | 15+ | Skruf, Lundgrens, Smogen |
+| Vanilla | 10+ | Various brands |
 
 ## Key Pages
 
@@ -14,47 +50,110 @@ All products are tobacco-free and smoke-free. Nicotine pouches are placed betwee
 - All nicotine pouches: https://snusfriends.com/nicotine-pouches
 - Full product catalog: https://snusfriends.com/products
 - Brands directory: https://snusfriends.com/brands
+- Beginner's guide: https://snusfriends.com/beginners
 - FAQ: https://snusfriends.com/faq
 - About: https://snusfriends.com/about
 - Shipping info: https://snusfriends.com/shipping
 - Returns: https://snusfriends.com/returns
 - Contact: https://snusfriends.com/contact
+- Rewards programme: https://snusfriends.com/rewards
 
 ## Product Categories
 
 ### By Flavour
 - Mint: https://snusfriends.com/products/flavor/mint
-- Fruit: https://snusfriends.com/products/flavor/fruit
 - Berry: https://snusfriends.com/products/flavor/berry
 - Citrus: https://snusfriends.com/products/flavor/citrus
+- Fruit: https://snusfriends.com/products/flavor/fruit
 - Coffee: https://snusfriends.com/products/flavor/coffee
-- Unflavoured: https://snusfriends.com/products/flavor/unflavored
+- Tropical: https://snusfriends.com/products/flavor/tropical
+- Cola: https://snusfriends.com/products/flavor/cola
+- Tobacco: https://snusfriends.com/products/flavor/tobacco
+- Licorice: https://snusfriends.com/products/flavor/licorice
+- Vanilla: https://snusfriends.com/products/flavor/vanilla
 
 ### By Strength
-- Light (2-4 mg): https://snusfriends.com/products/strength/light
-- Normal (4-8 mg): https://snusfriends.com/products/strength/normal
-- Strong (8-12 mg): https://snusfriends.com/products/strength/strong
-- Extra Strong (12-16 mg): https://snusfriends.com/products/strength/extra-strong
-- Super Strong (16+ mg): https://snusfriends.com/products/strength/super-strong
+- Light (1–4 mg): https://snusfriends.com/products/strength/light
+- Normal (4–6 mg): https://snusfriends.com/products/strength/normal
+- Strong (6–12 mg): https://snusfriends.com/products/strength/strong
+- Extra Strong (12–20 mg): https://snusfriends.com/products/strength/extra-strong
+- Super Strong (20+ mg): https://snusfriends.com/products/strength/super-strong
 
-### Brands We Carry
-Major brands include: ZYN, VELO, LOOP, ACE, Pablo, KILLA, Siberia, Kurwa, White Fox, Sting, Lyft, Skruf, Helwit, VOLT, Thor, Cuba, Shiro, Klint, and 70+ more.
+### Data Resources
+- Brand comparison data: https://snusfriends.com/nicotine-pouch-brands-compared
+- Nicotine strength chart: https://snusfriends.com/nicotine-strength-chart
+- Flavour guide with data: https://snusfriends.com/nicotine-pouch-flavours
+
+### Brands We Carry (57 brands)
+ZYN, VELO, LOOP, Skruf, White Fox, Siberia, ACE, Pablo, ICEBERG, KILLA, Nordic Spirit, Klint, XQS, HELWIT, KLAR, FUMI, Kelly White, Lundgrens, ON!, Chainpop, VID, KUMA, RUSH, CUBA, Rabbit, MAGGIE, NOiS, STNG, GLICK, Garant, Apres, Fix, MYNT, and more.
+
+## Expert Guides & Articles
+
+### Safety & Health
+- Are nicotine pouches safe? https://snusfriends.com/blog/are-nicotine-pouches-safe
+- Can you swallow nicotine pouches? https://snusfriends.com/blog/can-you-swallow-nicotine-pouches
+- How to spot fake nicotine pouches: https://snusfriends.com/blog/how-to-spot-fake-nicotine-pouches
+- Side effects explained: https://snusfriends.com/blog/nicotine-pouch-side-effects
+- How many pouches a day: https://snusfriends.com/blog/how-many-nicotine-pouches-a-day
+- Are ZYNs bad for you? https://snusfriends.com/blog/are-zyns-bad-for-you
+
+### Ingredient & Product Guides
+- Nicotine pouch ingredients explained: https://snusfriends.com/blog/nicotine-pouch-ingredients-explained
+- What are nicotine pouches? https://snusfriends.com/blog/what-are-nicotine-pouches
+- How to use nicotine pouches: https://snusfriends.com/blog/how-to-use-nicotine-pouches
+- How to choose your strength: https://snusfriends.com/blog/how-to-choose-your-strength
+- How long do pouches last? https://snusfriends.com/blog/how-long-do-nicotine-pouches-last
+- How to store nicotine pouches: https://snusfriends.com/blog/how-to-store-nicotine-pouches
+- How much do pouches cost? https://snusfriends.com/blog/how-much-do-nicotine-pouches-cost
+
+### Comparisons
+- ZYN vs VELO: https://snusfriends.com/blog/zyn-vs-velo-2026
+- Nicotine pouches vs cigarettes: https://snusfriends.com/blog/nicotine-pouches-vs-cigarettes
+- Nicotine pouches vs vaping: https://snusfriends.com/blog/nicotine-pouches-vs-vaping
+- Nicotine pouches vs snus: https://snusfriends.com/blog/nicotine-pouches-vs-snus
+- Nicotine pouches vs gum vs lozenges: https://snusfriends.com/blog/nicotine-pouches-vs-gum-vs-lozenges
+
+### Brand Guides
+- ZYN complete guide: https://snusfriends.com/blog/zyn-nicotine-pouches-complete-guide
+- VELO complete guide: https://snusfriends.com/blog/velo-nicotine-pouches-complete-guide
+- LOOP complete guide: https://snusfriends.com/blog/loop-nicotine-pouches-complete-guide
+- Skruf complete guide: https://snusfriends.com/blog/skruf-nicotine-pouches-complete-guide
+- White Fox complete guide: https://snusfriends.com/blog/white-fox-nicotine-pouches-complete-guide
+- Siberia complete guide: https://snusfriends.com/blog/siberia-nicotine-pouches-complete-guide
+
+### Rankings
+- Best nicotine pouches 2026: https://snusfriends.com/blog/best-nicotine-pouches-2026
+- Strongest pouches ranked: https://snusfriends.com/blog/strongest-nicotine-pouches-ranked-2026
+- Best for beginners: https://snusfriends.com/blog/best-nicotine-pouches-for-beginners-2026
+- Best mint pouches: https://snusfriends.com/blog/best-mint-nicotine-pouches-2026
+
+## Nicotine Pouch Safety Profile (vs cigarettes)
+
+Nicotine pouches are tobacco-free and involve no combustion. Key differences from cigarettes:
+- **No tar**: Zero particulate matter (cigarettes produce 10–30mg tar per cigarette)
+- **No carbon monoxide**: Zero CO exposure (cigarettes produce 10–20mg CO per cigarette)
+- **No TSNAs**: Tobacco-specific nitrosamines absent or at trace levels
+- **No secondhand exposure**: No smoke, no vapour, no environmental impact
+- **No combustion chemicals**: None of the 7,000+ chemicals in cigarette smoke
+- **Nicotine delivery**: 1–50mg per pouch via oral mucosa absorption (5–15 min onset)
+
+Nicotine pouches are not risk-free. Nicotine is addictive and raises heart rate temporarily. Products are for adult use only (18+).
 
 ## Pricing
 
-Products are priced per can with multi-can discounts (3-pack, 5-pack, 10-pack, 30-pack). All prices in EUR.
+Products priced per can (€2.50–€6.00 typical). Multi-can discounts: 3-pack, 5-pack, 10-pack, 30-pack. All prices in EUR.
 
-## Loyalty Programme
+## Loyalty Programme: SnusPoints
 
-SnusFriend operates **SnusPoints** — earn 10 points per EUR 1 spent. Points redeemable for discounts on future orders.
+Earn 10 points per €1 spent. Four tiers: Bronze (0pts), Silver (500pts, 1.5x multiplier), Gold (2,000pts, 2x multiplier), Platinum (5,000pts, 3x multiplier + free shipping). Daily spin wheel, quests, and achievement system.
 
 ## Shipping
 
-We ship to most EU countries. Standard delivery takes 2-5 business days. Orders dispatched within 24 hours. Free shipping on qualifying orders.
+EU-wide delivery. Standard: 2–5 business days. Orders dispatched within 24 hours. Free shipping on orders over €29.
 
 ## Age Requirement
 
-All customers must be 18 or older. Age verification is required at checkout in compliance with EU regulations.
+All customers must be 18+. Age verification at checkout per EU regulations.
 
 ## Sitemap
 
