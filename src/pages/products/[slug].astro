@@ -425,4 +425,19 @@ const jsonLd = {
       });
     });
   </script>
+
+  <!-- PostHog: product_viewed -->
+  <script is:inline define:vars={{ productId: p.slug, productName: p.name, brand: p.brand, price: p.prices.pack1, strengthKey: p.strengthKey, flavorKey: p.flavorKey }}>
+    if (typeof window !== 'undefined' && window.posthog) {
+      window.posthog.capture('product_viewed', {
+        product_id: productId,
+        product_name: productName,
+        brand: brand,
+        price: price,
+        strength: strengthKey,
+        flavor: flavorKey,
+        currency: 'EUR',
+      });
+    }
+  </script>
 </Shop>

@@ -43,6 +43,17 @@ const props = Astro.props;
   <Analytics />
   <ClientRouter />
 
+  <!-- Guard against Chrome 146+ InvalidStateError in View Transitions (Sentry SNUSFRIENDS-3) -->
+  <script is:inline>
+    (function() {
+      var origReplaceState = history.replaceState;
+      history.replaceState = function() {
+        try { return origReplaceState.apply(this, arguments); }
+        catch(e) { if (e.name !== 'InvalidStateError') throw e; }
+      };
+    })();
+  </script>
+
   <script is:inline define:vars={{ storageKey: tenant.storage.themeKey, defaultTheme: tenant.theme.darkModeClass, validThemeList: validThemes }}>
     (function() {
       try {

@@ -2,6 +2,7 @@ import { atom, computed } from 'nanostores';
 import { persistentAtom } from '@nanostores/persistent';
 import type { Product, PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
+import { trackAddToCart, trackRemoveFromCart } from '@/lib/analytics';
 
 export interface CartItem {
   product: Product;
@@ -49,14 +50,36 @@ export function addToCart(product: Product, packSize: PackSize, quantity = 1) {
   } else {
     $cartItems.set([...items, { product, packSize, quantity }]);
   }
+
+  // PostHog: track add_to_cart
+  trackAddToCart({
+    productId: product.id,
+    productName: product.name,
+    brand: product.brand ?? '',
+    packSize,
+    quantity,
+    price: product.prices[packSize] ?? 0,
+  });
 }
 
 export function removeFromCart(productId: string, packSize: PackSize) {
+  const removed = $cartItems.get().find(
+    (item) => item.product.id === productId && item.packSize === packSize,
+  );
   $cartItems.set(
     $cartItems.get().filter(
       (item) => !(item.product.id === productId && item.packSize === packSize),
     ),
   );
+
+  // PostHog: track remove_from_cart
+  if (removed) {
+    trackRemoveFromCart({
+      productId,
+      productName: removed.product.name,
+      packSize,
+    });
+  }
 }
 
 export function updateCartQuantity(productId: string, packSize: PackSize, quantity: number) {

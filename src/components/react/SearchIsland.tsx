@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import ProductCard from './ProductCard';
 import { scoreProduct, type SearchableProduct } from '@/lib/search';
+import { trackSearchPerformed } from '@/lib/analytics';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -79,6 +80,16 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
       : window.location.pathname;
     window.history.replaceState(null, '', url);
   }, [debouncedQuery]);
+
+  // PostHog: track search after results are computed
+  const prevQueryRef = useRef('');
+  useEffect(() => {
+    const trimmed = debouncedQuery.trim();
+    if (trimmed && trimmed !== prevQueryRef.current) {
+      prevQueryRef.current = trimmed;
+      trackSearchPerformed({ query: trimmed, resultCount: results.length });
+    }
+  }, [debouncedQuery, results.length]);
 
   // Score and filter results
   const results = useMemo(() => {

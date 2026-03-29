@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { apiFetch } from '@/lib/api';
+import { trackSpinWheelUsed } from '@/lib/analytics';
 
 export interface PrizeDisplay {
   icon: string;
@@ -52,7 +53,10 @@ export function useSpinWheel() {
     mutationFn: async () => {
       return apiFetch<SpinResult>('spin-wheel', { method: 'POST' });
     },
-    onSuccess: () => {
+    onSuccess: (_data) => {
+      // PostHog: track spin wheel usage
+      trackSpinWheelUsed({ prize: _data?.prize_display?.title });
+
       queryClient.invalidateQueries({ queryKey: ['spin-status'] });
       queryClient.invalidateQueries({ queryKey: ['snuspoints'] });
       queryClient.invalidateQueries({ queryKey: ['vouchers'] });

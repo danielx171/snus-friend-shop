@@ -4,6 +4,7 @@ import { $cartItems, $cartTotal, clearCart } from '@/stores/cart';
 import { packSizeMultipliers, type PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
 import { actions } from 'astro:actions';
+import { trackCheckoutStarted } from '@/lib/analytics';
 
 interface Props {
   userEmail?: string;
@@ -106,6 +107,9 @@ export default function CheckoutForm({ userEmail }: Props) {
 
     setSubmitting(true);
     setError('');
+
+    // PostHog: track checkout_started
+    trackCheckoutStarted({ cartTotal: total, itemCount: cartItems.length });
 
     try {
       const items = cartItems.map((item) => ({

@@ -1,7 +1,8 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { addToCart, openCart } from '@/stores/cart';
 import { cartToast } from '@/lib/toast';
 import type { Product } from '@/data/products';
+import { trackQuizCompleted } from '@/lib/analytics';
 
 interface QuizProduct {
   slug: string;
@@ -236,7 +237,13 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
 
   const goToResults = useCallback(() => {
     setStep(2);
-  }, []);
+    // PostHog: track quiz completion
+    trackQuizCompleted({
+      flavors: selectedFlavors,
+      strength: selectedStrength ?? 'none',
+      resultCount: 0, // updated below once results compute
+    });
+  }, [selectedFlavors, selectedStrength]);
 
   const retake = useCallback(() => {
     setSelectedFlavors([]);
