@@ -106,7 +106,7 @@ if (heroProducts.length < 4) {
         <div class="relative h-80 w-80">
           {heroProducts[0] && (
             <img
-              src={`/_vercel/image?url=${encodeURIComponent(heroProducts[0]!.data.imageUrl)}&w=256&q=80`}
+              src={heroProducts[0]!.data.imageUrl}
               alt={heroProducts[0]!.data.name}
               width="180"
               height="180"
@@ -117,7 +117,7 @@ if (heroProducts.length < 4) {
           )}
           {heroProducts[1] && (
             <img
-              src={`/_vercel/image?url=${encodeURIComponent(heroProducts[1]!.data.imageUrl)}&w=256&q=80`}
+              src={heroProducts[1]!.data.imageUrl}
               alt={heroProducts[1]!.data.name}
               width="160"
               height="160"
@@ -128,7 +128,7 @@ if (heroProducts.length < 4) {
           )}
           {heroProducts[2] && (
             <img
-              src={`/_vercel/image?url=${encodeURIComponent(heroProducts[2]!.data.imageUrl)}&w=256&q=80`}
+              src={heroProducts[2]!.data.imageUrl}
               alt={heroProducts[2]!.data.name}
               width="150"
               height="150"
@@ -139,7 +139,7 @@ if (heroProducts.length < 4) {
           )}
           {heroProducts[3] && (
             <img
-              src={`/_vercel/image?url=${encodeURIComponent(heroProducts[3]!.data.imageUrl)}&w=256&q=80`}
+              src={heroProducts[3]!.data.imageUrl}
               alt={heroProducts[3]!.data.name}
               width="140"
               height="140"
@@ -155,7 +155,7 @@ if (heroProducts.length < 4) {
       <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory">
         {heroProducts.map((p) => p && (
           <img
-            src={`/_vercel/image?url=${encodeURIComponent(p.data.imageUrl)}&w=128&q=80`}
+            src={p.data.imageUrl}
             alt={p.data.name}
             width="96"
             height="96"
