@@ -12,6 +12,24 @@ ensureProductsJson(products);
 
 const totalProducts = products.length;
 const brandCount = new Set(products.map(p => p.data.brand)).size;
+
+// ItemList schema for rich results
+const topProducts = products
+  .sort((a, b) => (b.data.ratings ?? 0) - (a.data.ratings ?? 0))
+  .slice(0, 20);
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Nicotine Pouches',
+  description: `Shop ${totalProducts}+ tobacco-free nicotine pouches from ${brandCount} brands.`,
+  numberOfItems: totalProducts,
+  itemListElement: topProducts.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://${tenant.domain}/products/${p.id}`,
+    name: p.data.name,
+  })),
+};
 ---
 
 <Shop
@@ -19,6 +37,7 @@ const brandCount = new Set(products.map(p => p.data.brand)).size;
   description={`Shop ${totalProducts}+ tobacco-free nicotine pouches from ${brandCount} leading brands. Browse by strength, flavour, and format. Fast EU shipping on all orders. 18+ only.`}
   canonical="/nicotine-pouches"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
   <Breadcrumb items={[{ label: 'Nicotine Pouches' }]} />
 
   <div class="container mx-auto px-4 py-8">

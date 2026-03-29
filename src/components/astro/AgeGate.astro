@@ -62,7 +62,13 @@ import { tenant } from '@/config/tenant';
       }
 
       function denyAge() {
-        window.location.href = 'https://google.com';
+        var container = gate.querySelector('div');
+        if (container) {
+          container.innerHTML =
+            '<h2 class="text-2xl font-bold text-foreground">Access Denied</h2>' +
+            '<p class="mt-4 text-sm text-muted-foreground">Sorry, you must be 18 or older to visit this site.</p>' +
+            '<p class="mt-2 text-xs text-muted-foreground">Please close this tab or navigate away.</p>';
+        }
       }
 
       // Use onclick instead of addEventListener to avoid stale duplicates

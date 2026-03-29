@@ -9,6 +9,27 @@ interface Props {
 }
 
 const { items } = Astro.props;
+
+const siteUrl = 'https://snusfriends.com';
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: siteUrl + '/',
+    },
+    ...items.map((item, i) => ({
+      '@type': 'ListItem' as const,
+      position: i + 2,
+      name: item.label,
+      ...(item.href ? { item: siteUrl + item.href } : {}),
+    })),
+  ],
+};
 ---
 
 <nav aria-label="Breadcrumb" class="mb-4">
@@ -36,3 +57,4 @@ const { items } = Astro.props;
     ))}
   </ol>
 </nav>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
