@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-03-27
+Last updated: 2026-03-30
 
 ## Astro 6 Migration: COMPLETE
 
@@ -47,12 +47,24 @@ Migrated from Vite SPA to Astro 6 with React islands. Deployed and live on snusf
 - [ ] C4: Transactional email (Resend — deferred)
 - Plan: `.claude/plans/federated-gathering-lecun.md`
 
-### 4. Pre-Launch Blockers
+### 4. Analytics & Email (NEW — March 29-30)
+- [x] PostHog custom events: add_to_cart, product_viewed, checkout_started, search, quiz, spin wheel, beginner mode, newsletter
+- [x] PostHog dashboard: "SnusFriend Core Metrics" with trends + gamification insights
+- [x] Sentry: InvalidStateError suppressed (Chrome 146 View Transitions bug)
+- [x] Community page: dynamic stats from Supabase (replaces hardcoded fake numbers)
+- [x] Search: multi-word query + flavour synonym matching (50+ synonyms)
+- [x] Achievements: fixed logged-out loading state
+- [x] Klaviyo: Welcome email template (ID Tjf23a) + Post-purchase template (ID UtA6PL)
+- [x] Klaviyo: Welcome campaign created (draft, targets Email List XSsBfF)
+- [ ] Klaviyo: Set up automated welcome flow in Klaviyo UI (can't be done via API)
+- [ ] Klaviyo: Browse abandonment flow (future)
+
+### 5. Pre-Launch Blockers
 - [ ] Solicitor sign-off on Terms, Privacy, Cookie pages
 - [ ] Final checkout smoke test with real payment
 - [ ] Remove preview mode (set env var)
 
-### 5. Nice to Have
+### 6. Nice to Have
 - [ ] Uptime monitoring (UptimeRobot)
 - [ ] OG images per page
 - [ ] Product image quality improvements
@@ -61,10 +73,13 @@ Migrated from Vite SPA to Astro 6 with React islands. Deployed and live on snusf
 ## Current State
 
 - Site live at snusfriends.com
-- 734 products from Supabase (47 tables, 20 edge functions, 42 migrations)
+- 708 active products from Supabase (47 tables, 22 edge functions, 44 migrations)
 - Astro 6 SSG/SSR hybrid, React islands for interactivity
+- 94+ pages (43 blog, 57 brands, 5 country pages)
 - Checkout fully working — Nyehandel payment + shipping
-- Phase 2 gamification UI built, backend automation pending
+- Gamification fully live — spin wheel, quests, points, avatars, achievements
+- PostHog analytics instrumented (9 custom events), Sentry error monitoring
+- Klaviyo: 2 email templates (welcome + post-purchase), 1 draft campaign
 - Version: 1.5.0
 
 ## Key Reference Files

@@ -6,6 +6,35 @@ import QuestBoardIsland from '@/components/react/QuestBoardIsland';
 import LeaderboardIsland from '@/components/react/LeaderboardIsland';
 import AchievementGridIsland from '@/components/react/AchievementGridIsland';
 import { tenant } from '@/config/tenant';
+import { supabase, hasSupabaseEnv } from '@/integrations/supabase/client';
+
+// Query real community stats at build time
+let memberCount = 0;
+let reviewCount = 0;
+let pointsEarned = 0;
+
+if (hasSupabaseEnv) {
+  try {
+    const [usersRes, reviewsRes, pointsRes] = await Promise.all([
+      supabase.from('user_profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('product_reviews').select('id', { count: 'exact', head: true }),
+      supabase.from('points_transactions').select('points').gt('points', 0),
+    ]);
+    memberCount = usersRes.count ?? 0;
+    reviewCount = reviewsRes.count ?? 0;
+    pointsEarned = (pointsRes.data ?? []).reduce((sum: number, r: { points: number }) => sum + r.points, 0);
+  } catch (_) { /* fall back to 0s */ }
+}
+
+// Format numbers for display
+function formatStat(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, '')}K`;
+  return n.toLocaleString('en-GB');
+}
+
+// Only show stats section if we have meaningful community activity
+const showStats = memberCount >= 10;
 ---
 
 <Shop
@@ -26,21 +55,29 @@ import { tenant } from '@/config/tenant';
             Connect with thousands of pouch enthusiasts. Share reviews, earn points, complete quests, and unlock exclusive rewards as you climb the ranks.
           </p>
 
-          <!-- Key Stats -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 max-w-2xl mx-auto mb-10">
-            <div class="rounded-lg bg-card/40 backdrop-blur-sm border border-border/30 p-4 sm:p-6">
-              <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">2,847</div>
-              <p class="text-xs sm:text-sm text-muted-foreground">Active Members</p>
+          <!-- Key Stats (only shown when community has meaningful activity) -->
+          {showStats ? (
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 max-w-2xl mx-auto mb-10">
+              <div class="rounded-lg bg-card/40 backdrop-blur-sm border border-border/30 p-4 sm:p-6">
+                <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">{formatStat(memberCount)}</div>
+                <p class="text-xs sm:text-sm text-muted-foreground">Active Members</p>
+              </div>
+              <div class="rounded-lg bg-card/40 backdrop-blur-sm border border-border/30 p-4 sm:p-6">
+                <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">{formatStat(reviewCount)}</div>
+                <p class="text-xs sm:text-sm text-muted-foreground">Reviews Posted</p>
+              </div>
+              <div class="rounded-lg bg-card/40 backdrop-blur-sm border border-border/30 p-4 sm:p-6">
+                <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">{formatStat(pointsEarned)}</div>
+                <p class="text-xs sm:text-sm text-muted-foreground">Points Earned</p>
+              </div>
             </div>
-            <div class="rounded-lg bg-card/40 backdrop-blur-sm border border-border/30 p-4 sm:p-6">
-              <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">15.3K</div>
-              <p class="text-xs sm:text-sm text-muted-foreground">Reviews Posted</p>
+          ) : (
+            <div class="max-w-xl mx-auto mb-10">
+              <p class="text-sm text-muted-foreground bg-card/40 backdrop-blur-sm border border-border/30 rounded-lg px-6 py-4">
+                We're a new and growing community — join now to be among the first members and shape how SnusFriend evolves.
+              </p>
             </div>
-            <div class="rounded-lg bg-card/40 backdrop-blur-sm border border-border/30 p-4 sm:p-6">
-              <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">94.2M</div>
-              <p class="text-xs sm:text-sm text-muted-foreground">Points Earned</p>
-            </div>
-          </div>
+          )}
 
           <!-- CTA -->
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
