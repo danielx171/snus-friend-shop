@@ -4,6 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import ProductCard from '@/components/astro/ProductCard.astro';
+import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
 const allProducts = await getCollection('products');
 const allBrands = await getCollection('brands');
@@ -257,20 +258,31 @@ if (heroProducts.length < 4) {
       <p class="mb-10 text-center text-muted-foreground">
         We carry all the brands you know and love &mdash; plus new favourites waiting to be discovered.
       </p>
-      <div class="flex flex-wrap items-center justify-center gap-4">
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {brands.length > 0 ? (
-          brands.slice(0, 16).map((brand) => (
-            <a
-              href={`/brands/${brand.id}`}
-              class="flex h-14 items-center rounded-lg border border-border bg-card/40 px-6 text-sm font-medium text-muted-foreground backdrop-blur transition hover:border-primary/30 hover:text-foreground hover:bg-card/60"
-            >
-              {brand.data.name}
-            </a>
-          ))
+          brands.slice(0, 15).map((brand) => {
+            const bColor = brandColors[brand.id] ?? defaultBrandColor;
+            const initials = brand.data.name.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('');
+            return (
+              <a
+                href={`/brands/${brand.id}`}
+                class="flex items-center gap-3 rounded-xl border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-md"
+                style={`border-left: 3px solid ${bColor};`}
+              >
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style={`background: ${bColor}18;`}>
+                  <span class="text-sm font-bold" style={`color: ${bColor};`}>{initials}</span>
+                </div>
+                <span class="text-sm font-medium text-foreground">{brand.data.name}</span>
+              </a>
+            );
+          })
         ) : (
-          ['VELO', 'ZYN', 'LOOP', 'Siberia', 'PABLO', 'KILLA', 'Kurwa', 'ACE'].map((name) => (
-            <div class="flex h-14 items-center rounded-lg border border-border bg-card/40 px-6 text-sm font-medium text-muted-foreground backdrop-blur transition hover:border-primary/30 hover:text-foreground">
-              {name}
+          ['VELO', 'ZYN', 'LOOP', 'Siberia', 'PABLO'].map((name) => (
+            <div class="flex items-center gap-3 rounded-xl border border-border bg-card/60 p-3">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <span class="text-sm font-bold text-primary">{name[0]}</span>
+              </div>
+              <span class="text-sm font-medium text-foreground">{name}</span>
             </div>
           ))
         )}
