@@ -53,55 +53,55 @@ const CookieConsentBanner: React.FC = () => {
           <p className="text-sm text-muted-foreground">
             We use cookies to improve your experience.
           </p>
-          <div className="flex gap-3">
+          <div className="flex w-full gap-3 sm:w-auto">
             <button
               onClick={handleManage}
-              className="rounded-md border border-border bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
+              className="min-h-[44px] flex-1 rounded-md border border-border bg-secondary px-4 py-2.5 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80 sm:flex-initial"
             >
               Manage Preferences
             </button>
             <button
               onClick={acceptAll}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              className="min-h-[44px] flex-1 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:flex-initial"
             >
               Accept All
             </button>
           </div>
         </div>
       ) : (
-        <div className="mx-auto max-w-4xl space-y-4">
-          <label className="flex items-center justify-between">
+        <div className="mx-auto max-w-4xl space-y-3">
+          <label className="flex min-h-[44px] items-center justify-between">
             <span className="text-sm font-medium">Essential</span>
-            <input type="checkbox" checked disabled className="h-4 w-4 accent-primary" />
+            <input type="checkbox" checked disabled className="h-5 w-5 accent-primary" />
           </label>
-          <label className="flex items-center justify-between">
+          <label className="flex min-h-[44px] items-center justify-between">
             <span className="text-sm font-medium">Analytics</span>
             <input
               type="checkbox"
               checked={analytics}
               onChange={(e) => setAnalytics(e.target.checked)}
-              className="h-4 w-4 accent-primary"
+              className="h-5 w-5 accent-primary"
             />
           </label>
-          <label className="flex items-center justify-between">
+          <label className="flex min-h-[44px] items-center justify-between">
             <span className="text-sm font-medium">Marketing</span>
             <input
               type="checkbox"
               checked={marketing}
               onChange={(e) => setMarketing(e.target.checked)}
-              className="h-4 w-4 accent-primary"
+              className="h-5 w-5 accent-primary"
             />
           </label>
           <div className="flex items-center justify-between pt-2">
             <button
               onClick={rejectAll}
-              className="text-sm text-muted-foreground underline transition-colors hover:text-foreground"
+              className="min-h-[44px] px-2 text-sm text-muted-foreground underline transition-colors hover:text-foreground"
             >
               Reject All
             </button>
             <button
               onClick={handleSave}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              className="min-h-[44px] rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Save Preferences
             </button>

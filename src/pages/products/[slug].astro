@@ -5,6 +5,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import AddToCartButton from '@/components/react/AddToCartButton';
+import StickyAddToCart from '@/components/react/StickyAddToCart';
 import ProductReviewsIsland from '@/components/react/ProductReviewsIsland';
 import { getCollection } from 'astro:content';
 import { brandColors, defaultBrandColor } from '@/data/brand-colors';
@@ -298,7 +299,7 @@ const jsonLd = {
         </div>
 
         {/* Add to Cart — React island */}
-        <div class="mb-8">
+        <div class="mb-8" data-add-to-cart-main>
           <AddToCartButton
             client:visible
             product={{
@@ -399,6 +400,23 @@ const jsonLd = {
       } catch { /* ignore */ }
     }, { once: true });
   </script>
+
+  <!-- Sticky Add to Cart bar (mobile only) -->
+  <StickyAddToCart
+    client:idle
+    productId={product.id}
+    name={p.name}
+    brand={p.brand}
+    price={p.prices.pack1}
+    imageUrl={p.imageUrl}
+    flavorKey={p.flavorKey}
+    strengthKey={p.strengthKey}
+    nicotineContent={p.nicotineContent}
+    ratings={p.ratings}
+    badgeKeys={p.badgeKeys}
+    prices={p.prices}
+    stock={p.stock}
+  />
 
   <!-- Image zoom script -->
   <script is:inline>
