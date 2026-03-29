@@ -8,6 +8,7 @@ import {
   $cartCount,
   $freeShippingProgress,
   closeCart,
+  openCart,
   removeFromCart,
   updateCartQuantity,
   upgradePackSize,
@@ -194,7 +195,13 @@ export default function CartDrawer() {
   // Prevent hydration mismatch: server has no localStorage, so
   // render nothing until after first mount when persistentAtom syncs.
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    // Listen for open-cart event from MobileBottomNav (Astro component)
+    const handler = () => openCart();
+    window.addEventListener('open-cart', handler);
+    return () => window.removeEventListener('open-cart', handler);
+  }, []);
 
   const handleOpenChange = useCallback((open: boolean) => {
     if (!open) closeCart();

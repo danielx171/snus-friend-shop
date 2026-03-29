@@ -10,6 +10,7 @@ import CookieConsentBanner from '@/components/react/CookieConsentBanner';
 import CartDrawer from '@/components/react/CartDrawer';
 import MobileMenu from '@/components/react/MobileMenu';
 import BeginnerBanner from '@/components/react/BeginnerBanner';
+import MobileBottomNav from '@/components/astro/MobileBottomNav.astro';
 
 interface Props {
   title?: string;
@@ -41,7 +42,10 @@ const authUser = Astro.locals.user ? { id: Astro.locals.user.id, email: Astro.lo
       <slot />
     </main>
     <Footer />
+    <!-- Spacer for mobile bottom nav -->
+    <div class="h-14 sm:hidden" aria-hidden="true"></div>
   </div>
+  <MobileBottomNav />
   <CartDrawer client:idle />
   <MobileMenu client:idle />
   <ToastProvider client:idle />

@@ -52,35 +52,42 @@ const collectionJsonLd = {
       <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
         Nicotine Pouch Brands
       </h1>
-      <div class="mt-3 max-w-3xl space-y-3 text-base leading-relaxed text-muted-foreground">
+      <div class="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground">
         <p>
           We carry <strong class="text-foreground">{brands.length} nicotine pouch brands</strong> from
           Scandinavia, the UK, the Baltics, and beyond — the widest selection of tobacco-free pouches
-          you'll find in one European shop. Whether you've used pouches for years or you're switching
-          from cigarettes for the first time, our brand wall makes it easy to compare manufacturers,
-          country of origin, strength ranges, and flavour profiles side by side.
+          you'll find in one European shop.
         </p>
-        <p>
-          Household names like <a href="/brands/zyn" class="underline hover:text-foreground">ZYN</a>,
-          <a href="/brands/velo" class="underline hover:text-foreground">VELO</a>, and
-          <a href="/brands/loop" class="underline hover:text-foreground">LOOP</a> sit alongside
-          specialist labels such as <a href="/brands/siberia" class="underline hover:text-foreground">Siberia</a>,
-          <a href="/brands/pablo" class="underline hover:text-foreground">Pablo</a>,
-          <a href="/brands/killa" class="underline hover:text-foreground">Killa</a>,
-          <a href="/brands/skruf" class="underline hover:text-foreground">Skruf</a>, and
-          <a href="/brands/fumi" class="underline hover:text-foreground">FUMI</a> — so you can
-          explore everything from mild 2 mg everyday pouches to ultra-strong 50 mg options.
-          Every brand page lists the full product range with available strengths, flavour
-          descriptions, and current pricing — plus the manufacturer and country of origin
-          so you always know exactly who makes the product you're buying.
-        </p>
-        <p>
-          Not sure where to start? Our
-          <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="underline hover:text-foreground">beginner's guide</a>
-          walks you through choosing the right brand and strength for your experience level,
-          or take the <a href="/flavor-quiz" class="underline hover:text-foreground">flavour quiz</a>
-          for a personalised recommendation in under a minute.
-        </p>
+        <div id="brands-seo-text" class="mt-3 space-y-3 hidden sm:block">
+          <p>
+            Whether you've used pouches for years or you're switching
+            from cigarettes for the first time, our brand wall makes it easy to compare manufacturers,
+            country of origin, strength ranges, and flavour profiles side by side.
+            Household names like <a href="/brands/zyn" class="underline hover:text-foreground">ZYN</a>,
+            <a href="/brands/velo" class="underline hover:text-foreground">VELO</a>, and
+            <a href="/brands/loop" class="underline hover:text-foreground">LOOP</a> sit alongside
+            specialist labels such as <a href="/brands/siberia" class="underline hover:text-foreground">Siberia</a>,
+            <a href="/brands/pablo" class="underline hover:text-foreground">Pablo</a>,
+            <a href="/brands/killa" class="underline hover:text-foreground">Killa</a>,
+            <a href="/brands/skruf" class="underline hover:text-foreground">Skruf</a>, and
+            <a href="/brands/fumi" class="underline hover:text-foreground">FUMI</a> — so you can
+            explore everything from mild 2 mg everyday pouches to ultra-strong 50 mg options.
+          </p>
+          <p>
+            Not sure where to start? Our
+            <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="underline hover:text-foreground">beginner's guide</a>
+            walks you through choosing the right brand and strength for your experience level,
+            or take the <a href="/flavor-quiz" class="underline hover:text-foreground">flavour quiz</a>
+            for a personalised recommendation in under a minute.
+          </p>
+        </div>
+        <button
+          type="button"
+          class="mt-2 text-sm font-medium text-primary underline sm:hidden"
+          onclick="var el=document.getElementById('brands-seo-text');el.classList.toggle('hidden');this.textContent=el.classList.contains('hidden')?'Read more':'Show less'"
+        >
+          Read more
+        </button>
       </div>
     </div>
 

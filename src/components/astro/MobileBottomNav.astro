@@ -1,0 +1,67 @@
+---
+const user = Astro.locals.user;
+---
+
+<nav class="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-lg sm:hidden" aria-label="Mobile navigation">
+  <div class="flex items-center justify-around h-14">
+    <a href="/" class="flex flex-col items-center justify-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-foreground transition-colors" aria-label="Home">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="text-[10px] font-medium leading-none">Home</span>
+    </a>
+    <a href="/search" class="flex flex-col items-center justify-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-foreground transition-colors" aria-label="Search products">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <span class="text-[10px] font-medium leading-none">Search</span>
+    </a>
+    <button type="button" class="flex flex-col items-center justify-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-foreground transition-colors relative" aria-label="Open cart" data-mobile-cart-btn>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+      <span class="text-[10px] font-medium leading-none">Cart</span>
+      <span id="mobile-cart-badge" class="absolute -top-0.5 right-1 hidden min-w-[16px] rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground text-center leading-[16px]"></span>
+    </button>
+    <a href={user ? "/account" : "/login"} class="flex flex-col items-center justify-center gap-0.5 px-3 py-1.5 text-muted-foreground hover:text-foreground transition-colors" aria-label={user ? "My account" : "Login"}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="text-[10px] font-medium leading-none">{user ? 'Account' : 'Login'}</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Cart badge sync + cart open handler -->
+<script is:inline>
+(function() {
+  function updateBadge() {
+    try {
+      var raw = localStorage.getItem('snusfriend_cart');
+      if (!raw) { hideBadge(); return; }
+      var items = JSON.parse(raw);
+      var count = 0;
+      for (var i = 0; i < items.length; i++) count += (items[i].quantity || 1);
+      var badge = document.getElementById('mobile-cart-badge');
+      if (!badge) return;
+      if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : String(count);
+        badge.classList.remove('hidden');
+      } else {
+        hideBadge();
+      }
+    } catch(e) { hideBadge(); }
+  }
+  function hideBadge() {
+    var b = document.getElementById('mobile-cart-badge');
+    if (b) b.classList.add('hidden');
+  }
+  updateBadge();
+  window.addEventListener('storage', updateBadge);
+  // Listen for custom cart events
+  window.addEventListener('cart-updated', updateBadge);
+  // Poll every 2s for nanostore changes (nanostores don't fire storage events)
+  setInterval(updateBadge, 2000);
+
+  // Cart button opens cart drawer
+  var btn = document.querySelector('[data-mobile-cart-btn]');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      // Dispatch the same event the header cart button uses
+      window.dispatchEvent(new CustomEvent('open-cart'));
+    });
+  }
+})();
+</script>
