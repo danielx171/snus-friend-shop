@@ -79,7 +79,7 @@ if (heroProducts.length < 4) {
   <!-- Hero — Split layout: text left, product images right -->
   <section class="relative overflow-hidden border-b border-border" style={`background: hsl(var(--hero-bg));`}>
     <div class="absolute inset-0" style={`background: linear-gradient(to bottom right, hsl(var(--hero-gradient-from)), hsl(var(--hero-gradient-via)), hsl(var(--hero-gradient-to)));`} />
-    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 py-16 sm:py-20 lg:flex-row lg:gap-12 lg:py-24">
+    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 py-16 sm:py-20 lg:flex-row lg:gap-12 lg:py-24 lg:px-8">
 
       <!-- Left: text + stats + CTAs -->
       <div class="flex-1 text-center lg:text-left">
@@ -225,7 +225,7 @@ if (heroProducts.length < 4) {
 
   <!-- Best Sellers -->
   <section id="best-sellers" class="border-b border-border bg-background py-16 sm:py-20">
-    <div class="mx-auto max-w-6xl px-4">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mb-10 flex items-end justify-between">
         <div>
           <h2 class="text-2xl font-bold text-foreground sm:text-3xl">Best Sellers</h2>
@@ -235,7 +235,7 @@ if (heroProducts.length < 4) {
           View all &rarr;
         </a>
       </div>
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:gap-6">
         {bestSellers.length > 0 ? (
           bestSellers.map((product) => (
             <ProductCard
@@ -254,7 +254,7 @@ if (heroProducts.length < 4) {
             />
           ))
         ) : (
-          <div role="status" aria-label="Loading cans" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+          <div role="status" aria-label="Loading cans" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:gap-6">
             {Array.from({ length: 8 }).map(() => (
               <div class="group rounded-xl border border-border bg-card/50 p-4 backdrop-blur">
                 <div class="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
@@ -271,7 +271,7 @@ if (heroProducts.length < 4) {
   <!-- Staff Picks -->
   {staffPicks.length > 0 && (
     <section id="staff-picks" class="border-b border-border bg-card/30 py-16 sm:py-20">
-      <div class="mx-auto max-w-6xl px-4">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mb-10">
           <h2 class="text-2xl font-bold text-foreground sm:text-3xl">Staff Picks</h2>
           <p class="mt-2 text-muted-foreground">Curated by our editorial team — one standout from each top brand</p>
@@ -301,7 +301,7 @@ if (heroProducts.length < 4) {
   <!-- New Arrivals -->
   {newArrivals.length > 0 && (
     <section id="new-arrivals" class="border-b border-border bg-background py-16 sm:py-20">
-      <div class="mx-auto max-w-6xl px-4">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mb-10 flex items-end justify-between">
           <div>
             <h2 class="text-2xl font-bold text-foreground sm:text-3xl">New Arrivals</h2>
@@ -335,7 +335,7 @@ if (heroProducts.length < 4) {
 
   <!-- Why SnusFriend -->
   <section class="border-b border-border bg-background py-16 sm:py-20">
-    <div class="mx-auto max-w-3xl px-4">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-6 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Why Thousands of Europeans Shop at SnusFriend
       </h2>
@@ -371,14 +371,14 @@ if (heroProducts.length < 4) {
 
   <!-- Shop by Brand -->
   <section class="border-b border-border bg-background py-16 sm:py-20">
-    <div class="mx-auto max-w-6xl px-4">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-10 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Shop by Brand
       </h2>
       <p class="mb-10 text-center text-muted-foreground">
         We carry all the brands you know and love &mdash; plus new favourites waiting to be discovered.
       </p>
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6">
         {brands.length > 0 ? (
           brands.slice(0, 15).map((brand) => {
             const bColor = brandColors[brand.id] ?? defaultBrandColor;
@@ -433,7 +433,7 @@ if (heroProducts.length < 4) {
 
   <!-- Rewards & Gamification CTA -->
   <section class="border-b border-border py-16 sm:py-20" style={`background: hsl(var(--hero-bg));`}>
-    <div class="mx-auto max-w-4xl px-4">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col items-center gap-8 text-center sm:flex-row sm:text-left">
         <div class="flex-1">
           <h2 class="text-2xl font-bold sm:text-3xl" style={`color: hsl(var(--hero-text)); font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;`}>
@@ -471,7 +471,7 @@ if (heroProducts.length < 4) {
 
   <!-- CTA -->
   <section class="bg-background py-16 sm:py-20">
-    <div class="mx-auto max-w-3xl px-4 text-center">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-2xl font-bold text-foreground sm:text-3xl">
         Ready to find your perfect pouch?
       </h2>

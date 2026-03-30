@@ -2,15 +2,16 @@
 
 **Created:** 2026-03-30
 **Status:** Living document — update as items complete
-**Source:** Cross-referenced from 10 Cowork audits, ROADMAP.md, DEPLOYMENT_CHECKLIST.md, codebase scan, and live site analysis.
+**Status:** Living document — update as items complete
+**Source:** Cross-referenced from 10 Cowork audits, ROADMAP.md, DEPLOYMENT_CHECKLIST.md, codebase scan, live site analysis, and full tool audit (Sentry, Vercel, Klaviyo, Supabase, PostHog — March 30 evening).
 
 ---
 
 ## Current State (as of March 30, 2026)
 
 - **Live at** snusfriends.com (Astro 6, SSG/SSR hybrid)
-- **Products:** 708 active, 57 brands, 47 Supabase tables, 22 edge functions
-- **Pages:** 94+ Astro pages (46 blog, 57 brand pages + sub-pages, 12 category pages, 5 country pages)
+- **Products:** 708 active (2,203 total in DB), 57 brands, 60 Supabase tables, 31 edge functions
+- **Pages:** 94+ Astro pages (46 blog, 57 brand pages + sub-pages, 14 category pages, 5 country pages)
 - **Lighthouse:** SEO 100, Performance LCP <200ms, Accessibility 93-100, Best Practices 100
 - **Checkout:** Fully working (Nyehandel payment + UPS shipping, test order #479 confirmed)
 - **Gamification:** Live (spin wheel, quests, points, avatars, achievements, leaderboard)
@@ -18,6 +19,35 @@
 - **Analytics:** PostHog (9 custom events), Sentry error monitoring
 - **Email:** 2 Resend templates (order confirmed, order shipped), 2 Klaviyo templates (welcome, post-purchase)
 - **GSC:** 2 pages indexed (new site), 12 impressions, 5 queries
+
+---
+
+## Full Tool Audit (March 30, 2026 evening)
+
+| System | Key Finding | Action |
+|--------|-------------|--------|
+| Sentry | 16 errors/7d, 1 unresolved (InvalidStateError on View Transitions — already suppressed) | Low priority |
+| Vercel | 20 deployments, latest "a11y: ARIA roles" built but NOT promoted to production | Promote tomorrow |
+| Supabase | 60 tables, 31 edge functions, 0 orders, 0 reviews, 0 newsletter subs, 3 users | Pre-launch expected |
+| Supabase | RESEND_API_KEY not set — customers will NOT receive order confirmation emails | **P0 — Daniel must set** |
+| Klaviyo | 0 active flows, 1 draft "Welcome to SnusFriend" campaign, 3 lists | **P0 — no email automation** |
+| Competitive | SnusFriends B+ (7.5) features, BUT 0 Trustpilot reviews vs Haypp 7,405 / Northerner 4,151 | **P0 — trust gap** |
+| GSC | 2 pages indexed, 12 impressions, 5 queries (positions 9-59) | Submit sitemap after content |
+| Ahrefs | MCP connector available (61 tools) — not yet connected | Connect for keyword research |
+
+### Competitive Scorecard (March 30, 2026)
+
+| Retailer | Overall | Features | Trust | SEO | UX |
+|----------|---------|----------|-------|-----|----|
+| **SnusFriends** | **B+ (7.5)** | Strong (gamification, quiz, compare) | Weak (0 reviews) | Weak (2 indexed) | Good |
+| Northerner | B (6.3) | Decent | Strong (4,151 Trustpilot) | Strong (5000+ indexed) | Average |
+| Haypp | B (6.1) | Decent | Strong (7,405 Trustpilot) | Strong | Good |
+| Nicokick | C+ (5.5) | Basic | Medium | Strong | Average |
+| SnusMe | C (4.8) | Basic | Medium | Medium | Basic |
+| Swenico | D (3.9) | Minimal | Weak | Weak | Basic |
+
+**Key competitive advantages:** Gamification (unique), flavor quiz, product comparison, beginner mode
+**Key competitive gaps:** Trustpilot, email automation, multi-currency, sample packs, indexed pages
 
 ---
 
@@ -296,36 +326,41 @@ These improve conversion rate and brand perception. Visual audit average: 6.0/10
 
 ## Priority Summary — What to Build Next
 
-### This Week (execute in new chat session)
-1. ~~Gamification visibility~~ → ✅ DONE (header badge, card points, cart preview all implemented)
-2. ~~Missing category keys~~ → ✅ DONE (exotic + unflavored already in FLAVOR_META + getStaticPaths)
-3. **Form accessibility fixes** — `role="alert"` on all error divs (1 hour)
-4. **Age gate dialog ARIA** — add `role="dialog"` (30 min)
-5. **Push latest commits** — Daniel needs to `git push origin astro-migration-clean`
+### ✅ Completed (March 30)
+1. ~~Gamification visibility~~ → ✅ Header badge, card points, cart preview all implemented
+2. ~~Missing category keys~~ → ✅ Exotic + unflavored added to FLAVOR_META + getStaticPaths
+3. ~~Form accessibility fixes~~ → ✅ `role="alert"` on all error divs
+4. ~~Age gate dialog ARIA~~ → ✅ `role="dialog"` + `aria-modal="true"`
+5. ~~Competitive audit~~ → ✅ Full scorecard across 6 competitors (see `competitive-scorecard-2026-03-30.xlsx`)
+6. ~~Full tool audit~~ → ✅ Sentry, Vercel, Klaviyo, Supabase, PostHog audited
 
-### This Month
-6. Set missing Supabase secrets (RESEND_API_KEY priority — customers need emails)
-7. Set up Klaviyo welcome flow in UI
-8. Continue blog content: 3 articles/week targeting keyword gaps
-9. OG image generation for key pages
-10. Submit sitemap to GSC after each content batch
-11. Uptime monitoring setup
-12. Password strength meter (Step 53)
+### Tomorrow (March 31 — 10-hour sprint, see `TOMORROW_10H_PLAN.md`)
+7. **Push commits + promote Vercel deployment** — get a11y + gamification live
+8. **Daniel: Set RESEND_API_KEY + DISCORD webhooks + Leaked Password Protection**
+9. **Klaviyo email flows** — welcome, browse abandonment, cart abandonment
+10. **Trust signals** — Trustpilot profile, payment icons, trust badges, OG images
+11. **3 SEO articles** — Killa review, XQS review, Best for Beginners 2026
+12. **Conversion UX** — password strength meter, enhanced footer, compare button, review incentives
+13. **Verify + deploy + submit to GSC**
+
+### This Month (remaining)
+14. Continue blog content: 3 articles/week targeting keyword gaps
+15. Internal linking strategy across all content
+16. UptimeRobot setup
+17. Brand page hero banners
 
 ### Next Month
-13. Critical path tests (Step 55)
-14. Bundle size optimization (lucide-react, framer-motion)
-15. Enhanced footer with payment icons
-16. Brand page hero banners
-17. Internal linking strategy
-18. Review incentivization (SnusPoints for reviews)
+18. Critical path tests (Step 55)
+19. Bundle size optimization (lucide-react, framer-motion)
+20. Multi-currency support (competitors all have this)
+21. Sample/trial packs (Northerner + Nicokick have this)
 
 ### Quarter 2
-19. Multi-currency support
-20. Membership tiers
-21. Email automation flows
-22. Video content
-23. Backlink outreach
+22. Membership tiers
+23. Subscription model
+24. Email automation expansion (win-back, post-purchase series)
+25. Video content
+26. Backlink outreach
 
 ---
 

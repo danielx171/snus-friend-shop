@@ -635,7 +635,7 @@ export default function FilterableProductGrid({
         {/* Product grid */}
         <div className="flex-1">
           {loading ? (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3" role="status" aria-label="Loading products">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5" role="status" aria-label="Loading products">
               {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="rounded-xl border border-border bg-card/50 p-4">
                   <div className="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
@@ -660,7 +660,7 @@ export default function FilterableProductGrid({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
                 {visibleProducts.map((product) => (
                   <ProductCard
                     key={product.slug}
