@@ -24,7 +24,6 @@ const {
 } = Astro.props;
 
 const isOutOfStock = stock === 0;
-const displayPrice = prices.pack1;
 
 // Brand color for image tint
 const brandColor = brandColors[brandSlug] ?? defaultBrandColor;
@@ -153,26 +152,19 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
       </div>
     )}
 
-    {/* Price + Cart */}
-    <div class="mt-auto flex items-end justify-between pt-2">
-      <div>
-        <span class="text-lg font-bold text-foreground">&euro;{displayPrice.toFixed(2)}</span>
-        <span class="text-[10px] text-muted-foreground ml-1">/ can</span>
-      </div>
-      <CardAddToCart
-        client:visible
-        slug={slug}
-        name={name}
-        brand={brand}
-        imageUrl={imageUrl}
-        prices={prices}
-        stock={stock}
-        nicotineContent={nicotineContent}
-        strengthKey={strengthKey}
-        flavorKey={flavorKey}
-        ratings={ratings}
-        badgeKeys={badgeKeys}
-      />
-    </div>
+    <CardAddToCart
+      client:visible
+      slug={slug}
+      name={name}
+      brand={brand}
+      imageUrl={imageUrl}
+      prices={prices}
+      stock={stock}
+      nicotineContent={nicotineContent}
+      strengthKey={strengthKey}
+      flavorKey={flavorKey}
+      ratings={ratings}
+      badgeKeys={badgeKeys}
+    />
   </div>
 </a>
