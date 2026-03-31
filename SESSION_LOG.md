@@ -55,6 +55,15 @@
 - DB: `stock_synced_at` column on `product_variants`
 - Deployed + cron active on Supabase
 
+### Order Cancellation (Sprint 2 of 4)
+- New edge function: `cancel-nyehandel-order` — JWT-protected
+- Supports both customer (own orders) and ops (any order) cancellation
+- Calls NYE `POST /orders/{id}/cancel?refund_payment=true`
+- Guards: cancellable status check, already-canceled check, ownership check
+- Creates ops_alert if NYE cancellation fails
+- DB: `canceled_at` + `cancel_reason` columns on `orders`
+- Deployed on Supabase
+
 ---
 
 ## What Cowork Should NOT Redo
