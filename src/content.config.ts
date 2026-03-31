@@ -52,7 +52,7 @@ const products = defineCollection({
       manufacturer: p.brands?.manufacturer ?? '',
       categoryKey: p.category_key ?? 'nicotinePouches',
       flavorKey: p.flavor_key ?? 'mint',
-      strengthKey: p.strength_key ?? 'normal',
+      strengthKey: ({ extraStrong: 'extra-strong', ultraStrong: 'super-strong' } as Record<string, string>)[p.strength_key] ?? p.strength_key ?? 'normal',
       formatKey: p.format_key ?? 'slim',
       nicotineContent: p.nicotine_mg ?? 0,
       portionsPerCan: p.portions_per_can ?? 20,
