@@ -52,3 +52,20 @@ export const strengthLabels: Record<string, string> = {
 };
 
 export const defaultBrandColor = '#e8f0e8';
+
+/** Flavor family colors for product card left borders */
+export const flavorColors: Record<string, string> = {
+  mint: '#06B6D4',
+  menthol: '#06B6D4',
+  berry: '#A855F7',
+  citrus: '#84CC16',
+  coffee: '#92400E',
+  tobacco: '#78716C',
+  fruit: '#FB923C',
+  tropical: '#FB923C',
+  cola: '#92400E',
+  vanilla: '#F59E0B',
+  licorice: '#374151',
+};
+
+export const defaultFlavorColor = '#6B7280';
