@@ -361,7 +361,7 @@ import { tenant } from '@/config/tenant';
           </summary>
           <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
             No — you can check out as a guest. However, creating a free account lets you
-            track orders, earn loyalty points, leave reviews, and access members-only deals.
+            track orders, earn loyalty points, leave reviews, and unlock tier-based perks.
           </div>
         </details>
 
@@ -375,6 +375,51 @@ import { tenant } from '@/config/tenant';
             completing quests, and participating in the community. Points can be redeemed
             for discounts on future orders. Check your account dashboard for your current
             balance and available rewards.
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="text-2xl font-semibold mb-4">Orders, Cancellations &amp; Discounts</h2>
+      <div class="space-y-3">
+        <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+          <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+            How do I cancel my order?
+            <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+          </summary>
+          <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+            You can cancel your order from your <a href="/account" class="underline hover:text-foreground">account page</a> as long as it hasn't been shipped yet. Open the order you'd like to cancel and click "Cancel Order." You'll see a confirmation dialog — once you confirm, the cancellation is processed immediately. If your order has already been shipped, it can't be cancelled. In that case, you can return it once it arrives — just <a href="/contact" class="underline hover:text-foreground">contact us</a>.
+          </div>
+        </details>
+
+        <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+          <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+            How long does a refund take after cancellation?
+            <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+          </summary>
+          <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+            Once your order is cancelled, your refund is processed automatically. It typically takes 3–5 business days for the money to appear back on your original payment method. You'll receive an email confirming the cancellation and the refund amount.
+          </div>
+        </details>
+
+        <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+          <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+            How do I use a discount code?
+            <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+          </summary>
+          <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+            During checkout, look for the "Have a discount code?" link in the order summary section. Click it to reveal the input field, enter your code, and press Apply. Only one discount code can be used per order, codes are not case-sensitive, and some have a minimum order value or expiry date.
+          </div>
+        </details>
+
+        <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+          <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
+            Why is a product showing as out of stock?
+            <span class="ml-2 transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+          </summary>
+          <div class="px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+            Our stock levels are synced regularly with our fulfilment warehouse. When a product shows as out of stock, it means the warehouse currently doesn't have it available. You can join the waitlist on the product page to be notified when it's back in stock.
           </div>
         </details>
       </div>
@@ -582,7 +627,7 @@ import { tenant } from '@/config/tenant';
         "name": "Do I need an account to order?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No — you can check out as a guest. However, creating a free account lets you track orders, earn loyalty points, leave reviews, and access members-only deals."
+          "text": "No — you can check out as a guest. However, creating a free account lets you track orders, earn loyalty points, leave reviews, and unlock tier-based perks."
         }
       },
       {
@@ -591,6 +636,38 @@ import { tenant } from '@/config/tenant';
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Every purchase earns points. You can also earn points by writing reviews, completing quests, and participating in the community. Points can be redeemed for discounts on future orders. Check your account dashboard for your current balance and available rewards."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I cancel my order?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can cancel your order from your account page as long as it hasn't been shipped yet. Open the order and click Cancel Order. If your order has already been shipped, contact us to arrange a return once it arrives."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does a refund take after cancellation?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Refunds are processed automatically after cancellation and typically take 3-5 business days to appear on your original payment method."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I use a discount code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "During checkout, click 'Have a discount code?' in the order summary, enter your code, and press Apply. Only one code can be used per order."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is a product showing as out of stock?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Stock levels are synced regularly with our fulfilment warehouse. When a product is out of stock, it means the warehouse currently doesn't have it available. You can join the waitlist on the product page to be notified when it's back."
         }
       }
     ]
