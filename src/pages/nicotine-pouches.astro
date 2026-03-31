@@ -41,110 +41,102 @@ const itemListJsonLd = {
   <Breadcrumb items={[{ label: 'Nicotine Pouches' }]} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-    <article class="mb-10">
-      <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-        Buy Nicotine Pouches Online
-      </h1>
-      <div class="mt-4 max-w-3xl space-y-3 text-base text-muted-foreground leading-relaxed">
-        <p>
-          Nicotine pouches are tobacco-free, smoke-free, and vapour-free — simply place one
-          between your gum and upper lip for a discreet nicotine experience that lasts 20-40
-          minutes. {tenant.name} carries <strong class="text-foreground">{totalProducts}+
-          products</strong> from <strong class="text-foreground">{brandCount} brands</strong>,
-          including ZYN, VELO, LOOP, ACE, Pablo, Siberia, KILLA, and many more.
-        </p>
-        <p>
-          Whether you prefer <a href="/products/flavor/mint" class="underline hover:text-foreground">refreshing mint</a>,
-          <a href="/products/flavor/berry" class="underline hover:text-foreground">sweet berries</a>,
-          <a href="/products/flavor/citrus" class="underline hover:text-foreground">zesty citrus</a>,
-          or <a href="/products/flavor/coffee" class="underline hover:text-foreground">rich coffee</a>,
-          our catalog covers every taste. Strengths range from
-          <a href="/products/strength/light" class="underline hover:text-foreground">light (2-4 mg)</a> for beginners to
-          <a href="/products/strength/super-strong" class="underline hover:text-foreground">super strong (20 mg+)</a> for
-          experienced users. Not sure where to start? Try our
-          <a href="/faq" class="underline hover:text-foreground">FAQ</a> or
-          <a href="/flavor-quiz" class="underline hover:text-foreground">flavour quiz</a>.
-        </p>
-        <p>
-          All orders ship fast across the EU with tracking — most arrive within 2-5 business
-          days. Free shipping on qualifying orders. We only sell to customers aged 18 and over.
-        </p>
-      </div>
+    <!-- Compact header -->
+    <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+      Buy Nicotine Pouches Online
+    </h1>
+    <p class="mt-2 text-base text-muted-foreground">
+      <strong class="text-foreground">{totalProducts}+ products</strong> from <strong class="text-foreground">{brandCount} brands</strong>. Filter by strength, flavour, or brand. Fast EU shipping.
+    </p>
 
-      <!-- Quick category navigation -->
-      <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <a href="/products/flavor/mint" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
-          Mint
-        </a>
-        <a href="/products/flavor/berry" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
-          Berry
-        </a>
-        <a href="/products/flavor/citrus" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
-          Citrus
-        </a>
-        <a href="/products/strength/strong" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
-          Strong
-        </a>
-        <a href="/products/strength/extra-strong" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
-          Extra Strong
-        </a>
-        <a href="/brands" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">
-          All Brands
-        </a>
-      </div>
+    <!-- Quick filter pills -->
+    <div class="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-6">
+      <a href="/products/flavor/mint" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">Mint</a>
+      <a href="/products/flavor/berry" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">Berry</a>
+      <a href="/products/flavor/citrus" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">Citrus</a>
+      <a href="/products/strength/strong" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">Strong</a>
+      <a href="/products/strength/extra-strong" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">Extra Strong</a>
+      <a href="/brands" class="rounded-xl border border-border bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5">All Brands</a>
+    </div>
 
-      <!-- Expanded landing copy -->
-      <div class="mt-10 max-w-3xl space-y-4 text-base leading-relaxed text-muted-foreground">
-        <h2 class="text-xl font-semibold text-foreground">
-          What Are Nicotine Pouches?
-        </h2>
-        <p>
-          Nicotine pouches are small, pre-portioned sachets containing food-grade plant fibre,
-          flavouring, and pharmaceutical-grade nicotine — with zero tobacco leaf. You place one
-          between your upper lip and gum, and the nicotine absorbs through the oral mucosa over
-          20 to 40 minutes. There is no smoke, no vapour, and no spit, which makes pouches one
-          of the most discreet nicotine formats available. Clinical research shows that peak
-          nicotine absorption typically occurs at
-          <a href="/blog/how-long-do-nicotine-pouches-last" class="underline hover:text-foreground">20 to 30 minutes</a>,
-          comparable to traditional snus but without the tobacco.
-        </p>
-        <h2 class="text-xl font-semibold text-foreground">
-          How to Choose the Right Pouch
-        </h2>
-        <p>
-          Two things matter most: <strong class="text-foreground">strength</strong> and
-          <strong class="text-foreground">flavour</strong>. Strengths range from light
-          (2–4 mg nicotine per pouch) through normal (6–8 mg), strong (10–14 mg), and
-          extra-strong (16–20 mg) up to super-strong (20 mg+). If you're new to pouches,
-          start at 4–6 mg — our
-          <a href="/blog/how-to-choose-your-strength" class="underline hover:text-foreground">strength guide</a>
-          explains why. Flavours span
-          <a href="/products/flavor/mint" class="underline hover:text-foreground">mint</a> (the most popular
-          category, making up an estimated 45–60% of sales),
-          <a href="/products/flavor/berry" class="underline hover:text-foreground">berry</a>,
-          <a href="/products/flavor/citrus" class="underline hover:text-foreground">citrus</a>,
-          <a href="/products/flavor/coffee" class="underline hover:text-foreground">coffee</a>, and
-          dozens of creative blends like jalapeño lime and habanero mint.
-        </p>
-        <h2 class="text-xl font-semibold text-foreground">
-          Buying Nicotine Pouches in Europe
-        </h2>
-        <p>
-          The European nicotine pouch market is growing rapidly — industry analysts project a
-          compound annual growth rate above 28% through 2033. Regulations vary by country:
-          pouches are widely available in Sweden, Germany, the UK, and most of the EU, but
-          France banned commercial sales in February 2025, and the Netherlands followed with
-          a retail ban the same month. The EU's upcoming Tobacco Products Directive 3 (TPD3),
-          expected in draft form by mid-2026, will bring pouches under harmonised regulation for
-          the first time. SnusFriend ships from within the EU with full compliance and tracking
-          on every order. For a country-by-country breakdown, read our
-          <a href="/blog/nicotine-pouch-buying-guide-europe" class="underline hover:text-foreground">European buying guide</a>.
-        </p>
-      </div>
+    <!-- Product grid — above the fold -->
+    <div class="mt-8">
+      <h2 class="sr-only">Product Catalog</h2>
+      <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
+    </div>
+
+    <!-- SEO content — below products for crawlers -->
+    <hr class="my-12 border-border" />
+    <article class="max-w-3xl space-y-4 text-base leading-relaxed text-muted-foreground">
+      <p>
+        Nicotine pouches are tobacco-free, smoke-free, and vapour-free — simply place one
+        between your gum and upper lip for a discreet nicotine experience that lasts 20-40
+        minutes. {tenant.name} carries <strong class="text-foreground">{totalProducts}+
+        products</strong> from <strong class="text-foreground">{brandCount} brands</strong>,
+        including ZYN, VELO, LOOP, ACE, Pablo, Siberia, KILLA, and many more.
+      </p>
+      <p>
+        Whether you prefer <a href="/products/flavor/mint" class="underline hover:text-foreground">refreshing mint</a>,
+        <a href="/products/flavor/berry" class="underline hover:text-foreground">sweet berries</a>,
+        <a href="/products/flavor/citrus" class="underline hover:text-foreground">zesty citrus</a>,
+        or <a href="/products/flavor/coffee" class="underline hover:text-foreground">rich coffee</a>,
+        our catalog covers every taste. Strengths range from
+        <a href="/products/strength/light" class="underline hover:text-foreground">light (2-4 mg)</a> for beginners to
+        <a href="/products/strength/super-strong" class="underline hover:text-foreground">super strong (20 mg+)</a> for
+        experienced users. Not sure where to start? Try our
+        <a href="/faq" class="underline hover:text-foreground">FAQ</a> or
+        <a href="/flavor-quiz" class="underline hover:text-foreground">flavour quiz</a>.
+      </p>
+      <p>
+        All orders ship fast across the EU with tracking — most arrive within 2-5 business
+        days. Free shipping on qualifying orders. We only sell to customers aged 18 and over.
+      </p>
+      <h2 class="text-xl font-semibold text-foreground">
+        What Are Nicotine Pouches?
+      </h2>
+      <p>
+        Nicotine pouches are small, pre-portioned sachets containing food-grade plant fibre,
+        flavouring, and pharmaceutical-grade nicotine — with zero tobacco leaf. You place one
+        between your upper lip and gum, and the nicotine absorbs through the oral mucosa over
+        20 to 40 minutes. There is no smoke, no vapour, and no spit, which makes pouches one
+        of the most discreet nicotine formats available. Clinical research shows that peak
+        nicotine absorption typically occurs at
+        <a href="/blog/how-long-do-nicotine-pouches-last" class="underline hover:text-foreground">20 to 30 minutes</a>,
+        comparable to traditional snus but without the tobacco.
+      </p>
+      <h2 class="text-xl font-semibold text-foreground">
+        How to Choose the Right Pouch
+      </h2>
+      <p>
+        Two things matter most: <strong class="text-foreground">strength</strong> and
+        <strong class="text-foreground">flavour</strong>. Strengths range from light
+        (2–4 mg nicotine per pouch) through normal (6–8 mg), strong (10–14 mg), and
+        extra-strong (16–20 mg) up to super-strong (20 mg+). If you're new to pouches,
+        start at 4–6 mg — our
+        <a href="/blog/how-to-choose-your-strength" class="underline hover:text-foreground">strength guide</a>
+        explains why. Flavours span
+        <a href="/products/flavor/mint" class="underline hover:text-foreground">mint</a> (the most popular
+        category, making up an estimated 45–60% of sales),
+        <a href="/products/flavor/berry" class="underline hover:text-foreground">berry</a>,
+        <a href="/products/flavor/citrus" class="underline hover:text-foreground">citrus</a>,
+        <a href="/products/flavor/coffee" class="underline hover:text-foreground">coffee</a>, and
+        dozens of creative blends like jalapeño lime and habanero mint.
+      </p>
+      <h2 class="text-xl font-semibold text-foreground">
+        Buying Nicotine Pouches in Europe
+      </h2>
+      <p>
+        The European nicotine pouch market is growing rapidly — industry analysts project a
+        compound annual growth rate above 28% through 2033. Regulations vary by country:
+        pouches are widely available in Sweden, Germany, the UK, and most of the EU, but
+        France banned commercial sales in February 2025, and the Netherlands followed with
+        a retail ban the same month. The EU's upcoming Tobacco Products Directive 3 (TPD3),
+        expected in draft form by mid-2026, will bring pouches under harmonised regulation for
+        the first time. SnusFriend ships from within the EU with full compliance and tracking
+        on every order. For a country-by-country breakdown, read our
+        <a href="/blog/nicotine-pouch-buying-guide-europe" class="underline hover:text-foreground">European buying guide</a>.
+      </p>
     </article>
-
-    <h2 class="sr-only">Product Catalog</h2>
-    <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
   </div>
 
   <script type="application/ld+json" set:html={JSON.stringify({
