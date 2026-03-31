@@ -73,6 +73,22 @@
 - Increments used_count after successful application
 - NOTE: `create-nyehandel-checkout` needs redeployment via Supabase CLI
 
+### Order Updates (Sprint 4 of 4)
+- New edge function: `update-nyehandel-order` — JWT-protected, ops-only
+- NYE quirks baked in: strips company name (causes server error), warns about shipping VAT flip
+- Supports: shipping address changes, warehouse notes
+- NOT supported (by design): email changes (NYE ignores them), item changes (cancel + recreate)
+- Audit trail: `update_history` jsonb column on orders + webhook_inbox log
+- DB: `last_updated_at` + `update_history` columns
+- Deployed on Supabase
+
+### All 4 Nyehandel Gaps: COMPLETE
+Edge functions deployed: sync-nyehandel-stock, cancel-nyehandel-order, update-nyehandel-order
+Shared utility: _shared/discount-distribution.ts
+Modified: create-nyehandel-checkout (discount_code support)
+Tables created: discounts
+Columns added: product_variants.stock_synced_at, orders.canceled_at, orders.cancel_reason, orders.last_updated_at, orders.update_history
+
 ---
 
 ## What Cowork Should NOT Redo
