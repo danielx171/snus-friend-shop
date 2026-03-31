@@ -19,24 +19,25 @@ import { tenant } from '@/config/tenant';
         prose-a:text-primary prose-strong:text-foreground
         prose-li:text-muted-foreground prose-hr:border-border">
 
-        <div class="rounded-lg border border-yellow-500/20 bg-yellow-500/5 p-4 mb-8 not-prose">
-          <p class="text-sm text-yellow-400">
-            <strong>Note:</strong> This privacy policy is under review by our legal team.
-            Last revised: March 2026.
-          </p>
-        </div>
-
         <h1 class="text-4xl font-bold tracking-tight mb-2">Privacy Policy</h1>
-        <p class="text-sm text-muted-foreground mb-8">Effective date: 26 March 2026</p>
+        <p class="text-sm text-muted-foreground mb-8">Effective date: 31 March 2026</p>
 
         <h2>1. Data Controller</h2>
         <p>
-          {tenant.name} ("{tenant.name}", "we", "us", or "our") is the data controller for
-          personal data collected through the website at {tenant.domain}. For any questions
-          about this policy, contact us at <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.
+          {tenant.name} ("SnusFriend", "we", "us", or "our"), registered in Sweden, is the
+          data controller for personal data collected through the website at {tenant.domain}.
+          For any questions about this policy, contact us at
+          <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.
         </p>
 
-        <h2>2. Data We Collect</h2>
+        <h2>2. Scope</h2>
+        <p>
+          This Privacy Policy applies to all personal data we collect when you browse our
+          website, create an account, place an order, contact customer support, subscribe to
+          marketing communications, leave product reviews, or participate in community features.
+        </p>
+
+        <h2>3. Data We Collect</h2>
         <p>We collect the following categories of personal data:</p>
         <ul>
           <li><strong>Account data:</strong> name, email address, and encrypted password when you create an account.</li>
@@ -46,7 +47,7 @@ import { tenant } from '@/config/tenant';
           <li><strong>Communication data:</strong> email correspondence, support tickets, and newsletter preferences.</li>
         </ul>
 
-        <h2>3. Legal Basis for Processing</h2>
+        <h2>4. Legal Basis for Processing</h2>
         <p>We process your data under the following legal bases (GDPR Art. 6):</p>
         <ul>
           <li><strong>Contract performance:</strong> processing orders, managing your account, and providing customer support.</li>
@@ -55,7 +56,7 @@ import { tenant } from '@/config/tenant';
           <li><strong>Legal obligation:</strong> age verification, tax records, and regulatory compliance.</li>
         </ul>
 
-        <h2>4. Cookies</h2>
+        <h2>5. Cookies</h2>
         <p>
           We use cookies and similar technologies to operate the Site, remember your preferences,
           and analyse usage. For full details, see our <a href="/cookies">Cookie Policy</a>.
@@ -65,7 +66,15 @@ import { tenant } from '@/config/tenant';
           cookies are only set with your consent.
         </p>
 
-        <h2>5. Third-Party Services</h2>
+        <h2>6. Payment Processing</h2>
+        <p>
+          Payments are processed by our commerce partner, Nyehandel, and their payment providers.
+          We do not store your full credit card numbers, CVV codes, or other sensitive payment
+          credentials on our servers. Payment providers operate under their own privacy policies
+          and PCI DSS compliance requirements.
+        </p>
+
+        <h2>7. Third-Party Services</h2>
         <p>We share data with the following categories of third parties, each under appropriate data processing agreements:</p>
         <ul>
           <li><strong>Supabase</strong> (database and authentication) &mdash; stores account, order, and application data. EU-hosted infrastructure.</li>
@@ -78,7 +87,7 @@ import { tenant } from '@/config/tenant';
           We do not sell your personal data to any third party.
         </p>
 
-        <h2>6. Data Retention</h2>
+        <h2>8. Data Retention</h2>
         <ul>
           <li><strong>Account data:</strong> retained for as long as your account is active, plus 30 days after deletion.</li>
           <li><strong>Order data:</strong> retained for 7 years to comply with tax and accounting regulations.</li>
@@ -86,7 +95,7 @@ import { tenant } from '@/config/tenant';
           <li><strong>Marketing consent records:</strong> retained for as long as the consent is valid, plus 3 years.</li>
         </ul>
 
-        <h2>7. Your Rights</h2>
+        <h2>9. Your Rights</h2>
         <p>Under GDPR, you have the following rights:</p>
         <ul>
           <li><strong>Access:</strong> request a copy of your personal data.</li>
@@ -102,7 +111,7 @@ import { tenant } from '@/config/tenant';
           We will respond within 30 days.
         </p>
 
-        <h2>8. Data Security</h2>
+        <h2>10. Data Security</h2>
         <p>
           We implement appropriate technical and organisational measures to protect your data,
           including encryption in transit (TLS), secure authentication, access controls, and
@@ -110,27 +119,27 @@ import { tenant } from '@/config/tenant';
           100% secure.
         </p>
 
-        <h2>9. International Transfers</h2>
+        <h2>11. International Transfers</h2>
         <p>
           Your data is primarily stored within the EU. Where data is transferred outside the
           EEA (e.g., to US-based sub-processors), we ensure appropriate safeguards are in place,
           such as Standard Contractual Clauses or adequacy decisions.
         </p>
 
-        <h2>10. Children</h2>
+        <h2>12. Children</h2>
         <p>
           Our Site is not intended for individuals under 18 years of age. We do not knowingly
           collect data from minors. If we become aware that we have collected data from someone
           under 18, we will promptly delete it.
         </p>
 
-        <h2>11. Changes to This Policy</h2>
+        <h2>13. Changes to This Policy</h2>
         <p>
           We may update this Privacy Policy from time to time. Changes will be posted on this
           page with an updated effective date. We encourage you to review this page periodically.
         </p>
 
-        <h2>12. Contact and Complaints</h2>
+        <h2>14. Contact and Complaints</h2>
         <p>
           For privacy-related questions or to exercise your rights, contact us at
           <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.

@@ -8,10 +8,13 @@ import { tenant } from '@/config/tenant';
 
 const result = Astro.getActionResult(actions.auth.login);
 
+// Don't use Astro.redirect() here — it creates a 302 response that strips
+// the Set-Cookie headers from the Supabase SSR client, breaking auth.
+// Instead, render a minimal page that redirects client-side, preserving cookies.
+let loginRedirectDest: string | null = null;
 if (result && !result.error && result.data?.redirect) {
   const dest = result.data.redirect ?? '/account';
-  const safeDest = dest.startsWith('/') && !dest.startsWith('//') ? dest : '/account';
-  return Astro.redirect(safeDest);
+  loginRedirectDest = dest.startsWith('/') && !dest.startsWith('//') ? dest : '/account';
 }
 
 const redirectTo = Astro.url.searchParams.get('redirect') || '/account';
@@ -23,6 +26,19 @@ const errorMessage = result?.error?.message;
   description={`Sign in to your ${tenant.name} account to manage orders, earn rewards, and track deliveries.`}
   noindex={true}
 >
+  {loginRedirectDest && (
+    <meta http-equiv="refresh" content={`0;url=${loginRedirectDest}`} />
+    <script define:vars={{ loginRedirectDest }}>
+      window.location.replace(loginRedirectDest);
+    </script>
+    <section class="bg-background text-foreground">
+      <div class="max-w-3xl mx-auto px-4 py-12 text-center">
+        <p class="text-muted-foreground">Signing you in…</p>
+      </div>
+    </section>
+  )}
+
+  {!loginRedirectDest && (
   <section class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">
       <Breadcrumb items={[{ label: 'Login' }]} />
@@ -96,4 +112,5 @@ const errorMessage = result?.error?.message;
       </div>
     </div>
   </section>
+  )}
 </Shop>

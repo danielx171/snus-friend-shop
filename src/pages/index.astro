@@ -79,7 +79,7 @@ if (heroProducts.length < 4) {
   <!-- Hero — Split layout: text left, product images right -->
   <section class="relative overflow-hidden border-b border-border" style={`background: hsl(var(--hero-bg));`}>
     <div class="absolute inset-0" style={`background: linear-gradient(to bottom right, hsl(var(--hero-gradient-from)), hsl(var(--hero-gradient-via)), hsl(var(--hero-gradient-to)));`} />
-    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 py-16 sm:py-20 lg:flex-row lg:gap-12 lg:py-24 lg:px-8">
+    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 py-16 sm:py-20 lg:py-24 lg:flex-row lg:gap-12 lg:py-24 lg:px-8">
 
       <!-- Left: text + stats + CTAs -->
       <div class="flex-1 text-center lg:text-left">
@@ -132,7 +132,7 @@ if (heroProducts.length < 4) {
 
       <!-- Right: product can cluster -->
       <div class="hidden flex-1 items-center justify-center lg:flex">
-        <div class="relative h-80 w-80">
+        <div class="relative h-80 w-80 xl:h-96 xl:w-96">
           {heroProducts[0] && (
             <img
               src={heroProducts[0]!.data.imageUrl}
@@ -181,17 +181,49 @@ if (heroProducts.length < 4) {
       </div>
 
       <!-- Mobile: horizontal product strip -->
-      <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory">
+      <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory px-1">
         {heroProducts.map((p) => p && (
           <img
             src={p.data.imageUrl}
             alt={p.data.name}
-            width="96"
-            height="96"
-            class="flex-shrink-0 snap-center rounded-xl shadow-lg shadow-black/20"
+            width="112"
+            height="112"
+            class="flex-shrink-0 snap-center rounded-xl shadow-lg shadow-black/20 w-24 h-24 sm:w-28 sm:h-28"
             loading="eager"
           />
         ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Rewards strip — above the fold gamification visibility -->
+  <section class="border-b border-border bg-card/30">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between gap-4 py-3 overflow-x-auto">
+        <a href="/rewards" class="flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-colors" data-astro-prefetch>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/15 text-primary" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+          </span>
+          Earn points on every order
+        </a>
+        <span class="hidden sm:block h-4 w-px bg-border" aria-hidden="true" />
+        <a href="/rewards#spin" class="flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-colors" data-astro-prefetch>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-amber-500/15 text-amber-500" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 16V8"/></svg>
+          </span>
+          Daily spin wheel
+        </a>
+        <span class="hidden sm:block h-4 w-px bg-border" aria-hidden="true" />
+        <a href="/community" class="flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-colors" data-astro-prefetch>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-purple-500/15 text-purple-500" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          Quests & leaderboard
+        </a>
+        <span class="hidden sm:block h-4 w-px bg-border" aria-hidden="true" />
+        <a href="/rewards" class="hidden md:inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90 whitespace-nowrap" data-astro-prefetch>
+          Join Free &rarr;
+        </a>
       </div>
     </div>
   </section>
@@ -223,8 +255,30 @@ if (heroProducts.length < 4) {
     })))}
   />
 
+  <!-- Trust bar -->
+  <section class="border-b border-border bg-background py-4">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 sm:px-6 lg:px-8 text-muted-foreground">
+      <div class="flex items-center gap-1.5">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span class="text-xs font-medium">Free shipping &euro;{tenant.freeShippingThreshold}+</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        <span class="text-xs font-medium">Ships from EU warehouse</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span class="text-xs font-medium">Secure checkout</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span class="text-xs font-medium">Same-day dispatch</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Best Sellers -->
-  <section id="best-sellers" class="border-b border-border bg-background py-16 sm:py-20">
+  <section id="best-sellers" class="border-b border-border bg-background py-16 sm:py-20 lg:py-24 lg:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mb-10 flex items-end justify-between">
         <div>
@@ -270,7 +324,7 @@ if (heroProducts.length < 4) {
 
   <!-- Staff Picks -->
   {staffPicks.length > 0 && (
-    <section id="staff-picks" class="border-b border-border bg-card/30 py-16 sm:py-20">
+    <section id="staff-picks" class="border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mb-10">
           <h2 class="text-2xl font-bold text-foreground sm:text-3xl">Staff Picks</h2>
@@ -300,7 +354,7 @@ if (heroProducts.length < 4) {
 
   <!-- New Arrivals -->
   {newArrivals.length > 0 && (
-    <section id="new-arrivals" class="border-b border-border bg-background py-16 sm:py-20">
+    <section id="new-arrivals" class="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mb-10 flex items-end justify-between">
           <div>
@@ -333,8 +387,53 @@ if (heroProducts.length < 4) {
     </section>
   )}
 
+  <!-- Popular Guides — internal linking to top blog content -->
+  <section class="border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="mb-3 text-center text-2xl font-bold text-foreground sm:text-3xl">
+        Expert Guides & Reviews
+      </h2>
+      <p class="mb-10 text-center text-muted-foreground">
+        In-depth, fact-checked guides written by nicotine pouch enthusiasts
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <a href="/blog/strongest-nicotine-pouches-ranked-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-600">Ranking</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Strongest Nicotine Pouches 2026</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Every high-strength pouch ranked by mg — from 50 mg ultra-extreme to 25 mg strong.</p>
+        </a>
+        <a href="/blog/best-nicotine-pouches-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600">Expert Picks</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Best Nicotine Pouches 2026</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Winners in 7 categories — best overall, beginner, mint, strong, value, variety, and premium.</p>
+        </a>
+        <a href="/blog/zyn-flavours-complete-guide" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-600">Flavour Guide</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">ZYN Flavours: Complete Guide</h3>
+          <p class="mt-2 text-sm text-muted-foreground">All 56+ ZYN flavours ranked — mint, citrus, coffee, berry. Strengths from 1.5 to 16.5 mg.</p>
+        </a>
+        <a href="/blog/how-to-use-nicotine-pouches" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-600">Beginner</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">How to Use Nicotine Pouches</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Step-by-step guide for first-time users. Placement, timing, strength selection, and tips.</p>
+        </a>
+        <a href="/blog/nicotine-pouches-vs-vaping" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-600">Comparison</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Nicotine Pouches vs Vaping</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Health, cost, convenience, and social factors compared side by side.</p>
+        </a>
+        <a href="/blog" class="group flex items-center justify-center rounded-xl border border-dashed border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <div class="text-center">
+            <h3 class="text-lg font-semibold text-primary group-hover:underline">View All 55+ Guides &rarr;</h3>
+            <p class="mt-2 text-sm text-muted-foreground">Rankings, comparisons, brand deep-dives, and more</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Why SnusFriend -->
-  <section class="border-b border-border bg-background py-16 sm:py-20">
+  <section class="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-6 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Why Thousands of Europeans Shop at SnusFriend
@@ -352,8 +451,7 @@ if (heroProducts.length < 4) {
           Because Google Ads bans nicotine advertising, you won't find us through flashy paid
           campaigns. Instead, we earn every visit by publishing the most thorough
           <a href="/blog" class="underline hover:text-foreground">guides and reviews</a> in the
-          nicotine pouch space — fact-checked, regularly updated, and written for real users
-          rather than search algorithms. That editorial approach shapes our entire store: every
+          nicotine pouch space — from our <a href="/blog/strongest-nicotine-pouches-ranked-2026" class="underline hover:text-foreground">strongest pouches ranking</a> to the <a href="/blog/zyn-flavours-complete-guide" class="underline hover:text-foreground">complete ZYN flavour guide</a> — fact-checked, regularly updated, and written for real users rather than search algorithms. That editorial approach shapes our entire store: every
           brand page includes the manufacturer, country of origin, strength range, and an honest
           description so you know exactly what you're buying.
         </p>
@@ -370,7 +468,7 @@ if (heroProducts.length < 4) {
   </section>
 
   <!-- Shop by Brand -->
-  <section class="border-b border-border bg-background py-16 sm:py-20">
+  <section class="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-10 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Shop by Brand
@@ -432,7 +530,7 @@ if (heroProducts.length < 4) {
   </section>
 
   <!-- Rewards & Gamification CTA -->
-  <section class="border-b border-border py-16 sm:py-20" style={`background: hsl(var(--hero-bg));`}>
+  <section class="border-b border-border py-16 sm:py-20 lg:py-24" style={`background: hsl(var(--hero-bg));`}>
     <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col items-center gap-8 text-center sm:flex-row sm:text-left">
         <div class="flex-1">
@@ -470,7 +568,7 @@ if (heroProducts.length < 4) {
   </section>
 
   <!-- CTA -->
-  <section class="bg-background py-16 sm:py-20">
+  <section class="bg-background py-16 sm:py-20 lg:py-24">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-2xl font-bold text-foreground sm:text-3xl">
         Ready to find your perfect pouch?

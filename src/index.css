@@ -51,7 +51,7 @@
    ═══════════════════════════════════════════════════════ */
 @theme {
   /* Container */
-  --container-2xl: 1400px;
+  --container-2xl: 1440px;
 
   /* Border radius */
   --radius-lg: var(--radius);
@@ -313,7 +313,7 @@
     --background: 240 15% 9%;
     --foreground: 30 15% 90%;
 
-    --card: 240 12% 14%;
+    --card: 240 12% 15%;
     --card-foreground: 30 15% 92%;
 
     --popover: 240 12% 15%;
@@ -326,7 +326,7 @@
     --secondary-foreground: 30 15% 85%;
 
     --muted: 240 8% 22%;
-    --muted-foreground: 30 10% 68%;
+    --muted-foreground: 30 12% 72%;
 
     --accent: 240 12% 16%;
     --accent-foreground: 30 15% 85%;
@@ -373,17 +373,17 @@
     --color-rarity-epic: 268 55% 58%;
     --color-rarity-legendary: 40 82% 52%;
 
-    /* Hero section — warm copper/bronze tones */
-    --hero-bg: 20 30% 8%;
-    --hero-gradient-from: 20 30% 8%;
-    --hero-gradient-via: 15 25% 5%;
-    --hero-gradient-to: 20 30% 8%;
-    --hero-text: 30 15% 92%;
-    --hero-muted: 28 25% 60%;
+    /* Hero section — warm copper/bronze tones (richer, more saturated) */
+    --hero-bg: 20 45% 12%;
+    --hero-gradient-from: 20 45% 12%;
+    --hero-gradient-via: 15 40% 8%;
+    --hero-gradient-to: 25 45% 12%;
+    --hero-text: 35 25% 95%;
+    --hero-muted: 28 30% 65%;
     --hero-cta-bg: 28 55% 46%;
-    --hero-cta-text: 30 15% 92%;
-    --hero-cta-hover-bg: 28 55% 40%;
-    --hero-divider: 30 15% 92%;
+    --hero-cta-text: 35 25% 95%;
+    --hero-cta-hover-bg: 28 60% 40%;
+    --hero-divider: 35 25% 95%;
   }
 
   /* Themes removed: Velo (F), see git history */
