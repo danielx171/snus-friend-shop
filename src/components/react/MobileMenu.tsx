@@ -38,7 +38,10 @@ const navSections = [
     links: [
       { href: '/community', label: 'Community' },
       { href: '/rewards', label: 'Rewards' },
+      { href: '/membership', label: 'Membership' },
       { href: '/blog', label: 'Blog' },
+      { href: '/compare', label: 'Compare Products' },
+      { href: '/whats-new', label: "What's New" },
     ],
   },
   {
@@ -46,6 +49,7 @@ const navSections = [
     links: [
       { href: '/login', label: 'Login' },
       { href: '/register', label: 'Register' },
+      { href: '/wishlist', label: 'Wishlist' },
     ],
   },
 ];
