@@ -49,6 +49,12 @@
 - Copper theme hero richer, footer spacing, header breathing room
 - Section spacing lg:py-24, container 1440px, mega menu theme-aware
 
+### Nyehandel Stock Sync (Sprint 1 of 4)
+- New edge function: `sync-nyehandel-stock` — lightweight stock-only sync
+- Cron: every 10 minutes via pg_cron (alongside existing 4h full sync)
+- DB: `stock_synced_at` column on `product_variants`
+- Deployed + cron active on Supabase
+
 ---
 
 ## What Cowork Should NOT Redo
