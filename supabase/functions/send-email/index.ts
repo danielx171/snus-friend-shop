@@ -335,11 +335,50 @@ function renderReviewRequest(data: Record<string, unknown>): string {
 </html>`;
 }
 
+function renderOrderCanceled(data: Record<string, unknown>): string {
+  const orderId = escapeHtml(String(data.orderId ?? ""));
+  const customerName = escapeHtml(String(data.customerName ?? "Customer"));
+  const total = escapeHtml(String(data.total ?? "0.00"));
+  const currency = escapeHtml(String(data.currency ?? "EUR"));
+  const reason = data.reason ? escapeHtml(String(data.reason)) : "";
+
+  return wrapInLayout(`
+    <h1 style="margin:0 0 16px;font-size:22px;color:#0f172a;">Order Cancelled</h1>
+    <p style="margin:0 0 24px;font-size:15px;color:#475569;line-height:1.6;">
+      Hi ${customerName}, your order <strong style="color:#0f172a;">#${orderId}</strong> has been cancelled as requested.
+    </p>
+    ${reason ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;"><tr><td style="padding:16px;background-color:#fef2f2;border-radius:8px;border-left:4px solid #ef4444;"><span style="font-size:13px;font-weight:600;color:#64748b;">Reason</span><br /><span style="font-size:14px;color:#334155;">${reason}</span></td></tr></table>` : ""}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;"><tr><td style="padding:16px;background-color:#f8fafc;border-radius:8px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="font-size:14px;color:#64748b;">Refund amount</td><td style="font-size:18px;font-weight:700;color:#0f172a;text-align:right;">${currency} ${total}</td></tr></table></td></tr></table>
+    <p style="margin:0 0 24px;font-size:14px;color:#475569;line-height:1.6;">Your refund will be processed within <strong style="color:#0f172a;">3–5 business days</strong> back to your original payment method.</p>
+    <p style="margin:0 0 24px;font-size:14px;color:#475569;line-height:1.6;">Changed your mind? You can always place a new order — we'd love to have you back.</p>
+    <p style="margin:0;text-align:center;"><a href="https://snusfriends.com/products" style="display:inline-block;padding:12px 28px;background-color:#0f172a;color:#a3e635;font-size:15px;font-weight:600;text-decoration:none;border-radius:8px;">Browse Products</a></p>
+  `);
+}
+
+function renderOrderUpdated(data: Record<string, unknown>): string {
+  const orderId = escapeHtml(String(data.orderId ?? ""));
+  const customerName = escapeHtml(String(data.customerName ?? "Customer"));
+  const changeType = escapeHtml(String(data.changeType ?? "updated"));
+  const changeSummary = escapeHtml(String(data.changeSummary ?? ""));
+  const changeLabels: Record<string, string> = { address_updated: "Shipping address updated", items_modified: "Order items modified", shipping_changed: "Shipping method changed", general: "Order updated" };
+  const changeLabel = changeLabels[changeType] ?? "Order updated";
+
+  return wrapInLayout(`
+    <h1 style="margin:0 0 16px;font-size:22px;color:#0f172a;">Order Updated</h1>
+    <p style="margin:0 0 24px;font-size:15px;color:#475569;line-height:1.6;">Hi ${customerName}, we've made a change to your order <strong style="color:#0f172a;">#${orderId}</strong>.</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;"><tr><td style="padding:16px;background-color:#eff6ff;border-radius:8px;border-left:4px solid #3b82f6;"><span style="font-size:13px;font-weight:600;color:#3b82f6;text-transform:uppercase;letter-spacing:0.5px;">What changed</span><br /><span style="font-size:15px;font-weight:600;color:#0f172a;display:block;margin-top:4px;">${changeLabel}</span>${changeSummary ? `<span style="font-size:14px;color:#475569;display:block;margin-top:8px;line-height:1.5;">${changeSummary}</span>` : ""}</td></tr></table>
+    <p style="margin:0 0 24px;font-size:14px;color:#475569;line-height:1.6;">Everything else about your order stays the same. If this doesn't look right, <a href="https://snusfriends.com/contact" style="color:#0f172a;font-weight:600;text-decoration:none;">contact us</a>.</p>
+    <p style="margin:0;text-align:center;"><a href="https://snusfriends.com/account" style="display:inline-block;padding:12px 28px;background-color:#0f172a;color:#a3e635;font-size:15px;font-weight:600;text-decoration:none;border-radius:8px;">View Your Orders</a></p>
+  `);
+}
+
 const TEMPLATE_RENDERERS: Record<string, (data: Record<string, unknown>) => string> = {
   order_confirmed: renderOrderConfirmed,
   order_shipped: renderOrderShipped,
   welcome: renderWelcome,
   review_request: renderReviewRequest,
+  order_canceled: renderOrderCanceled,
+  order_updated: renderOrderUpdated,
 };
 
 /* ------------------------------------------------------------------ */

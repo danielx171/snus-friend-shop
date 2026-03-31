@@ -32,7 +32,7 @@ Deno.serve(async (req: Request) => {
 
     // Auth: require either cron secret or internal function secret
     const cronSecret = Deno.env.get('CRON_SECRET');
-    const internalSecret = Deno.env.get('INTERNAL_FUNCTION_SECRET');
+    const internalSecret = Deno.env.get('INTERNAL_FUNCTIONS_SECRET');
     const providedCron = req.headers.get('x-cron-secret');
     const providedInternal = req.headers.get('x-internal-function-secret');
 
