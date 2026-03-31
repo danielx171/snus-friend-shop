@@ -64,6 +64,15 @@
 - DB: `canceled_at` + `cancel_reason` columns on `orders`
 - Deployed on Supabase
 
+### Discount Distribution (Sprint 3 of 4)
+- New shared utility: `_shared/discount-distribution.ts` — VAT-safe proportional discount math
+- New `discounts` table (code, type, amount, min_order, max_uses, validity window)
+- Modified `create-nyehandel-checkout` to accept `discount_code` field
+- Validates: code exists, active, not expired, not exhausted, min order met
+- Distributes discount proportionally across line items (NYE requirement)
+- Increments used_count after successful application
+- NOTE: `create-nyehandel-checkout` needs redeployment via Supabase CLI
+
 ---
 
 ## What Cowork Should NOT Redo

@@ -9,13 +9,15 @@ declare const Deno: {
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // @ts-ignore: Deno file import
 import { getCorsHeaders } from "../_shared/cors.ts";
+// @ts-ignore: Deno file import
+import { distributeDiscount, percentageToAmount } from "../_shared/discount-distribution.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-/** Validated shipping methods from NordicPouch Nyehandel admin */
-const VALID_SHIPPING_METHODS = [
+/** Fallback shipping methods — used only when live NYE fetch fails */
+const FALLBACK_SHIPPING_METHODS = [
   "UPS Standard (J229F1)",
   "UPS Express Saver",
   "DHL Economy (Non EU)",
@@ -23,6 +25,11 @@ const VALID_SHIPPING_METHODS = [
   "DHL Express EU",
   "DHL Economy EU",
 ];
+
+/** In-memory cache for live shipping methods from Nyehandel */
+let cachedShippingMethods: string[] = [];
+let shippingCachedAt = 0;
+const SHIPPING_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -60,6 +67,8 @@ interface CheckoutRequest {
   display_total?: number;
   /** Currency code for the display total */
   display_currency?: string;
+  /** Optional discount/coupon code */
+  discount_code?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -158,19 +167,12 @@ function validatePayload(
     };
   }
 
-  // shipping_method — validated against known Nyehandel shipping methods
-  if (
-    typeof b.shipping_method !== "string" ||
-    !VALID_SHIPPING_METHODS.includes(b.shipping_method)
-  ) {
+  // shipping_method — basic type check; live validation against NYE happens in main handler
+  if (typeof b.shipping_method !== "string" || !b.shipping_method.trim()) {
     return {
       ok: false,
       response: jsonResponse(
-        {
-          error: "invalid_shipping_method",
-          message: `Must be one of: ${VALID_SHIPPING_METHODS.join(", ")}`,
-          requestId,
-        },
+        { error: "shipping_method_required", requestId },
         400,
       ),
     };
@@ -197,6 +199,140 @@ function validatePayload(
       display_currency: displayCurrency,
     },
   };
+}
+
+/* ------------------------------------------------------------------ */
+/*  NYE Validation Helpers                                             */
+/* ------------------------------------------------------------------ */
+
+/** Fetch valid shipping methods from Nyehandel, with in-memory cache */
+async function getValidShippingMethods(
+  baseUrl: string,
+  token: string,
+  xIdentifier: string,
+): Promise<string[]> {
+  const now = Date.now();
+  if (cachedShippingMethods.length > 0 && now - shippingCachedAt < SHIPPING_CACHE_TTL_MS) {
+    return cachedShippingMethods;
+  }
+  try {
+    const res = await fetch(`${baseUrl}/shipping-methods`, {
+      headers: {
+        Accept: "application/json",
+        "X-identifier": xIdentifier,
+        Authorization: `Bearer ${token}`,
+        "X-Language": "en",
+      },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      // NYE returns { data: [{ name: "UPS Standard (J229F1)", ... }, ...] }
+      const methods = (json?.data ?? [])
+        .map((m: Record<string, unknown>) => String(m.name ?? ""))
+        .filter(Boolean);
+      if (methods.length > 0) {
+        cachedShippingMethods = methods;
+        shippingCachedAt = now;
+        return methods;
+      }
+    }
+  } catch {
+    // Fall through to fallback
+  }
+  // Return fallback if live fetch fails — never block checkout on a cache miss
+  return FALLBACK_SHIPPING_METHODS;
+}
+
+/**
+ * Validate SKUs against the Nyehandel catalog.
+ * Returns an array of SKUs that NYE doesn't recognise.
+ * Uses batched individual lookups (NYE has no bulk SKU endpoint).
+ */
+async function validateSkusAgainstNye(
+  skus: string[],
+  baseUrl: string,
+  token: string,
+  xIdentifier: string,
+  requestId: string,
+): Promise<string[]> {
+  const invalidSkus: string[] = [];
+
+  // Deduplicate SKUs before checking
+  const uniqueSkus = [...new Set(skus)];
+
+  // Check each SKU against NYE — run in parallel with concurrency limit
+  const BATCH_SIZE = 5;
+  for (let i = 0; i < uniqueSkus.length; i += BATCH_SIZE) {
+    const batch = uniqueSkus.slice(i, i + BATCH_SIZE);
+    const results = await Promise.allSettled(
+      batch.map(async (sku) => {
+        try {
+          const res = await fetch(
+            `${baseUrl}/products/find?sku=${encodeURIComponent(sku)}`,
+            {
+              headers: {
+                Accept: "application/json",
+                "X-identifier": xIdentifier,
+                Authorization: `Bearer ${token}`,
+                "X-Language": "en",
+              },
+            },
+          );
+          if (!res.ok) {
+            console.log(JSON.stringify({ requestId, event: "nye_sku_check_failed", sku, status: res.status }));
+            return { sku, valid: false };
+          }
+          const json = await res.json();
+          // NYE returns { data: { ... } } for found products, or empty/404 for missing
+          const found = json?.data?.id != null;
+          return { sku, valid: found };
+        } catch {
+          // Network error on SKU check — treat as valid to avoid blocking checkout
+          console.log(JSON.stringify({ requestId, event: "nye_sku_check_error", sku }));
+          return { sku, valid: true };
+        }
+      }),
+    );
+
+    for (const result of results) {
+      if (result.status === "fulfilled" && !result.value.valid) {
+        invalidSkus.push(result.value.sku);
+      }
+    }
+  }
+
+  return invalidSkus;
+}
+
+/**
+ * Acquire a processing lock using Supabase pg_advisory_xact_lock.
+ * Prevents concurrent requests with the same idempotency key from
+ * both creating orders. Returns true if lock acquired.
+ */
+async function acquireProcessingLock(
+  adminClient: ReturnType<typeof createClient>,
+  idempotencyKey: string,
+  requestId: string,
+): Promise<boolean> {
+  try {
+    // Hash the idempotency key to a bigint for pg_advisory_xact_lock
+    // Use a simple hash: sum of char codes modulo 2^31
+    let hash = 0;
+    for (let i = 0; i < idempotencyKey.length; i++) {
+      hash = ((hash << 5) - hash + idempotencyKey.charCodeAt(i)) | 0;
+    }
+    // pg_try_advisory_lock returns true if acquired, false if already held
+    const { data, error } = await adminClient.rpc("pg_try_advisory_lock", { key: hash });
+    if (error) {
+      console.log(JSON.stringify({ requestId, event: "advisory_lock_error", error: error.message }));
+      // If advisory lock fails, allow checkout to proceed (fail-open)
+      return true;
+    }
+    return data === true;
+  } catch {
+    // Fail open — don't block checkout if lock mechanism fails
+    return true;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -262,9 +398,10 @@ Deno.serve(async (req) => {
     if (user?.id) userId = user.id;
   }
 
-  /* ---------- idempotency check ---------- */
+  /* ---------- idempotency check + processing lock ---------- */
 
   if (idempotency_key) {
+    // Layer 1: Check if order already exists for this idempotency key
     const { data: existing } = await adminClient
       .from("orders")
       .select("id, nyehandel_order_id, nyehandel_prefix")
@@ -281,6 +418,49 @@ Deno.serve(async (req) => {
         requestId,
       });
     }
+
+    // Layer 2: Acquire advisory lock to prevent concurrent duplicate submissions
+    const lockAcquired = await acquireProcessingLock(adminClient, idempotency_key, requestId);
+    if (!lockAcquired) {
+      console.log(JSON.stringify({ requestId, event: "duplicate_submission_blocked", idempotency_key }));
+      return jsonResponse(
+        { error: "order_already_processing", message: "This order is currently being processed. Please wait.", requestId },
+        409,
+      );
+    }
+
+    // Layer 3: Re-check after lock acquired (another request may have completed)
+    const { data: existingAfterLock } = await adminClient
+      .from("orders")
+      .select("id, nyehandel_order_id, nyehandel_prefix")
+      .eq("idempotency_key", idempotency_key)
+      .maybeSingle();
+
+    if (existingAfterLock) {
+      return jsonResponse({
+        ok: true,
+        idempotent: true,
+        orderId: existingAfterLock.id,
+        nyehandelOrderId: existingAfterLock.nyehandel_order_id,
+        prefix: existingAfterLock.nyehandel_prefix,
+        requestId,
+      });
+    }
+  }
+
+  /* ---------- validate shipping method against live NYE data ---------- */
+
+  const validMethods = await getValidShippingMethods(nyehandelBaseUrl, nyehandelToken, nyehandelXIdentifier);
+  if (!validMethods.includes(shipping_method)) {
+    console.log(JSON.stringify({ requestId, event: "invalid_shipping_method", method: shipping_method, validMethods }));
+    return jsonResponse(
+      {
+        error: "invalid_shipping_method",
+        message: `Shipping method "${shipping_method}" is not available. Valid methods: ${validMethods.join(", ")}`,
+        requestId,
+      },
+      400,
+    );
   }
 
   /* ---------- server-side price lookup (never trust client prices) ---------- */
@@ -335,6 +515,139 @@ Deno.serve(async (req) => {
       console.error(JSON.stringify({ requestId, event: "sku_price_not_found", sku: item.sku }));
       return jsonResponse({ error: "sku_not_found", sku: item.sku, requestId }, 400);
     }
+  }
+
+  /* ---------- validate SKUs against live NYE catalog ---------- */
+
+  const invalidSkus = await validateSkusAgainstNye(
+    skus,
+    nyehandelBaseUrl,
+    nyehandelToken,
+    nyehandelXIdentifier,
+    requestId,
+  );
+
+  if (invalidSkus.length > 0) {
+    console.error(JSON.stringify({
+      requestId,
+      event: "nye_sku_validation_failed",
+      invalidSkus,
+    }));
+
+    // Surface an ops alert so the catalog sync issue gets attention
+    try {
+      await adminClient.from("ops_alerts").insert({
+        alert_type: "sku_mismatch",
+        severity: "high",
+        title: `SKU(s) missing from Nyehandel catalog: ${invalidSkus.join(", ")}`,
+        details: {
+          invalidSkus,
+          customerEmail: customer.email,
+          requestId,
+          timestamp: new Date().toISOString(),
+        },
+        status: "open",
+      });
+    } catch {
+      // Best-effort alert — the console.error above logs the critical info
+    }
+
+    return jsonResponse(
+      {
+        error: "sku_not_in_catalog",
+        message: `The following SKU(s) are not available in the fulfillment catalog: ${invalidSkus.join(", ")}. Please remove them and try again.`,
+        invalidSkus,
+        requestId,
+      },
+      400,
+    );
+  }
+
+  /* ---------- apply discount code (if provided) ---------- */
+
+  let discountApplied = 0;
+  let discountCode: string | null = null;
+
+  if (rawBody.discount_code) {
+    const code = String(rawBody.discount_code).trim().toUpperCase();
+    const { data: discount, error: discountErr } = await adminClient
+      .from("discounts")
+      .select("*")
+      .eq("code", code)
+      .eq("active", true)
+      .maybeSingle();
+
+    if (discountErr || !discount) {
+      return jsonResponse({ error: "invalid_discount_code", code, requestId }, 400);
+    }
+
+    // Check validity window
+    const now = new Date();
+    if (discount.valid_from && new Date(discount.valid_from) > now) {
+      return jsonResponse({ error: "discount_not_yet_active", code, requestId }, 400);
+    }
+    if (discount.valid_until && new Date(discount.valid_until) < now) {
+      return jsonResponse({ error: "discount_expired", code, requestId }, 400);
+    }
+
+    // Check max uses
+    if (discount.max_uses != null && discount.used_count >= discount.max_uses) {
+      return jsonResponse({ error: "discount_exhausted", code, requestId }, 400);
+    }
+
+    // Check min order value
+    const cartTotalCents = pricedItems.reduce((s, i) => s + Math.round(i.serverPrice * 100) * i.quantity, 0);
+    const minOrderCents = Math.round((discount.min_order_value ?? 0) * 100);
+    if (cartTotalCents < minOrderCents) {
+      return jsonResponse({
+        error: "discount_min_order_not_met",
+        min_order: discount.min_order_value,
+        cart_total: cartTotalCents / 100,
+        code,
+        requestId,
+      }, 400);
+    }
+
+    // Calculate discount amount in cents
+    const discountCents = discount.type === "percentage"
+      ? percentageToAmount(cartTotalCents, Number(discount.value))
+      : Math.round(Number(discount.value) * 100);
+
+    // Distribute across line items (VAT-safe)
+    const discountableItems = pricedItems.map((i) => ({
+      sku: i.sku,
+      quantity: i.quantity,
+      priceIncVat: Math.round(i.serverPrice * 100),
+      vatRate: 0, // NYE handles VAT — we pass price_inc_vat = price_ex_vat (0% local VAT)
+    }));
+
+    const distributed = distributeDiscount(discountableItems, discountCents);
+    if (!distributed) {
+      return jsonResponse({ error: "discount_exceeds_cart_total", code, requestId }, 400);
+    }
+
+    // Apply discounted prices back to pricedItems
+    for (let idx = 0; idx < pricedItems.length; idx++) {
+      pricedItems[idx].serverPrice = distributed[idx].discountedPriceIncVat / 100;
+    }
+
+    discountApplied = discountCents;
+    discountCode = code;
+
+    // Increment used_count
+    await adminClient
+      .from("discounts")
+      .update({ used_count: (discount.used_count ?? 0) + 1 })
+      .eq("id", discount.id);
+
+    console.log(JSON.stringify({
+      requestId,
+      event: "discount_applied",
+      code,
+      type: discount.type,
+      value: discount.value,
+      discountCents,
+    }));
   }
 
   /* ---------- build Nyehandel POST /orders payload ---------- */
