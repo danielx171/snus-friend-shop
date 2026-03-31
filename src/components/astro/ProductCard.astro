@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import CardAddToCart from '@/components/react/CardAddToCart';
-import { brandColors, strengthColors, strengthLabels, defaultBrandColor } from '@/data/brand-colors';
+import { brandColors, strengthColors, strengthLabels, defaultBrandColor, flavorColors, defaultFlavorColor } from '@/data/brand-colors';
 
 interface Props {
   slug: string;
@@ -31,6 +31,7 @@ const brandColor = brandColors[brandSlug] ?? defaultBrandColor;
 
 // Strength color
 const strengthColor = strengthColors[strengthKey] ?? strengthColors['normal'];
+const flavorColor = flavorColors[flavorKey] ?? defaultFlavorColor;
 
 // Badge formatting
 const badgeLabelMap: Record<string, string> = {
@@ -40,12 +41,6 @@ const badgeLabelMap: Record<string, string> = {
 function formatBadge(key: string): string {
   return badgeLabelMap[key] ?? key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase());
 }
-
-// Strength dots
-const strengthMap: Record<string, number> = {
-  light: 1, normal: 2, strong: 3, 'extra-strong': 4, 'super-strong': 5,
-};
-const strengthLevel = strengthMap[strengthKey] ?? 2;
 
 // Star rating
 const fullStars = Math.floor(ratings);
@@ -58,7 +53,8 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
   data-astro-prefetch
   aria-label={`${name} by ${brand} — view product details`}
   data-nicotine-mg={nicotineContent}
-  class="product-card group relative flex min-h-[48px] flex-col overflow-hidden rounded-xl bg-card/60 backdrop-blur-sm border border-border transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 hover:border-primary/30"
+  class="product-card group relative flex min-h-[48px] flex-col overflow-hidden rounded-xl bg-card/60 backdrop-blur-sm border border-l-4 border-border transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 hover:border-primary/30"
+  style={`border-left-color: ${flavorColor};`}
 >
   {/* Badges */}
   <div class="absolute top-2 left-2 z-10 flex flex-wrap gap-1">
@@ -112,16 +108,19 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
     <h3 class="text-sm font-bold leading-tight text-foreground line-clamp-2">{name}</h3>
 
     {/* Strength + Flavor */}
-    <div class="flex items-center gap-2">
-      <div class="flex items-center gap-1" role="img" aria-label={`${strengthLabels[strengthKey] ?? 'Normal'} strength`}>
-        {Array.from({ length: 5 }, (_, i) => (
-          <span class={`inline-block h-1.5 w-1.5 rounded-full ${i < strengthLevel ? '' : 'opacity-25'}`} style={`background-color: ${strengthColor};`} />
-        ))}
-        <span class="text-xs font-medium text-muted-foreground ml-0.5">{strengthLabels[strengthKey] ?? 'Normal'}</span>
-      </div>
-      <span class="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground capitalize">
+    <div class="flex items-center gap-1.5 flex-wrap">
+      <span
+        class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+        style={`background-color: ${strengthColor}18; color: ${strengthColor};`}
+        role="img"
+        aria-label={`${strengthLabels[strengthKey] ?? 'Normal'} strength`}
+      >
+        {strengthLabels[strengthKey] ?? 'Normal'}
+      </span>
+      <span class="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-secondary-foreground capitalize">
         {flavorKey}
       </span>
+      <span class="text-[10px] text-muted-foreground">{nicotineContent} mg</span>
     </div>
 
     {/* Star rating */}
@@ -153,9 +152,6 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
         <span class="text-xs text-muted-foreground">{ratings.toFixed(1)}</span>
       </div>
     )}
-
-    {/* Nicotine */}
-    <span class="text-xs text-muted-foreground">{nicotineContent} mg/pouch</span>
 
     {/* Price + Cart */}
     <div class="mt-auto flex items-end justify-between pt-2">
