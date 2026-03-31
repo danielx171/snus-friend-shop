@@ -3,7 +3,18 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+function serializeCookie(name: string, value: string, options?: CookieOptions): string {
+  let cookie = `${name}=${encodeURIComponent(value)}`;
+  if (options?.path) cookie += `; Path=${options.path}`;
+  if (options?.maxAge) cookie += `; Max-Age=${options.maxAge}`;
+  if (options?.domain) cookie += `; Domain=${options.domain}`;
+  if (options?.httpOnly) cookie += '; HttpOnly';
+  if (options?.secure) cookie += '; Secure';
+  if (options?.sameSite) cookie += `; SameSite=${options.sameSite}`;
+  return cookie;
+}
+
+export const POST: APIRoute = async ({ request }) => {
   const supabaseUrl = import.meta.env.SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
   const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -32,24 +43,22 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     });
   }
 
+  // Collect Set-Cookie headers manually — Astro API routes don't attach
+  // cookies.set() to manually constructed Response objects
+  const cookieHeaders: string[] = [];
+
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
-        // Astro API route cookies — try getAll first, fall back to parsing header
-        try {
-          if (typeof cookies.getAll === 'function') {
-            return cookies.getAll().map((c: any) => ({ name: c.name ?? '', value: c.value }));
-          }
-        } catch { /* fall through */ }
         const header = request.headers.get('cookie') ?? '';
         return header.split(';').filter(Boolean).map((pair) => {
           const [name, ...rest] = pair.trim().split('=');
-          return { name: name ?? '', value: rest.join('=') };
+          return { name: name ?? '', value: decodeURIComponent(rest.join('=')) };
         });
       },
       setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
         for (const { name, value, options } of cookiesToSet) {
-          cookies.set(name, value, options as any);
+          cookieHeaders.push(serializeCookie(name, value, options));
         }
       },
     },
@@ -66,8 +75,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
   const dest = redirect && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/account';
 
+  const responseHeaders = new Headers({ 'Content-Type': 'application/json' });
+  for (const cookie of cookieHeaders) {
+    responseHeaders.append('Set-Cookie', cookie);
+  }
+
   return new Response(JSON.stringify({ success: true, redirect: dest }), {
     status: 200,
-    headers: { 'Content-Type': 'application/json' },
+    headers: responseHeaders,
   });
 };
