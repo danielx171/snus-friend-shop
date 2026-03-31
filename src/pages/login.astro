@@ -3,19 +3,15 @@ export const prerender = false;
 
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
-import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
 
-const result = Astro.getActionResult(actions.auth.login);
-
-if (result && !result.error && result.data?.redirect) {
-  const dest = result.data.redirect ?? '/account';
-  const safeDest = dest.startsWith('/') && !dest.startsWith('//') ? dest : '/account';
-  return Astro.redirect(safeDest);
-}
-
 const redirectTo = Astro.url.searchParams.get('redirect') || '/account';
-const errorMessage = result?.error?.message;
+
+// If already logged in, redirect to account
+const user = Astro.locals.user;
+if (user) {
+  return Astro.redirect(redirectTo);
+}
 ---
 
 <Shop
@@ -34,13 +30,11 @@ const errorMessage = result?.error?.message;
             Sign in to your {tenant.name} account
           </p>
 
-          {errorMessage && (
-            <div role="alert" aria-live="assertive" class="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-center">
-              <p class="text-sm text-destructive font-medium">{errorMessage}</p>
-            </div>
-          )}
+          <div id="login-error" role="alert" aria-live="assertive" class="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-center hidden">
+            <p id="login-error-text" class="text-sm text-destructive font-medium"></p>
+          </div>
 
-          <form method="POST" action={actions.auth.login} class="space-y-5">
+          <form id="login-form" class="space-y-5" novalidate>
             <input type="hidden" name="redirect" value={redirectTo} />
 
             <div>
@@ -80,7 +74,8 @@ const errorMessage = result?.error?.message;
 
             <button
               type="submit"
-              class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-primary/50"
+              id="login-btn"
+              class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Sign In
             </button>
@@ -97,3 +92,59 @@ const errorMessage = result?.error?.message;
     </div>
   </section>
 </Shop>
+
+<script is:inline>
+(function() {
+  var form = document.getElementById('login-form');
+  var btn = document.getElementById('login-btn');
+  var errBox = document.getElementById('login-error');
+  var errText = document.getElementById('login-error-text');
+  if (!form || !btn) return;
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = form.querySelector('#email').value.trim();
+    var password = form.querySelector('#password').value;
+    var redirect = form.querySelector('[name=redirect]').value;
+
+    if (!email || !password) {
+      showError('Please enter your email and password.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+    hideError();
+
+    fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ email: email, password: password, redirect: redirect })
+    })
+    .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, data: d }; }); })
+    .then(function(result) {
+      if (result.ok && result.data.redirect) {
+        window.location.replace(result.data.redirect);
+      } else {
+        showError(result.data.error || 'Login failed. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+    })
+    .catch(function() {
+      showError('Network error. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    });
+  });
+
+  function showError(msg) {
+    errText.textContent = msg;
+    errBox.classList.remove('hidden');
+  }
+  function hideError() {
+    errBox.classList.add('hidden');
+  }
+})();
+</script>

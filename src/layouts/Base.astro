@@ -26,12 +26,13 @@ const props = Astro.props;
   <meta name="generator" content={Astro.generator} />
   <link rel="icon" type="image/png" href={tenant.assets.favicon} />
   <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
-  <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/PlusJakartaSans-Variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preconnect" href="https://bozdnoctcszbhemdjsek.supabase.co" crossorigin />
   <link rel="author" type="text/plain" href="/llms.txt" />
-  <meta name="theme-color" content="#f5f3ef" />
+  <meta name="theme-color" content="#f5f3ef" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#161622" media="(prefers-color-scheme: dark)" />
 
   <SEO
     title={props.title}
