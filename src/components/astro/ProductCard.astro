@@ -28,9 +28,13 @@ const isOutOfStock = stock === 0;
 // Brand color for image tint
 const brandColor = brandColors[brandSlug] ?? defaultBrandColor;
 
-// Strength color
+// Strength color + flavor color
 const strengthColor = strengthColors[strengthKey] ?? strengthColors['normal'];
 const flavorColor = flavorColors[flavorKey] ?? defaultFlavorColor;
+
+// Strength dots (1-5 scale)
+const strengthMap: Record<string, number> = { normal: 2, strong: 3, 'extra-strong': 4, 'super-strong': 5 };
+const strengthDots = strengthMap[strengthKey] ?? 2;
 
 // Badge formatting
 const badgeLabelMap: Record<string, string> = {
@@ -45,6 +49,17 @@ function formatBadge(key: string): string {
 const fullStars = Math.floor(ratings);
 const hasHalf = ratings - fullStars >= 0.25;
 const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+
+// Flavor labels
+const flavorLabelMap: Record<string, string> = {
+  mint: 'Mint', berry: 'Berry', citrus: 'Citrus', fruit: 'Fruit',
+  coffee: 'Coffee', cola: 'Cola', menthol: 'Menthol', wintergreen: 'Wintergreen',
+  tropical: 'Tropical', ice: 'Ice', original: 'Original', tobacco: 'Tobacco',
+  licorice: 'Licorice', vanilla: 'Vanilla',
+};
+const flavorLabel = flavorLabelMap[flavorKey] ?? flavorKey;
+
+const pack1Price = prices.pack1 ?? 0;
 ---
 
 <a
@@ -52,25 +67,33 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
   data-astro-prefetch
   aria-label={`${name} by ${brand} — view product details`}
   data-nicotine-mg={nicotineContent}
-  class="product-card group relative flex min-h-[48px] flex-col overflow-hidden rounded-xl bg-card/60 backdrop-blur-sm border border-l-4 border-border transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 hover:border-primary/30"
-  style={`border-left-color: ${flavorColor};`}
+  class="product-card group relative flex min-h-[48px] flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1"
+  style={`background: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%); box-shadow: 0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);`}
 >
-  {/* Badges */}
-  <div class="absolute top-2 left-4 z-10 flex flex-wrap gap-1">
+  {/* Badges — pill style with glow */}
+  <div class="absolute top-2.5 left-2.5 z-10 flex flex-wrap gap-1">
     {isOutOfStock && (
-      <span class="rounded-md bg-destructive px-2 py-0.5 text-xs font-medium text-destructive-foreground">
+      <span class="rounded-full bg-destructive px-2.5 py-0.5 text-[10px] font-bold text-destructive-foreground shadow-sm">
         Out of Stock
       </span>
     )}
     {badgeKeys.map((badge) => (
-      <span class="rounded-md bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary">
+      <span
+        class="rounded-full px-2.5 py-0.5 text-[10px] font-bold text-white shadow-sm"
+        style={`background-color: ${badge === 'popular' || badge === 'bestseller' ? '#f59e0b' : badge === 'new' ? '#22c55e' : 'hsl(var(--primary))'};`}
+      >
         {formatBadge(badge)}
       </span>
     ))}
   </div>
 
-  {/* Image */}
-  <div class="product-card-image relative aspect-square w-full overflow-hidden" style={`background: linear-gradient(135deg, ${brandColor}12, ${brandColor}06);`}>
+  {/* Image area with radial flavor glow */}
+  <div class="product-card-image relative aspect-square w-full overflow-hidden">
+    {/* Radial glow behind product */}
+    <div
+      class="absolute inset-0 opacity-15 transition-opacity duration-300 group-hover:opacity-30"
+      style={`background: radial-gradient(circle at 50% 60%, ${flavorColor}90 0%, transparent 70%);`}
+    />
     {imageUrl ? (
       <Image
         src={imageUrl}
@@ -80,46 +103,63 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
         loading="lazy"
         format="webp"
         quality={80}
-        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        class="relative z-[1] h-full w-full object-cover transition-transform duration-500 group-hover:scale-108"
+        style={`filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)) drop-shadow(0 0 8px ${flavorColor}15);`}
       />
     ) : (
-      <div class="flex h-full w-full items-center justify-center" style={`background: linear-gradient(135deg, ${brandColor}25, ${brandColor}10);`}>
+      <div class="flex h-full w-full items-center justify-center" style={`background: radial-gradient(circle at 50% 60%, ${brandColor}30 0%, transparent 70%);`}>
         <span class="text-4xl font-bold" style={`color: ${brandColor}90;`} aria-hidden="true">
           {brand.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
         </span>
       </div>
     )}
+
+    {/* Strength accent line at bottom of image */}
+    <div
+      class="absolute bottom-0 left-0 right-0 h-[2px] z-[2]"
+      style={`background: linear-gradient(90deg, transparent, ${strengthColor}, transparent); opacity: 0.8;`}
+    />
   </div>
-  {/* Strength color strip */}
-  <div class="h-[3px] w-full" style={`background-color: ${strengthColor};`} />
 
   {/* Content */}
   <div class="flex flex-1 flex-col gap-1.5 p-3">
-    {/* Brand — span instead of <a> to avoid nested links (breaks HTML) */}
-    <span
-      class="text-xs text-muted-foreground hover:text-primary cursor-pointer transition-colors py-1"
-      onclick={`event.preventDefault();event.stopPropagation();window.location.href='/brands/${brandSlug}'`}
-    >
-      {brand}
-    </span>
+    {/* Brand + strength dots row */}
+    <div class="flex items-center justify-between">
+      <span
+        class="text-xs font-semibold uppercase tracking-wider hover:brightness-125 cursor-pointer transition-all"
+        style={`color: ${brandColor};`}
+        onclick={`event.preventDefault();event.stopPropagation();window.location.href='/brands/${brandSlug}'`}
+      >
+        {brand}
+      </span>
+      {/* Strength dots */}
+      <div class="flex items-center gap-0.5" role="img" aria-label={`${strengthLabels[strengthKey] ?? 'Normal'} strength, ${strengthDots} of 5`}>
+        {Array.from({ length: 5 }, (_, i) => (
+          <div
+            class="rounded-full transition-all"
+            style={`width: ${i < strengthDots ? '6px' : '5px'}; height: ${i < strengthDots ? '6px' : '5px'}; background-color: ${i < strengthDots ? strengthColor : 'rgba(128,128,128,0.2)'}; ${i < strengthDots ? `box-shadow: 0 0 4px ${strengthColor}50;` : ''}`}
+          />
+        ))}
+      </div>
+    </div>
 
     {/* Name */}
     <h3 class="text-sm font-bold leading-tight text-foreground line-clamp-2">{name}</h3>
 
-    {/* Strength + Flavor */}
-    <div class="flex items-center gap-1.5 flex-wrap">
+    {/* Pill badges — flavor, mg, format */}
+    <div class="flex items-center gap-1 flex-wrap">
       <span
-        class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
-        style={`background-color: ${strengthColor}18; color: ${strengthColor};`}
-        role="img"
-        aria-label={`${strengthLabels[strengthKey] ?? 'Normal'} strength`}
+        class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium border"
+        style={`background-color: ${flavorColor}15; color: ${flavorColor}; border-color: ${flavorColor}25;`}
       >
-        {strengthLabels[strengthKey] ?? 'Normal'}
+        {flavorLabel}
       </span>
-      <span class="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-secondary-foreground capitalize">
-        {flavorKey}
+      <span
+        class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium border"
+        style={`background-color: ${strengthColor}15; color: ${strengthColor}; border-color: ${strengthColor}25;`}
+      >
+        {nicotineContent} mg
       </span>
-      <span class="text-[10px] text-muted-foreground">{nicotineContent} mg</span>
     </div>
 
     {/* Star rating */}
@@ -168,3 +208,16 @@ const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
     />
   </div>
 </a>
+
+<style>
+  /* Hover effects only on pointer devices */
+  @media (hover: hover) {
+    .product-card:hover {
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+    }
+  }
+  /* Scale utility not in Tailwind v4 by default */
+  .group:hover .group-hover\:scale-108 {
+    transform: scale(1.08);
+  }
+</style>
