@@ -57,9 +57,11 @@ const { count: referralCount } = await supabase
   .select('id', { count: 'exact', head: true })
   .eq('referral_code_id', (await supabase.from('referral_codes').select('id').eq('user_id', user.id).single()).data?.id ?? '00000000-0000-0000-0000-000000000000');
 
-// User metadata
+// User metadata + nickname
+import { generateNickname } from '@/lib/nickname';
 const fullName = user.user_metadata?.full_name || '';
 const phone = user.user_metadata?.phone || '';
+const nickname = user.user_metadata?.nickname || generateNickname(user.id);
 
 // Check action results
 const profileResult = Astro.getActionResult(actions.account.updateProfile);
@@ -105,7 +107,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
       <Breadcrumb items={[{ label: 'Account' }]} />
 
       <h1 class="text-3xl font-bold tracking-tight mb-2">My Account</h1>
-      <p class="text-muted-foreground mb-6">Welcome back, {fullName || user.email}</p>
+      <p class="text-muted-foreground mb-6">Welcome back, <span class="font-semibold text-foreground">{nickname}</span></p>
 
       <!-- Gamification Profile Card -->
       <div class="mb-8">

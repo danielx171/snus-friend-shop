@@ -130,8 +130,8 @@ if (heroProducts.length < 4) {
         </div>
       </div>
 
-      <!-- Right: product can cluster -->
-      <div class="hidden flex-1 items-center justify-center lg:flex">
+      <!-- Right: floating 3D product cans -->
+      <div class="hidden flex-1 items-center justify-center lg:flex" style="perspective: 600px;">
         <div class="relative h-80 w-80 xl:h-96 xl:w-96">
           {heroProducts[0] && (
             <img
@@ -139,8 +139,8 @@ if (heroProducts.length < 4) {
               alt={heroProducts[0]!.data.name}
               width="180"
               height="180"
-              class="absolute left-4 top-2 rounded-2xl shadow-2xl shadow-black/30"
-              style="transform: rotate(-6deg);"
+              class="hero-can absolute left-4 top-2 rounded-2xl"
+              style="animation: heroFloat1 6s ease-in-out infinite; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));"
               loading="eager"
             />
           )}
@@ -150,8 +150,8 @@ if (heroProducts.length < 4) {
               alt={heroProducts[1]!.data.name}
               width="160"
               height="160"
-              class="absolute right-0 top-8 rounded-2xl shadow-2xl shadow-black/30"
-              style="transform: rotate(4deg);"
+              class="hero-can absolute right-0 top-8 rounded-2xl"
+              style="animation: heroFloat2 7s ease-in-out infinite 1s; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));"
               loading="eager"
             />
           )}
@@ -161,8 +161,8 @@ if (heroProducts.length < 4) {
               alt={heroProducts[2]!.data.name}
               width="150"
               height="150"
-              class="absolute bottom-4 left-12 rounded-2xl shadow-2xl shadow-black/30"
-              style="transform: rotate(3deg);"
+              class="hero-can absolute bottom-4 left-12 rounded-2xl"
+              style="animation: heroFloat3 8s ease-in-out infinite 0.5s; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));"
               loading="eager"
             />
           )}
@@ -172,8 +172,8 @@ if (heroProducts.length < 4) {
               alt={heroProducts[3]!.data.name}
               width="140"
               height="140"
-              class="absolute bottom-0 right-8 rounded-2xl shadow-2xl shadow-black/30"
-              style="transform: rotate(-3deg);"
+              class="hero-can absolute bottom-0 right-8 rounded-2xl"
+              style="animation: heroFloat4 6.5s ease-in-out infinite 1.5s; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));"
               loading="eager"
             />
           )}
@@ -192,6 +192,31 @@ if (heroProducts.length < 4) {
             loading="eager"
           />
         ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Beginner CTA strip -->
+  <section class="border-b border-primary/20 bg-primary/5">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-lg">
+            🌱
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-foreground">New to nicotine pouches?</p>
+            <p class="text-xs text-muted-foreground">We'll help you pick a safe, gentle starting point. No pressure.</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <a href="/flavor-quiz" class="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition">
+            Take the Quiz
+          </a>
+          <a href="/beginners" class="rounded-lg border border-primary/30 px-4 py-2 text-xs font-medium text-foreground hover:bg-primary/10 transition">
+            Beginner Guide
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -637,4 +662,37 @@ if (heroProducts.length < 4) {
     } catch(e) {}
   })();
   </script>
+
+  <style>
+    /* Floating 3D hero animations — GPU-accelerated, ~2KB total */
+    @keyframes heroFloat1 {
+      0%, 100% { transform: translateY(0) rotateY(0deg) rotate(-6deg) scale(1); }
+      25% { transform: translateY(-18px) rotateY(8deg) rotate(-4deg) scale(1.03); }
+      50% { transform: translateY(-8px) rotateY(-4deg) rotate(-7deg) scale(1.01); }
+      75% { transform: translateY(-22px) rotateY(5deg) rotate(-5deg) scale(1.04); }
+    }
+    @keyframes heroFloat2 {
+      0%, 100% { transform: translateY(0) rotateY(0deg) rotate(4deg) scale(1); }
+      30% { transform: translateY(-15px) rotateY(-6deg) rotate(6deg) scale(1.02); }
+      60% { transform: translateY(-25px) rotateY(5deg) rotate(3deg) scale(1.05); }
+    }
+    @keyframes heroFloat3 {
+      0%, 100% { transform: translateY(0) rotateY(0deg) rotate(3deg) scale(1); }
+      35% { transform: translateY(-20px) rotateY(7deg) rotate(1deg) scale(1.03); }
+      65% { transform: translateY(-10px) rotateY(-5deg) rotate(5deg) scale(1.01); }
+    }
+    @keyframes heroFloat4 {
+      0%, 100% { transform: translateY(0) rotateY(0deg) rotate(-3deg) scale(1); }
+      40% { transform: translateY(-22px) rotateY(-8deg) rotate(-1deg) scale(1.04); }
+      70% { transform: translateY(-12px) rotateY(6deg) rotate(-5deg) scale(1.02); }
+    }
+    .hero-can {
+      will-change: transform;
+      transform-style: preserve-3d;
+    }
+    /* Reduce motion for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-can { animation: none !important; }
+    }
+  </style>
 </Shop>

@@ -220,38 +220,55 @@ const pack1Price = prices.pack1 ?? 0;
 </style>
 
 <script>
-  // 3D mouse-tracking tilt for Astro product cards (same effect as React version)
-  function initTilt() {
-    document.querySelectorAll('.product-card').forEach((card) => {
-      if ((card as any).__tiltInit) return;
-      (card as any).__tiltInit = true;
-      const el = card as HTMLElement;
-      // Wrap in perspective container if not already
-      if (el.parentElement?.style.perspective !== '800px') {
-        const wrapper = document.createElement('div');
-        wrapper.style.perspective = '800px';
-        el.parentElement?.insertBefore(wrapper, el);
-        wrapper.appendChild(el);
-      }
-      const isTouchDevice = 'ontouchstart' in window;
-      if (isTouchDevice) return; // Skip tilt on touch devices
+  // 3D mouse-tracking tilt — lazy init via IntersectionObserver for performance
+  function attachTilt(el: HTMLElement) {
+    if ((el as any).__tiltInit) return;
+    (el as any).__tiltInit = true;
+    if ('ontouchstart' in window) return;
 
-      el.addEventListener('mousemove', (e) => {
-        const r = el.getBoundingClientRect();
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
-        const x = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height / 2))) * 12;
-        const y = Math.max(-1, Math.min(1, -(e.clientX - cx) / (r.width / 2))) * 12;
-        el.style.transform = `rotateX(${x}deg) rotateY(${y}deg) scale(1.04) translateY(-8px)`;
-        el.style.boxShadow = '0 35px 60px -15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)';
-        el.style.transition = 'box-shadow 0.2s, transform 0.08s ease-out';
-      });
-      el.addEventListener('mouseleave', () => {
-        el.style.transform = '';
-        el.style.boxShadow = '';
-        el.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
-      });
+    // Wrap in perspective container
+    if (el.parentElement?.style.perspective !== '800px') {
+      const wrapper = document.createElement('div');
+      wrapper.style.perspective = '800px';
+      el.parentElement?.insertBefore(wrapper, el);
+      wrapper.appendChild(el);
+    }
+
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height/2)) / (r.height/2))) * 12;
+      const y = Math.max(-1, Math.min(1, -(e.clientX - (r.left + r.width/2)) / (r.width/2))) * 12;
+      el.style.transform = `rotateX(${x}deg) rotateY(${y}deg) scale(1.04) translateY(-8px)`;
+      el.style.boxShadow = '0 35px 60px -15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)';
+      el.style.transition = 'box-shadow 0.2s, transform 0.08s ease-out';
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+      el.style.boxShadow = '';
+      el.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
     });
   }
-  document.addEventListener('astro:page-load', initTilt);
+
+  function initTilt() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          attachTilt(entry.target as HTMLElement);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '200px' });
+
+    document.querySelectorAll('.product-card').forEach((card) => {
+      if (!(card as any).__tiltInit) observer.observe(card);
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(initTilt);
+    } else {
+      setTimeout(initTilt, 100);
+    }
+  });
 </script>
