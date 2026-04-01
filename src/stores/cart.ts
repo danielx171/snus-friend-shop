@@ -185,3 +185,44 @@ export function getPackSavings(item: CartItem): { bestPack: PackSize; savingsPer
   if (bestSaving < 5) return null; // Only show if >5% savings
   return { bestPack, savingsPercent: bestSaving, pricePerCan: bestPerCan };
 }
+
+/* ── Abandoned cart snapshot (debounced server sync) ── */
+
+let _snapshotTimer: ReturnType<typeof setTimeout> | null = null;
+const SNAPSHOT_DEBOUNCE_MS = 30_000; // 30 seconds after last cart change
+
+$cartItems.listen((items) => {
+  if (typeof window === 'undefined') return;
+  if (_snapshotTimer) clearTimeout(_snapshotTimer);
+  if (items.length === 0) return; // Don't snapshot empty carts
+
+  _snapshotTimer = setTimeout(() => {
+    const supabaseUrl =
+      (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_SUPABASE_URL) ||
+      (window as any).__SUPABASE_URL__ ||
+      '';
+    if (!supabaseUrl) return;
+
+    const total = items.reduce((sum, item) => {
+      const price = item.product.prices[item.packSize] ?? 0;
+      return sum + price * item.quantity;
+    }, 0);
+
+    const canCount = items.reduce((sum, item) => {
+      return sum + (packSizeMultipliers[item.packSize] ?? 1) * item.quantity;
+    }, 0);
+
+    const auth = (window as any).__AUTH_STATE__;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+
+    fetch(`${supabaseUrl}/functions/v1/save-cart-snapshot`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        cart_data: items,
+        cart_total: total,
+        item_count: canCount,
+      }),
+    }).catch(() => {}); // Fire-and-forget
+  }, SNAPSHOT_DEBOUNCE_MS);
+});
