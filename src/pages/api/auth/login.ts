@@ -5,12 +5,14 @@ export const prerender = false;
 
 function serializeCookie(name: string, value: string, options?: CookieOptions): string {
   let cookie = `${name}=${encodeURIComponent(value)}`;
-  if (options?.path) cookie += `; Path=${options.path}`;
+  // Path MUST default to '/' — without this, cookies get scoped to /api/auth/login
+  // and won't be sent on subsequent page loads (e.g. /account)
+  cookie += `; Path=${options?.path ?? '/'}`;
   if (options?.maxAge) cookie += `; Max-Age=${options.maxAge}`;
   if (options?.domain) cookie += `; Domain=${options.domain}`;
-  if (options?.httpOnly) cookie += '; HttpOnly';
-  if (options?.secure) cookie += '; Secure';
-  if (options?.sameSite) cookie += `; SameSite=${options.sameSite}`;
+  if (options?.httpOnly !== false) cookie += '; HttpOnly';
+  cookie += '; Secure';
+  cookie += `; SameSite=${options?.sameSite ?? 'Lax'}`;
   return cookie;
 }
 
