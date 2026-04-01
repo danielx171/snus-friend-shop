@@ -3,6 +3,7 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -133,14 +134,17 @@ import { tenant } from '@/config/tenant';
       <p>Don't panic. While unpleasant, a swallowed pouch is unlikely to cause serious harm. You may experience nausea or stomach discomfort. Contact poison control or your doctor if you experience severe symptoms like difficulty breathing, chest pain, or persistent vomiting.</p>
     </section>
 
+    <BlogNewsletterCta />
+
     <section>
       <h2>Related Reading</h2>
       <ul style="list-style-type: disc; padding-left: 24px; margin: 20px 0;">
+        <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best for Beginners</a> — Gentle options with strength recommendations</li>
+        <li><a href="/blog/nicotine-pouch-side-effects">Side Effects Guide</a> — What's normal and when to worry</li>
+        <li><a href="/blog/can-you-swallow-nicotine-pouches">Can You Swallow Nicotine Pouches?</a> — Common beginner question answered</li>
+        <li><a href="/blog/how-to-store-nicotine-pouches">How to Store Nicotine Pouches</a> — Keep them fresh</li>
         <li><a href="/blog/switching-from-cigarettes-to-nicotine-pouches">Switching to Pouches</a> — 4-week transition plan for ex-smokers</li>
-        <li><a href="/blog/best-nicotine-pouches-for-quitting-smoking">Best for Quitting</a> — Top products for cessation</li>
         <li><a href="/blog/how-to-choose-your-strength">Strength Selection</a> — Match pouches to your needs</li>
-        <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best for Beginners</a> — Gentle options to start with</li>
-        <li><a href="/blog/nicotine-pouch-side-effects">Side Effects Guide</a> — What to expect</li>
       </ul>
     </section>
 

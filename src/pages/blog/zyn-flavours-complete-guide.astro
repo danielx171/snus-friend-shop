@@ -3,12 +3,13 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 ---
 
 <Shop
-  title="ZYN Flavours: Complete 2026 Guide & Rankings"
-  description="Every ZYN flavour ranked and reviewed. Mint, citrus, coffee, berry, licorice — strengths from 1.5 to 16.5 mg. Find your perfect ZYN at SnusFriend."
+  title="ZYN Flavours & Flavors: Complete 2026 Guide & Rankings"
+  description="Every ZYN flavour ranked and reviewed for 2026. All ZYN flavors listed — mint, citrus, coffee, berry, licorice — strengths from 1.5 to 16.5 mg."
   canonical="/blog/zyn-flavours-complete-guide"
   ogType="article"
 >
@@ -210,8 +211,11 @@ import { tenant } from '@/config/tenant';
 
     <p>Start your journey at <a href="/products">SnusFriend's full ZYN range</a>, or use our <a href="/flavor-quiz">flavour quiz</a> for personalised recommendations. Questions about strength or switching from another brand? See our guide on <a href="/blog/how-to-choose-your-strength">how to choose your strength</a> or explore <a href="/blog/best-nicotine-pouches-for-beginners-2026">the best pouches for beginners</a>.</p>
 
+    <BlogNewsletterCta />
+
     <h2>Related Reading</h2>
     <ul>
+      <li><a href="/blog/zyn-strength-chart-every-level-explained">ZYN Strength Chart: S1 to S6 Explained</a> — Every ZYN product mapped by nicotine level</li>
       <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO: Complete Comparison 2026</a></li>
       <li><a href="/blog/best-nicotine-pouches-2026">Best Nicotine Pouches 2026: Expert Picks</a></li>
       <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Nicotine Strength</a></li>

@@ -12,8 +12,8 @@ const activeBrandCount = allBrands.filter((b) => brandSlugsWithProducts.has(b.id
 ---
 
 <Shop
-  title={`About Us — Europe's Nicotine Pouch Shop | ${tenant.name}`}
-  description={`Learn about ${tenant.name} — Europe's premium nicotine pouch shop with ${allProducts.length}+ cans from ${activeBrandCount} brands. Fast EU-wide delivery and unbeatable prices.`}
+  title={`About Us — EU Nicotine Pouch Shop | ${tenant.name}`}
+  description={`Learn about ${tenant.name} — an EU-based nicotine pouch shop with ${allProducts.length}+ cans from ${activeBrandCount} brands. Fast EU-wide delivery and competitive prices.`}
 >
   <!-- Hero banner -->
   <section style={`background: hsl(var(--hero-bg)); color: hsl(var(--hero-text));`}>
@@ -42,7 +42,7 @@ const activeBrandCount = allBrands.filter((b) => brandSlugsWithProducts.has(b.id
           <div class="text-sm text-muted-foreground">Brands</div>
         </div>
         <div class="text-center">
-          <div class="text-3xl font-bold text-foreground">55+</div>
+          <div class="text-3xl font-bold text-foreground">50+</div>
           <div class="text-sm text-muted-foreground">Expert Guides</div>
         </div>
         <div class="text-center">
@@ -140,14 +140,14 @@ const activeBrandCount = allBrands.filter((b) => brandSlugsWithProducts.has(b.id
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
     name: `About ${tenant.name}`,
-    description: `Learn about ${tenant.name} — Europe's premium nicotine pouch shop.`,
+    description: `Learn about ${tenant.name} — an EU-based nicotine pouch shop.`,
     url: 'https://snusfriends.com/about',
     mainEntity: {
       '@type': 'Organization',
       name: tenant.name,
       url: 'https://snusfriends.com',
       logo: { '@type': 'ImageObject', url: 'https://snusfriends.com/logo.svg' },
-      description: `Europe's leading online shop for premium nicotine pouches. ${allProducts.length}+ products from ${activeBrandCount} brands.`,
+      description: `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${activeBrandCount} brands.`,
       foundingDate: '2025',
       sameAs: ['https://snusfriends.com'],
     },

@@ -59,12 +59,23 @@ Migrated from Vite SPA to Astro 6 with React islands. Deployed and live on snusf
 - [ ] Klaviyo: Set up automated welcome flow in Klaviyo UI (can't be done via API)
 - [ ] Klaviyo: Browse abandonment flow (future)
 
-### 5. Pre-Launch Blockers
+### 5. Nyehandel Integration Hardening (NEW — March 31)
+- [x] SKU pre-validation: checkout verifies each SKU against NYE `/products/find` before submission
+- [x] Dynamic shipping validation: checkout validates shipping methods against live NYE `/shipping-methods` (cached 5 min)
+- [x] 3-layer duplicate prevention: idempotency check → pg_advisory_lock → re-check after lock
+- [x] Ops alert on SKU mismatch: auto-creates `ops_alerts` row when a SKU isn't in NYE catalog
+- [ ] Order cancellation edge function (`cancel-nyehandel-order`) — spec ready
+- [ ] Order update/edit flow (`update-nyehandel-order`) — spec ready
+- [ ] VAT-safe discount distribution (`_shared/discount-distribution.ts`) — spec ready
+- [ ] Real-time stock sync cron (`sync-nyehandel-stock`, every 10 min) — spec ready
+- Design spec: `docs/superpowers/specs/2026-03-31-nyehandel-gaps-design.md`
+
+### 6. Pre-Launch Blockers
 - [ ] Solicitor sign-off on Terms, Privacy, Cookie pages
 - [ ] Final checkout smoke test with real payment
 - [ ] Remove preview mode (set env var)
 
-### 6. Nice to Have
+### 7. Nice to Have
 - [ ] Uptime monitoring (UptimeRobot)
 - [ ] OG images per page
 - [ ] Product image quality improvements

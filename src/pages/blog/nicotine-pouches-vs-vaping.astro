@@ -3,6 +3,7 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -184,6 +185,8 @@ import { tenant } from '@/config/tenant';
       <h3>Are nicotine pouches legal in Europe?</h3>
       <p>Yes. Nicotine pouches are legal throughout the EU and are currently less regulated than vaping products. Both are age-restricted to 18+. However, TPD3 (the third revision of the Tobacco Products Directive) is being developed and may tighten rules on pouches. Check your local jurisdiction for the latest regulations.</p>
     </section>
+
+    <BlogNewsletterCta />
 
     <section>
       <h2>Related Reading</h2>

@@ -35,6 +35,27 @@ This is a **headless B2C nicotine pouch shop** — Nyehandel-first.
 
 Shopify has been fully removed. There are no Shopify functions, webhooks, or references.
 
+### CEO's Railway Middleware (separate repo — Shopify→NYE)
+
+The CEO maintains a separate Shopify–NYE integration platform deployed on Railway
+for other stores (multi-tenant). It is NOT used by snusfriends.com (we go direct
+to Nyehandel via edge functions). However, it documents critical **Nyehandel API
+behaviours** we must respect:
+
+- **Shipping VAT inconsistency:** NYE create endpoint treats shipping price as
+  VAT-inclusive; the update endpoint treats it as VAT-exclusive. For order changes
+  where exact shipping VAT matters, cancel + recreate instead of updating.
+- **Rounding variance:** NYE truncates line items independently on multi-item
+  discounted orders, producing up to €0.01 variance in totals.
+- **Company name on updates:** NYE returns a server error when company name is
+  included in order updates. Omit it on PATCH/PUT.
+- **Email changes ignored:** NYE silently ignores email changes on existing orders.
+- **Supported carriers (tracking):** UPS, DHL, PostNord, FedEx (auto-detected).
+- **Discount handling:** Discounts must be distributed proportionally across product
+  prices before submission (VAT-safe). Never send a separate discount line.
+- **SKU validation:** Always validate SKUs against NYE catalog before order submission.
+  Missing SKUs should block the order and surface an alert.
+
 Tiebreaker docs: `ROADMAP.md` and `CURRENT_PRIORITIES.md`.
 
 ### Order Flow (target — Steps 26–29)
@@ -223,4 +244,5 @@ Read before complex work; update when done:
 | `DEPLOYMENT_CHECKLIST.md` | Required secrets and deploy order |
 | `docs/superpowers/specs/2026-03-28-competitive-advantage-design.md` | 3-phase competitive strategy (Traffic → Conversion → Community) |
 | `docs/superpowers/specs/2026-03-28-visual-upgrade-design.md` | Visual upgrade spec (hero, logo, cards, brand headers, PDP) |
+| `docs/superpowers/specs/2026-03-31-nyehandel-gaps-design.md` | NYE integration gaps — cancel, update, discounts, stock sync |
 | `cowork/README.md` | Cowork audit summary + priority P0/P1/P2 items |

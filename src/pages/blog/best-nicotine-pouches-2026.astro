@@ -3,6 +3,7 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 ---
 
@@ -251,16 +252,18 @@ import { tenant } from '@/config/tenant';
 
     <p>Ready to try one? <a href="/products">Browse our full catalogue</a> — we stock all seven category winners with fast EU-wide shipping. Or <a href="/flavor-quiz">take the flavour quiz</a> for a personalised recommendation in 30 seconds.</p>
 
+    <BlogNewsletterCta />
+
     <div>
       <h3>Related Reading</h3>
       <ul>
+        <li><a href="/blog/best-mint-nicotine-pouches-2026">Best Mint Nicotine Pouches 2026</a> — From subtle spearmint to icy menthol</li>
+        <li><a href="/blog/best-budget-nicotine-pouches">Best Budget Nicotine Pouches Under €3</a></li>
         <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best Nicotine Pouches for Beginners 2026</a></li>
         <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest Nicotine Pouches Ranked 2026</a></li>
-        <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Strength: A Science-Backed Guide</a></li>
-        <li><a href="/blog/best-budget-nicotine-pouches">Best Budget Nicotine Pouches Under €3</a></li>
-        <li><a href="/blog/zyn-nicotine-pouches-complete-guide">ZYN Flavours: Complete 2026 Guide</a></li>
-        <li><a href="/blog/velo-nicotine-pouches-complete-guide">VELO Nicotine Pouches: Complete Guide</a></li>
-        <li><a href="/blog/nicotine-pouches-legal-europe-2026">Legal Status Across Europe 2026</a></li>
+        <li><a href="/blog/rave-nicotine-pouches-review">RAVE Nicotine Pouches Review</a> — Unique flavours + energy pouches</li>
+        <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Strength</a></li>
+        <li><a href="/blog/best-citrus-nicotine-pouches">Best Citrus Pouches</a> | <a href="/blog/best-berry-nicotine-pouches">Best Berry Pouches</a></li>
         <li><a href="/nicotine-pouches">Browse All Nicotine Pouches</a></li>
       </ul>
     </div>

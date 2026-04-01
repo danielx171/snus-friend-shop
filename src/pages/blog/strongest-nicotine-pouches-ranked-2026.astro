@@ -3,11 +3,13 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 
 const publishDate = '2026-03-28';
-const title = 'Strongest Nicotine Pouches in 2026: The Complete Strength Ranking';
-const description = 'Ranked comparison of the strongest nicotine pouches available in 2026. Ultra-extreme (40 mg+), extreme (25-40 mg), and very strong tiers with exact mg/pouch specifications and safety guidance.';
+const modifiedDate = '2026-03-31';
+const title = 'Strongest Nicotine Pouches 2026: Highest mg Pouches Ranked';
+const description = 'Ranked list of the strongest nicotine pouches in 2026 by mg/pouch. From 50 mg ultra-extreme to 25 mg strong — every high-strength pouch compared with exact nicotine content, health authority guidance, and safety advice.';
 ---
 
 <Shop
@@ -31,6 +33,24 @@ const description = 'Ranked comparison of the strongest nicotine pouches availab
       />
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>The Growing High-Strength Market</h2>
+        <p>
+          The global nicotine pouch market reached an estimated $3.2 billion in 2025 and is projected to grow at 25–30%
+          CAGR through 2030, driven by smoking cessation trends and expanding EU availability. The high-strength segment
+          is growing fastest as the user base matures and tolerance builds — mirroring the craft beer industry's IPA strength escalation.
+        </p>
+        <p>
+          <strong>Regulatory landscape:</strong> The EU Tobacco Products Directive (TPD) does not explicitly cover nicotine
+          pouches (they contain no tobacco). Individual member states are implementing their own rules — the Netherlands banned
+          nicotine pouches in 2023, Belgium restricts sales to over-18s, and Sweden regulates them alongside traditional snus.
+        </p>
+        <p>
+          <strong>Brand competition:</strong> Rabbit, Siberia, and CUBA dominate the ultra-extreme tier. Mid-range brands like
+          <a href="/brands/velo">VELO</a> (max 17 mg), <a href="/brands/zyn">ZYN</a> (max 16.5 mg), and
+          <a href="/brands/loop">Loop</a> (max 15.6 mg) deliberately cap their strength ranges, positioning as "responsible" alternatives.
+          Our data shows the ultra-strong tier (15+ mg) accounts for approximately 35% of our 708 active products.
+        </p>
 
         <h2>Understanding High-Strength Pouches</h2>
         <p>
@@ -146,6 +166,79 @@ const description = 'Ranked comparison of the strongest nicotine pouches availab
           Extremely wide flavour variety at this strength level.
         </p>
 
+        <h2>Complete Brand Strength Table — SnusFriend Catalog Data</h2>
+        <p>
+          The table below is generated from SnusFriend's live product database (708 active products, March 2026).
+          These are verified mg/pouch figures from our catalog, not marketing claims.
+        </p>
+
+        <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr><th>Rank</th><th>Brand</th><th>Strongest Product</th><th>mg/pouch</th><th>Tier</th><th>Products</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><a href="/brands/rabbit">Rabbit</a></td><td>Pepper Mint Extreme</td><td>50.0</td><td>Ultra Extreme</td><td>15</td></tr>
+            <tr><td>2</td><td><a href="/brands/siberia">Siberia</a></td><td>Maxi All White Portion</td><td>49.5</td><td>Ultra Extreme</td><td>7</td></tr>
+            <tr><td>3</td><td><a href="/brands/maggie">MAGGIE</a></td><td>Jamaican Kola 60mg</td><td>45.0</td><td>Ultra Extreme</td><td>12</td></tr>
+            <tr><td>4</td><td><a href="/brands/cuba">CUBA</a></td><td>Black Ice Spearmint</td><td>43.0</td><td>Ultra Extreme</td><td>29</td></tr>
+            <tr><td>5</td><td><a href="/brands/iceberg">ICEBERG</a></td><td>Black variants</td><td>40.0</td><td>Extreme</td><td>13</td></tr>
+            <tr><td>6</td><td><a href="/brands/garant">Garant</a></td><td>Extreme variants</td><td>38.0</td><td>Extreme</td><td>15</td></tr>
+            <tr><td>7</td><td><a href="/brands/stng">STNG</a></td><td>MAX variants</td><td>27.5</td><td>Extreme</td><td>10</td></tr>
+            <tr><td>8</td><td><a href="/brands/glick">GLICK</a></td><td>Strong variants</td><td>25.0</td><td>Very Strong</td><td>11</td></tr>
+            <tr><td>9</td><td>NOiS</td><td>Extreme variants</td><td>25.0</td><td>Very Strong</td><td>10</td></tr>
+            <tr><td>10</td><td><a href="/brands/zeus">Zeus</a></td><td>Strong variants</td><td>25.0</td><td>Very Strong</td><td>32</td></tr>
+            <tr><td>11</td><td><a href="/brands/white-fox">White Fox</a></td><td>Double Mint</td><td>24.0</td><td>Very Strong</td><td>5</td></tr>
+            <tr><td>12</td><td>RUSH</td><td>Strong variants</td><td>21.0</td><td>Strong</td><td>9</td></tr>
+            <tr><td>13</td><td><a href="/brands/77-pouches">77 Pouches</a></td><td>Strong variants</td><td>20.0</td><td>Strong</td><td>23</td></tr>
+            <tr><td>14</td><td><a href="/brands/clew">CLEW</a></td><td>Strong variants</td><td>20.0</td><td>Strong</td><td>19</td></tr>
+            <tr><td>15</td><td><a href="/brands/klint">Klint</a></td><td>Avalanche Mint 6</td><td>20.0</td><td>Strong</td><td>8</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p><em>Data: SnusFriend product database, 708 active products, March 2026.</em></p>
+        <p>
+          <strong>Key finding:</strong> The top 4 brands account for the ultra-extreme tier (40+ mg). There's a significant
+          gap between ICEBERG at 40 mg and STNG at 27.5 mg — products above 40 mg are genuinely in a different category
+          of experience.
+        </p>
+
+        <h2>What Health Authorities Say About High-Strength Nicotine</h2>
+
+        <h3>EU Scientific Committee (SCHEER)</h3>
+        <p>
+          The EU's Scientific Committee on Health, Environmental and Emerging Risks published a preliminary opinion on nicotine
+          pouches in 2022, noting that nicotine pouches "represent a new category" and that "nicotine is addictive and not risk-free."
+          The committee highlighted concerns about high-concentration products but stopped short of recommending specific mg limits.
+        </p>
+
+        <h3>Swedish Public Health Agency (Folkhälsomyndigheten)</h3>
+        <p>
+          Sweden, the largest per-capita snus market globally, regulates snus under tobacco law. The Swedish Public Health Agency
+          has noted that smokeless tobacco products carry lower health risks than combustible cigarettes but are not risk-free.
+          Sweden's "Swedish Experience" is frequently cited in harm reduction research — Swedish men have the lowest smoking-related
+          mortality in the EU while having the highest oral tobacco use.
+        </p>
+
+        <h3>UK National Health Service (NHS)</h3>
+        <p>
+          The NHS does not specifically endorse nicotine pouches but recognises nicotine replacement as a smoking cessation tool.
+          NHS guidance states that nicotine itself, while addictive, is not the primary cause of smoking-related disease —
+          combustion products are. This distinction underpins harm reduction approaches across Scandinavia and the UK.
+        </p>
+
+        <h3>General Safety Consensus</h3>
+        <p>
+          No major health authority has established a specific "safe" mg/pouch ceiling. The emerging consensus across European health bodies is:
+        </p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>Nicotine pouches are significantly less harmful than cigarettes</li>
+          <li>They are not risk-free, particularly for cardiovascular health</li>
+          <li>High-strength products (>20 mg/pouch) increase dependency risk</li>
+          <li>Non-users should not start using nicotine products</li>
+          <li>Pregnant women, adolescents, and people with cardiovascular conditions should avoid all nicotine products</li>
+        </ul>
+
         <h2>Safety Guidance for High-Strength Pouches</h2>
 
         <h3>Signs You're Pushing Too Hard</h3>
@@ -176,13 +269,15 @@ const description = 'Ranked comparison of the strongest nicotine pouches availab
           enough for daily life, and sustainable long-term without escalating further.
         </p>
 
+        <BlogNewsletterCta />
+
         <h2>Related Reading</h2>
         <ul class="list-disc pl-6 space-y-2">
-          <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Strength</a> — Comprehensive strength guide</li>
-          <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO</a> — Compare two market leaders across strength tiers</li>
-          <li><a href="/blog/loop-vs-skruf">LOOP vs Skruf</a> — Swedish brands and their strength options</li>
+          <li><a href="/blog/strongest-snus-brands-compared-beginners-warning">Strongest Snus Brands Compared: A Beginner's Warning Guide</a> — Brand-by-brand strength breakdown with beginner safety warnings</li>
+          <li><a href="/blog/zyn-strength-chart-every-level-explained">ZYN Strength Chart: Every Nicotine Level Explained</a> — Every ZYN product from S1 to S6 mapped by mg/pouch</li>
           <li><a href="/blog/best-nicotine-pouches-2026">Best Nicotine Pouches 2026</a> — Top picks at all strengths</li>
-          <li><a href="/blog/best-nicotine-pouches-for-quitting-smoking">Best for Quitting Smoking</a> — Strength matching for ex-smokers</li>
+          <li><a href="/blog/how-many-nicotine-pouches-a-day">How Many Nicotine Pouches a Day?</a> — Safe dosing guidance for every strength tier</li>
+          <li><a href="/blog/rave-nicotine-pouches-review">RAVE Nicotine Pouches Review</a> — Unique flavours and energy pouches reviewed</li>
         </ul>
 
         <h2>FAQ</h2>
@@ -204,6 +299,26 @@ const description = 'Ranked comparison of the strongest nicotine pouches availab
         <p>
           Not essential, but it helps. High-strength pouches deteriorate faster at room temperature due to higher moisture
           and nicotine oxidation. A fridge is ideal; a cool cupboard is acceptable for short-term storage.
+        </p>
+
+        <h3>What's the strongest nicotine pouch available at SnusFriend?</h3>
+        <p>
+          Rabbit Pepper Mint Extreme at 50 mg/pouch is the single strongest product in our catalog. Siberia Maxi All
+          White Portion at 49.5 mg is a close second. Both are in the ultra-extreme tier — only for users with established heavy tolerance.
+        </p>
+
+        <h3>Are there any nicotine pouches stronger than 50 mg?</h3>
+        <p>
+          Not from any reputable commercial brand as of 2026. Some manufacturers have tested higher concentrations, but
+          50 mg/pouch represents the practical ceiling for consumer products. Products claiming higher strengths should be
+          treated with caution.
+        </p>
+
+        <h3>How do nicotine pouch strengths compare to cigarettes?</h3>
+        <p>
+          A typical cigarette delivers 1.0–1.5 mg of absorbed nicotine. Nicotine pouches deliver approximately 30–40%
+          of their stated mg through oral absorption. So a 50 mg pouch delivers roughly 15–20 mg of bioavailable nicotine —
+          equivalent to 10–20 cigarettes. This is why ultra-extreme pouches are only for users with heavy established tolerance.
         </p>
       </div>
 
@@ -238,7 +353,7 @@ const description = 'Ranked comparison of the strongest nicotine pouches availab
         "@type": "Article",
         "headline": title,
         "datePublished": publishDate,
-        "dateModified": publishDate,
+        "dateModified": modifiedDate,
         "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
         "publisher": {
           "@type": "Organization",
@@ -247,6 +362,18 @@ const description = 'Ranked comparison of the strongest nicotine pouches availab
         },
         "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/strongest-nicotine-pouches-ranked-2026` },
         "description": description
+      })} />
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Can I switch brands at the same strength level?", "acceptedAnswer": { "@type": "Answer", "text": "Mostly yes — but don't expect identical sensations. CUBA Black (43 mg) and Siberia 40 mg both deliver extreme strength, but CUBA hits faster and Siberia sustains longer. The nicotine load is the same; the delivery is different." } },
+          { "@type": "Question", "name": "Why do some 30 mg pouches feel weaker than some 25 mg pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Absorption speed. A wetter, higher-pH 25 mg pouch might deliver nicotine faster than a dry 30 mg pouch. Your body feels the speed of delivery as much as the total load." } },
+          { "@type": "Question", "name": "What's the strongest nicotine pouch available at SnusFriend?", "acceptedAnswer": { "@type": "Answer", "text": "Rabbit Pepper Mint Extreme at 50 mg/pouch is the single strongest product in our catalog. Siberia Maxi All White Portion at 49.5 mg is a close second. Both are in the ultra-extreme tier — only for users with established heavy tolerance." } },
+          { "@type": "Question", "name": "Are there any nicotine pouches stronger than 50 mg?", "acceptedAnswer": { "@type": "Answer", "text": "Not from any reputable commercial brand as of 2026. 50 mg/pouch represents the practical ceiling for consumer products. Products claiming higher strengths should be treated with caution." } },
+          { "@type": "Question", "name": "How do nicotine pouch strengths compare to cigarettes?", "acceptedAnswer": { "@type": "Answer", "text": "A typical cigarette delivers 1.0–1.5 mg of absorbed nicotine. Nicotine pouches deliver approximately 30–40% of their stated mg through oral absorption. So a 50 mg pouch delivers roughly 15–20 mg — equivalent to 10–20 cigarettes." } }
+        ]
       })} />
     </div>
   </article>

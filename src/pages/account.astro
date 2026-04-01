@@ -69,10 +69,11 @@ function statusColor(status: string): string {
 const balance = pointsBalance?.balance ?? 0;
 const lifetime = pointsBalance?.lifetime_earned ?? 0;
 function getTier(pts: number) {
-  if (pts >= 5000) return { name: 'Diamond', next: null, threshold: 5000 };
-  if (pts >= 2000) return { name: 'Gold', next: 'Diamond', threshold: 5000 };
-  if (pts >= 500) return { name: 'Silver', next: 'Gold', threshold: 2000 };
-  return { name: 'Bronze', next: 'Silver', threshold: 500 };
+  if (pts >= 5000) return { name: 'Legend', next: null, threshold: 5000 };
+  if (pts >= 2000) return { name: 'Expert', next: 'Legend', threshold: 5000 };
+  if (pts >= 500) return { name: 'Enthusiast', next: 'Expert', threshold: 2000 };
+  if (pts >= 100) return { name: 'Regular', next: 'Enthusiast', threshold: 500 };
+  return { name: 'Newcomer', next: 'Regular', threshold: 100 };
 }
 const tier = getTier(lifetime);
 const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold) * 100)) : 100;

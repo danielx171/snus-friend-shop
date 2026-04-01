@@ -1,0 +1,239 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-03-31';
+const title = 'RAVE Nicotine Pouches Review 2026: Every Flavour & Strength Tested';
+const description = 'Complete RAVE nicotine pouches review covering all 26 products — nicotine pouches (9.6-19.5mg) and caffeine energy pouches. Flavours, strengths, and honest ratings.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  canonical="/blog/rave-nicotine-pouches-review"
+  ogType="article"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Organization", "name": "SnusFriends", "url": "https://snusfriends.com" },
+    "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/rave-nicotine-pouches-review" }
+  })} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'RAVE Review 2026' },
+      ]} />
+
+      <BlogHero
+        category="Brand Review"
+        title={title}
+        description={description}
+        date="31 March 2026"
+        readTime="9 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <p>
+          <a href="/brands/rave">RAVE</a> is a standout brand for one reason: <strong>they don't just make nicotine
+          pouches — they make energy pouches too.</strong> While most brands compete on nicotine strength and mint variants,
+          RAVE offers a dual lineup of nicotine products (Strong at 9.6 mg and Ultra Strong at 19.5 mg) alongside
+          nicotine-free caffeine pouches.
+        </p>
+        <p>
+          This review covers all 26 RAVE products available at SnusFriend, including taste notes, strength assessments,
+          and honest value comparisons.
+        </p>
+
+        <h2>RAVE at a Glance</h2>
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Detail</th><th>Info</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Product count</strong></td><td>26 products (18 nicotine + 8 energy)</td></tr>
+            <tr><td><strong>Nicotine range</strong></td><td>9.6 mg – 19.5 mg/pouch</td></tr>
+            <tr><td><strong>Energy range</strong></td><td>0 mg nicotine, 80–100 mg caffeine/can</td></tr>
+            <tr><td><strong>Format</strong></td><td>Slim</td></tr>
+            <tr><td><strong>Pouches per can</strong></td><td>20</td></tr>
+            <tr><td><strong>Flavour range</strong></td><td>10 unique flavours</td></tr>
+            <tr><td><strong>Standout feature</strong></td><td>Unique flavour names (Skittler, Mango Django, Lemoncello)</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <h2>RAVE Nicotine Pouches: The Complete Lineup</h2>
+
+        <h3>Strong (16mg/can — 9.6 mg/pouch)</h3>
+        <p>
+          RAVE's "Strong" tier is their entry point for nicotine users. At 9.6 mg per pouch, it sits in the solid
+          mid-range — comparable to <a href="/brands/zyn">ZYN S3</a> (9.0 mg) or slightly stronger.
+        </p>
+
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Product</th><th>Flavour Profile</th><th>Taste Notes</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Frozen Citrus 16mg</strong></td><td>Sharp citrus with icy cooling</td><td>Clean, crisp opening that builds. The "frozen" element is genuine — there's a menthol-like cooling that lingers. One of the most refreshing citrus pouches on the market.</td></tr>
+            <tr><td><strong>Lemoncello 16mg</strong></td><td>Italian-inspired lemon zest</td><td>Distinctly different from generic "lemon" — it's got a sweet, almost dessert-like quality that references actual limoncello. Unique in the category.</td></tr>
+            <tr><td><strong>Mango Django 16mg</strong></td><td>Tropical mango</td><td>Sweet, ripe mango with no artificial edge. Mango flavour holds up well over a 30-minute session — doesn't fade to nothing after 10 minutes.</td></tr>
+            <tr><td><strong>La Passion Fruit 16mg</strong></td><td>Exotic passionfruit</td><td>Tart and tropical with good complexity. Not a common flavour in the pouch world, which makes it a good change of pace from mint.</td></tr>
+            <tr><td><strong>Juicy Apple 16mg</strong></td><td>Crisp green apple</td><td>Orchard-fresh apple that avoids the "candy apple" trap. Clean and natural-tasting.</td></tr>
+            <tr><td><strong>Minty Berry 16mg</strong></td><td>Mixed berry with cool mint</td><td>A dual-flavour pouch that actually works. The berry is present, the mint provides backbone. Good daily driver.</td></tr>
+            <tr><td><strong>Merry Cherry 16mg</strong></td><td>Bright cherry</td><td>Sweet without being cloying. Lighter than some cherry pouches that veer into cough-syrup territory.</td></tr>
+            <tr><td><strong>Cola Explosion 16mg</strong></td><td>Bold cola</td><td>Love-it-or-hate-it. If you like cola sweets (think Haribo Cola Bottles), you'll enjoy this. Otherwise, it's an odd experience.</td></tr>
+            <tr><td><strong>Skittler 16mg</strong></td><td>Rainbow fruit mix</td><td>The wildcard. Multiple fruit notes blended together. Fun, sweet, and genuinely different from anything else in the category.</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p><strong>Overall Strong tier rating: 7.5/10.</strong> Good flavour execution, consistent nicotine delivery, and genuinely creative flavour choices. The 9.6 mg strength is appropriate for the majority of regular users.</p>
+
+        <h3>Ultra Strong (32.5mg/can — 19.5 mg/pouch)</h3>
+        <p>
+          RAVE's Ultra Strong line doubles down on their creative flavours at a significantly higher nicotine level.
+          At 19.5 mg per pouch, these sit between ZYN's maximum (16.5 mg) and the mid-range extreme brands (25+ mg).
+        </p>
+
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Product</th><th>Flavour Profile</th><th>Taste Notes</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Frozen Citrus 32.5mg</strong></td><td>Same citrus-ice profile, stronger hit</td><td>Flavour identical to 16mg version but the nicotine buzz is noticeable within 2–3 minutes. Good for experienced users who loved the Strong version.</td></tr>
+            <tr><td><strong>Lemoncello 32.5mg</strong></td><td>Same limoncello sweetness, bigger payload</td><td>Still unique, still good. The higher nicotine doesn't overpower the flavour.</td></tr>
+            <tr><td><strong>Mango Django 32.5mg</strong></td><td>Tropical mango, ultra strength</td><td>The mango holds up at this strength — impressive flavour engineering.</td></tr>
+            <tr><td><strong>La Passion Fruit 32.5mg</strong></td><td>Intense passionfruit</td><td>The tartness pairs well with the stronger nicotine hit.</td></tr>
+            <tr><td><strong>Juicy Apple 32.5mg</strong></td><td>Crisp apple, amplified</td><td>Clean apple at higher strength.</td></tr>
+            <tr><td><strong>Minty Berry 32.5mg</strong></td><td>Berry-mint at ultra strength</td><td>The mint intensifies at this level, which actually improves the balance.</td></tr>
+            <tr><td><strong>Merry Cherry 32.5mg</strong></td><td>Cherry at full power</td><td>Holds up well. Cherry flavour doesn't fade.</td></tr>
+            <tr><td><strong>Cola Explosion 32.5mg</strong></td><td>Ultra cola</td><td>The cola flavour with a serious nicotine kick. For cola pouch enthusiasts.</td></tr>
+            <tr><td><strong>Skittler 32.5mg</strong></td><td>Maximum rainbow</td><td>Every bit as fun as the 16mg version but with a genuine strength profile.</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p><strong>Overall Ultra Strong tier rating: 7/10.</strong> Same great flavours at a strength that puts them in genuine "strong" territory. The 19.5 mg level is a sweet spot — strong enough to satisfy experienced users, not so extreme that flavour is lost.</p>
+
+        <h2>RAVE Energy Pouches: Caffeine Without Nicotine</h2>
+        <p>
+          This is where RAVE does something genuinely different. Their energy line contains zero nicotine — instead,
+          each can contains 80–100 mg of caffeine (roughly equivalent to one cup of coffee, spread across 20 pouches).
+        </p>
+
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Product</th><th>Caffeine/Can</th><th>Flavour</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Mint Man 100mg</strong></td><td>100 mg</td><td>Cool mint</td></tr>
+            <tr><td><strong>Bubble Gun 100mg</strong></td><td>100 mg</td><td>Sweet bubblegum</td></tr>
+            <tr><td><strong>Watermelon Ice 100mg</strong></td><td>100 mg</td><td>Juicy watermelon + ice</td></tr>
+            <tr><td><strong>Strawberry Shake 100mg</strong></td><td>100 mg</td><td>Creamy strawberry</td></tr>
+            <tr><td><strong>Grapper 100mg</strong></td><td>100 mg</td><td>Grape-inspired</td></tr>
+            <tr><td><strong>Frozen Citrus 80mg</strong></td><td>80 mg</td><td>Icy citrus</td></tr>
+            <tr><td><strong>Minty Berry 80mg</strong></td><td>80 mg</td><td>Berry + mint</td></tr>
+            <tr><td><strong>La Passion Fruit 80mg</strong></td><td>80 mg</td><td>Tropical passionfruit</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p><strong>Who are these for?</strong></p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>People who want the oral pouch experience without nicotine</li>
+          <li>Students or professionals wanting discreet caffeine delivery</li>
+          <li>Nicotine users looking for a daytime alternative to reduce intake</li>
+          <li>People tapering off nicotine who want to maintain the pouch habit</li>
+        </ul>
+
+        <p><strong>Rating: 6.5/10.</strong> The concept is smart and execution is decent. Caffeine absorption through oral mucosa is real but slower than coffee. These won't replace your morning espresso, but they're a genuinely interesting alternative for specific use cases.</p>
+
+        <h2>How RAVE Compares to Competitors</h2>
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Factor</th><th>RAVE</th><th>ZYN</th><th>VELO</th><th>CUBA</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Max nicotine</strong></td><td>19.5 mg</td><td>16.5 mg</td><td>17.0 mg</td><td>43.0 mg</td></tr>
+            <tr><td><strong>Flavour creativity</strong></td><td>Excellent</td><td>Good</td><td>Good</td><td>Very good</td></tr>
+            <tr><td><strong>Energy pouches</strong></td><td>Yes (8 products)</td><td>No</td><td>No</td><td>No</td></tr>
+            <tr><td><strong>Strength tiers</strong></td><td>2</td><td>6 (S1–S6)</td><td>3–4</td><td>2–3</td></tr>
+            <tr><td><strong>Product count</strong></td><td>26</td><td>52</td><td>53</td><td>29</td></tr>
+            <tr><td><strong>Format</strong></td><td>Slim only</td><td>Mini + Slim</td><td>Mini + Slim</td><td>Slim only</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p>
+          <strong>RAVE's niche:</strong> Creative flavours and the energy pouch concept. They're not competing on
+          extreme strength (that's <a href="/brands/cuba">CUBA</a>/<a href="/brands/siberia">Siberia</a> territory)
+          or brand recognition (that's ZYN/VELO). They're carving out a space as the "fun, flavourful" option with a
+          genuine innovation in caffeine pouches.
+        </p>
+
+        <h2>Verdict: Who Should Buy RAVE?</h2>
+
+        <p><strong>Buy RAVE if you:</strong></p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>Want unique flavours you can't find elsewhere (Lemoncello, Skittler, Mango Django)</li>
+          <li>Need a brand with both nicotine and caffeine options</li>
+          <li>Are an experienced user looking for 9.6–19.5 mg strength</li>
+          <li>Enjoy fruit-forward flavours over mint</li>
+          <li>Want to reduce nicotine intake by alternating with energy pouches</li>
+        </ul>
+
+        <p><strong>Look elsewhere if you:</strong></p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>Need extreme strength (30+ mg) — try <a href="/brands/cuba">CUBA</a>, <a href="/brands/siberia">Siberia</a>, or <a href="/brands/rabbit">Rabbit</a></li>
+          <li>Want the gentlest possible introduction — try <a href="/brands/zyn">ZYN Mini S1 or S2</a></li>
+          <li>Prefer traditional mint-dominant flavours — try <a href="/brands/velo">VELO</a> or ZYN</li>
+          <li>Need the widest product range — ZYN (52 products) or VELO (53 products) offer more variety</li>
+        </ul>
+
+        <p><strong>Shop the full collection:</strong> <a href="/brands/rave">All RAVE products at SnusFriend</a></p>
+
+        <BlogNewsletterCta />
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/best-nicotine-pouches-2026">Best Nicotine Pouches 2026</a> — Our overall top picks</li>
+          <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest Nicotine Pouches Ranked</a> — The full strength ranking</li>
+          <li><a href="/blog/zyn-strength-chart-every-level-explained">ZYN Strength Chart</a> — Every ZYN product mapped by strength</li>
+          <li><a href="/blog/nicotine-pouch-ingredients-explained">Nicotine Pouch Ingredients Explained</a> — What's actually in your pouch</li>
+          <li><a href="/blog/nicotine-pouches-vs-vaping">Nicotine Pouches vs Vaping</a> — Comparing delivery methods</li>
+        </ul>
+
+      </div>
+
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse RAVE</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/brands/rave" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">All RAVE Products</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit Flavours</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Similar Brands</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/brands/zyn" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">ZYN</a>
+              <a href="/brands/velo" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">VELO</a>
+              <a href="/brands/cuba" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">CUBA</a>
+              <a href="/brands/loop" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Loop</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </article>
+</Shop>

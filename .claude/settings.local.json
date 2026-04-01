@@ -400,7 +400,13 @@
       "mcp__claude_ai_Supabase__deploy_edge_function",
       "mcp__gsc__get_search_analytics",
       "mcp__gsc__submit_sitemap",
-      "mcp__claude_ai_Vercel__get_deployment_build_logs"
+      "mcp__claude_ai_Vercel__get_deployment_build_logs",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__fill",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__press_key",
+      "Bash(node:*)",
+      "Bash(find src/actions -name *.ts)",
+      "Bash(find src:*)",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__list_network_requests"
     ]
   }
 }

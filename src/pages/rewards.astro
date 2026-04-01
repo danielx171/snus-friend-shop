@@ -7,16 +7,17 @@ import PointsRedemptionIsland from '@/components/react/PointsRedemptionIsland';
 import { tenant } from '@/config/tenant';
 
 const tiers = [
-  { name: 'Bronze', points: '0', perks: ['1 point per euro spent', 'Birthday bonus', 'Member-only newsletter'], color: 'from-[hsl(var(--color-tier-bronze))] to-[hsl(var(--color-tier-bronze)/0.7)]' },
-  { name: 'Silver', points: '500', perks: ['1.5x points multiplier', 'Early access to new flavours', 'Free shipping on orders over 30 EUR'], color: 'from-[hsl(var(--color-tier-silver))] to-[hsl(var(--color-tier-silver)/0.7)]' },
-  { name: 'Gold', points: '2,000', perks: ['2x points multiplier', 'Exclusive product drops', 'Priority customer support'], color: 'from-[hsl(var(--color-tier-gold))] to-[hsl(var(--color-tier-gold)/0.7)]' },
-  { name: 'Platinum', points: '5,000', perks: ['3x points multiplier', 'Free shipping on every order', 'Quarterly surprise box', 'VIP community access'], color: 'from-[hsl(var(--color-tier-diamond))] to-[hsl(var(--color-tier-diamond)/0.7)]' },
+  { name: 'Newcomer', points: '0', perks: ['1 point per EUR spent', 'Welcome spin bonus', 'Member-only newsletter'], color: 'from-zinc-500/20 to-zinc-600/10' },
+  { name: 'Regular', points: '100', perks: ['Community posting', 'Review reactions', 'Birthday bonus'], color: 'from-blue-500/20 to-blue-600/10' },
+  { name: 'Enthusiast', points: '500', perks: ['Custom avatar border', 'Early sale access'], color: 'from-emerald-500/20 to-emerald-600/10' },
+  { name: 'Expert', points: '2,000', perks: ['Double quest rewards', 'Exclusive polls', 'Priority customer support'], color: 'from-purple-500/20 to-purple-600/10' },
+  { name: 'Legend', points: '5,000', perks: ['Gold badge', 'VIP support', 'Legend-only vouchers'], color: 'from-amber-500/20 to-amber-600/10' },
 ];
 ---
 
 <Shop
   title={`Loyalty Rewards — Earn Points & Perks | ${tenant.name}`}
-  description={`Earn points on every purchase and redeem them for discounts, free products, and exclusive perks with ${tenant.name} Rewards.`}
+  description={`Earn SnusPoints on every purchase and redeem them for discounts, free products, and exclusive perks. Level up from Newcomer to Legend with ${tenant.name} Rewards.`}
 >
   <section class="bg-background text-foreground">
     <div class="max-w-4xl mx-auto px-4 py-12">
