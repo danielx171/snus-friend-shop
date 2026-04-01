@@ -125,34 +125,39 @@ const moreLinks = [
   import { openMobileMenu } from '@/stores/ui';
   document.querySelector('[data-mobile-menu-toggle]')?.addEventListener('click', () => openMobileMenu());
 
-  // Update auth link client-side — multiple fallbacks
-  import { supabase } from '@/integrations/supabase/client';
+  // Update auth link client-side — lightweight check, NO Supabase SDK import
+  // (importing supabase client here was pulling the entire SDK into every page)
 
-  const ACCOUNT_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
-
-  function showLoggedIn(authLink: HTMLElement) {
-    authLink.setAttribute('href', '/account');
-    authLink.setAttribute('aria-label', 'My account');
-    authLink.innerHTML = ACCOUNT_SVG;
-  }
-
-  async function updateHeaderAuth() {
+  function updateHeaderAuth() {
     const authLink = document.getElementById('header-auth-link');
     if (!authLink) return;
 
-    // 1. Check server-rendered auth state (SSR pages)
+    const ACCOUNT_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+
+    let isLoggedIn = false;
+
+    // 1. Check server-rendered auth state (SSR pages like /account)
     const serverAuth = (window as any).__AUTH_STATE__;
-    if (serverAuth?.id) { showLoggedIn(authLink); return; }
+    if (serverAuth?.id) isLoggedIn = true;
 
-    // 2. Check Supabase client session (localStorage)
-    try {
-      const { data } = await supabase.auth.getSession();
-      if (data.session?.user) { showLoggedIn(authLink); return; }
-    } catch {}
+    // 2. Check for Supabase auth cookies (set by server-side login)
+    if (!isLoggedIn) {
+      isLoggedIn = document.cookie.split(';').some(c => c.trim().startsWith('sb-') && c.includes('auth-token'));
+    }
 
-    // 3. Check for Supabase auth cookies directly (set by server-side login)
-    const hasSbCookie = document.cookie.split(';').some(c => c.trim().startsWith('sb-') && c.includes('auth-token'));
-    if (hasSbCookie) { showLoggedIn(authLink); return; }
+    // 3. Check localStorage for Supabase session (set by client-side auth)
+    if (!isLoggedIn) {
+      try {
+        const keys = Object.keys(localStorage);
+        isLoggedIn = keys.some(k => k.startsWith('sb-') && k.includes('auth-token'));
+      } catch {}
+    }
+
+    if (isLoggedIn) {
+      authLink.setAttribute('href', '/account');
+      authLink.setAttribute('aria-label', 'My account');
+      authLink.innerHTML = ACCOUNT_SVG;
+    }
   }
 
   document.addEventListener('astro:page-load', updateHeaderAuth);
