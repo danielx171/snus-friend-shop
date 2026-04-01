@@ -210,13 +210,17 @@ const pack1Price = prices.pack1 ?? 0;
 </a>
 
 <style>
-  /* Hover effects only on pointer devices */
+  /* 3D perspective wrapper */
+  .product-card {
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease;
+  }
   @media (hover: hover) {
     .product-card:hover {
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+      transform: perspective(800px) rotateX(2deg) rotateY(-2deg) scale(1.02) !important;
+      box-shadow: 0 25px 50px -10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06) !important;
     }
   }
-  /* Scale utility not in Tailwind v4 by default */
   .group:hover .group-hover\:scale-108 {
     transform: scale(1.08);
   }

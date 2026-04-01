@@ -154,17 +154,16 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
             ))}
           </defs>
 
-          {/* LED ring — chase pattern */}
+          {/* LED ring — static dots */}
           {leds.map((led, i) => (
             <circle
               key={i}
               cx={led.x}
               cy={led.y}
               r={2.5}
-              className="led-dot"
               style={{
                 fill: i % 3 === 0 ? 'hsl(44 100% 60%)' : i % 3 === 1 ? 'hsl(var(--primary))' : 'hsl(270 50% 60%)',
-                animationDelay: `${i * 80}ms`,
+                opacity: 0.5,
               }}
             />
           ))}
@@ -272,7 +271,6 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
                 stroke="hsl(var(--primary))"
                 strokeWidth="1"
                 opacity="0.4"
-                className="center-pulse"
               />
             )}
 
@@ -317,14 +315,7 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
       </div>
 
       {/* Animations */}
-      <style>{`
-        .led-dot {
-          opacity: 0.6;
-        }
-        .center-pulse {
-          opacity: 0.4;
-        }
-      `}</style>
+      {/* No animations — all static */}
     </div>
   );
 }
