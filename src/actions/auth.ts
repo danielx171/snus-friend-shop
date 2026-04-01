@@ -105,6 +105,33 @@ export const auth = {
     },
   }),
 
+  sendMagicLink: defineAction({
+    accept: 'json',
+    input: z.object({
+      email: z.string().email('Please enter a valid email address'),
+    }),
+    handler: async (input, ctx) => {
+      const supabase = createSupabaseFromContext(ctx);
+      const siteUrl =
+        import.meta.env.PUBLIC_SITE_URL ??
+        import.meta.env.VITE_SITE_URL ??
+        'https://snusfriends.com';
+
+      // Always return success to avoid leaking whether the email exists
+      await supabase.auth.signInWithOtp({
+        email: input.email,
+        options: {
+          emailRedirectTo: `${siteUrl}/auth/confirm`,
+        },
+      });
+
+      return {
+        success: true,
+        message: 'Check your inbox — we sent you a login link.',
+      };
+    },
+  }),
+
   forgotPassword: defineAction({
     accept: 'form',
     input: z.object({

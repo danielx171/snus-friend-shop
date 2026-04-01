@@ -188,6 +188,15 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
                         Cancel Order
                       </button>
                     )}
+                    {order.line_items_snapshot && (
+                      <button
+                        type="button"
+                        class="text-primary/70 hover:text-primary transition text-sm"
+                        data-reorder={JSON.stringify(order.line_items_snapshot)}
+                      >
+                        Reorder
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -519,5 +528,74 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
       btn.disabled = false;
       btn.textContent = 'Yes, Cancel My Order';
     }
+  });
+
+  // Reorder buttons
+  document.querySelectorAll('[data-reorder]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      try {
+        const raw = (btn as HTMLElement).dataset.reorder;
+        if (!raw) return;
+        const snapshot = typeof raw === 'string' ? JSON.parse(raw) : raw;
+        if (!Array.isArray(snapshot) || snapshot.length === 0) return;
+
+        // Read existing cart from localStorage
+        const cartKey = 'snusfriend_cart';
+        const existing = JSON.parse(localStorage.getItem(cartKey) || '[]');
+
+        for (const item of snapshot) {
+          // SKU format: "{productSlug}-{packSize}" e.g. "zyn-cool-mint-6mg-pack3"
+          const sku = item.sku || '';
+          const lastDash = sku.lastIndexOf('-');
+          if (lastDash === -1) continue;
+          const slug = sku.slice(0, lastDash);
+          const packSize = sku.slice(lastDash + 1);
+          if (!slug || !packSize.startsWith('pack')) continue;
+
+          const qty = item.quantity ?? 1;
+          const price = item.unit_price ?? 0;
+          const name = item.product_name ?? 'Product';
+
+          // Build minimal product for the cart store
+          const cartItem = {
+            product: {
+              id: slug,
+              name: name,
+              brand: '',
+              categoryKey: 'nicotinePouches',
+              flavorKey: 'mint',
+              strengthKey: 'normal',
+              formatKey: 'slim',
+              nicotineContent: 0,
+              portionsPerCan: 20,
+              descriptionKey: '',
+              image: '',
+              ratings: 0,
+              badgeKeys: [],
+              prices: { [packSize]: price, pack1: price, pack3: 0, pack5: 0, pack10: 0, pack30: 0 },
+              manufacturer: '',
+              stock: 99,
+            },
+            packSize: packSize,
+            quantity: qty,
+          };
+
+          // Check if already in cart
+          const existingIdx = existing.findIndex(
+            (c: any) => c.product?.id === slug && c.packSize === packSize
+          );
+          if (existingIdx >= 0) {
+            existing[existingIdx].quantity += qty;
+          } else {
+            existing.push(cartItem);
+          }
+        }
+
+        localStorage.setItem(cartKey, JSON.stringify(existing));
+        window.location.href = '/cart';
+      } catch (e) {
+        console.error('Reorder failed:', e);
+      }
+    });
   });
 </script>

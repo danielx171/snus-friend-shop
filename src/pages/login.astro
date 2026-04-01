@@ -81,6 +81,36 @@ if (user) {
             </button>
           </form>
 
+          <div class="relative my-6">
+            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-border"></div></div>
+            <div class="relative flex justify-center text-xs"><span class="bg-card/60 px-3 text-muted-foreground">or</span></div>
+          </div>
+
+          <div id="magic-link-section">
+            <p class="text-sm text-muted-foreground text-center mb-3">Sign in with a one-click email link — no password needed.</p>
+            <form id="magic-link-form" class="space-y-3" novalidate>
+              <div>
+                <label for="magic-email" class="sr-only">Email address</label>
+                <input
+                  type="email"
+                  id="magic-email"
+                  required
+                  autocomplete="email"
+                  placeholder="you@example.com"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                />
+              </div>
+              <button
+                type="submit"
+                id="magic-link-btn"
+                class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted/50 transition focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Send me a login link
+              </button>
+            </form>
+            <div id="magic-link-msg" class="mt-3 hidden rounded-lg p-3 text-center text-sm"></div>
+          </div>
+
           <p class="mt-6 text-center text-sm text-muted-foreground">
             Don't have an account?
             <a href="/register" class="text-primary font-medium hover:underline">
@@ -146,5 +176,56 @@ if (user) {
   function hideError() {
     errBox.classList.add('hidden');
   }
+})();
+
+// Magic link form
+(function() {
+  var form = document.getElementById('magic-link-form');
+  var btn = document.getElementById('magic-link-btn');
+  var msgEl = document.getElementById('magic-link-msg');
+  if (!form || !btn) return;
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = form.querySelector('#magic-email').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showMsg('Please enter a valid email address.', true);
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Sending\u2026';
+    hideMsg();
+
+    fetch('/_actions/auth.sendMagicLink', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ email: email })
+    })
+    .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, body: d }; }); })
+    .then(function(result) {
+      if (result.ok && result.body.data && result.body.data.success) {
+        showMsg(result.body.data.message || 'Check your inbox for the login link.', false);
+        btn.textContent = 'Link sent!';
+      } else {
+        var msg = (result.body.error && result.body.error.message) || 'Something went wrong.';
+        showMsg(msg, true);
+        btn.disabled = false;
+        btn.textContent = 'Send me a login link';
+      }
+    })
+    .catch(function() {
+      showMsg('Network error. Please try again.', true);
+      btn.disabled = false;
+      btn.textContent = 'Send me a login link';
+    });
+  });
+
+  function showMsg(text, isError) {
+    msgEl.textContent = text;
+    msgEl.className = 'mt-3 rounded-lg p-3 text-center text-sm ' +
+      (isError ? 'bg-destructive/5 border border-destructive/30 text-destructive' : 'bg-primary/5 border border-primary/30 text-foreground');
+  }
+  function hideMsg() { msgEl.className = 'mt-3 hidden'; }
 })();
 </script>
