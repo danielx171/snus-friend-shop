@@ -125,21 +125,34 @@ const moreLinks = [
   import { openMobileMenu } from '@/stores/ui';
   document.querySelector('[data-mobile-menu-toggle]')?.addEventListener('click', () => openMobileMenu());
 
-  // Update auth link client-side — checks Supabase session directly
-  // (needed because SSG pages are built without auth state)
+  // Update auth link client-side — multiple fallbacks
   import { supabase } from '@/integrations/supabase/client';
+
+  const ACCOUNT_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+
+  function showLoggedIn(authLink: HTMLElement) {
+    authLink.setAttribute('href', '/account');
+    authLink.setAttribute('aria-label', 'My account');
+    authLink.innerHTML = ACCOUNT_SVG;
+  }
 
   async function updateHeaderAuth() {
     const authLink = document.getElementById('header-auth-link');
     if (!authLink) return;
+
+    // 1. Check server-rendered auth state (SSR pages)
+    const serverAuth = (window as any).__AUTH_STATE__;
+    if (serverAuth?.id) { showLoggedIn(authLink); return; }
+
+    // 2. Check Supabase client session (localStorage)
     try {
       const { data } = await supabase.auth.getSession();
-      if (data.session?.user) {
-        authLink.setAttribute('href', '/account');
-        authLink.setAttribute('aria-label', 'My account');
-        authLink.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
-      }
-    } catch { /* ignore — show login as fallback */ }
+      if (data.session?.user) { showLoggedIn(authLink); return; }
+    } catch {}
+
+    // 3. Check for Supabase auth cookies directly (set by server-side login)
+    const hasSbCookie = document.cookie.split(';').some(c => c.trim().startsWith('sb-') && c.includes('auth-token'));
+    if (hasSbCookie) { showLoggedIn(authLink); return; }
   }
 
   document.addEventListener('astro:page-load', updateHeaderAuth);
