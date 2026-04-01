@@ -98,6 +98,7 @@ export const AchievementCard = React.memo(function AchievementCard({
             aria-valuenow={progress}
             aria-valuemin={0}
             aria-valuemax={threshold}
+            aria-label={`Achievement progress: ${progress} of ${threshold}`}
           />
         </div>
       )}
