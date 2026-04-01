@@ -18,14 +18,21 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  // Parse cookies directly from the raw Cookie header — Astro's cookies.getAll()
+  // URL-decodes values which corrupts the base64-encoded Supabase JWT session tokens.
+  const rawCookieHeader = context.request.headers.get('cookie') ?? '';
+  const parsedCookies = rawCookieHeader.split(';').filter(Boolean).map((pair) => {
+    const eqIdx = pair.indexOf('=');
+    return {
+      name: pair.slice(0, eqIdx).trim(),
+      value: pair.slice(eqIdx + 1).trim(),
+    };
+  });
+
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
-        try {
-          return context.cookies.getAll().map(c => ({ name: c.name ?? '', value: c.value }));
-        } catch {
-          return [];
-        }
+        return parsedCookies;
       },
       setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
         try {

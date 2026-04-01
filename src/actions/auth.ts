@@ -17,18 +17,12 @@ function createSupabaseFromContext(ctx: { cookies: any; request: Request }) {
   return createServerClient(url, key, {
     cookies: {
       getAll() {
-        // Astro action ctx.cookies may not have getAll() — use headers fallback
-        try {
-          if (typeof ctx.cookies.getAll === 'function') {
-            return ctx.cookies.getAll().map((c: any) => ({ name: c.name ?? '', value: c.value }));
-          }
-        } catch { /* fall through */ }
-
-        // Fallback: parse cookies from the request header
+        // Parse directly from the raw Cookie header — avoids Astro's URL-decoding
+        // which corrupts base64-encoded Supabase JWT session tokens.
         const header = ctx.request.headers.get('cookie') ?? '';
         return header.split(';').filter(Boolean).map((pair) => {
-          const [name, ...rest] = pair.trim().split('=');
-          return { name: name ?? '', value: rest.join('=') };
+          const eqIdx = pair.indexOf('=');
+          return { name: pair.slice(0, eqIdx).trim(), value: pair.slice(eqIdx + 1).trim() };
         });
       },
       setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {

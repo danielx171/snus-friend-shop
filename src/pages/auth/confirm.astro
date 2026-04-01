@@ -22,7 +22,11 @@ if (!supabaseUrl || !supabaseKey) {
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
-        return (Astro.cookies as any).getAll().map((c: { name: string; value: string }) => ({ name: c.name, value: c.value }));
+        const header = Astro.request.headers.get('cookie') ?? '';
+        return header.split(';').filter(Boolean).map((pair) => {
+          const eqIdx = pair.indexOf('=');
+          return { name: pair.slice(0, eqIdx).trim(), value: pair.slice(eqIdx + 1).trim() };
+        });
       },
       setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
         for (const { name, value, options } of cookiesToSet) {
