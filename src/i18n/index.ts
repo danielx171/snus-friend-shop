@@ -1,12 +1,14 @@
 import sv from './sv.json';
+import de from './de.json';
 
-export type Locale = 'en' | 'sv';
+export type Locale = 'en' | 'sv' | 'de';
 
 export const defaultLocale: Locale = 'en';
-export const supportedLocales: Locale[] = ['en', 'sv'];
+export const supportedLocales: Locale[] = ['en', 'sv', 'de'];
 
 const translations: Record<string, Record<string, unknown>> = {
   sv: sv as Record<string, unknown>,
+  de: de as Record<string, unknown>,
 };
 
 /**
