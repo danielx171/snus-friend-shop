@@ -125,16 +125,22 @@ const moreLinks = [
   import { openMobileMenu } from '@/stores/ui';
   document.querySelector('[data-mobile-menu-toggle]')?.addEventListener('click', () => openMobileMenu());
 
-  // Update auth link client-side for SSG pages
-  document.addEventListener('astro:page-load', () => {
+  // Update auth link client-side — checks Supabase session directly
+  // (needed because SSG pages are built without auth state)
+  import { supabase } from '@/integrations/supabase/client';
+
+  async function updateHeaderAuth() {
     const authLink = document.getElementById('header-auth-link');
-    const authText = document.getElementById('header-auth-text');
     if (!authLink) return;
-    const auth = (window as any).__AUTH_STATE__;
-    if (auth && auth.id) {
-      authLink.setAttribute('href', '/account');
-      authLink.setAttribute('aria-label', 'My account');
-      authLink.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
-    }
-  });
+    try {
+      const { data } = await supabase.auth.getSession();
+      if (data.session?.user) {
+        authLink.setAttribute('href', '/account');
+        authLink.setAttribute('aria-label', 'My account');
+        authLink.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+      }
+    } catch { /* ignore — show login as fallback */ }
+  }
+
+  document.addEventListener('astro:page-load', updateHeaderAuth);
 </script>
