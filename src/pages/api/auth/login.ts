@@ -4,7 +4,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 export const prerender = false;
 
 function serializeCookie(name: string, value: string, options?: CookieOptions): string {
-  let cookie = `${name}=${encodeURIComponent(value)}`;
+  let cookie = `${name}=${value}`;
   // Path MUST default to '/' — without this, cookies get scoped to /api/auth/login
   // and won't be sent on subsequent page loads (e.g. /account)
   cookie += `; Path=${options?.path ?? '/'}`;

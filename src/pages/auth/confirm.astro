@@ -1,0 +1,112 @@
+---
+export const prerender = false;
+
+import { createServerClient } from '@supabase/ssr';
+import Shop from '@/layouts/Shop.astro';
+import { tenant } from '@/config/tenant';
+
+const url = Astro.url;
+const tokenHash = url.searchParams.get('token_hash');
+const type = url.searchParams.get('type') as 'signup' | 'email' | 'recovery' | 'invite' | 'email_change' | null;
+const code = url.searchParams.get('code');
+const next = url.searchParams.get('next') ?? '/account';
+
+const supabaseUrl = import.meta.env.SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL ?? '';
+const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '';
+
+let errorMessage = '';
+
+if (!supabaseUrl || !supabaseKey) {
+  errorMessage = 'Authentication service unavailable. Please try again later.';
+} else {
+  const supabase = createServerClient(supabaseUrl, supabaseKey, {
+    cookies: {
+      getAll() {
+        return (Astro.cookies as any).getAll().map((c: { name: string; value: string }) => ({ name: c.name, value: c.value }));
+      },
+      setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
+        for (const { name, value, options } of cookiesToSet) {
+          Astro.cookies.set(name, value, options);
+        }
+      },
+    },
+  });
+
+  if (tokenHash && type) {
+    // PKCE / OTP flow — email confirmation, password recovery
+    const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
+    if (error) {
+      errorMessage = error.message === 'Token has expired or is invalid'
+        ? 'This confirmation link has expired. Please request a new one.'
+        : error.message;
+    } else {
+      // Recovery → password update page; all other types → account (auto-login)
+      return Astro.redirect(type === 'recovery' ? '/update-password' : next, 303);
+    }
+  } else if (code) {
+    // OAuth / PKCE code exchange
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) {
+      errorMessage = error.message;
+    } else {
+      return Astro.redirect(next, 303);
+    }
+  } else {
+    errorMessage = 'Invalid confirmation link. The link may have already been used or is malformed.';
+  }
+}
+---
+
+<Shop
+  title={`Email Confirmed | ${tenant.name}`}
+  description="Confirming your email address."
+  noindex={true}
+>
+  <section class="bg-background text-foreground min-h-[60vh] flex items-center justify-center">
+    <div class="max-w-md w-full mx-auto px-4 py-12">
+      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
+
+        {errorMessage ? (
+          <>
+            <div class="w-16 h-16 rounded-full bg-destructive/10 border border-destructive/20 flex items-center justify-center mx-auto mb-5">
+              <svg class="w-8 h-8 text-destructive" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight mb-2">Link expired</h1>
+            <p class="text-muted-foreground text-sm mb-6">{errorMessage}</p>
+            <div class="flex flex-col gap-3">
+              <a
+                href="/register"
+                class="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+              >
+                Create new account
+              </a>
+              <a
+                href="/forgot-password"
+                class="inline-flex items-center justify-center rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted/50 transition"
+              >
+                Request new reset link
+              </a>
+              <a href="/login" class="text-sm text-muted-foreground hover:text-foreground transition">
+                Back to login
+              </a>
+            </div>
+          </>
+        ) : (
+          <>
+            <div class="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-5">
+              <svg class="w-8 h-8 text-primary animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight mb-2">Confirming...</h1>
+            <p class="text-muted-foreground text-sm">Just a moment while we verify your link.</p>
+          </>
+        )}
+
+      </div>
+    </div>
+  </section>
+</Shop>

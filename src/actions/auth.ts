@@ -83,11 +83,17 @@ export const auth = {
     }),
     handler: async (input, ctx) => {
       const supabase = createSupabaseFromContext(ctx);
+      const siteUrl =
+        import.meta.env.PUBLIC_SITE_URL ??
+        import.meta.env.VITE_SITE_URL ??
+        'https://snusfriends.com';
+
       const { error } = await supabase.auth.signUp({
         email: input.email,
         password: input.password,
         options: {
           data: { full_name: input.fullName },
+          emailRedirectTo: `${siteUrl}/auth/confirm`,
         },
       });
 
@@ -118,8 +124,10 @@ export const auth = {
         'https://snusfriends.com';
 
       // Always return success to avoid leaking whether the email exists.
+      // Route through /auth/confirm so the server-side session is set before
+      // the user reaches the update-password form (PKCE flow).
       await supabase.auth.resetPasswordForEmail(input.email, {
-        redirectTo: `${siteUrl}/update-password`,
+        redirectTo: `${siteUrl}/auth/confirm`,
       });
 
       return {
