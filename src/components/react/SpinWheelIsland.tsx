@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
-import { supabase } from '@/integrations/supabase/client';
+import { useAuthUser } from '@/hooks/useAuthUser';
 import { useSpinWheel, useSpinStatus } from '@/hooks/useSpinWheel';
 import type { SpinResult } from '@/hooks/useSpinWheel';
 import SpinWheel from '@/components/rewards/SpinWheel';
@@ -10,19 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 
 function SpinWheelInner() {
   const { toast } = useToast();
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUserId(data.session?.user?.id ?? null);
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUserId(session?.user?.id ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
+  const { userId } = useAuthUser();
 
   const spinStatus = useSpinStatus(userId);
   const spinMutation = useSpinWheel();

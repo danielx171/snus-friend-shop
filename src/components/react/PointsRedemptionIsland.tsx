@@ -1,24 +1,18 @@
 import { useSnusPoints } from '@/hooks/useSnusPoints';
 import PointsRedemption from '@/components/rewards/PointsRedemption';
 import QueryProvider from './QueryProvider';
-import { supabase } from '@/integrations/supabase/client';
+import { useAuthUser } from '@/hooks/useAuthUser';
 import { useState, useEffect } from 'react';
 
 function PointsRedemptionInner() {
-  const [userId, setUserId] = useState<string | null>(null);
+  const { userId, authChecked } = useAuthUser();
   const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data.user?.id ?? null);
-    });
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   const { data: points } = useSnusPoints();
   const balance = points?.balance ?? 0;
 
-  if (!mounted) return null;
+  if (!mounted || !authChecked) return null;
 
   if (!userId) {
     return (

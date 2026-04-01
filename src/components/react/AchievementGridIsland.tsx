@@ -1,27 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
-import { supabase } from '@/integrations/supabase/client';
+import { useAuthUser } from '@/hooks/useAuthUser';
 import { useAchievements } from '@/hooks/useAchievements';
 import { AchievementGrid } from '@/components/gamification/AchievementGrid';
 
 function AchievementGridInner() {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUserId(data.session?.user?.id ?? null);
-      setAuthChecked(true);
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUserId(session?.user?.id ?? null);
-      setAuthChecked(true);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
+  const { userId, authChecked } = useAuthUser();
 
   const { data: achievementData, isLoading } = useAchievements(userId);
 

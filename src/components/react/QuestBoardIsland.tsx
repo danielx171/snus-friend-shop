@@ -1,23 +1,17 @@
 import { useQuests } from '@/hooks/useQuests';
 import QuestBoard from '@/components/quests/QuestBoard';
 import QueryProvider from './QueryProvider';
-import { supabase } from '@/integrations/supabase/client';
+import { useAuthUser } from '@/hooks/useAuthUser';
 import { useState, useEffect } from 'react';
 
 function QuestBoardInner() {
-  const [userId, setUserId] = useState<string | null>(null);
+  const { userId, authChecked } = useAuthUser();
   const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data.user?.id ?? null);
-    });
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   const { data: quests, isLoading } = useQuests(userId);
 
-  if (!mounted) return null;
+  if (!mounted || !authChecked) return null;
 
   if (!userId) {
     return (
