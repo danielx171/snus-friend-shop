@@ -46,18 +46,26 @@ export const onRequest = defineMiddleware(async (context, next) => {
     },
   });
 
-  const { data: { user } } = await supabase.auth.getUser();
-  context.locals.user = user;
   context.locals.supabase = supabase as any;
 
   const pathname = context.url.pathname;
-  // Only protect SSR pages here — SSG pages skip middleware (isPrerendered check above)
-  // /rewards and /wishlist are SSG with client-side auth checks, so not listed here
-  const protectedPaths = ['/account'];
-  const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
 
-  if (isProtected && !user) {
-    return context.redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
+  // Pages that need auth state (getUser is a network call — skip for pages that don't need it)
+  const authRequiredPaths = ['/account', '/checkout', '/order-confirmation'];
+  const needsAuth = authRequiredPaths.some((p) => pathname.startsWith(p));
+
+  if (needsAuth) {
+    const { data: { user } } = await supabase.auth.getUser();
+    context.locals.user = user;
+
+    // Protect /account — redirect to login if not authenticated
+    if (pathname.startsWith('/account') && !user) {
+      return context.redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
+    }
+  } else {
+    // For login/register/forgot-password/etc: skip the getUser() call entirely
+    // This saves 100-300ms per page load
+    context.locals.user = null;
   }
 
   return next();
