@@ -41,6 +41,13 @@ const { count: reviewsCount } = await supabase
   .select('id', { count: 'exact', head: true })
   .eq('user_id', user.id);
 
+// Fetch subscriptions
+const { data: subscriptions } = await supabase
+  .from('subscriptions')
+  .select('*')
+  .eq('user_id', user.id)
+  .order('created_at', { ascending: false });
+
 // Fetch referral code
 const { data: referralCode } = await supabase.rpc('get_or_create_referral_code', { p_user_id: user.id });
 
@@ -149,6 +156,17 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
           ]}
         >
           Membership
+        </a>
+        <a
+          href="/account?tab=subscriptions"
+          class:list={[
+            'px-4 py-2.5 text-sm font-medium rounded-t-lg transition',
+            tab === 'subscriptions'
+              ? 'bg-card/60 text-foreground border border-border border-b-transparent -mb-px'
+              : 'text-muted-foreground hover:text-foreground',
+          ]}
+        >
+          Subscriptions
         </a>
       </div>
 
@@ -455,6 +473,67 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
           )}
         </div>
       )}
+
+      <!-- Subscriptions Tab -->
+      {tab === 'subscriptions' && (
+        <div class="space-y-4">
+          {(!subscriptions || subscriptions.length === 0) ? (
+            <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
+              <p class="text-muted-foreground mb-2">No active subscriptions.</p>
+              <p class="text-sm text-muted-foreground mb-4">
+                Subscribe to your favourite products and save up to 15% on every delivery.
+              </p>
+              <a href="/products" class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition">
+                Browse Products
+              </a>
+            </div>
+          ) : (
+            subscriptions.map((sub: any) => (
+              <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                  <div>
+                    <a href={`/products/${sub.product_slug}`} class="text-sm font-semibold text-foreground hover:text-primary transition">
+                      {sub.product_name || sub.product_slug}
+                    </a>
+                    <div class="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                      <span>{sub.interval === 'monthly' ? 'Monthly' : 'Every 6 months'}</span>
+                      <span class="text-primary font-medium">{sub.discount_pct}% off</span>
+                    </div>
+                  </div>
+                  <span class:list={[
+                    'px-2.5 py-0.5 rounded-full text-xs font-medium',
+                    sub.status === 'active' ? 'bg-primary/20 text-primary' :
+                    sub.status === 'paused' ? 'bg-muted text-muted-foreground' :
+                    'bg-destructive/20 text-destructive'
+                  ]}>
+                    {sub.status}
+                  </span>
+                </div>
+                <div class="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                  {sub.status === 'active' && sub.next_order_at && (
+                    <span>Next delivery: {new Date(sub.next_order_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                  )}
+                  {sub.status === 'active' && (
+                    <button type="button" class="text-muted-foreground hover:text-foreground transition text-sm" data-sub-action="pause" data-sub-id={sub.id}>
+                      Pause
+                    </button>
+                  )}
+                  {sub.status === 'paused' && (
+                    <button type="button" class="text-primary hover:text-primary/80 transition text-sm" data-sub-action="resume" data-sub-id={sub.id}>
+                      Resume
+                    </button>
+                  )}
+                  {sub.status !== 'cancelled' && (
+                    <button type="button" class="text-destructive/70 hover:text-destructive transition text-sm" data-sub-action="cancel" data-sub-id={sub.id}>
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   </section>
 </Shop>
@@ -663,6 +742,47 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
         window.location.href = '/cart';
       } catch (e) {
         console.error('Reorder failed:', e);
+      }
+    });
+  });
+
+  // Subscription management buttons
+  document.querySelectorAll('[data-sub-action]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const action = (btn as HTMLElement).dataset.subAction;
+      const subId = (btn as HTMLElement).dataset.subId;
+      if (!action || !subId) return;
+
+      const confirmed = action === 'cancel'
+        ? confirm('Cancel this subscription? You can always create a new one later.')
+        : true;
+      if (!confirmed) return;
+
+      (btn as HTMLButtonElement).disabled = true;
+      (btn as HTMLButtonElement).textContent = action === 'pause' ? 'Pausing...' : action === 'resume' ? 'Resuming...' : 'Cancelling...';
+
+      try {
+        const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+        const cookies = document.cookie.split(';');
+        const authCookies = cookies.filter(c => c.trim().match(/^sb-.*-auth-token/));
+        const token = authCookies.length > 0 ? authCookies[0].split('=').slice(1).join('=').trim() : '';
+
+        const res = await fetch(`${supabaseUrl}/functions/v1/manage-subscription`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ action, subscription_id: subId }),
+        });
+
+        if (res.ok) {
+          window.location.reload();
+        } else {
+          alert('Something went wrong. Please try again.');
+          (btn as HTMLButtonElement).disabled = false;
+          (btn as HTMLButtonElement).textContent = action.charAt(0).toUpperCase() + action.slice(1);
+        }
+      } catch {
+        alert('Network error. Please try again.');
+        (btn as HTMLButtonElement).disabled = false;
       }
     });
   });

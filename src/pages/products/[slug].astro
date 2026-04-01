@@ -324,6 +324,46 @@ const jsonLd = {
           )}
         </div>
 
+        {/* Subscribe & Save */}
+        {inStock && (
+          <div class="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-5 backdrop-blur" id="subscribe-section">
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-sm font-semibold text-foreground">Subscribe & Save</h2>
+              <span class="text-xs font-bold text-primary">Up to 15% off</span>
+            </div>
+            <p class="text-xs text-muted-foreground mb-4">
+              Auto-delivery at a discount. No commitment — pause or cancel anytime.
+            </p>
+            <div class="grid grid-cols-2 gap-2 mb-4">
+              <label class="subscribe-option flex flex-col items-center rounded-lg border border-primary/30 bg-primary/10 p-3 cursor-pointer transition hover:border-primary/50" data-interval="monthly">
+                <input type="radio" name="sub-interval" value="monthly" class="sr-only" checked />
+                <span class="text-xs text-muted-foreground">Monthly</span>
+                <span class="text-sm font-bold text-primary">10% off</span>
+                <span class="text-xs text-muted-foreground">&euro;{(singlePrice * 0.9).toFixed(2)}/can</span>
+              </label>
+              <label class="subscribe-option flex flex-col items-center rounded-lg border border-border bg-card/30 p-3 cursor-pointer transition hover:border-primary/30" data-interval="6monthly">
+                <input type="radio" name="sub-interval" value="6monthly" class="sr-only" />
+                <span class="text-xs text-muted-foreground">Every 6 months</span>
+                <span class="text-sm font-bold text-primary">15% off</span>
+                <span class="text-xs text-muted-foreground">&euro;{(singlePrice * 0.85).toFixed(2)}/can</span>
+              </label>
+            </div>
+            <button
+              type="button"
+              id="subscribe-btn"
+              data-slug={p.slug}
+              data-name={p.name}
+              class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Subscribe — save 10%
+            </button>
+            <p id="subscribe-msg" class="mt-2 text-xs text-center hidden"></p>
+            <p class="text-[10px] text-muted-foreground text-center mt-2">
+              First delivery ships immediately. Cancel anytime from your account.
+            </p>
+          </div>
+        )}
+
         {/* Description */}
         {description && (
           <div class="rounded-xl border border-border bg-card/30 p-5 backdrop-blur">
@@ -449,6 +489,95 @@ const jsonLd = {
         img.style.transform = 'scale(1)';
       });
     });
+  </script>
+
+  <!-- Subscribe & Save handler -->
+  <script is:inline define:vars={{ supabaseUrl: import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '' }}>
+  document.addEventListener('astro:page-load', function() {
+    var section = document.getElementById('subscribe-section');
+    if (!section) return;
+    var btn = document.getElementById('subscribe-btn');
+    var msg = document.getElementById('subscribe-msg');
+    var options = section.querySelectorAll('.subscribe-option');
+    var selectedInterval = 'monthly';
+
+    options.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        selectedInterval = opt.dataset.interval;
+        options.forEach(function(o) {
+          if (o.dataset.interval === selectedInterval) {
+            o.classList.add('border-primary/30', 'bg-primary/10');
+            o.classList.remove('border-border', 'bg-card/30');
+          } else {
+            o.classList.remove('border-primary/30', 'bg-primary/10');
+            o.classList.add('border-border', 'bg-card/30');
+          }
+        });
+        var pct = selectedInterval === 'monthly' ? '10' : '15';
+        btn.textContent = 'Subscribe \u2014 save ' + pct + '%';
+      });
+    });
+
+    btn.addEventListener('click', function() {
+      var auth = window.__AUTH_STATE__;
+      if (!auth || !auth.id) {
+        window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Setting up\u2026';
+      if (msg) { msg.classList.add('hidden'); }
+
+      // Get session token from cookie
+      var cookies = document.cookie.split(';');
+      var tokenCookie = cookies.find(function(c) { return c.trim().startsWith('sb-'); });
+      var token = '';
+      if (tokenCookie) {
+        // Find the access token cookie (format: sb-{ref}-auth-token)
+        var authCookies = cookies.filter(function(c) { return c.trim().match(/^sb-.*-auth-token/); });
+        if (authCookies.length > 0) {
+          token = authCookies[0].split('=').slice(1).join('=').trim();
+        }
+      }
+
+      fetch(supabaseUrl + '/functions/v1/manage-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          'apikey': (document.querySelector('meta[name=\"supabase-anon-key\"]') || {}).content || ''
+        },
+        body: JSON.stringify({
+          action: 'create',
+          product_slug: btn.dataset.slug,
+          product_name: btn.dataset.name,
+          pack_size: 'pack1',
+          quantity: 1,
+          interval: selectedInterval
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.ok) {
+          var pct = selectedInterval === 'monthly' ? '10' : '15';
+          msg.textContent = 'Subscribed! You\u2019ll save ' + pct + '% on every delivery.';
+          msg.className = 'mt-2 text-xs text-center text-primary';
+          btn.textContent = 'Subscribed';
+        } else {
+          msg.textContent = data.error === 'unauthorized' ? 'Please log in first.' : 'Something went wrong. Try again.';
+          msg.className = 'mt-2 text-xs text-center text-destructive';
+          btn.disabled = false;
+          btn.textContent = 'Subscribe \u2014 save ' + (selectedInterval === 'monthly' ? '10' : '15') + '%';
+        }
+      })
+      .catch(function() {
+        msg.textContent = 'Network error. Try again.';
+        msg.className = 'mt-2 text-xs text-center text-destructive';
+        btn.disabled = false;
+        btn.textContent = 'Subscribe \u2014 save ' + (selectedInterval === 'monthly' ? '10' : '15') + '%';
+      });
+    });
+  });
   </script>
 
   <!-- Back-in-stock notify form handler -->
