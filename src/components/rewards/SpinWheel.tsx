@@ -318,19 +318,11 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
 
       {/* Animations */}
       <style>{`
-        @keyframes led-chase {
-          0%, 100% { opacity: 0.2; transform: scale(0.8); }
-          50% { opacity: 1; transform: scale(1.2); }
-        }
         .led-dot {
-          animation: led-chase 2s ease-in-out infinite;
-        }
-        @keyframes center-glow {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.6; }
+          opacity: 0.6;
         }
         .center-pulse {
-          animation: center-glow 2s ease-in-out infinite;
+          opacity: 0.4;
         }
       `}</style>
     </div>
