@@ -53,22 +53,25 @@ const staffPicks = staffPickBrands
   })
   .filter(Boolean);
 
-// Pick 4 hero products with diverse brand colors for the hero image cluster
-const heroBrandTargets = ['zyn', 'velo', 'siberia', 'loop'];
+// Pick 10 hero products with diverse brands for the 3D showcase
+const heroBrandTargets = ['zyn', 'velo', 'siberia', 'loop', 'skruf', 'nordic-spirit', 'pablo', 'iceberg', 'white-fox', 'killa'];
 const heroProducts = heroBrandTargets
-  .map((slug) => allProducts.find((p) => p.data.brandSlug === slug && p.data.imageUrl))
+  .map((slug) => allProducts.find((p) => p.data.brandSlug === slug && p.data.imageUrl && p.data.stock > 0))
   .filter(Boolean)
-  .slice(0, 4);
+  .slice(0, 10);
 
-// Fallback: if we don't have those brands, pick popular ones with images
-if (heroProducts.length < 4) {
+// Fallback: fill up to 10 with popular products from other brands
+if (heroProducts.length < 10) {
   for (const p of sortedByPopularity) {
-    if (heroProducts.length >= 4) break;
+    if (heroProducts.length >= 10) break;
     if (p.data.imageUrl && !heroProducts.some((h) => h!.data.brandSlug === p.data.brandSlug)) {
       heroProducts.push(p);
     }
   }
 }
+
+// Brand logo images for the marquee
+const topBrandNames = brands.slice(0, 12).map(b => b.data.name);
 ---
 
 <Shop
@@ -76,53 +79,61 @@ if (heroProducts.length < 4) {
   description={heroDescription}
   ogImage={tenant.seo.ogImage}
 >
-  <!-- Hero — Split layout: text left, product images right -->
+  <!-- Hero — Immersive 3D product showcase -->
   <section class="relative overflow-hidden border-b border-border" style={`background: hsl(var(--hero-bg));`}>
+    <!-- Background gradient -->
     <div class="absolute inset-0" style={`background: linear-gradient(to bottom right, hsl(var(--hero-gradient-from)), hsl(var(--hero-gradient-via)), hsl(var(--hero-gradient-to)));`} />
-    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 py-16 sm:py-20 lg:py-24 lg:flex-row lg:gap-12 lg:py-24 lg:px-8">
 
-      <!-- Left: text + stats + CTAs -->
-      <div class="flex-1 text-center lg:text-left">
-        <p class="mb-3 text-sm font-medium uppercase tracking-widest" style={`color: hsl(var(--hero-muted));`}>
+    <!-- Ambient glow orbs -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="hero-glow-1 absolute w-96 h-96 rounded-full opacity-20" style="background: radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%); top: -10%; right: 10%;" />
+      <div class="hero-glow-2 absolute w-80 h-80 rounded-full opacity-15" style="background: radial-gradient(circle, hsl(153 55% 30% / 0.3) 0%, transparent 70%); bottom: -5%; left: 15%;" />
+    </div>
+
+    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 py-16 sm:py-20 lg:py-28 lg:flex-row lg:gap-16 lg:px-8">
+
+      <!-- Left: text with staggered reveal -->
+      <div class="flex-1 text-center lg:text-left z-10">
+        <p class="hero-reveal mb-3 text-sm font-medium uppercase tracking-widest" style={`color: hsl(var(--hero-muted)); animation: heroSlideUp 0.6s ease-out both;`}>
           Europe's Nicotine Pouch Shop
         </p>
-        <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]" style={`color: hsl(var(--hero-text)); font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;`}>
-          Premium Nicotine Pouches
+        <h1 class="hero-reveal text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]" style={`color: hsl(var(--hero-text)); font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; animation: heroSlideUp 0.6s ease-out 0.1s both;`}>
+          Premium Nicotine<br class="hidden sm:block" /> Pouches
         </h1>
-        <p class="mx-auto mt-4 max-w-xl text-lg lg:mx-0" style={`color: hsl(var(--hero-muted));`}>
+        <p class="hero-reveal mx-auto mt-4 max-w-xl text-lg lg:mx-0" style={`color: hsl(var(--hero-muted)); animation: heroSlideUp 0.6s ease-out 0.2s both;`}>
           {heroDescription}
         </p>
 
-        <!-- Stats row -->
-        <div class="mt-8 flex justify-center gap-8 lg:justify-start">
+        <!-- Animated stats row -->
+        <div class="hero-reveal mt-8 flex justify-center gap-8 lg:justify-start" style="animation: heroSlideUp 0.6s ease-out 0.3s both;">
           <div>
-            <div class="text-2xl font-bold" style={`color: hsl(var(--hero-text));`}>{allProducts.length}+</div>
-            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Cans</div>
+            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`} data-count-to={allProducts.length}>0</div>
+            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Products</div>
           </div>
-          <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.1);`} />
+          <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
           <div>
-            <div class="text-2xl font-bold" style={`color: hsl(var(--hero-text));`}>{brands.length}</div>
+            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`} data-count-to={brands.length}>0</div>
             <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Brands</div>
           </div>
-          <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.1);`} />
+          <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
           <div>
-            <div class="text-2xl font-bold" style={`color: hsl(var(--hero-text));`}>Free</div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--primary));`}>Free</div>
             <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>EU Shipping</div>
           </div>
         </div>
 
         <!-- CTAs -->
-        <div class="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
+        <div class="hero-reveal mt-8 flex flex-col items-center gap-3 sm:flex-row lg:justify-start" style="animation: heroSlideUp 0.6s ease-out 0.4s both;">
           <a
             href="/nicotine-pouches"
-            class="inline-flex h-12 items-center rounded-lg px-8 text-base font-semibold shadow-lg transition"
+            class="inline-flex h-12 items-center rounded-lg px-8 text-base font-semibold shadow-lg shadow-primary/20 transition hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02]"
             style={`background: hsl(var(--hero-cta-bg)); color: hsl(var(--hero-cta-text));`}
           >
             Shop All Pouches
           </a>
           <a
             href="/flavor-quiz"
-            class="inline-flex h-12 items-center rounded-lg border px-8 text-base font-semibold transition"
+            class="inline-flex h-12 items-center rounded-lg border px-8 text-base font-semibold transition hover:bg-white/5"
             style={`border-color: hsl(var(--hero-text) / 0.2); color: hsl(var(--hero-text));`}
           >
             Take the Flavour Quiz
@@ -130,67 +141,77 @@ if (heroProducts.length < 4) {
         </div>
       </div>
 
-      <!-- Right: floating 3D product cans -->
-      <div class="hidden flex-1 items-center justify-center lg:flex" style="perspective: 600px;">
-        <div class="relative h-80 w-80 xl:h-96 xl:w-96">
+      <!-- Right: 3D orbital product showcase (desktop) -->
+      <div class="hidden flex-1 items-center justify-center lg:flex">
+        <div class="hero-orbit relative" style="width: 420px; height: 420px; perspective: 800px;">
+          <!-- Orbital ring of products -->
+          <div class="hero-orbit-ring absolute inset-0" style="transform-style: preserve-3d; animation: heroOrbit 30s linear infinite;">
+            {heroProducts.slice(0, 8).map((p, i) => {
+              if (!p) return null;
+              const angle = (i / 8) * 360;
+              const radius = 160;
+              return (
+                <img
+                  src={p.data.imageUrl}
+                  alt={p.data.name}
+                  width="100"
+                  height="100"
+                  class="hero-orbit-item absolute rounded-xl"
+                  style={`
+                    left: 50%; top: 50%;
+                    width: 100px; height: 100px;
+                    margin: -50px 0 0 -50px;
+                    transform: rotateY(${angle}deg) translateZ(${radius}px);
+                    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+                    backface-visibility: hidden;
+                  `}
+                  loading="eager"
+                />
+              );
+            })}
+          </div>
+
+          <!-- Center featured product (larger, floating) -->
           {heroProducts[0] && (
-            <img
-              src={heroProducts[0]!.data.imageUrl}
-              alt={heroProducts[0]!.data.name}
-              width="180"
-              height="180"
-              class="hero-can absolute left-4 top-2 rounded-2xl"
-              style="animation: heroFloat1 6s ease-in-out infinite; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));"
-              loading="eager"
-            />
+            <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+              <img
+                src={heroProducts[0]!.data.imageUrl}
+                alt={heroProducts[0]!.data.name}
+                width="180"
+                height="180"
+                class="hero-center-can rounded-2xl"
+                style="animation: heroCenterFloat 4s ease-in-out infinite; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) drop-shadow(0 0 20px hsl(var(--primary) / 0.15));"
+                loading="eager"
+              />
+            </div>
           )}
-          {heroProducts[1] && (
-            <img
-              src={heroProducts[1]!.data.imageUrl}
-              alt={heroProducts[1]!.data.name}
-              width="160"
-              height="160"
-              class="hero-can absolute right-0 top-8 rounded-2xl"
-              style="animation: heroFloat2 7s ease-in-out infinite 1s; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));"
-              loading="eager"
-            />
-          )}
-          {heroProducts[2] && (
-            <img
-              src={heroProducts[2]!.data.imageUrl}
-              alt={heroProducts[2]!.data.name}
-              width="150"
-              height="150"
-              class="hero-can absolute bottom-4 left-12 rounded-2xl"
-              style="animation: heroFloat3 8s ease-in-out infinite 0.5s; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));"
-              loading="eager"
-            />
-          )}
-          {heroProducts[3] && (
-            <img
-              src={heroProducts[3]!.data.imageUrl}
-              alt={heroProducts[3]!.data.name}
-              width="140"
-              height="140"
-              class="hero-can absolute bottom-0 right-8 rounded-2xl"
-              style="animation: heroFloat4 6.5s ease-in-out infinite 1.5s; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));"
-              loading="eager"
-            />
-          )}
+
+          <!-- Glow ring behind orbit -->
+          <div class="absolute inset-8 rounded-full opacity-20" style="background: conic-gradient(from 0deg, hsl(var(--primary) / 0.3), transparent 30%, hsl(153 55% 30% / 0.2) 50%, transparent 70%, hsl(var(--primary) / 0.3)); animation: heroOrbit 20s linear infinite reverse; filter: blur(20px);" />
         </div>
       </div>
 
-      <!-- Mobile: horizontal product strip -->
-      <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory px-1">
-        {heroProducts.map((p) => p && (
+      <!-- Mobile: scrolling product strip with 3D -->
+      <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory px-1" style="perspective: 400px;">
+        {heroProducts.slice(0, 6).map((p, i) => p && (
           <img
             src={p.data.imageUrl}
             alt={p.data.name}
             width="112"
             height="112"
-            class="flex-shrink-0 snap-center rounded-xl shadow-lg shadow-black/20 w-24 h-24 sm:w-28 sm:h-28"
+            class="flex-shrink-0 snap-center rounded-xl w-24 h-24 sm:w-28 sm:h-28 hero-can"
+            style={`animation: heroFloat${(i % 4) + 1} ${6 + i * 0.5}s ease-in-out infinite ${i * 0.3}s; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.3));`}
             loading="eager"
           />
+        ))}
+      </div>
+    </div>
+
+    <!-- Brand marquee -->
+    <div class="relative border-t border-white/5 overflow-hidden" style="background: hsl(var(--hero-bg) / 0.8);">
+      <div class="hero-marquee flex items-center gap-12 py-3 whitespace-nowrap" style="animation: heroMarquee 25s linear infinite;">
+        {[...topBrandNames, ...topBrandNames].map((name) => (
+          <span class="text-xs font-semibold uppercase tracking-[0.15em] opacity-30" style={`color: hsl(var(--hero-text));`}>{name}</span>
         ))}
       </div>
     </div>
@@ -651,6 +672,7 @@ if (heroProducts.length < 4) {
   <!-- Beginner mode: hide strong products from static sections -->
   <script is:inline>
   (function() {
+    // Beginner mode filter
     try {
       var raw = localStorage.getItem('snusfriend_beginner');
       if (!raw || raw !== 'true') return;
@@ -660,39 +682,99 @@ if (heroProducts.length < 4) {
         if (mg > 6) cards[i].style.display = 'none';
       }
     } catch(e) {}
+
+    // Animated stat counters
+    document.querySelectorAll('[data-count-to]').forEach(function(el) {
+      var target = parseInt(el.getAttribute('data-count-to') || '0');
+      var duration = 1500;
+      var start = performance.now();
+      function step(now) {
+        var progress = Math.min((now - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        el.textContent = Math.round(target * eased) + (progress >= 1 ? '+' : '');
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      // Only animate if in viewport
+      var observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          start = performance.now();
+          requestAnimationFrame(step);
+        }
+      });
+      observer.observe(el);
+    });
   })();
   </script>
 
   <style>
-    /* Floating 3D hero animations — GPU-accelerated, ~2KB total */
+    /* ═══ 3D Hero Animations ═══ */
+
+    /* Text reveal — slide up with fade */
+    @keyframes heroSlideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Orbital rotation for product ring */
+    @keyframes heroOrbit {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    /* Center product float */
+    @keyframes heroCenterFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-16px) scale(1.05); }
+    }
+
+    /* Mobile floating cans */
     @keyframes heroFloat1 {
-      0%, 100% { transform: translateY(0) rotateY(0deg) rotate(-6deg) scale(1); }
-      25% { transform: translateY(-18px) rotateY(8deg) rotate(-4deg) scale(1.03); }
-      50% { transform: translateY(-8px) rotateY(-4deg) rotate(-7deg) scale(1.01); }
-      75% { transform: translateY(-22px) rotateY(5deg) rotate(-5deg) scale(1.04); }
+      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateY(-14px) rotateY(8deg) scale(1.03); }
     }
     @keyframes heroFloat2 {
-      0%, 100% { transform: translateY(0) rotateY(0deg) rotate(4deg) scale(1); }
-      30% { transform: translateY(-15px) rotateY(-6deg) rotate(6deg) scale(1.02); }
-      60% { transform: translateY(-25px) rotateY(5deg) rotate(3deg) scale(1.05); }
+      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateY(-18px) rotateY(-6deg) scale(1.02); }
     }
     @keyframes heroFloat3 {
-      0%, 100% { transform: translateY(0) rotateY(0deg) rotate(3deg) scale(1); }
-      35% { transform: translateY(-20px) rotateY(7deg) rotate(1deg) scale(1.03); }
-      65% { transform: translateY(-10px) rotateY(-5deg) rotate(5deg) scale(1.01); }
+      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateY(-12px) rotateY(7deg) scale(1.04); }
     }
     @keyframes heroFloat4 {
-      0%, 100% { transform: translateY(0) rotateY(0deg) rotate(-3deg) scale(1); }
-      40% { transform: translateY(-22px) rotateY(-8deg) rotate(-1deg) scale(1.04); }
-      70% { transform: translateY(-12px) rotateY(6deg) rotate(-5deg) scale(1.02); }
+      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateY(-20px) rotateY(-5deg) scale(1.03); }
     }
-    .hero-can {
-      will-change: transform;
-      transform-style: preserve-3d;
+
+    /* Brand marquee scroll */
+    @keyframes heroMarquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
     }
-    /* Reduce motion for accessibility */
+
+    /* Ambient glow drift */
+    .hero-glow-1 { animation: heroDrift1 12s ease-in-out infinite; }
+    .hero-glow-2 { animation: heroDrift2 15s ease-in-out infinite 3s; }
+    @keyframes heroDrift1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-30px, 20px); }
+    }
+    @keyframes heroDrift2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20px, -30px); }
+    }
+
+    /* Orbit items preserve 3D */
+    .hero-orbit-ring { transform-style: preserve-3d; }
+    .hero-orbit-item { will-change: transform; }
+    .hero-center-can { will-change: transform; }
+    .hero-can { will-change: transform; transform-style: preserve-3d; }
+
+    /* Accessibility */
     @media (prefers-reduced-motion: reduce) {
-      .hero-can { animation: none !important; }
+      .hero-can, .hero-orbit-ring, .hero-center-can,
+      .hero-glow-1, .hero-glow-2, .hero-marquee,
+      .hero-reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
     }
   </style>
 </Shop>
