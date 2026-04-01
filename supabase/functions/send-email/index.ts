@@ -372,6 +372,66 @@ function renderOrderUpdated(data: Record<string, unknown>): string {
   `);
 }
 
+function renderCartAbandoned(data: Record<string, unknown>): string {
+  const items = Array.isArray(data.items) ? (data.items as Array<Record<string, unknown>>) : [];
+  const cartTotal = escapeHtml(String(data.cart_total ?? "EUR 0.00"));
+  const itemCount = Number(data.item_count ?? items.length);
+  const recoveryUrl = String(data.recovery_url ?? "https://snusfriends.com/cart");
+  const pointsTotal = Math.floor(Number(String(cartTotal).replace(/[^0-9.]/g, "") || "0") * 10);
+
+  const itemRows = items.map((item, i) => {
+    const name = escapeHtml(String(item.name ?? "Product"));
+    const brand = escapeHtml(String(item.brand ?? ""));
+    const imageUrl = String(item.image_url ?? "");
+    const packLabel = escapeHtml(String(item.pack_label ?? "1 can(s)"));
+    const price = Number(item.price ?? 0);
+    const qty = Number(item.quantity ?? 1);
+    const paddingTop = i === 0 ? "24px" : "8px";
+    return `<tr><td style="padding:${paddingTop} 32px 0 32px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#1e293b;border-radius:12px;overflow:hidden;">
+        <tr><td style="padding:16px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="72" valign="top">
+              <div style="width:64px;height:64px;border-radius:50%;overflow:hidden;background-color:#253044;">
+                ${imageUrl ? `<img src="${imageUrl}" alt="${name}" width="64" height="64" style="display:block;width:64px;height:64px;object-fit:contain;border-radius:50%;" />` : `<div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;color:#64748b;">${brand.charAt(0)}</div>`}
+              </div>
+            </td>
+            <td style="padding-left:12px;" valign="top">
+              ${brand ? `<p style="margin:0 0 2px 0;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">${brand}</p>` : ""}
+              <p style="margin:0 0 4px 0;font-size:15px;font-weight:600;color:#f1f5f9;">${name}</p>
+              <p style="margin:0 0 6px 0;font-size:12px;color:#64748b;">${packLabel}</p>
+              <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                <td><span style="font-size:13px;color:#94a3b8;">Qty: ${qty}</span></td>
+                <td style="padding-left:16px;"><span style="font-size:16px;font-weight:700;color:#f1f5f9;">&euro;${(price * qty).toFixed(2)}</span></td>
+              </tr></table>
+            </td>
+          </tr></table>
+        </td></tr>
+      </table>
+    </td></tr>`;
+  }).join("");
+
+  // Use dark theme layout (not the default light wrapInLayout)
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>You left something behind</title></head>
+<body style="margin:0;padding:0;background-color:#0c1018;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0c1018;"><tr><td align="center" style="padding:40px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;margin:0 auto;background-color:#161d2b;border-radius:16px;overflow:hidden;">
+  <tr><td style="height:3px;background:linear-gradient(90deg,#22c55e,#a3e635,#22c55e);font-size:0;line-height:0;">&nbsp;</td></tr>
+  <tr><td align="center" style="padding:32px 32px 0 32px;"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background-color:#1e293b;border-radius:12px;padding:10px 20px;"><span style="font-size:22px;font-weight:800;color:#a3e635;letter-spacing:-0.5px;">Snus</span><span style="font-size:22px;font-weight:800;color:#e2e8f0;letter-spacing:-0.5px;">Friend</span></td></tr></table></td></tr>
+  <tr><td align="center" style="padding:28px 32px 0 32px;"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td align="center" style="width:56px;height:56px;background-color:rgba(163,230,53,0.1);border-radius:50%;border:2px solid rgba(163,230,53,0.2);text-align:center;vertical-align:middle;"><span style="font-size:28px;line-height:56px;">&#128722;</span></td></tr></table></td></tr>
+  <tr><td align="center" style="padding:20px 32px 0 32px;"><h1 style="margin:0;font-size:24px;font-weight:700;color:#f1f5f9;line-height:1.3;">You Left Something Behind</h1></td></tr>
+  <tr><td align="center" style="padding:12px 32px 0 32px;"><p style="margin:0;font-size:15px;line-height:1.6;color:#94a3b8;">Your cart is still waiting for you. Complete your order before your favourites run out.</p></td></tr>
+  ${itemRows}
+  <tr><td style="padding:16px 32px 0 32px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #253044;padding-top:12px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td><span style="font-size:14px;color:#94a3b8;">Subtotal (${itemCount} item${itemCount !== 1 ? "s" : ""})</span></td><td align="right"><span style="font-size:16px;font-weight:700;color:#f1f5f9;">${cartTotal}</span></td></tr></table></td></tr><tr><td style="padding-top:6px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td><span style="font-size:13px;color:#22c55e;">&#10003; Free shipping on orders over &euro;50</span></td><td align="right"><span style="font-size:13px;font-weight:600;color:#22c55e;">+${pointsTotal} pts</span></td></tr></table></td></tr></table></td></tr>
+  <tr><td align="center" style="padding:24px 32px 0 32px;"><a href="${recoveryUrl}" target="_blank" style="display:inline-block;width:100%;max-width:360px;background-color:#22c55e;background-image:linear-gradient(135deg,#22c55e,#15803d);color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;padding:16px 24px;border-radius:12px;text-align:center;">Complete Your Order &rarr;</a></td></tr>
+  <tr><td align="center" style="padding:16px 32px 0 32px;"><p style="margin:0;font-size:13px;color:#f59e0b;font-weight:500;">&#9888; Popular items sell out fast &mdash; we can&rsquo;t guarantee availability</p></td></tr>
+  <tr><td style="padding:24px 32px 0 32px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:rgba(30,41,59,0.5);border-radius:10px;"><tr><td style="padding:14px 16px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td width="33%" align="center" style="padding:0 4px;"><p style="margin:0;font-size:16px;">&#128666;</p><p style="margin:4px 0 0 0;font-size:11px;color:#94a3b8;line-height:1.3;">Fast EU<br/>delivery</p></td><td width="33%" align="center" style="padding:0 4px;border-left:1px solid #253044;border-right:1px solid #253044;"><p style="margin:0;font-size:16px;">&#128274;</p><p style="margin:4px 0 0 0;font-size:11px;color:#94a3b8;line-height:1.3;">Secure<br/>checkout</p></td><td width="33%" align="center" style="padding:0 4px;"><p style="margin:0;font-size:16px;">&#127873;</p><p style="margin:4px 0 0 0;font-size:11px;color:#94a3b8;line-height:1.3;">Earn points<br/>every order</p></td></tr></table></td></tr></table></td></tr>
+  <tr><td style="padding:24px 32px 0 32px;"><div style="height:1px;background-color:#1e293b;">&nbsp;</div></td></tr>
+  <tr><td align="center" style="padding:16px 32px 0 32px;"><p style="margin:0;font-size:13px;color:#64748b;line-height:1.5;">Questions? Reply to this email or reach us at <a href="mailto:hello@snusfriends.com" style="color:#a3e635;text-decoration:none;">hello@snusfriends.com</a></p></td></tr>
+  <tr><td style="padding:16px 32px 28px 32px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><p style="margin:0;font-size:12px;color:#475569;">&copy; 2026 SnusFriend &middot; <a href="https://snusfriends.com" style="color:#64748b;text-decoration:none;">snusfriends.com</a> &middot; <a href="mailto:hello@snusfriends.com" style="color:#64748b;text-decoration:none;">hello@snusfriends.com</a></p></td></tr></table></td></tr>
+</table></td></tr></table></body></html>`;
+}
+
 const TEMPLATE_RENDERERS: Record<string, (data: Record<string, unknown>) => string> = {
   order_confirmed: renderOrderConfirmed,
   order_shipped: renderOrderShipped,
@@ -379,6 +439,7 @@ const TEMPLATE_RENDERERS: Record<string, (data: Record<string, unknown>) => stri
   review_request: renderReviewRequest,
   order_canceled: renderOrderCanceled,
   order_updated: renderOrderUpdated,
+  cart_abandoned: renderCartAbandoned,
 };
 
 /* ------------------------------------------------------------------ */
