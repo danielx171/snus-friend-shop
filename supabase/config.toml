@@ -92,3 +92,6 @@ verify_jwt = true
 
 [functions.update-nyehandel-order]
 verify_jwt = true
+
+[functions.validate-discount]
+verify_jwt = false

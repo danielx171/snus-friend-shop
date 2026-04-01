@@ -3,125 +3,118 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 
 const publishDate = '2026-03-27';
-const title = 'Nicotine Pouch Side Effects: What to Expect';
-const description = 'Honest guide to common nicotine pouch side effects — tingling, hiccups, nausea — what causes them, how to avoid them, and when to lower your strength.';
+const modifiedDate = '2026-04-01';
+const title = 'Nicotine Pouch Side Effects: What the Research Actually Says';
+const description = 'An honest look at nicotine pouch side effects based on published research. Covers common effects, long-term unknowns, and how to reduce risk.';
 ---
 
 <Shop
   title={`${title} | ${tenant.name}`}
   description={description}
+  canonical="/blog/nicotine-pouch-side-effects"
   ogType="article"
 >
-  <article class="bg-background text-foreground">
-    <div class="max-w-3xl mx-auto px-4 py-12">
-      <Breadcrumb items={[
-        { label: 'Blog', href: '/blog' },
-        { label: 'Side Effects' },
-      ]} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": modifiedDate,
+    "author": { "@type": "Organization", "name": "SnusFriends", "url": "https://snusfriends.com" },
+    "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/nicotine-pouch-side-effects" }
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What are the most common nicotine pouch side effects?", "acceptedAnswer": { "@type": "Answer", "text": "The most common side effects are hiccups, mild nausea, gum irritation, throat irritation, and a slight increase in heart rate. These are generally mild and temporary, especially for new users or when switching to a higher strength. Most resolve within the first week of regular use." } },
+      { "@type": "Question", "name": "Are nicotine pouches safe long-term?", "acceptedAnswer": { "@type": "Answer", "text": "The honest answer is that we don't fully know yet. Nicotine pouches launched around 2016, and large-scale independent longitudinal studies are still underway. Current research suggests they carry substantially lower risk than cigarettes and traditional snus, but the long-term cardiovascular and oral health effects of daily use over decades are not yet established." } },
+      { "@type": "Question", "name": "Can nicotine pouches cause gum damage?", "acceptedAnswer": { "@type": "Answer", "text": "There is limited evidence that regular, long-term use in the same spot can contribute to localised gum recession. This is more commonly associated with traditional snus than with tobacco-free pouches. Rotating the placement of the pouch between left and right sides helps prevent irritation from building up." } },
+      { "@type": "Question", "name": "Who should not use nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches are not suitable for people under 18, pregnant or breastfeeding women, non-nicotine users (there is no benefit to starting), or anyone managing a heart condition without consulting their doctor first." } },
+      { "@type": "Question", "name": "How can I reduce nicotine pouch side effects?", "acceptedAnswer": { "@type": "Answer", "text": "Start with a low strength (3–4 mg), rotate pouch placement between sides, stay hydrated, limit use to 8–12 pouches per day, and avoid using pouches within 2–3 hours of bedtime to prevent sleep disruption." } }
+    ]
+  })} />
+
+  <div class="bg-background text-foreground">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">
+
+      <Breadcrumb
+        items={[
+          { label: 'Blog', href: '/blog' },
+          { label: 'Side Effects Guide' }
+        ]}
+      />
 
       <BlogHero
-        category="Guide"
         title={title}
         description={description}
-        date="March 27, 2026"
-        readTime="6 min read"
+        publishDate={publishDate}
+        readTime="9 min read"
+        category="Health & Safety"
       />
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
 
-        <h2>The Short Version</h2>
+        <h2>Honest Answers, Not Marketing</h2>
         <p>
-          <strong>Most nicotine pouch side effects are mild, temporary, and entirely avoidable</strong>.
-          Tingling lips, hiccups, a wave of nausea — these are almost always caused by one thing:
-          using a pouch that is too strong for your current tolerance. The fix is straightforward.
-          Drop down in strength, give your body time to adjust, and the discomfort disappears. According to Public Health England and clinical guidance, these reactions are normal physiological responses to nicotine exposure and pose no lasting harm.
-        </p>
-        <p>
-          If you are new to <a href="/blog/what-are-nicotine-pouches">nicotine pouches</a>, none
-          of this should put you off. Millions of adults use them daily without issues. But knowing
-          what to expect — and why it happens — means you can skip the unpleasant learning curve
-          that catches some first-timers off guard. If you are still choosing your first product,
-          our <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginner's guide</a> walks you
-          through exactly where to start.
+          If you search for nicotine pouch side effects, you'll find two types of content: brand-funded articles that downplay everything, and anti-nicotine pages that treat pouches like they're as dangerous as cigarettes. Neither is particularly useful. This guide covers what peer-reviewed research has actually found as of early 2026, where the evidence is strong, and where there are genuine gaps. We sell nicotine pouches — but we'd rather you make informed decisions than uninformed purchases.
         </p>
 
-        <h2>Common Side Effects</h2>
+        <h2>Common Short-Term Side Effects</h2>
         <p>
-          Here is what you might experience, what causes it, and what to do about it.
-        </p>
-
-        <h3>Tingling or Burning Under the Lip</h3>
-        <p>
-          This is the most common sensation and it is <strong>completely normal</strong>. Nicotine
-          pouches contain a pH adjuster (usually sodium carbonate) that makes the lining of your
-          gum more permeable so the nicotine can absorb efficiently. That mild tingle or slight
-          burn is the pH shift doing its job. It typically <strong>fades within two to five minutes</strong>
-          as the pouch settles in.
-        </p>
-        <p>
-          Mini pouches and lower strengths produce less tingling because they contain less pH
-          adjuster. If the sensation bothers you, try a <a href="/products/strength/mild">mild
-          strength (2-4 mg)</a> pouch or switch to a mini format. The tingle is not a sign of
-          damage — it is simply how the product works.
+          These are the side effects most users experience, especially when starting out or when switching strengths. They're generally mild and temporary.
         </p>
 
         <h3>Hiccups</h3>
         <p>
-          Hiccups are <strong>very common</strong>, especially with stronger pouches above 8 mg.
-          Nicotine stimulates the vagus nerve, which runs from the brain to the abdomen, and this
-          can trigger involuntary diaphragm contractions — hiccups. They are harmless but annoying,
-          and they are a reliable signal that the strength is too high for you right now.
-        </p>
-        <p>
-          The solution is simple: step down by 2-4 mg. If you are getting hiccups on a 10 mg pouch,
-          try a 6 mg instead. For help picking the right level, read our guide on
-          <a href="/blog/how-to-choose-your-strength">how to choose your strength</a>.
+          The most common side effect for new users. Nicotine stimulates the vagus nerve, which can trigger hiccups — especially at higher strengths or if you haven't used nicotine before. This almost always resolves within the first week of regular use. Tip: start with a <a href="/products/strength/light">lower strength</a> (3–4 mg) and work up.
         </p>
 
-        <h3>Nausea or Dizziness</h3>
+        <h3>Nausea</h3>
         <p>
-          Feeling queasy or lightheaded after placing a pouch is a clear sign that <strong>the
-          nicotine dose exceeds your tolerance</strong>. This happens most often to beginners who
-          start with a strong pouch, or to experienced users who jump up in strength too quickly.
-        </p>
-        <p>
-          If it happens, <strong>remove the pouch immediately</strong>. Drink water. Sit down if you
-          feel dizzy. The sensation passes within 10-15 minutes. Next time, try a pouch that is
-          2-4 mg lower. Using pouches on an empty stomach makes nausea much more likely, so eat
-          something first — especially during your first week. Our
-          <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginner's guide</a> covers this in detail.
+          Mild nausea is common if the nicotine strength is too high for your tolerance, if you use a pouch on an empty stomach, or if you swallow too much of the pouch liquid. The fix is straightforward: drop to a lower strength and don't use right before eating. If nausea persists beyond the first few uses, the strength is too high.
         </p>
 
-        <h3>Dry Mouth</h3>
+        <h3>Gum irritation</h3>
         <p>
-          Nicotine mildly reduces saliva production, and some users notice a <strong>slight dryness</strong>
-          in the mouth during or after use. This is not harmful and does not indicate anything wrong.
-          Keep a glass of water nearby and sip regularly. Staying hydrated generally solves it. If you
-          are browsing for your next order, check out our <a href="/nicotine-pouches">full catalogue</a>
-          — some moist-format pouches feel less drying than others.
+          Most pouches contain pH adjusters (sodium carbonate or similar) that increase the alkalinity of the saliva around the pouch, which helps nicotine absorb through the gum tissue. This can cause mild irritation, tingling, or soreness — especially in the first few days. Rotating the placement of the pouch (left side, right side, alternating) helps prevent irritation from building up in one spot.
         </p>
 
-        <h3>Gum Irritation</h3>
+        <h3>Throat irritation</h3>
         <p>
-          Placing multiple pouches per day in the <strong>same spot</strong> can irritate the gum
-          tissue. You might notice redness, tenderness, or a slight soreness where the pouch sits.
-          The fix is to <strong>rotate placement</strong> — alternate between the left and right
-          sides of your upper lip, and vary the exact position slightly each time.
-        </p>
-        <p>
-          Take breaks between pouches. If irritation persists after a day or two of reduced use,
-          give your gums a full rest for 48 hours. Heavy daily use in one spot is the cause —
-          the pouches themselves are soft and designed to be gentle on tissue.
+          Some users experience a dry or scratchy throat, particularly with strong mint or menthol flavours. This is typically caused by the flavouring compounds rather than the nicotine itself. Staying hydrated and choosing milder flavours (citrus, coffee) can reduce this.
         </p>
 
-        <h2>Strength Is Almost Always the Problem</h2>
+        <h3>Increased heart rate</h3>
         <p>
-          Notice a pattern? Nearly every side effect traces back to nicotine strength. Here is a
-          quick-reference table:
+          Nicotine is a stimulant. A slight increase in heart rate after using a pouch is normal and expected — similar to the effect of a strong coffee. For most healthy adults, this isn't a concern. However, if you have a pre-existing heart condition, you should speak with your doctor before using any nicotine product.
         </p>
+
+        <h2>Less Common Side Effects</h2>
+
+        <h3>Headaches</h3>
+        <p>
+          Some users report headaches, especially when they first start using pouches or when they skip their usual nicotine intake (withdrawal). Nicotine causes blood vessel constriction, which can trigger headaches in susceptible individuals. Consistent, moderate use tends to prevent both the over-stimulation and withdrawal patterns that cause them.
+        </p>
+
+        <h3>Gum recession (with prolonged use)</h3>
+        <p>
+          There is limited evidence that regular, long-term pouch use in the same spot can contribute to localised gum recession. This is more commonly associated with traditional snus (which contains tobacco) than with modern nicotine pouches, but the mechanism — sustained pressure and chemical contact on gum tissue — is similar. Rotating placement is the practical mitigation. No large-scale studies have confirmed this specifically for tobacco-free pouches.
+        </p>
+
+        <h3>Sleep disruption</h3>
+        <p>
+          Nicotine has a half-life of about two hours. Using a pouch close to bedtime can delay sleep onset and reduce sleep quality. If this affects you, set a cutoff time — stopping 2–3 hours before bed usually resolves it. See our guide on <a href="/blog/how-many-nicotine-pouches-a-day">how many pouches per day</a> for more on managing intake.
+        </p>
+
+        <h2>Side Effect Quick Reference</h2>
         <div class="overflow-x-auto">
           <table class="w-full text-sm border-collapse">
             <thead>
@@ -133,153 +126,103 @@ const description = 'Honest guide to common nicotine pouch side effects — ting
             </thead>
             <tbody class="text-muted-foreground">
               <tr class="border-b border-border/50">
-                <td class="py-3 pr-4">Tingling / burning</td>
-                <td class="py-3 pr-4">pH adjuster (normal)</td>
-                <td class="py-3">Try <a href="/products/strength/mild">mild strength</a> or mini format</td>
-              </tr>
-              <tr class="border-b border-border/50">
                 <td class="py-3 pr-4">Hiccups</td>
-                <td class="py-3 pr-4">Strength too high</td>
-                <td class="py-3">Drop by 2-4 mg</td>
+                <td class="py-3 pr-4">Vagus nerve stimulation (strength too high)</td>
+                <td class="py-3">Drop by 2–4 mg</td>
               </tr>
               <tr class="border-b border-border/50">
-                <td class="py-3 pr-4">Nausea / dizziness</td>
+                <td class="py-3 pr-4">Nausea</td>
                 <td class="py-3 pr-4">Strength too high or empty stomach</td>
-                <td class="py-3">Remove pouch, eat first, try <a href="/products/strength/regular">regular strength</a></td>
+                <td class="py-3">Lower strength, eat first</td>
               </tr>
               <tr class="border-b border-border/50">
-                <td class="py-3 pr-4">Dry mouth</td>
-                <td class="py-3 pr-4">Nicotine reduces saliva</td>
-                <td class="py-3">Drink water alongside</td>
+                <td class="py-3 pr-4">Gum irritation</td>
+                <td class="py-3 pr-4">pH adjusters + repeated placement</td>
+                <td class="py-3">Rotate sides, take breaks</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">Throat irritation</td>
+                <td class="py-3 pr-4">Mint/menthol flavouring compounds</td>
+                <td class="py-3">Hydrate, try citrus or coffee</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">Increased heart rate</td>
+                <td class="py-3 pr-4">Nicotine stimulant effect (normal)</td>
+                <td class="py-3">Consult doctor if pre-existing condition</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">Headaches</td>
+                <td class="py-3 pr-4">Overuse or withdrawal</td>
+                <td class="py-3">Consistent, moderate use</td>
               </tr>
               <tr>
-                <td class="py-3 pr-4">Gum irritation</td>
-                <td class="py-3 pr-4">Repeated use in same spot</td>
-                <td class="py-3">Rotate placement, take breaks</td>
+                <td class="py-3 pr-4">Sleep disruption</td>
+                <td class="py-3 pr-4">Nicotine half-life (~2 hours)</td>
+                <td class="py-3">Stop 2–3 hours before bed</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h2>How to Avoid Side Effects</h2>
+        <h2>What About Long-Term Effects?</h2>
         <p>
-          Prevention is easier than management. Follow these five rules and you will sidestep
-          the vast majority of problems:
+          Here's where honesty matters: <strong>we don't fully know yet.</strong> Nicotine pouches are a relatively new product category. The earliest brands launched around 2016, and large-scale, independent longitudinal studies are still underway. Here's what the current research says:
         </p>
-        <ol class="list-decimal pl-6 space-y-3">
-          <li><strong>Start with the lowest strength available.</strong> A 2-4 mg pouch is plenty for anyone without existing nicotine tolerance. You can always move up — you cannot undo a bad first experience. Browse our <a href="/products/strength/mild">mild range</a> to see options.</li>
-          <li><strong>Do not use on an empty stomach.</strong> Nicotine hits harder without food in your system. Eat a meal or snack before your first pouch of the day, especially in your first week.</li>
-          <li><strong>Avoid combining with coffee at first.</strong> Both nicotine and caffeine are stimulants. Together they can amplify nausea and dizziness. Once you know your tolerance, combining them is fine — but not on day one.</li>
-          <li><strong>Use one pouch at a time.</strong> Doubling up does not improve the experience. It doubles the nicotine dose and doubles the chance of side effects.</li>
-          <li><strong>Give your body time to adjust.</strong> The first three to five pouches might feel unusual. A slight tingle, an odd sensation under the lip — this is normal. It fades as you get accustomed to the format.</li>
-        </ol>
         <p>
-          If you are <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">switching from
-          cigarettes</a>, your nicotine tolerance is already established — but the delivery method
-          is different. Start at a moderate strength (6-8 mg) rather than jumping straight to
-          extra strong.
+          A 2024 scoping review in <em>Nicotine &amp; Tobacco Research</em> (Oxford Academic) analysed the available evidence and concluded that the chemical composition of nicotine pouches suggests fewer harmful compounds at lower levels than cigarettes and traditional smokeless tobacco. However, the same review noted that most existing studies were industry-funded and called for more independent research.
+        </p>
+        <p>
+          A 2025 narrative review published in <em>PMC</em> reached similar conclusions: pouches appear to carry substantially lower risk than combustible tobacco, but the long-term cardiovascular and oral health effects of daily nicotine pouch use over decades are not yet established.
+        </p>
+        <p>
+          A <em>Frontiers in Public Health</em> paper (2025) specifically flagged concerns about cardiovascular risks in young adults who start using pouches without a prior smoking history — noting that the marketing of pouches as "tobacco-free" may lead to underestimation of the inherent risks of nicotine itself.
         </p>
 
-        <h2>When to Stop or See a Doctor</h2>
+        <h2>Nicotine Pouches vs. Cigarettes vs. Snus</h2>
         <p>
-          In the vast majority of cases, lowering your strength or taking a break resolves any
-          discomfort within minutes. However, <strong>stop using nicotine pouches and seek medical
-          advice</strong> if you experience any of the following:
+          Context matters. Nicotine pouches contain no tobacco leaf, produce no combustion byproducts, and don't expose the user or bystanders to smoke. The primary health concern is nicotine itself — an addictive stimulant with cardiovascular effects.
         </p>
-        <ul class="list-disc pl-6 space-y-2">
-          <li>Chest pain or tightness</li>
-          <li>Irregular or rapid heartbeat</li>
-          <li>Severe or persistent nausea that does not resolve after removing the pouch</li>
-          <li>Allergic reactions such as swelling, rash, or difficulty breathing</li>
+        <p>
+          Cigarettes expose users to tar, carbon monoxide, and thousands of combustion chemicals. Traditional snus contains tobacco and tobacco-specific nitrosamines (TSNAs), though at much lower levels than cigarettes. Nicotine pouches remove both combustion and tobacco from the equation — which is why they're generally considered a lower-risk alternative. "Lower-risk" does not mean "risk-free."
+        </p>
+        <p>
+          If you're using pouches as a tool to quit smoking, that's a different risk calculus than starting pouches as a non-smoker. For an in-depth look at this, read our piece on <a href="/blog/are-nicotine-pouches-safe">are nicotine pouches safe</a>.
+        </p>
+
+        <h2>Who Should Avoid Nicotine Pouches</h2>
+        <p>
+          Nicotine pouches are not suitable for everyone. You should not use them if you are:
+        </p>
+        <ul>
+          <li><strong>Under 18</strong> — nicotine is harmful to developing brains and SnusFriend does not sell to minors</li>
+          <li><strong>Pregnant or breastfeeding</strong> — nicotine crosses the placenta and passes into breast milk</li>
+          <li><strong>A non-nicotine user</strong> — if you don't currently use nicotine, there is no benefit to starting</li>
+          <li><strong>Managing a heart condition</strong> — consult your doctor before using any nicotine product</li>
         </ul>
+
+        <h2>How to Minimise Side Effects</h2>
         <p>
-          Nicotine is an addictive substance. If you do not currently use nicotine, be aware that
-          regular use of nicotine pouches can create dependence. <strong>We are a shop, not a
-          clinic</strong> — this guide is based on common user experiences, not medical advice. If
-          you have concerns about nicotine use and your health, speak to a healthcare professional.
+          If you're experiencing side effects, most can be reduced or eliminated with straightforward adjustments:
+        </p>
+        <ul>
+          <li><strong>Start low:</strong> Begin with 3–4 mg if you're new. You can always move up; starting too high is the most common mistake. Our <a href="/beginners">beginner mode</a> filters the catalogue to appropriate products.</li>
+          <li><strong>Rotate placement:</strong> Don't park the pouch in the same spot every time. Alternate sides to distribute the contact.</li>
+          <li><strong>Hydrate:</strong> Dry mouth amplifies gum and throat irritation. Keep water nearby.</li>
+          <li><strong>Set limits:</strong> There's no official guideline, but most experienced users settle on 8–12 pouches per day. If you find yourself reaching for more, drop to a higher strength rather than increasing volume.</li>
+          <li><strong>Don't use before sleep:</strong> Cut off 2–3 hours before bedtime.</li>
+        </ul>
+
+        <h2>The Bottom Line</h2>
+        <p>
+          Nicotine pouches carry real side effects — mostly mild and manageable with common sense. The short-term profile is well-documented: hiccups, nausea, gum irritation, and elevated heart rate, all of which tend to resolve with experience and proper strength selection. The long-term picture is less clear: independent research is ongoing, and the honest answer is that we'll know more in five to ten years.
+        </p>
+        <p>
+          What we can say with confidence: pouches are substantially less harmful than smoking, they carry lower chemical exposure than traditional snus, and the risks can be minimised with informed use. If you have specific health concerns, talk to your doctor — not a blog post.
         </p>
 
-        <h2>Nicotine-Free Options</h2>
-        <p>
-          If you want the ritual — the pouch under the lip, the flavour, the moment of calm —
-          without any nicotine at all, there are <strong>0 mg options</strong> available. Brands
-          like <a href="/brands/zeronito">Zeronito</a> and X-booster make tobacco-free,
-          nicotine-free pouches in a range of flavours. Zero nicotine means zero nicotine-related
-          side effects. They are a solid choice if you are curious about the format but not ready
-          to introduce nicotine, or if you are looking to step down from nicotine gradually.
-        </p>
+        <BlogNewsletterCta />
 
       </div>
-
-      <!-- Cross-link grids -->
-      <div class="mt-16 space-y-10">
-        <div>
-          <h2 class="text-xl font-bold text-foreground mb-4">Browse by Strength</h2>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <a href="/products/strength/mild" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Mild (2-4 mg)</a>
-            <a href="/products/strength/regular" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Regular (4-8 mg)</a>
-            <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Strong (8-12 mg)</a>
-            <a href="/products/strength/extra-strong" class="rounded-lg border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Extra Strong (12+ mg)</a>
-          </div>
-        </div>
-        <div>
-          <h2 class="text-xl font-bold text-foreground mb-4">Related Guides</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <a href="/blog/how-to-choose-your-strength" class="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">How to Choose Your Strength</a>
-            <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Best Pouches for Beginners</a>
-            <a href="/blog/switching-from-cigarettes-to-nicotine-pouches" class="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Switching from Cigarettes</a>
-            <a href="/blog/what-are-nicotine-pouches" class="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">What Are Nicotine Pouches?</a>
-            <a href="/blog/how-many-nicotine-pouches-a-day" class="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">How Many Pouches a Day?</a>
-            <a href="/blog/how-to-use-nicotine-pouches" class="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">How to Use Nicotine Pouches</a>
-            <a href="/blog/nicotine-pouches-vs-cigarettes" class="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Pouches vs Cigarettes</a>
-            <a href="/blog/are-zyns-bad-for-you" class="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Are ZYNs Bad for You?</a>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </article>
-
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": publishDate,
-    "author": { "@type": "Person", "name": "SnusFriends Editorial" },
-    "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/nicotine-pouch-side-effects` },
-  })} />
-
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Are nicotine pouches safe?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Nicotine pouches are tobacco-free and considered significantly less harmful than cigarettes, but they contain nicotine which is an addictive substance. If you have health concerns, consult a healthcare professional."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Why do nicotine pouches make me hiccup?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Hiccups are caused by nicotine stimulating the vagus nerve and diaphragm. This is very common with stronger pouches. Try a lower strength — dropping by 2-4 mg usually solves it."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can nicotine pouches damage your gums?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Occasional use is unlikely to cause lasting damage. However, heavy daily use in the same spot can cause gum irritation. Rotate placement between the left and right sides of your upper lip and take breaks between pouches."
-        }
-      }
-    ]
-  })} />
+  </div>
 </Shop>
