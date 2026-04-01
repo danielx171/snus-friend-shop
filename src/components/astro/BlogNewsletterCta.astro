@@ -1,0 +1,65 @@
+---
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
+---
+
+<aside class="my-10 rounded-xl border border-primary/20 bg-primary/5 p-6 sm:p-8">
+  <h2 class="text-lg font-bold text-foreground">Get the latest guides in your inbox</h2>
+  <p class="mt-1 text-sm text-muted-foreground">New releases, strength rankings, and exclusive deals — no spam, unsubscribe anytime.</p>
+  <form id="blog-newsletter-form" class="mt-4 flex gap-2">
+    <label for="blog-newsletter-email" class="sr-only">Email address</label>
+    <input
+      id="blog-newsletter-email"
+      type="email"
+      required
+      placeholder="you@email.com"
+      class="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+    />
+    <button
+      type="submit"
+      id="blog-newsletter-btn"
+      class="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      Subscribe
+    </button>
+  </form>
+  <p id="blog-newsletter-msg" class="mt-2 text-xs hidden"></p>
+</aside>
+
+<script is:inline define:vars={{ supabaseUrl }}>
+(function() {
+  var form = document.getElementById('blog-newsletter-form');
+  if (!form) return;
+  var input = document.getElementById('blog-newsletter-email');
+  var btn = document.getElementById('blog-newsletter-btn');
+  var msg = document.getElementById('blog-newsletter-msg');
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var url = supabaseUrl;
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = (input.value || '').trim();
+    if (!emailRe.test(email)) { showMsg('Please enter a valid email.', true); return; }
+    if (!url) { showMsg('Service unavailable.', true); return; }
+    btn.disabled = true;
+    btn.textContent = '...';
+
+    fetch(url + '/functions/v1/save-waitlist-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, source: 'blog-newsletter' })
+    })
+    .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+    .then(function(res) {
+      if (res.ok) { showMsg("You're in! Check your inbox.", false); input.value = ''; }
+      else { showMsg(res.data.error || 'Something went wrong.', true); }
+    })
+    .catch(function() { showMsg('Network error — try again.', true); })
+    .finally(function() { btn.disabled = false; btn.textContent = 'Subscribe'; });
+  });
+
+  function showMsg(text, isError) {
+    msg.textContent = text;
+    msg.className = 'mt-2 text-xs ' + (isError ? 'text-destructive' : 'text-green-500');
+  }
+})();
+</script>
