@@ -59,6 +59,34 @@ Deno.serve(async (req: Request) => {
 
     console.log('waitlist signup', { email: email.toLowerCase().trim(), source, requestId });
 
+    // Sync to Klaviyo (fire-and-forget) — subscribe to Email List
+    const klaviyoKey = Deno.env.get('KLAVIYO_PRIVATE_API_KEY');
+    if (klaviyoKey && (source === 'blog-newsletter' || source === 'footer-newsletter' || source === 'membership')) {
+      fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Klaviyo-API-Key ${klaviyoKey}`,
+          'revision': '2024-10-15',
+        },
+        body: JSON.stringify({
+          data: {
+            type: 'profile-subscription-bulk-create-job',
+            attributes: {
+              profiles: {
+                data: [{ type: 'profile', attributes: { email: email.toLowerCase().trim() } }],
+              },
+            },
+            relationships: {
+              list: { data: { type: 'list', id: 'XSsBfF' } },
+            },
+          },
+        }),
+      }).catch((err) => {
+        console.error('klaviyo sync error', { error: String(err), requestId });
+      });
+    }
+
     return new Response(
       JSON.stringify({ ok: true, requestId }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
