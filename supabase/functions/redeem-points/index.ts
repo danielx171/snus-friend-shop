@@ -5,11 +5,12 @@ import { corsHeaders } from "../_shared/cors.ts";
 
 const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
 
-const REWARDS: Record<string, { points: number; value: number; label: string }> = {
-  discount_5:       { points: 200, value: 5,  label: '€5 off' },
-  discount_10:      { points: 350, value: 10, label: '€10 off' },
-  free_shipping:    { points: 150, value: 0,  label: 'Free shipping' },
-  mystery_box_month: { points: 500, value: 0, label: 'Free mystery box month' },
+const REWARDS: Record<string, { points: number; value: number; label: string; maxRedemptions?: number }> = {
+  discount_5:            { points: 200, value: 5,  label: '€5 off' },
+  discount_10:           { points: 350, value: 10, label: '€10 off' },
+  free_shipping:         { points: 150, value: 0,  label: 'Free shipping' },
+  mystery_box:           { points: 500, value: 0,  label: 'Mystery Box (5 curated pouches)' },
+  mystery_box_founders:  { points: 500, value: 0,  label: "Founder's Edition Box (10 pouches + merch)", maxRedemptions: 10 },
 };
 
 Deno.serve(async (req: Request) => {
@@ -86,6 +87,25 @@ Deno.serve(async (req: Request) => {
     }
 
     const admin = createClient(supabaseUrl, serviceKey);
+
+    // Check max redemptions for limited rewards (e.g. Founder's Edition)
+    if (reward.maxRedemptions) {
+      const { count } = await admin
+        .from('points_transactions')
+        .select('id', { count: 'exact', head: true })
+        .eq('reason', `redemption_${rewardType}`);
+
+      if ((count ?? 0) >= reward.maxRedemptions) {
+        return new Response(
+          JSON.stringify({
+            error: 'sold_out',
+            message: `This reward is limited to ${reward.maxRedemptions} redeemers and has sold out!`,
+            requestId,
+          }),
+          { status: 400, headers: JSON_HEADERS }
+        );
+      }
+    }
 
     // Call atomic RPC to deduct points and record redemption
     const { data: redemptionId, error: rpcError } = await admin.rpc('redeem_points', {

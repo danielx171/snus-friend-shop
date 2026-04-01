@@ -10,18 +10,18 @@ import { useRedeemPoints } from '@/hooks/useRedeemPoints';
 
 const REWARDS = [
   {
-    type: 'discount_5',
-    name: '€5 Off',
-    description: 'Get €5 off your next order',
-    cost: 200,
-    icon: Tag,
-  },
-  {
     type: 'free_shipping',
     name: 'Free Shipping',
     description: 'Free shipping on your next order',
     cost: 150,
     icon: Truck,
+  },
+  {
+    type: 'discount_5',
+    name: '€5 Off',
+    description: 'Get €5 off your next order',
+    cost: 200,
+    icon: Tag,
   },
   {
     type: 'discount_10',
@@ -31,11 +31,20 @@ const REWARDS = [
     icon: Tag,
   },
   {
-    type: 'mystery_box_month',
-    name: 'Mystery Box Month',
-    description: 'A free curated mystery box delivered to you',
+    type: 'mystery_box',
+    name: 'Mystery Box',
+    description: 'A curated box of 5 pouches picked by our team — surprise flavours and strengths',
     cost: 500,
     icon: Package,
+  },
+  {
+    type: 'mystery_box_founders',
+    name: "Founder's Edition Box",
+    description: 'DOUBLE loot: 10 curated pouches + exclusive SnusFriend merch. Limited to first 10 redeemers!',
+    cost: 500,
+    icon: Gift,
+    limited: true,
+    maxRedemptions: 10,
   },
 ] as const;
 
@@ -94,7 +103,14 @@ const PointsRedemption = React.memo(function PointsRedemption({ balance }: Props
               </div>
             </div>
 
-            <h3 className="text-sm font-semibold mb-0.5">{reward.name}</h3>
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <h3 className="text-sm font-semibold">{reward.name}</h3>
+              {'limited' in reward && reward.limited && (
+                <span className="rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[9px] font-bold text-amber-400 uppercase tracking-wider">
+                  Limited
+                </span>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground mb-3 flex-1">
               {reward.description}
             </p>
