@@ -13,6 +13,7 @@ import {
   updateCartQuantity,
   upgradePackSize,
   getPackSavings,
+  $mixDiscount,
 } from '@/stores/cart';
 import type { CartItem } from '@/stores/cart';
 import type { PackSize } from '@/data/products';
@@ -191,6 +192,7 @@ export default function CartDrawer() {
   const items = useStore($cartItems);
   const total = useStore($cartTotal);
   const count = useStore($cartCount);
+  const mixDiscount = useStore($mixDiscount);
 
   // Prevent hydration mismatch: server has no localStorage, so
   // render nothing until after first mount when persistentAtom syncs.
@@ -306,6 +308,24 @@ export default function CartDrawer() {
                     &euro;{total.toFixed(2)}
                   </span>
                 </div>
+
+                {/* Mix discount indicator */}
+                {mixDiscount.active ? (
+                  <div className="flex items-center justify-between rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-2">
+                    <span className="text-xs font-medium text-green-400">
+                      Mix &amp; Save {mixDiscount.pct}% ({mixDiscount.canCount} cans)
+                    </span>
+                    <span className="text-xs font-bold text-green-400">
+                      -&euro;{mixDiscount.amount.toFixed(2)}
+                    </span>
+                  </div>
+                ) : mixDiscount.cansNeeded > 0 && count > 0 ? (
+                  <div className="rounded-lg bg-muted/50 px-3 py-2">
+                    <span className="text-xs text-muted-foreground">
+                      Add {mixDiscount.cansNeeded} more can{mixDiscount.cansNeeded !== 1 ? 's' : ''} to save {mixDiscount.nextTierPct}% — mix any brands!
+                    </span>
+                  </div>
+                ) : null}
 
                 {/* Points preview */}
                 {total > 0 && (

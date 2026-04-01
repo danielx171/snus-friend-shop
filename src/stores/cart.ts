@@ -1,6 +1,7 @@
 import { atom, computed } from 'nanostores';
 import { persistentAtom } from '@nanostores/persistent';
 import type { Product, PackSize } from '@/data/products';
+import { packSizeMultipliers } from '@/data/products';
 import { tenant } from '@/config/tenant';
 import { trackAddToCart, trackRemoveFromCart } from '@/lib/analytics';
 
@@ -34,6 +35,50 @@ export const $freeShippingProgress = computed($cartTotal, (total) => ({
   remaining: Math.max(0, tenant.freeShippingThreshold - total),
   threshold: tenant.freeShippingThreshold,
 }));
+
+/** Total number of individual cans in cart (across all products/pack sizes) */
+export const $cartCanCount = computed($cartItems, (items) =>
+  items.reduce((sum, item) => {
+    const multiplier = packSizeMultipliers[item.packSize] ?? 1;
+    return sum + multiplier * item.quantity;
+  }, 0),
+);
+
+/** Mix discount tiers: buy more cans from any mix of products, get a percentage off */
+const MIX_TIERS = [
+  { minCans: 20, pct: 15 },
+  { minCans: 10, pct: 10 },
+  { minCans: 5, pct: 5 },
+] as const;
+
+export const $mixDiscount = computed([$cartCanCount, $cartTotal], ([canCount, total]) => {
+  const tier = MIX_TIERS.find((t) => canCount >= t.minCans);
+  if (!tier) {
+    // Show next tier as incentive
+    const nextTier = MIX_TIERS[MIX_TIERS.length - 1]; // 5 cans = 5%
+    return {
+      active: false,
+      pct: 0,
+      amount: 0,
+      canCount,
+      nextTierCans: nextTier.minCans,
+      nextTierPct: nextTier.pct,
+      cansNeeded: nextTier.minCans - canCount,
+    };
+  }
+  // Find next higher tier (if any)
+  const tierIdx = MIX_TIERS.indexOf(tier);
+  const nextTier = tierIdx > 0 ? MIX_TIERS[tierIdx - 1] : null;
+  return {
+    active: true,
+    pct: tier.pct,
+    amount: Math.round(total * tier.pct) / 100,
+    canCount,
+    nextTierCans: nextTier?.minCans ?? null,
+    nextTierPct: nextTier?.pct ?? null,
+    cansNeeded: nextTier ? nextTier.minCans - canCount : 0,
+  };
+});
 
 export function addToCart(product: Product, packSize: PackSize, quantity = 1) {
   const items = $cartItems.get();

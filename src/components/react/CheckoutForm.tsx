@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, type FormEvent } from 'react';
 import { useStore } from '@nanostores/react';
-import { $cartItems, $cartTotal, clearCart } from '@/stores/cart';
+import { $cartItems, $cartTotal, clearCart, $mixDiscount, type CartItem } from '@/stores/cart';
 import { packSizeMultipliers, type PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
 import { actions } from 'astro:actions';
@@ -67,8 +67,28 @@ function packLabel(packSize: PackSize): string {
 }
 
 export default function CheckoutForm({ userEmail, isGuest }: Props) {
-  const cartItems = useStore($cartItems);
-  const cartTotal = useStore($cartTotal);
+  const storeCartItems = useStore($cartItems);
+  const storeCartTotal = useStore($cartTotal);
+
+  // Buy Now mode: single item from sessionStorage, bypasses cart
+  const [buyNowItem, setBuyNowItem] = useState<CartItem | null>(null);
+  const [isBuyNow] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('buyNow') !== '1') return false;
+    try {
+      const raw = sessionStorage.getItem('snusfriend_buynow');
+      if (!raw) return false;
+      const item = JSON.parse(raw) as CartItem;
+      setBuyNowItem(item);
+      return true;
+    } catch { return false; }
+  });
+
+  const cartItems = isBuyNow && buyNowItem ? [buyNowItem] : storeCartItems;
+  const cartTotal = isBuyNow && buyNowItem
+    ? (buyNowItem.product.prices[buyNowItem.packSize] ?? 0) * buyNowItem.quantity
+    : storeCartTotal;
 
   const [email, setEmail] = useState(userEmail || '');
   const [firstName, setFirstName] = useState('');
@@ -92,8 +112,13 @@ export default function CheckoutForm({ userEmail, isGuest }: Props) {
 
   const shippingMethods = useMemo(() => getShippingMethods(country), [country]);
   const selectedShipping = shippingMethods.find((m) => m.id === shippingMethod);
+  const mixDiscount = useStore($mixDiscount);
   const shippingCost = selectedShipping?.price ?? 0;
-  const discountAmount = discountApplied?.amount ?? 0;
+  const codeDiscountAmount = discountApplied?.amount ?? 0;
+  // Mix discount and code discount don't stack — use whichever saves more
+  const mixDiscountAmount = mixDiscount.active ? mixDiscount.amount : 0;
+  const discountAmount = Math.max(codeDiscountAmount, mixDiscountAmount);
+  const usingMixDiscount = mixDiscountAmount > codeDiscountAmount && mixDiscount.active;
   const orderTotal = cartTotal + shippingCost - discountAmount;
 
   // Reset shipping method when country changes
@@ -217,6 +242,7 @@ export default function CheckoutForm({ userEmail, isGuest }: Props) {
           return;
         }
         clearCart();
+        try { sessionStorage.removeItem('snusfriend_buynow'); } catch {}
         window.location.href = data.redirect_url;
       }
     } catch {
@@ -538,9 +564,9 @@ export default function CheckoutForm({ userEmail, isGuest }: Props) {
                 <span className="text-muted-foreground">Subtotal</span>
                 <span>{tenant.currencyCode} {cartTotal.toFixed(2)}</span>
               </div>
-              {discountApplied && (
+              {discountAmount > 0 && (
                 <div className="flex justify-between text-green-400">
-                  <span>Discount ({discountApplied.code})</span>
+                  <span>{usingMixDiscount ? `Mix & Save ${mixDiscount.pct}%` : `Discount (${discountApplied?.code})`}</span>
                   <span>-{tenant.currencyCode} {discountAmount.toFixed(2)}</span>
                 </div>
               )}

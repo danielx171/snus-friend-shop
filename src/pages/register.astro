@@ -10,6 +10,7 @@ const result = Astro.getActionResult(actions.auth.register);
 
 const errorMessage = result?.error?.message;
 const successMessage = result?.data?.message;
+const refCode = Astro.url.searchParams.get('ref') ?? '';
 ---
 
 <Shop
@@ -112,6 +113,21 @@ const successMessage = result?.data?.message;
                   placeholder="Repeat your password"
                   class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
                 />
+              </div>
+
+              <div>
+                <label for="referralCode" class="block text-sm font-medium text-foreground mb-1.5">
+                  Referral code <span class="text-muted-foreground font-normal">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  id="referralCode"
+                  name="referralCode"
+                  value={refCode}
+                  placeholder="e.g. SF-A1B2C3D4"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                />
+                <p class="text-xs text-muted-foreground mt-1">Got a code from a friend? Enter it to earn 50 bonus SnusPoints.</p>
               </div>
 
               <div class="space-y-3">

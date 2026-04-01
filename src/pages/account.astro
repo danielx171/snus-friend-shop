@@ -41,6 +41,15 @@ const { count: reviewsCount } = await supabase
   .select('id', { count: 'exact', head: true })
   .eq('user_id', user.id);
 
+// Fetch referral code
+const { data: referralCode } = await supabase.rpc('get_or_create_referral_code', { p_user_id: user.id });
+
+// Fetch referral stats
+const { count: referralCount } = await supabase
+  .from('referral_redemptions')
+  .select('id', { count: 'exact', head: true })
+  .eq('referral_code_id', (await supabase.from('referral_codes').select('id').eq('user_id', user.id).single()).data?.id ?? '00000000-0000-0000-0000-000000000000');
+
 // User metadata
 const fullName = user.user_metadata?.full_name || '';
 const phone = user.user_metadata?.phone || '';
@@ -397,10 +406,53 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
               </li>
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Refer a friend — both earn 200 points
+                Refer a friend — both earn points
               </li>
             </ul>
           </div>
+
+          <!-- Referral Program -->
+          {referralCode && (
+            <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6">
+              <h3 class="text-sm font-semibold mb-3">Refer a Friend</h3>
+              <p class="text-sm text-muted-foreground mb-4">
+                Share your code with friends. They get 50 SnusPoints, you get 100 — everyone wins.
+              </p>
+              <div class="flex items-center gap-2 mb-4">
+                <div class="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 font-mono text-sm text-foreground select-all">
+                  {referralCode}
+                </div>
+                <button
+                  type="button"
+                  id="copy-referral-btn"
+                  data-code={referralCode}
+                  class="shrink-0 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+                >
+                  Copy
+                </button>
+              </div>
+              <div class="flex items-center gap-4 text-xs text-muted-foreground">
+                <span>{referralCount ?? 0} friend{(referralCount ?? 0) !== 1 ? 's' : ''} referred</span>
+                <span>{((referralCount ?? 0) * 100).toLocaleString()} points earned</span>
+              </div>
+              <div class="flex gap-2 mt-4">
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(`Join SnusFriend and get 50 bonus points! Use my code: ${referralCode} — https://snusfriends.com/register?ref=${referralCode}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-center text-xs font-medium text-foreground hover:bg-muted transition"
+                >
+                  WhatsApp
+                </a>
+                <a
+                  href={`mailto:?subject=Join SnusFriend&body=${encodeURIComponent(`Hey! Join SnusFriend and get 50 bonus points. Use my referral code: ${referralCode}\n\nhttps://snusfriends.com/register?ref=${referralCode}`)}`}
+                  class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-center text-xs font-medium text-foreground hover:bg-muted transition"
+                >
+                  Email
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -437,8 +489,24 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
   </div>
 </dialog>
 
-<!-- Progressive enhancement: client-side password match check -->
+<!-- Progressive enhancement: client-side interactions -->
 <script>
+  // Copy referral code
+  const copyBtn = document.getElementById('copy-referral-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      const code = copyBtn.dataset.code ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      } catch {
+        copyBtn.textContent = 'Failed';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      }
+    });
+  }
+
   // Password match check
   const form = document.getElementById('change-password-form');
   if (form) {

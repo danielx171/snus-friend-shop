@@ -34,32 +34,41 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
     const selectedPrice = product.prices[selectedPack];
     const availablePacks = packOptions.filter((p) => product.prices[p.key] != null && product.prices[p.key] > 0);
 
+    const buildCartProduct = useCallback((): Product => ({
+      id: product.slug,
+      name: product.name,
+      brand: product.brand,
+      categoryKey: 'nicotinePouches',
+      flavorKey: (product.flavorKey ?? 'mint') as Product['flavorKey'],
+      strengthKey: (product.strengthKey ?? 'normal') as Product['strengthKey'],
+      formatKey: (product.formatKey ?? 'slim') as Product['formatKey'],
+      nicotineContent: product.nicotineContent ?? 0,
+      portionsPerCan: product.portionsPerCan ?? 20,
+      descriptionKey: '',
+      image: product.imageUrl,
+      ratings: 0,
+      badgeKeys: [],
+      prices: product.prices as Product['prices'],
+      manufacturer: product.brand,
+      stock: product.stock,
+    }), [product]);
+
     const handleAdd = useCallback(() => {
       if (isOutOfStock) return;
-
-      // Build a minimal Product object compatible with the cart store
-      const cartProduct: Product = {
-        id: product.slug,
-        name: product.name,
-        brand: product.brand,
-        categoryKey: 'nicotinePouches',
-        flavorKey: (product.flavorKey ?? 'mint') as Product['flavorKey'],
-        strengthKey: (product.strengthKey ?? 'normal') as Product['strengthKey'],
-        formatKey: (product.formatKey ?? 'slim') as Product['formatKey'],
-        nicotineContent: product.nicotineContent ?? 0,
-        portionsPerCan: product.portionsPerCan ?? 20,
-        descriptionKey: '',
-        image: product.imageUrl,
-        ratings: 0,
-        badgeKeys: [],
-        prices: product.prices as Product['prices'],
-        manufacturer: product.brand,
-        stock: product.stock,
-      };
-
-      addToCart(cartProduct, selectedPack, quantity);
+      addToCart(buildCartProduct(), selectedPack, quantity);
       openCart();
-    }, [product, selectedPack, quantity, isOutOfStock]);
+    }, [buildCartProduct, selectedPack, quantity, isOutOfStock]);
+
+    const handleBuyNow = useCallback(() => {
+      if (isOutOfStock) return;
+      const item = {
+        product: buildCartProduct(),
+        packSize: selectedPack,
+        quantity,
+      };
+      sessionStorage.setItem('snusfriend_buynow', JSON.stringify(item));
+      window.location.href = '/checkout?buyNow=1';
+    }, [buildCartProduct, selectedPack, quantity, isOutOfStock]);
 
     const decrement = useCallback(() => {
       setQuantity((q) => Math.max(1, q - 1));
@@ -138,7 +147,7 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
             type="button"
             onClick={handleAdd}
             disabled={isOutOfStock}
-            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-initial"
+            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-6 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -153,6 +162,19 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
             </svg>
             {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
           </button>
+
+          {!isOutOfStock && (
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-6 text-base font-semibold text-primary transition hover:bg-primary/20"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Buy Now
+            </button>
+          )}
         </div>
 
         {/* Selected price summary */}
