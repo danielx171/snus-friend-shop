@@ -106,8 +106,20 @@ const flavorLabels: Record<string, string> = {
       var initial = params.get('products');
       if (initial) {
         selected = initial.split(',').filter(Boolean).slice(0, 4);
-        render();
+      } else {
+        // Pre-select two popular products so the page isn't empty
+        var popular = products
+          .filter(function(p) { return p.imageUrl && p.stock > 0 && p.prices && p.prices.pack1 > 0; })
+          .sort(function(a, b) { return (b.ratings || 0) - (a.ratings || 0); });
+        // Pick two from different brands
+        if (popular.length >= 2) {
+          selected.push(popular[0].slug);
+          var second = popular.find(function(p) { return p.brand !== popular[0].brand; });
+          if (second) selected.push(second.slug);
+          else selected.push(popular[1].slug);
+        }
       }
+      render();
     });
 
     function getProduct(slug) {
@@ -170,6 +182,41 @@ const flavorLabels: Record<string, string> = {
           }).join('') +
           '</tbody></table></div>' +
           '<p class="text-center text-xs text-muted-foreground mt-4">Share this comparison: <a href="/compare?products=' + selected.join(',') + '" class="text-primary hover:underline">snusfriends.com/compare?products=' + selected.join(',') + '</a></p>';
+
+        // Suggestions: similar products based on flavour, strength, or price
+        if (selected.length < 4) {
+          var selectedFlavors = selectedProducts.map(function(p) { return p.flavorKey; });
+          var selectedStrengths = selectedProducts.map(function(p) { return p.strengthKey; });
+          var avgPrice = selectedProducts.reduce(function(s, p) { return s + (p.prices?.pack1 || 0); }, 0) / selectedProducts.length;
+
+          var suggestions = allProducts
+            .filter(function(p) {
+              if (selected.includes(p.slug)) return false;
+              if (!p.imageUrl || p.stock <= 0) return false;
+              // Match by flavour, strength, or similar price (within 30%)
+              var flavorMatch = selectedFlavors.indexOf(p.flavorKey) !== -1;
+              var strengthMatch = selectedStrengths.indexOf(p.strengthKey) !== -1;
+              var price = p.prices?.pack1 || 0;
+              var priceMatch = price > 0 && Math.abs(price - avgPrice) / avgPrice < 0.3;
+              return flavorMatch || strengthMatch || priceMatch;
+            })
+            .sort(function(a, b) { return (b.ratings || 0) - (a.ratings || 0); })
+            .slice(0, 6);
+
+          if (suggestions.length > 0) {
+            table.innerHTML += '<div class="mt-8"><h3 class="text-sm font-semibold text-foreground mb-3">You might also want to compare</h3>' +
+              '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">' +
+              suggestions.map(function(p) {
+                return '<button type="button" onclick="window.__addCompare(\'' + p.slug + '\')" class="flex flex-col items-center gap-2 rounded-xl border border-border bg-card/60 p-3 text-center hover:border-primary/30 hover:bg-primary/5 transition cursor-pointer">' +
+                  (p.imageUrl ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" class="w-12 h-12 rounded-lg object-contain" />' : '') +
+                  '<div><p class="text-xs font-medium text-foreground line-clamp-2">' + p.name + '</p>' +
+                  '<p class="text-[10px] text-muted-foreground">' + p.brand + ' · ' + p.nicotineContent + 'mg</p></div>' +
+                  '<span class="text-[10px] text-primary font-medium">+ Add to compare</span>' +
+                '</button>';
+              }).join('') +
+              '</div></div>';
+          }
+        }
       } else if (selected.length === 1) {
         empty.classList.remove('hidden');
         empty.querySelector('p').textContent = 'Add at least one more product to start comparing.';
