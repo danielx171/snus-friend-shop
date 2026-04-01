@@ -80,6 +80,20 @@ export const checkout = {
       }
 
       const { redirect_url } = await res.json();
+
+      // Save last address for logged-in users (pre-fill on next checkout)
+      if (user && context.locals.supabase) {
+        context.locals.supabase.auth.updateUser({
+          data: {
+            last_address: {
+              firstname: input.customer.firstname,
+              lastname: input.customer.lastname,
+              ...input.billing_address,
+            },
+          },
+        }).catch(() => {}); // Fire-and-forget — don't block checkout
+      }
+
       return { redirect_url };
     },
   }),

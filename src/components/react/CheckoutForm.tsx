@@ -6,9 +6,19 @@ import { tenant } from '@/config/tenant';
 import { actions } from 'astro:actions';
 import { trackCheckoutStarted } from '@/lib/analytics';
 
+interface SavedAddress {
+  firstname?: string;
+  lastname?: string;
+  address?: string;
+  postcode?: string;
+  city?: string;
+  country?: string;
+}
+
 interface Props {
   userEmail?: string;
   isGuest?: boolean;
+  lastAddress?: SavedAddress | null;
 }
 
 const SHIPPING_COUNTRIES = [
@@ -66,7 +76,7 @@ function packLabel(packSize: PackSize): string {
   return qty === 1 ? '1 can' : `${qty} cans`;
 }
 
-export default function CheckoutForm({ userEmail, isGuest }: Props) {
+export default function CheckoutForm({ userEmail, isGuest, lastAddress }: Props) {
   const storeCartItems = useStore($cartItems);
   const storeCartTotal = useStore($cartTotal);
 
@@ -91,12 +101,12 @@ export default function CheckoutForm({ userEmail, isGuest }: Props) {
     : storeCartTotal;
 
   const [email, setEmail] = useState(userEmail || '');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [address, setAddress] = useState('');
-  const [postcode, setPostcode] = useState('');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('SE');
+  const [firstName, setFirstName] = useState(lastAddress?.firstname ?? '');
+  const [lastName, setLastName] = useState(lastAddress?.lastname ?? '');
+  const [address, setAddress] = useState(lastAddress?.address ?? '');
+  const [postcode, setPostcode] = useState(lastAddress?.postcode ?? '');
+  const [city, setCity] = useState(lastAddress?.city ?? '');
+  const [country, setCountry] = useState(lastAddress?.country ?? 'SE');
   const [phone, setPhone] = useState('');
   const [shippingMethod, setShippingMethod] = useState('');
   const [ageVerified, setAgeVerified] = useState(false);

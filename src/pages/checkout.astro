@@ -8,13 +8,14 @@ import { tenant } from '@/config/tenant';
 
 const user = Astro.locals.user;
 const isGuest = !user;
+const lastAddress = user?.user_metadata?.last_address ?? null;
 ---
 
 <Shop title={`Checkout | ${tenant.name}`} description="Complete your purchase securely." noindex={true}>
   <section class="bg-background text-foreground">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Breadcrumb items={[{ label: 'Cart', href: '/cart' }, { label: 'Checkout' }]} />
-      <CheckoutForm client:load userEmail={user?.email ?? ''} isGuest={isGuest} />
+      <CheckoutForm client:load userEmail={user?.email ?? ''} isGuest={isGuest} lastAddress={lastAddress} />
     </div>
   </section>
 </Shop>
