@@ -173,4 +173,40 @@ export const auth = {
       return { redirect: '/' };
     },
   }),
+
+  guestToAccount: defineAction({
+    accept: 'json',
+    input: z.object({
+      email: z.string().email(),
+      password: z.string().min(8, 'Password must be at least 8 characters'),
+      orderId: z.string().min(1),
+    }),
+    handler: async (input, ctx) => {
+      const supabase = createSupabaseFromContext(ctx);
+      const siteUrl =
+        import.meta.env.PUBLIC_SITE_URL ??
+        import.meta.env.VITE_SITE_URL ??
+        'https://snusfriends.com';
+
+      const { error } = await supabase.auth.signUp({
+        email: input.email,
+        password: input.password,
+        options: {
+          emailRedirectTo: `${siteUrl}/auth/confirm`,
+        },
+      });
+
+      if (error) {
+        throw new ActionError({
+          code: 'BAD_REQUEST',
+          message: error.message,
+        });
+      }
+
+      return {
+        success: true,
+        message: 'Account created! Check your email to confirm, then your order will appear in your account.',
+      };
+    },
+  }),
 };

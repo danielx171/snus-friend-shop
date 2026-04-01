@@ -26,6 +26,7 @@ export const checkout = {
         country: z.string().length(2),
       }),
       shipping_method: z.string().min(1),
+      discount_code: z.string().optional(),
       display_total: z.number().positive(),
       display_currency: z.string(),
     }),
@@ -34,21 +35,12 @@ export const checkout = {
         throw new ActionError({ code: 'INTERNAL_SERVER_ERROR', message: 'Database not configured' });
       }
 
+      // Auth is optional — guests can checkout without an account
+      let authToken: string | null = null;
       const user = context.locals.user;
-      if (!user) {
-        throw new ActionError({
-          code: 'UNAUTHORIZED',
-          message: 'You must be logged in to checkout.',
-        });
-      }
-
-      // Get a fresh access token from the session
-      const { data: { session } } = await context.locals.supabase.auth.getSession();
-      if (!session) {
-        throw new ActionError({
-          code: 'UNAUTHORIZED',
-          message: 'Session expired. Please log in again.',
-        });
+      if (user) {
+        const { data: { session } } = await context.locals.supabase.auth.getSession();
+        authToken = session?.access_token ?? null;
       }
 
       const payload = {
@@ -56,14 +48,18 @@ export const checkout = {
         idempotency_key: crypto.randomUUID(),
       };
 
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
       const res = await fetch(
         `${import.meta.env.SUPABASE_URL}/functions/v1/create-nyehandel-checkout`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
-          },
+          headers,
           body: JSON.stringify(payload),
         },
       );

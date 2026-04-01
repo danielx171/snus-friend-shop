@@ -8,6 +8,7 @@ import { trackCheckoutStarted } from '@/lib/analytics';
 
 interface Props {
   userEmail?: string;
+  isGuest?: boolean;
 }
 
 const SHIPPING_COUNTRIES = [
@@ -65,7 +66,7 @@ function packLabel(packSize: PackSize): string {
   return qty === 1 ? '1 can' : `${qty} cans`;
 }
 
-export default function CheckoutForm({ userEmail }: Props) {
+export default function CheckoutForm({ userEmail, isGuest }: Props) {
   const cartItems = useStore($cartItems);
   const cartTotal = useStore($cartTotal);
 
@@ -242,6 +243,15 @@ export default function CheckoutForm({ userEmail }: Props) {
     <form onSubmit={handleSubmit}>
       <h1 className="text-3xl font-bold tracking-tight mb-8">Checkout</h1>
 
+      {isGuest && (
+        <div className="rounded-lg border border-border bg-card/60 p-4 mb-6 flex items-center justify-between flex-wrap gap-2">
+          <p className="text-sm text-muted-foreground">Checking out as guest</p>
+          <a href="/login?redirect=/checkout" className="text-sm font-medium text-primary hover:underline">
+            Sign in for faster checkout
+          </a>
+        </div>
+      )}
+
       {error && (
         <div role="alert" aria-live="assertive" className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 mb-6 text-sm text-destructive">
           {error}
@@ -259,14 +269,22 @@ export default function CheckoutForm({ userEmail }: Props) {
                 <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-1">
                   Email
                 </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
+                {!isGuest && userEmail ? (
+                  <div className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground cursor-not-allowed">
+                    {userEmail}
+                  </div>
+                ) : (
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                )}
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>

@@ -53,7 +53,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const pathname = context.url.pathname;
   // Only protect SSR pages here — SSG pages skip middleware (isPrerendered check above)
   // /rewards and /wishlist are SSG with client-side auth checks, so not listed here
-  const protectedPaths = ['/account', '/checkout', '/order-confirmation'];
+  const protectedPaths = ['/account'];
   const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
 
   if (isProtected && !user) {

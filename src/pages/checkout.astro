@@ -7,16 +7,14 @@ import CheckoutForm from '@/components/react/CheckoutForm';
 import { tenant } from '@/config/tenant';
 
 const user = Astro.locals.user;
-if (!user) {
-  return Astro.redirect('/login?redirect=/checkout');
-}
+const isGuest = !user;
 ---
 
 <Shop title={`Checkout | ${tenant.name}`} description="Complete your purchase securely." noindex={true}>
   <section class="bg-background text-foreground">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Breadcrumb items={[{ label: 'Cart', href: '/cart' }, { label: 'Checkout' }]} />
-      <CheckoutForm client:load userEmail={user.email} />
+      <CheckoutForm client:load userEmail={user?.email ?? ''} isGuest={isGuest} />
     </div>
   </section>
 </Shop>

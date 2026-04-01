@@ -16,13 +16,13 @@ let order: any = null;
 let lineItems: any[] = [];
 let fetchError = false;
 
-if (orderId && supabase && user) {
-  const { data, error } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('id', orderId)
-    .eq('user_id', user.id)
-    .single();
+if (orderId && supabase) {
+  // Logged-in: filter by user_id for security. Guest: order ID is a UUID (unguessable).
+  let query = supabase.from('orders').select('*').eq('id', orderId);
+  if (user) {
+    query = query.eq('user_id', user.id);
+  }
+  const { data, error } = await query.single();
 
   if (error || !data) {
     fetchError = true;
@@ -273,6 +273,44 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
           <OrderQuestTrigger client:idle orderId={orderId} />
         )}
 
+        {/* Guest account creation prompt */}
+        {!user && order && (
+          <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6 mb-6 text-center">
+            <h2 class="text-lg font-semibold mb-2">Track your order & earn rewards</h2>
+            <p class="text-sm text-muted-foreground mb-4">
+              Create an account to track this order, earn SnusPoints on future purchases, and get exclusive deals.
+            </p>
+            <form id="guest-register-form" class="max-w-sm mx-auto space-y-3">
+              <input type="hidden" name="email" value={order.customer_email} />
+              <input type="hidden" name="orderId" value={orderId} />
+              <div>
+                <label for="guest-password" class="block text-sm font-medium mb-1">Choose a password</label>
+                <input
+                  type="password"
+                  id="guest-password"
+                  name="password"
+                  required
+                  minlength="8"
+                  placeholder="At least 8 characters"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              </div>
+              <div id="guest-register-error" class="hidden rounded-lg bg-destructive/10 border border-destructive/30 p-3 text-sm text-destructive"></div>
+              <div id="guest-register-success" class="hidden rounded-lg bg-emerald-500/10 border border-emerald-500/30 p-3 text-sm text-emerald-400"></div>
+              <button
+                type="submit"
+                id="guest-register-btn"
+                class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Create Account & Track Order
+              </button>
+            </form>
+            <p class="mt-3 text-xs text-muted-foreground">
+              Or <a href="/" class="text-primary hover:underline">continue without an account</a>
+            </p>
+          </div>
+        )}
+
         {/* Actions */}
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a
@@ -281,14 +319,70 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
           >
             Continue Shopping
           </a>
-          <a
-            href="/account"
-            class="inline-flex items-center justify-center rounded-lg border border-border bg-background px-6 py-2.5 text-sm font-medium text-foreground hover:bg-card transition"
-          >
-            View Orders
-          </a>
+          {user && (
+            <a
+              href="/account"
+              class="inline-flex items-center justify-center rounded-lg border border-border bg-background px-6 py-2.5 text-sm font-medium text-foreground hover:bg-card transition"
+            >
+              View Orders
+            </a>
+          )}
         </div>
       </div>
     </div>
   </section>
 </Shop>
+
+<script is:inline>
+(function() {
+  var form = document.getElementById('guest-register-form');
+  if (!form) return;
+  var btn = document.getElementById('guest-register-btn');
+  var errEl = document.getElementById('guest-register-error');
+  var successEl = document.getElementById('guest-register-success');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = form.querySelector('[name=email]').value;
+    var orderId = form.querySelector('[name=orderId]').value;
+    var password = form.querySelector('#guest-password').value;
+    if (!password || password.length < 8) {
+      showError('Password must be at least 8 characters.');
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Creating account\u2026';
+    hideError();
+
+    fetch('/_actions/auth.guestToAccount', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ email: email, password: password, orderId: orderId })
+    })
+    .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, body: d }; }); })
+    .then(function(result) {
+      // Astro action response: { data: { success, message }, error: null } or { data: null, error: { message } }
+      if (result.ok && result.body.data && result.body.data.success) {
+        form.querySelector('#guest-password').disabled = true;
+        btn.style.display = 'none';
+        successEl.textContent = result.body.data.message || 'Account created! Check your email to confirm.';
+        successEl.classList.remove('hidden');
+      } else {
+        var msg = (result.body.error && result.body.error.message) || 'Something went wrong.';
+        showError(msg);
+        btn.disabled = false;
+        btn.textContent = 'Create Account & Track Order';
+      }
+    })
+    .catch(function() {
+      showError('Network error. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Create Account & Track Order';
+    });
+  });
+
+  function showError(msg) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
+  function hideError() { errEl.classList.add('hidden'); }
+})();
+</script>
