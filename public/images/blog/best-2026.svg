@@ -1,0 +1,54 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="b26-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1018" />
+      <stop offset="100%" stop-color="#161d2b" />
+    </linearGradient>
+    <linearGradient id="b26-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#b26-bg)" />
+
+  <!-- Trophy -->
+  <g transform="translate(340, 40)">
+    <path d="M40 0 L80 0 L75 50 Q60 65 45 50 Z" fill="url(#b26-gold)" />
+    <path d="M25 10 Q10 10 15 30 Q20 45 35 40" fill="#fbbf24" opacity="0.6" />
+    <path d="M95 10 Q110 10 105 30 Q100 45 85 40" fill="#fbbf24" opacity="0.6" />
+    <rect x="50" y="55" width="20" height="15" fill="#d97706" />
+    <rect x="40" y="68" width="40" height="8" rx="2" fill="#b45309" />
+    <text x="60" y="40" text-anchor="middle" font-size="20" fill="#0c1018" font-weight="700" font-family="system-ui">#1</text>
+  </g>
+
+  <!-- 2nd place -->
+  <rect x="180" y="260" width="150" height="100" fill="#334155" rx="4" />
+  <text x="255" y="290" text-anchor="middle" font-size="32" font-weight="700" fill="#94a3b8" font-family="system-ui">2</text>
+  <ellipse cx="255" cy="250" rx="28" ry="8" fill="#475569" />
+  <rect x="227" y="220" width="56" height="30" fill="#475569" rx="2" />
+  <ellipse cx="255" cy="220" rx="28" ry="8" fill="#64748b" />
+  <text x="255" y="240" text-anchor="middle" font-size="10" fill="#94a3b8" font-weight="600" font-family="system-ui">VELO</text>
+
+  <!-- 1st place -->
+  <rect x="330" y="220" width="150" height="140" fill="#1e293b" rx="4" stroke="#fbbf24" stroke-width="1" />
+  <text x="405" y="260" text-anchor="middle" font-size="36" font-weight="700" fill="#fbbf24" font-family="system-ui">1</text>
+  <ellipse cx="405" cy="210" rx="30" ry="9" fill="#475569" />
+  <rect x="375" y="178" width="60" height="32" fill="#475569" rx="2" />
+  <ellipse cx="405" cy="178" rx="30" ry="9" fill="#64748b" />
+  <text x="405" y="200" text-anchor="middle" font-size="11" fill="#a3e635" font-weight="700" font-family="system-ui">ZYN</text>
+
+  <!-- 3rd place -->
+  <rect x="480" y="290" width="150" height="70" fill="#334155" rx="4" />
+  <text x="555" y="315" text-anchor="middle" font-size="28" font-weight="700" fill="#94a3b8" font-family="system-ui">3</text>
+  <ellipse cx="555" cy="280" rx="26" ry="7" fill="#475569" />
+  <rect x="529" y="252" width="52" height="28" fill="#475569" rx="2" />
+  <ellipse cx="555" cy="252" rx="26" ry="7" fill="#64748b" />
+  <text x="555" y="272" text-anchor="middle" font-size="10" fill="#94a3b8" font-weight="600" font-family="system-ui">LOOP</text>
+
+  <!-- Stars decoration -->
+  <path d="M100 80 L103 88 L112 88 L105 93 L107 102 L100 97 L93 102 L95 93 L88 88 L97 88 Z" fill="#fbbf24" opacity="0.3" />
+  <path d="M700 60 L703 68 L712 68 L705 73 L707 82 L700 77 L693 82 L695 73 L688 68 L697 68 Z" fill="#fbbf24" opacity="0.25" />
+  <path d="M120 300 L122 306 L128 306 L123 310 L125 316 L120 312 L115 316 L117 310 L112 306 L118 306 Z" fill="#fbbf24" opacity="0.2" />
+
+  <text x="400" y="390" text-anchor="middle" font-size="11" fill="#64748b" font-family="system-ui">Based on expert reviews, customer ratings, and flavour consistency</text>
+</svg>

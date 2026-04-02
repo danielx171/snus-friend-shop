@@ -49,6 +49,18 @@ const nicotineValues = products.map((p) => p.data.nicotineContent).filter(Boolea
 const minMg = nicotineValues.length ? Math.min(...nicotineValues) : 0;
 const maxMg = nicotineValues.length ? Math.max(...nicotineValues) : 0;
 
+// Mosaic: first 5 products with images
+const mosaicProducts = products.filter((p) => p.data.imageUrl).slice(0, 5);
+
+// Mosaic grid positions: first cell spans 2 rows (hero), then 4 small cells
+const mosaicPositions = [
+  { gridColumn: '1 / 2', gridRow: '1 / 3', size: 'lg' },
+  { gridColumn: '2 / 3', gridRow: '1 / 2', size: 'sm' },
+  { gridColumn: '3 / 4', gridRow: '1 / 2', size: 'sm' },
+  { gridColumn: '2 / 3', gridRow: '2 / 3', size: 'sm' },
+  { gridColumn: '3 / 4', gridRow: '2 / 3', size: 'sm' },
+];
+
 const metaDescription = b.description
   ? (b.description.length > 160 ? b.description.slice(0, 157) + '...' : b.description)
   : `Shop ${b.name} nicotine pouches at SnusFriend. Browse the full range of ${b.name} products with free EU shipping on qualifying orders.`;
@@ -88,13 +100,56 @@ const metaDescription = b.description
       { label: b.name },
     ]} />
 
-    <!-- Brand hero banner with tin lid ring effect -->
-    <div class="mb-8 overflow-hidden rounded-2xl relative" style={`background: linear-gradient(135deg, ${bColor}dd, ${bColor}88);`}>
-      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.06) 0%, transparent 30%), radial-gradient(circle at 80% 50%, transparent 28%, rgba(255,255,255,0.04) 29%, transparent 31%), radial-gradient(circle at 80% 50%, transparent 38%, rgba(255,255,255,0.03) 39%, transparent 41%);"></div>
-      <div class="flex flex-col items-start gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
-        {/* Brand logo or styled name */}
+    <!-- Brand Mosaic Header -->
+    <div class="relative mb-8 overflow-hidden rounded-2xl" style="background: #0c1018; min-height: 220px;">
+
+      <!-- Brand color ambient glow — subtle, anchored to top-left -->
+      <div class="absolute inset-0" style={`background: radial-gradient(ellipse at 10% 30%, ${bColor}25 0%, transparent 50%), radial-gradient(ellipse at 90% 80%, ${bColor}10 0%, transparent 40%);`}></div>
+
+      <!-- Product mosaic grid — right side, fades in from right -->
+      {mosaicProducts.length > 0 && (
+        <div
+          class="absolute top-0 right-0 bottom-0 hidden sm:grid"
+          style="width: 55%; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; mask-image: linear-gradient(to right, transparent 0%, black 30%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%);"
+        >
+          {mosaicProducts.map((p, i) => {
+            const pos = mosaicPositions[i];
+            const imgSize = pos.size === 'lg' ? 140 : 80;
+            return (
+              <div
+                class="relative overflow-hidden flex items-center justify-center"
+                style={`grid-column: ${pos.gridColumn}; grid-row: ${pos.gridRow}; background: radial-gradient(circle at 50% 50%, ${bColor}15 0%, transparent 70%);`}
+              >
+                <img
+                  src={p.data.imageUrl}
+                  alt={`${b.name} product ${i + 1}`}
+                  width={imgSize}
+                  height={imgSize}
+                  loading="lazy"
+                  class="object-contain rounded-full"
+                  style={`width: ${imgSize}px; height: ${imgSize}px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); opacity: 0.75;`}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <!-- Dark overlay gradient: full opacity left → semi-transparent right (text readability) -->
+      <div class="absolute inset-0" style="background: linear-gradient(90deg, #0c1018 0%, #0c1018dd 40%, #0c101888 70%, #0c101866 100%);"></div>
+
+      <!-- Top accent line — brand color -->
+      <div class="absolute top-0 left-0 right-0 h-[3px] z-10" style={`background: linear-gradient(90deg, ${bColor}, ${bColor}88, transparent 80%);`}></div>
+
+      <!-- Content -->
+      <div class="relative z-10 flex flex-col items-start gap-5 p-6 sm:flex-row sm:items-center sm:p-8">
+
+        <!-- Logo or initials badge -->
         {b.logoUrl ? (
-          <div class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/20 backdrop-blur">
+          <div
+            class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl"
+            style={`background: linear-gradient(135deg, ${bColor}30, ${bColor}15); border: 1px solid ${bColor}25; backdrop-filter: blur(12px);`}
+          >
             <Image
               src={b.logoUrl}
               alt={`${b.name} logo`}
@@ -106,36 +161,55 @@ const metaDescription = b.description
             />
           </div>
         ) : (
-          <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
-            <span class="text-2xl font-bold text-white">
+          <div
+            class="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl"
+            style={`background: linear-gradient(135deg, ${bColor}30, ${bColor}15); border: 1px solid ${bColor}25; backdrop-filter: blur(12px);`}
+          >
+            <span class="text-2xl font-extrabold" style={`color: ${bColor};`}>
               {b.name.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
             </span>
           </div>
         )}
 
-        <div class="flex-1">
-          <h1 class="text-3xl font-bold tracking-tight text-white sm:text-4xl" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
+        <!-- Brand info -->
+        <div class="flex-1 min-w-0">
+          <h1
+            class="text-3xl font-extrabold tracking-tight sm:text-4xl"
+            style="color: #f1f5f9; font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;"
+          >
             {b.name}
           </h1>
 
-          {/* Metadata chips */}
+          <!-- Metadata chips -->
           <div class="mt-3 flex flex-wrap items-center gap-2">
             {countryLabel && (
-              <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+              <span
+                class="rounded-full px-3 py-1 text-xs font-medium"
+                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.08);"
+              >
                 {countryLabel}
               </span>
             )}
             {b.manufacturer && (
-              <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
-                {b.manufacturer}
+              <span
+                class="rounded-full px-3 py-1 text-xs font-medium"
+                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.08);"
+              >
+                by {b.manufacturer}
               </span>
             )}
-            <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+            <span
+              class="rounded-full px-3 py-1 text-xs font-medium"
+              style={`background: ${bColor}15; color: ${bColor}; border: 1px solid ${bColor}25;`}
+            >
               {products.length} cans
             </span>
             {minMg > 0 && (
-              <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
-                {minMg}-{maxMg} mg
+              <span
+                class="rounded-full px-3 py-1 text-xs font-medium"
+                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.08);"
+              >
+                {minMg}–{maxMg} mg
               </span>
             )}
           </div>

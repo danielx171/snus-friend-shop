@@ -1,0 +1,92 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+
+const title = 'Erik Lindqvist — Senior Editor, SnusFriend';
+const description = 'Erik Lindqvist is the senior editor at SnusFriend, covering nicotine pouches, harm reduction, and smokeless tobacco. 10+ years in the industry, 200+ products tested.';
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Erik Lindqvist',
+  jobTitle: 'Senior Editor',
+  worksFor: {
+    '@type': 'Organization',
+    name: 'SnusFriend',
+    url: 'https://snusfriends.com',
+  },
+  description: 'Senior editor and nicotine harm reduction researcher covering the European smokeless market for over a decade.',
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Uppsala University',
+  },
+  knowsAbout: ['nicotine pouches', 'tobacco harm reduction', 'smokeless tobacco', 'nicotine pharmacology'],
+  url: 'https://snusfriends.com/authors/erik-lindqvist',
+};
+---
+
+<Shop
+  title={title}
+  description={description}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Authors', href: '/blog' },
+        { label: 'Erik Lindqvist' },
+      ]} />
+
+      <header class="mb-10">
+        <h1 class="text-4xl font-bold text-foreground mb-2">Erik Lindqvist</h1>
+        <p class="text-lg font-medium text-primary mb-3">Senior Editor, SnusFriend</p>
+        <p class="text-base italic text-muted-foreground">10+ years covering European smokeless tobacco · 200+ products tested · Public Health Communication, Uppsala University</p>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1 [&_li]:leading-relaxed">
+
+        <p>
+          Erik Lindqvist is the senior editor at SnusFriend, where he leads product testing, health content review, and editorial strategy. Based in Malmö, Sweden — the birthplace of modern oral nicotine — Erik has spent over a decade covering the European smokeless tobacco and nicotine pouch markets.
+        </p>
+
+        <p>
+          Erik began his career as a health journalist in Stockholm, reporting on Sweden's tobacco harm reduction success story — the country with the lowest smoking rate in Europe. His early work focused on epidemiological data showing dramatically lower rates of lung cancer and cardiovascular disease among Swedish men compared to the rest of Europe, a divergence largely attributed to the cultural shift from cigarettes to snus. When tobacco-free nicotine pouches emerged in the late 2010s, Erik was among the first journalists to cover them as a distinct product category.
+        </p>
+
+        <p>
+          At SnusFriend, Erik has personally tested over 200 nicotine pouch SKUs across 35+ brands, evaluating flavour accuracy, nicotine delivery consistency, pouch quality, and moisture retention. His testing methodology involves blind trials with standardised scoring rubrics — no brand pays for placement or favourable reviews. Every health claim in SnusFriend's blog content is fact-checked against peer-reviewed research, with priority given to studies published in PubMed, Cochrane reviews, and guidance from the NHS, WHO, and the Royal College of Physicians. When clinical evidence is limited or inconclusive, our articles say so explicitly.
+        </p>
+
+        <p>
+          Erik holds a Master's degree in Public Health Communication from Uppsala University and is a member of the Swedish Society for Tobacco Control Research. He follows harm reduction developments across the EU, UK, and Nordics, and regularly reviews regulatory updates including the EU Tobacco Products Directive (TPD) revisions. Outside of work, he's an avid cross-country skier and an unapologetic mint flavour loyalist.
+        </p>
+
+        <h2>Credentials</h2>
+
+        <ul>
+          <li>10+ years covering European smokeless tobacco and nicotine pouch markets</li>
+          <li>Personally tested and reviewed 200+ nicotine pouch SKUs across 35+ brands</li>
+          <li>Master's in Public Health Communication, Uppsala University</li>
+          <li>Health content fact-checked against peer-reviewed PubMed research, NHS guidance, and WHO reports</li>
+          <li>Follows Royal College of Physicians and Public Health England harm reduction frameworks</li>
+          <li>Member, Swedish Society for Tobacco Control Research</li>
+          <li>Editorial independence: no brand pays for product placement or favourable reviews</li>
+        </ul>
+
+        <h2>Articles by Erik Lindqvist</h2>
+
+        <p>
+          Erik authors and edits all long-form health, harm reduction, and product review content on SnusFriend. His articles cover nicotine pharmacology, product comparisons, strength guides, and regulatory updates — all grounded in peer-reviewed research and independent testing.
+        </p>
+
+        <p>
+          <a href="/blog">Browse all articles on the SnusFriend blog</a>
+        </p>
+
+      </div>
+    </div>
+  </article>
+</Shop>
