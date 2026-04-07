@@ -3,8 +3,8 @@ import { Image } from 'astro:assets';
 import CardAddToCart from '@/components/react/CardAddToCart';
 import { strengthColors, strengthLabels, flavorColors, defaultFlavorColor, brandColors, defaultBrandColor } from '@/data/brand-colors';
 
-interface Props {
-  slug: string;
+interface ProductData {
+  slug?: string;
   name: string;
   brand: string;
   brandSlug: string;
@@ -18,10 +18,20 @@ interface Props {
   badgeKeys: string[];
 }
 
+interface Props extends Partial<ProductData> {
+  /** Accept a full content-collection entry for convenience */
+  product?: { id: string; data: ProductData };
+}
+
+const raw = Astro.props;
+const resolved = raw.product
+  ? { slug: raw.product.id, ...raw.product.data }
+  : raw as ProductData & { slug: string };
+
 const {
   slug, name, brand, brandSlug, imageUrl, prices, stock,
   nicotineContent, strengthKey, flavorKey, ratings, badgeKeys,
-} = Astro.props;
+} = resolved;
 
 const isOutOfStock = stock === 0;
 

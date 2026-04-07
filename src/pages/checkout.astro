@@ -15,7 +15,7 @@ const lastAddress = user?.user_metadata?.last_address ?? null;
   <section class="bg-background text-foreground">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Breadcrumb items={[{ label: 'Cart', href: '/cart' }, { label: 'Checkout' }]} />
-      <CheckoutForm client:load userEmail={user?.email ?? ''} isGuest={isGuest} lastAddress={lastAddress} />
+      <CheckoutForm client:load userEmail={user?.email ?? ''} userId={user?.id ?? null} isGuest={isGuest} lastAddress={lastAddress} />
     </div>
   </section>
 </Shop>

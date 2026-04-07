@@ -5,6 +5,7 @@ import { packSizeMultipliers, type PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
 import { actions } from 'astro:actions';
 import { trackCheckoutStarted } from '@/lib/analytics';
+import ReductionAlert from './ReductionAlert';
 
 interface SavedAddress {
   firstname?: string;
@@ -17,6 +18,7 @@ interface SavedAddress {
 
 interface Props {
   userEmail?: string;
+  userId?: string | null;
   isGuest?: boolean;
   lastAddress?: SavedAddress | null;
 }
@@ -76,7 +78,7 @@ function packLabel(packSize: PackSize): string {
   return qty === 1 ? '1 can' : `${qty} cans`;
 }
 
-export default function CheckoutForm({ userEmail, isGuest, lastAddress }: Props) {
+export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }: Props) {
   const storeCartItems = useStore($cartItems);
   const storeCartTotal = useStore($cartTotal);
 
@@ -205,10 +207,13 @@ export default function CheckoutForm({ userEmail, isGuest, lastAddress }: Props)
     try {
       const items = cartItems.map((item) => ({
         sku: `${item.product.id}-${item.packSize}`,
+        slug: item.product.id,
         quantity: item.quantity,
         product_name: item.product.name,
+        brand: item.product.brand,
         pack_label: packLabel(item.packSize),
         unit_price: item.product.prices[item.packSize],
+        image_url: item.product.image,
       }));
 
       const { data, error: actionError } = await actions.checkout.createCheckout({
@@ -293,6 +298,8 @@ export default function CheckoutForm({ userEmail, isGuest, lastAddress }: Props)
           {error}
         </div>
       )}
+
+      <ReductionAlert cartItems={cartItems} userId={userId ?? null} />
 
       <div className="grid lg:grid-cols-5 gap-8">
         {/* Form Column */}
