@@ -149,14 +149,16 @@ Deno.serve(async (req: Request) => {
     const relevantQuests = quests.filter((q: { quest_type: string }) => relevantQuestTypes.includes(q.quest_type));
 
     // --- Pre-compute values for "brands" and "spend" quest types ---
+    let orderCount: number | null = null;
     let distinctBrandCount: number | null = null;
     let totalSpend: number | null = null;
 
+    const needsOrders = relevantQuests.some((q: { quest_type: string }) => q.quest_type === 'orders');
     const needsBrands = relevantQuests.some((q: { quest_type: string }) => q.quest_type === 'brands');
     const needsSpend = relevantQuests.some((q: { quest_type: string }) => q.quest_type === 'spend');
 
-    if (needsBrands || needsSpend) {
-      // Fetch user orders to compute aggregates
+    if (needsOrders || needsBrands || needsSpend) {
+      // Fetch user orders to compute aggregates (order count, brands, spend)
       const { data: orders, error: ordersError } = await admin
         .from('orders')
         .select('total_price, line_items_snapshot')
@@ -169,6 +171,10 @@ Deno.serve(async (req: Request) => {
           JSON.stringify({ error: 'internal', requestId }),
           { status: 500, headers: JSON_HEADERS }
         );
+      }
+
+      if (needsOrders) {
+        orderCount = (orders ?? []).length;
       }
 
       if (needsSpend) {
@@ -248,7 +254,7 @@ Deno.serve(async (req: Request) => {
       let newValue: number;
       switch (quest.quest_type) {
         case 'orders':
-          newValue = progress.current_value + 1;
+          newValue = orderCount ?? progress.current_value + 1;
           break;
         case 'reviews':
           newValue = progress.current_value + 1;
