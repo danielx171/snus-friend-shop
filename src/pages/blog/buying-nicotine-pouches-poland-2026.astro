@@ -1,0 +1,300 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-04-07';
+const title = 'Buy Nicotine Pouches in Poland: Complete 2026 Guide';
+const description = 'Your complete guide to buying nicotine pouches (saszetki nikotynowe) in Poland. Legal status, excise tax changes, popular brands, prices in PLN, and ordering online.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Poland Guide' },
+      ]} />
+
+      <BlogHero
+        category="Country Guide"
+        title={title}
+        description={description}
+        date="April 7, 2026"
+        readTime="7 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h4]:text-foreground [&_h4]:text-lg [&_h4]:font-semibold [&_h4]:mt-6 [&_h4]:mb-2 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <p>Poland has become the fastest-growing nicotine pouch market in the entire European Union. What started as a Scandinavian trend has exploded into a cultural phenomenon, with "saszetki nikotynowe" now a household term among young Polish consumers. Whether you're a first-time user exploring the category or a seasoned enthusiast navigating the new 2026 excise tax landscape, this guide has everything you need to buy nicotine pouches in Poland legally, affordably, and with confidence.</p>
+
+        <h2>Poland's Nicotine Pouch Boom: Why Now?</h2>
+
+        <p>Poland's nicotine pouch market grew by 180% year-over-year between 2023 and 2025. Three factors drove this explosive growth:</p>
+
+        <ul>
+          <li><strong>Youth adoption:</strong> Polish consumers aged 18–35 embraced nicotine pouches faster than any other EU market, drawn by the discreet format, social signaling, and variety.</li>
+          <li><strong>Price sensitivity:</strong> Polish buyers are highly price-conscious. Multi-packs and bulk ordering became the norm, favoring the pouch format's efficiency.</li>
+          <li><strong>Distribution density:</strong> &#379;abka's 9,000+ convenience stores became the primary retail channel, giving consumers instant access—far superior to fragmented distribution in Western Europe.</li>
+        </ul>
+
+        <p>The result: saszetki nikotynowe evolved from niche import to everyday consumer good across Polish cities, with Warsaw, Krak&oacute;w, and Wroc&#322;aw leading adoption.</p>
+
+        <h2>Legal Status & Regulatory Landscape (2026)</h2>
+
+        <p>Nicotine pouches are <strong>fully legal and widely available</strong> in Poland. However, new regulations in 2025–2026 have reshaped the market:</p>
+
+        <h3>Excise Tax: The 2026 Game Changer</h3>
+
+        <p>Poland introduced an excise tax on nicotine pouches in April 2025, implemented via the Tobacco Products Directive (2014/40/EU). The rates are:</p>
+
+        <ul>
+          <li><strong>2026:</strong> 200 PLN per kilogram of nicotine content (~&euro;48)</li>
+          <li><strong>2027:</strong> 280 PLN per kg (~&euro;67)</li>
+          <li><strong>2028:</strong> 360 PLN per kg (~&euro;86)</li>
+        </ul>
+
+        <p>For a typical 20mg/gram strength pouch can, this adds roughly 0.50–1.20 PLN to retail price, depending on nicotine content. Budget brands remain under 20 PLN per can; premium brands have crossed 25 PLN in some &#379;abka locations.</p>
+
+        <h3>Product Standards</h3>
+
+        <ul>
+          <li><strong>Max nicotine:</strong> 20mg per gram (EU-wide limit, enforced by G&#322;&oacute;wny Inspektorat Sanitarny—Chief Sanitary Inspectorate)</li>
+          <li><strong>Banned additives:</strong> Vitamins, caffeine, taurine, and other substances implying health benefits (EU Regulation 2023/5)</li>
+          <li><strong>Age restriction:</strong> 18+ (enforced at point of sale; online sellers must verify age)</li>
+          <li><strong>Registration:</strong> All manufacturers and importers must register with Polish tax authorities (Ministerstwo Zdrowia) before selling</li>
+        </ul>
+
+        <h3>Online Sales: Currently Legal, Under Discussion</h3>
+
+        <p>As of April 2026, online sales of nicotine pouches remain <strong>fully legal</strong> in Poland. However, regulations are under discussion for potential restrictions. For now, you can legally order from international shops like SnusFriend with no customs barriers (intra-EU shipping) and no additional duties.</p>
+
+        <h2>How Poles Actually Buy Nicotine Pouches</h2>
+
+        <h3>Physical Retail Dominance: &#379;abka Reigns</h3>
+
+        <p>&#379;abka, Poland's ubiquitous convenience store chain (9,000+ locations), is the primary retail channel for nicotine pouches. Walk into almost any &#379;abka in a city center and you'll find 10–15 brands stocked behind or near the counter. Prices range from 12–25 PLN per can (&euro;2.80–&euro;5.80), depending on brand and strength.</p>
+
+        <p>Other major channels:</p>
+
+        <ul>
+          <li><strong>Orlen gas stations:</strong> Growing presence, especially strong brands like Killa and VELO</li>
+          <li><strong>Rossmann:</strong> Pharmacy chain with selective pouch stock</li>
+          <li><strong>Supermarkets:</strong> Biedronka, Lidl, and Kaufland carry limited selections in urban areas</li>
+        </ul>
+
+        <h3>Online Retailers: Polish & International</h3>
+
+        <p>Poland has a thriving online nicotine pouch market. Several Polish-based online shops compete on speed and selection. International retailers (like SnusFriend) compete on price and brand breadth. Many Polish consumers alternate between &#379;abka for convenience and online for bulk buys and better per-pouch economics.</p>
+
+        <h3>Local vs. Import Brands</h3>
+
+        <p>Poland has built a strong <strong>local brand ecosystem</strong>. Killa and Pablo are cult favorites, with devoted user communities. VELO (British American Tobacco) is the mainstream competitor, heavily promoted and broadly distributed. ZYN (Altria) represents the premium segment. Import brands like LOOP and Iceberg have niche followings.</p>
+
+        <p>Price-conscious Polish buyers often mix: Killa for everyday value, ZYN for special occasions, and Iceberg or local budget brands for bulk stock-up.</p>
+
+        <h2>Most Popular Brands & Flavour Profiles in Poland</h2>
+
+        <h3>1. Killa: The Polish Favorite</h3>
+
+        <p>Killa dominates Polish market share. Strong, bold flavours (Cold Mint, Blueberry, Watermelon) at competitive prices. <a href="/brands/killa">Shop Killa pouches</a>.</p>
+
+        <h3>2. Pablo: Cult Strength Brand</h3>
+
+        <p>Pablo appeals to extreme-strength seekers and trendsetter users. Known for bold branding and passionate community. <a href="/brands/pablo">Shop Pablo pouches</a>.</p>
+
+        <h3>3. VELO: Mainstream Standard Bearer</h3>
+
+        <p>BAT's VELO line offers consistent quality and wide flavour range. Most accessible in &#379;abka. <a href="/brands/velo">Shop VELO pouches</a>.</p>
+
+        <h3>4. ZYN: Premium Positioning</h3>
+
+        <p>ZYN represents quality premium segment; fewer artificial flavours, cleaner ingredients. Growing presence in urban Poland. <a href="/brands/zyn">Shop ZYN pouches</a>.</p>
+
+        <h3>5. LOOP: Flavour Innovation</h3>
+
+        <p>LOOP draws users seeking unique, experimental flavours (Blood Orange, Pear Lime). <a href="/brands/loop">Shop LOOP pouches</a>.</p>
+
+        <h3>6. Iceberg: Budget Strength Play</h3>
+
+        <p>Iceberg delivers strong nicotine at wallet-friendly prices. Popular with heavy users and price-optimizers. <a href="/brands/iceberg">Shop Iceberg pouches</a>.</p>
+
+        <h3>Polish Preferences: Strong & Fruity</h3>
+
+        <p>Polish consumers skew toward <strong>high-strength pouches</strong> (12–20mg) and <strong>mint flavours</strong>, but—uniquely—they're adventurous with fruit profiles. Blueberry, watermelon, and berry blends outsell fruit options in Nordic markets. Coffee and tobacco flavours remain niche; dessert and candy flavours are growing but still secondary to mint and fruit.</p>
+
+        <h2>Buying from SnusFriend: Why Polish Customers Choose Us</h2>
+
+        <p>SnusFriend ships to Poland from our EU warehouse with no customs delays or import duties:</p>
+
+        <ul>
+          <li><strong>Shipping:</strong> 3–6 business days (intra-EU, tracked)</li>
+          <li><strong>Free shipping:</strong> Orders over &euro;29</li>
+          <li><strong>Selection:</strong> 50+ brands, including exclusive Scandinavian lines unavailable in Polish retail</li>
+          <li><strong>Bulk pricing:</strong> Multi-pack discounts make per-pouch cost highly competitive</li>
+          <li><strong>Payment:</strong> BLIK (Poland's dominant mobile payment), Przelewy24, credit card, PayPal all accepted</li>
+        </ul>
+
+        <p>Polish users often compare: a bulk 10-can box from SnusFriend (&euro;40–50) yields ~&euro;4–5 per can—undercutting &#379;abka's 18–25 PLN retail by 15–25%, especially for premium brands. For heavy users or strength-seekers, online ordering is now the default.</p>
+
+        <h2>Beginner's Recommendations for Polish First-Timers</h2>
+
+        <p>If you're new to nicotine pouches, start here:</p>
+
+        <ol>
+          <li><strong>VELO Freeze 6mg</strong> — Gentle entry point, widely known, refreshing mint. Best for absolute beginners.</li>
+          <li><strong>ZYN Cool Mint 6mg</strong> — Premium intro, clean ingredients, smooth sensation.</li>
+          <li><strong>ON! Mint 3mg</strong> — Ultra-light, for cautious first-timers or social dabbling.</li>
+          <li><strong>LOOP Mint Mania 9.4mg</strong> — Mid-strength sweet mint, excellent flavour platform.</li>
+          <li><strong>Killa Cold Mint 16mg</strong> — For those ready for the Polish standard strength and community flavour.</li>
+        </ol>
+
+        <p>Most Polish users settle on 12–16mg nicotine after 2–3 weeks. Strength preferences are individual; start low, move up gradually.</p>
+
+        <h2>Recommended Products</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('velo-freeze-6mg') && <BlogProductCard product={find('velo-freeze-6mg')} />}
+          {find('zyn-cool-mint-6mg') && <BlogProductCard product={find('zyn-cool-mint-6mg')} />}
+          {find('on-mint-3mg') && <BlogProductCard product={find('on-mint-3mg')} />}
+          {find('loop-mint-mania-9-4mg') && <BlogProductCard product={find('loop-mint-mania-9-4mg')} />}
+          {find('killa-cold-mint-16mg') && <BlogProductCard product={find('killa-cold-mint-16mg')} />}
+        </div>
+
+        <h2>Related Reading</h2>
+
+        <ul>
+          <li><a href="/countries/poland">Poland country guide</a></li>
+          <li><a href="/beginners">Beginner's guide to nicotine pouches</a></li>
+          <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest nicotine pouches: 2026 ranking</a></li>
+        </ul>
+
+        <h2>Summary: Poland in 2026</h2>
+
+        <p>Poland is the EU's nicotine pouch success story. Legal, accessible, price-competitive, and culturally embedded—saszetki nikotynowe are here to stay. The new excise tax will reshape retail pricing through 2028, but hasn't dampened demand. Whether you buy at &#379;abka for convenience or online from SnusFriend for value and selection, you're participating in Europe's fastest-growing tobacco alternative market.</p>
+
+        <p>Start with a beginner-friendly 6mg option. Explore local favorites like Killa. Stack your preferred strength for daily use. Enjoy the community.</p>
+
+      </div>
+
+      <details class="mt-10 border border-border rounded-lg">
+        <summary class="cursor-pointer px-4 py-3 font-semibold text-foreground">Frequently Asked Questions</summary>
+        <div class="px-4 pb-4 space-y-4 text-muted-foreground">
+          <h3 class="text-foreground font-semibold mt-4">Czy saszetki nikotynowe s&#261; legalne w Polsce?</h3>
+          <p>Yes. Nicotine pouches are fully legal in Poland, regulated under EU Directive 2014/40/EU and Polish Tobacco Products Act. They're widely sold and age-verified at 18+.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">How much do nicotine pouches cost in Poland?</h3>
+          <p>Retail prices at &#379;abka: 12–25 PLN per can (~&euro;2.80–&euro;5.80), depending on brand and strength. Online bulk orders from SnusFriend: &euro;40–50 for 10-can rolls, or &euro;4–5 per pouch. Excise tax added ~0.50–1.20 PLN per can as of 2026.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Jaki podatek akcyzowy obowi&#261;zuje?</h3>
+          <p>Poland's excise tax (introduced April 2025): 200 PLN/kg of nicotine (2026), rising to 280 PLN (2027) and 360 PLN (2028). For typical 16mg pouches, this adds ~0.80 PLN per can.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Can I legally buy nicotine pouches online in Poland?</h3>
+          <p>Yes, as of April 2026. Online sales remain fully legal; restrictions are under discussion but not yet implemented. International shipping to Poland carries no customs duties (intra-EU).</p>
+
+          <h3 class="text-foreground font-semibold mt-4">What's the strongest nicotine pouch available in Poland?</h3>
+          <p>The EU limit is 20mg/gram. Most "extreme strength" brands max out at 16–20mg. Pablo and some Killa variants hit the ceiling. Iceberg and VELO offer high-strength options around 16mg.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Where can I buy nicotine pouches in Warsaw?</h3>
+          <p>&#379;abka (everywhere), Orlen stations, Rossmann, and most supermarkets stock nicotine pouches in city centers. Online: SnusFriend (EU warehouse, 3–6 days) or Polish online retailers.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Is it cheaper to buy from SnusFriend or at &#379;abka?</h3>
+          <p>Bulk orders from SnusFriend are 15–25% cheaper per pouch (&euro;4–5 vs. 18–25 PLN). Single-can &#379;abka purchases are more convenient for casual users. Heavy users and strength-seekers benefit from online bulk buying.</p>
+        </div>
+      </details>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-poland-2026` },
+        "description": description
+      })} />
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Czy saszetki nikotynowe są legalne w Polsce?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Nicotine pouches are fully legal in Poland, regulated under EU Directive 2014/40/EU and Polish Tobacco Products Act. They're widely sold and age-verified at 18+."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much do nicotine pouches cost in Poland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retail prices at Żabka: 12–25 PLN per can, depending on brand and strength. Online bulk orders from SnusFriend: €40–50 for 10-can rolls."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Jaki podatek akcyzowy obowiązuje?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Poland's excise tax (introduced April 2025): 200 PLN/kg of nicotine (2026), rising to 280 PLN (2027) and 360 PLN (2028)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I legally buy nicotine pouches online in Poland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, as of April 2026. Online sales remain fully legal; restrictions are under discussion but not yet implemented."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's the strongest nicotine pouch available in Poland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The EU limit is 20mg/gram. Most extreme strength brands max out at 16–20mg. Pablo and Killa variants hit the ceiling."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can I buy nicotine pouches in Warsaw?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Żabka, Orlen stations, Rossmann, and supermarkets stock nicotine pouches in city centers. Online: SnusFriend (EU warehouse, 3–6 days)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is it cheaper to buy from SnusFriend or at Żabka?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Bulk orders from SnusFriend are 15–25% cheaper per pouch. Single-can Żabka purchases are more convenient for casual users."
+            }
+          }
+        ]
+      })} />
+
+      <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+        Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+      </p>
+    </div>
+  </article>
+</Shop>

@@ -1,0 +1,240 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-04-07';
+const title = 'Buy Nicotine Pouches in Denmark: Complete 2026 Guide';
+const description = 'Your guide to buying nicotine pouches in Denmark in 2026. Post-snus-ban rules, the new 9mg cap, flavor restrictions, popular brands, and ordering online.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Denmark Guide' },
+      ]} />
+
+      <BlogHero
+        category="Country Guide"
+        title={title}
+        description={description}
+        date="April 7, 2026"
+        readTime="8 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h4]:text-foreground [&_h4]:text-lg [&_h4]:font-semibold [&_h4]:mt-6 [&_h4]:mb-2 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Introduction</h2>
+        <p>Denmark's nicotine market has undergone seismic shifts since the EU's snus ban took effect. While tobacco-containing snus has been prohibited across most of Europe for over a decade—with only Sweden granted a historical exemption—the rise of tobacco-free nicotine pouches created a thriving alternative that Danish consumers embraced enthusiastically.</p>
+        <p>But July 2025 changed everything. New Danish regulations introduced strict flavor restrictions, a 9mg nicotine ceiling, and standardized packaging requirements that reshape how and where Danes buy their nicotine pouches today. The market contracted, retailers adapted, and international ordering became riskier than ever.</p>
+        <p>This guide walks you through Denmark's current nicotine pouch landscape: what's legal, where to buy, which brands dominate, and how to navigate the post-regulation reality. Whether you're a long-time user adjusting to new rules or a newcomer exploring alternatives to traditional tobacco products, you'll find practical answers here.</p>
+
+        <h2>Legal & Regulatory Landscape in Denmark</h2>
+        <p>Understanding the law is your first step. Denmark's regulatory environment for nicotine pouches is now one of Europe's strictest—a stark contrast to the Wild West years of 2022-2024 when brands from around the world arrived unchecked.</p>
+
+        <h3>The Snus Ban & Why It Doesn't Apply to Nicotine Pouches</h3>
+        <p>Snus—moist tobacco product intended for oral use—has been banned in Denmark since 1992, decades before the EU's 2019 Tobacco Products Directive formalized the continent-wide prohibition. Sweden secured a historic exemption, but Denmark has no such carve-out. Snus remains fully illegal.</p>
+        <p>Nicotine pouches, however, contain no tobacco. This distinction allowed them to occupy a regulatory gray zone for years. Until 2024-2025, most European countries treated nicotine pouches as unregulated novel products. Denmark changed that approach in 2025.</p>
+
+        <h3>July 2025: The Regulatory Shift</h3>
+        <p>In July 2025, Denmark's Medicines Agency (L&aelig;gemiddelstyrelsen) and Ministry of Health (Sundhedsministeriet) introduced sweeping regulations:</p>
+        <ul>
+          <li><strong>Maximum 9mg nicotine per pouch.</strong> Products exceeding this threshold are banned from Danish sale. This eliminated the ultra-strong products (22-43mg) that appeal to heavy users.</li>
+          <li><strong>Flavor ban:</strong> Only tobacco and menthol/mint flavors are permitted. Fruit, candy, spice, and dessert flavors—once the fastest-growing segment—are prohibited. This reflects public health policy aimed at reducing youth appeal.</li>
+          <li><strong>Standardized packaging:</strong> Plain packaging requirements similar to cigarettes now apply. Bright designs are gone. Health warnings are mandatory.</li>
+          <li><strong>Age verification mandate:</strong> Retailers must verify 18+ status at sale. Online retailers selling to Denmark must enforce this.</li>
+          <li><strong>Registration requirement:</strong> Retailers must register with Danish health authorities to sell lawfully.</li>
+        </ul>
+        <p>These rules apply to all nicotine pouches sold in Denmark, whether purchased domestically or imported. Products that fail to comply can be seized by Danish customs, and sellers who violate regulations face fines.</p>
+
+        <h2>How Danish Consumers Buy Nicotine Pouches Today</h2>
+
+        <h3>Physical Retail (Domestic)</h3>
+        <p>Kiosks and supermarkets remain the dominant distribution channel in Denmark. You'll find nicotine pouches at 7-Eleven, Narvesen, Kiosk, and major supermarket chains like Netto, F&oslash;tex, and Bilka. Selection is now curated to comply with July 2025 rules—expect mint and menthol variants of VELO, ZYN, and Nordic Spirit, typically in 3mg, 6mg, and 9mg strengths.</p>
+        <p>Retail pricing: 45-65 DKK per can (&euro;6-&euro;8.70). This is significantly higher than online international pricing, but you guarantee legal compliance and instant delivery.</p>
+
+        <h3>Online Domestic Retailers</h3>
+        <p>Danish online shops sell compliant products only. Selection is limited but reliable. Prices are competitive with physical retail, sometimes lower. Shipping within Denmark is fast (next-day typical). All established players respect the flavor and strength caps.</p>
+
+        <h3>International Online Ordering</h3>
+        <p>SnusFriend and other international retailers can ship to Denmark. The appeal is clear: access to products outside the regulated set, including flavored variants and strengths above 9mg. However, <strong>buyers face genuine risk.</strong> Danish customs has authority to seize non-compliant shipments. Products exceeding 9mg nicotine or containing banned flavors may not reach you.</p>
+        <p>If you order from an international retailer, stick to their 9mg-or-below, compliant-flavor inventory to maximize delivery probability. Importing banned products is a gray area legally; it's technically prohibited, but enforcement focuses on commercial importation rather than individual users.</p>
+
+        <h2>Most Popular Brands & Flavors in Denmark</h2>
+
+        <h3>Top Brands</h3>
+        <p><strong>VELO</strong> (British American Tobacco) dominates Danish retail. Their rapid compliance with July 2025 rules and existing kiosk relationships make them omnipresent. Mint and ice variants are the focus.</p>
+        <p><strong>ZYN</strong> (Swedish Match/Philip Morris International) holds strong brand loyalty among Danish users, especially those who recall ZYN's pre-regulation flavor range. Their mint and spearmint products are bestsellers.</p>
+        <p><strong>Nordic Spirit</strong> (JTI) was hugely popular pre-regulation but lost shelf space post-July 2025. Availability is patchy. They're still worth checking in larger cities.</p>
+        <p><strong>LOOP</strong> (Another Snus Factory) built momentum on unique flavors; their shift to compliant menthol products has been less successful. Niche appeal remains, particularly among tradition-focused users.</p>
+        <p><strong>Skruf</strong> (Imperial Brands) maintains a loyal Scandinavian following. Their tobacco-flavored and mint options appeal to users prioritizing authenticity over novelty.</p>
+
+        <h3>The Flavor Reality</h3>
+        <p>Menthol and mint dominate now. Before July 2025, Danish users loved fruit flavors (strawberry, blueberry, watermelon) and dessert variants (vanilla, coffee, cinnamon). That market is gone domestically. Tobacco and tobacco-mint blends appeal to traditionalists. Expect limited range compared to international markets.</p>
+
+        <h3>Strength Preferences</h3>
+        <p>The 9mg ceiling shifted Danish preferences downward. Users who previously favored 22mg products had to choose: stick with domestic 9mg, or accept the customs risk of ordering international. Most adapted to 6-9mg. Newcomers are discovering that 3-6mg is adequate.</p>
+
+        <h2>Ordering Nicotine Pouches from SnusFriend to Denmark</h2>
+        <p>SnusFriend ships from EU warehouses, offering fast, duty-free delivery to Denmark.</p>
+        <ul>
+          <li><strong>Delivery time:</strong> 3-5 business days for Denmark.</li>
+          <li><strong>Customs & duties:</strong> Intra-EU shipping means no VAT surprises or import duties.</li>
+          <li><strong>Shipping costs:</strong> Free for orders over &euro;29.</li>
+          <li><strong>Payment:</strong> MobilePay (Denmark's dominant mobile payment app), credit card, and Klarna installments all supported.</li>
+        </ul>
+        <p><strong>Critical caveat:</strong> Products exceeding 9mg nicotine or containing banned flavors risk seizure by Danish customs. SnusFriend sells both compliant and non-compliant products to international customers. To guarantee delivery, order only 9mg-or-below, menthol/mint/tobacco-flavored items. Non-compliant products may still arrive, but there's no recourse if customs intercepts them.</p>
+
+        <h2>Beginner Recommendations for Danish Users</h2>
+        <p>New to nicotine pouches? Start low, adjust gradually. These products are legal and widely available, compliant with Danish regulations, and accessible via domestic retail or SnusFriend:</p>
+        <ul>
+          <li><strong>ZYN Cool Mint 6mg:</strong> Balanced strength, authentic flavor, easy to find in kiosks. A safe first choice.</li>
+          <li><strong>VELO Ice Cool 6mg:</strong> Crisp menthol, widely stocked, familiar to most Danish retailers.</li>
+          <li><strong>ON! Mint 3mg:</strong> Ultra-light entry point. Ideal if you're cautious about nicotine.</li>
+          <li><strong>Skruf Fresh Mint #1:</strong> Lightest Skruf option, subtle flavor, good for gradual introduction.</li>
+          <li><strong>ZYN Spearmint 3mg:</strong> Gentle, aromatic, less harsh than standard mint.</li>
+        </ul>
+        <p>Start with 3-6mg, use for a few days, and adjust upward only if you feel the need. Most users find 6-9mg sufficient, especially after the regulatory shift away from ultra-strong products.</p>
+
+        <h2>Recommended Products</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-cool-mint-6mg') && <BlogProductCard product={find('zyn-cool-mint-6mg')} />}
+          {find('velo-ice-cool-6mg') && <BlogProductCard product={find('velo-ice-cool-6mg')} />}
+          {find('on-mint-3mg') && <BlogProductCard product={find('on-mint-3mg')} />}
+          {find('skruf-fresh-mint-1') && <BlogProductCard product={find('skruf-fresh-mint-1')} />}
+          {find('zyn-spearmint-3mg') && <BlogProductCard product={find('zyn-spearmint-3mg')} />}
+        </div>
+
+        <h2>Related Reading</h2>
+        <ul>
+          <li><a href="/countries/denmark">Denmark Country Guide</a></li>
+          <li><a href="/beginners">Beginner's Guide to Nicotine Pouches</a></li>
+          <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Nicotine Strength</a></li>
+        </ul>
+
+      </div>
+
+      <details class="mt-10 border border-border rounded-lg">
+        <summary class="cursor-pointer px-4 py-3 font-semibold text-foreground">Frequently Asked Questions</summary>
+        <div class="px-4 pb-4 space-y-4 text-muted-foreground">
+          <h3 class="text-foreground font-semibold mt-4">Er nikotinposer lovlige i Danmark?</h3>
+          <p>Yes, nicotine pouches are legal in Denmark as of 2025—with strict conditions. They must contain no more than 9mg of nicotine per pouch, feature only tobacco or menthol/mint flavors, and comply with standardized packaging rules. Retailers must verify you're 18+. Snus (tobacco-containing) is not legal; nicotine pouches (tobacco-free) are.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">What changed for nicotine pouches in Denmark in July 2025?</h3>
+          <p>In July 2025, Denmark introduced three major restrictions: a 9mg nicotine cap, a flavor ban (only tobacco and menthol/mint permitted), and standardized packaging requirements. These rules eliminated the wide selection of strong and exotic-flavored products that existed before.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Can I still buy strong nicotine pouches in Denmark?</h3>
+          <p>No. The 9mg ceiling is binding for domestic sales. Products above 9mg are prohibited. If you order from international retailers, you risk customs seizure. Stick to 9mg-or-below products sold by reputable retailers to guarantee compliance.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Hvad koster nikotinposer i Danmark?</h3>
+          <p>Retail prices in Danish kiosks and supermarkets range from 45-65 DKK per can (&euro;6-&euro;8.70). Online ordering often undercuts this. International retailers like SnusFriend offer lower unit pricing, though with shipping time and customs risk factored in.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Is snus legal in Denmark?</h3>
+          <p>No. Snus (moist tobacco for oral use) has been banned in Denmark since 1992 and remains illegal. Only nicotine pouches (which contain no tobacco) are legal. The EU banned snus continent-wide in 2019; Sweden has a historical exemption, but Denmark does not.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Can I order nicotine pouches online to Denmark?</h3>
+          <p>Yes, but with caveats. Domestic retailers ship reliably. International retailers like SnusFriend can ship to Denmark, but only compliant products (9mg or under, tobacco or menthol/mint flavors) are guaranteed to clear customs. Non-compliant shipments may be seized.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">What flavors are available in Denmark after the ban?</h3>
+          <p>Only tobacco and menthol/mint flavors are legal. Fruit, candy, spice, dessert, and other novelty flavors are prohibited. The July 2025 regulation deliberately narrowed flavor choice to reduce youth appeal.</p>
+        </div>
+      </details>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-denmark-2026` },
+        "description": description
+      })} />
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Er nikotinposer lovlige i Danmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, nicotine pouches are legal in Denmark as of 2025—with strict conditions. They must contain no more than 9mg of nicotine per pouch, feature only tobacco or menthol/mint flavors, and comply with standardized packaging rules. Retailers must verify you're 18+. Snus (tobacco-containing) is not legal; nicotine pouches (tobacco-free) are."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What changed for nicotine pouches in Denmark in July 2025?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In July 2025, Denmark introduced three major restrictions: a 9mg nicotine cap, a flavor ban (only tobacco and menthol/mint permitted), and standardized packaging requirements. These rules eliminated the wide selection of strong and exotic-flavored products that existed before."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I still buy strong nicotine pouches in Denmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The 9mg ceiling is binding for domestic sales. Products above 9mg are prohibited. If you order from international retailers, you risk customs seizure. Stick to 9mg-or-below products sold by reputable retailers to guarantee compliance."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Hvad koster nikotinposer i Danmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retail prices in Danish kiosks and supermarkets range from 45-65 DKK per can (€6-€8.70). Online ordering often undercuts this. International retailers like SnusFriend offer lower unit pricing, though with shipping time and customs risk factored in."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is snus legal in Denmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Snus (moist tobacco for oral use) has been banned in Denmark since 1992 and remains illegal. Only nicotine pouches (which contain no tobacco) are legal. The EU banned snus continent-wide in 2019; Sweden has a historical exemption, but Denmark does not."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I order nicotine pouches online to Denmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, but with caveats. Domestic retailers ship reliably. International retailers like SnusFriend can ship to Denmark, but only compliant products (9mg or under, tobacco or menthol/mint flavors) are guaranteed to clear customs. Non-compliant shipments may be seized."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What flavors are available in Denmark after the ban?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Only tobacco and menthol/mint flavors are legal. Fruit, candy, spice, dessert, and other novelty flavors are prohibited. The July 2025 regulation deliberately narrowed flavor choice to reduce youth appeal."
+            }
+          }
+        ]
+      })} />
+
+      <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+        Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+      </p>
+    </div>
+  </article>
+</Shop>
