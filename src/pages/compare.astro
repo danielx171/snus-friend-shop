@@ -90,6 +90,12 @@ const flavorLabels: Record<string, string> = {
 
   <script is:inline define:vars={{ strengthLabels, flavorLabels, currencyCode: tenant.currencyCode }}>
   document.addEventListener('astro:page-load', function() {
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = String(str);
+      return div.innerHTML;
+    }
+
     var allProducts = [];
     var selected = [];
     var input = document.getElementById('compare-search');
@@ -141,12 +147,17 @@ const flavorLabels: Record<string, string> = {
       if (selected.length > 0) {
         chips.innerHTML = selectedProducts.map(function(p) {
           return '<span class="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs font-medium text-foreground">' +
-            (p.imageUrl ? '<img src="' + p.imageUrl + '" alt="" class="w-5 h-5 rounded-full object-cover" />' : '') +
-            p.name +
-            '<button onclick="window.__removeCompare(\'' + p.slug + '\')" class="ml-0.5 text-muted-foreground hover:text-foreground transition" aria-label="Remove ' + p.name + '">&times;</button>' +
+            (p.imageUrl ? '<img src="' + escapeHtml(p.imageUrl) + '" alt="" class="w-5 h-5 rounded-full object-cover" />' : '') +
+            escapeHtml(p.name) +
+            '<button data-remove-slug="' + escapeHtml(p.slug) + '" class="ml-0.5 text-muted-foreground hover:text-foreground transition compare-remove-btn" aria-label="Remove ' + escapeHtml(p.name) + '">&times;</button>' +
           '</span>';
         }).join('') +
-        '<button onclick="window.__clearCompare()" class="rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 transition">Clear all</button>';
+        '<button class="rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 transition compare-clear-btn">Clear all</button>';
+      chips.querySelectorAll('.compare-remove-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { window.__removeCompare(btn.getAttribute('data-remove-slug')); });
+      });
+      var clearBtn = chips.querySelector('.compare-clear-btn');
+      if (clearBtn) clearBtn.addEventListener('click', function() { window.__clearCompare(); });
       } else {
         chips.innerHTML = '';
       }
@@ -155,23 +166,23 @@ const flavorLabels: Record<string, string> = {
       if (selectedProducts.length >= 2) {
         empty.classList.add('hidden');
         var rows = [
-          { label: 'Image', render: function(p) { return p.imageUrl ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" class="w-16 h-16 rounded-lg object-contain mx-auto" />' : '<div class="w-16 h-16 rounded-lg bg-muted/30 flex items-center justify-center text-muted-foreground/40 mx-auto">-</div>'; } },
-          { label: 'Brand', render: function(p) { return '<a href="/brands/' + p.brandSlug + '" class="text-primary hover:underline">' + p.brand + '</a>'; } },
-          { label: 'Nicotine', render: function(p) { return '<span class="font-semibold">' + p.nicotineContent + ' mg</span>/pouch'; } },
-          { label: 'Strength', render: function(p) { return strengthLabels[p.strengthKey] || p.strengthKey || 'Normal'; } },
-          { label: 'Flavour', render: function(p) { return flavorLabels[p.flavorKey] || p.flavorKey || '-'; } },
-          { label: 'Format', render: function(p) { var f = p.formatKey || 'slim'; return f.charAt(0).toUpperCase() + f.slice(1); } },
-          { label: 'Portions', render: function(p) { return (p.portionsPerCan || 20) + '/can'; } },
-          { label: 'Price (1 can)', render: function(p) { return '<span class="font-bold text-foreground">' + currencyCode + ' ' + (p.prices && p.prices.pack1 ? p.prices.pack1.toFixed(2) : '-') + '</span>'; } },
-          { label: 'Rating', render: function(p) { return p.ratings > 0 ? p.ratings.toFixed(1) + '/5' : 'No reviews'; } },
+          { label: 'Image', render: function(p) { return p.imageUrl ? '<img src="' + escapeHtml(p.imageUrl) + '" alt="' + escapeHtml(p.name) + '" class="w-16 h-16 rounded-lg object-contain mx-auto" />' : '<div class="w-16 h-16 rounded-lg bg-muted/30 flex items-center justify-center text-muted-foreground/40 mx-auto">-</div>'; } },
+          { label: 'Brand', render: function(p) { return '<a href="/brands/' + escapeHtml(p.brandSlug) + '" class="text-primary hover:underline">' + escapeHtml(p.brand) + '</a>'; } },
+          { label: 'Nicotine', render: function(p) { return '<span class="font-semibold">' + escapeHtml(p.nicotineContent) + ' mg</span>/pouch'; } },
+          { label: 'Strength', render: function(p) { return escapeHtml(strengthLabels[p.strengthKey] || p.strengthKey || 'Normal'); } },
+          { label: 'Flavour', render: function(p) { return escapeHtml(flavorLabels[p.flavorKey] || p.flavorKey || '-'); } },
+          { label: 'Format', render: function(p) { var f = p.formatKey || 'slim'; return escapeHtml(f.charAt(0).toUpperCase() + f.slice(1)); } },
+          { label: 'Portions', render: function(p) { return escapeHtml((p.portionsPerCan || 20) + '/can'); } },
+          { label: 'Price (1 can)', render: function(p) { return '<span class="font-bold text-foreground">' + escapeHtml(currencyCode) + ' ' + escapeHtml(p.prices && p.prices.pack1 ? p.prices.pack1.toFixed(2) : '-') + '</span>'; } },
+          { label: 'Rating', render: function(p) { return p.ratings > 0 ? escapeHtml(p.ratings.toFixed(1) + '/5') : 'No reviews'; } },
           { label: 'Stock', render: function(p) { return p.stock > 0 ? '<span class="text-primary font-medium">In Stock</span>' : '<span class="text-destructive">Out of Stock</span>'; } },
-          { label: '', render: function(p) { return '<a href="/products/' + p.slug + '" class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition">View Product</a>'; } },
+          { label: '', render: function(p) { return '<a href="/products/' + escapeHtml(p.slug) + '" class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition">View Product</a>'; } },
         ];
 
         table.innerHTML = '<div class="overflow-x-auto rounded-xl border border-border"><table class="w-full text-sm">' +
           '<thead><tr class="border-b border-border bg-card/60"><th class="text-left px-4 py-3 text-muted-foreground font-medium w-28"></th>' +
           selectedProducts.map(function(p) {
-            return '<th class="text-center px-4 py-3 font-semibold text-foreground min-w-[140px]">' + p.name + '</th>';
+            return '<th class="text-center px-4 py-3 font-semibold text-foreground min-w-[140px]">' + escapeHtml(p.name) + '</th>';
           }).join('') + '</tr></thead><tbody>' +
           rows.map(function(row, i) {
             return '<tr class="' + (i < rows.length - 1 ? 'border-b border-border' : '') + '">' +
@@ -181,7 +192,7 @@ const flavorLabels: Record<string, string> = {
               }).join('') + '</tr>';
           }).join('') +
           '</tbody></table></div>' +
-          '<p class="text-center text-xs text-muted-foreground mt-4">Share this comparison: <a href="/compare?products=' + selected.join(',') + '" class="text-primary hover:underline">snusfriends.com/compare?products=' + selected.join(',') + '</a></p>';
+          '<p class="text-center text-xs text-muted-foreground mt-4">Share this comparison: <a href="/compare?products=' + encodeURIComponent(selected.join(',')) + '" class="text-primary hover:underline">snusfriends.com/compare?products=' + escapeHtml(selected.join(',')) + '</a></p>';
 
         // Suggestions: similar products based on flavour, strength, or price
         if (selected.length < 4) {
@@ -207,14 +218,17 @@ const flavorLabels: Record<string, string> = {
             table.innerHTML += '<div class="mt-8"><h3 class="text-sm font-semibold text-foreground mb-3">You might also want to compare</h3>' +
               '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">' +
               suggestions.map(function(p) {
-                return '<button type="button" onclick="window.__addCompare(\'' + p.slug + '\')" class="flex flex-col items-center gap-2 rounded-xl border border-border bg-card/60 p-3 text-center hover:border-primary/30 hover:bg-primary/5 transition cursor-pointer">' +
-                  (p.imageUrl ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" class="w-12 h-12 rounded-lg object-contain" />' : '') +
-                  '<div><p class="text-xs font-medium text-foreground line-clamp-2">' + p.name + '</p>' +
-                  '<p class="text-[10px] text-muted-foreground">' + p.brand + ' · ' + p.nicotineContent + 'mg</p></div>' +
+                return '<button type="button" data-add-slug="' + escapeHtml(p.slug) + '" class="compare-add-btn flex flex-col items-center gap-2 rounded-xl border border-border bg-card/60 p-3 text-center hover:border-primary/30 hover:bg-primary/5 transition cursor-pointer">' +
+                  (p.imageUrl ? '<img src="' + escapeHtml(p.imageUrl) + '" alt="' + escapeHtml(p.name) + '" class="w-12 h-12 rounded-lg object-contain" />' : '') +
+                  '<div><p class="text-xs font-medium text-foreground line-clamp-2">' + escapeHtml(p.name) + '</p>' +
+                  '<p class="text-[10px] text-muted-foreground">' + escapeHtml(p.brand) + ' · ' + escapeHtml(p.nicotineContent) + 'mg</p></div>' +
                   '<span class="text-[10px] text-primary font-medium">+ Add to compare</span>' +
                 '</button>';
               }).join('') +
               '</div></div>';
+            table.querySelectorAll('.compare-add-btn').forEach(function(btn) {
+              btn.addEventListener('click', function() { window.__addCompare(btn.getAttribute('data-add-slug')); });
+            });
           }
         }
       } else if (selected.length === 1) {
@@ -243,11 +257,14 @@ const flavorLabels: Record<string, string> = {
       if (matches.length === 0) { results.classList.add('hidden'); return; }
       results.classList.remove('hidden');
       results.innerHTML = matches.map(function(p) {
-        return '<button type="button" onclick="window.__addCompare(\'' + p.slug + '\')" class="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm hover:bg-muted/50 transition border-b border-border last:border-0">' +
-          (p.imageUrl ? '<img src="' + p.imageUrl + '" alt="" class="w-8 h-8 rounded-full object-cover shrink-0" />' : '<div class="w-8 h-8 rounded-full bg-muted/30 shrink-0"></div>') +
-          '<div class="flex-1 min-w-0"><p class="font-medium text-foreground truncate">' + p.name + '</p><p class="text-xs text-muted-foreground">' + p.brand + ' · ' + p.nicotineContent + 'mg</p></div>' +
+        return '<button type="button" data-add-slug="' + escapeHtml(p.slug) + '" class="search-add-btn w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm hover:bg-muted/50 transition border-b border-border last:border-0">' +
+          (p.imageUrl ? '<img src="' + escapeHtml(p.imageUrl) + '" alt="" class="w-8 h-8 rounded-full object-cover shrink-0" />' : '<div class="w-8 h-8 rounded-full bg-muted/30 shrink-0"></div>') +
+          '<div class="flex-1 min-w-0"><p class="font-medium text-foreground truncate">' + escapeHtml(p.name) + '</p><p class="text-xs text-muted-foreground">' + escapeHtml(p.brand) + ' · ' + escapeHtml(p.nicotineContent) + 'mg</p></div>' +
         '</button>';
       }).join('');
+      results.querySelectorAll('.search-add-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { window.__addCompare(btn.getAttribute('data-add-slug')); });
+      });
     });
 
     // Close results on outside click
