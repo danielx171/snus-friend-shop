@@ -1,0 +1,258 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-04-07';
+const title = 'Best Nicotine Pouches for Every Occasion in 2026';
+const description = 'Best nicotine pouches for work, gym, social events, morning coffee, driving, studying, and bedtime. Find the perfect pouch for every moment.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Best Pouches by Occasion' },
+      ]} />
+
+      <BlogHero
+        category="Guide"
+        title={title}
+        description={description}
+        date="April 7, 2026"
+        readTime="12 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <p>Not all nicotine pouches are created equal. What works brilliantly in the gym—fast-acting, intense, and keeps you locked in—would feel way too aggressive in a quiet office. Similarly, the discreet little pouch you use at your desk might not deliver the sustained release you need on a 4-hour road trip.</p>
+
+        <p>The truth is, most regular users don't stick to one pouch. They build a small collection—different strengths, formats, and flavors for different moments. Think of it like having both espresso and herbal tea in your kitchen. Same family of products, totally different use cases.</p>
+
+        <p>This guide walks you through the best nicotine pouches for seven real-world scenarios.</p>
+
+        <h2>Best Nicotine Pouches for the Office or Workplace</h2>
+
+        <p>At work, discretion is everything. You need something you can use without anyone knowing.</p>
+
+        <p>The winner here is <strong>ON! Mint Extra Strong in the mini format at 9.3mg</strong>. The mini format is genuinely tiny—about the size of a small raindrop. It sits invisibly under your lip, the aroma is subtle mint, and it lasts around 30 minutes. Cost is roughly €0.50–0.60 per pouch.</p>
+
+        <p>Your runner-up is <strong>ZYN Spearmint Mini at 1.5mg</strong>. Incredibly discreet, the mild buzz pairs well with morning coffee or a post-lunch slump. €0.40–0.50 per pouch.</p>
+
+        <p><strong>Quick tip:</strong> Keep a few minis in your desk drawer. Use one 30–45 minutes before you need to be sharp.</p>
+
+        <h2>Best Nicotine Pouches for the Gym or Sports</h2>
+
+        <p>In the gym, you want maximum stimulation fast.</p>
+
+        <p><strong>VELO Freezing Peppermint MAX at 17mg</strong> is the absolute standout. 17mg hits fast and hard—you'll feel it within 2–3 minutes—and the cooling sensation enhances the workout vibe. €0.70–0.85 per pouch.</p>
+
+        <p>The runner-up is <strong>LOOP Habanero Mint Hyper at 15.6mg</strong>. Genuinely strong, with a hint of heat from the habanero. €0.75–0.90 per pouch.</p>
+
+        <p><strong>Quick tip:</strong> Use your gym pouch 10 minutes before your workout starts, not during.</p>
+
+        <h2>Best Nicotine Pouches for Social Settings & Pubs</h2>
+
+        <p>Social moments are about flavor, conversation, and maybe a bit of theater.</p>
+
+        <p><strong>LOOP Jalapeño Lime Strong at approximately 13.5mg</strong> is the clear winner. The flavor is genuinely unusual—a conversation-starter. €0.70–0.85 per pouch.</p>
+
+        <p>Runner-up: <strong>Skruf Passion Fruit at roughly 8–10mg</strong>. Fruit-forward and smooth. €0.55–0.70 per pouch.</p>
+
+        <p><strong>Quick tip:</strong> Avoid boring mint flavors in social settings. Lean into the fun.</p>
+
+        <h2>Best Nicotine Pouches for Morning & Coffee</h2>
+
+        <p>Morning pouches should enhance the coffee experience, not overpower it.</p>
+
+        <p><strong>ZYN Espressini Slim S4 at 4mg</strong> is purpose-built for this moment. It literally has espresso in the name and the flavor. €0.40–0.50 per pouch.</p>
+
+        <p>Runner-up: <strong>FUMI Sweet Mint Extra Strong at roughly 11mg</strong>. There's a subtle vanilla note that genuinely complements coffee. €0.60–0.75 per pouch.</p>
+
+        <p><strong>Quick tip:</strong> Use your morning pouch after your first sip of coffee, not before.</p>
+
+        <h2>Best Nicotine Pouches Before Bed</h2>
+
+        <p>Lighter pouches before bed help some people wind down. You want something very mild and calming.</p>
+
+        <p><strong>ZYN Gentle Mint Slim at 6.5mg</strong> is the obvious choice. Light enough that it doesn't overstimulate, soothing rather than sharp. €0.45–0.55 per pouch.</p>
+
+        <p>Runner-up: <strong>HELWIT Mint Slim at 4.5mg</strong>. Even lighter, for people genuinely sensitive to nicotine. €0.50–0.65 per pouch.</p>
+
+        <p><strong>Quick tip:</strong> Don't use strong pouches in the hour before bed. Stick to the 4–6mg range.</p>
+
+        <h2>Best Nicotine Pouches for Long Drives</h2>
+
+        <p>On a long drive, you need sustained release that lasts 45+ minutes.</p>
+
+        <p><strong>Skruf Fresh Mint Strong at roughly 11mg</strong> is the road-trip pouch. Famously long-lasting format, fresh mint helps with alertness. €0.65–0.80 per pouch.</p>
+
+        <p>Runner-up: <strong>White Fox Full Charge at 16.5mg</strong>. For the truly long haul (6+ hours). €0.75–0.90 per pouch.</p>
+
+        <p><strong>Quick tip:</strong> Use a long-lasting pouch once per hour of driving, max.</p>
+
+        <h2>Best Nicotine Pouches for Studying & Deep Focus</h2>
+
+        <p>When you're in study mode, you need steady, sustained concentration.</p>
+
+        <p><strong>KLAR Mint Slim at 3mg</strong> is the studying pouch. 3mg is the goldilocks zone—enough to nudge your focus, not enough to create jittery distraction. €0.40–0.50 per pouch.</p>
+
+        <p>Runner-up: <strong>HELWIT Mocha Slim at 4.5mg</strong>. The mocha flavor is gentle and warm, great paired with afternoon coffee. €0.50–0.65 per pouch.</p>
+
+        <p><strong>Quick tip:</strong> For long study sessions, use a pouch at 45 minutes, then another at 90 minutes. Stick to mild pouches.</p>
+
+        <h2>Occasion Selection Table</h2>
+
+        <table style="width: 100%; border-collapse: collapse; margin: 2rem 0; background-color: hsl(var(--background)); border: 1px solid hsl(var(--border));">
+          <thead>
+            <tr style="background-color: hsl(var(--muted)); border-bottom: 2px solid hsl(var(--border));">
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: hsl(var(--foreground));">Occasion</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: hsl(var(--foreground));">Top Pick</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: hsl(var(--foreground));">Strength</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Office/Work</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">ON! Mint Extra Strong Mini</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">9.3mg</td>
+            </tr>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Gym/Sports</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">VELO Freezing Peppermint MAX</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">17mg</td>
+            </tr>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Social/Pub</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">LOOP Jalapeño Lime Strong</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">~13.5mg</td>
+            </tr>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Morning Coffee</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">ZYN Espressini Slim S4</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">4mg</td>
+            </tr>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Before Bed</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">ZYN Gentle Mint Slim</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">6.5mg</td>
+            </tr>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Long Drive</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Skruf Fresh Mint Strong</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">~11mg</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Studying/Focus</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">KLAR Mint Slim</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">3mg</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>How to Build Your Collection</h2>
+
+        <p>Most people who use nicotine pouches regularly end up with 2–4 favorites. Start with one pouch that matches your most common scenario. A realistic collection: a mild, discreet pouch for work (1–9mg), a stronger pouch for the gym (15mg+), and maybe a fun social flavor for weekends. Three pouches covering 90% of your real-world moments.</p>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Can I use the same pouch for everything?</summary>
+          <p class="mt-2">Technically, yes—but you'll probably be frustrated. Most people find that having 2–3 options makes the whole experience better.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">What's the most discreet pouch for work?</summary>
+          <p class="mt-2">ON! Mint Extra Strong Mini. It's genuinely the smallest pouch on the market. ZYN Spearmint Mini runs a close second at 1.5mg.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Should I use stronger pouches for the gym?</summary>
+          <p class="mt-2">Yes. Go for 15mg+. VELO Freezing Peppermint MAX at 17mg is perfect for gym use.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Is it OK to use pouches before bed?</summary>
+          <p class="mt-2">Light pouches (3–6.5mg) are fine if you find them relaxing. Strong pouches are not—nicotine can disrupt sleep quality. Give yourself 30–60 minutes before trying to sleep.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">How many pouches should I use per day?</summary>
+          <p class="mt-2">Most regular users average 4–6 pouches daily, spread across their day.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">What's the best all-rounder if I only want one brand?</summary>
+          <p class="mt-2">ZYN is probably your safest bet—consistent quality, wide range of strengths, multiple formats, and reliable flavor. Go for their standard Mint in 4–6mg.</p>
+        </details>
+
+        <h2>Closing Thought</h2>
+
+        <p>The best nicotine pouch isn't the "strongest" or the most "popular." It's the one that matches what you're actually doing in that moment. Start with one pouch for your main scenario, try it for a week or two, then add a second for a different moment.</p>
+
+        <p>Explore our <a href="/brands/zyn">ZYN collection</a>, <a href="/brands/velo">VELO range</a>, <a href="/brands/loop">LOOP flavors</a>, <a href="/brands/on">ON! options</a>, <a href="/brands/skruf">Skruf strength</a>, <a href="/brands/klar">KLAR pouches</a>, and <a href="/brands/helwit">HELWIT selection</a>. Or start with our <a href="/blog/how-to-choose-your-strength">guide to choosing your strength</a> and <a href="/blog/how-to-use-nicotine-pouches">how to use nicotine pouches</a> if you're new. And if you're brand new to all this, our <a href="/beginners">beginner's guide</a> covers the basics.</p>
+
+        <h2>Recommended Products</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('on-mint-extra-strong-mini') && <BlogProductCard product={find('on-mint-extra-strong-mini')} />}
+          {find('zyn-spearmint-mini') && <BlogProductCard product={find('zyn-spearmint-mini')} />}
+          {find('velo-freezing-peppermint-max') && <BlogProductCard product={find('velo-freezing-peppermint-max')} />}
+          {find('loop-habanero-mint-hyper-strong') && <BlogProductCard product={find('loop-habanero-mint-hyper-strong')} />}
+          {find('loop-jalapeno-lime-strong') && <BlogProductCard product={find('loop-jalapeno-lime-strong')} />}
+          {find('zyn-espressini-slim-s4') && <BlogProductCard product={find('zyn-espressini-slim-s4')} />}
+          {find('zyn-gentle-mint-slim') && <BlogProductCard product={find('zyn-gentle-mint-slim')} />}
+          {find('helwit-mint-slim') && <BlogProductCard product={find('helwit-mint-slim')} />}
+          {find('klar-mint-slim') && <BlogProductCard product={find('klar-mint-slim')} />}
+          {find('skruf-fresh-mint-strong') && <BlogProductCard product={find('skruf-fresh-mint-strong')} />}
+          {find('white-fox-full-charge') && <BlogProductCard product={find('white-fox-full-charge')} />}
+        </div>
+
+      </div>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-by-occasion` },
+        "description": description
+      })} />
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Can I use the same pouch for everything?", "acceptedAnswer": { "@type": "Answer", "text": "Technically, yes\u2014but most people find that having 2\u20133 options makes the whole experience better." } },
+          { "@type": "Question", "name": "What's the most discreet pouch for work?", "acceptedAnswer": { "@type": "Answer", "text": "ON! Mint Extra Strong Mini. It's genuinely the smallest pouch on the market." } },
+          { "@type": "Question", "name": "Should I use stronger pouches for the gym?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Go for 15mg+. VELO Freezing Peppermint MAX at 17mg is perfect here." } },
+          { "@type": "Question", "name": "Is it OK to use pouches before bed?", "acceptedAnswer": { "@type": "Answer", "text": "Light pouches (3\u20136.5mg) are fine if you find them relaxing. Strong pouches can disrupt sleep quality." } },
+          { "@type": "Question", "name": "How many pouches should I use per day?", "acceptedAnswer": { "@type": "Answer", "text": "Most regular users average 4\u20136 pouches daily, spread across their day." } },
+          { "@type": "Question", "name": "What's the best all-rounder if I only want one brand?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN is probably your safest bet\u2014consistent quality, wide range of strengths, multiple formats, and reliable flavor." } }
+        ]
+      })} />
+
+      <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+        Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+      </p>
+    </div>
+  </article>
+</Shop>

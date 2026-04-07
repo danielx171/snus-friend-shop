@@ -1,0 +1,259 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-04-07';
+const title = 'White Fox vs Siberia: Which Is Stronger in 2026?';
+const description = 'White Fox vs Siberia compared head-to-head. Strength, format, price, cooling sensation, and safety — find out which extreme nicotine pouch brand wins in 2026.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'White Fox vs Siberia 2026' },
+      ]} />
+
+      <BlogHero
+        category="Comparison"
+        title={title}
+        description={description}
+        date="April 7, 2026"
+        readTime="10 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <p>In the world of extreme-strength nicotine pouches, two names dominate the conversation: <strong>White Fox</strong> and <strong>Siberia</strong>. Both are made by GN Tobacco — the Swedish powerhouse behind some of the most intense nicotine products on the market. Yet they represent two entirely different philosophies: White Fox is refined strength, while Siberia is raw power.</p>
+
+        <p>This comparison reveals why both exist under the same roof, which one is truly strongest, and which might be right for you.</p>
+
+        <h2>The GN Tobacco Connection</h2>
+
+        <p>GN Tobacco manufactures both White Fox and Siberia. White Fox targets users who want strong pouches with a refined, elegant approach. Siberia targets the extreme niche: users who've mastered high-strength products and crave the absolute ceiling of nicotine delivery.</p>
+
+        <h2>Strength Comparison: Where They Stand</h2>
+
+        <p><strong>White Fox Strength Range:</strong></p>
+        <ul>
+          <li>White Fox (12mg)</li>
+          <li>White Fox Double Mint (16mg)</li>
+          <li>White Fox Full Charge (16.5mg)</li>
+          <li>White Fox Peppered Mint (16.5mg)</li>
+          <li>White Fox Black Edition (24mg)</li>
+        </ul>
+
+        <p><strong>Siberia Strength Range:</strong></p>
+        <ul>
+          <li>Siberia Ultra Slim (16.5mg)</li>
+          <li>Siberia Super Slim (24mg)</li>
+          <li>Siberia Slim (24mg)</li>
+          <li>Siberia Portion (16.5mg)</li>
+          <li>Siberia Long Portion (48mg)</li>
+          <li>Siberia Maxi (49.5mg)</li>
+        </ul>
+
+        <p><strong>The Verdict on Strength:</strong> White Fox tops out at 24mg. Siberia doubles that — the legendary <strong>Maxi reaches 49.5mg</strong>, the strongest nicotine pouch in the entire SnusFriend catalog.</p>
+
+        <h2>Format Diversity: Slim Elegance vs. Full Spectrum</h2>
+
+        <p><strong>White Fox:</strong> All products come in <strong>slim format only</strong>. This is intentional branding — discreet, elegant, refined.</p>
+
+        <p><strong>Siberia:</strong> Six formats: Ultra Slim, Super Slim, Slim, Portion, Long Portion, and Maxi. Users can choose their experience from discreet to all-in.</p>
+
+        <h2>Price Comparison</h2>
+
+        <p><strong>White Fox:</strong> €3.86–€5.16/can. <strong>Siberia:</strong> €4.99–€7.32/can.</p>
+
+        <p><strong>Per-Milligram:</strong> White Fox Black Edition (24mg): ~€0.21/mg. Siberia Maxi (49.5mg): ~€0.15/mg. If you're chasing pure nicotine delivery, Siberia offers better value.</p>
+
+        <h2>Comfort and User Experience</h2>
+
+        <p><strong>White Fox:</strong> Smooth, refined nicotine hit. Comfortable slim format for extended sessions.</p>
+
+        <p><strong>Siberia:</strong> Famous for its <strong>-80°C cooling technology</strong> — a numbing, icy sensation. The nicotine hit is rapid and profound. White Fox = smooth ride. Siberia = adrenaline rush.</p>
+
+        <h2>Flavor Profile: The Mint-Only Reality</h2>
+
+        <p>Both brands are mint-only. <strong>White Fox mint</strong> is clean and fresh with subtle variations (Double Mint, Peppered Mint). <strong>Siberia mint</strong> is sharper, more aggressive, enhanced by the cooling technology.</p>
+
+        <h2>Head-to-Head Summary Table</h2>
+
+        <table style="width: 100%; border-collapse: collapse; margin: 2rem 0; background-color: hsl(var(--background)); border: 1px solid hsl(var(--border));">
+          <thead>
+            <tr style="background-color: hsl(var(--muted)); border-bottom: 2px solid hsl(var(--border));">
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: hsl(var(--foreground));">Metric</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: hsl(var(--foreground));">White Fox</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; color: hsl(var(--foreground));">Siberia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem;"><strong>Nicotine Range</strong></td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">12–24mg</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">16.5–49.5mg</td>
+            </tr>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem;"><strong>Formats</strong></td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">1 (Slim only)</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">6 (Ultra Slim to Maxi)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem;"><strong>Price Per Can</strong></td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">€3.86–€5.16</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">€4.99–€7.32</td>
+            </tr>
+            <tr style="border-bottom: 1px solid hsl(var(--border));">
+              <td style="padding: 0.75rem;"><strong>Cooling</strong></td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Smooth, refined</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Intense -80°C cooling</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.75rem;"><strong>Best For</strong></td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Strong pouch + elegance</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Maximum strength + intensity</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Who Should Choose White Fox?</h2>
+
+        <ul>
+          <li><strong>Users seeking refined strength:</strong> You want high nicotine with a smooth experience.</li>
+          <li><strong>Slim format enthusiasts:</strong> The slim pouch is your preferred format for discretion.</li>
+          <li><strong>Upgrade from regular strength:</strong> Moving from 8–12mg to 24mg feels like the right step.</li>
+          <li><strong>Mint lovers seeking variety:</strong> Double Mint, Peppered Mint, and Black Edition offer subtle shifts.</li>
+        </ul>
+
+        <h2>Who Should Choose Siberia?</h2>
+
+        <ul>
+          <li><strong>Extreme-strength seekers:</strong> Siberia Maxi (49.5mg) is the only realistic choice at the ceiling.</li>
+          <li><strong>Format flexibility:</strong> Sometimes Ultra Slim, sometimes Maxi.</li>
+          <li><strong>Cooling sensation fans:</strong> The -80°C numbing effect is a feature, not a bug.</li>
+          <li><strong>Cost-per-dose optimization:</strong> Better value per milligram at high strengths.</li>
+          <li><strong>Cult brand appeal:</strong> Siberia has legendary status in the nicotine pouch community.</li>
+        </ul>
+
+        <h2>Safety: Using Extreme-Strength Pouches Responsibly</h2>
+
+        <p><strong>Start Low, Progress Slowly:</strong> Don't start with 24mg+. Begin with 12–16mg. Siberia Maxi should only be considered by users with extensive experience at 24mg+.</p>
+
+        <p><strong>Hydration is Critical:</strong> High-strength nicotine accelerates dehydration. Drink water throughout the day.</p>
+
+        <p><strong>Avoid Using on an Empty Stomach:</strong> Nicotine absorption is faster when your stomach is empty. Eat before using extreme-strength pouches.</p>
+
+        <p><strong>Session Duration:</strong> 20–30 minutes is the target for 24mg+ pouches. Siberia's cooling can mask how much nicotine you're absorbing.</p>
+
+        <p><strong>Know the Signs of Nicotine Overload:</strong> Dizziness, nausea, rapid heartbeat, or tingling. Remove the pouch immediately, sit down, and hydrate.</p>
+
+        <h2>The Verdict</h2>
+
+        <p><strong>White Fox</strong> is the answer if you want strong nicotine with refinement. 24mg in an elegant slim format.</p>
+
+        <p><strong>Siberia</strong> is the answer if you want to challenge your limits. Formats from 16.5mg to 49.5mg, extreme cooling, and legendary cult status.</p>
+
+        <p>White Fox and Siberia aren't competitors — they're answers to different questions. One asks, "How strong can I go while staying elegant?" The other asks, "How strong can I actually go?"</p>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Is Siberia really 49.5mg? Can that be safe?</summary>
+          <p class="mt-2">Yes, Siberia Maxi is certified at 49.5mg per pouch. It's safe if used correctly: hydrate, eat beforehand, limit sessions to 15–20 minutes, and only for users with established tolerance.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Which is smoother, White Fox or Siberia?</summary>
+          <p class="mt-2">White Fox is noticeably smoother. Siberia's cooling technology and higher nicotine create a harsher, more intense sensation. White Fox Black Edition (24mg) is still powerful but more controlled.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Can I use White Fox Black Edition and Siberia interchangeably?</summary>
+          <p class="mt-2">Both are 24mg, so nicotine-wise, yes. But the experience differs: White Fox is smooth and refined; Siberia is intense and cooling.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Why is White Fox only in slim format?</summary>
+          <p class="mt-2">Brand identity. White Fox positions itself as the premium, discreet option. Siberia offers every format for users who value variety and power.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Which lasts longer in your mouth?</summary>
+          <p class="mt-2">A Siberia Maxi is larger and will physically stay in longer. But extreme-strength pouches shouldn't be used for more than 20–30 minutes at a time.</p>
+        </details>
+
+        <details class="group border border-border rounded-lg p-4 my-3">
+          <summary class="cursor-pointer font-semibold text-foreground">Which brand has better availability in Europe?</summary>
+          <p class="mt-2">Both are widely available in Nordic countries and EU retailers. SnusFriend stocks both with fast shipping.</p>
+        </details>
+
+        <h2>Related Reading</h2>
+
+        <ul>
+          <li><a href="/brands/white-fox">White Fox: Complete Brand Guide</a></li>
+          <li><a href="/brands/siberia">Siberia: Complete Brand Guide</a></li>
+          <li><a href="/blog/white-fox-nicotine-pouches-complete-guide">White Fox Nicotine Pouches: Everything You Need to Know</a></li>
+          <li><a href="/blog/siberia-nicotine-pouches-complete-guide">Siberia Nicotine Pouches: The Complete Guide</a></li>
+          <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Nicotine Pouch Strength</a></li>
+        </ul>
+
+        <h2>Recommended Products</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('white-fox-slim-12mg') && <BlogProductCard product={find('white-fox-slim-12mg')} />}
+          {find('white-fox-double-mint-16mg') && <BlogProductCard product={find('white-fox-double-mint-16mg')} />}
+          {find('white-fox-black-edition-24mg') && <BlogProductCard product={find('white-fox-black-edition-24mg')} />}
+          {find('siberia-ultra-slim-16.5mg') && <BlogProductCard product={find('siberia-ultra-slim-16.5mg')} />}
+          {find('siberia-slim-24mg') && <BlogProductCard product={find('siberia-slim-24mg')} />}
+          {find('siberia-maxi-49.5mg') && <BlogProductCard product={find('siberia-maxi-49.5mg')} />}
+        </div>
+
+      </div>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/white-fox-vs-siberia-2026` },
+        "description": description
+      })} />
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is Siberia really 49.5mg? Can that be safe?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, Siberia Maxi is certified at 49.5mg per pouch. It's safe if used correctly with established tolerance." } },
+          { "@type": "Question", "name": "Which is smoother, White Fox or Siberia?", "acceptedAnswer": { "@type": "Answer", "text": "White Fox is noticeably smoother. Siberia's cooling technology creates a harsher, more intense sensation." } },
+          { "@type": "Question", "name": "Can I use White Fox Black Edition and Siberia interchangeably?", "acceptedAnswer": { "@type": "Answer", "text": "Both are 24mg, so nicotine-wise, yes. But the experience differs significantly." } },
+          { "@type": "Question", "name": "Why is White Fox only in slim format?", "acceptedAnswer": { "@type": "Answer", "text": "Brand identity. White Fox positions itself as the premium, discreet option." } },
+          { "@type": "Question", "name": "Which lasts longer in your mouth?", "acceptedAnswer": { "@type": "Answer", "text": "Siberia Maxi is larger and stays longer. But extreme-strength pouches shouldn't be used more than 20-30 minutes." } },
+          { "@type": "Question", "name": "Which brand has better availability in Europe?", "acceptedAnswer": { "@type": "Answer", "text": "Both are widely available in Nordic countries and EU retailers." } }
+        ]
+      })} />
+
+      <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+        Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+      </p>
+    </div>
+  </article>
+</Shop>
