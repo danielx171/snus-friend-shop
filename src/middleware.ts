@@ -51,7 +51,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const pathname = context.url.pathname;
 
   // Pages that need auth state (getUser is a network call — skip for pages that don't need it)
-  const authRequiredPaths = ['/account', '/checkout', '/order-confirmation'];
+  const authRequiredPaths = ['/account', '/checkout', '/order-confirmation', '/suggestions'];
   const needsAuth = authRequiredPaths.some((p) => pathname.startsWith(p));
 
   if (needsAuth) {

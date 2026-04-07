@@ -1,8 +1,10 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { addToCart, openCart } from '@/stores/cart';
 import { cartToast } from '@/lib/toast';
 import type { Product } from '@/data/products';
 import { trackQuizCompleted } from '@/lib/analytics';
+import { useAuthUser } from '@/hooks/useAuthUser';
+import { supabase } from '@/integrations/supabase/client';
 
 interface QuizProduct {
   slug: string;
@@ -267,6 +269,10 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
   const [email, setEmail] = useState('');
   const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
+  // Auth for saving quiz results
+  const { userId } = useAuthUser();
+  const savedRef = useRef(false);
+
   const toggleFlavor = useCallback((key: string) => {
     setSelectedFlavors((prev) =>
       prev.includes(key) ? prev.filter((f) => f !== key) : [...prev, key],
@@ -292,6 +298,7 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
     setSelectedStrength(null);
     setEmail('');
     setEmailStatus('idle');
+    savedRef.current = false;
     setStep(0);
   }, []);
 
@@ -310,6 +317,37 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
 
     return scored;
   }, [step, products, selectedFlavors, allowedStrengths]);
+
+  // Save quiz results to user_attributes when authenticated
+  useEffect(() => {
+    if (step !== 2 || !userId || savedRef.current) return;
+    savedRef.current = true;
+
+    const savePreferences = async () => {
+      try {
+        // Save flavor preferences
+        if (selectedFlavors.length > 0) {
+          await supabase.rpc('replace_user_attributes', {
+            p_user_id: userId,
+            p_attribute_key: 'flavor_preference',
+            p_values: selectedFlavors,
+          });
+        }
+        // Save strength preference
+        if (selectedStrength) {
+          await supabase.rpc('replace_user_attributes', {
+            p_user_id: userId,
+            p_attribute_key: 'strength_preference',
+            p_values: [selectedStrength],
+          });
+        }
+      } catch (err) {
+        console.error('[FlavorQuiz] Failed to save quiz preferences:', err);
+      }
+    };
+
+    savePreferences();
+  }, [step, userId, selectedFlavors, selectedStrength]);
 
   const handleEmailSubmit = useCallback(
     async (e: React.FormEvent) => {

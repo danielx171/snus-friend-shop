@@ -515,6 +515,51 @@ export type Database = {
         Update: { id?: string; user_id?: string; order_id?: string | null; points?: number; reason?: string; created_at?: string }
         Relationships: []
       }
+      feature_suggestions: {
+        Row: {
+          id: string
+          user_id: string
+          title: string
+          description: string | null
+          votes: number
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          title: string
+          description?: string | null
+          votes?: number
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          title?: string
+          description?: string | null
+          votes?: number
+          status?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      suggestion_votes: {
+        Row: {
+          user_id: string
+          suggestion_id: string
+        }
+        Insert: {
+          user_id: string
+          suggestion_id: string
+        }
+        Update: {
+          user_id?: string
+          suggestion_id?: string
+        }
+        Relationships: []
+      }
       social_shares: {
         Row: {
           id: string

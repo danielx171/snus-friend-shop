@@ -10,6 +10,144 @@ const user = Astro.locals.user;
 if (!user) {
   return Astro.redirect('/login?redirect=/suggestions');
 }
+
+const supabase = Astro.locals.supabase;
+
+let formError = '';
+let formSuccess = '';
+
+// Handle POST actions (submit suggestion or vote)
+if (Astro.request.method === 'POST' && supabase) {
+  const formData = await Astro.request.formData();
+  const action = formData.get('_action') as string;
+
+  if (action === 'submit') {
+    const title = (formData.get('title') as string ?? '').trim();
+    const description = (formData.get('description') as string ?? '').trim();
+
+    if (title.length < 5 || title.length > 100) {
+      formError = 'Title must be between 5 and 100 characters.';
+    } else if (description && description.length > 500) {
+      formError = 'Description must be under 500 characters.';
+    } else {
+      const { error } = await supabase.from('feature_suggestions').insert({
+        user_id: user.id,
+        title,
+        description: description || null,
+      });
+      if (error) {
+        console.error('suggestion insert error', error);
+        formError = 'Something went wrong. Please try again.';
+      } else {
+        formSuccess = 'Your suggestion has been submitted!';
+      }
+    }
+  } else if (action === 'vote') {
+    const suggestionId = formData.get('suggestion_id') as string;
+    if (suggestionId) {
+      // Check if already voted
+      const { data: existingVote } = await supabase
+        .from('suggestion_votes')
+        .select('suggestion_id')
+        .eq('user_id', user.id)
+        .eq('suggestion_id', suggestionId)
+        .maybeSingle();
+
+      if (existingVote) {
+        // Remove vote
+        await supabase
+          .from('suggestion_votes')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('suggestion_id', suggestionId);
+        // Decrement count
+        const { data: current } = await supabase
+          .from('feature_suggestions')
+          .select('votes')
+          .eq('id', suggestionId)
+          .single();
+        if (current) {
+          await supabase
+            .from('feature_suggestions')
+            .update({ votes: Math.max(0, current.votes - 1) })
+            .eq('id', suggestionId);
+        }
+      } else {
+        // Add vote
+        await supabase
+          .from('suggestion_votes')
+          .insert({ user_id: user.id, suggestion_id: suggestionId });
+        // Increment count
+        const { data: current } = await supabase
+          .from('feature_suggestions')
+          .select('votes')
+          .eq('id', suggestionId)
+          .single();
+        if (current) {
+          await supabase
+            .from('feature_suggestions')
+            .update({ votes: current.votes + 1 })
+            .eq('id', suggestionId);
+        }
+      }
+    }
+  }
+}
+
+// Fetch suggestions
+let suggestions: Array<{
+  id: string;
+  title: string;
+  description: string | null;
+  votes: number;
+  status: string;
+  created_at: string;
+}> = [];
+
+let userVotedIds: Set<string> = new Set();
+
+if (supabase) {
+  const { data } = await supabase
+    .from('feature_suggestions')
+    .select('id, title, description, votes, status, created_at')
+    .order('votes', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(30);
+  suggestions = data ?? [];
+
+  // Get user's votes
+  if (suggestions.length > 0) {
+    const { data: votes } = await supabase
+      .from('suggestion_votes')
+      .select('suggestion_id')
+      .eq('user_id', user.id);
+    if (votes) {
+      userVotedIds = new Set(votes.map((v: { suggestion_id: string }) => v.suggestion_id));
+    }
+  }
+}
+
+function timeAgo(dateStr: string): string {
+  const now = Date.now();
+  const then = new Date(dateStr).getTime();
+  const diff = now - then;
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  return `${months}mo ago`;
+}
+
+const statusColors: Record<string, { bg: string; text: string; label: string }> = {
+  open: { bg: 'bg-blue-500/15', text: 'text-blue-400', label: 'Open' },
+  planned: { bg: 'bg-amber-500/15', text: 'text-amber-400', label: 'Planned' },
+  shipped: { bg: 'bg-emerald-500/15', text: 'text-emerald-400', label: 'Shipped' },
+  declined: { bg: 'bg-red-500/15', text: 'text-red-400', label: 'Declined' },
+};
 ---
 
 <Shop
@@ -69,11 +207,23 @@ if (!user) {
     <!-- Suggestion form -->
     <section class="mb-12">
       <h2 class="mb-6 text-2xl font-bold text-foreground">Submit a Suggestion</h2>
+
+      {formError && (
+        <div class="mb-4 mx-auto max-w-xl rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          {formError}
+        </div>
+      )}
+      {formSuccess && (
+        <div class="mb-4 mx-auto max-w-xl rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400">
+          {formSuccess}
+        </div>
+      )}
+
       <form
-        action="/api/suggest"
         method="POST"
         class="mx-auto max-w-xl space-y-4 rounded-2xl border border-border bg-card/50 p-6 backdrop-blur sm:p-8"
       >
+        <input type="hidden" name="_action" value="submit" />
         <div>
           <label for="suggestion-title" class="mb-1.5 block text-sm font-medium text-foreground">
             Your idea in one sentence
@@ -83,6 +233,7 @@ if (!user) {
             name="title"
             type="text"
             placeholder="e.g. Add a price drop alert for my favourite products"
+            minlength="5"
             maxlength="100"
             required
             class="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -109,6 +260,60 @@ if (!user) {
         </button>
       </form>
     </section>
+
+    <!-- Suggestions list -->
+    {suggestions.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-6 text-2xl font-bold text-foreground">
+          Community Suggestions
+          <span class="ml-2 text-base font-normal text-muted-foreground">({suggestions.length})</span>
+        </h2>
+        <div class="space-y-3">
+          {suggestions.map((s) => {
+            const voted = userVotedIds.has(s.id);
+            const status = statusColors[s.status] ?? statusColors.open;
+            return (
+              <div class="flex items-start gap-4 rounded-xl border border-border bg-card/50 p-4 backdrop-blur sm:p-5">
+                {/* Vote button */}
+                <form method="POST" class="shrink-0">
+                  <input type="hidden" name="_action" value="vote" />
+                  <input type="hidden" name="suggestion_id" value={s.id} />
+                  <button
+                    type="submit"
+                    aria-label={voted ? `Remove vote from "${s.title}"` : `Vote for "${s.title}"`}
+                    class:list={[
+                      'flex flex-col items-center gap-0.5 rounded-lg border px-3 py-2 text-sm font-semibold transition',
+                      voted
+                        ? 'border-primary/40 bg-primary/15 text-primary'
+                        : 'border-border bg-background text-muted-foreground hover:border-primary/30 hover:text-primary',
+                    ]}
+                  >
+                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
+                    </svg>
+                    <span>{s.votes}</span>
+                  </button>
+                </form>
+
+                {/* Content */}
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="font-semibold text-foreground">{s.title}</h3>
+                    <span class:list={['inline-flex rounded-full px-2 py-0.5 text-xs font-medium', status.bg, status.text]}>
+                      {status.label}
+                    </span>
+                  </div>
+                  {s.description && (
+                    <p class="mt-1.5 text-sm text-muted-foreground line-clamp-2">{s.description}</p>
+                  )}
+                  <p class="mt-2 text-xs text-muted-foreground/60">{timeAgo(s.created_at)}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    )}
 
     <!-- Reward info -->
     <div class="mb-12 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-6 py-6 sm:px-10">
