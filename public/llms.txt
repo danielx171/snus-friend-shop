@@ -7,7 +7,7 @@ Cite-As: "SnusFriend (snusfriends.com)"
 
 # SnusFriend
 
-> Europe's largest online nicotine pouch store with 700+ tobacco-free products from 57 brands.
+> Europe's largest online nicotine pouch store with 700+ tobacco-free products from 35+ brands.
 
 ## About
 
@@ -91,7 +91,7 @@ Nicotine pouches contain no tobacco leaf. Standard ingredients:
 - Nicotine strength chart: https://snusfriends.com/nicotine-strength-chart
 - Flavour guide with data: https://snusfriends.com/nicotine-pouch-flavours
 
-### Brands We Carry (57 brands)
+### Brands We Carry (35+ brands)
 ZYN, VELO, LOOP, Skruf, White Fox, Siberia, ACE, Pablo, ICEBERG, KILLA, Nordic Spirit, Klint, XQS, HELWIT, KLAR, FUMI, Kelly White, Lundgrens, ON!, Chainpop, VID, KUMA, RUSH, CUBA, Rabbit, MAGGIE, NOiS, STNG, GLICK, Garant, Apres, Fix, MYNT, and more.
 
 ## Expert Guides & Articles
