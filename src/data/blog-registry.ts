@@ -1,0 +1,276 @@
+export interface BlogArticle {
+  slug: string;
+  title: string;
+  excerpt: string;
+  tag: string;
+  date?: string;
+}
+
+export const blogArticles: BlogArticle[] = [
+  // Brand Spotlights
+  {
+    title: 'ZYN Nicotine Pouches: The Complete Guide',
+    excerpt: 'Everything about the world\'s best-selling nicotine pouch brand — 52 products, strengths from 1.5 to 16.5 mg, and the full ZYN flavour range explained.',
+    slug: 'zyn-nicotine-pouches-complete-guide',
+    tag: 'Brand Spotlight',
+    date: '2026-03-27',
+  },
+  {
+    title: 'VELO Nicotine Pouches: Complete Brand Guide',
+    excerpt: 'Discover BAT\'s global nicotine pouch leader — 53 products from Mighty Peppermint to Tropical Mango, available in mini and slim formats.',
+    slug: 'velo-nicotine-pouches-complete-guide',
+    tag: 'Brand Spotlight',
+    date: '2026-03-27',
+  },
+  {
+    title: 'LOOP Nicotine Pouches: The Flavour-First Brand',
+    excerpt: 'Swedish-made with Instant Rush technology for faster nicotine delivery. 32 bold products from jalapeño lime to habanero mint.',
+    slug: 'loop-nicotine-pouches-complete-guide',
+    tag: 'Brand Spotlight',
+    date: '2026-03-27',
+  },
+  // Comparisons
+  {
+    title: 'ZYN vs VELO in 2026: The Definitive Comparison',
+    excerpt: 'Updated 2026 head-to-head — flavours, strength, format, pricing, nicotine delivery curves, and which brand suits your style.',
+    slug: 'zyn-vs-velo-2026',
+    tag: 'Comparison',
+    date: '2026-03-27',
+  },
+  {
+    title: 'LOOP vs Skruf: Which Swedish Brand Is Right for You?',
+    excerpt: 'A detailed comparison of LOOP and Skruf — flavour range, strength, pouch format, and which brand suits different users.',
+    slug: 'loop-vs-skruf',
+    tag: 'Comparison',
+    date: '2026-03-27',
+  },
+  // Buying Guides
+  {
+    title: 'Best Nicotine Pouches for Beginners: 2026 Starter Guide',
+    excerpt: 'Overwhelmed by pouch options? Exactly which low-strength brands to try first, what strength to start with, and what to expect in your first week.',
+    slug: 'best-nicotine-pouches-for-beginners-2026',
+    tag: 'Buying Guide',
+    date: '2026-03-27',
+  },
+  {
+    title: 'The Complete Nicotine Pouch Buying Guide for Europe (2026)',
+    excerpt: 'Everything European buyers need to know — strength tiers, regulations by country, top brands, storage tips, and honest pricing guidance.',
+    slug: 'nicotine-pouch-buying-guide-europe',
+    tag: 'Guide',
+    date: '2026-03-27',
+  },
+  {
+    title: 'Switching from Cigarettes to Nicotine Pouches',
+    excerpt: 'A practical week-by-week transition plan — which pouch strength matches your cigarette intake, best brands for switchers, and how to make it stick.',
+    slug: 'switching-from-cigarettes-to-nicotine-pouches',
+    tag: 'Guide',
+    date: '2026-03-26',
+  },
+  // Rankings
+  {
+    title: 'Strongest Nicotine Pouches in 2026: Complete Strength Ranking',
+    excerpt: 'Ranked from 50 mg ultra-extreme to 10 mg strong — NOIS, Rabbit, CUBA, Siberia, ICEBERG, and more with safety guidance and tolerance tips.',
+    slug: 'strongest-nicotine-pouches-ranked-2026',
+    tag: 'Ranking',
+    date: '2026-03-27',
+  },
+  // Flavour Guides
+  {
+    title: 'The 10 Best Mint Nicotine Pouches in 2026: Expert Picks',
+    excerpt: 'Expert ranking — White Fox, VELO, Skruf, ZYN, Nordic Spirit, Glick, and Vika compared by cooling, strength, duration, and pouch feel.',
+    slug: 'best-mint-nicotine-pouches-2026',
+    tag: 'Ranking',
+    date: '2026-03-27',
+  },
+  {
+    title: 'Top 10 Mint Nicotine Pouches in 2026',
+    excerpt: 'We ranked the best mint and menthol nicotine pouches from top European brands. From icy peppermint to smooth spearmint — find your perfect mint.',
+    slug: 'top-10-mint-flavours',
+    tag: 'Ranking',
+    date: '2026-03-26',
+  },
+  {
+    title: 'Best Citrus Nicotine Pouches: 2026 Flavour Guide',
+    excerpt: 'From zesty lemon and lime to smooth orange and grapefruit — the top 8 citrus pouches ranked by flavour, strength, and duration.',
+    slug: 'best-citrus-nicotine-pouches',
+    tag: 'Flavour Guide',
+    date: '2026-03-27',
+  },
+  {
+    title: 'Best Berry Nicotine Pouches: Top 10 for 2026',
+    excerpt: 'From sweet strawberry to tart mixed berries — our expert ranking of the best berry-flavoured pouches across all strengths and brands.',
+    slug: 'best-berry-nicotine-pouches',
+    tag: 'Ranking',
+    date: '2026-03-27',
+  },
+  {
+    title: 'Best Coffee-Flavoured Nicotine Pouches',
+    excerpt: 'From rich espresso to smooth macchiato — the best coffee nicotine pouches ranked by flavour, strength, and value. The perfect morning pouch.',
+    slug: 'best-coffee-nicotine-pouches',
+    tag: 'Flavour Guide',
+    date: '2026-03-27',
+  },
+  // Knowledge Base
+  {
+    title: 'Nicotine Pouches vs Snus: What\'s the Difference?',
+    excerpt: 'The key differences between tobacco-free nicotine pouches and traditional snus — ingredients, legality, strength, flavour, and which suits you.',
+    slug: 'nicotine-pouches-vs-snus',
+    tag: 'Guide',
+    date: '2026-03-26',
+  },
+  {
+    title: 'How Long Do Nicotine Pouches Last?',
+    excerpt: 'A nicotine pouch lasts 20-40 minutes per use. We cover usage time, shelf life, storage tips, and how format and strength affect duration.',
+    slug: 'how-long-do-nicotine-pouches-last',
+    tag: 'FAQ',
+    date: '2026-03-26',
+  },
+  {
+    title: 'Nicotine Pouch Side Effects: What to Expect',
+    excerpt: 'Honest guide to common side effects — tingling, hiccups, nausea — what causes them, how to avoid them, and when to lower your strength.',
+    slug: 'nicotine-pouch-side-effects',
+    tag: 'Guide',
+    date: '2026-03-26',
+  },
+  // Fundamentals
+  {
+    title: 'What Are Nicotine Pouches? A Complete Guide',
+    excerpt: 'A beginner-friendly guide to tobacco-free nicotine pouches — how they work, how to use them, and why millions of Europeans are making the switch.',
+    slug: 'what-are-nicotine-pouches',
+    tag: 'Guide',
+    date: '2026-03-26',
+  },
+  {
+    title: 'How to Choose the Right Nicotine Strength',
+    excerpt: 'From light (2 mg) to super strong (20 mg+), picking the right strength matters. A practical framework based on your experience level.',
+    slug: 'how-to-choose-your-strength',
+    tag: 'Guide',
+    date: '2026-03-26',
+  },
+  // New articles — March 28, 2026
+  {
+    title: 'ZYN Flavours: The Complete 2026 Guide & Rankings',
+    excerpt: 'Every ZYN flavour available in Europe — grouped by category, ranked by our editorial team, with strength options and format details.',
+    slug: 'zyn-flavours-complete-guide',
+    tag: 'Brand Spotlight',
+    date: '2026-03-28',
+  },
+  {
+    title: 'VELO Flavours: Complete 2026 Guide & Rankings',
+    excerpt: 'The full VELO flavour range explored — mint, citrus, berry, tropical and more. Rankings, strength tiers, and format comparisons.',
+    slug: 'velo-flavours-complete-guide',
+    tag: 'Brand Spotlight',
+    date: '2026-03-28',
+  },
+  {
+    title: 'Best Nicotine Pouches 2026: Expert Picks Across Every Category',
+    excerpt: 'Our editorial team picks the best nicotine pouches of 2026 — best overall, best for beginners, best mint, best strong, and best value.',
+    slug: 'best-nicotine-pouches-2026',
+    tag: 'Ranking',
+    date: '2026-03-28',
+  },
+  {
+    title: 'How to Use Nicotine Pouches: A Complete Guide',
+    excerpt: 'Step-by-step guide to using nicotine pouches — placement, timing, what to expect, and common mistakes to avoid.',
+    slug: 'how-to-use-nicotine-pouches',
+    tag: 'Guide',
+    date: '2026-03-28',
+  },
+  {
+    title: 'Nicotine Pouches vs Vaping: Which Is Better in 2026?',
+    excerpt: 'A head-to-head comparison of nicotine pouches and vaping — cost, health, convenience, discretion, and which suits your lifestyle.',
+    slug: 'nicotine-pouches-vs-vaping',
+    tag: 'Comparison',
+    date: '2026-03-28',
+  },
+  {
+    title: 'Nicotine Pouches Legal in Europe: 2026 Country-by-Country Guide',
+    excerpt: 'Country-by-country legal status of nicotine pouches across Europe — including the France ban, Netherlands restrictions, and EU TPD3 outlook.',
+    slug: 'nicotine-pouches-legal-europe-2026',
+    tag: 'Guide',
+    date: '2026-03-28',
+  },
+  {
+    title: 'Nicotine Pouch Flavour Guide: Every Category Explained',
+    excerpt: 'From mint to coffee to cola — every nicotine pouch flavour category explained with top brand recommendations and strength ranges.',
+    slug: 'nicotine-pouch-flavour-guide',
+    tag: 'Flavour Guide',
+    date: '2026-03-28',
+  },
+  {
+    title: 'Pablo Nicotine Pouches: Complete Brand Guide',
+    excerpt: 'Everything about Pablo — the ultra-strong brand that pushes nicotine to the extreme. Product range, strengths, safety guidance.',
+    slug: 'pablo-nicotine-pouches-complete-guide',
+    tag: 'Brand Spotlight',
+    date: '2026-03-28',
+  },
+  {
+    title: 'ICEBERG Nicotine Pouches: Complete Brand Guide',
+    excerpt: 'The full ICEBERG range — from Dragon Fruit to Winterstorm. Strength tiers, flavour profiles, and who this brand is best for.',
+    slug: 'iceberg-nicotine-pouches-complete-guide',
+    tag: 'Brand Spotlight',
+    date: '2026-03-28',
+  },
+  {
+    title: 'Nicotine Pouches vs Gum vs Lozenges: Which NRT Is Right for You?',
+    excerpt: 'Comparing nicotine pouches with traditional NRT — gum, lozenges, and patches. Cost, speed, flavour, and which works best for quitting.',
+    slug: 'nicotine-pouches-vs-gum-vs-lozenges',
+    tag: 'Comparison',
+    date: '2026-03-28',
+  },
+  // Brand spotlights — batch 2
+  { title: 'Skruf Nicotine Pouches: Complete Brand Guide', excerpt: 'Imperial Brands\' Swedish pouch brand — the #2-#5 strength system, slim format focus, and every flavour reviewed.', slug: 'skruf-nicotine-pouches-complete-guide', tag: 'Brand Spotlight', date: '2026-03-28' },
+  { title: 'White Fox Nicotine Pouches: Complete Brand Guide', excerpt: 'GN Tobacco\'s extreme mint specialist — Full Charge at 16.5mg, Double Mint, and the coolest pouches on the market.', slug: 'white-fox-nicotine-pouches-complete-guide', tag: 'Brand Spotlight', date: '2026-03-28' },
+  { title: 'Siberia Nicotine Pouches & Snus: Complete Guide', excerpt: 'The legendary ultra-strong brand — up to 49.5mg per pouch. History, product range, and essential safety guidance.', slug: 'siberia-nicotine-pouches-complete-guide', tag: 'Brand Spotlight', date: '2026-03-28' },
+  { title: 'Nordic Spirit Nicotine Pouches: Complete Brand Guide', excerpt: 'JTI\'s smooth, subtle pouch brand — popular in the UK. Full range, strength tiers, and flavour profiles.', slug: 'nordic-spirit-nicotine-pouches-complete-guide', tag: 'Brand Spotlight', date: '2026-03-28' },
+  { title: 'KLAR Nicotine Pouches: Complete Brand Guide', excerpt: 'Swedish craft pouches with bioceramic technology — premium positioning, small range, distinctive quality.', slug: 'klar-nicotine-pouches-complete-guide', tag: 'Brand Spotlight', date: '2026-03-28' },
+  { title: 'FUMI Nicotine Pouches: Complete Brand Guide', excerpt: 'Another Snus Factory\'s unconventional flavour brand — salty raspberry, rhubarb, and Nordic culinary-inspired pouches.', slug: 'fumi-nicotine-pouches-complete-guide', tag: 'Brand Spotlight', date: '2026-03-28' },
+  // Buying guides
+  { title: 'Best Nicotine Pouches for Quitting Smoking (2026)', excerpt: 'Match your cigarette intake to the right pouch strength. Specific product picks and a week-by-week transition plan.', slug: 'best-nicotine-pouches-for-quitting-smoking', tag: 'Buying Guide', date: '2026-03-28' },
+  { title: 'Best Budget Nicotine Pouches: Top Picks Under €3', excerpt: 'Price-per-pouch comparison of the best value pouches. Quality doesn\'t have to cost more.', slug: 'best-budget-nicotine-pouches', tag: 'Buying Guide', date: '2026-03-28' },
+  { title: 'Best Strong Nicotine Pouches (10-20mg): 2026 Guide', excerpt: 'For experienced users — the best strong pouches compared across brands, flavours, and comfort.', slug: 'best-strong-nicotine-pouches', tag: 'Buying Guide', date: '2026-03-28' },
+  { title: 'Best Nicotine Pouches with No Aftertaste', excerpt: 'Clean flavour, no chemical aftertaste — the brands and products that deliver pure taste.', slug: 'best-nicotine-pouches-no-aftertaste', tag: 'Buying Guide', date: '2026-03-28' },
+  { title: 'Best Nicotine Pouches for All-Day Use', excerpt: 'Comfort, moderate strength, and long flavour duration — pouches designed for extended wear.', slug: 'best-nicotine-pouches-all-day-use', tag: 'Buying Guide', date: '2026-03-28' },
+  { title: 'Best Slim Nicotine Pouches: Comfortable & Discreet', excerpt: 'Why slim format dominates — the most comfortable and discreet pouches ranked.', slug: 'best-slim-nicotine-pouches', tag: 'Buying Guide', date: '2026-03-28' },
+  { title: 'Best Nicotine Pouches for Women in 2026', excerpt: 'Discretion, lower strengths, and flavour preferences — data-driven picks, not patronising advice.', slug: 'best-nicotine-pouches-for-women', tag: 'Buying Guide', date: '2026-03-28' },
+  { title: 'Nicotine Pouch Subscription: Is It Worth It in 2026?', excerpt: 'Compare subscription offerings, calculate savings, and find out if auto-delivery makes sense for you.', slug: 'nicotine-pouch-subscription-guide', tag: 'Buying Guide', date: '2026-03-28' },
+  // New articles — March 29, 2026 (batch 2)
+  { title: 'Nicotine Pouches vs Cigarettes: Health, Cost & Convenience Compared', excerpt: 'A side-by-side comparison of nicotine pouches and cigarettes — nicotine delivery, health considerations, monthly cost, and lifestyle impact.', slug: 'nicotine-pouches-vs-cigarettes', tag: 'Comparison', date: '2026-03-29' },
+  { title: 'How Much Do Nicotine Pouches Cost? 2026 Price Guide', excerpt: 'Real pricing data from our catalog — average cost per can, cost per pouch, and monthly spend for light, moderate, and heavy users.', slug: 'how-much-do-nicotine-pouches-cost', tag: 'Guide', date: '2026-03-29' },
+  { title: 'How to Store Nicotine Pouches: Shelf Life & Freshness Tips', excerpt: 'Keep your pouches fresh — storage temperature, shelf life, signs of expiry, and whether to refrigerate.', slug: 'how-to-store-nicotine-pouches', tag: 'Guide', date: '2026-03-29' },
+  // Data Reports — unique citable assets with live catalog data
+  { title: 'Nicotine Pouch Brands Compared: Side-by-Side Data', excerpt: 'Every brand compared — product range, nicotine strengths, flavours, and prices. Auto-generated from our live catalog.', slug: '../nicotine-pouch-brands-compared', tag: 'Data Report', date: '2026-03-28' },
+  { title: 'Nicotine Strength Chart: Products Mapped by mg', excerpt: 'Visual chart mapping every product by nicotine content — from 1 mg to 50+ mg. Find the right strength for your level.', slug: '../nicotine-strength-chart', tag: 'Data Report', date: '2026-03-28' },
+  { title: 'Nicotine Pouch Flavours: The Complete Data Guide', excerpt: 'Market share, brand coverage, and deep-dives for every flavour category — computed from our full product catalog.', slug: '../nicotine-pouch-flavours', tag: 'Data Report', date: '2026-03-28' },
+  // New articles — March 29 batch 3
+  { title: 'Can You Swallow Nicotine Pouches? Safety Facts', excerpt: 'What happens if you swallow a nicotine pouch — safety facts, what to do, and why it happens.', slug: 'can-you-swallow-nicotine-pouches', tag: 'FAQ', date: '2026-03-29' },
+  { title: 'Are ZYNs Bad for You? Health Facts in 2026', excerpt: 'An evidence-based look at ZYN health effects — what the research says about nicotine pouches and your body.', slug: 'are-zyns-bad-for-you', tag: 'Guide', date: '2026-03-29' },
+  { title: 'How Many Nicotine Pouches a Day Is Safe?', excerpt: 'Daily usage guidance — how many pouches most users go through and when to cut back.', slug: 'how-many-nicotine-pouches-a-day', tag: 'FAQ', date: '2026-03-29' },
+  { title: 'VELO vs Nordic Spirit: Which Is Better in 2026?', excerpt: 'Head-to-head comparison of VELO and Nordic Spirit — flavours, strength, format, and which brand suits you.', slug: 'velo-vs-nordic-spirit', tag: 'Comparison', date: '2026-03-29' },
+  { title: 'Nicotine Pouch Tax & Regulations 2026', excerpt: 'Country-by-country breakdown of nicotine pouch taxation and regulations across Europe in 2026.', slug: 'nicotine-pouch-tax-regulations-2026', tag: 'Guide', date: '2026-03-29' },
+  { title: 'ON! Nicotine Pouches: Complete Brand Guide', excerpt: 'Everything about ON! — Altria\'s compact nicotine pouch brand. Product range, strengths, flavours, and who it\'s best for.', slug: 'on-nicotine-pouches-complete-guide', tag: 'Brand Spotlight', date: '2026-03-29' },
+  { title: 'RAVE Nicotine Pouches Review 2026: Every Flavour & Strength Tested', excerpt: 'We tested all 26 RAVE products. Here\'s the honest breakdown of flavours, strength, and value.', slug: 'rave-nicotine-pouches-review', tag: 'Brand Spotlight', date: '2026-04-04' },
+  // New articles — April 2026 (recent additions)
+  { title: 'Every VELO Flavour Ranked: The Complete 2026 Guide', excerpt: 'All 30+ VELO flavours ranked by taste, strength, and value. Find your perfect pick.', slug: 'all-velo-flavors-ranked-2026', tag: 'Flavour Guide', date: '2026-04-04' },
+  { title: 'Nicotine Pouch Trends 2026: New Brands, Flavours & What\'s Next', excerpt: 'The nicotine pouch world is evolving fast in 2026. Here\'s what\'s trending and what\'s next.', slug: 'nicotine-pouch-trends-new-brands-2026', tag: 'Guide', date: '2026-04-04' },
+  { title: 'Strongest Snus Brands Compared: A Beginner\'s Warning Guide', excerpt: 'The strongest brands ranked and explained — plus why beginners should start elsewhere.', slug: 'strongest-snus-brands-compared-beginners-warning', tag: 'Buying Guide', date: '2026-04-04' },
+  { title: 'VELO vs ON! Nicotine Pouches: Which Should You Choose in 2026?', excerpt: 'VELO vs ON!: We break down flavour selection, nicotine strength, and price to help you decide.', slug: 'velo-vs-on-nicotine-pouches', tag: 'Comparison', date: '2026-04-04' },
+  { title: 'ZYN Strength Chart 2026: Every Nicotine Level Explained (S1 to S6)', excerpt: 'ZYN\'s strength levels explained. Find the right nicotine dose for your needs.', slug: 'zyn-strength-chart-every-level-explained', tag: 'Guide', date: '2026-04-04' },
+  { title: 'ZYN vs Nordic Spirit: Premium Swedish Pouches Compared (2026)', excerpt: 'Two Swedish icons compared. Find out which premium pouch suits you best.', slug: 'zyn-vs-nordic-spirit', tag: 'Comparison', date: '2026-04-04' },
+  // New articles — March 30, 2026 (SEO gap targets)
+  { title: 'Are Nicotine Pouches Safe? Evidence-Based Health Guide', excerpt: 'We review the clinical evidence on nicotine pouch safety, compare risk profiles against cigarettes and snus, and explain what long-term research actually shows.', slug: 'are-nicotine-pouches-safe', tag: 'Safety & Health', date: '2026-03-30' },
+  { title: 'Nicotine Pouch Ingredients Explained: What\'s Actually Inside?', excerpt: 'Complete breakdown of every ingredient in a nicotine pouch — nicotine source, fillers, pH adjusters, flavourings, and sweeteners.', slug: 'nicotine-pouch-ingredients-explained', tag: 'Guide', date: '2026-03-30' },
+  { title: 'How to Spot Fake Nicotine Pouches: Authentication Guide', excerpt: 'Learn how to identify counterfeit nicotine pouches — check packaging, batch codes, holograms, and authorised retailers.', slug: 'how-to-spot-fake-nicotine-pouches', tag: 'Safety & Health', date: '2026-03-30' },
+  // New articles — April 8, 2026 (comparison + country guides)
+  { title: 'ZYN vs LOOP: Which Is Better in 2026?', excerpt: 'Head-to-head comparison of ZYN and LOOP — flavours, strength, price, comfort, and availability.', slug: 'zyn-vs-loop-2026', tag: 'Comparison', date: '2026-04-08' },
+  { title: 'ZYN vs Skruf: Which Is Better in 2026?', excerpt: 'ZYN vs Skruf compared — strength, flavours, price, and format. Which brand suits you best?', slug: 'zyn-vs-skruf-2026', tag: 'Comparison', date: '2026-04-08' },
+  { title: 'VELO vs LOOP: Which Is Better in 2026?', excerpt: 'VELO vs LOOP head-to-head — flavour range, strength, price, and innovation compared.', slug: 'velo-vs-loop-2026', tag: 'Comparison', date: '2026-04-08' },
+  { title: 'White Fox vs Siberia: Strongest Pouches Compared', excerpt: 'The ultimate strong pouch showdown — White Fox vs Siberia. Strength, flavours, price, and which hits harder.', slug: 'white-fox-vs-siberia-2026', tag: 'Comparison', date: '2026-04-08' },
+  { title: 'KLAR vs FUMI: Which Scandinavian Pouch Wins?', excerpt: 'Scandinavian minimalism meets bold flavours — KLAR vs FUMI compared across strength, taste, format, and price.', slug: 'klar-vs-fumi-2026', tag: 'Comparison', date: '2026-04-08' },
+  { title: 'Best Nicotine Pouches for Every Occasion', excerpt: 'The best pouch for work, gym, socialising, morning coffee, and more — tested picks for every moment of your day.', slug: 'best-nicotine-pouches-by-occasion', tag: 'Buying Guide', date: '2026-04-08' },
+  { title: 'Buy Nicotine Pouches in Austria: 2026 Guide', excerpt: 'Trafik vs online, legal status, popular brands, and how to order from SnusFriend to Austria.', slug: 'buying-nicotine-pouches-austria-2026', tag: 'Buying Guide', date: '2026-04-08' },
+  { title: 'Buy Nicotine Pouches in Denmark: 2026 Guide', excerpt: 'Post-snus-ban rules, the 9mg cap, flavour restrictions, and ordering online to Denmark.', slug: 'buying-nicotine-pouches-denmark-2026', tag: 'Buying Guide', date: '2026-04-08' },
+  { title: 'Nicotine Pouches in Norway: 2026 Rules & Alternatives', excerpt: 'Why nicotine pouches are banned in Norway, how snus remains legal, and what Norwegian users do now.', slug: 'buying-nicotine-pouches-norway-2026', tag: 'Buying Guide', date: '2026-04-08' },
+  { title: 'Nicotine Pouches in Finland: 2026 Guide & Rules', excerpt: 'Distance selling ban, flavour restrictions, personal import rules, and what Finnish users need to know.', slug: 'buying-nicotine-pouches-finland-2026', tag: 'Buying Guide', date: '2026-04-08' },
+  { title: 'Buy Nicotine Pouches in Poland: 2026 Guide', excerpt: 'Europe\'s fastest-growing market — excise tax changes, popular brands, prices in PLN, and ordering online.', slug: 'buying-nicotine-pouches-poland-2026', tag: 'Buying Guide', date: '2026-04-08' },
+];
