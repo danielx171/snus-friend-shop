@@ -31,8 +31,7 @@ function computeStock(variants: Array<{ inventory?: Array<{ quantity: number }> 
 const products = defineCollection({
   loader: async () => {
     if (!url || !key) {
-      console.warn('[content.config] No Supabase credentials — returning empty product catalog');
-      return [];
+      throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY — cannot build without product data');
     }
     const { data, error } = await buildClient!
       .from('products')
@@ -99,7 +98,9 @@ const products = defineCollection({
 
 const brands = defineCollection({
   loader: async () => {
-    if (!url || !key) return [];
+    if (!url || !key) {
+      throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY — cannot build without brand data');
+    }
     const { data, error } = await buildClient!
       .from('brands')
       .select('id, slug, name, manufacturer, logo_url, description')

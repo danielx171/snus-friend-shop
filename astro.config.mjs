@@ -40,10 +40,6 @@ export default defineConfig({
         ];
         return !exclude.some((p) => page.includes(p));
       },
-      serialize: (item) => ({
-        ...item,
-        lastmod: new Date().toISOString().split('T')[0],
-      }),
     }),
   ],
   vite: {
