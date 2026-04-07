@@ -12,6 +12,7 @@ const buildClient = url && key
 
 // Pricing logic from shared module — single source of truth
 import { computePrices } from './lib/pricing';
+import { brandDescriptions } from './data/brand-descriptions';
 
 function computeStock(variants: Array<{ inventory?: Array<{ quantity: number }> }>) {
   // If no inventory rows exist at all, treat product as available (Nyehandel manages stock).
@@ -105,15 +106,18 @@ const brands = defineCollection({
       return [];
     }
 
-    return (data ?? []).map((b: any) => ({
-      id: b.slug ?? b.id,
-      slug: b.slug ?? b.id,
-      name: b.name,
-      manufacturer: b.manufacturer ?? '',
-      logoUrl: b.logo_url ?? '',
-      description: b.description ?? '',
-      countryCode: b.country_code ?? '',
-    }));
+    return (data ?? []).map((b: any) => {
+      const slug = b.slug ?? b.id;
+      return {
+        id: slug,
+        slug,
+        name: b.name,
+        manufacturer: b.manufacturer ?? '',
+        logoUrl: b.logo_url ?? '',
+        description: b.description || brandDescriptions[slug] || '',
+        countryCode: b.country_code ?? '',
+      };
+    });
   },
   schema: z.object({
     id: z.string(),
