@@ -1,0 +1,96 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#0c1018" />
+
+  <!-- Central circle (white) -->
+  <circle cx="200" cy="150" r="80" fill="#a3e635" opacity="0.15" />
+
+  <!-- Flavour wheel segments -->
+  <!-- Mint segment - teal -->
+  <path
+    d="M 200 150 L 200 70 A 80 80 0 0 1 255.3 87.9 Z"
+    fill="#14B8A6"
+    opacity="0.8"
+  />
+
+  <!-- Citrus segment - orange -->
+  <path
+    d="M 200 150 L 255.3 87.9 A 80 80 0 0 1 292.8 142.3 Z"
+    fill="#F97316"
+    opacity="0.8"
+  />
+
+  <!-- Berry segment - red -->
+  <path
+    d="M 200 150 L 292.8 142.3 A 80 80 0 0 1 255.3 212.1 Z"
+    fill="#EF4444"
+    opacity="0.8"
+  />
+
+  <!-- Coffee segment - brown -->
+  <path
+    d="M 200 150 L 255.3 212.1 A 80 80 0 0 1 200 230 Z"
+    fill="#92400E"
+    opacity="0.8"
+  />
+
+  <!-- Fruit segment - green -->
+  <path
+    d="M 200 150 L 200 230 A 80 80 0 0 1 107.2 212.1 Z"
+    fill="#22C55E"
+    opacity="0.8"
+  />
+
+  <!-- Licorice segment - dark -->
+  <path
+    d="M 200 150 L 107.2 212.1 A 80 80 0 0 1 144.7 87.9 Z"
+    fill="#1F2937"
+    opacity="0.8"
+  />
+
+  <!-- Original segment - gray -->
+  <path
+    d="M 200 150 L 144.7 87.9 A 80 80 0 0 1 200 70 Z"
+    fill="#6B7280"
+    opacity="0.8"
+  />
+
+  <!-- Central circle labels -->
+  <circle cx="200" cy="150" r="35" fill="#0c1018" />
+
+  <!-- Outer labels -->
+  <text x="200" y="95" font-size="9" fill="#14B8A6" text-anchor="middle" font-weight="bold">
+    MINT
+  </text>
+  <text x="270" y="130" font-size="9" fill="#F97316" text-anchor="middle" font-weight="bold">
+    CITRUS
+  </text>
+  <text x="265" y="195" font-size="9" fill="#EF4444" text-anchor="middle" font-weight="bold">
+    BERRY
+  </text>
+  <text x="200" y="240" font-size="9" fill="#92400E" text-anchor="middle" font-weight="bold">
+    COFFEE
+  </text>
+  <text x="130" y="195" font-size="9" fill="#22C55E" text-anchor="middle" font-weight="bold">
+    FRUIT
+  </text>
+  <text x="115" y="130" font-size="9" fill="#1F2937" text-anchor="middle" font-weight="bold">
+    LICORICE
+  </text>
+  <text x="200" y="90" font-size="9" fill="#6B7280" text-anchor="middle" font-weight="bold" transform="translate(-45, 0)">
+    ORIGINAL
+  </text>
+
+  <!-- Center text -->
+  <text x="200" y="150" font-size="14" fill="#a3e635" text-anchor="middle" font-weight="bold">
+    ZYN
+  </text>
+
+  <!-- Title and subtitle -->
+  <text x="200" y="280" font-size="14" fill="#a3e635" text-anchor="middle" font-weight="bold">
+    ZYN FLAVOUR MAP
+  </text>
+  <text x="200" y="295" font-size="10" fill="#cbd5e1" text-anchor="middle">
+    56+ PRODUCTS
+  </text>
+</svg>

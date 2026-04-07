@@ -1,0 +1,76 @@
+<svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="500" height="300" fill="#0c1018" />
+
+  <!-- Decorative glow -->
+  <circle cx="250" cy="150" r="120" fill="#E040FB" opacity="0.08" />
+
+  <!-- Can 1: Mint (teal) -->
+  <g transform="translate(40, 90)">
+    <rect x="0" y="0" width="40" height="100" rx="4" fill="#14B8A6" />
+    <rect x="3" y="2" width="9" height="96" rx="2" fill="#7DD5CA" opacity="0.6" />
+    <rect x="2" y="30" width="36" height="40" fill="#1a202c" />
+    <text x="20" y="48" font-size="6" fill="#14B8A6" text-anchor="middle" font-weight="bold">
+      MINT
+    </text>
+  </g>
+
+  <!-- Can 2: Berry (pink) -->
+  <g transform="translate(110, 70)">
+    <rect x="0" y="0" width="40" height="120" rx="4" fill="#EC4899" />
+    <rect x="3" y="2" width="9" height="116" rx="2" fill="#F5A3C7" opacity="0.6" />
+    <rect x="2" y="35" width="36" height="50" fill="#1a202c" />
+    <text x="20" y="57" font-size="6" fill="#EC4899" text-anchor="middle" font-weight="bold">
+      BERRY
+    </text>
+  </g>
+
+  <!-- Can 3: Citrus (yellow) -->
+  <g transform="translate(180, 85)">
+    <rect x="0" y="0" width="40" height="105" rx="4" fill="#FBBF24" />
+    <rect x="3" y="2" width="9" height="101" rx="2" fill="#FDD89B" opacity="0.6" />
+    <rect x="2" y="32" width="36" height="41" fill="#1a202c" />
+    <text x="20" y="52" font-size="6" fill="#FBBF24" text-anchor="middle" font-weight="bold">
+      CITRUS
+    </text>
+  </g>
+
+  <!-- Can 4: Fruit (orange) -->
+  <g transform="translate(250, 80)">
+    <rect x="0" y="0" width="40" height="110" rx="4" fill="#F97316" />
+    <rect x="3" y="2" width="9" height="106" rx="2" fill="#FCA5A5" opacity="0.6" />
+    <rect x="2" y="33" width="36" height="44" fill="#1a202c" />
+    <text x="20" y="55" font-size="6" fill="#F97316" text-anchor="middle" font-weight="bold">
+      FRUIT
+    </text>
+  </g>
+
+  <!-- Can 5: Licorice (dark) -->
+  <g transform="translate(320, 90)">
+    <rect x="0" y="0" width="40" height="100" rx="4" fill="#6B21A8" />
+    <rect x="3" y="2" width="9" height="96" rx="2" fill="#A78BFA" opacity="0.5" />
+    <rect x="2" y="30" width="36" height="40" fill="#1a202c" />
+    <text x="20" y="48" font-size="6" fill="#A78BFA" text-anchor="middle" font-weight="bold">
+      LICORICE
+    </text>
+  </g>
+
+  <!-- SHIFT COLLECTION callout badge -->
+  <g transform="translate(390, 110)">
+    <circle cx="0" cy="0" r="35" fill="#E040FB" opacity="0.9" />
+    <text x="0" y="-5" font-size="8" fill="#f1f5f9" text-anchor="middle" font-weight="bold">
+      SHIFT
+    </text>
+    <text x="0" y="8" font-size="8" fill="#f1f5f9" text-anchor="middle" font-weight="bold">
+      COLLECTION
+    </text>
+  </g>
+
+  <!-- Title and subtitle -->
+  <text x="250" y="265" font-size="18" fill="#E040FB" text-anchor="middle" font-weight="bold">
+    VELO FLAVOURS
+  </text>
+  <text x="250" y="290" font-size="11" fill="#cbd5e1" text-anchor="middle">
+    30+ VARIETIES
+  </text>
+</svg>

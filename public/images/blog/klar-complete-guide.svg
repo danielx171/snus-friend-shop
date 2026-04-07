@@ -1,0 +1,78 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="klar-bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1018" />
+      <stop offset="100%" stop-color="#161d2b" />
+    </linearGradient>
+    <linearGradient id="klar-purple-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9F7AEA" />
+      <stop offset="100%" stop-color="#6B4EE6" />
+    </linearGradient>
+    <filter id="klar-speed">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="800" height="400" fill="url(#klar-bg-grad)" />
+
+  <!-- Bioceramic molecular hexagon pattern (background, subtle) -->
+  <g stroke="#334155" stroke-width="0.5" opacity="0.2">
+    <polygon points="200,100 220,90 240,100 240,120 220,130 200,120" />
+    <polygon points="280,150 300,140 320,150 320,170 300,180 280,170" />
+    <polygon points="500,120 520,110 540,120 540,140 520,150 500,140" />
+    <polygon points="600,200 620,190 640,200 640,220 620,230 600,220" />
+    <polygon points="350,280 370,270 390,280 390,300 370,310 350,300" />
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="70" font-size="56" font-weight="700" fill="#6B4EE6" text-anchor="middle" font-family="system-ui">
+    KLAR
+  </text>
+  <text x="400" y="105" font-size="14" fill="#94a3b8" text-anchor="middle" font-family="system-ui" letter-spacing="1">
+    SERATEK BIOCERAMIC
+  </text>
+
+  <!-- Beaker/Flask Icon -->
+  <g transform="translate(680, 55)" fill="none" stroke="#6B4EE6" stroke-width="1.5">
+    <rect x="-8" y="-8" width="12" height="18" rx="1" />
+    <line x1="-8" y1="5" x2="4" y2="5" />
+    <line x1="0" y1="10" x2="4" y2="3" />
+  </g>
+
+  <!-- Can 1: Mint (Green tint) -->
+  <g transform="translate(220, 180)">
+    <rect x="0" y="0" width="60" height="110" rx="3" fill="#10b981" stroke="#334155" stroke-width="1.5" />
+    <rect x="2" y="2" width="56" height="16" rx="2" fill="#34d399" />
+    <circle cx="30" cy="40" r="14" fill="#6ee7b7" opacity="0.5" />
+    <text x="30" y="70" font-size="9" fill="#f1f5f9" text-anchor="middle" font-weight="700">KLAR</text>
+    <text x="30" y="83" font-size="8" fill="#f1f5f9" text-anchor="middle">MINT</text>
+    <text x="30" y="95" font-size="7" fill="#d1d5db" text-anchor="middle" font-weight="600">SERATEK</text>
+  </g>
+
+  <!-- Can 2: Blank (Neutral/Gray) -->
+  <g transform="translate(400, 180)">
+    <rect x="0" y="0" width="60" height="110" rx="3" fill="#e0e0e0" stroke="#334155" stroke-width="1.5" />
+    <rect x="2" y="2" width="56" height="16" rx="2" fill="#f0f0f0" />
+    <circle cx="30" cy="40" r="14" fill="#ffffff" opacity="0.5" />
+    <text x="30" y="70" font-size="9" fill="#0c1018" text-anchor="middle" font-weight="700">KLAR</text>
+    <text x="30" y="83" font-size="8" fill="#0c1018" text-anchor="middle">BLANK</text>
+    <text x="30" y="95" font-size="7" fill="#404040" text-anchor="middle" font-weight="600">SERATEK</text>
+  </g>
+
+  <!-- "80% FASTER" Badge with speed lines -->
+  <g transform="translate(120, 80)">
+    <rect x="-38" y="-18" width="76" height="36" rx="6" fill="#6B4EE6" stroke="#9F7AEA" stroke-width="1.5" />
+    <text x="0" y="-3" font-size="13" fill="#f1f5f9" text-anchor="middle" font-weight="700" font-family="system-ui">80% FASTER</text>
+    <!-- Speed lines -->
+    <line x1="-45" y1="-5" x2="-55" y2="-5" stroke="#a3e635" stroke-width="1.5" filter="url(#klar-speed)" />
+    <line x1="-48" y1="8" x2="-60" y2="8" stroke="#a3e635" stroke-width="1.5" filter="url(#klar-speed)" opacity="0.6" />
+  </g>
+
+  <!-- Innovation highlight -->
+  <text x="400" y="330" font-size="12" fill="#6B4EE6" text-anchor="middle" font-weight="600" font-family="system-ui">
+    SERATEK BIOCERAMIC — NEXT GENERATION
+  </text>
+</svg>
