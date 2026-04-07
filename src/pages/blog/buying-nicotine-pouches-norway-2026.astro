@@ -11,12 +11,12 @@ const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-04-07';
-const title = 'Nicotine Pouches in Norway: 2026 Guide to Rules & Alternatives';
-const description = 'Everything you need to know about nicotine pouches in Norway in 2026. Why they\'re banned, how snus remains legal, cross-border options, and what Norwegian users do now.';
+const title = 'Nicotine Pouches in Norway: 2026 Rules Guide';
+const description = 'Nicotine pouches in Norway 2026. Why they\'re banned, snus legality, cross-border options, and what Norwegian users do now.';
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
 >

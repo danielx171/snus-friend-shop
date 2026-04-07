@@ -12,12 +12,12 @@ const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-31';
-const title = "Strongest Snus Brands Compared: A Beginner's Warning Guide";
-const description = 'Complete comparison of the strongest snus and nicotine pouch brands in 2026. Strength tiers explained, beginner safety warnings, and which brands to avoid as a first-time user.';
+const title = "Strongest Snus Brands Compared: Beginner Warning";
+const description = 'Strongest snus and nicotine pouch brands compared. Strength tiers explained, beginner safety warnings, and which brands to avoid first.';
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   canonical="/blog/strongest-snus-brands-compared-beginners-warning"
   ogType="article"

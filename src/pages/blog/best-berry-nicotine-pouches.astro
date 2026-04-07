@@ -11,12 +11,12 @@ const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-27';
-const title = 'Best Berry Nicotine Pouches: Top 10 Picks for 2026';
+const title = 'Best Berry Nicotine Pouches: Top 10 for 2026';
 const description = 'From sweet strawberry to tart mixed berries — our expert ranking of the best berry-flavoured nicotine pouches across all strengths and brands.';
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
   ogImage="/images/og/og-best-of.svg"

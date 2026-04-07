@@ -11,12 +11,12 @@ const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-04-07';
-const title = 'Buy Nicotine Pouches in Austria: Complete 2026 Guide';
+const title = 'Buy Nicotine Pouches in Austria (2026 Guide)';
 const description = 'Complete guide to buying nicotine pouches in Austria in 2026. Legal status, Trafik vs online prices, popular brands, and how to order from SnusFriend.';
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
 >

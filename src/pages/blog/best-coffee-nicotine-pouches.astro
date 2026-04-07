@@ -8,7 +8,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 
 const publishDate = '2026-03-27';
-const title = 'Best Coffee-Flavoured Nicotine Pouches: Our Top Picks';
+const title = 'Best Coffee Nicotine Pouches: Top Picks (2026)';
 const description = 'From rich espresso to smooth macchiato — the best coffee nicotine pouches ranked by flavour, strength, and value. Perfect morning pouches.';
 
 // Fetch coffee products for inline cards
@@ -30,7 +30,7 @@ const helwitCoffee = findProduct('helwit', 'coffee') ?? findProduct('helwit');
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
   ogImage="/images/og/og-best-of.svg"
