@@ -20,30 +20,28 @@ const supabase = Astro.locals.supabase;
 // Tab selection via query param (default: orders)
 const tab = Astro.url.searchParams.get('tab') || 'orders';
 
-// Fetch referral code ID first (needed as input for referral count query)
-const { data: referralCodeRow } = await supabase
-  .from('referral_codes')
-  .select('id')
-  .eq('user_id', user.id)
-  .single();
-
-// Fetch everything else in parallel
+// Fetch all independent queries in parallel (referral_codes moved here to unblock the waterfall)
 const [
   { data: orders },
   { data: pointsBalance },
   { count: reviewsCount },
   { data: subscriptions },
   { data: referralCode },
-  { count: referralCount },
+  { data: referralCodeRow },
 ] = await Promise.all([
   supabase.from('orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(20),
   supabase.from('points_balances').select('*').eq('user_id', user.id).single(),
   supabase.from('product_reviews').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
   supabase.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
   supabase.rpc('get_or_create_referral_code', { p_user_id: user.id }),
-  supabase.from('referral_redemptions').select('id', { count: 'exact', head: true })
-    .eq('referral_code_id', referralCodeRow?.id ?? '00000000-0000-0000-0000-000000000000'),
+  supabase.from('referral_codes').select('id').eq('user_id', user.id).single(),
 ]);
+
+// Fast follow-up: referral redemption count (single indexed WHERE, ~50ms)
+const { count: referralCount } = await supabase
+  .from('referral_redemptions')
+  .select('id', { count: 'exact', head: true })
+  .eq('referral_code_id', referralCodeRow?.id ?? '00000000-0000-0000-0000-000000000000');
 
 // User metadata + nickname
 import { generateNickname } from '@/lib/nickname';

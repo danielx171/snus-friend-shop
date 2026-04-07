@@ -10,8 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 
 function SpinWheelInner() {
   const { toast } = useToast();
-  const { userId } = useAuthUser();
-
+  const { userId, authChecked } = useAuthUser();
   const spinStatus = useSpinStatus(userId);
   const spinMutation = useSpinWheel();
   const hasSpunToday = spinStatus.data === true;
@@ -36,6 +35,10 @@ function SpinWheelInner() {
   const handleClosePrize = useCallback(() => {
     setRevealedPrize(null);
   }, []);
+
+  // Don't render until auth is resolved — prevents flash of "Sign in" wall for
+  // logged-in users on prerendered (SSG) pages where __AUTH_STATE__ is null at build time
+  if (!authChecked) return null;
 
   return (
     <>
