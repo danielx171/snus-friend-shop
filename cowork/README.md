@@ -2,13 +2,13 @@
 
 Findings and deliverables from Cowork audit sessions. Read these before implementing any design or UX changes.
 
-**Last updated:** 2026-03-29
+**Last updated:** 2026-04-07
 
 ---
 
-## Audits (10 reports, 8,097 lines)
+## Audits (15 reports)
 
-All from the comprehensive site audit run on 2026-03-29.
+**Comprehensive site audits** (2026-03-29):
 
 | File | What it covers | Key finding |
 |------|---------------|-------------|
@@ -21,6 +21,16 @@ All from the comprehensive site audit run on 2026-03-29.
 | `audits/PERFORMANCE_AUDIT.md` | JS bundles, fonts, images, SSG/SSR split | P0: 666KB products.json blocks mobile — needs pagination |
 | `audits/COMPETITOR_FEATURE_GAP.md` | Haypp, Northerner, SnusDaddy comparison | Blog gap (0 vs 100+), no multi-currency, gamification is unique edge |
 | `audits/CONTENT_STRATEGY_RECS.md` | Top 15 keyword gaps, content roadmap, 10K/mo plan | Target "can you swallow nicotine pouches" (1.5K/mo), publish 3/week |
+
+**Blog SEO audit series** (2026-04-07):
+
+| File | What it covers | Key finding |
+|------|---------------|-------------|
+| `audits/blog-seo-audit-batch1.html` | 12 foundational articles (general knowledge) | Avg SEO 4.2/5, strong readability, low product specificity (intentional) |
+| `audits/blog-seo-audit-batch2.html` | 12 product-specific articles (brand/strength guides) | Avg SEO 4.4/5, product specificity 4.6/5, 11/12 articles score 5/5 in depth |
+| `audits/blog-seo-audit-batch3.html` | 11 comparison + decision articles | Avg SEO 4.5/5, visual structure strong, FAQ coverage 100% |
+| `audits/blog-seo-audit-batch4.html` | 13 detailed guides + buyer's guides | Avg Content Depth 4.5/5, 12/13 articles score 4-5/5 on structure |
+| `audits/blog-seo-audit-batch5-6.html` | 24 best-of + comprehensive guides (final batch) | 92% meet baseline SEO standards, 4 articles ≤3/5 flagged for improvement, 1 missing (404) |
 
 ## Design Reviews
 
