@@ -47,6 +47,21 @@ const description = 'Every strong nicotine pouch ranked by mg — from White Fox
           </p>
         </div>
 
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the strongest nicotine pouch in the world?</summary>
+          <p style="margin-top: 12px;">Shiro and Killa hold the highest market positions, with some variants reaching up to 50mg of nicotine per pouch—designed for experienced users and former heavy smokers. These ultra-strength options are primarily available in Scandinavia and select European markets.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Is 50mg nicotine safe?</summary>
+          <p style="margin-top: 12px;">50mg nicotine pouches carry significant health risks and are intended only for users with established high nicotine tolerance. Current research suggests such high concentrations increase risks of dependence and cardiovascular effects; they should never be used by beginners or those with heart conditions.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is stronger than ZYN?</summary>
+          <p style="margin-top: 12px;">VELO, ON!, Shiro, and Killa all offer strength tiers exceeding ZYN's maximum of 6mg per pouch. <a href="/brands/velo" style="color: hsl(var(--primary));">VELO offers up to 8mg</a>, while Nordic brands like Shiro and Killa reach 25–50mg for users seeking maximum nicotine delivery.</p>
+        </details>
+
         <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
           {find('siberia-slim') && <BlogProductCard product={find('siberia-slim')} />}
           {find('white-fox-full-charge') && <BlogProductCard product={find('white-fox-full-charge')} />}
