@@ -145,12 +145,12 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         <!-- Animated stats row -->
         <div class="hero-reveal mt-8 flex justify-center gap-8 lg:justify-start" style="animation: heroSlideUp 0.6s ease-out 0.3s both;">
           <div>
-            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`} data-count-to={allProducts.length}>0</div>
+            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`} data-count-to={allProducts.length}>{allProducts.length}</div>
             <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Products</div>
           </div>
           <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
           <div>
-            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`} data-count-to={brands.length}>0</div>
+            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`} data-count-to={brands.length}>{brands.length}</div>
             <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Brands</div>
           </div>
           <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
