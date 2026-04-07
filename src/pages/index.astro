@@ -72,6 +72,20 @@ if (heroProducts.length < 10) {
 
 // Brand logo images for the marquee
 const topBrandNames = brands.slice(0, 12).map(b => b.data.name);
+
+// Breaking news ticker items
+const breakingItems = [
+  "SnusFriend — Europe's Nicotine Pouch Store",
+  `${allProducts.length}+ Products Now In Stock`,
+  `${brands.length} Top Brands Available`,
+  "Free EU Delivery Over €29",
+  "New Arrivals Added Every Week",
+  "Earn SnusPoints On Every Order",
+  "Daily Spin Wheel — Win Rewards",
+  "Tobacco-Free · Smoke-Free · Discreet",
+  "ZYN · VELO · Loop · Siberia · Pablo · ICEBERG",
+];
+const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
 ---
 
 <Shop
@@ -81,6 +95,30 @@ const topBrandNames = brands.slice(0, 12).map(b => b.data.name);
 >
   <!-- Hero — Immersive 3D product showcase -->
   <section class="relative overflow-hidden border-b border-border" style={`background: hsl(var(--hero-bg));`}>
+
+    <!-- Breaking news top ticker -->
+    <div class="relative z-20 overflow-hidden" style="background: rgba(8,8,8,0.97); border-bottom: 1px solid rgba(220,38,38,0.18);">
+      <div class="flex items-stretch" style="height: 34px;">
+        <div class="flex-shrink-0 flex items-center gap-2 px-4 border-r" style="background: #dc2626; border-color: rgba(255,255,255,0.12); min-width: max-content;">
+          <span class="relative flex h-2 w-2 flex-shrink-0">
+            <span class="breaking-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background: #fca5a5;"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full" style="background: white;"></span>
+          </span>
+          <span class="text-white text-[10px] font-black tracking-[0.22em] uppercase whitespace-nowrap">Breaking</span>
+        </div>
+        <div class="overflow-hidden flex-1">
+          <div class="breaking-ticker flex items-center h-full whitespace-nowrap" style="animation: breakingTicker 42s linear infinite;">
+            {[...breakingItems, ...breakingItems].map((item) => (
+              <span class="inline-flex items-center flex-shrink-0">
+                <span class="text-[11px] font-medium px-5" style="color: rgba(255,255,255,0.62);">{item}</span>
+                <span class="flex-shrink-0" style="color: rgba(220,38,38,0.55); font-size: 7px;">◆</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Background gradient -->
     <div class="absolute inset-0" style={`background: linear-gradient(to bottom right, hsl(var(--hero-gradient-from)), hsl(var(--hero-gradient-via)), hsl(var(--hero-gradient-to)));`} />
 
@@ -207,12 +245,26 @@ const topBrandNames = brands.slice(0, 12).map(b => b.data.name);
       </div>
     </div>
 
-    <!-- Brand marquee -->
-    <div class="relative border-t border-white/5 overflow-hidden" style="background: hsl(var(--hero-bg) / 0.8);">
-      <div class="hero-marquee flex items-center gap-12 py-3 whitespace-nowrap" style="animation: heroMarquee 25s linear infinite;">
-        {[...topBrandNames, ...topBrandNames].map((name) => (
-          <span class="text-xs font-semibold uppercase tracking-[0.15em] opacity-30" style={`color: hsl(var(--hero-text));`}>{name}</span>
-        ))}
+    <!-- Live brand ticker (bottom) -->
+    <div class="relative z-20 overflow-hidden" style="background: rgba(0,0,0,0.52); border-top: 1px solid rgba(255,255,255,0.05);">
+      <div class="flex items-stretch" style="height: 30px;">
+        <div class="flex-shrink-0 flex items-center gap-2 px-3 border-r" style="background: hsl(var(--primary) / 0.82); border-color: rgba(255,255,255,0.1); min-width: max-content;">
+          <span class="relative flex h-1.5 w-1.5 flex-shrink-0">
+            <span class="live-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background: #86efac;"></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full" style="background: white;"></span>
+          </span>
+          <span class="text-white text-[9px] font-black tracking-[0.22em] uppercase whitespace-nowrap">Live</span>
+        </div>
+        <div class="overflow-hidden flex-1">
+          <div class="live-ticker flex items-center h-full whitespace-nowrap" style="animation: liveTicker 28s linear infinite;">
+            {[...liveBrandNames, ...liveBrandNames].map((name) => (
+              <span class="inline-flex items-center flex-shrink-0">
+                <span class="text-[10px] font-bold tracking-[0.14em] px-5" style="color: rgba(255,255,255,0.28);">{name}</span>
+                <span class="flex-shrink-0" style="color: hsl(var(--primary) / 0.38); font-size: 7px;">◆</span>
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -651,7 +703,7 @@ const topBrandNames = brands.slice(0, 12).map(b => b.data.name);
       "email": "support@snusfriends.com",
       "contactType": "customer service"
     },
-    "sameAs": []
+    "sameAs": ["https://snusfriends.com"]
   })} />
 
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -752,6 +804,23 @@ const topBrandNames = brands.slice(0, 12).map(b => b.data.name);
       to { transform: translateX(-50%); }
     }
 
+    /* News tickers */
+    @keyframes breakingTicker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes liveTicker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* Pulsing dots for BREAKING / LIVE badges */
+    @keyframes tickerPing {
+      75%, 100% { transform: scale(2); opacity: 0; }
+    }
+    .breaking-ping { animation: tickerPing 1s cubic-bezier(0,0,0.2,1) infinite; }
+    .live-ping { animation: tickerPing 1.5s cubic-bezier(0,0,0.2,1) infinite; }
+
     /* Ambient glow drift */
     .hero-glow-1 { animation: heroDrift1 12s ease-in-out infinite; }
     .hero-glow-2 { animation: heroDrift2 15s ease-in-out infinite 3s; }
@@ -774,6 +843,7 @@ const topBrandNames = brands.slice(0, 12).map(b => b.data.name);
     @media (prefers-reduced-motion: reduce) {
       .hero-can, .hero-orbit-ring, .hero-center-can,
       .hero-glow-1, .hero-glow-2, .hero-marquee,
+      .breaking-ticker, .live-ticker, .breaking-ping, .live-ping,
       .hero-reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
     }
   </style>

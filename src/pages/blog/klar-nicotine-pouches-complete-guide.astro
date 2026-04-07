@@ -13,7 +13,7 @@ import { tenant } from '@/config/tenant';
   ogType="article"
   ogImage="/images/og/og-brand.svg"
 >
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"KLAR Nicotine Pouches: Complete Brand Guide","description":"KLAR nicotine pouches — the world's first bioceramic pouch with 80% faster nicotine release. 6 products, mint and unflavoured, 3-9 mg. Full review.","image":"https://snusfriends.com/images/klar-hero.jpg","datePublished":"2026-03-28","dateModified":"2026-03-28","author":{"@type":"Organization","name":"SnusFriend","url":"https://snusfriends.com"},"publisher":{"@type":"Organization","name":"SnusFriend","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}}})} />
+  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"KLAR Nicotine Pouches: Complete Brand Guide","description":"KLAR nicotine pouches — the world's first bioceramic pouch with 80% faster nicotine release. 6 products, mint and unflavoured, 3-9 mg. Full review.","image":"https://snusfriends.com/images/klar-hero.jpg","datePublished":"2026-03-28","dateModified":"2026-03-28","author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },"publisher":{"@type":"Organization","name":"SnusFriend","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}}})} />
 
   <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is bioceramic technology safe?","acceptedAnswer":{"@type":"Answer","text":"Yes. Calcium carbonate is food-grade and biocompatible (used in antacids, supplements, food additives). The polymer matrix is plant-derived and inert. KLAR pouches meet all UK nicotine pouch safety standards and carry no additional risk compared to traditional pouches."}},{"@type":"Question","name":"Why is KLAR more expensive than other brands?","acceptedAnswer":{"@type":"Answer","text":"Bioceramic manufacturing is more complex than traditional pouch production. Emplicure invests heavily in R&D and quality control. Additionally, KLAR has smaller market share, so economies of scale don't apply yet. You're paying for verified innovation."}},{"@type":"Question","name":"How much shorter is KLAR's duration compared to other pouches?","acceptedAnswer":{"@type":"Answer","text":"Typically 20–30 minutes for KLAR vs. 30–45 minutes for traditional pouches. Most users find KLAR's rapid onset compensates for shorter duration—peak satisfaction is achieved faster, even if total session is shorter."}},{"@type":"Question","name":"Can I mix KLAR with traditional pouches throughout the day?","acceptedAnswer":{"@type":"Answer","text":"Yes, absolutely. Many users do: KLAR for rapid morning/afternoon hits, traditional pouches for longer evening sessions. Just monitor total daily nicotine to avoid excessive consumption."}},{"@type":"Question","name":"Is KLAR available in strengths below 3 mg?","acceptedAnswer":{"@type":"Answer","text":"Not currently. KLAR's 3 mg (Regular Mini Mint) is the lightest option. However, due to bioceramic acceleration, 3 mg KLAR delivers equivalent satisfaction to 5–6 mg traditional pouches."}}]})} />
 
@@ -29,7 +29,6 @@ import { tenant } from '@/config/tenant';
       description="KLAR nicotine pouches — the world's first bioceramic pouch with 80% faster nicotine release. 6 products, mint and unflavoured, 3-9 mg. Full review."
       date="March 2026"
       readTime="7 min read"
-      illustrationSrc="/images/blog/klar-complete-guide.svg"
     />
 
     <aside class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
@@ -229,5 +228,8 @@ import { tenant } from '@/config/tenant';
             <li><a href="/blog/loop-nicotine-pouches-complete-guide">LOOP Complete Guide</a> — Another innovation-focused brand with fast absorption</li>
         </ul>
     </nav>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

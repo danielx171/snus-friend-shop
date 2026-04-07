@@ -35,7 +35,7 @@ const description = 'Learn everything about tobacco-free nicotine pouches — ho
 
         <h2>What Are Nicotine Pouches?</h2>
         <p>
-          Nicotine pouches are small, pre-portioned sachets that deliver nicotine through
+          As the SnusFriends team explains in this guide, nicotine pouches are small, pre-portioned sachets that deliver nicotine through
           the lining of your mouth. Unlike traditional <a href="/blog/nicotine-pouches-vs-snus">snus or chewing tobacco</a>, nicotine
           pouches contain <strong>no tobacco leaf whatsoever</strong>. They are white, discreet, and produce
           no smoke, no vapour, and no spit.
@@ -166,7 +166,10 @@ const description = 'Learn everything about tobacco-free nicotine pouches — ho
         </section>
 </div>
     </div>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -175,7 +178,7 @@ const description = 'Learn everything about tobacco-free nicotine pouches — ho
     "description": description,
     "datePublished": publishDate,
     "dateModified": publishDate,
-    "author": { "@type": "Organization", "name": tenant.name, "url": `https://${tenant.domain}` },
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
     "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/what-are-nicotine-pouches` },
   })} />

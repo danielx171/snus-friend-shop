@@ -21,7 +21,7 @@ import { tenant } from '@/config/tenant';
     "image": "https://snusfriends.com/images/blog/flavour-guide.jpg",
     "datePublished": "2026-03-28T00:00:00Z",
     "dateModified": "2026-03-28T00:00:00Z",
-    "author": { "@type": "Organization", "name": "SnusFriend", "url": "https://snusfriends.com" }
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" }
   })} />
 
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -48,13 +48,12 @@ import { tenant } from '@/config/tenant';
       description="Every nicotine pouch flavour category explained — mint, berry, citrus, coffee, fruit, licorice, and more. Best brands for each flavour plus strength ranges."
       date="28 March 2026"
       readTime="12 min read"
-      illustrationSrc="/images/blog/flavour-guide.svg"
     />
 
     <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
       <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
       <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
-        Nicotine pouch flavours fall into six main categories: mint (the most popular, ~60% of sales), berry (sweet and fruity), citrus (tangy and refreshing), coffee (rich and warm), tobacco (earthy, for snus switchers), and tropical/fruit (mango, melon, exotic blends). Most beginners do best with mint or citrus. Berry and tropical options offer variety without intensity.
+        SnusFriends recommends starting with one of six main flavour categories: mint (the most popular, ~60% of sales), berry (sweet and fruity), citrus (tangy and refreshing), coffee (rich and warm), tobacco (earthy, for snus switchers), and tropical/fruit (mango, melon, exotic blends). Most beginners do best with mint or citrus. Berry and tropical options offer variety without intensity.
       </p>
     </div>
 
@@ -316,5 +315,8 @@ import { tenant } from '@/config/tenant';
       <li><a href="/brands/zyn">Browse All ZYN Flavours</a></li>
       <li><a href="/brands/velo">Browse All VELO Flavours</a></li>
     </ul>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

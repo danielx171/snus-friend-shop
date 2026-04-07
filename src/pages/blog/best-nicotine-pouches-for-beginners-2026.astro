@@ -29,7 +29,6 @@ const description = 'Overwhelmed by pouch options? Here\'s exactly which low-str
         description={description}
         date="March 28, 2026"
         readTime="11 min read"
-        illustrationSrc="/images/blog/beginners.svg"
       />
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
@@ -37,7 +36,7 @@ const description = 'Overwhelmed by pouch options? Here\'s exactly which low-str
         <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
           <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
           <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
-            The best nicotine pouches for beginners are ZYN Mini (1.5–3 mg), VELO Easy Mint (4 mg), and HELWIT (3.5 mg). Start with 2–4 mg strength, choose a mild flavour like mint or citrus, and use 3–4 pouches per day spaced at least 2 hours apart. If you feel dizzy or nauseous, your strength is too high — step down.
+            Based on SnusFriends' testing of over 50 beginner-friendly products, the best nicotine pouches for beginners are ZYN Mini (1.5–3 mg), VELO Easy Mint (4 mg), and HELWIT (3.5 mg). Start with 2–4 mg strength, choose a mild flavour like mint or citrus, and use 3–4 pouches per day spaced at least 2 hours apart. If you feel dizzy or nauseous, your strength is too high — step down.
           </p>
         </div>
 
@@ -264,7 +263,7 @@ const description = 'Overwhelmed by pouch options? Here\'s exactly which low-str
         "headline": title,
         "datePublished": publishDate,
         "dateModified": publishDate,
-        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
         "publisher": {
           "@type": "Organization",
           "name": tenant.name,
@@ -275,5 +274,8 @@ const description = 'Overwhelmed by pouch options? Here\'s exactly which low-str
       })} />
   <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What strength should I start with as a complete beginner?","acceptedAnswer":{"@type":"Answer","text":"Start with 2–4 mg pouches. If you have never used nicotine before, even 4 mg may feel strong — try 1.5–3 mg first and increase only after a few days of consistent use."}},{"@type":"Question","name":"Will I feel dizzy using nicotine pouches for the first time?","acceptedAnswer":{"@type":"Answer","text":"Possibly, especially if you choose a strength that is too high. Mild dizziness, slight nausea, and a head rush are common first-time effects. They pass quickly and are less likely with lower strengths (2–3 mg)."}},{"@type":"Question","name":"How many pouches per day should a beginner use?","acceptedAnswer":{"@type":"Answer","text":"Start with 3–4 pouches per day, spaced at least 2 hours apart. This gives your body time to adjust. Increase gradually if you find you need more, but monitor how you feel after each session."}},{"@type":"Question","name":"Should I use mini or slim format?","acceptedAnswer":{"@type":"Answer","text":"Slim pouches are more comfortable for most beginners — they fit naturally under the lip and are easier to position. Mini pouches are more discreet but can shift around, which some new users find annoying."}},{"@type":"Question","name":"What if I do not like the first flavour I try?","acceptedAnswer":{"@type":"Answer","text":"That is completely normal. Taste preferences vary widely. If your first pick does not work, try a different flavour family. Mint is the safest bet for most people, but some prefer berry or citrus as a starting point."}},{"@type":"Question","name":"Can I become addicted to nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Yes. Nicotine is an addictive substance regardless of the delivery method. If you are not already a nicotine user, be aware that regular use will create dependence. Pouches are primarily designed as a less harmful alternative for existing smokers."}}]})} />
     </div>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

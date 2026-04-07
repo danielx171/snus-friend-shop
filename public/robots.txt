@@ -6,6 +6,12 @@ Disallow: /cart
 Disallow: /ops/
 Disallow: /search?
 
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 # Sitemap
 Sitemap: https://snusfriends.com/sitemap-index.xml
 

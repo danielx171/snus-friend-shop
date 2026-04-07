@@ -4,6 +4,21 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const skrufFreshMint = findProduct('skruf', 'fresh mint');
+const skrufFrozenShot = findProduct('skruf', 'frozen shot');
+const skrufFresh = findProduct('skruf', 'fresh');
+const skrufBlackcurrant = findProduct('skruf', 'blackcurrant');
 ---
 
 <Shop
@@ -21,7 +36,7 @@ import { tenant } from '@/config/tenant';
     "image": "https://snusfriends.com/images/skruf-hero.jpg",
     "datePublished": "2026-03-28",
     "dateModified": "2026-03-28",
-    "author": { "@type": "Organization", "name": "SnusFriend", "url": "https://snusfriends.com" },
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/skruf-nicotine-pouches-complete-guide" }
   })} />
@@ -50,7 +65,6 @@ import { tenant } from '@/config/tenant';
       description="Skruf nicotine pouches reviewed — Sweden's craft brand by Imperial Brands. 15 products, strengths 6-11.5 mg, flavours from Purple Cassice to Fresh Freeze."
       date="28 March 2026"
       readTime="7 min read"
-      illustrationSrc="/images/blog/skruf-complete-guide.svg"
     />
 
     <section class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
@@ -144,9 +158,11 @@ import { tenant } from '@/config/tenant';
 
     <h3>1. Fresh Mint S3 (9 mg) — The Balanced Entry</h3>
     <p>If you're new to Skruf, this is the obvious start. Medium strength, clean flavour, proven formula. Thousands of daily users rely on it.</p>
+    {skrufFresh && <BlogProductCard {...skrufFresh.data} />}
 
     <h3>2. Purple Cassice S2 (6 mg) — The Heritage Flavour</h3>
     <p>Berry is where Skruf's craft roots show. This blackcurrant pouch has been refined for 20+ years. If you want to taste tradition, this is it.</p>
+    {skrufBlackcurrant && <BlogProductCard {...skrufBlackcurrant.data} />}
 
     <h3>3. Intense Spearmint Ice S4 (11.3 mg) — The Sophisticated Strong</h3>
     <p>Not just cooling blastwave — spearmint has botanical complexity. For advanced users who want flavour and strength in equal measure.</p>
@@ -156,6 +172,7 @@ import { tenant } from '@/config/tenant';
 
     <h3>5. Fresh Freeze Ultra (11.5 mg) — The Limited Collector</h3>
     <p>Skruf's rotating limited-edition drops. When Fresh Freeze appears, it sells fast. Maximum strength, frozen freshness, pure pouch craft.</p>
+    {skrufFrozenShot && <BlogProductCard {...skrufFrozenShot.data} />}
 
     <h2>Who Is Skruf For?</h2>
 
@@ -228,5 +245,8 @@ import { tenant } from '@/config/tenant';
     </ul>
 
     <p><strong>Ready to explore Skruf?</strong> Shop all <a href="/brands/skruf">15 Skruf products</a> at SnusFriend.</p>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

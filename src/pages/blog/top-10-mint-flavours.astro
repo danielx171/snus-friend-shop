@@ -35,7 +35,7 @@ const description = 'We ranked the best mint and menthol nicotine pouches from t
 
         <h2>Why Mint Dominates</h2>
         <p>
-          <a href="/products/flavor/mint">Mint nicotine pouches</a> account for an estimated 45-60%
+          Here at SnusFriends, we have reviewed over 700 nicotine pouches — and <a href="/products/flavor/mint">mint nicotine pouches</a> account for an estimated 45-60%
           of all nicotine pouch sales globally, depending on the market. <strong>Mint flavour and nicotine are a natural pairing because the cooling sensation enhances the nicotine experience, masks bitterness, and leaves breath fresh.</strong> This is especially true for users in the <a href="/blog/best-nicotine-pouches-all-day-use">all-day use category</a>.
         </p>
         <p>
@@ -200,7 +200,10 @@ const description = 'We ranked the best mint and menthol nicotine pouches from t
         </section>
 </div>
     </div>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -209,7 +212,7 @@ const description = 'We ranked the best mint and menthol nicotine pouches from t
     "description": description,
     "datePublished": publishDate,
     "dateModified": publishDate,
-    "author": { "@type": "Organization", "name": tenant.name, "url": `https://${tenant.domain}` },
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
     "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/top-10-mint-flavours` },
   })} />

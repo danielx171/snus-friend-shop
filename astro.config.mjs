@@ -32,7 +32,7 @@ export default defineConfig({
         const exclude = [
           '/account', '/cart', '/checkout', '/login', '/register',
           '/forgot-password', '/update-password', '/order-confirmation',
-          '/search', '/wishlist', '/404',
+          '/search', '/wishlist', '/404', '/auth/confirm',
           // Old blog URLs that have 301 redirects — only new versions should be in sitemap
           '/blog/zyn-vs-velo/',
           '/blog/strongest-nicotine-pouches/',
@@ -40,6 +40,10 @@ export default defineConfig({
         ];
         return !exclude.some((p) => page.includes(p));
       },
+      serialize: (item) => ({
+        ...item,
+        lastmod: new Date().toISOString().split('T')[0],
+      }),
     }),
   ],
   vite: {

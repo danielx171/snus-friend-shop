@@ -13,7 +13,7 @@ import { tenant } from '@/config/tenant';
   ogType="article"
   ogImage="/images/og/og-brand.svg"
 >
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"Nordic Spirit Nicotine Pouches: Complete Brand Guide","description":"Nordic Spirit by JTI reviewed — the UK's favourite nicotine pouch brand. 12 flavours from Bergamot Wildberry to Frosty Mint, strengths 6-17 mg.","image":"https://snusfriends.com/images/nordic-spirit-hero.jpg","datePublished":"2026-03-28","dateModified":"2026-03-28","author":{"@type":"Organization","name":"SnusFriend","url":"https://snusfriends.com"},"publisher":{"@type":"Organization","name":"SnusFriend","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}},"mainEntity":{"@type":"Product","name":"Nordic Spirit Nicotine Pouches","manufacturer":{"@type":"Organization","name":"JTI (Japan Tobacco International)"},"description":"UK market-leading nicotine pouches with 12 flavours and 4 strength tiers"}})} />
+  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"Nordic Spirit Nicotine Pouches: Complete Brand Guide","description":"Nordic Spirit by JTI reviewed — the UK's favourite nicotine pouch brand. 12 flavours from Bergamot Wildberry to Frosty Mint, strengths 6-17 mg.","image":"https://snusfriends.com/images/nordic-spirit-hero.jpg","datePublished":"2026-03-28","dateModified":"2026-03-28","author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },"publisher":{"@type":"Organization","name":"SnusFriend","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}},"mainEntity":{"@type":"Product","name":"Nordic Spirit Nicotine Pouches","manufacturer":{"@type":"Organization","name":"JTI (Japan Tobacco International)"},"description":"UK market-leading nicotine pouches with 12 flavours and 4 strength tiers"}})} />
 
   <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are Nordic Spirit pouches safe?","acceptedAnswer":{"@type":"Answer","text":"Nordic Spirit pouches contain nicotine—a highly addictive substance—but no tobacco. They carry no cancer risk equivalent to cigarette smoking. They are legal and age-restricted (18+) in the UK. If you have heart conditions, pregnancy concerns, or nicotine sensitivity, consult your GP before use."}},{"@type":"Question","name":"How long does one Nordic Spirit pouch last?","acceptedAnswer":{"@type":"Answer","text":"Typically 30–45 minutes. Nicotine release is gradual, so satisfaction is sustained without sharp peaks or crashes. You'll sense when the flavour and nicotine are depleted and naturally remove it."}},{"@type":"Question","name":"Can I swallow saliva with Nordic Spirit?","acceptedAnswer":{"@type":"Answer","text":"Yes, saliva produced during use is safe to swallow. Nordic Spirit generates minimal drip, so swallowing is not a concern. Some users prefer to spit (as with traditional snus); others simply swallow."}},{"@type":"Question","name":"Which Nordic Spirit flavour is most popular?","acceptedAnswer":{"@type":"Answer","text":"Mint is the bestseller globally, followed by Spearmint and Bergamot Wildberry. However, 'best' is subjective—we recommend starting with classic Mint or Spearmint and exploring from there."}},{"@type":"Question","name":"Can I use Nordic Spirit if I've never smoked?","acceptedAnswer":{"@type":"Answer","text":"Technically yes, but it's not recommended. Nicotine pouches are designed for smokers transitioning away from cigarettes or existing snus users. If you're a non-smoker, nicotine carries addiction risk and no health benefit."}}]})} />
 
@@ -29,7 +29,6 @@ import { tenant } from '@/config/tenant';
       description="Nordic Spirit by JTI reviewed — the UK's favourite nicotine pouch brand. 12 flavours from Bergamot Wildberry to Frosty Mint, strengths 6-17 mg."
       date="March 2026"
       readTime="6 min read"
-      illustrationSrc="/images/blog/nordic-spirit-complete-guide.svg"
     />
 
     <aside class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
@@ -249,5 +248,8 @@ import { tenant } from '@/config/tenant';
             <li><a href="/blog/zyn-nicotine-pouches-complete-guide">ZYN Complete Guide</a> — Compare with Nordic Spirit's main competitor</li>
         </ul>
     </nav>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

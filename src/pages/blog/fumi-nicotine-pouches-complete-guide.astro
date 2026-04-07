@@ -13,7 +13,7 @@ import { tenant } from '@/config/tenant';
   ogType="article"
   ogImage="/images/og/og-brand.svg"
 >
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"FUMI Nicotine Pouches: Complete Brand Guide","description":"FUMI nicotine pouches reviewed — Swedish-made with eccentric Nordic flavours. Salty Raspberry, Fiery Mango, Zingy Ginger and more. Plant-based and vegan.","image":"https://snusfriends.com/images/fumi-hero.jpg","datePublished":"2026-03-28","dateModified":"2026-03-28","author":{"@type":"Organization","name":"SnusFriend","url":"https://snusfriends.com"},"publisher":{"@type":"Organization","name":"SnusFriend","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}}})} />
+  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"FUMI Nicotine Pouches: Complete Brand Guide","description":"FUMI nicotine pouches reviewed — Swedish-made with eccentric Nordic flavours. Salty Raspberry, Fiery Mango, Zingy Ginger and more. Plant-based and vegan.","image":"https://snusfriends.com/images/fumi-hero.jpg","datePublished":"2026-03-28","dateModified":"2026-03-28","author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },"publisher":{"@type":"Organization","name":"SnusFriend","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}}})} />
 
   <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are FUMI's salty flavours actually salty?","acceptedAnswer":{"@type":"Answer","text":"Yes, but not in the aggressive table-salt sense. 'Salty' refers to mild saline undertones (umami, mineral notes) that add complexity and depth. Salty Raspberry has raspberry at the forefront with saline in the background, creating a pickled-fruit quality."}},{"@type":"Question","name":"How long do FUMI flavours actually last?","acceptedAnswer":{"@type":"Answer","text":"User reports consistently describe 35–45 minute flavour persistence. This is longer than most competitor brands (typically 20–30 minutes). Natural botanical flavourings appear more tenacious than synthetic compounds."}},{"@type":"Question","name":"Which FUMI product should I start with?","acceptedAnswer":{"@type":"Answer","text":"If adventurous: Salty Raspberry or Fiery Mango. If uncertain: Fiery Mango (relatable tropical fruit + mild spice; easiest gateway). If heavy user seeking substance: Freezy Mint 11 mg."}},{"@type":"Question","name":"Is FUMI truly vegan and plant-based?","acceptedAnswer":{"@type":"Answer","text":"Yes, FUMI explicitly sources plant-based nicotine and botanical flavourings. No gelatin, no carmine, no animal testing. Helix Sweden publishes ingredient lists."}},{"@type":"Question","name":"Can I find FUMI in all UK retailers?","acceptedAnswer":{"@type":"Answer","text":"No. FUMI is a niche, smaller-scale brand. Availability is patchy across UK retailers. Online specialist retailers stock FUMI more reliably than high-street shops."}}]})} />
 
@@ -29,7 +29,6 @@ import { tenant } from '@/config/tenant';
       description="FUMI nicotine pouches reviewed — Swedish-made with eccentric Nordic flavours. Salty Raspberry, Fiery Mango, Zingy Ginger and more. Plant-based and vegan."
       date="March 2026"
       readTime="7 min read"
-      illustrationSrc="/images/blog/fumi-brand.svg"
     />
 
     <aside class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
@@ -237,5 +236,8 @@ import { tenant } from '@/config/tenant';
             <li><a href="/blog/velo-flavours-complete-guide">VELO Flavours Complete Guide</a> — Compare with another innovative flavour-forward brand</li>
         </ul>
     </nav>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

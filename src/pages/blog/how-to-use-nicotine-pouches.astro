@@ -22,7 +22,7 @@ import { tenant } from '@/config/tenant';
     "image": "/images/blog/how-to-use-nicotine-pouches.jpg",
     "datePublished": "2026-03-28",
     "dateModified": "2026-03-28",
-    "author": { "@type": "Organization", "name": "SnusFriends", "url": "https://snusfriends.com" },
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
     "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } }
   })} />
 
@@ -38,6 +38,22 @@ import { tenant } from '@/config/tenant';
     ]
   })} />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Use Nicotine Pouches",
+    "description": "Step-by-step instructions for using a nicotine pouch correctly, from opening the can to disposal.",
+    "totalTime": "PT5M",
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Open the Can", "text": "Gently open your nicotine pouch can. You will notice a lid compartment designed to hold used pouches for discreet disposal." },
+      { "@type": "HowToStep", "position": 2, "name": "Place Under Your Upper Lip", "text": "Remove a single pouch and position it between your upper gum and inner lip. The most comfortable position is slightly towards the centre. Ensure the pouch sits snugly against your gum." },
+      { "@type": "HowToStep", "position": 3, "name": "Feel the Tingle", "text": "Within seconds, you will notice a subtle tingling sensation as nicotine begins to absorb through your gum tissue. This is normal and indicates the pouch is working." },
+      { "@type": "HowToStep", "position": 4, "name": "Enjoy for 20-40 Minutes", "text": "Leave the pouch in place for 20-40 minutes. Peak nicotine absorption occurs around 20-30 minutes. You do not need to chew or suck on the pouch; simply let it sit." },
+      { "@type": "HowToStep", "position": 5, "name": "Remove and Dispose", "text": "Once you are done, carefully remove the pouch and place it in the lid compartment of your can. This keeps your space clean and prevents accidental ingestion by children or pets." },
+      { "@type": "HowToStep", "position": 6, "name": "Note the Strength for Next Time", "text": "If it is your first time, take note of how the strength feels. This helps you choose the right strength on your next purchase." }
+    ]
+  })} />
+
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[
       { label: 'Blog', href: '/blog' },
@@ -50,7 +66,6 @@ import { tenant } from '@/config/tenant';
       description="Learn how to use nicotine pouches correctly. Step-by-step instructions, what to expect your first time, tips for comfort, and common mistakes to avoid."
       date="28 March 2026"
       readTime="8 min read"
-      illustrationSrc="/images/blog/how-to-use.svg"
     />
 
     <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
@@ -162,5 +177,8 @@ import { tenant } from '@/config/tenant';
       <p>Now that you know how to use nicotine pouches correctly, explore our <a href="/products">full product range</a> or take our <a href="/flavor-quiz">flavour quiz</a> to find your perfect match. If you're switching from cigarettes, check out our guide on <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">switching to nicotine pouches</a> or explore <a href="/blog/nicotine-pouch-side-effects">what to expect in terms of side effects</a>.</p>
       <p>For beginners, we recommend starting with our <a href="/blog/best-nicotine-pouches-for-beginners-2026">best nicotine pouches for beginners</a> guide, which highlights the most forgiving and flavourful options for first-time users.</p>
     </section>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

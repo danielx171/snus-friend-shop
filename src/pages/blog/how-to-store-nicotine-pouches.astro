@@ -13,7 +13,22 @@ import { tenant } from '@/config/tenant';
   ogType="article"
   ogImage="/images/og/og-guide.svg"
 >
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"How to Store Nicotine Pouches: Shelf Life, Freshness & Tips","description":"Learn how to store nicotine pouches to keep them fresh. Covers shelf life, temperature, refrigeration, travel storage, and signs of expired pouches.","image":"https://snusfriends.com/og-storage-guide.jpg","datePublished":"2026-03-29T00:00:00Z","dateModified":"2026-03-29T00:00:00Z","author":{"@type":"Organization","name":"SnusFriends","url":"https://snusfriends.com"},"publisher":{"@type":"Organization","name":"SnusFriends","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}},"mainEntity":{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How long do unopened nicotine pouches last?","acceptedAnswer":{"@type":"Answer","text":"Unopened nicotine pouches typically last 12–14 months at room temperature when stored away from heat, moisture, and direct sunlight. The expiry date is printed on each tin; most manufacturers guarantee full potency within this window. Proper storage (cool, dry place) helps maintain flavour and nicotine strength throughout shelf life."}},{"@type":"Question","name":"Should I refrigerate nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Refrigeration is optional for single tins but recommended for bulk storage. If you're storing 10+ tins, keep them in the fridge at 2–8°C to extend freshness by 2–3 months and slow flavour degradation. After removing from the fridge, let pouches return to room temperature before opening to prevent condensation and moisture buildup."}},{"@type":"Question","name":"How can I tell if nicotine pouches have expired?","acceptedAnswer":{"@type":"Answer","text":"Signs of expiry include: dry or hardened pouches (should be moist), weak or off flavour, discoloration or browning, and reduced nicotine sensation. Check the expiry date on the tin first. If pouches are past their date or show any of these signs, discard them — expired pouches are less effective and may taste unpleasant."}}]}})} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Store Nicotine Pouches",
+    "description": "Learn how to store nicotine pouches correctly to maintain freshness, flavour, and nicotine potency.",
+    "totalTime": "PT3M",
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Keep Temperature Cool and Stable", "text": "Store nicotine pouches at 15-20 degrees Celsius (59-68 degrees Fahrenheit). Avoid storing near radiators, heaters, direct sunlight, or in warm cupboards above the stove." },
+      { "@type": "HowToStep", "position": 2, "name": "Control Moisture and Humidity", "text": "Avoid storing in bathrooms or kitchens near sinks. Always reseal the tin immediately after removing a pouch. In humid climates, use a small desiccant sachet in your storage container." },
+      { "@type": "HowToStep", "position": 3, "name": "Keep Pouches in the Dark", "text": "Store pouches in opaque containers or dark cupboards. Direct sunlight and UV light degrade nicotine and flavour compounds. The original tin is designed for this purpose." },
+      { "@type": "HowToStep", "position": 4, "name": "Refrigerate for Bulk Storage", "text": "If storing 10 or more tins, refrigerate at 2-8 degrees Celsius to extend freshness by 2-3 months. Store in an airtight container and let pouches return to room temperature before opening." },
+      { "@type": "HowToStep", "position": 5, "name": "Check for Signs of Expiry", "text": "Look for dry or hardened pouches, weak or off flavour, discoloration or browning, and reduced nicotine sensation. Discard any pouches past their printed expiry date or showing these signs." }
+    ]
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":"How to Store Nicotine Pouches: Shelf Life, Freshness & Tips","description":"Learn how to store nicotine pouches to keep them fresh. Covers shelf life, temperature, refrigeration, travel storage, and signs of expired pouches.","image":"https://snusfriends.com/og-storage-guide.jpg","datePublished":"2026-03-29T00:00:00Z","dateModified":"2026-03-29T00:00:00Z","author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },"publisher":{"@type":"Organization","name":"SnusFriends","logo":{"@type":"ImageObject","url":"https://snusfriends.com/logo.png"}},"mainEntity":{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How long do unopened nicotine pouches last?","acceptedAnswer":{"@type":"Answer","text":"Unopened nicotine pouches typically last 12–14 months at room temperature when stored away from heat, moisture, and direct sunlight. The expiry date is printed on each tin; most manufacturers guarantee full potency within this window. Proper storage (cool, dry place) helps maintain flavour and nicotine strength throughout shelf life."}},{"@type":"Question","name":"Should I refrigerate nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Refrigeration is optional for single tins but recommended for bulk storage. If you're storing 10+ tins, keep them in the fridge at 2–8°C to extend freshness by 2–3 months and slow flavour degradation. After removing from the fridge, let pouches return to room temperature before opening to prevent condensation and moisture buildup."}},{"@type":"Question","name":"How can I tell if nicotine pouches have expired?","acceptedAnswer":{"@type":"Answer","text":"Signs of expiry include: dry or hardened pouches (should be moist), weak or off flavour, discoloration or browning, and reduced nicotine sensation. Check the expiry date on the tin first. If pouches are past their date or show any of these signs, discard them — expired pouches are less effective and may taste unpleasant."}}]}})} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[
@@ -181,5 +196,8 @@ import { tenant } from '@/config/tenant';
             <li><a href="/products">Browse fresh stock of premium nicotine pouches</a></li>
         </ul>
     </div>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

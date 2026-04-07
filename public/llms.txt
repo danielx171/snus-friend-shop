@@ -1,3 +1,10 @@
+---
+Last-Updated: 2026-04-07
+License: CC-BY-4.0
+See-Also: /llms-full.txt
+Cite-As: "SnusFriend (snusfriends.com)"
+---
+
 # SnusFriend
 
 > Europe's largest online nicotine pouch store with 700+ tobacco-free products from 57 brands.
