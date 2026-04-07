@@ -50,9 +50,9 @@ Deno.serve(async (req) => {
 
       if (!firstItem || !order.customer_email) continue;
 
-      const productName = firstItem.name || "your recent purchase";
-      const productSlug = firstItem.slug || firstItem.product_id || "";
-      const productImageUrl = firstItem.image_url || firstItem.imageUrl || "";
+      const productName = firstItem.product_name || "your recent purchase";
+      const productSlug = firstItem.slug || "";
+      const productImageUrl = firstItem.image_url || "";
       const reviewUrl = `https://snusfriends.com/products/${productSlug}#reviews`;
       const orderDate = new Date(order.created_at).toLocaleDateString("en-GB", {
         day: "numeric", month: "long", year: "numeric",
