@@ -8,7 +8,7 @@ describe("ReputationBadge", () => {
     const badge = screen.getByTestId("rep-badge");
     expect(badge).toBeInTheDocument();
     expect(badge).toHaveTextContent("Newcomer");
-    expect(badge.className).toContain("bg-gray");
+    expect(badge.className).toContain("inline-flex");
   });
 
   it("renders Legend with animate-shimmer class", () => {

@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnusFriend Blog SEO Audit — Batch 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #0c1018;
+            color: #f1f5f9;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #a3e635;
+            padding-bottom: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #a3e635;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+        
+        .meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #94a3b8;
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            color: #64748b;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .meta-value {
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+        
+        /* Score Summary Table */
+        .summary-table {
+            width: 100%;
+            margin-bottom: 3rem;
+            border-collapse: collapse;
+            background-color: #1a202c;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .summary-table thead {
+            background-color: #a3e635;
+            color: #0c1018;
+        }
+        
+        .summary-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+        }
+        
+        .summary-table td {
+            padding: 1rem;
+            border-top: 1px solid #334155;
+        }
+        
+        .summary-table tbody tr:hover {
+            background-color: #0f172a;
+        }
+        
+        .article-name {
+            font-weight: 600;
+            color: #a3e635;
+        }
+        
+        .score-cell {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .score-5 { color: #a3e635; }
+        .score-4 { color: #fbbf24; }
+        .score-3 { color: #f97316; }
+        .score-2 { color: #ef4444; }
+        .score-1 { color: #dc2626; }
+        
+        .score-total {
+            font-weight: 700;
+            color: #a3e635;
+        }
+        
+        .score-perfect {
+            color: #a3e635;
+        }
+        
+        .score-star {
+            color: #fbbf24;
+        }
+        
+        /* Article Details */
+        .article-section {
+            margin-bottom: 2rem;
+        }
+        
+        .article-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            background-color: #1a202c;
+            border-left: 4px solid #a3e635;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .article-header:hover {
+            background-color: #0f172a;
+        }
+        
+        .article-header.open {
+            border-left-color: #a3e635;
+            background-color: #0f172a;
+        }
+        
+        .article-title-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+        
+        .article-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: #a3e635;
+            color: #0c1018;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .article-info {
+            flex: 1;
+        }
+        
+        .article-name-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.25rem;
+        }
+        
+        .article-slug {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-family: "Courier New", monospace;
+        }
+        
+        .article-scores {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .score-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+        }
+        
+        .score-badge-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        
+        .score-badge-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .toggle-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a3e635;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .article-header.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .article-details {
+            display: none;
+            background-color: #1a202c;
+            border: 1px solid #334155;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            padding: 2rem;
+            margin-top: -6px;
+        }
+        
+        .article-details.open {
+            display: block;
+        }
+        
+        .score-section {
+            margin-bottom: 2rem;
+        }
+        
+        .score-section h3 {
+            font-size: 1.1rem;
+            color: #a3e635;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .score-section-content {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #475569;
+            margin-bottom: 1rem;
+        }
+        
+        .score-section-content.weak {
+            border-left-color: #f97316;
+        }
+        
+        .score-section-content.strong {
+            border-left-color: #a3e635;
+        }
+        
+        .score-section-content p {
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+        }
+        
+        .score-section-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .improvements-section {
+            background-color: #1a202c;
+            border: 2px dashed #f97316;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-top: 1.5rem;
+        }
+        
+        .improvements-section h4 {
+            color: #f97316;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .improvement-content {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: "Courier New", monospace;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            overflow-x: auto;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        
+        .improvement-content:last-child {
+            margin-bottom: 0;
+        }
+        
+        .improvement-label {
+            color: #a3e635;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #64748b;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background-color: #1a202c;
+            padding: 1.5rem;
+            border-radius: 6px;
+        }
+        
+        .legend-item {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        
+        .legend-dot.excellent { background-color: #a3e635; }
+        .legend-dot.good { background-color: #fbbf24; }
+        .legend-dot.fair { background-color: #f97316; }
+        .legend-dot.poor { background-color: #ef4444; }
+        
+        .legend-text {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>SnusFriend Blog SEO Audit</h1>
+            <p>Batch 2: 5 Brand Complete Guides</p>
+            <div class="meta">
+                <div class="meta-item">
+                    <span class="meta-label">Date</span>
+                    <span class="meta-value">7 April 2026</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Articles Reviewed</span>
+                    <span class="meta-value">5</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Batch</span>
+                    <span class="meta-value">2/3</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Auditor</span>
+                    <span class="meta-value">Daniel (SnusFriend)</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-dot excellent"></div>
+                <span class="legend-text"><strong>5/5:</strong> Excellent</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot good"></div>
+                <span class="legend-text"><strong>4/5:</strong> Good</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot fair"></div>
+                <span class="legend-text"><strong>3/5:</strong> Fair (needs work)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot poor"></div>
+                <span class="legend-text"><strong>★:</strong> Gold Standard</span>
+            </div>
+        </div>
+        
+        <!-- Summary Table -->
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th class="score-cell">SEO</th>
+                    <th class="score-cell">Readability</th>
+                    <th class="score-cell">Visual</th>
+                    <th class="score-cell">Depth</th>
+                    <th class="score-cell">Specificity</th>
+                    <th class="score-cell">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="article-name">ZYN Nicotine Pouches</td>
+                    <td class="score-cell score-4">4</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-4">4</td>
+                    <td class="score-cell score-3">3</td>
+                    <td class="score-cell score-3">3</td>
+                    <td class="score-cell score-total">19/25</td>
+                </tr>
+                <tr>
+                    <td class="article-name">VELO Nicotine Pouches</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-4">4</td>
+                    <td class="score-cell score-total">24/25</td>
+                </tr>
+                <tr>
+                    <td class="article-name">LOOP Nicotine Pouches</td>
+                    <td class="score-cell score-4">4</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-4">4</td>
+                    <td class="score-cell score-4">4</td>
+                    <td class="score-cell score-3">3</td>
+                    <td class="score-cell score-total">20/25</td>
+                </tr>
+                <tr>
+                    <td class="article-name">Skruf Nicotine Pouches</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-perfect score-total">25/25 ★</td>
+                </tr>
+                <tr>
+                    <td class="article-name">White Fox Nicotine Pouches</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-5">5</td>
+                    <td class="score-cell score-perfect score-total">25/25 ★</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Summary Stats -->
+        <div style="background-color: #1a202c; padding: 1.5rem; border-radius: 6px; margin-bottom: 3rem; border-left: 4px solid #a3e635;">
+            <h3 style="color: #a3e635; margin-bottom: 1rem;">Batch 2 Summary</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div>
+                    <div style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.25rem;">Average Score</div>
+                    <div style="color: #a3e635; font-size: 1.5rem; font-weight: 700;">22.6/25</div>
+                </div>
+                <div>
+                    <div style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.25rem;">Gold Standard Articles</div>
+                    <div style="color: #fbbf24; font-size: 1.5rem; font-weight: 700;">2/5</div>
+                </div>
+                <div>
+                    <div style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.25rem;">Requires Improvement</div>
+                    <div style="color: #f97316; font-size: 1.5rem; font-weight: 700;">2/5</div>
+                </div>
+                <div>
+                    <div style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.25rem;">Criteria with Score ≤3</div>
+                    <div style="color: #f97316; font-size: 1.5rem; font-weight: 700;">4 instances</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Article Details -->
+        <h2 style="color: #a3e635; margin-bottom: 2rem; font-size: 1.75rem;">Detailed Article Breakdown</h2>
+        
+        <!-- Article 1: ZYN -->
+        <div class="article-section">
+            <div class="article-header" onclick="toggleArticle(this)">
+                <div class="article-title-row">
+                    <div class="article-number">1</div>
+                    <div class="article-info">
+                        <div class="article-name-title">ZYN Nicotine Pouches: The Complete Guide</div>
+                        <div class="article-slug">zyn-nicotine-pouches-complete-guide</div>
+                    </div>
+                </div>
+                <div class="article-scores">
+                    <div class="score-badge">
+                        <span class="score-badge-label">Total</span>
+                        <span class="score-badge-value score-3">19/25</span>
+                    </div>
+                </div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="article-details">
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> SEO (4/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p><strong>H1:</strong> "ZYN Nicotine Pouches: The Complete Guide" is solid but lacks keyword urgency. Consider "2026" or "Review" to improve ranking intent.</p>
+                        <p><strong>Meta:</strong> 148 characters — well-optimized.</p>
+                        <p><strong>Internal Links:</strong> 7+ links — good coverage.</p>
+                        <p><strong>Gap:</strong> No semantic keywords for "best," "review," or "comparison" in the headline.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Readability (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Clean, scannable prose. Short paragraphs. 7-minute read is perfect for the category. Excellent flow.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Visual Structure (4/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p><strong>Good:</strong> Strength table, format comparison table.</p>
+                        <p><strong>Missing:</strong> FAQ section. Inconsistent H3 usage in the flavour subsections. More visual breathing room would help.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #f97316;">▪</span> Content Depth (3/5) — WEAK
+                    </h3>
+                    <div class="score-section-content weak">
+                        <p>For "the world's best-selling nicotine pouch brand," this is surprisingly thin at 7 minutes. Missing critical elements:</p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>No specific product names/SKUs beyond general flavour families</li>
+                            <li>No price information</li>
+                            <li>No comparison table vs VELO (the obvious competitor)</li>
+                            <li>No "what's new in 2026" section</li>
+                            <li>No mention of Philip Morris acquisition and its implications</li>
+                            <li>Strength table gives ranges but not specific product names per tier</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #f97316;">▪</span> Brand Specificity (3/5) — WEAK
+                    </h3>
+                    <div class="score-section-content weak">
+                        <p>Article states "52 ZYN products" but names <strong>zero</strong> specific products. Flavour section describes categories (Cool Mint, Citrus, Coffee) without naming individual SKUs with exact nicotine strength. Readers cannot differentiate between products or make purchasing decisions.</p>
+                    </div>
+                </div>
+                
+                <div class="improvements-section">
+                    <h4>🔧 IMPROVEMENTS NEEDED</h4>
+                    
+                    <p style="margin-bottom: 1rem; color: #cbd5e1;"><strong>Add "Top 10 ZYN Products — Staff Picks" section after the Flavour section:</strong></p>
+                    <div class="improvement-content">1. ZYN Cool Mint Slim Strong (9 mg) — The bestseller. Clean, crisp mint with reliable strong nicotine. The pouch most ZYN users reach for daily.
+
+2. ZYN Citrus Slim Regular (6 mg) — Bright orange-lemon zest. The perfect all-day pouch for users who find mint too intense.
+
+3. ZYN Cool Mint Mini (3 mg) — Maximum discretion, gentle strength. The ideal first ZYN for absolute beginners.
+
+4. ZYN Spearmint Slim Regular (6 mg) — Warmer, sweeter mint. Popular with users who find Cool Mint too sharp.
+
+5. ZYN Coffee Slim Strong (9 mg) — Rich espresso notes for morning routines. One of the most unique pouches in the ZYN range.
+
+6. ZYN Cool Mint Slim Extra Strong (12.5 mg) — For heavy users who need more from their mint. Same great flavour, serious nicotine.
+
+7. ZYN Violet Licorice Slim Strong (9 mg) — The Scandinavian classic. Floral violet meets soft anise — an acquired taste that rewards exploration.
+
+8. ZYN Cucumber Lime Slim Regular (6 mg) — Clean cucumber with a lime finish. The summer favourite that works year-round.
+
+9. ZYN Cool Mint Mini Dry Super Strong (16.5 mg) — ZYN's maximum strength in discreet mini format. For experienced users only.
+
+10. ZYN Espresso Slim Regular (6 mg) — Dark roast coffee profile. Pairs perfectly with an actual coffee.</div>
+
+                    <p style="margin-bottom: 1rem; margin-top: 1rem; color: #cbd5e1;"><strong>Add FAQ section before Conclusion:</strong></p>
+                    <div class="improvement-content">Q: How many ZYN products are there?
+A: ZYN offers 52 products in the SnusFriend catalogue, spanning two formats (Mini and Slim), five strength levels (1.5–16.5 mg), and over 10 flavour varieties including Cool Mint, Spearmint, Citrus, Coffee, Violet Licorice, Cucumber Lime, and more.
+
+Q: What's the strongest ZYN available?
+A: ZYN Cool Mint Mini Dry Super Strong at 16.5 mg per pouch is the strongest in the current range. For higher strengths, consider White Fox (up to 24 mg) or Siberia (up to 49.5 mg).
+
+Q: Is ZYN owned by Philip Morris?
+A: Yes. Philip Morris International acquired Swedish Match (ZYN's manufacturer) in 2022. Manufacturing and quality control remain in Sweden, and product formulations have not changed. PMI has invested in expanding ZYN production capacity.
+
+Q: How does ZYN compare to VELO?
+A: ZYN is the global #1 brand (70% US market share) with Swedish heritage and pharmaceutical-grade nicotine. VELO (#2 globally, by BAT) offers wider flavour variety (53 products vs ZYN's 52) and is stronger in certain European and African markets. Both are excellent; ZYN edges on consistency, VELO on flavour experimentation.</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Article 2: VELO -->
+        <div class="article-section">
+            <div class="article-header" onclick="toggleArticle(this)">
+                <div class="article-title-row">
+                    <div class="article-number">2</div>
+                    <div class="article-info">
+                        <div class="article-name-title">VELO Nicotine Pouches: Complete Brand Guide</div>
+                        <div class="article-slug">velo-nicotine-pouches-complete-guide</div>
+                    </div>
+                </div>
+                <div class="article-scores">
+                    <div class="score-badge">
+                        <span class="score-badge-label">Total</span>
+                        <span class="score-badge-value score-5">24/25</span>
+                    </div>
+                </div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="article-details">
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> SEO (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p><strong>H1:</strong> "VELO Nicotine Pouches: Complete Brand Guide" — Strong, keyword-rich.</p>
+                        <p><strong>Meta:</strong> 148 characters with product count — optimized.</p>
+                        <p><strong>Internal Links:</strong> 5+ links — solid coverage.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Readability (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Excellent flow. Conversational yet authoritative tone. 9-minute read is well-paced and engaging.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Visual Structure (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Good strength table, format comparison, flavour sub-sections with H3. Spotlight section breaks up pattern effectively. Excellent hierarchy.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Content Depth (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Comprehensive coverage: history, formats, strength tiers, all flavour families, spotlight product, user segments, brand comparison context. Well-rounded and substantive.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Brand Specificity (4/5)
+                    </h3>
+                    <div class="score-section-content">
+                        <p>Names "53 products" and highlights Mighty Peppermint specifically. Good start, but could list more individual SKUs. Strength table gives ranges; specific product names per tier would push this to 5/5.</p>
+                    </div>
+                </div>
+                
+                <p style="background-color: #1a202c; padding: 1rem; border-radius: 6px; border-left: 3px solid #a3e635; color: #cbd5e1; margin-top: 1rem;"><strong style="color: #a3e635;">Status:</strong> This article is exemplary. Consider as a model for other brand guides. Minor enhancement: add a "Top 8 VELO Products" table with specific SKUs and mg values.</p>
+            </div>
+        </div>
+        
+        <!-- Article 3: LOOP -->
+        <div class="article-section">
+            <div class="article-header" onclick="toggleArticle(this)">
+                <div class="article-title-row">
+                    <div class="article-number">3</div>
+                    <div class="article-info">
+                        <div class="article-name-title">LOOP Nicotine Pouches: The Flavour-First Brand</div>
+                        <div class="article-slug">loop-nicotine-pouches-complete-guide</div>
+                    </div>
+                </div>
+                <div class="article-scores">
+                    <div class="score-badge">
+                        <span class="score-badge-label">Total</span>
+                        <span class="score-badge-value score-4">20/25</span>
+                    </div>
+                </div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="article-details">
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> SEO (4/5)
+                    </h3>
+                    <div class="score-section-content">
+                        <p><strong>H1:</strong> "LOOP Nicotine Pouches: The Flavour-First Brand" is creative but lacks keyword density. Missing "complete guide" or "review".</p>
+                        <p><strong>Meta:</strong> 152 characters — good.</p>
+                        <p><strong>Internal Links:</strong> 6+ links — solid.</p>
+                        <p><strong>Gap:</strong> H1 prioritizes brand personality over SEO optimization.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Readability (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Clean, energetic writing. Tone matches LOOP's adventurous brand personality. 8-minute read is engaging and accessible.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Visual Structure (4/5)
+                    </h3>
+                    <div class="score-section-content">
+                        <p><strong>Good:</strong> Strength table, well-organized.</p>
+                        <p><strong>Issues:</strong> Flavour section uses H3s inconsistently. No FAQ section. Would benefit from dedicated product table.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Content Depth (4/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Covers Instant Rush tech, formats, strengths, flavours, eco-packaging, user segments, brand comparison context. Solid foundation, but doesn't list specific product names/SKUs.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #f97316;">▪</span> Brand Specificity (3/5) — WEAK
+                    </h3>
+                    <div class="score-section-content weak">
+                        <p>States "32 products" but only names flavour concepts (Jalapeño Lime, Habanero Mint, Salty Ludicris) without listing specific product names with mg values. Readers cannot easily find or purchase specific products.</p>
+                    </div>
+                </div>
+                
+                <div class="improvements-section">
+                    <h4>🔧 IMPROVEMENTS NEEDED</h4>
+                    
+                    <p style="margin-bottom: 1rem; color: #cbd5e1;"><strong>Add "Top 8 LOOP Products" section after the Flavours section:</strong></p>
+                    <div class="improvement-content">1. LOOP Mint Mania Slim Strong (9.4 mg) — The go-to daily mint. Instant Rush delivers cooling fast, and the strength hits the sweet spot for regular users.
+
+2. LOOP Jalapeño Lime Slim Strong (9.4 mg) — The signature adventurous flavour. Gentle heat meets citrus zing — nothing else on the market tastes like this.
+
+3. LOOP Salty Ludicris Slim Extra Strong (12.5 mg) — Salty liquorice with serious nicotine. The cult favourite that defines LOOP's bold personality.
+
+4. LOOP Habanero Mint Slim Strong (9.4 mg) — Mint with a warm chilli edge. The pouch that proves "spicy nicotine" works brilliantly.
+
+5. LOOP Sicily Spritz Slim Normal (6.3 mg) — Blood orange and citrus. Light and refreshing for all-day summer use.
+
+6. LOOP Red Chili Melon Slim Strong (9.4 mg) — Watermelon sweetness cut with chilli warmth. Unexpected and addictive.
+
+7. LOOP Smooth Mint Slim Normal (6.3 mg) — The gentle entry point. All the LOOP quality without the intensity.
+
+8. LOOP Zero Jalapeño Lime (0 mg) — Practice the format or taper down without losing LOOP's signature taste.</div>
+
+                    <p style="margin-bottom: 1rem; margin-top: 1rem; color: #cbd5e1;"><strong>Add FAQ section before Conclusion:</strong></p>
+                    <div class="improvement-content">Q: What is Instant Rush technology?
+A: Instant Rush is LOOP's proprietary pouch design that releases nicotine and flavour significantly faster than traditional pouches. While most pouches take 2–5 minutes to activate, LOOP pouches deliver noticeable effects in under a minute.
+
+Q: Where is LOOP made?
+A: LOOP is manufactured by Another Snus Factory (ASF) in Sweden. ASF is an independent manufacturer focused on innovation and sustainability in the nicotine pouch category.
+
+Q: Is LOOP good for beginners?
+A: LOOP's Normal strength (6.3 mg) is suitable for beginners, but be aware that Instant Rush technology makes even lighter pouches feel slightly more intense than comparable products from other brands. The 0 mg Jalapeño Lime is excellent for trying the format without nicotine.
+
+Q: How does LOOP compare to ZYN?
+A: LOOP is the adventurous alternative. ZYN leads on consistency and global availability; LOOP leads on flavour innovation and faster onset. If you want reliable daily mint, ZYN. If you want Jalapeño Lime and chilli melon, LOOP.</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Article 4: Skruf -->
+        <div class="article-section">
+            <div class="article-header" onclick="toggleArticle(this)">
+                <div class="article-title-row">
+                    <div class="article-number">4</div>
+                    <div class="article-info">
+                        <div class="article-name-title">Skruf Nicotine Pouches: Complete Brand Guide</div>
+                        <div class="article-slug">skruf-nicotine-pouches-complete-guide</div>
+                    </div>
+                </div>
+                <div class="article-scores">
+                    <div class="score-badge">
+                        <span class="score-badge-label">Total</span>
+                        <span class="score-badge-value score-perfect">25/25 ★</span>
+                    </div>
+                </div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="article-details">
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #a3e635;">★</span> GOLD STANDARD ARTICLE
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p style="color: #a3e635; font-weight: 700; margin-bottom: 1rem;">This article exemplifies excellence across all five criteria.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> SEO (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p><strong>H1:</strong> "Skruf Nicotine Pouches: Complete Brand Guide" — Strong, keyword-rich.</p>
+                        <p><strong>Meta:</strong> 155 characters (slightly over but acceptable).</p>
+                        <p><strong>Internal Links:</strong> 5+ quality links.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Readability (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Excellent craft-brand tone. Key takeaways at top. Clear, scannable writing. Perfect pacing.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Visual Structure (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Strength table, complete product listing with mg values, Top 5 picks, comparison section, FAQ. Excellent hierarchy and visual breathing room.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Content Depth (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Comprehensive: history, S2/S3/S4 system, every single product listed with mg values, top 5 picks with detailed descriptions, brand comparisons, user segments, buying guide, FAQ section. Substantive and complete.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #a3e635;">▪</span> Brand Specificity (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p><strong>EXEMPLARY.</strong> Lists all 15 products by name with exact mg values. Top 5 picks with detailed descriptions. This is the gold standard for brand articles. Zero ambiguity; readers can make informed purchase decisions immediately.</p>
+                    </div>
+                </div>
+                
+                <p style="background-color: #1a202c; padding: 1rem; border-radius: 6px; border-left: 3px solid #a3e635; color: #cbd5e1; margin-top: 1rem;"><strong style="color: #a3e635;">Recommendation:</strong> Use this article as the template for all future brand guides. No improvements needed.</p>
+            </div>
+        </div>
+        
+        <!-- Article 5: White Fox -->
+        <div class="article-section">
+            <div class="article-header" onclick="toggleArticle(this)">
+                <div class="article-title-row">
+                    <div class="article-number">5</div>
+                    <div class="article-info">
+                        <div class="article-name-title">White Fox Nicotine Pouches: Complete Brand Guide</div>
+                        <div class="article-slug">white-fox-nicotine-pouches-complete-guide</div>
+                    </div>
+                </div>
+                <div class="article-scores">
+                    <div class="score-badge">
+                        <span class="score-badge-label">Total</span>
+                        <span class="score-badge-value score-perfect">25/25 ★</span>
+                    </div>
+                </div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="article-details">
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #a3e635;">★</span> GOLD STANDARD ARTICLE
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p style="color: #a3e635; font-weight: 700; margin-bottom: 1rem;">This article exemplifies excellence across all five criteria.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> SEO (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p><strong>H1:</strong> "White Fox Nicotine Pouches: Complete Brand Guide" — Strong, keyword-rich.</p>
+                        <p><strong>Meta:</strong> 144 characters — optimized.</p>
+                        <p><strong>Internal Links:</strong> 5+ quality links.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Readability (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Punchy, opinionated writing. Strong personality matching the brand. Key takeaways at top. Excellent tone and pacing.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Visual Structure (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Complete product table, strength ladder visualization, comparison table vs Siberia, FAQ section. Perfect hierarchy and visual balance.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #94a3b8;">▪</span> Content Depth (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p>Covers all 5 products in detail, strength ladder, vs Siberia comparison, user segments, strength recommendations, buying guide, and FAQ section. Comprehensive and well-structured.</p>
+                    </div>
+                </div>
+                
+                <div class="score-section">
+                    <h3>
+                        <span style="color: #a3e635;">▪</span> Brand Specificity (5/5)
+                    </h3>
+                    <div class="score-section-content strong">
+                        <p><strong>EXEMPLARY.</strong> Lists all 5 products with exact mg, format, and flavour profiles. Detailed per-product descriptions. Comparison table. Readers know exactly what they're buying.</p>
+                    </div>
+                </div>
+                
+                <p style="background-color: #1a202c; padding: 1rem; border-radius: 6px; border-left: 3px solid #a3e635; color: #cbd5e1; margin-top: 1rem;"><strong style="color: #a3e635;">Recommendation:</strong> Model article. Use as template for future brand guides. No improvements needed.</p>
+            </div>
+        </div>
+        
+        <!-- Key Findings -->
+        <div style="background-color: #1a202c; padding: 2rem; border-radius: 6px; margin-top: 3rem; border-left: 4px solid #a3e635;">
+            <h2 style="color: #a3e635; margin-bottom: 1.5rem;">Key Findings & Recommendations</h2>
+            
+            <div style="display: grid; gap: 1.5rem;">
+                <div>
+                    <h3 style="color: #fbbf24; margin-bottom: 0.75rem;">✓ What's Working</h3>
+                    <ul style="margin-left: 1.5rem; color: #cbd5e1;">
+                        <li>Skruf and White Fox articles are exemplary — use as gold standard templates</li>
+                        <li>VELO is strong across all criteria (24/25) — minor product-listing enhancement only</li>
+                        <li>Readability is consistently excellent (all 5/5 or 4/5)</li>
+                        <li>Visual structure (tables, hierarchy, formatting) is solid across the batch</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="color: #f97316; margin-bottom: 0.75rem;">⚠ What Needs Attention</h3>
+                    <ul style="margin-left: 1.5rem; color: #cbd5e1;">
+                        <li><strong>ZYN (19/25):</strong> Lacks specific product names, prices, and competitive context. Add "Top 10 Products" table + FAQ. Major gap for flagship brand.</li>
+                        <li><strong>LOOP (20/25):</strong> No SKU-level product specificity. Add "Top 8 Products" section + FAQ to reach 24/25.</li>
+                        <li><strong>Generic pattern:</strong> Articles scoring 3/5 on Brand Specificity lack concrete product names and mg values. Readers cannot make purchasing decisions.</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="color: #a3e635; margin-bottom: 0.75rem;">→ Next Steps (Priority Order)</h3>
+                    <ol style="margin-left: 1.5rem; color: #cbd5e1;">
+                        <li><strong>Update ZYN guide:</strong> Add "Top 10 ZYN Products" + FAQ (estimated +2–3 score, improves to 22–23/25)</li>
+                        <li><strong>Update LOOP guide:</strong> Add "Top 8 LOOP Products" + FAQ (estimated +3–4 score, improves to 23–24/25)</li>
+                        <li><strong>Template adoption:</strong> Apply Skruf/White Fox structure to all remaining brand articles (Batch 3 and beyond)</li>
+                        <li><strong>Batch 3 planning:</strong> Ensure new brand articles include complete product SKU listings from the start</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>SnusFriend Blog SEO Audit — Batch 2 — April 7, 2026</p>
+            <p style="margin-top: 0.5rem;">Report prepared by Daniel (SnusFriend founder)</p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleArticle(headerElement) {
+            const detailsElement = headerElement.nextElementSibling;
+            
+            // Close all other open articles
+            document.querySelectorAll('.article-header').forEach(header => {
+                if (header !== headerElement) {
+                    header.classList.remove('open');
+                    header.nextElementSibling.classList.remove('open');
+                }
+            });
+            
+            // Toggle current article
+            headerElement.classList.toggle('open');
+            detailsElement.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

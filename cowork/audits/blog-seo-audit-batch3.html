@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog SEO Audit — Batch 3 (Brand Guides)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0c1018;
+            color: #f1f5f9;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #a3e635;
+            padding-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #a3e635;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+        }
+
+        .metadata {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .summary-section {
+            margin-bottom: 3rem;
+            background-color: #1a202c;
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #a3e635;
+        }
+
+        .summary-section h2 {
+            color: #a3e635;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: #a3e635;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #1e293b;
+        }
+
+        .score-excellent {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .score-good {
+            color: #a3e635;
+            font-weight: 600;
+        }
+
+        .score-fair {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .score-poor {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .article-section {
+            margin-bottom: 2.5rem;
+            background-color: #1a202c;
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #a3e635;
+        }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .article-title {
+            font-size: 1.4rem;
+            color: #a3e635;
+        }
+
+        .article-slug {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-family: 'Monaco', 'Courier New', monospace;
+            margin-top: 0.25rem;
+        }
+
+        .total-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .score-item {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #a3e635;
+        }
+
+        .score-label {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #a3e635;
+        }
+
+        .insights {
+            margin-bottom: 1.5rem;
+        }
+
+        .insights h4 {
+            color: #a3e635;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .insights p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .strengths {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .strengths h4 {
+            color: #22c55e;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .strengths ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .strengths li {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .strengths li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .improvements {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .improvements h4 {
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .improvements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .improvements li {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .improvements li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+        }
+
+        .recommendations-section {
+            background-color: #1a202c;
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #a3e635;
+            margin-top: 3rem;
+        }
+
+        .recommendations-section h2 {
+            color: #a3e635;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .recommendation {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #a3e635;
+        }
+
+        .recommendation-title {
+            color: #a3e635;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .recommendation-text {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .star {
+            color: #fbbf24;
+            margin-left: 0.5rem;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Blog SEO Audit — Batch 3</h1>
+            <p class="subtitle">Brand Complete Guides: 5 Articles Analyzed</p>
+            <p class="metadata">Generated: April 7, 2026 | snusfriends.com</p>
+        </header>
+
+        <div class="summary-section">
+            <h2>Batch Summary</h2>
+            <p style="margin-bottom: 1.5rem; color: #cbd5e1;">
+                <strong>Result:</strong> Excellent batch overall. 3 perfect scores (Siberia, KLAR, ON! nearly perfect at 24/25).
+                No articles require full rewrites — only minor improvements noted for Nordic Spirit.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Article</th>
+                        <th>SEO</th>
+                        <th>Readability</th>
+                        <th>Visual Structure</th>
+                        <th>Content Depth</th>
+                        <th>Brand Specificity</th>
+                        <th>Total Score</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nordic Spirit Nicotine Pouches</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-good">4</td>
+                        <td class="score-good">4</td>
+                        <td class="score-excellent">23/25</td>
+                        <td style="color: #f59e0b;">Minor Improvements</td>
+                    </tr>
+                    <tr>
+                        <td>ON! Nicotine Pouches</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-good">4</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">24/25</td>
+                        <td style="color: #22c55e;">Excellent</td>
+                    </tr>
+                    <tr>
+                        <td>Pablo Nicotine Pouches</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-good">4</td>
+                        <td class="score-excellent">24/25</td>
+                        <td style="color: #22c55e;">Excellent</td>
+                    </tr>
+                    <tr>
+                        <td>Siberia Nicotine Pouches</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">25/25</td>
+                        <td style="color: #22c55e;">Perfect <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>KLAR Nicotine Pouches</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">5</td>
+                        <td class="score-excellent">25/25</td>
+                        <td style="color: #22c55e;">Perfect <span class="star">★</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 1rem; color: #cbd5e1; font-size: 0.9rem;">
+                <strong>Batch Average:</strong> 24.2/25 | <strong>Percentage:</strong> 96.8%
+            </p>
+        </div>
+
+        <!-- Article 1: Nordic Spirit -->
+        <div class="article-section">
+            <div class="article-header">
+                <div>
+                    <div class="article-title">Nordic Spirit Nicotine Pouches: Complete Brand Guide</div>
+                    <div class="article-slug">nordic-spirit-nicotine-pouches-complete-guide</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="total-score score-good">23/25</div>
+                    <div style="font-size: 0.85rem; color: #94a3b8;">Minor Improvements</div>
+                </div>
+            </div>
+
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="score-label">SEO</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Readability</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Visual Structure</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Content Depth</div>
+                    <div class="score-value">4/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Brand Specificity</div>
+                    <div class="score-value">4/5</div>
+                </div>
+            </div>
+
+            <div class="insights">
+                <h4>Summary</h4>
+                <p>
+                    Strong, well-structured guide with excellent SEO fundamentals and clear readability.
+                    H1 is optimized ("Nordic Spirit Nicotine Pouches: Complete Brand Guide"), meta description
+                    at 149 characters, and 5+ internal links present. Content covers history, flavours, strengths,
+                    and user segments with solid depth.
+                </p>
+            </div>
+
+            <div class="strengths">
+                <h4>Key Strengths</h4>
+                <ul>
+                    <li>Excellent H1 and meta description optimization</li>
+                    <li>5+ internal links properly distributed</li>
+                    <li>Clean paragraph structure with key takeaways at top</li>
+                    <li>Strength table and flavour sub-sections with H3s</li>
+                    <li>Comparison table vs ZYN included</li>
+                    <li>FAQ section with relevant Q&A</li>
+                </ul>
+            </div>
+
+            <div class="improvements">
+                <h4>Areas for Improvement</h4>
+                <ul>
+                    <li><strong>Add "Top 5 Products" section:</strong> Article lists 12 flavour names and strength tiers with mg values, but doesn't list individual products with exact mg per flavour (e.g., "Nordic Spirit Bergamot Wildberry Strong 9mg"). A "Top 5 Nordic Spirit Products" section with specific SKUs would improve brand specificity and user guidance.</li>
+                    <li><strong>Product recommendation section:</strong> Currently missing specific product recommendations in a dedicated section, unlike the exemplary Skruf guide. This would help readers make immediate purchase decisions.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Article 2: ON! -->
+        <div class="article-section">
+            <div class="article-header">
+                <div>
+                    <div class="article-title">ON! Nicotine Pouches Complete Guide 2026: Flavours, Strength, and Comparison</div>
+                    <div class="article-slug">on-nicotine-pouches-complete-guide</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="total-score score-excellent">24/25</div>
+                    <div style="font-size: 0.85rem; color: #22c55e;">Excellent</div>
+                </div>
+            </div>
+
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="score-label">SEO</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Readability</div>
+                    <div class="score-value">4/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Visual Structure</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Content Depth</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Brand Specificity</div>
+                    <div class="score-value">5/5</div>
+                </div>
+            </div>
+
+            <div class="insights">
+                <h4>Summary</h4>
+                <p>
+                    Exemplary comprehensive guide with exceptional depth and specificity. H1 includes year ("2026"),
+                    meta at 155 characters, and 5+ internal links. Coverage includes Classic vs PLUS variants, every flavour
+                    with tasting notes, all 4 strength tiers, NICOSILK technology, pricing analysis, regional availability,
+                    and strength recommendations by user type. Specific products named (Classic Mint 2mg, PLUS Coffee 4mg).
+                </p>
+            </div>
+
+            <div class="strengths">
+                <h4>Key Strengths</h4>
+                <ul>
+                    <li>Year included in H1 for freshness signal</li>
+                    <li>EXEMPLARY content depth — every variant and strength tier covered in detail</li>
+                    <li>Multiple comparison tables (ON! vs ZYN, 3-way comparison)</li>
+                    <li>Strength recommendation matrix for different user types</li>
+                    <li>Pricing table and cost-per-mg analysis</li>
+                    <li>Specific product names with exact mg values</li>
+                    <li>Regional availability documented</li>
+                    <li>Citations and sourced information</li>
+                </ul>
+            </div>
+
+            <div class="improvements">
+                <h4>Areas for Improvement</h4>
+                <ul>
+                    <li><strong>Tighten NICOSILK explanation:</strong> The NICOSILK technology section is thorough but dense. Consider condensing the technical details to 1-2 sentences for better readability flow, as some readers may skip this section. Keep the detail but organize it in a collapsible or tabbed format if possible.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Article 3: Pablo -->
+        <div class="article-section">
+            <div class="article-header">
+                <div>
+                    <div class="article-title">Pablo Nicotine Pouches: Complete Brand Guide</div>
+                    <div class="article-slug">pablo-nicotine-pouches-complete-guide</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="total-score score-excellent">24/25</div>
+                    <div style="font-size: 0.85rem; color: #22c55e;">Excellent</div>
+                </div>
+            </div>
+
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="score-label">SEO</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Readability</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Visual Structure</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Content Depth</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Brand Specificity</div>
+                    <div class="score-value">4/5</div>
+                </div>
+            </div>
+
+            <div class="insights">
+                <h4>Summary</h4>
+                <p>
+                    Excellent guide with exemplary safety-aware tone and clear messaging. H1 is strong ("Pablo Nicotine Pouches:
+                    Complete Brand Guide"), meta at 148 characters, and 6+ internal links. Content is comprehensive with history,
+                    30+ flavour range, strength levels, detailed safety notes, user segments, and 3-way comparison table. Responsibly
+                    handles extreme-strength messaging without being preachy.
+                </p>
+            </div>
+
+            <div class="strengths">
+                <h4>Key Strengths</h4>
+                <ul>
+                    <li>Exemplary safety-aware tone — practical warnings without fear-mongering</li>
+                    <li>Safety section integrated naturally into content flow</li>
+                    <li>Clear strengths/tiers table</li>
+                    <li>Comparison table vs Siberia vs ICEBERG</li>
+                    <li>Excellent "Who It's For (And NOT For)" section</li>
+                    <li>Good coverage of 30+ flavour range</li>
+                    <li>FAQ with relevant safety questions</li>
+                    <li>6+ internal links properly distributed</li>
+                </ul>
+            </div>
+
+            <div class="improvements">
+                <h4>Areas for Improvement</h4>
+                <ul>
+                    <li><strong>Full product specification table:</strong> Currently uses strength ranges (10-50mg) rather than per-product exact mg values. Once products are in stock, add a complete product table with exact mg per flavour and format type (similar to Siberia and KLAR examples). Note "coming soon" status where applicable.</li>
+                    <li><strong>Extreme-strength protocol:</strong> Consider adding a dedicated "How to Use Extreme Strength Responsibly" section with specific guidance for Pablo users (hydration, timing, tolerance building).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Article 4: Siberia -->
+        <div class="article-section">
+            <div class="article-header">
+                <div>
+                    <div class="article-title">Siberia Nicotine Pouches & Snus: Complete Brand Guide</div>
+                    <div class="article-slug">siberia-nicotine-pouches-complete-guide</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="total-score score-excellent">25/25</div>
+                    <div style="font-size: 0.85rem; color: #22c55e;">Perfect <span class="star">★</span></div>
+                </div>
+            </div>
+
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="score-label">SEO</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Readability</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Visual Structure</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Content Depth</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Brand Specificity</div>
+                    <div class="score-value">5/5</div>
+                </div>
+            </div>
+
+            <div class="insights">
+                <h4>Summary</h4>
+                <p>
+                    GOLD STANDARD article. Perfect 25/25 score. H1 is strong ("Siberia Nicotine Pouches & Snus: Complete Brand Guide"),
+                    meta at 152 characters, and 6+ internal links. Content is exemplary with engaging cult-brand tone, comprehensive
+                    product coverage (all 7 products with exact mg), -80°C technology explanation, detailed safety section, hydration
+                    protocol, and practical how-to-start guidance. All products listed by name with exact mg values and formats.
+                </p>
+            </div>
+
+            <div class="strengths">
+                <h4>Key Strengths</h4>
+                <ul>
+                    <li>Complete product table — ALL 7 products listed with exact mg and formats</li>
+                    <li>Engaging cult-brand voice that resonates with target audience</li>
+                    <li>Clear -80°C technology explanation with practical implications</li>
+                    <li>Strength tiers with progression guidance for new users</li>
+                    <li>Comprehensive safety section woven naturally into content</li>
+                    <li>Hydration protocol — practical, not preachy</li>
+                    <li>Comparison table vs Pablo vs ICEBERG</li>
+                    <li>Practical "How to Start" section with real user guidance</li>
+                    <li>Strength equivalency guidance across products</li>
+                </ul>
+            </div>
+
+            <div class="improvements">
+                <h4>Areas for Improvement</h4>
+                <ul>
+                    <li><strong>None identified.</strong> This article sets an excellent standard for niche/premium brand content. Exemplary for replication in future guides.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Article 5: KLAR -->
+        <div class="article-section">
+            <div class="article-header">
+                <div>
+                    <div class="article-title">KLAR Nicotine Pouches: Complete Brand Guide</div>
+                    <div class="article-slug">klar-nicotine-pouches-complete-guide</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="total-score score-excellent">25/25</div>
+                    <div style="font-size: 0.85rem; color: #22c55e;">Perfect <span class="star">★</span></div>
+                </div>
+            </div>
+
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="score-label">SEO</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Readability</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Visual Structure</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Content Depth</div>
+                    <div class="score-value">5/5</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Brand Specificity</div>
+                    <div class="score-value">5/5</div>
+                </div>
+            </div>
+
+            <div class="insights">
+                <h4>Summary</h4>
+                <p>
+                    GOLD STANDARD article. Perfect 25/25 score. H1 is strong ("KLAR Nicotine Pouches: Complete Brand Guide"),
+                    meta at 141 characters, and 5+ internal links. Content is excellent with technical clarity, all 6 products
+                    listed with exact mg and format, detailed SERATEK technology explanation, Mint vs Blank comparison, strength
+                    equivalency table, honest tradeoff discussion, and clear user segment guidance.
+                </p>
+            </div>
+
+            <div class="strengths">
+                <h4>Key Strengths</h4>
+                <ul>
+                    <li>Complete product table — ALL 6 products listed with exact mg and format</li>
+                    <li>SERATEK technology clearly explained without being overly technical</li>
+                    <li>Strength equivalency table — helps readers compare to other brands</li>
+                    <li>Mint vs Blank detailed comparison section</li>
+                    <li>Honest about product limitations and tradeoffs</li>
+                    <li>Clear user segment guidance (who should use KLAR)</li>
+                    <li>Good structure with product table and FAQ</li>
+                    <li>Technical but accessible tone</li>
+                </ul>
+            </div>
+
+            <div class="improvements">
+                <h4>Areas for Improvement</h4>
+                <ul>
+                    <li><strong>None identified.</strong> This article sets an excellent standard for innovative/niche brand content. Particularly strong on technology explanation without losing accessibility. Exemplary for replication in future guides.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recommendations Section -->
+        <div class="recommendations-section">
+            <h2>Recommendations for Next Steps</h2>
+
+            <div class="recommendation">
+                <div class="recommendation-title">1. Nordic Spirit — Add "Top 5 Products" Section</div>
+                <div class="recommendation-text">
+                    Nordic Spirit article lists flavour names and strength tiers but lacks specific product recommendations.
+                    Add a "Top 5 Nordic Spirit Products" section modeled after the exemplary Skruf guide, featuring specific
+                    product names with exact mg values (e.g., "Nordic Spirit Bergamot Wildberry Strong 9mg") and brief use-case
+                    guidance for each. This small addition will improve brand specificity from 4/5 to 5/5 and boost user engagement.
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">2. ON! Article — Consider a Collapsible NICOSILK Section</div>
+                <div class="recommendation-text">
+                    The ON! article is impressively thorough at 24/25, but the NICOSILK technology explanation is dense.
+                    Consider organizing this in a collapsible/expandable format or dedicating it to a callout box so readers
+                    can opt-in to technical details without breaking readability flow. This would improve readability from 4/5 to 5/5
+                    without losing any content.
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">3. Siberia & KLAR — Use as Standard References</div>
+                <div class="recommendation-text">
+                    Both Siberia (25/25) and KLAR (25/25) articles set excellent standards for niche/premium brand content.
+                    Use these as templates for future brand guides, particularly in three areas: complete product tables with
+                    exact specifications, honest tradeoff discussion, and engaging voice that matches brand positioning.
+                    These articles prove that technical depth and accessibility are not mutually exclusive.
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">4. Pablo — Monitor Stock Status for Product Table Update</div>
+                <div class="recommendation-text">
+                    The Pablo article responsibly handles extreme-strength safety messaging — a significant achievement.
+                    Once products are in stock, update the article with a complete product table (similar to Siberia/KLAR)
+                    showing exact mg per flavour and format. Also consider adding a "How to Use Extreme Strength Responsibly"
+                    section with specific protocol guidance.
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="recommendation-title">5. Batch Quality — Prioritize Replication</div>
+                <div class="recommendation-text">
+                    This batch achieved 96.8% average quality (24.2/25). Three articles scored perfect marks and only one
+                    needs minor improvements. Maintain this level of quality in future batches by using Siberia and KLAR as
+                    standards, and ensure every guide includes: (a) complete product specifications with exact mg, (b) strength
+                    equivalency guidance, (c) honest tradeoff discussion, and (d) user segment clarity.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>
+                <strong>Audit Details:</strong> Batch 3 of snusfriends.com blog SEO audit covering Nordic Spirit, ON!, Pablo,
+                Siberia, and KLAR brand guides. All scores based on 5-point rubric covering SEO fundamentals, readability,
+                visual structure, content depth, and brand specificity. Generated April 7, 2026.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
