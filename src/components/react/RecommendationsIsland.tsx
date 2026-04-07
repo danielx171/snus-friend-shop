@@ -246,6 +246,33 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
     };
   }, [allProducts, purchasedSlugs, isBeginner]);
 
+  const renderSaveMoneyPill = useCallback(
+    (p: any) => (
+      <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-800 dark:bg-green-900/40 dark:text-green-300">
+        Save €{p._savings.toFixed(2)}
+      </span>
+    ),
+    [],
+  );
+
+  const renderNewFormatPill = useCallback(
+    (p: any) => (
+      <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">
+        {p._formatLabel}
+      </span>
+    ),
+    [],
+  );
+
+  const renderTrendingPill = useCallback(
+    (p: any) => (
+      <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+        ★ {(p.ratings ?? 0).toFixed(1)}
+      </span>
+    ),
+    [],
+  );
+
   if (!mounted || !userId || isLoading) return null;
   if (
     buyAgain.length === 0 &&
@@ -266,40 +293,19 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
         <RecommendationRow
           title="Same taste, better price"
           products={saveMoney}
-          renderPill={useCallback(
-            (p: any) => (
-              <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-800 dark:bg-green-900/40 dark:text-green-300">
-                Save €{p._savings.toFixed(2)}
-              </span>
-            ),
-            [],
-          )}
+          renderPill={renderSaveMoneyPill}
         />
 
         <RecommendationRow
           title="New format to try"
           products={newFormat}
-          renderPill={useCallback(
-            (p: any) => (
-              <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">
-                {p._formatLabel}
-              </span>
-            ),
-            [],
-          )}
+          renderPill={renderNewFormatPill}
         />
 
         <RecommendationRow
           title="Popular in flavors you love"
           products={trending}
-          renderPill={useCallback(
-            (p: any) => (
-              <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
-                ★ {(p.ratings ?? 0).toFixed(1)}
-              </span>
-            ),
-            [],
-          )}
+          renderPill={renderTrendingPill}
         />
       </div>
     </section>
