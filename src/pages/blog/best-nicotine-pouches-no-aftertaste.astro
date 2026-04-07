@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 ---
 
 <Shop
@@ -38,6 +43,14 @@ import { tenant } from '@/config/tenant';
             <li>Hydration, correct pouch placement, and matching nicotine strength to your tolerance prevents harsh finishes</li>
             <li>Budget-friendly alternatives like SNOBERG Cool Peppermint deliver clean taste at half the price</li>
         </ul>
+    </div>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('zyn-gentle-mint-mini-s1') && <BlogProductCard product={find('zyn-gentle-mint-mini-s1')} />}
+      {find('helwit-blueberry-medium') && <BlogProductCard product={find('helwit-blueberry-medium')} />}
+      {find('velo-bright-spearmint-mini-es') && <BlogProductCard product={find('velo-bright-spearmint-mini-es')} />}
+      {find('on-mint') && <BlogProductCard product={find('on-mint')} />}
+      {find('skruf-aloe-fresh-s2') && <BlogProductCard product={find('skruf-aloe-fresh-s2')} />}
     </div>
 
     <section>

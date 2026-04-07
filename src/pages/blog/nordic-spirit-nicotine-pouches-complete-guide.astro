@@ -4,6 +4,21 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const nordicSpearmint = findProduct('nordic-spirit', 'spearmint');
+const nordicBergamot = findProduct('nordic-spirit', 'bergamot');
+const nordicMint = findProduct('nordic-spirit', 'mint');
+const nordicAny = findProduct('nordic-spirit');
 ---
 
 <Shop
@@ -118,6 +133,12 @@ import { tenant } from '@/config/tenant';
         </ul>
 
         <p><em>Note: Availability varies by market and retailer. Check <a href="/brands/nordic-spirit">Nordic Spirit products</a> for current stock and EU shipping options.</em></p>
+
+        <h2>Featured Nordic Spirit Products</h2>
+        {nordicSpearmint && <BlogProductCard {...nordicSpearmint.data} />}
+        {nordicBergamot && <BlogProductCard {...nordicBergamot.data} />}
+        {nordicMint && <BlogProductCard {...nordicMint.data} />}
+        {nordicAny && !nordicSpearmint && !nordicBergamot && !nordicMint && <BlogProductCard {...nordicAny.data} />}
     </section>
 
     <section>

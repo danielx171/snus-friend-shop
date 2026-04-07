@@ -4,6 +4,21 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const pabloIceCold = findProduct('pablo', 'ice cold');
+const pabloBanana = findProduct('pablo', 'banana');
+const pabloFrost = findProduct('pablo', 'frost');
+const pabloAny = findProduct('pablo');
 ---
 
 <Shop
@@ -111,6 +126,7 @@ import { tenant } from '@/config/tenant';
         <li><strong>Ice Cold:</strong> Polar-level menthol. One of their most beloved offerings. Fans describe it as "Arctic in a pouch."</li>
         <li><strong>Extreme Ice:</strong> Even colder. Not for the faint-hearted.</li>
       </ul>
+      {pabloIceCold && <BlogProductCard {...pabloIceCold.data} />}
 
       <h3>Fruit Flavours</h3>
       <p>Pablo's fruit selection skews bold and icy, avoiding overly sweet territory:</p>
@@ -119,6 +135,7 @@ import { tenant } from '@/config/tenant';
         <li><strong>Grape Ice:</strong> Grape with pronounced menthol kick.</li>
         <li><strong>Passionfruit:</strong> Mixed reviews—some find it artificial; others love the tropical-icy contrast. Worth trying but not universally beloved.</li>
       </ul>
+      {pabloBanana && <BlogProductCard {...pabloBanana.data} />}
 
       <h3>Dessert &amp; Sweet Flavours</h3>
       <p>Surprisingly, Pablo ventured into sweeter territory with moderate success:</p>
@@ -127,6 +144,7 @@ import { tenant } from '@/config/tenant';
         <li><strong>Bubblegum:</strong> Nostalgic sweetness with icy finish. Polarizing but cult-beloved.</li>
         <li><strong>Dark Cherry:</strong> Fruity-sweet with herbal undertones. Inconsistent moisture and flavour intensity have led to mixed customer feedback.</li>
       </ul>
+      {pabloFrost && <BlogProductCard {...pabloFrost.data} />}
 
       <h3>Other Flavours</h3>
       <p>Pablo continues experimenting: Cola variants, spicy options, and limited-edition releases. Check SnusFriend for current availability, as the Pablo lineup rotates.</p>
@@ -251,6 +269,12 @@ import { tenant } from '@/config/tenant';
 
       <h3>What's the best Pablo flavour for beginners?</h3>
       <p>Pablo is NOT recommended for beginners at all. If you must try Pablo, start with their Silver strength (10mg) in a familiar flavour like Frosted Mint. However, we recommend beginners choose brands specifically designed for entry-level users.</p>
+    </section>
+
+    <section>
+      <h2>Featured Pablo Products</h2>
+
+      {pabloAny && <BlogProductCard {...pabloAny.data} />}
     </section>
 
     <section>

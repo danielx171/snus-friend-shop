@@ -4,7 +4,12 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-31';
 const title = "Strongest Snus Brands Compared: A Beginner's Warning Guide";
@@ -73,6 +78,14 @@ const description = 'Complete comparison of the strongest snus and nicotine pouc
           (like most products here) are tobacco-free. Both deliver nicotine orally. When people search "strongest snus,"
           they typically mean both categories — so this guide covers both.
         </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('siberia-slim') && <BlogProductCard product={find('siberia-slim')} />}
+          {find('siberia-portion') && <BlogProductCard product={find('siberia-portion')} />}
+          {find('white-fox-full-charge') && <BlogProductCard product={find('white-fox-full-charge')} />}
+          {find('loop-spicy-apple-hyper-strong') && <BlogProductCard product={find('loop-spicy-apple-hyper-strong')} />}
+          {find('skruf-intense-peppermint-ice-s4') && <BlogProductCard product={find('skruf-intense-peppermint-ice-s4')} />}
+        </div>
 
         <h2>The Strength Scale: How Snus &amp; Pouches Are Measured</h2>
         <p>Nicotine strength in oral products uses two measurements:</p>

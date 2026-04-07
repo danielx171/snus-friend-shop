@@ -15,6 +15,8 @@ function findProduct(brandSlug: string, nameFragment?: string) {
   );
 }
 
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
 const skrufFreshMint = findProduct('skruf', 'fresh mint');
 const skrufFrozenShot = findProduct('skruf', 'frozen shot');
 const skrufFresh = findProduct('skruf', 'fresh');
@@ -77,6 +79,13 @@ const skrufBlackcurrant = findProduct('skruf', 'blackcurrant');
             <li>Fresh Mint and Intense Spearmint Ice are customer favourites; Fresh Freeze Ultra is the limited-edition collector's item.</li>
         </ul>
     </section>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('skruf-fresh-mint-s4') && <BlogProductCard product={find('skruf-fresh-mint-s4')} />}
+      {find('skruf-nordic-liqourice-s4') && <BlogProductCard product={find('skruf-nordic-liqourice-s4')} />}
+      {find('skruf-frozen-mint-superslim-s4') && <BlogProductCard product={find('skruf-frozen-mint-superslim-s4')} />}
+      {find('skruf-purple-cassic-s3') && <BlogProductCard product={find('skruf-purple-cassic-s3')} />}
+    </div>
 
     <h2>Skruf Product Overview</h2>
     <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>

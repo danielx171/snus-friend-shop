@@ -4,7 +4,12 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-28';
 const modifiedDate = '2026-03-31';
@@ -40,6 +45,15 @@ const description = 'Ranked list of the strongest nicotine pouches in 2026 by mg
           <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
             The strongest nicotine pouches available in Europe in 2026 are Siberia (43 mg/g), Pablo (50 mg/g), KILLA (16–24 mg/pouch), and RAVE Ultra Strong (19.5 mg/pouch). These are designed exclusively for experienced users with established tolerance. Beginners should never start with extra-strong or super-strong pouches — start at 2–4 mg and work up.
           </p>
+        </div>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('siberia-slim') && <BlogProductCard product={find('siberia-slim')} />}
+          {find('white-fox-full-charge') && <BlogProductCard product={find('white-fox-full-charge')} />}
+          {find('loop-red-chili-melon-hyper-strong') && <BlogProductCard product={find('loop-red-chili-melon-hyper-strong')} />}
+          {find('loop-habanero-mint-hyper-strong') && <BlogProductCard product={find('loop-habanero-mint-hyper-strong')} />}
+          {find('velo-freezing-peppermint-ultra-es') && <BlogProductCard product={find('velo-freezing-peppermint-ultra-es')} />}
+          {find('white-fox-black-edition') && <BlogProductCard product={find('white-fox-black-edition')} />}
         </div>
 
         <h2>The Growing High-Strength Market</h2>

@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 ---
 
 <Shop
@@ -41,6 +46,15 @@ import { tenant } from '@/config/tenant';
             <li><strong>Best budget slim:</strong> AVANT Cool Mint (13mg) — €0.59 for maximum strength on a budget</li>
             <li>Slim works for most users; consider mini only if you find slim uncomfortable</li>
         </ul>
+    </div>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+      {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+      {find('loop-smooth-mint-extra-strong') && <BlogProductCard product={find('loop-smooth-mint-extra-strong')} />}
+      {find('skruf-frozen-mint-superslim-s4') && <BlogProductCard product={find('skruf-frozen-mint-superslim-s4')} />}
+      {find('white-fox-peppered-mint') && <BlogProductCard product={find('white-fox-peppered-mint')} />}
+      {find('helwit-menthol-strong') && <BlogProductCard product={find('helwit-menthol-strong')} />}
     </div>
 
     <h2>What Makes a Nicotine Pouch Slim? Format Explained</h2>

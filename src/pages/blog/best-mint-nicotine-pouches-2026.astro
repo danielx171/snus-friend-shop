@@ -3,7 +3,24 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const zynMint = findProduct('zyn', 'cool mint');
+const veloMint = findProduct('velo', 'crispy peppermint') ?? findProduct('velo', 'peppermint');
+const loopMint = findProduct('loop', 'mint');
+const skrufMint = findProduct('skruf', 'fresh mint') ?? findProduct('skruf', 'mint');
 
 const publishDate = '2026-03-28';
 const title = 'The 10 Best Mint Nicotine Pouches in 2026: Expert Picks';
@@ -50,6 +67,15 @@ const description = 'Expert ranking of the top mint nicotine pouches. Compare Wh
           burning), and <strong>nicotine longevity</strong> (the hit should plateau around the 5-minute mark and hold steady
           until 30-40 minutes in).
         </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('white-fox-double-mint') && <BlogProductCard product={find('white-fox-double-mint')} />}
+          {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+          {find('skruf-fresh-mint-s4') && <BlogProductCard product={find('skruf-fresh-mint-s4')} />}
+          {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+          {find('loop-fresh-peppermint-hyper') && <BlogProductCard product={find('loop-fresh-peppermint-hyper')} />}
+          {find('velo-green-spearmint') && <BlogProductCard product={find('velo-green-spearmint')} />}
+        </div>
 
         <h2>The Top 10 Mint Nicotine Pouches of 2026</h2>
 
@@ -139,6 +165,14 @@ const description = 'Expert ranking of the top mint nicotine pouches. Compare Wh
           price-to-quality ratio remains hard to beat. Flavour consistency is solid through 30+ minutes.
         </p>
         <p><strong>Best for:</strong> Budget-conscious users; daily drivers; those seeking balance without brand premium pricing.</p>
+
+        <h2>Featured Mint Products</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin: 32px 0;">
+          {zynMint && <BlogProductCard product={zynMint} />}
+          {veloMint && <BlogProductCard product={veloMint} />}
+          {loopMint && <BlogProductCard product={loopMint} />}
+          {skrufMint && <BlogProductCard product={skrufMint} />}
+        </div>
 
         <h2>How to Choose Your Mint Pouch</h2>
 

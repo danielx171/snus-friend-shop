@@ -4,6 +4,19 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const klarMint = findProduct('klar', 'mint');
+const klarAny = findProduct('klar');
 ---
 
 <Shop
@@ -130,6 +143,8 @@ import { tenant } from '@/config/tenant';
         </ul>
 
         <p><strong>Our recommendation:</strong> Try Mint 3mg first. If you find flavour distracting or want maximum subtlety, switch to Blank 3mg. If you need intensive nicotine, Blank 9mg (Extra Strong Slim) is uncompromising.</p>
+
+        {klarMint && <BlogProductCard {...klarMint.data} />}
     </section>
 
     <section>
@@ -211,6 +226,11 @@ import { tenant } from '@/config/tenant';
 
         <h3>5. Is KLAR available in strengths below 3 mg?</h3>
         <p>Not currently. KLAR's 3 mg (Regular Mini Mint) is the lightest option. However, due to bioceramic acceleration, 3 mg KLAR delivers equivalent satisfaction to 5–6 mg traditional. If you're very light user, KLAR 3mg Blank (unflavoured) may feel less intense than Mint. Start there and increase if needed.</p>
+    </section>
+
+    <section>
+        <h2>Featured KLAR Products</h2>
+        {klarAny && <BlogProductCard {...klarAny.data} />}
     </section>
 
     <section>

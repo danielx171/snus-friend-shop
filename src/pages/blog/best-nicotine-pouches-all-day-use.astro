@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 ---
 
 <Shop
@@ -45,6 +50,14 @@ import { tenant } from '@/config/tenant';
     </div>
 
     <p>Whether you're managing focus through a 10-hour office shift, staying alert on a long drive, or maintaining steady energy during an active day, nicotine pouches designed for all-day use can provide sustained, discreet nicotine delivery without smoke, vapour, or spit. New users should first read our <a href="/blog/what-are-nicotine-pouches">complete guide to nicotine pouches</a> and our <a href="/blog/how-to-choose-your-strength">strength selection guide</a>.</p>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+      {find('velo-green-spearmint') && <BlogProductCard product={find('velo-green-spearmint')} />}
+      {find('skruf-fresh-mint-s4') && <BlogProductCard product={find('skruf-fresh-mint-s4')} />}
+      {find('helwit-menthol-strong') && <BlogProductCard product={find('helwit-menthol-strong')} />}
+      {find('loop-smooth-mint-extra-strong') && <BlogProductCard product={find('loop-smooth-mint-extra-strong')} />}
+    </div>
 
     <h2>Ideal Strength for All-Day Use</h2>
     <ul>

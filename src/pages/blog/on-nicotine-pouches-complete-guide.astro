@@ -15,6 +15,8 @@ function findProduct(brandSlug: string, nameFragment?: string) {
   );
 }
 
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
 const onMint = findProduct('on', 'mint');
 const onCitrus = findProduct('on', 'citrus');
 const onCoffee = findProduct('on', 'coffee');
@@ -56,6 +58,13 @@ const onAny = findProduct('on');
             <li style="padding: 10px 0;"><strong>Flavour-by-flavour breakdown: ON! Mint (cool, balanced), Coffee (robust, earthy), Citrus (bright, zesty), Cinnamon (warm, spiced), Berry (sweet, fruity), and limited editions vary by region.</strong></li>
             <li style="padding: 10px 0;"><strong>ON! is widely available in Germany, UK, and Northern Europe; limited in Southern Europe; banned in Belgium. Online retailers ship across most of EU with compliance to regional regulations.</strong></li>
         </ul>
+    </div>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('on-mint') && <BlogProductCard product={find('on-mint')} />}
+      {find('on-mint-strong') && <BlogProductCard product={find('on-mint-strong')} />}
+      {find('on-mint-extra-strong') && <BlogProductCard product={find('on-mint-extra-strong')} />}
+      {find('on-coffee-strong') && <BlogProductCard product={find('on-coffee-strong')} />}
     </div>
 
     <h2>ON! Product Overview</h2>
@@ -121,12 +130,15 @@ const onAny = findProduct('on');
     <h2>ON! Classic Flavours: Detailed Tasting Notes</h2>
     <p><strong>ON! Classic Mint</strong></p>
     <p>The signature flavour. Balanced cooling sensation without harshness; mouth-coating mint finish. Pair: Ideal for morning use; pairs well with coffee. Nicotine profile: Smooth absorption complements the refreshing flavour. Best for: Beginners seeking a neutral, approachable flavour; all-day use.</p>
+    {onMint && <BlogProductCard {...onMint.data} />}
 
     <p><strong>ON! Classic Coffee</strong></p>
     <p>Robust, earthy coffee character with subtle sweetness. The pouch delivers a genuine coffee impression without bitterness. Pair: Afternoon to evening; pairs with snacks. Nicotine profile: Steady, unobtrusive release. Best for: Coffee lovers; users seeking an alternative to smoking breaks.</p>
+    {onCoffee && <BlogProductCard {...onCoffee.data} />}
 
     <p><strong>ON! Classic Citrus</strong></p>
     <p>Bright, zesty orange and lemon blend with subtle vanilla undertones. Refreshing and energising. Pair: Daytime; pairs with outdoor activity. Nicotine profile: Pairs well with Citrus's energy. Best for: Users who prefer fruity, energetic flavours; daytime use.</p>
+    {onCitrus && <BlogProductCard {...onCitrus.data} />}
 
     <p><strong>ON! Classic Cinnamon</strong></p>
     <p>Warm, spiced cinnamon with subtle nutmeg and clove notes. More subtle than ZYN Cinnamon; less peppery than VELO Cinnamon. Pair: Evening; comfort-focused. Nicotine profile: The spiced warmth complements steady absorption. Best for: Ex-snus users familiar with spiced snus; evening relaxation.</p>
@@ -400,6 +412,9 @@ const onAny = findProduct('on');
     <p><strong>Choose ON! if:</strong> You prioritise cost-effectiveness, are new to nicotine pouches (Classic) or an ex-smoker seeking rapid delivery (PLUS), and want access to a reliable, compliant European retailer.</p>
     <p><strong>Choose a different brand if:</strong> You require strength above 8 mg, live in Belgium, or need maximum flavour variety (ZYN offers more options).</p>
     <p><strong>The bottom line:</strong> <strong>ON! offers the best cost-per-mg value among major European nicotine pouch brands, backed by Altria's resources and TPD3 compliance. For budget-conscious consumers, especially beginners and ex-smokers, ON! represents exceptional value.</strong></p>
+
+    <h2>Featured ON! Products</h2>
+    {onAny && <BlogProductCard {...onAny.data} />}
 
     <h2>Related Reading</h2>
     <ul>

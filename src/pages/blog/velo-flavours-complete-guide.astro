@@ -3,7 +3,22 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const veloCrispy = findProduct('velo', 'crispy peppermint');
+const veloFreeze = findProduct('velo', 'freezing peppermint');
+const veloRuby = findProduct('velo', 'ruby');
+const veloIce = findProduct('velo', 'ice');
 ---
 
 <Shop
@@ -126,6 +141,14 @@ import { tenant } from '@/config/tenant';
       <li><strong>Wintery Watermelon (6–14 mg)</strong> — Unique cooling-fruity hybrid. Slim Mini format popular; High Nic variant growing with strength users.</li>
       <li><strong>Blue Raspberry (8 mg)</strong> — Tart, bold, unexpected. Polarising (some love tartness; others find it extreme) but consistently high engagement. Berry category's strongest performer after Strawberry Ice.</li>
     </ol>
+
+    <h2 style="margin-top: 48px;">Featured VELO Products</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin: 32px 0;">
+      {veloCrispy && <BlogProductCard product={veloCrispy} />}
+      {veloFreeze && <BlogProductCard product={veloFreeze} />}
+      {veloRuby && <BlogProductCard product={veloRuby} />}
+      {veloIce && <BlogProductCard product={veloIce} />}
+    </div>
 
     <h2>VELO Strength Levels Explained</h2>
 

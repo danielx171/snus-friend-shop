@@ -15,6 +15,8 @@ function findProduct(brandSlug: string, nameFragment?: string) {
   );
 }
 
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
 const veloCrispyPeppermint = findProduct('velo', 'crispy peppermint');
 const veloIceCool = findProduct('velo', 'ice cool');
 const veloRubyBerry = findProduct('velo', 'ruby berry');
@@ -66,6 +68,13 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
           grown to <strong>53 products</strong> across multiple formats, strengths, and flavour families — making
           them one of the most diverse brands on the market.
         </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+          {find('velo-blue-raspberry') && <BlogProductCard product={find('velo-blue-raspberry')} />}
+          {find('velo-lime-flame') && <BlogProductCard product={find('velo-lime-flame')} />}
+          {find('velo-bright-spearmint-mini-es') && <BlogProductCard product={find('velo-bright-spearmint-mini-es')} />}
+        </div>
 
         <h2>VELO Product Overview</h2>
         <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>

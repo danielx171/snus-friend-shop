@@ -4,6 +4,23 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const whiteFoxDoubleMint = findProduct('white-fox', 'double mint');
+const whiteFoxFullCharge = findProduct('white-fox', 'full charge');
+const whiteFoxPepperedMint = findProduct('white-fox', 'peppered mint');
+const whiteFoxAny = findProduct('white-fox');
 ---
 
 <Shop
@@ -62,6 +79,13 @@ import { tenant } from '@/config/tenant';
             <li>Full Charge 16.5 mg is the sweet spot: strong enough for heavy users, manageable enough for daily rotation.</li>
         </ul>
     </section>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('white-fox-double-mint') && <BlogProductCard product={find('white-fox-double-mint')} />}
+      {find('white-fox-full-charge') && <BlogProductCard product={find('white-fox-full-charge')} />}
+      {find('white-fox-peppered-mint') && <BlogProductCard product={find('white-fox-peppered-mint')} />}
+      {find('white-fox-black-edition') && <BlogProductCard product={find('white-fox-black-edition')} />}
+    </div>
 
     <h2>White Fox Product Overview</h2>
     <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>
@@ -252,6 +276,14 @@ import { tenant } from '@/config/tenant';
     <h2>Where to Buy White Fox Nicotine Pouches</h2>
 
     <p>SnusFriend stocks all five White Fox products. Visit <a href="/brands/white-fox">/brands/white-fox</a> to browse, compare, and order with discreet EU-wide delivery.</p>
+
+    <h2>Featured White Fox Products</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin: 32px 0;">
+      {whiteFoxDoubleMint && <BlogProductCard {...whiteFoxDoubleMint.data} />}
+      {whiteFoxFullCharge && <BlogProductCard {...whiteFoxFullCharge.data} />}
+      {whiteFoxPepperedMint && <BlogProductCard {...whiteFoxPepperedMint.data} />}
+      {whiteFoxAny && !whiteFoxDoubleMint && !whiteFoxFullCharge && !whiteFoxPepperedMint && <BlogProductCard {...whiteFoxAny.data} />}
+    </div>
 
     <h2>FAQ</h2>
 

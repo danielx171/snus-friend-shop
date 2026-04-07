@@ -3,7 +3,27 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const zynMini = findProduct('zyn', 'mini');
+const veloEasy = findProduct('velo', 'easy mint');
+const helwit = findProduct('helwit');
+const onMini = findProduct('on', 'mini');
+const kellyWhite = findProduct('kelly', 'white');
+const aceQuick = findProduct('ace', 'quick');
+const loopFreeJalapeno = findProduct('loop', 'jalapeno');
 
 const publishDate = '2026-03-28';
 const title = 'Best Nicotine Pouches for Beginners: 2026 Starter Guide';
@@ -38,6 +58,15 @@ const description = 'Overwhelmed by pouch options? Here\'s exactly which low-str
           <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
             Based on SnusFriends' testing of over 50 beginner-friendly products, the best nicotine pouches for beginners are ZYN Mini (1.5–3 mg), VELO Easy Mint (4 mg), and HELWIT (3.5 mg). Start with 2–4 mg strength, choose a mild flavour like mint or citrus, and use 3–4 pouches per day spaced at least 2 hours apart. If you feel dizzy or nauseous, your strength is too high — step down.
           </p>
+        </div>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-gentle-mint-mini-s1') && <BlogProductCard product={find('zyn-gentle-mint-mini-s1')} />}
+          {find('zyn-spearmint-mini') && <BlogProductCard product={find('zyn-spearmint-mini')} />}
+          {find('velo-bright-spearmint-mini-es') && <BlogProductCard product={find('velo-bright-spearmint-mini-es')} />}
+          {find('helwit-blueberry-medium') && <BlogProductCard product={find('helwit-blueberry-medium')} />}
+          {find('on-mint') && <BlogProductCard product={find('on-mint')} />}
+          {find('velo-bright-peppermint-zero') && <BlogProductCard product={find('velo-bright-peppermint-zero')} />}
         </div>
 
         <h2>Before You Start: What to Look For</h2>

@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 ---
 
 <Shop
@@ -45,6 +50,14 @@ import { tenant } from '@/config/tenant';
     <p>If you're a regular nicotine pouch user, the cost adds up fast. Premium brands charge €3–€3.50 per can, which means a daily habit costs €80–€100 monthly. The good news? You don't need to pay premium prices to get quality pouches.</p>
 
     <p>We've tested and ranked the best cheap nicotine pouches available on SnusFriends, spotlighting the brands that deliver honest flavour, reliable nicotine strength, and solid texture at prices that won't drain your wallet. Whether you're budget-conscious or just starting out, this guide will help you find excellent value without settling for subpar quality.</p>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('helwit-blueberry-medium') && <BlogProductCard product={find('helwit-blueberry-medium')} />}
+      {find('helwit-menthol-strong') && <BlogProductCard product={find('helwit-menthol-strong')} />}
+      {find('on-mint-strong') && <BlogProductCard product={find('on-mint-strong')} />}
+      {find('skruf-aloe-fresh-s2') && <BlogProductCard product={find('skruf-aloe-fresh-s2')} />}
+      {find('velo-green-spearmint') && <BlogProductCard product={find('velo-green-spearmint')} />}
+    </div>
 
     <h2>Why Budget Nicotine Pouches Are Worth Your Time</h2>
 

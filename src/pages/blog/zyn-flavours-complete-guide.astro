@@ -4,7 +4,22 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const zynCoolMint = findProduct('zyn', 'cool mint');
+const zynCitrus = findProduct('zyn', 'citrus');
+const zynAppleMint = findProduct('zyn', 'apple mint');
+const zynMenthol = findProduct('zyn', 'menthol');
 
 const publishDate = '2026-03-28';
 const modifiedDate = '2026-04-01';
@@ -127,6 +142,14 @@ const description = 'Every ZYN flavour ranked by taste, strength, and longevity.
         <p>
           A blended berry flavour that sits in the middle of the pack. Red Fruits covers strawberry, raspberry, and cranberry territory without committing to any single one. It's pleasant and easy to use all day, but it lacks the sharpness that makes the top-five flavours memorable. Good for variety rotation, less good as a daily driver.
         </p>
+
+        <h2 style="margin-top: 48px;">Featured ZYN Products</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin: 32px 0;">
+          {zynCoolMint && <BlogProductCard product={zynCoolMint} />}
+          {zynCitrus && <BlogProductCard product={zynCitrus} />}
+          {zynAppleMint && <BlogProductCard product={zynAppleMint} />}
+          {zynMenthol && <BlogProductCard product={zynMenthol} />}
+        </div>
 
         <h2>The After Dark Series</h2>
         <p>

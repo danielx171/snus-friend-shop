@@ -4,6 +4,20 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const fumiSalty = findProduct('fumi', 'salty');
+const fumiSparkling = findProduct('fumi', 'sparkling');
+const fumiAny = findProduct('fumi');
 ---
 
 <Shop
@@ -154,6 +168,8 @@ import { tenant } from '@/config/tenant';
 
         <h3>5. Minty Blueberry (Best Berry-Mint Hybrid)</h3>
         <p><strong>Why:</strong> Bridges eccentric and familiar. Berry-mint combinations are established but rarely done with blueberry's subtle earthiness. Swedish forest nostalgia resonates with Scandinavian users.</p>
+
+        {fumiSalty && <BlogProductCard {...fumiSalty.data} />}
     </section>
 
     <section>
@@ -219,6 +235,11 @@ import { tenant } from '@/config/tenant';
 
         <h3>5. Can I find FUMI in European retailers?</h3>
         <p>FUMI is a niche, smaller-scale brand. Availability is patchy across European retailers. Online specialist retailers like SnusFriend stock FUMI more reliably than high-street shops. We recommend checking stock before ordering. Visit <a href="/brands/fumi">FUMI products</a> to see current availability and EU shipping options.</p>
+    </section>
+
+    <section>
+        <h2>Featured FUMI Products</h2>
+        {fumiAny && <BlogProductCard {...fumiAny.data} />}
     </section>
 
     <section>

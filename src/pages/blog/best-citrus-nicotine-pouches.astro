@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-28';
 const title = 'Best Citrus Nicotine Pouches: 2026 Flavour Guide';
@@ -45,6 +50,14 @@ const description = 'Expert guide to the top citrus nicotine pouches in 2026 —
           the <a href="/products/flavor/citrus">citrus category</a> has exploded with quality options in 2026. This guide
           walks you through the best citrus pouches on the market, ranked by flavour quality, strength, and overall experience.
         </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-citrus-slim-extra-strong') && <BlogProductCard product={find('zyn-citrus-slim-extra-strong')} />}
+          {find('velo-lime-flame') && <BlogProductCard product={find('velo-lime-flame')} />}
+          {find('velo-arctic-grapefruit-normal') && <BlogProductCard product={find('velo-arctic-grapefruit-normal')} />}
+          {find('zyn-lemon-spritz-slim') && <BlogProductCard product={find('zyn-lemon-spritz-slim')} />}
+          {find('loop-jalapeno-lime-mini') && <BlogProductCard product={find('loop-jalapeno-lime-mini')} />}
+        </div>
 
         <h2>Types of Citrus Pouches</h2>
         <p>

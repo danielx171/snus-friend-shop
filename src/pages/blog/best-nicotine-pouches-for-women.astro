@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 ---
 
 <Shop
@@ -45,6 +50,14 @@ import { tenant } from '@/config/tenant';
     <p>Nicotine pouches have grown significantly in popularity across all demographics, not because of marketing to any specific group, but because they offer a smoke-free, odourless, and discreet alternative to traditional nicotine products. If you're searching for nicotine pouches suited to certain preferences — lower strengths, pleasant flavours, compact formats — this guide covers the best options available in 2026.</p>
 
     <p>It's important to note that preference for strength, flavour, and format is entirely individual and not determined by gender. <strong>Product choice comes down to personal preference for strength, flavour, and format—not demographics.</strong> This guide focuses on the products that tend to appeal to first-time or newer users — and those features happen to align with what many people searching for "nicotine pouches for women" are actually looking for. See our <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginner's guide</a> for comprehensive guidance.</p>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('zyn-gentle-mint-mini-s1') && <BlogProductCard product={find('zyn-gentle-mint-mini-s1')} />}
+      {find('velo-bright-spearmint-mini-es') && <BlogProductCard product={find('velo-bright-spearmint-mini-es')} />}
+      {find('helwit-acai-slim') && <BlogProductCard product={find('helwit-acai-slim')} />}
+      {find('on-mint') && <BlogProductCard product={find('on-mint')} />}
+      {find('zyn-lemon-spritz-slim') && <BlogProductCard product={find('zyn-lemon-spritz-slim')} />}
+    </div>
 
     <h2>Why Nicotine Pouches Are Gaining Popularity</h2>
     <ul>

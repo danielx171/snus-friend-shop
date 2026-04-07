@@ -4,6 +4,23 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const loopMint = findProduct('loop', 'mint');
+const loopJalapeno = findProduct('loop', 'jalapeno');
+const loopMango = findProduct('loop', 'mango');
+const loopAny = findProduct('loop');
 
 const publishDate = '2026-03-27';
 const title = 'LOOP Nicotine Pouches: The Flavour-First Brand';
@@ -32,6 +49,13 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
       />
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('loop-jalapeno-lime-mini') && <BlogProductCard product={find('loop-jalapeno-lime-mini')} />}
+          {find('loop-fresh-peppermint-hyper') && <BlogProductCard product={find('loop-fresh-peppermint-hyper')} />}
+          {find('loop-red-chili-melon-hyper-strong') && <BlogProductCard product={find('loop-red-chili-melon-hyper-strong')} />}
+          {find('loop-creamy-cappuccino-mini') && <BlogProductCard product={find('loop-creamy-cappuccino-mini')} />}
+        </div>
 
         <h2>LOOP Product Overview</h2>
         <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>
@@ -157,6 +181,12 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
           that pairs perfectly with a morning routine. The licorice options lean Swedish — authentic and
           slightly salty rather than candy-sweet.
         </p>
+
+        <h2>Featured LOOP Products</h2>
+        {loopMint && <BlogProductCard {...loopMint.data} />}
+        {loopJalapeno && <BlogProductCard {...loopJalapeno.data} />}
+        {loopMango && <BlogProductCard {...loopMango.data} />}
+        {loopAny && !loopMint && !loopJalapeno && !loopMango && <BlogProductCard {...loopAny.data} />}
 
         <h2>The Instant Rush Experience</h2>
         <p>

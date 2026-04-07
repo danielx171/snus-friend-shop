@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 ---
 
 <Shop
@@ -41,6 +46,14 @@ import { tenant } from '@/config/tenant';
             <li>Gradual strength reduction helps prevent relapse once cigarettes are quit</li>
         </ul>
     </aside>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('zyn-citrus-slim-extra-strong') && <BlogProductCard product={find('zyn-citrus-slim-extra-strong')} />}
+      {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+      {find('on-mint-extra-strong') && <BlogProductCard product={find('on-mint-extra-strong')} />}
+      {find('loop-smooth-mint-extra-strong') && <BlogProductCard product={find('loop-smooth-mint-extra-strong')} />}
+      {find('zyn-gentle-mint-mini-s1') && <BlogProductCard product={find('zyn-gentle-mint-mini-s1')} />}
+    </div>
 
     <h2>Why Nicotine Pouches Work as a Smoking Cessation Tool</h2>
 

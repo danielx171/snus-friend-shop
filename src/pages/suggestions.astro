@@ -169,10 +169,10 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
           Community-Driven
         </span>
         <h1 class="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-          Help Us Build SnusFriend
+          Build SnusFriend With Us
         </h1>
         <p class="mt-4 text-lg leading-relaxed text-muted-foreground">
-          This shop is built for you — so tell us what you want next. Submit ideas, vote on others, and earn rewards when your suggestion ships.
+          Got an idea that would make this place better? Drop it here. The best suggestions get built -- and you get the credit.
         </p>
       </div>
     </div>
@@ -184,22 +184,47 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
         <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-lg">1</div>
           <h3 class="mb-1 font-semibold text-foreground">Submit Your Idea</h3>
-          <p class="text-sm text-muted-foreground">Describe a feature, product, or improvement you want to see on SnusFriend.</p>
+          <p class="text-sm text-muted-foreground">Describe what you want and why it matters -- one sentence is enough, but detail helps.</p>
         </div>
         <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-lg">2</div>
-          <h3 class="mb-1 font-semibold text-foreground">Community Votes</h3>
-          <p class="text-sm text-muted-foreground">Other members upvote the ideas they care about most, so the best ones rise to the top.</p>
+          <h3 class="mb-1 font-semibold text-foreground">The Community Votes</h3>
+          <p class="text-sm text-muted-foreground">Other members upvote the suggestions they want most. Popular ideas rise to the top.</p>
         </div>
         <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-lg">3</div>
           <h3 class="mb-1 font-semibold text-foreground">We Build It</h3>
-          <p class="text-sm text-muted-foreground">Top-voted suggestions go into our roadmap and get built into the site.</p>
+          <p class="text-sm text-muted-foreground">Our team reviews the most-requested ideas each month and ships the best ones.</p>
         </div>
         <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-lg">4</div>
-          <h3 class="mb-1 font-semibold text-foreground">You Earn Rewards</h3>
-          <p class="text-sm text-muted-foreground">When your suggestion ships, you earn the Pioneer badge and 200 SnusPoints.</p>
+          <h3 class="mb-1 font-semibold text-foreground">You Get Rewarded</h3>
+          <p class="text-sm text-muted-foreground">If your suggestion ships, you earn the exclusive Pioneer badge and 200 SnusPoints.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guidelines -->
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-foreground">Guidelines</h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
+          <h3 class="mb-3 font-semibold text-foreground">What makes a great suggestion</h3>
+          <ul class="space-y-2 text-sm text-muted-foreground">
+            <li>Be specific. "Add a flavour comparison tool" is better than "make the site better."</li>
+            <li>Focus on something that would help you or other pouch users. Features, content, tools, UX improvements -- all fair game.</li>
+            <li>Check existing suggestions first. If someone already posted your idea, upvote theirs instead of duplicating it.</li>
+            <li>One idea per submission. If you have three ideas, submit three times.</li>
+            <li>Keep it constructive. Criticism is welcome when it comes with a solution.</li>
+          </ul>
+        </div>
+        <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
+          <h3 class="mb-3 font-semibold text-foreground">What is out of scope</h3>
+          <ul class="space-y-2 text-sm text-muted-foreground">
+            <li>Requests for specific product stock or pricing changes (that is a purchasing decision, not a feature)</li>
+            <li>Anything that requires us to break our own policies (age verification, legal compliance, etc.)</li>
+            <li>Personal support tickets -- use the <a href="/contact" class="text-primary underline hover:text-foreground">contact page</a> for order issues</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -326,8 +351,14 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
         <div>
           <h3 class="text-base font-semibold text-foreground">Pioneer Rewards</h3>
           <p class="mt-1 text-sm text-muted-foreground">
-            When your suggestion gets built and shipped, you earn the <strong class="text-amber-400">Pioneer badge</strong> on your profile and <strong class="text-amber-400">200 SnusPoints</strong> added to your balance. The more ideas you contribute, the more you shape the future of SnusFriend.
+            The <strong class="text-amber-400">Pioneer badge</strong> is exclusive to users whose suggestions become real features. You cannot buy it, grind for it, or earn it any other way. When we ship a feature that came from your suggestion, you get:
           </p>
+          <ul class="mt-2 space-y-1 text-sm text-muted-foreground">
+            <li>The Pioneer badge on your profile (permanent, visible on leaderboards)</li>
+            <li><strong class="text-amber-400">200 SnusPoints</strong> credited to your account</li>
+            <li>A shoutout in our monthly changelog</li>
+          </ul>
+          <p class="mt-2 text-sm text-muted-foreground">Your idea. Your badge. Simple as that.</p>
         </div>
       </div>
     </div>

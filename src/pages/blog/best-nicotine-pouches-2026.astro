@@ -4,7 +4,27 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const zynCoolMint = findProduct('zyn', 'cool mint');
+const veloBeginner = findProduct('velo', 'spearmint');
+const zynMenthol = findProduct('zyn', 'menthol ice');
+const siberia = findProduct('siberia', 'red');
+const loopValue = findProduct('loop', 'mint');
+const veloVariety = findProduct('velo');
+const kellyPremium = findProduct('kelly', 'white');
 ---
 
 <Shop
@@ -63,6 +83,15 @@ import { tenant } from '@/config/tenant';
     <p>The nicotine pouch market has exploded. <strong>In 2023, Europe alone hit EUR 1.6 billion — and the category is growing at 28.8% annually</strong> (source: <a href="https://www.grandviewresearch.com/industry-analysis/nicotine-pouches-market-report">Grand View Research</a>). With more than 50 brands now competing for shelf space, choosing the right pouch has become harder, not easier.</p>
 
     <p>We've tested hundreds of pouches across strength, flavour, pouch comfort, and value. This guide cuts through the noise and identifies the category winners you can actually trust. Whether you're after the world's most consistent brand, the gentlest entry point, or legendary strength, we've got you covered.</p>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+      {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+      {find('white-fox-double-mint') && <BlogProductCard product={find('white-fox-double-mint')} />}
+      {find('loop-jalapeno-lime-mini') && <BlogProductCard product={find('loop-jalapeno-lime-mini')} />}
+      {find('skruf-fresh-mint-s4') && <BlogProductCard product={find('skruf-fresh-mint-s4')} />}
+      {find('helwit-menthol-strong') && <BlogProductCard product={find('helwit-menthol-strong')} />}
+    </div>
 
     <h2>How We Picked Our Winners</h2>
 

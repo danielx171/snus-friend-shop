@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-26';
 const title = 'Top 10 Mint Nicotine Pouches in 2026';
@@ -55,6 +60,15 @@ const description = 'We ranked the best mint and menthol nicotine pouches from t
           tested. When two products scored similarly, we gave the edge to the one offering
           better value per can.
         </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+          {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+          {find('loop-fresh-peppermint-hyper') && <BlogProductCard product={find('loop-fresh-peppermint-hyper')} />}
+          {find('white-fox-double-mint') && <BlogProductCard product={find('white-fox-double-mint')} />}
+          {find('skruf-frozen-mint-superslim-s4') && <BlogProductCard product={find('skruf-frozen-mint-superslim-s4')} />}
+          {find('helwit-menthol-strong') && <BlogProductCard product={find('helwit-menthol-strong')} />}
+        </div>
 
         <h2>The Top 10</h2>
 

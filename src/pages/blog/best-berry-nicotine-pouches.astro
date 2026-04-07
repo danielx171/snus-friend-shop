@@ -3,7 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-27';
 const title = 'Best Berry Nicotine Pouches: Top 10 Picks for 2026';
@@ -56,6 +61,15 @@ const description = 'From sweet strawberry to tart mixed berries — our expert 
           which berry products customers buy again. Every product listed is one we stock and have
           personally tested.
         </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-red-fruits-fizz-slim-s4') && <BlogProductCard product={find('zyn-red-fruits-fizz-slim-s4')} />}
+          {find('velo-blue-raspberry') && <BlogProductCard product={find('velo-blue-raspberry')} />}
+          {find('velo-dark-blackcurrant') && <BlogProductCard product={find('velo-dark-blackcurrant')} />}
+          {find('helwit-acai-slim') && <BlogProductCard product={find('helwit-acai-slim')} />}
+          {find('skruf-purple-cassic-s3') && <BlogProductCard product={find('skruf-purple-cassic-s3')} />}
+          {find('loop-blueberry-ice-strong') && <BlogProductCard product={find('loop-blueberry-ice-strong')} />}
+        </div>
 
         <h2>Our Top 10 Berry Nicotine Pouches</h2>
 

@@ -3,7 +3,22 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const mildPick = findProduct('zyn', 'citrus');
+const mediumPick = findProduct('zyn', 'cool mint') ?? findProduct('velo', 'ice cool');
+const strongPick = findProduct('velo', 'freeze') ?? findProduct('loop', 'jalapeno');
+const extraStrongPick = findProduct('siberia') ?? findProduct('pablo');
 
 const publishDate = '2026-03-26';
 const title = 'How to Choose the Right Nicotine Pouch Strength';
@@ -147,6 +162,17 @@ const description = 'A practical guide to nicotine pouch strengths — from ligh
           <li><strong>Brand varies</strong> — A "strong" from one brand may feel different from another. The mg number is the best guide</li>
           <li><strong>Hydration helps</strong> — Drink water. Dehydration makes nicotine feel harsher</li>
         </ul>
+
+        <h2>Featured Products by Strength</h2>
+        <p>
+          Here are some of our top recommendations across different strength levels:
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin: 32px 0;">
+          {mildPick && <BlogProductCard product={mildPick} />}
+          {mediumPick && <BlogProductCard product={mediumPick} />}
+          {strongPick && <BlogProductCard product={strongPick} />}
+          {extraStrongPick && <BlogProductCard product={extraStrongPick} />}
+        </div>
 
         <h2>Browse by Strength</h2>
         <p>

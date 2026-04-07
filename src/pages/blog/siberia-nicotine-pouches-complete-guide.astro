@@ -4,6 +4,23 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const siberiaRed = findProduct('siberia', 'red');
+const siberiaBlue = findProduct('siberia', 'blue');
+const siberiaWhite = findProduct('siberia', 'white');
+const siberiaAny = findProduct('siberia');
 ---
 
 <Shop
@@ -62,6 +79,13 @@ import { tenant } from '@/config/tenant';
             <li>Best for extreme-strength adventurers, heavy ex-smokers, and users who've proven they handle 16+ mg comfortably. Not for daily rotation unless you're expert-level.</li>
         </ul>
     </section>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('siberia-slim') && <BlogProductCard product={find('siberia-slim')} />}
+      {find('siberia-portion') && <BlogProductCard product={find('siberia-portion')} />}
+      {find('siberia-all-white-mini') && <BlogProductCard product={find('siberia-all-white-mini')} />}
+      {find('siberia-super-slim') && <BlogProductCard product={find('siberia-super-slim')} />}
+    </div>
 
     <h2>Siberia Product Overview</h2>
     <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>
@@ -125,6 +149,7 @@ import { tenant } from '@/config/tenant';
     <h3>Entry Tier: Ultra Slim (16.5 mg)</h3>
     <p>If you've handled <a href="/blog/white-fox-nicotine-pouches-complete-guide">White Fox's 16.5 mg Full Charge</a> comfortably for weeks, Ultra Slim is your Siberia gateway. The pouch is slender, the strength is powerful, and the cooling is noticeable. This is where you discover whether Siberia's legend lives up to hype. For many, Ultra Slim becomes the daily workhorse. For others, it's a stepping stone.</p>
     <p><strong>Best for:</strong> Users proven comfortable with 16+ mg who want to test Siberia without committing to maximum strength.</p>
+    {siberiaWhite && <BlogProductCard {...siberiaWhite.data} />}
 
     <h3>Compact Tier: Mini (21.5 mg) & Super Slim (21.5 mg)</h3>
     <p>Both hit 21.5 mg nicotine, but offer different formats:</p>
@@ -138,6 +163,7 @@ import { tenant } from '@/config/tenant';
     <h3>Expert Tier: Slim (25 mg)</h3>
     <p>This is the <strong>unofficial Siberia sweet spot</strong> for daily users. At 25 mg, you're serious enough to feel legendary status, but not so extreme that tolerance spirals uncontrollably. The slim format keeps oral comfort high. The nicotine hit is undeniable. Most Siberia users who report "daily rotation" are actually running Slim repeatedly.</p>
     <p><strong>Best for:</strong> Experienced users maintaining Siberia use; ex-smokers who've graduated from moderate brands; users who want serious strength without the extreme persona.</p>
+    {siberiaRed && <BlogProductCard {...siberiaRed.data} />}
 
     <h3>Extreme Tier: Portion (33 mg) & Long Portion (35 mg)</h3>
     <p>You've entered specialist territory. At 33–35 mg, nicotine poisoning risk increases noticeably. Format matters:</p>
@@ -147,6 +173,7 @@ import { tenant } from '@/config/tenant';
     </ul>
     <p>Users at this tier are often testing limits, chasing novelty, or have genuinely exceptional tolerance. Not for daily rotation.</p>
     <p><strong>Best for:</strong> Occasional extreme sessions; tolerance specialists; users explicitly seeking the "legendary extreme" experience.</p>
+    {siberiaBlue && <BlogProductCard {...siberiaBlue.data} />}
 
     <h3>Absolute Maximum: Maxi All White (49.5 mg)</h3>
     <p>This is not a daily pouch. This is the <strong>ultimate status symbol</strong> in the nicotine pouch world. At 49.5 mg, you're handling roughly 50 times the nicotine of a light Skruf pouch. The maxi format is large, the hit is overwhelming, and the cooling is intense. For many users, Maxi serves one purpose: the bragging story. "I've handled Siberia Maxi" is a credential in extreme-user communities.</p>
@@ -230,6 +257,10 @@ import { tenant } from '@/config/tenant';
     </table>
 
     <p><strong>In brief:</strong> Siberia is the veteran extreme brand — refined, tested, cult community. <a href="/blog/pablo-nicotine-pouches-complete-guide">Pablo</a> is insane novelty. <a href="/blog/iceberg-nicotine-pouches-complete-guide">ICEBERG</a> competes on cooling theatre. If you're serious about sustainable extreme-strength use, Siberia Slim (25 mg) is the daily choice. If you're testing limits, Pablo or ICEBERG for one-off sessions. See our full <a href="/blog/strongest-nicotine-pouches-ranked-2026">extreme strength ranking</a> for all ultra-strong brands.</p>
+
+    <h2>Featured Siberia Products</h2>
+
+    {siberiaAny && <BlogProductCard {...siberiaAny.data} />}
 
     <h2>Where to Buy Siberia Nicotine Pouches</h2>
 
