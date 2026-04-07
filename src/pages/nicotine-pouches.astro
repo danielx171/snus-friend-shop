@@ -5,10 +5,10 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
-import { writeProductsJson } from '@/lib/product-json';
+import { ensureProductsJson } from '@/lib/product-json';
 
 const products = await getCollection('products');
-writeProductsJson(products);
+ensureProductsJson(products);
 
 const totalProducts = products.length;
 const brandCount = new Set(products.map(p => p.data.brand)).size;
