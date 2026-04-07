@@ -42,3 +42,6 @@ stats.html
 Snus/
 
 .env*.local
+
+# Generated during build
+public/data/products.json
