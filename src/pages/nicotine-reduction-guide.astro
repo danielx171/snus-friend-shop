@@ -3,6 +3,11 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 ---
 
 <Shop
@@ -179,11 +184,11 @@ import BlogHero from '@/components/astro/BlogHero.astro';
       <p><strong>How long to stay:</strong> Minimum 4 weeks. There is no rush -- stabilising at each tier matters more than speed. If after 4 weeks you still feel strong cravings throughout the day, stay another 2 weeks before stepping down.</p>
       <p><strong>Warning signs you are moving too fast:</strong> Constant preoccupation with your next pouch, irritability that does not ease within the first week, reverting to using 2 pouches in quick succession, or sleep disruption lasting more than 5 days.</p>
       <p><strong>Recommended products:</strong></p>
-      <ul>
-        <li><a href="/brands/siberia">Siberia Slim</a> (43 mg/g) -- for users currently at the extreme end who need to first stabilise before reducing</li>
-        <li><a href="/brands/white-fox">White Fox Full Charge</a> (16.5 mg) -- a strong but more moderate option to step down to from Siberia/Pablo</li>
-        <li><a href="/brands/loop">LOOP Habanero Mint Hyper Strong</a> (15 mg) -- bold flavour helps compensate for reduced nicotine satisfaction</li>
-      </ul>
+      <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+        {find('siberia-slim') && <BlogProductCard product={find('siberia-slim')} />}
+        {find('white-fox-full-charge') && <BlogProductCard product={find('white-fox-full-charge')} />}
+        {find('loop-habanero-mint-hyper-strong') && <BlogProductCard product={find('loop-habanero-mint-hyper-strong')} />}
+      </div>
       <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">Use 6-10 pouches per day. Do not exceed your current daily intake. Track your usage.</p>
     </div>
 
@@ -197,11 +202,11 @@ import BlogHero from '@/components/astro/BlogHero.astro';
       <p><strong>How long to stay:</strong> 4-6 weeks. This tier is the foundation of your reduction -- rushing through it increases relapse risk.</p>
       <p><strong>Warning signs:</strong> Using more than 12 pouches per day to compensate (you are chasing the old hit), frequent headaches, or strong temptation to buy a can of your old Tier 1 brand.</p>
       <p><strong>Recommended products:</strong></p>
-      <ul>
-        <li><a href="/brands/zyn">ZYN Black Cherry Mini S4</a> (9.5 mg) -- rich flavour helps distract from the strength change</li>
-        <li><a href="/brands/velo">VELO Crispy Peppermint Extra Strong</a> (9.8 mg) -- strong mint kick compensates for lower nicotine</li>
-        <li><a href="/brands/loop">LOOP Jalapeno Lime Strong</a> (9.4 mg) -- the flavour intensity keeps things interesting during the adjustment</li>
-      </ul>
+      <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+        {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+        {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+        {find('loop-jalapeno-lime-mini') && <BlogProductCard product={find('loop-jalapeno-lime-mini')} />}
+      </div>
       <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">Maintain the same number of pouches per day. Only change the strength, not the frequency.</p>
     </div>
 
@@ -215,11 +220,11 @@ import BlogHero from '@/components/astro/BlogHero.astro';
       <p><strong>How long to stay:</strong> 4-8 weeks. Many users choose to remain at this tier permanently -- it offers a sustainable balance of satisfaction and reduced dependence.</p>
       <p><strong>Warning signs:</strong> None specific to this tier. If you feel comfortable here and are not motivated to reduce further, that is completely valid.</p>
       <p><strong>Recommended products:</strong></p>
-      <ul>
-        <li><a href="/brands/zyn">ZYN Cool Mint Ice Slim S6</a> -- the gold standard at this strength; clean, consistent, all-day comfortable</li>
-        <li><a href="/brands/nordic-spirit">Nordic Spirit Spearmint</a> (6 mg) -- smooth delivery, premium pouch feel</li>
-        <li><a href="/brands/velo">VELO Green Spearmint</a> (6 mg) -- gentle mint, excellent for new users at this tier</li>
-      </ul>
+      <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+        {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+        {find('skruf-fresh-mint-s4') && <BlogProductCard product={find('skruf-fresh-mint-s4')} />}
+        {find('velo-green-spearmint') && <BlogProductCard product={find('velo-green-spearmint')} />}
+      </div>
       <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">You can start reducing frequency here -- try dropping one pouch per day each week.</p>
     </div>
 
@@ -233,11 +238,11 @@ import BlogHero from '@/components/astro/BlogHero.astro';
       <p><strong>How long to stay:</strong> 4 weeks minimum before attempting zero. Some users stay at this tier long-term, and that is a perfectly reasonable endpoint.</p>
       <p><strong>Warning signs:</strong> If you find yourself using 15+ light pouches per day, you are overcompensating. Try spacing pouches further apart (every 3-4 hours) rather than increasing frequency.</p>
       <p><strong>Recommended products:</strong></p>
-      <ul>
-        <li><a href="/brands/zyn">ZYN Gentle Mint Mini S1</a> (1.5 mg) -- the lightest ZYN available; excellent final step before zero</li>
-        <li><a href="/brands/helwit">HELWIT Blueberry Medium</a> (4 mg) -- pleasant berry flavour at a gentle strength</li>
-        <li><a href="/brands/on">ON! Mint</a> (3 mg) -- ultra-discreet mini format, perfect for occasional use</li>
-      </ul>
+      <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+        {find('zyn-gentle-mint-mini-s1') && <BlogProductCard product={find('zyn-gentle-mint-mini-s1')} />}
+        {find('helwit-blueberry-medium') && <BlogProductCard product={find('helwit-blueberry-medium')} />}
+        {find('on-mint') && <BlogProductCard product={find('on-mint')} />}
+      </div>
       <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">At this level, try extending the time between pouches. Going from 6 per day to 3-4 makes the final step easier.</p>
     </div>
 
@@ -251,11 +256,9 @@ import BlogHero from '@/components/astro/BlogHero.astro';
       <p><strong>How long to stay:</strong> Use as needed. Some people use nicotine-free pouches for weeks during the transition, then stop entirely. Others keep them as an occasional habit replacement with no health concern.</p>
       <p><strong>Warning signs:</strong> If you revert to nicotine pouches after going to zero, do not treat it as failure. Step back to Tier 4 for another 2-4 weeks, then try again. Relapse is part of the process.</p>
       <p><strong>Recommended products:</strong></p>
-      <ul>
-        <li><a href="/brands/velo">VELO Bright Peppermint Zero</a> -- strong mint flavour in the familiar VELO format</li>
-        <li><a href="/brands/velo">VELO Tropical Mango Zero</a> -- fruity alternative for users who want variety</li>
-        <li><a href="/brands/loop">LOOP Zero Jalapeno Lime</a> -- maintains the bold LOOP experience at 0 mg</li>
-      </ul>
+      <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+        {find('velo-bright-peppermint-zero') && <BlogProductCard product={find('velo-bright-peppermint-zero')} />}
+      </div>
       <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">No rush to stop using these. The habit fades naturally when nicotine is no longer driving it.</p>
     </div>
 
