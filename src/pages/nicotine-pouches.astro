@@ -33,8 +33,8 @@ const itemListJsonLd = {
 ---
 
 <Shop
-  title="Buy Nicotine Pouches Online — 708 Products, 35+ Brands | SnusFriend"
-  description="Shop 708 nicotine pouches with free EU shipping over €29. ZYN, VELO, LOOP, Siberia, and more. Filter by strength, flavour, and brand."
+  title={`Buy Nicotine Pouches Online — ${totalProducts}+ Products, ${brandCount}+ Brands | SnusFriend`}
+  description={`Shop ${totalProducts}+ nicotine pouches with free EU shipping over €29. ZYN, VELO, LOOP, Siberia, and more. Filter by strength, flavour, and brand.`}
   canonical="/nicotine-pouches"
 >
   <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />

@@ -33,8 +33,8 @@ const productsJson = JSON.stringify(slimProductData(products));
 ---
 
 <Shop
-  title="Buy Nicotine Pouches — 708 Products, Free EU Shipping | SnusFriend"
-  description="Browse 708 nicotine pouches from ZYN, VELO, LOOP, Siberia, and 30+ more brands. Free shipping on orders over €29. Same-day dispatch."
+  title={`Buy Nicotine Pouches — ${products.length}+ Products, Free EU Shipping | SnusFriend`}
+  description={`Browse ${products.length}+ nicotine pouches from ZYN, VELO, LOOP, Siberia, and 30+ more brands. Free shipping on orders over €29. Same-day dispatch.`}
   canonical="/products"
 >
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
