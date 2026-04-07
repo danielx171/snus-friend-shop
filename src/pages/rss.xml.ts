@@ -64,6 +64,24 @@ const articles = [
   { title: 'Nicotine Pouches in Norway: 2026 Rules & Alternatives', slug: 'buying-nicotine-pouches-norway-2026', excerpt: 'Why pouches are banned in Norway, how snus stays legal, and cross-border options.', date: '2026-04-08' },
   { title: 'Nicotine Pouches in Finland: 2026 Guide & Rules', slug: 'buying-nicotine-pouches-finland-2026', excerpt: 'Distance selling ban, flavour restrictions, personal import rules explained.', date: '2026-04-08' },
   { title: 'Buy Nicotine Pouches in Poland: 2026 Guide', slug: 'buying-nicotine-pouches-poland-2026', excerpt: 'Fastest-growing EU market — excise tax, popular brands, prices in PLN.', date: '2026-04-08' },
+  // New articles — March 29 batch 3
+  { title: 'Nicotine Pouches vs Cigarettes: Health, Cost & Convenience Compared', slug: 'nicotine-pouches-vs-cigarettes', excerpt: 'Pouches vs cigarettes: the health, cost, and convenience breakdown.', date: '2026-03-29' },
+  { title: 'How Much Do Nicotine Pouches Cost? 2026 Price Guide', slug: 'how-much-do-nicotine-pouches-cost', excerpt: 'Real pricing data — average cost per can, cost per pouch, and monthly spend.', date: '2026-03-29' },
+  { title: 'How to Store Nicotine Pouches: Shelf Life & Freshness Tips', slug: 'how-to-store-nicotine-pouches', excerpt: 'Keep your pouches fresh — storage temperature, shelf life, signs of expiry.', date: '2026-03-29' },
+  { title: 'Can You Swallow Nicotine Pouches? Safety Facts', slug: 'can-you-swallow-nicotine-pouches', excerpt: 'What happens if you swallow a nicotine pouch — safety facts and what to do.', date: '2026-03-29' },
+  { title: 'Are ZYNs Bad for You? Health Facts in 2026', slug: 'are-zyns-bad-for-you', excerpt: 'An evidence-based look at ZYN health effects and what the research says.', date: '2026-03-29' },
+  { title: 'How Many Nicotine Pouches a Day Is Safe?', slug: 'how-many-nicotine-pouches-a-day', excerpt: 'Daily usage guidance — how many pouches most users go through and when to cut back.', date: '2026-03-29' },
+  { title: 'VELO vs Nordic Spirit: Which Is Better in 2026?', slug: 'velo-vs-nordic-spirit', excerpt: 'Head-to-head comparison of VELO and Nordic Spirit — flavours, strength, and value.', date: '2026-03-29' },
+  { title: 'ON! Nicotine Pouches: Complete Brand Guide', slug: 'on-nicotine-pouches-complete-guide', excerpt: 'Everything about ON! — Altria\'s compact nicotine pouch brand.', date: '2026-03-29' },
+  { title: 'Nicotine Pouch Tax & Regulations 2026', slug: 'nicotine-pouch-tax-regulations-2026', excerpt: 'Country-by-country breakdown of nicotine pouch taxation and regulations across Europe.', date: '2026-03-29' },
+  // New articles — April 2026 (recent additions)
+  { title: 'Every VELO Flavour Ranked: The Complete 2026 Guide', slug: 'all-velo-flavors-ranked-2026', excerpt: 'All 30+ VELO flavours ranked by taste, strength, and value.', date: '2026-04-04' },
+  { title: 'Nicotine Pouch Trends 2026: New Brands, Flavours & What\'s Next', slug: 'nicotine-pouch-trends-new-brands-2026', excerpt: 'The nicotine pouch world is evolving fast in 2026. Here\'s what\'s trending.', date: '2026-04-04' },
+  { title: 'RAVE Nicotine Pouches Review 2026', slug: 'rave-nicotine-pouches-review', excerpt: 'We tested all 26 RAVE products. Honest breakdown of flavours, strength, and value.', date: '2026-04-04' },
+  { title: 'Strongest Snus Brands Compared: A Beginner\'s Warning Guide', slug: 'strongest-snus-brands-compared-beginners-warning', excerpt: 'The strongest brands ranked and explained — plus why beginners should start elsewhere.', date: '2026-04-04' },
+  { title: 'VELO vs ON! Nicotine Pouches: Which Should You Choose?', slug: 'velo-vs-on-nicotine-pouches', excerpt: 'VELO vs ON!: flavour selection, nicotine strength, and price compared.', date: '2026-04-04' },
+  { title: 'ZYN Strength Chart 2026: Every Level Explained', slug: 'zyn-strength-chart-every-level-explained', excerpt: 'ZYN\'s strength levels from S1 to S6 explained. Find the right dose.', date: '2026-04-04' },
+  { title: 'ZYN vs Nordic Spirit: Premium Swedish Pouches Compared', slug: 'zyn-vs-nordic-spirit', excerpt: 'Two Swedish icons compared. Find out which premium pouch suits you best.', date: '2026-04-04' },
 ];
 
 export async function GET(context: APIContext) {
