@@ -1,3 +1,8 @@
+export interface CountryFaq {
+  q: string;
+  a: string;
+}
+
 export interface CountryData {
   name: string;
   slug: string;
@@ -11,6 +16,13 @@ export interface CountryData {
   h1: string;
   metaDescription: string;
   intro: string;
+  // Optional enriched sections (from Cowork enrichment batches)
+  enrichedIntro?: string;
+  marketContextHeading?: string;
+  marketContext?: string;
+  whySnusFriend?: string;
+  buyingTips?: string;
+  faq?: CountryFaq[];
 }
 
 export const countries: CountryData[] = [
@@ -27,6 +39,15 @@ export const countries: CountryData[] = [
     h1: 'Nicotine Pouches in Germany: Complete Guide 2026',
     metaDescription: 'Buy nicotine pouches in Germany legally. Shipping options, brand availability & regulations for Nikotinbeutel. Fast EU delivery from SnusFriend.',
     intro: 'Germany is one of Europe\'s largest nicotine pouch markets, with growing demand driven by health-conscious consumers switching from cigarettes and vaping. ZYN leads by market share, trusted for consistency and flavour variety. VELO appeals to design-conscious users with its slim format and Nordic branding. All major brands are available for delivery to German addresses with fast EU shipping.',
+    enrichedIntro: 'Germany is one of the largest and fastest-growing nicotine pouch markets in Europe. Since nicotine pouches are classified as consumer products rather than tobacco, they face lighter regulation and are widely available both online and in physical stores. Brands like ZYN, VELO, and Skruf have invested heavily in the German market, and consumer awareness has grown substantially since 2024. For many Germans, nicotine pouches represent a cleaner, more discreet alternative to cigarettes and vaping — no smoke, no vapour, no lingering smell. Whether you\'re in Berlin, Munich, Hamburg, or anywhere in between, SnusFriend delivers to your door.',
+    marketContextHeading: 'The German Nicotine Pouch Market',
+    marketContext: 'Germany\'s market is driven by a combination of health-conscious consumers leaving cigarettes behind and younger adults who never started smoking but want a controlled nicotine option. Mint flavours dominate, followed by berry and citrus. Strength preferences tend toward medium (6–10 mg), though demand for stronger options is rising. Unlike in Scandinavia, awareness of nicotine pouches is still growing in Germany — many consumers are discovering them for the first time, making beginner-friendly guides especially valuable. The competitive landscape is led by VELO and ZYN, with LOOP, Skruf, and Nordic Spirit holding strong niche positions.',
+    whySnusFriend: 'Unlike German tobacconists and petrol stations that carry only 2–3 brands, SnusFriend stocks over 700 products from 35+ brands — the widest selection available to German consumers. We ship from within the EU, so there are no customs delays, no import duties, and no surprise fees. Orders over €29 ship free, and most deliveries arrive within 3–5 business days via tracked shipping.',
+    buyingTips: 'When ordering nicotine pouches in Germany, there are a few things worth knowing. All deliveries require age verification at checkout (you must be 18+). There\'s no limit on how many cans you can order for personal use. Prices on SnusFriend are typically 15–30% lower than German retail because we buy direct from manufacturers. And if you\'re new to pouches, we recommend starting with a "Normal" or "Strong" strength (4–10 mg) — many beginners who jump straight to "Extra Strong" find the nicotine hit overwhelming.',
+    faq: [
+      { q: 'Do I need to pay customs or import tax when ordering nicotine pouches to Germany?', a: 'No. SnusFriend ships from within the EU, so there are no customs charges, import duties, or additional taxes. The price you see at checkout is the price you pay.' },
+      { q: 'Are nicotine pouches legal to use in public in Germany?', a: 'Yes. Since nicotine pouches produce no smoke or vapour, they can be used anywhere — including offices, restaurants, public transport, and bars. There are no legal restrictions on where you can use them.' },
+    ],
   },
   {
     name: 'United Kingdom',
@@ -41,6 +62,15 @@ export const countries: CountryData[] = [
     h1: 'Nicotine Pouches in the UK: Complete Guide 2026',
     metaDescription: 'Buy nicotine pouches in the UK — fully legal, 18+, fast delivery. Shop VELO, ZYN, Nordic Spirit, White Fox from SnusFriend.',
     intro: 'The UK is one of Europe\'s most progressive markets for tobacco harm reduction. VELO leads the UK market with strong retail presence, followed by ZYN and Nordic Spirit. The UK government\'s support for harm reduction makes it an ideal market for nicotine pouches as a smoking alternative.',
+    enrichedIntro: 'The UK has been at the forefront of tobacco harm reduction in Europe, and nicotine pouches fit perfectly into that story. Regulated as consumer products, they\'re legal, widely available, and increasingly popular among the UK\'s 6.4 million adult smokers looking for alternatives. VELO leads the UK market, followed by ZYN and Nordic Spirit — all available on SnusFriend with delivery to any UK address. The NHS has acknowledged oral nicotine products as part of the harm reduction toolkit, giving consumers confidence that pouches are a legitimate alternative.',
+    marketContextHeading: 'The UK Nicotine Pouch Market',
+    marketContext: 'The UK\'s progressive stance on harm reduction has created a receptive environment for nicotine pouches. The market has grown roughly 40% year-on-year since 2023. Convenience stores, supermarkets, and vape shops now stock pouches alongside traditional nicotine products. VELO\'s UK marketing has been particularly visible, with sponsorships and retail partnerships driving awareness. UK consumers tend to prefer mint, menthol, and berry flavours. Strength preferences are moderate — the 6–10 mg range is most popular, though the UK market also has strong demand for higher-nicotine products among experienced users.',
+    whySnusFriend: 'Most UK retailers carry only VELO and Nordic Spirit. SnusFriend opens up the full European catalogue — 700+ products from brands like ZYN, LOOP, Skruf, Fumi, White Fox, Killa, and more that are difficult or impossible to find on the UK high street. While delivery takes slightly longer (5–7 business days from our EU warehouse), the selection, pricing, and loyalty rewards make it worthwhile. Every order earns SnusPoints you can redeem for discounts.',
+    buyingTips: 'UK orders ship from the EU, so delivery takes 5–7 business days — plan ahead if you\'re running low. There are no import duties on nicotine pouches shipped to the UK for personal use. Bulk ordering (5–10 cans at a time) is popular among UK customers since it reduces the effective cost per can and ensures you won\'t run out between deliveries. If you\'re trying pouches for the first time, our beginner mode filters the catalogue to show only mild and medium-strength products.',
+    faq: [
+      { q: 'Will I be charged customs fees on UK deliveries?', a: 'Nicotine pouches shipped to the UK for personal use are not subject to customs duties. You may see a small handling fee from the carrier on larger orders, but the vast majority of UK orders arrive with no extra charges.' },
+      { q: 'How do nicotine pouches compare to vaping in the UK?', a: 'Both are considered significantly less harmful than smoking. The key difference is convenience and discretion: pouches require no device, no charging, no liquid refills, and produce no visible vapour. They\'re also allowed in places where vaping is banned (offices, some pubs, public transport).' },
+    ],
   },
   {
     name: 'Sweden',
@@ -55,6 +85,15 @@ export const countries: CountryData[] = [
     h1: 'Nicotine Pouches in Sweden: Complete Guide 2026',
     metaDescription: 'Buy nicotine pouches in Sweden — the home of snus. Shop ZYN, LOOP, Skruf, VELO, Fumi. 2-3 day delivery from SnusFriend.',
     intro: 'Sweden is where nicotine pouches were born. Swedish consumers are the most experienced and discerning pouch users in the world. The market features intense competition between ZYN (Swedish Match), LOOP (Another Snus Factory), Skruf, and newcomers like Fumi. Swedish users tend to prefer higher-quality, well-engineered products with authentic flavour profiles.',
+    enrichedIntro: 'Sweden is where the nicotine pouch story began. As the birthplace of snus and the country with the lowest smoking rate in Europe (under 6%), Sweden has a deep cultural relationship with oral nicotine. Tobacco-free nicotine pouches — which emerged in the late 2010s as a cleaner evolution of traditional snus — have been embraced enthusiastically. ZYN and LOOP are consumer favourites, alongside Skruf, VELO, and Fumi. Swedish consumers are the most experienced pouch users in the world, which means they\'re often looking for variety, new flavours, and competitive pricing.',
+    marketContextHeading: 'The Swedish Nicotine Pouch Market',
+    marketContext: 'Sweden\'s oral nicotine market is the most mature in the world. Traditional snus still holds a large share, but tobacco-free pouches have been growing at double-digit rates annually, particularly among younger consumers and women. Swedish consumers tend to be adventurous with flavours (mint, berry, tropical, coffee, licorice) and experienced with higher nicotine strengths. The competitive landscape is fierce: ZYN, LOOP, and Skruf battle for market share, while newer brands like Fumi and KLINT target niche audiences.',
+    whySnusFriend: 'Swedish consumers know pouches better than anyone — which means they demand variety. SnusFriend stocks 35+ brands and 700+ products, including limited editions and international brands that rarely appear on Swedish shelves. Delivery to Sweden takes just 2–4 business days, and the SnusFriend rewards system (SnusPoints, daily spin wheel, quests) adds a layer of engagement that no Swedish competitor offers.',
+    buyingTips: 'Swedish consumers ordering from SnusFriend benefit from fast intra-Nordic shipping (2–4 days). Since Sweden uses SEK, prices are displayed in EUR on our site — your bank converts at the current rate. Many Swedish customers order in bulk (10+ cans) to maximise free shipping and points earnings. If you\'re a snus user curious about tobacco-free alternatives, we recommend starting with ZYN or LOOP in a strength you\'re already comfortable with — the format is similar, but the nicotine delivery and flavour profile differ slightly from traditional snus.',
+    faq: [
+      { q: 'How do nicotine pouches differ from traditional Swedish snus?', a: 'Nicotine pouches contain no tobacco — they use a plant fibre base infused with nicotine, flavouring, and sweeteners. They don\'t stain teeth, produce less drip, and come in a wider range of flavours. The nicotine experience is similar but typically slightly less intense than snus at the same mg level.' },
+      { q: 'Are SnusFriend prices competitive with Swedish retail?', a: 'Yes. Our direct-from-manufacturer sourcing means prices are typically on par with or slightly below Swedish convenience store prices, with the added benefit of a much wider selection and loyalty rewards that compound over time.' },
+    ],
   },
   {
     name: 'Spain',
@@ -69,6 +108,15 @@ export const countries: CountryData[] = [
     h1: 'Nicotine Pouches in Spain: Complete Guide 2026',
     metaDescription: 'Buy nicotine pouches in Spain — legal, 18+, fast EU delivery. Shop VELO, ZYN, Pablo, Killa. Complete guide to regulations and shipping.',
     intro: 'Spain\'s nicotine pouch market is one of Europe\'s fastest-growing, driven by warm-weather lifestyles where discreet, smokeless products are particularly appealing. VELO leads the Spanish market through strong retail partnerships. High-strength brands like Pablo and Killa have a dedicated following among experienced users.',
+    enrichedIntro: 'Spain is one of Europe\'s fastest-growing nicotine pouch markets, and it\'s easy to see why. In a country where outdoor socialising is central to daily life, a discreet, smokeless nicotine product fits naturally. Spanish consumers — particularly in the 25–40 age range — are switching from cigarettes at an accelerating pace, and nicotine pouches offer a clean alternative that works whether you\'re at a café terrace, on the beach, or at the office. VELO has invested heavily in Spanish retail distribution, and ZYN is gaining ground fast.',
+    marketContextHeading: 'The Spanish Nicotine Pouch Market',
+    marketContext: 'Spain\'s market is newer than the Nordic countries but growing rapidly — estimated at 35–50% year-on-year. Mint and citrus flavours dominate (fitting the climate and palate), and there\'s notably strong demand for high-strength products (12 mg+) among younger male consumers. VELO leads through retail distribution in estancos (tobacconists) and supermarkets, but the online channel is growing as consumers discover brands that aren\'t available locally. The regulatory environment is permissive, with nicotine pouches classified as consumer products rather than tobacco.',
+    whySnusFriend: 'Spanish estancos typically stock only VELO in 2–3 variants. SnusFriend opens up a world of choice: 35+ brands, every strength from light (2 mg) to super-strong (20+ mg), and flavours you won\'t find anywhere in Spain. Delivery takes 4–6 business days, and orders over €29 ship free. Our beginner mode is especially useful for Spanish consumers who are new to pouches.',
+    buyingTips: 'If you\'re ordering from Spain, we recommend trying a variety of 3–5 different brands and flavours in your first order to find your preferences. Spanish consumers tend to gravitate toward mint, citrus, and tropical flavours. Storage tip: in hot Spanish summers, keep your cans in a cool, dry place (a drawer or cupboard — not the car). Nicotine pouches won\'t go bad in heat, but flavour is best preserved at room temperature.',
+    faq: [
+      { q: 'Is it legal to order nicotine pouches online in Spain?', a: 'Yes. Nicotine pouches are legal in Spain and classified as consumer products, not tobacco. There are no restrictions on ordering them online for personal use, and no quantity limits on personal orders.' },
+      { q: 'How quickly can I get nicotine pouches delivered to Spain?', a: 'Standard delivery from SnusFriend takes 4–6 business days to mainland Spain. Balearic and Canary Islands may take 1–2 days longer. All orders include tracking so you can follow your package.' },
+    ],
   },
   {
     name: 'Italy',
@@ -97,6 +145,15 @@ export const countries: CountryData[] = [
     h1: 'Buy Nicotine Pouches in Poland',
     metaDescription: 'Buy nicotine pouches in Poland — legal, 18+, fast EU delivery. Shop VELO, ZYN, Pablo, Killa. Free shipping over €29.',
     intro: 'Poland is one of Central Europe\'s fastest-growing nicotine pouch markets. VELO and ZYN lead, with strong demand for high-strength brands like Pablo and Killa among younger consumers.',
+    enrichedIntro: 'Poland is one of Central Europe\'s most dynamic nicotine pouch markets. With over 8 million smokers and a strong cultural interest in tobacco alternatives, demand for nicotine pouches has surged since 2023. VELO and ZYN lead the mainstream market, while high-strength brands like Pablo, Killa, and Cuba have developed passionate followings among Polish consumers who prefer a stronger nicotine experience. The regulatory environment is favourable — nicotine pouches are legal, not classified as tobacco, and face minimal restrictions.',
+    marketContextHeading: 'The Polish Nicotine Pouch Market',
+    marketContext: 'Poland\'s market stands out for its strong appetite for high-nicotine products. While Western European markets tend toward 6–10 mg, Polish consumers regularly purchase 12–20 mg products, and brands like Pablo (with variants exceeding 40 mg) have a dedicated following. Mint remains the dominant flavour, followed by berry and tropical. The competitive landscape includes both mainstream brands (VELO, ZYN) and a thriving niche segment of strong/super-strong brands.',
+    whySnusFriend: 'Polish consumers are savvy online shoppers who compare prices across multiple stores. SnusFriend competes on selection (700+ products vs. the typical 50–100 on Polish domestic shops), rewards (SnusPoints, daily spin, quests — unique in the Polish market), and content (reviews, strength guides, brand comparisons). Our EU warehouse shipping means 3–5 day delivery to anywhere in Poland.',
+    buyingTips: 'Polish consumers often order in bulk — 10–20 cans at a time — to take advantage of free shipping and earn more SnusPoints per order. If you\'re new to pouches but experienced with cigarettes, start at "Strong" (8–12 mg) rather than "Normal" — Polish smokers often find lighter strengths underwhelming. For those interested in the super-strong category (16 mg+), browse our strength filter and read reviews before committing to a full order.',
+    faq: [
+      { q: 'Are there any customs or import charges on orders to Poland?', a: 'No. SnusFriend ships from within the EU, so Polish orders are not subject to customs duties or import taxes. The checkout price is final.' },
+      { q: 'What\'s the strongest nicotine pouch available on SnusFriend?', a: 'We carry products up to 40+ mg per pouch from brands like Pablo, Killa, and Cuba. These are designed for very experienced users only. Our strength filter makes it easy to browse by nicotine level, and product pages include detailed strength warnings.' },
+    ],
   },
   {
     name: 'Austria',
@@ -111,6 +168,15 @@ export const countries: CountryData[] = [
     h1: 'Buy Nicotine Pouches in Austria',
     metaDescription: 'Buy nicotine pouches in Austria — available online, 18+, fast EU delivery. Shop VELO, ZYN, Skruf. Free shipping over €29.',
     intro: 'Austria has introduced specific regulations for nicotine pouches while maintaining their availability. The market is growing steadily with VELO and ZYN as the leading brands.',
+    enrichedIntro: 'Austria sits at the crossroads of Western and Central European nicotine pouch adoption. While the Austrian government introduced a specific regulatory framework for nicotine pouches in 2025, they remain fully available for online purchase and are growing steadily in popularity. Brands like VELO, ZYN, and Skruf are the most recognised, with Nordic Spirit also building a loyal following. The country\'s café culture and strict indoor smoking bans have made discreet, smokeless nicotine products particularly appealing.',
+    marketContextHeading: 'The Austrian Nicotine Pouch Market',
+    marketContext: 'Austria\'s nicotine pouch market emerged later than Germany\'s but is catching up quickly. The 2025 regulatory update brought nicotine pouches under specific product safety rules — including packaging requirements and age verification standards — but stopped short of banning or heavily restricting them. Austrian consumers tend toward moderate nicotine strengths (6–12 mg), with mint and menthol dominating flavour preferences. Austrian Trafik (tobacconist) shops carry a limited range — typically only VELO — making online retail essential for variety.',
+    whySnusFriend: 'Austrian Trafik shops typically stock only 1–2 brands in 3–4 variants. SnusFriend opens up the full European catalogue — 700+ products from 35+ brands that simply aren\'t available in Austrian retail. We ship from within the EU, so Austrian orders arrive in 3–5 business days with no customs or import complications. Free shipping on orders over €29.',
+    buyingTips: 'Austrian consumers benefit from seamless EU shipping — no customs, no delays, no surprise fees. If you\'re transitioning from cigarettes, start with a "Strong" (6–10 mg) product in mint or menthol. Bulk ordering (5–10 cans) is the most cost-effective approach, as it qualifies for free shipping and maximises SnusPoints earnings.',
+    faq: [
+      { q: 'How are nicotine pouches regulated in Austria?', a: 'Austria introduced specific regulations for nicotine pouches in 2025, covering packaging, labelling, and age verification. They are not classified as tobacco products and remain legally available for purchase online and in retail. You must be 18 or older to buy.' },
+      { q: 'Do I need to pay extra fees or taxes on orders to Austria?', a: 'No. SnusFriend ships from within the EU, so Austrian orders are not subject to customs, import duties, or additional taxes. The price at checkout is the final price. Austria uses the Euro, so there\'s no currency conversion involved either.' },
+    ],
   },
   {
     name: 'Denmark',
@@ -125,6 +191,15 @@ export const countries: CountryData[] = [
     h1: 'Buy Nicotine Pouches in Denmark',
     metaDescription: 'Buy nicotine pouches in Denmark — legal, 18+, fast Nordic delivery. Shop ZYN, VELO, LOOP, Skruf. Free shipping over €29.',
     intro: 'Denmark\'s proximity to Sweden means nicotine pouches are well-understood and widely adopted. ZYN and LOOP are particularly popular among Danish consumers.',
+    enrichedIntro: 'Denmark has a deep-rooted relationship with oral nicotine. As Sweden\'s Nordic neighbour, Danes were among the first non-Swedish consumers to adopt nicotine pouches when tobacco-free alternatives hit the market. Today, pouches are a common sight across Denmark — from Copenhagen offices to Aarhus university campuses. ZYN is the market leader, followed closely by LOOP and VELO. Denmark\'s high cigarette taxes have accelerated the switch to pouches as a more affordable and healthier alternative.',
+    marketContextHeading: 'The Danish Nicotine Pouch Market',
+    marketContext: 'Denmark\'s market benefits from strong Nordic cultural familiarity with oral nicotine. Danish consumers are flavour-adventurous, with mint, berry, and tropical profiles all performing well. Strength preferences lean medium to strong (6–14 mg), reflecting the influence of Swedish consumption patterns. The Danish retail landscape includes dedicated snus/pouch shops, convenience stores, and a well-developed online channel. Denmark\'s high tobacco taxes and aggressive anti-smoking policies continue to drive consumers toward alternatives.',
+    whySnusFriend: 'Danish consumers are knowledgeable about pouches but often limited by local retail selection. SnusFriend stocks 35+ brands and 700+ products — far beyond what any Danish physical store or domestic online shop offers. Our Nordic warehouse proximity means 2–4 day delivery, making us as fast as domestic Danish retailers. The SnusFriend rewards system (SnusPoints, daily spin wheel, quests) is unique in the Danish market.',
+    buyingTips: 'Danish consumers ordering from SnusFriend benefit from the fastest delivery times in our network — 2–4 business days for standard shipping. Prices are in EUR; your Danish bank handles the DKK conversion automatically. Many Danish customers order a "discovery" selection of 5–8 different products to explore brands they can\'t find locally. For the best value, order 10+ cans to hit the free shipping threshold.',
+    faq: [
+      { q: 'How do nicotine pouches compare to traditional snus in Denmark?', a: 'Tobacco-free nicotine pouches are a cleaner evolution of traditional snus. They contain no tobacco, produce less drip, don\'t stain teeth, and come in a wider range of flavours. While snus sales are technically restricted under EU law, nicotine pouches face no such restrictions.' },
+      { q: 'What are the most popular nicotine pouches in Denmark?', a: 'ZYN leads the Danish market with its mint and citrus flavours, followed by LOOP (popular for unique flavour combinations) and VELO (strong retail presence). Among experienced users, Skruf and Nordic Spirit are also well-regarded.' },
+    ],
   },
   {
     name: 'Norway',
@@ -139,6 +214,15 @@ export const countries: CountryData[] = [
     h1: 'Buy Nicotine Pouches in Norway',
     metaDescription: 'Buy nicotine pouches in Norway — legal, 18+, fast delivery. Shop ZYN, LOOP, Skruf, VELO. Free shipping on qualifying orders.',
     intro: 'Norway is one of the world\'s strongest markets for oral nicotine products. Nicotine pouches have gained significant popularity as a tobacco-free alternative to traditional snus.',
+    enrichedIntro: 'Norway is one of the world\'s strongest markets for oral nicotine products — and it\'s not hard to see why. Traditional snus has been a cultural staple for decades, used by roughly 12% of the adult population. Tobacco-free nicotine pouches represent the natural evolution: same discreet format, but without tobacco, staining, or drip. Norwegian consumers are among the most experienced oral nicotine users globally, which means they demand quality, variety, and competitive pricing.',
+    marketContextHeading: 'The Norwegian Nicotine Pouch Market',
+    marketContext: 'Norway\'s oral nicotine market is the second-largest in Europe after Sweden. The Norwegian government\'s pragmatic approach to harm reduction — combined with high cigarette taxes (over NOK 150 per pack) — has made oral nicotine the preferred format for millions. Nicotine pouches specifically have grown explosively since 2022, capturing younger consumers and women who find traditional snus less appealing. Norwegian consumers prefer strong products (10–16 mg is the sweet spot), and mint dominates flavour preferences, followed by bergamot, citrus, and berry.',
+    whySnusFriend: 'Norwegian retail carries strong brands but limited variety within each. SnusFriend\'s 700+ product catalogue opens up a world of options — limited editions, niche brands, international favourites, and flavour combinations that never make it to Norwegian shelves. While Norway sits outside the EU, personal-use orders from SnusFriend ship smoothly with 3–5 day delivery. Our rewards programme (SnusPoints, quests, leaderboards) appeals to Norway\'s competitive, gamification-friendly consumer culture.',
+    buyingTips: 'Norwegian consumers should be aware that Norway is outside the EU customs union. For personal-use quantities (typically up to 100–200 pouches), orders generally pass through customs without issue. Ordering in moderate bulk (5–10 cans per order) is the sweet spot — enough for free shipping and SnusPoints accumulation, but within comfortable personal-use ranges. If you\'re an experienced snus user exploring tobacco-free alternatives, start with a strength level you\'re familiar with.',
+    faq: [
+      { q: 'Are there customs charges when ordering nicotine pouches to Norway?', a: 'Norway is outside the EU, so orders may be subject to Norwegian customs processing. For personal-use quantities, nicotine pouches are generally processed without additional charges. Norwegian customs may apply a small handling fee on some shipments.' },
+      { q: 'How do tobacco-free nicotine pouches compare to Norwegian snus?', a: 'The format is very similar — both are used under the upper lip and deliver nicotine orally. Key differences: tobacco-free pouches contain no tobacco, produce less drip, don\'t stain teeth, and offer a wider range of flavours. The nicotine hit is slightly less intense per mg than tobacco snus, so experienced snus users often prefer one strength level higher.' },
+    ],
   },
   {
     name: 'Finland',
@@ -153,5 +237,14 @@ export const countries: CountryData[] = [
     h1: 'Buy Nicotine Pouches in Finland',
     metaDescription: 'Buy nicotine pouches in Finland — legal (snus is banned but pouches are not), 18+, fast EU delivery. Free shipping over €29.',
     intro: 'Finland represents an interesting market: while traditional snus is banned under EU regulations, tobacco-free nicotine pouches are fully legal and growing rapidly as the preferred oral nicotine product.',
+    enrichedIntro: 'Finland presents one of Europe\'s most interesting nicotine pouch markets. While traditional Swedish snus is banned under EU regulations (which Finland follows, unlike Sweden\'s exemption), tobacco-free nicotine pouches are fully legal — creating a unique dynamic where pouches are the only legal oral nicotine product available. This regulatory gap has driven rapid adoption, particularly among younger Finnish adults and former smokers.',
+    marketContextHeading: 'The Finnish Nicotine Pouch Market',
+    marketContext: 'Finland\'s ban on traditional snus has paradoxically accelerated nicotine pouch adoption. With no legal tobacco-based oral alternative, Finnish consumers who want a smokeless nicotine experience have embraced pouches enthusiastically. The market has grown by an estimated 50–60% annually since 2023. Finnish consumers tend toward moderate-to-strong strengths (8–14 mg), with mint and berry flavours dominating. Online retail is the primary purchase channel, as Finnish physical retail carries only a limited selection.',
+    whySnusFriend: 'Finnish consumers face a unique challenge: snus is banned, and local retail stocks only a handful of pouch brands. SnusFriend solves both problems — 700+ tobacco-free nicotine pouch products from 35+ brands, all legal in Finland, delivered in 3–5 business days. We\'re often the first place Finnish consumers discover brands like Fumi, White Fox, Killa, or Skruf\'s specialty lines. Our beginner mode is popular with Finnish users transitioning from smoking.',
+    buyingTips: 'Finnish consumers should know that all SnusFriend products are tobacco-free nicotine pouches — fully legal in Finland (unlike traditional snus, which is banned). Order confidently knowing there are no legal issues with personal-use purchases. Prices are in EUR, so no currency conversion is needed. Finnish customers often order in bulk (10+ cans) to stock up, especially ahead of winter months.',
+    faq: [
+      { q: 'Are nicotine pouches legal in Finland even though snus is banned?', a: 'Yes, absolutely. Traditional snus (which contains tobacco) is banned in Finland under EU regulations. Tobacco-free nicotine pouches are a completely different product category — they contain no tobacco and are classified as consumer products, not tobacco products. They are fully legal to buy, possess, and use in Finland.' },
+      { q: 'How quickly can I receive nicotine pouches in Finland?', a: 'SnusFriend ships to Finland from our EU warehouse. Standard delivery takes 3–5 business days to major cities (Helsinki, Espoo, Tampere, Turku, Oulu). Remote areas and northern Finland may take 1–2 additional days. All orders include tracking, and free shipping applies on orders over €29.' },
+    ],
   },
 ];

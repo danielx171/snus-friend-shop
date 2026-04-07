@@ -9,7 +9,7 @@ function PointsRedemptionInner() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
-  const { data: points } = useSnusPoints();
+  const { data: points } = useSnusPoints(userId);
   const balance = points?.balance ?? 0;
 
   if (!mounted || !authChecked) return null;
