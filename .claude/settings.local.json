@@ -459,7 +459,9 @@
       "Bash(xargs -I {} sh -c 'echo \"=== {} ===\" && jq .mcpServers {} 2>/dev/null | head -50')",
       "Bash(echo \"exit: $?\")",
       "Bash(claude plugins:*)",
-      "Skill(seo-audit)"
+      "Skill(seo-audit)",
+      "Bash(perl:*)",
+      "mcp__claude_ai_Sentry__find_projects"
     ]
   }
 }

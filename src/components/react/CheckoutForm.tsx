@@ -257,7 +257,9 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
           return;
         }
         clearCart();
-        try { sessionStorage.removeItem('snusfriend_buynow'); } catch {}
+        try { sessionStorage.removeItem('snusfriend_buynow'); } catch {
+          // Silently ignore if sessionStorage is unavailable
+        }
         window.location.href = data.redirect_url;
       }
     } catch {

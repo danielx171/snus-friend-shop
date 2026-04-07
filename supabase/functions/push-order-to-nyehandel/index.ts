@@ -5,7 +5,7 @@ declare const Deno: {
   serve: (handler: (req: Request) => Response | Promise<Response>) => void;
 };
 
-// @ts-ignore: Deno URL import
+// @ts-expect-error — Deno types: Deno URL import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ------------------------------------------------------------------ */

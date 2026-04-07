@@ -93,7 +93,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
 
       // Batch-fetch user profiles for unique user_ids
       const uniqueUserIds = [...new Set(rows.map((r) => r.user_id))];
-      let profileMap: Record<string, ReviewProfile> = {};
+      const profileMap: Record<string, ReviewProfile> = {};
 
       if (uniqueUserIds.length > 0) {
         const { data: profileRows } = await supabase
@@ -104,7 +104,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         if (profileRows) {
           // For profiles that have an avatar_id, fetch the avatar image_url
           const avatarIds = [...new Set(profileRows.map((p) => p.avatar_id).filter(Boolean) as string[])];
-          let avatarMap: Record<string, string> = {};
+          const avatarMap: Record<string, string> = {};
 
           if (avatarIds.length > 0) {
             const { data: avatarRows } = await supabase
@@ -131,7 +131,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
 
       // Batch-check verified buyer status: find which reviewers have a completed order
       // containing this product in their line_items_snapshot
-      let verifiedBuyerIds = new Set<string>();
+      const verifiedBuyerIds = new Set<string>();
       if (uniqueUserIds.length > 0) {
         const { data: orderRows } = await supabase
           .from('orders')

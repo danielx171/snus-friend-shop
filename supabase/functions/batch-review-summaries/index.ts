@@ -1,6 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// @ts-ignore: Deno file import
+// @ts-expect-error — Deno types: Deno file import
 import { getCorsHeaders } from "../_shared/cors.ts";
 
 /**
@@ -116,7 +116,7 @@ Deno.serve(async (req: Request) => {
     });
 
     let processed = 0;
-    let skipped = eligibleProducts.length - toRegenerate.length;
+    const skipped = eligibleProducts.length - toRegenerate.length;
     let errors = 0;
 
     // Call generate-review-summary for each (sequentially to avoid overloading)

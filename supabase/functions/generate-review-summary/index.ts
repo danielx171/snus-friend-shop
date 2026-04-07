@@ -1,6 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// @ts-ignore: Deno file import
+// @ts-expect-error — Deno types: Deno file import
 import { getCorsHeaders } from "../_shared/cors.ts";
 
 const MIN_REVIEWS_FOR_SUMMARY = 3;
@@ -9,6 +9,7 @@ const REVIEW_COUNT_DELTA_TO_REGENERATE = 3;
 /** Strip control characters and truncate to prevent prompt injection. */
 function sanitise(s: string | null | undefined, maxLen = 500): string {
   if (!s) return '';
+  // eslint-disable-next-line no-control-regex
   return s.replace(/[\x00-\x1F\x7F]/g, ' ').slice(0, maxLen);
 }
 

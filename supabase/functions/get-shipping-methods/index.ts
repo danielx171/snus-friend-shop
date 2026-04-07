@@ -9,7 +9,7 @@ declare const Deno: {
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-// @ts-ignore: Deno file import
+// @ts-expect-error — Deno types: Deno file import
 import { corsHeaders } from "../_shared/cors.ts";
 
 /** In-memory cache — avoids hitting Nyehandel on every page load */
