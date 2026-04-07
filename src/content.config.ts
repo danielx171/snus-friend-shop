@@ -41,7 +41,11 @@ const products = defineCollection({
 
     if (error) {
       console.error('[content.config] Failed to fetch products:', error.message);
-      return [];
+      throw new Error(`[content.config] Product fetch failed — build aborted. Fix Supabase connection. Error: ${error.message}`);
+    }
+
+    if (!data || data.length < 50) {
+      throw new Error(`[content.config] Product fetch returned only ${data?.length ?? 0} products (expected 50+). Possible empty catalog — build aborted.`);
     }
 
     return (data ?? []).map((p: any) => ({
@@ -103,7 +107,7 @@ const brands = defineCollection({
 
     if (error) {
       console.error('[content.config] Failed to fetch brands:', error.message);
-      return [];
+      throw new Error(`[content.config] Brand fetch failed — build aborted. Fix Supabase connection. Error: ${error.message}`);
     }
 
     return (data ?? []).map((b: any) => {

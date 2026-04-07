@@ -202,7 +202,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
     setError('');
 
     // PostHog: track checkout_started
-    trackCheckoutStarted({ cartTotal: total, itemCount: cartItems.length });
+    trackCheckoutStarted({ cartTotal: cartTotal, itemCount: cartItems.length });
 
     try {
       const items = cartItems.map((item) => ({

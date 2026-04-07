@@ -51,7 +51,7 @@ const MIX_TIERS = [
   { minCans: 5, pct: 5 },
 ] as const;
 
-export const $mixDiscount = computed([$cartCanCount, $cartTotal], ([canCount, total]) => {
+export const $mixDiscount = computed([$cartCanCount, $cartTotal], (canCount, total) => {
   const tier = MIX_TIERS.find((t) => canCount >= t.minCans);
   if (!tier) {
     // Show next tier as incentive

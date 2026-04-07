@@ -52,6 +52,18 @@ const articles = [
   { title: 'Are Nicotine Pouches Safe? Evidence-Based Health Guide', slug: 'are-nicotine-pouches-safe', excerpt: 'Clinical evidence on nicotine pouch safety — comparison with cigarettes, snus, and vaping.', date: '2026-03-30' },
   { title: 'Nicotine Pouch Ingredients Explained', slug: 'nicotine-pouch-ingredients-explained', excerpt: 'Complete breakdown of every ingredient — nicotine source, fillers, pH adjusters, flavourings, and sweeteners.', date: '2026-03-30' },
   { title: 'How to Spot Fake Nicotine Pouches', slug: 'how-to-spot-fake-nicotine-pouches', excerpt: 'Authentication guide — packaging, batch codes, holograms, and authorised retailers.', date: '2026-03-30' },
+  // New articles — April 8, 2026 (comparison + country guides)
+  { title: 'ZYN vs LOOP: Which Is Better in 2026?', slug: 'zyn-vs-loop-2026', excerpt: 'Head-to-head comparison of ZYN and LOOP — flavours, strength, price, comfort, and availability.', date: '2026-04-08' },
+  { title: 'ZYN vs Skruf: Which Is Better in 2026?', slug: 'zyn-vs-skruf-2026', excerpt: 'ZYN vs Skruf compared — strength, flavours, price, and format.', date: '2026-04-08' },
+  { title: 'VELO vs LOOP: Which Is Better in 2026?', slug: 'velo-vs-loop-2026', excerpt: 'VELO vs LOOP head-to-head — flavour range, strength, price, and innovation compared.', date: '2026-04-08' },
+  { title: 'White Fox vs Siberia: Strongest Pouches Compared', slug: 'white-fox-vs-siberia-2026', excerpt: 'The ultimate strong pouch showdown — strength, flavours, price, and which hits harder.', date: '2026-04-08' },
+  { title: 'KLAR vs FUMI: Which Scandinavian Pouch Wins?', slug: 'klar-vs-fumi-2026', excerpt: 'Scandinavian minimalism meets bold flavours — KLAR vs FUMI compared.', date: '2026-04-08' },
+  { title: 'Best Nicotine Pouches for Every Occasion', slug: 'best-nicotine-pouches-by-occasion', excerpt: 'The best pouch for work, gym, socialising, and more — tested picks for every moment.', date: '2026-04-08' },
+  { title: 'Buy Nicotine Pouches in Austria: 2026 Guide', slug: 'buying-nicotine-pouches-austria-2026', excerpt: 'Trafik vs online, legal status, popular brands, and how to order to Austria.', date: '2026-04-08' },
+  { title: 'Buy Nicotine Pouches in Denmark: 2026 Guide', slug: 'buying-nicotine-pouches-denmark-2026', excerpt: 'Post-snus-ban rules, the 9mg cap, flavour restrictions, and ordering online.', date: '2026-04-08' },
+  { title: 'Nicotine Pouches in Norway: 2026 Rules & Alternatives', slug: 'buying-nicotine-pouches-norway-2026', excerpt: 'Why pouches are banned in Norway, how snus stays legal, and cross-border options.', date: '2026-04-08' },
+  { title: 'Nicotine Pouches in Finland: 2026 Guide & Rules', slug: 'buying-nicotine-pouches-finland-2026', excerpt: 'Distance selling ban, flavour restrictions, personal import rules explained.', date: '2026-04-08' },
+  { title: 'Buy Nicotine Pouches in Poland: 2026 Guide', slug: 'buying-nicotine-pouches-poland-2026', excerpt: 'Fastest-growing EU market — excise tax, popular brands, prices in PLN.', date: '2026-04-08' },
 ];
 
 export async function GET(context: APIContext) {
