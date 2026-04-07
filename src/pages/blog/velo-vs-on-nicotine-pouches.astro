@@ -1,0 +1,321 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import { tenant } from '@/config/tenant';
+
+const publishDate = '2026-04-07';
+const title = 'VELO vs ON! Nicotine Pouches: Which Should You Choose in 2026?';
+const description = 'Head-to-head comparison of VELO and ON! nicotine pouches -- flavour range, strength, format, price, and which brand suits your needs. Updated for 2026.';
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'VELO vs ON! Nicotine Pouches' },
+      ]} />
+
+      <BlogHero
+        category="Comparison"
+        title={title}
+        description={description}
+        date="April 7, 2026"
+        readTime="10 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>The Two Contenders</h2>
+        <p>
+          <a href="/brands/velo">VELO</a> and <a href="/brands/on">ON!</a> are both backed by tobacco industry giants -- VELO by British American Tobacco, ON! by Philip Morris International (through its Helix Innovations subsidiary). Both brands aim squarely at the mainstream nicotine pouch consumer, but they take very different approaches to format, strength range, and flavour philosophy.
+        </p>
+        <p>
+          This guide compares them across every dimension that matters to a buyer: flavour variety, nicotine delivery, pouch comfort, price, and availability across Europe.
+        </p>
+
+        <h2>Brand Backgrounds</h2>
+
+        <h3>VELO: British American Tobacco</h3>
+        <p>
+          VELO launched as BAT's global answer to ZYN. Rebranded from the earlier "Lyft" name in several European markets, VELO has grown into the second-largest nicotine pouch brand in Europe by volume. BAT has invested heavily in flavour innovation, with VELO offering one of the widest product ranges in the market -- over 50 SKUs spanning five flavour families. Read our <a href="/blog/velo-nicotine-pouches-complete-guide">complete VELO guide</a> for the full breakdown.
+        </p>
+
+        <h3>ON!: Philip Morris International</h3>
+        <p>
+          ON! takes a different path. Originally developed by Burger Sohne in Switzerland and later acquired by Altria (then distributed under PMI's umbrella), ON! focuses on miniature pouches designed for maximum discretion. The brand made global headlines in 2025 when on! PLUS became the first nicotine pouch to receive FDA marketing authorisation in the United States -- a significant regulatory milestone for the entire category. See our <a href="/blog/on-nicotine-pouches-complete-guide">complete ON! guide</a> for more detail.
+        </p>
+
+        <h2>Head-to-Head: Flavour Range</h2>
+        <p>
+          VELO dominates in flavour breadth. The European range spans mint (peppermint, spearmint, wintergreen), berry (mixed berry, raspberry, elderflower), citrus (orange, lime, grapefruit), fruit (tropical, mango), and licorice. New releases appear quarterly, and regional exclusives keep the lineup fresh.
+        </p>
+        <p>
+          ON! takes a focused approach. The core range covers approximately 10-12 flavours: Mint, Wintergreen, Berry, Citrus, Coffee, Cinnamon, and a few regional variants. ON! does not chase novelty -- the emphasis is on consistency and a tighter flavour portfolio where every variant has been rigorously tested.
+        </p>
+        <p>
+          <strong>Verdict:</strong> VELO wins for variety seekers. ON! wins for users who want a reliable favourite without decision fatigue.
+        </p>
+
+        <h2>Head-to-Head: Strength and Nicotine Delivery</h2>
+        <p>
+          VELO offers a wide strength ladder: from 4 mg (Bright/Easy line) up to 17 mg (Max/Ultra line in select markets). The range covers <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginners</a> through to experienced users looking for a serious nicotine hit. VELO's moisture level is relatively high, which means faster initial flavour and nicotine release -- the hit comes within 60-90 seconds.
+        </p>
+        <p>
+          ON! is built around the mini format, which means each pouch is physically smaller. Strengths range from 2 mg to 8 mg per pouch in most European markets. The lower absolute nicotine content per pouch is partly offset by ON!'s higher bioavailability -- the mini format sits closer to the gum, and ON! uses a pH-optimised formulation that improves absorption efficiency.
+        </p>
+        <p>
+          <strong>Key difference:</strong> VELO delivers higher peak nicotine per pouch. ON! delivers a gentler, more sustained release. Heavy users may find they need more ON! pouches per day to match a VELO habit.
+        </p>
+        <p>
+          <strong>Verdict:</strong> VELO for users who want a stronger per-pouch experience. ON! for users who prefer micro-dosing or very discreet use. See our <a href="/blog/how-to-choose-your-strength">strength selection guide</a> for help choosing.
+        </p>
+
+        <h2>Head-to-Head: Format and Comfort</h2>
+        <p>
+          VELO offers both slim and mini formats. The slim is the most popular -- it sits flat under the lip, is comfortable for 25-35 minutes, and is available across all flavours and strengths. The VELO mini is smaller but still noticeably larger than an ON! mini.
+        </p>
+        <p>
+          ON! is almost exclusively a mini-format brand. The pouches are among the smallest on the market -- roughly the size of a thumbnail. This makes them virtually invisible under the lip, ideal for situations where discretion is paramount (office meetings, public transport, social settings).
+        </p>
+        <p>
+          The trade-off is session duration: ON! minis typically last 15-25 minutes before flavour fades, compared to 25-35 minutes for VELO slims. Some ON! users cycle through pouches faster as a result.
+        </p>
+        <p>
+          <strong>Verdict:</strong> ON! for discretion. VELO for comfort and session length.
+        </p>
+
+        <h2>Head-to-Head: Price and Value</h2>
+        <p>
+          In most European markets, VELO and ON! are priced competitively. VELO cans typically contain 20 pouches at EUR 3.50-5.50 per can. ON! cans also contain 20 pouches, priced at EUR 3.00-5.00 per can.
+        </p>
+        <p>
+          On a per-milligram basis, VELO often delivers more total nicotine per can (because higher-strength options are available), making it better value for users who measure by nicotine content rather than pouch count.
+        </p>
+        <p>
+          <strong>Verdict:</strong> Roughly even on price. VELO edges ahead on per-mg value at higher strengths.
+        </p>
+
+        <h2>Head-to-Head: European Availability</h2>
+        <p>
+          VELO has broader European distribution. It is available in the UK, Germany, Poland, Austria, Scandinavia, and most Western European markets. BAT's retail partnerships and marketing spend give VELO strong shelf presence.
+        </p>
+        <p>
+          ON! is expanding but still has gaps. It is well-established in the UK, US, and select Nordic markets, but availability in Southern and Eastern Europe is patchier. Online retailers like SnusFriend stock the full ON! range regardless of your location.
+        </p>
+        <p>
+          <strong>Verdict:</strong> VELO for in-store availability. Both brands are fully available online through SnusFriend.
+        </p>
+
+        <h2>The FDA Factor</h2>
+        <p>
+          ON! has a unique selling point that no other European brand can match: the on! PLUS range received FDA marketing authorisation in the US. While this does not directly affect European sales, it signals a level of regulatory scrutiny and product safety data that competitors have not yet achieved. For health-conscious consumers, this is a meaningful trust signal.
+        </p>
+        <p>
+          VELO has not pursued FDA authorisation but is subject to UK and EU consumer product regulations. BAT conducts extensive internal testing, though the results are not independently verified to the same regulatory standard as FDA review.
+        </p>
+
+        <h2>Side-by-Side Comparison Table</h2>
+        <div class="overflow-x-auto my-8">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-3 px-4 text-foreground font-semibold">Feature</th>
+                <th class="text-left py-3 px-4 text-foreground font-semibold">VELO</th>
+                <th class="text-left py-3 px-4 text-foreground font-semibold">ON!</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Maker</td>
+                <td class="py-3 px-4">British American Tobacco</td>
+                <td class="py-3 px-4">Philip Morris International</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Formats</td>
+                <td class="py-3 px-4">Slim + Mini</td>
+                <td class="py-3 px-4">Mini (primarily)</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Strength range</td>
+                <td class="py-3 px-4">4-17 mg</td>
+                <td class="py-3 px-4">2-8 mg</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Flavour count (EU)</td>
+                <td class="py-3 px-4">50+ SKUs</td>
+                <td class="py-3 px-4">10-12 SKUs</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Can size</td>
+                <td class="py-3 px-4">20 pouches</td>
+                <td class="py-3 px-4">20 pouches</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Session duration</td>
+                <td class="py-3 px-4">25-35 min</td>
+                <td class="py-3 px-4">15-25 min</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">FDA authorised</td>
+                <td class="py-3 px-4">No</td>
+                <td class="py-3 px-4">Yes (on! PLUS)</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Price range (EU)</td>
+                <td class="py-3 px-4">EUR 3.50-5.50</td>
+                <td class="py-3 px-4">EUR 3.00-5.00</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Best for</td>
+                <td class="py-3 px-4">Flavour variety, stronger hits</td>
+                <td class="py-3 px-4">Discretion, micro-dosing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Who Should Choose VELO?</h2>
+        <p>
+          VELO is the right choice if you want the widest flavour selection available, prefer stronger pouches (8-17 mg range), value longer session duration (25-35 min), or want a brand with broad in-store availability across Europe.
+        </p>
+
+        <h2>Who Should Choose ON!?</h2>
+        <p>
+          ON! is the right choice if you prioritise discretion above all else (the smallest pouches on the market), prefer lighter nicotine doses (2-8 mg range), value the FDA-authorised safety data behind on! PLUS, or want a simple, focused product range without overwhelming choice.
+        </p>
+
+        <h2>Final Verdict</h2>
+        <p>
+          There is no wrong choice between VELO and ON! -- the right brand depends on your priorities. VELO is the broader, bolder option with more flavours and higher strengths. ON! is the specialist for discreet, lighter use backed by the strongest regulatory credentials in the category.
+        </p>
+        <p>
+          Many users keep both on rotation: VELO for when you want flavour and intensity, ON! for when you need to be invisible.
+        </p>
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO: The Definitive 2026 Comparison</a></li>
+          <li><a href="/blog/on-nicotine-pouches-complete-guide">ON! Nicotine Pouches: Complete Brand Guide</a></li>
+          <li><a href="/blog/velo-nicotine-pouches-complete-guide">VELO Nicotine Pouches: Complete Brand Guide</a></li>
+          <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best Nicotine Pouches for Beginners</a></li>
+          <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Strength</a></li>
+        </ul>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+        <h2>Frequently Asked Questions</h2>
+        <div style="margin-top: 16px;">
+          <h3>Is VELO or ON! stronger?</h3>
+          <p>VELO offers higher maximum strengths (up to 17 mg per pouch in some European markets), while ON! tops out at 8 mg. VELO also delivers a faster initial nicotine hit due to higher pouch moisture. ON! provides a gentler, more sustained release.</p>
+
+          <h3>Are ON! pouches smaller than VELO?</h3>
+          <p>Yes. ON! specialises in mini-format pouches that are among the smallest on the market -- roughly thumbnail-sized. VELO offers both slim and mini formats, but even VELO's mini is larger than an ON! mini.</p>
+
+          <h3>Is ON! FDA approved?</h3>
+          <p>The on! PLUS range received FDA marketing authorisation in the United States in 2025 -- the first nicotine pouch to achieve this. This does not directly apply to European sales but signals rigorous safety testing. VELO has not pursued FDA authorisation.</p>
+
+          <h3>Which is cheaper, VELO or ON!?</h3>
+          <p>Prices are similar in most European markets. VELO cans run EUR 3.50-5.50 and ON! cans EUR 3.00-5.00 for 20 pouches each. On a per-milligram basis, VELO often provides more total nicotine per can due to higher-strength options.</p>
+
+          <h3>Can I switch between VELO and ON!?</h3>
+          <p>Yes. Many users keep both brands on rotation -- VELO for flavour variety and intensity, ON! for discreet, lighter use. The main adjustment is pouch size and nicotine delivery speed.</p>
+        </div>
+      </section>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-vs-on-nicotine-pouches` },
+        "description": description
+      })} />
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is VELO or ON! stronger?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "VELO offers higher maximum strengths (up to 17 mg per pouch in some European markets), while ON! tops out at 8 mg. VELO also delivers a faster initial nicotine hit due to higher pouch moisture. ON! provides a gentler, more sustained release."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are ON! pouches smaller than VELO?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. ON! specialises in mini-format pouches that are among the smallest on the market -- roughly thumbnail-sized. VELO offers both slim and mini formats, but even VELO's mini is larger than an ON! mini."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is ON! FDA approved?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The on! PLUS range received FDA marketing authorisation in the United States in 2025 -- the first nicotine pouch to achieve this. This does not directly apply to European sales but signals rigorous safety testing. VELO has not pursued FDA authorisation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which is cheaper, VELO or ON!?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Prices are similar in most European markets. VELO cans run EUR 3.50-5.50 and ON! cans EUR 3.00-5.00 for 20 pouches each. On a per-milligram basis, VELO often provides more total nicotine per can due to higher-strength options."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I switch between VELO and ON!?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Many users keep both brands on rotation -- VELO for flavour variety and intensity, ON! for discreet, lighter use. The main adjustment is pouch size and nicotine delivery speed."
+            }
+          }
+        ]
+      })} />
+    </div>
+  </article>
+</Shop>
