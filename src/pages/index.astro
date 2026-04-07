@@ -727,11 +727,12 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
     // Beginner mode filter
     try {
       var raw = localStorage.getItem('snusfriend_beginner');
-      if (!raw || raw !== 'true') return;
-      var cards = document.querySelectorAll('[data-nicotine-mg]');
-      for (var i = 0; i < cards.length; i++) {
-        var mg = parseFloat(cards[i].getAttribute('data-nicotine-mg'));
-        if (mg > 6) cards[i].style.display = 'none';
+      if (raw === 'true') {
+        var cards = document.querySelectorAll('[data-nicotine-mg]');
+        for (var i = 0; i < cards.length; i++) {
+          var mg = parseFloat(cards[i].getAttribute('data-nicotine-mg'));
+          if (mg > 6) cards[i].style.display = 'none';
+        }
       }
     } catch(e) {}
 
