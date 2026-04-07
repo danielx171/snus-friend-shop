@@ -713,43 +713,58 @@ export type Database = {
       product_reviews: {
         Row: {
           body: string
+          burn: number | null
           cons: string[]
           created_at: string
           flagged: boolean
+          flavor_intensity: number | null
           helpful_count: number
           id: string
+          longevity: number | null
+          moisture: number | null
           photo_urls: string[]
           product_id: string
           pros: string[]
           rating: number
+          sweetness: number | null
           title: string
           user_id: string
         }
         Insert: {
           body: string
+          burn?: number | null
           cons?: string[]
           created_at?: string
           flagged?: boolean
+          flavor_intensity?: number | null
           helpful_count?: number
           id?: string
+          longevity?: number | null
+          moisture?: number | null
           photo_urls?: string[]
           product_id: string
           pros?: string[]
           rating: number
+          sweetness?: number | null
           title: string
           user_id: string
         }
         Update: {
           body?: string
+          burn?: number | null
           cons?: string[]
           created_at?: string
           flagged?: boolean
+          flavor_intensity?: number | null
           helpful_count?: number
           id?: string
+          longevity?: number | null
+          moisture?: number | null
           photo_urls?: string[]
           product_id?: string
           pros?: string[]
           rating?: number
+          sweetness?: number | null
           title?: string
           user_id?: string
         }

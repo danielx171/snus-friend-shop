@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/select';
 import { Star, Heart, MessageSquare, Flag, ArrowUpDown, Check, X, Plus, Camera, ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useProductReviews, type ProductReview } from '@/hooks/useProductReviews';
+import { useProductReviews, type ProductReview, type DimensionAverages } from '@/hooks/useProductReviews';
 import { useReviewLikes } from '@/hooks/useReviewLikes';
 import { useUsersAttributes, type UserAttribute } from '@/hooks/useUserAttributes';
 import UserAvatar from '@/components/profile/UserAvatar';
@@ -120,6 +120,122 @@ function StarPicker({
   );
 }
 
+/* ── Dimension config ── */
+const DIMENSIONS = [
+  { key: 'flavor_intensity' as const, label: 'Flavor Intensity', abbr: 'FI', emoji: '\ud83d\udc45' },
+  { key: 'sweetness' as const, label: 'Sweetness', abbr: 'SW', emoji: '\ud83c\udf6f' },
+  { key: 'burn' as const, label: 'Burn / Tingle', abbr: 'BU', emoji: '\ud83d\udd25' },
+  { key: 'moisture' as const, label: 'Moisture', abbr: 'MO', emoji: '\ud83d\udca7' },
+  { key: 'longevity' as const, label: 'Longevity', abbr: 'LO', emoji: '\u23f0' },
+] as const;
+
+type DimensionKey = typeof DIMENSIONS[number]['key'];
+
+/* ── Dimension slider for form ── */
+function DimensionSlider({
+  label,
+  emoji,
+  value,
+  onChange,
+}: {
+  label: string;
+  emoji: string;
+  value: number | null;
+  onChange: (v: number | null) => void;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="w-5 text-center text-sm" aria-hidden="true">{emoji}</span>
+      <span className="w-28 text-xs text-muted-foreground">{label}</span>
+      <input
+        type="range"
+        min={1}
+        max={5}
+        step={1}
+        value={value ?? 3}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="h-2 flex-1 cursor-pointer appearance-none rounded-full bg-muted accent-[hsl(var(--primary))]"
+        aria-label={`${label} rating`}
+        style={{ colorScheme: 'dark' }}
+      />
+      <span className="w-5 text-center text-xs font-medium text-foreground">
+        {value ?? '\u2014'}
+      </span>
+      {value != null && (
+        <button
+          type="button"
+          onClick={() => onChange(null)}
+          className="text-xs text-muted-foreground hover:text-destructive"
+          aria-label={`Clear ${label} rating`}
+        >
+          <X className="h-3 w-3" />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ── Compact dimension bars for review cards ── */
+function DimensionMiniBar({ abbr, value }: { abbr: string; value: number }) {
+  const pct = (value / 5) * 100;
+  return (
+    <div className="flex items-center gap-1" title={`${abbr}: ${value}/5`}>
+      <span className="text-[10px] font-medium text-muted-foreground w-5">{abbr}</span>
+      <div className="h-1.5 w-12 rounded-full bg-muted overflow-hidden">
+        <div
+          className="h-full rounded-full bg-primary transition-all"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ReviewDimensionBars({ review }: { review: ProductReview }) {
+  const hasDimensions = DIMENSIONS.some((d) => review[d.key] != null);
+  if (!hasDimensions) return null;
+  return (
+    <div className="flex flex-wrap gap-x-3 gap-y-1 pt-1">
+      {DIMENSIONS.map((d) =>
+        review[d.key] != null ? (
+          <DimensionMiniBar key={d.key} abbr={d.abbr} value={review[d.key]!} />
+        ) : null,
+      )}
+    </div>
+  );
+}
+
+/* ── Aggregate dimension bars for product summary ── */
+function AggregateDimensionBars({ averages }: { averages: DimensionAverages }) {
+  const hasAny = DIMENSIONS.some((d) => averages[d.key] != null);
+  if (!hasAny) return null;
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Flavor Profile</p>
+      {DIMENSIONS.map((d) => {
+        const val = averages[d.key];
+        if (val == null) return null;
+        const pct = (val / 5) * 100;
+        return (
+          <div key={d.key} className="flex items-center gap-2">
+            <span className="w-4 text-center text-xs" aria-hidden="true">{d.emoji}</span>
+            <span className="w-24 text-xs text-muted-foreground">{d.label}</span>
+            <div className="h-2 flex-1 rounded-full bg-muted overflow-hidden">
+              <div
+                className="h-full rounded-full bg-primary transition-all"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+            <span className="w-8 text-right text-xs font-medium text-foreground">
+              {val.toFixed(1)}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ── Single review card ── */
 const ReviewCard = React.memo(function ReviewCard({
   review,
@@ -169,6 +285,7 @@ const ReviewCard = React.memo(function ReviewCard({
                 </div>
                 <AttributePills attributes={userAttributes} maxVisible={3} />
                 <Stars rating={review.rating} />
+                <ReviewDimensionBars review={review} />
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">{dateStr}</span>
@@ -272,7 +389,15 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
   const [sortBy, setSortBy] = useState<ReviewSortOption>('relevant');
   const { toast } = useToast();
 
-  const { reviews, avgRating, totalCount, distribution, isLoading, submitReview, flagReview } =
+  const [dimValues, setDimValues] = useState<Record<DimensionKey, number | null>>({
+    flavor_intensity: null,
+    sweetness: null,
+    burn: null,
+    moisture: null,
+    longevity: null,
+  });
+
+  const { reviews, avgRating, totalCount, distribution, dimensionAverages, isLoading, submitReview, flagReview } =
     useProductReviews(productId);
   const { likedIds, toggleLike } = useReviewLikes(productId);
   const { data: reviewSummary, isLoading: summaryLoading } = useReviewSummary(productId, totalCount);
@@ -320,6 +445,11 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
         ...(prosFiltered.length ? { pros: prosFiltered } : {}),
         ...(consFiltered.length ? { cons: consFiltered } : {}),
         ...(photoUrls.length ? { photo_urls: photoUrls } : {}),
+        flavor_intensity: dimValues.flavor_intensity,
+        sweetness: dimValues.sweetness,
+        burn: dimValues.burn,
+        moisture: dimValues.moisture,
+        longevity: dimValues.longevity,
       });
 
       // Calculate scaled points earned (mirrors DB trigger logic)
@@ -343,6 +473,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
       setNewBody('');
       setNewPros([]);
       setNewCons([]);
+      setDimValues({ flavor_intensity: null, sweetness: null, burn: null, moisture: null, longevity: null });
       clearPhotos();
     } catch {
       // Clean up orphaned photos if upload succeeded but DB write failed
@@ -498,6 +629,22 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                 </div>
               </div>
 
+              {/* Dimension sliders */}
+              <div className="space-y-2">
+                <Label>Rate Dimensions (optional)</Label>
+                <div className="space-y-2 rounded-lg border border-border bg-muted/30 p-3">
+                  {DIMENSIONS.map((d) => (
+                    <DimensionSlider
+                      key={d.key}
+                      label={d.label}
+                      emoji={d.emoji}
+                      value={dimValues[d.key]}
+                      onChange={(v) => setDimValues((prev) => ({ ...prev, [d.key]: v }))}
+                    />
+                  ))}
+                </div>
+              </div>
+
               {/* Photos */}
               <div className="space-y-2">
                 <Label>Photos (optional, max 3)</Label>
@@ -604,6 +751,17 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                 );
               })}
             </div>
+
+            {/* Aggregate dimension bars */}
+            {DIMENSIONS.some((d) => dimensionAverages[d.key] != null) && (
+              <>
+                <Separator orientation="vertical" className="hidden h-24 sm:block" />
+                <Separator className="sm:hidden" />
+                <div className="flex-1">
+                  <AggregateDimensionBars averages={dimensionAverages} />
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       )}
