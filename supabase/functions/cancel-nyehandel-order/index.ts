@@ -83,14 +83,15 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "order_not_found", requestId }, cors, 404);
   }
 
-  // Check: is this the customer's order? (or ops user)
-  const { data: profile } = await adminClient
-    .from("profiles")
+  // Check: is this the customer's order? (or ops/admin user via user_roles)
+  const { data: roleData } = await adminClient
+    .from("user_roles")
     .select("role")
-    .eq("id", user.id)
+    .eq("user_id", user.id)
+    .in("role", ["admin", "ops"])
     .maybeSingle();
 
-  const isOps = profile?.role === "ops" || profile?.role === "admin";
+  const isOps = !!roleData;
   if (order.user_id !== user.id && !isOps) {
     return jsonResponse({ error: "forbidden", requestId }, cors, 403);
   }

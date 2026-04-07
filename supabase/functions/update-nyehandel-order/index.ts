@@ -77,13 +77,14 @@ Deno.serve(async (req) => {
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
 
-  const { data: profile } = await adminClient
-    .from("profiles")
+  const { data: roleData } = await adminClient
+    .from("user_roles")
     .select("role")
-    .eq("id", user.id)
+    .eq("user_id", user.id)
+    .in("role", ["admin", "ops"])
     .maybeSingle();
 
-  if (!profile || (profile.role !== "ops" && profile.role !== "admin")) {
+  if (!roleData) {
     return jsonResponse({ error: "ops_only", message: "Order updates are restricted to ops users.", requestId }, cors, 403);
   }
 
