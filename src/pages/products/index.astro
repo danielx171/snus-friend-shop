@@ -4,7 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
-import { writeProductsJson } from '@/lib/product-json';
+import { slimProductData, writeProductsJson } from '@/lib/product-json';
 
 const products = await getCollection('products');
 
@@ -27,13 +27,14 @@ const collectionJsonLd = {
   },
 };
 
-// Write slim product catalog to a static JSON file (~300KB instead of ~688KB)
+// Generate products.json for search/compare pages that still need it via fetch
 writeProductsJson(products);
+const productsJson = JSON.stringify(slimProductData(products));
 ---
 
 <Shop
-  title="Shop All Nicotine Pouches | SnusFriend"
-  description={`Browse our full collection of ${products.length}+ premium nicotine pouches from top European brands. Filter by strength, flavour, brand and format. Free EU shipping on qualifying orders.`}
+  title="Buy Nicotine Pouches — 708 Products, Free EU Shipping | SnusFriend"
+  description="Browse 708 nicotine pouches from ZYN, VELO, LOOP, Siberia, and 30+ more brands. Free shipping on orders over €29. Same-day dispatch."
   canonical="/products"
 >
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
@@ -55,6 +56,6 @@ writeProductsJson(products);
     </div>
 
     <h2 class="sr-only">Product Catalog</h2>
-    <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
+    <FilterableProductGrid client:idle productsJson={productsJson} />
   </div>
 </Shop>
