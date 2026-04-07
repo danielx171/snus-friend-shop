@@ -20,42 +20,30 @@ const supabase = Astro.locals.supabase;
 // Tab selection via query param (default: orders)
 const tab = Astro.url.searchParams.get('tab') || 'orders';
 
-// Fetch orders
-const { data: orders } = await supabase
-  .from('orders')
-  .select('*')
-  .eq('user_id', user.id)
-  .order('created_at', { ascending: false })
-  .limit(20);
-
-// Fetch points balance
-const { data: pointsBalance } = await supabase
-  .from('points_balances')
-  .select('*')
+// Fetch referral code ID first (needed as input for referral count query)
+const { data: referralCodeRow } = await supabase
+  .from('referral_codes')
+  .select('id')
   .eq('user_id', user.id)
   .single();
 
-// Fetch review count for profile stats
-const { count: reviewsCount } = await supabase
-  .from('product_reviews')
-  .select('id', { count: 'exact', head: true })
-  .eq('user_id', user.id);
-
-// Fetch subscriptions
-const { data: subscriptions } = await supabase
-  .from('subscriptions')
-  .select('*')
-  .eq('user_id', user.id)
-  .order('created_at', { ascending: false });
-
-// Fetch referral code
-const { data: referralCode } = await supabase.rpc('get_or_create_referral_code', { p_user_id: user.id });
-
-// Fetch referral stats
-const { count: referralCount } = await supabase
-  .from('referral_redemptions')
-  .select('id', { count: 'exact', head: true })
-  .eq('referral_code_id', (await supabase.from('referral_codes').select('id').eq('user_id', user.id).single()).data?.id ?? '00000000-0000-0000-0000-000000000000');
+// Fetch everything else in parallel
+const [
+  { data: orders },
+  { data: pointsBalance },
+  { count: reviewsCount },
+  { data: subscriptions },
+  { data: referralCode },
+  { count: referralCount },
+] = await Promise.all([
+  supabase.from('orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(20),
+  supabase.from('points_balances').select('*').eq('user_id', user.id).single(),
+  supabase.from('product_reviews').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+  supabase.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
+  supabase.rpc('get_or_create_referral_code', { p_user_id: user.id }),
+  supabase.from('referral_redemptions').select('id', { count: 'exact', head: true })
+    .eq('referral_code_id', referralCodeRow?.id ?? '00000000-0000-0000-0000-000000000000'),
+]);
 
 // User metadata + nickname
 import { generateNickname } from '@/lib/nickname';

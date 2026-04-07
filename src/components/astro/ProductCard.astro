@@ -103,7 +103,7 @@ const pack1Price = prices.pack1 ?? 0;
         loading="lazy"
         format="webp"
         quality={80}
-        class="relative z-[1] h-full w-full object-cover transition-transform duration-500 group-hover:scale-108"
+        class="relative z-[1] h-full w-full object-cover product-card-img"
         style={`filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)) drop-shadow(0 0 8px ${flavorColor}15);`}
       />
     ) : (
@@ -211,11 +211,14 @@ const pack1Price = prices.pack1 ?? 0;
 
 <style>
   .product-card {
-    transform-style: preserve-3d;
-    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
   }
-  .group:hover .group-hover\:scale-108 {
-    transform: scale(1.08);
+  .product-card-img {
+    will-change: transform;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .group:hover .product-card-img {
+    transform: scale(1.05);
   }
 </style>
 
