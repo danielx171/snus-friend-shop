@@ -254,9 +254,9 @@ Deno.serve(async (req) => {
     const customerEmail = (order.customer_metadata as Record<string, unknown>)?.email as string ?? order.customer_email;
     if (customerEmail && supabaseUrl) {
       const lineItems = (Array.isArray(order.line_items_snapshot) ? order.line_items_snapshot as LineItem[] : []).map((item: LineItem) => ({
-        name: item.sku ?? "Product",
+        name: (item as Record<string, unknown>).product_name as string ?? "Product",
         qty: item.quantity ?? 1,
-        price: `€${(typeof (item as Record<string, unknown>).price === 'number' ? ((item as Record<string, unknown>).price as number) : 0).toFixed(2)}`,
+        price: `€${((item as Record<string, unknown>).unit_price as number ?? 0).toFixed(2)}`,
       }));
 
       fetch(`${supabaseUrl}/functions/v1/send-email`, {
