@@ -246,3 +246,38 @@ Read before complex work; update when done:
 | `docs/superpowers/specs/2026-03-28-visual-upgrade-design.md` | Visual upgrade spec (hero, logo, cards, brand headers, PDP) |
 | `docs/superpowers/specs/2026-03-31-nyehandel-gaps-design.md` | NYE integration gaps — cancel, update, discounts, stock sync |
 | `cowork/README.md` | Cowork audit summary + priority P0/P1/P2 items |
+
+## Known Bugs & Tech Debt (Codex audit, April 2026)
+
+Codex ran a full audit and found real issues. Some are already fixed, others remain.
+
+### FIXED (April 8, 2026)
+
+- **`src/stores/cart.ts:54`** — `$mixDiscount` computed callback destructured args as tuple
+  `([canCount, total])` but nanostores passes separate args. Changed to `(canCount, total)`.
+  Mix discount was silently broken (both values were `undefined`).
+- **`src/components/react/CheckoutForm.tsx:205`** — `trackCheckoutStarted({ cartTotal: total, ... })`
+  referenced undefined `total`. Fixed to `cartTotal`. Checkout worked but analytics tracking was broken.
+- **`src/content.config.ts`** — Build succeeded with empty product/brand collections when Supabase
+  fetch failed. Added `throw` on fetch error and minimum count assertion (50+ products required).
+  Builds now fail-closed instead of silently shipping an empty catalog.
+- **Blog index + RSS** — Hand-maintained article arrays in `src/pages/blog/index.astro` and
+  `src/pages/rss.xml.ts` were missing 14+ posts. All articles are now registered.
+
+### REMAINING (not yet fixed)
+
+- **`src/pages/compare.astro:142+`** — innerHTML with unescaped product data (XSS/breakage risk).
+  Product names with `<` would break layout. Low practical risk (data is from our own DB) but
+  should migrate to Astro template expressions.
+- **`src/components/react/RecommendationsIsland.tsx:249,269`** — `useCallback` called after
+  early `return null` — Rules-of-Hooks violation. Move hooks above early returns.
+- **Blog system** — Still hand-maintained arrays. Should be replaced with a content collection
+  or auto-generated registry so new posts can't be missed. Codex counted 14 posts missing from
+  `/blog` index and 22 from RSS before our fix.
+- **Verification noise** — `bun run lint` has 115 errors (mostly ESLint parsing .astro files),
+  `bun run check` has 68 errors (Astro.locals typing gap), `bun run test` has 1 stale assertion
+  (ReputationBadge class) and Supabase storage error in test setup. Fix order: add `.astro` to
+  ESLint ignores, fix `App.Locals` typing in `env.d.ts`, update stale test assertion.
+- **`src/pages/blog/all-velo-flavors-ranked-2026.astro:54`** and
+  **`src/pages/blog/zyn-flavours-complete-guide.astro:71`** — Pass `publishDate` to BlogHero
+  which expects `date`. Rename prop to `date` in those files.

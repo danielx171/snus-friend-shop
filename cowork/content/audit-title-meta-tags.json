@@ -1,0 +1,1796 @@
+[
+  {
+    "page": "/blog/all-velo-flavors-ranked-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/are-nicotine-pouches-safe",
+    "currentTitle": "Are Nicotine Pouches Safe? Evidence-Based Health Guide (2026)",
+    "titleLength": 61,
+    "titleAlone": "Are Nicotine Pouches Safe? Evidence-Based Health Guide (2026)",
+    "titleAloneLength": 61,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "Are nicotine pouches safe? We review the clinical evidence on health risks, compare them to cigarettes and snus, and explain what science actually says about long-term safety.",
+    "descriptionLength": 175,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/are-zyns-bad-for-you",
+    "currentTitle": "Are ZYNs Bad for You? Clinical Evidence & Health Effects",
+    "titleLength": 56,
+    "titleAlone": "Are ZYNs Bad for You? Clinical Evidence & Health Effects",
+    "titleAloneLength": 56,
+    "titleIssues": [],
+    "currentDescription": "Are ZYN nicotine pouches bad for you? Clinical data on health risks, cardiovascular effects, oral health, addiction, and comparison with smoking and vaping.",
+    "descriptionLength": 156,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-berry-nicotine-pouches",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-budget-nicotine-pouches",
+    "currentTitle": "Best Budget Nicotine Pouches: Top Picks Under €3 Per Can",
+    "titleLength": 56,
+    "titleAlone": "Best Budget Nicotine Pouches: Top Picks Under €3 Per Can",
+    "titleAloneLength": 56,
+    "titleIssues": [],
+    "currentDescription": "Discover the best budget nicotine pouches under €3 per can. Top picks, honest reviews, and value comparisons to help you save without sacrificing quality.",
+    "descriptionLength": 154,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-citrus-nicotine-pouches",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-coffee-nicotine-pouches",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-mint-nicotine-pouches-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-nicotine-pouches-2026",
+    "currentTitle": "Best Nicotine Pouches 2026: Expert Picks",
+    "titleLength": 40,
+    "titleAlone": "Best Nicotine Pouches 2026: Expert Picks",
+    "titleAloneLength": 40,
+    "titleIssues": [],
+    "currentDescription": "Our expert picks for the best nicotine pouches of 2026. Winners in 7 categories — best overall, beginner, mint, strong, value, variety, and premium.",
+    "descriptionLength": 148,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-nicotine-pouches-all-day-use",
+    "currentTitle": "Best Nicotine Pouches for All-Day Use (2026)",
+    "titleLength": 44,
+    "titleAlone": "Best Nicotine Pouches for All-Day Use (2026)",
+    "titleAloneLength": 44,
+    "titleIssues": [],
+    "currentDescription": "Find the best nicotine pouches for all-day use. Expert recommendations for strength, format, and cost-per-day. Compare slim, mini, and budget options for office workers and drivers.",
+    "descriptionLength": 181,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-nicotine-pouches-by-occasion",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-nicotine-pouches-for-beginners-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-nicotine-pouches-for-quitting-smoking",
+    "currentTitle": "Best Nicotine Pouches for Quitting Smoking (2026)",
+    "titleLength": 49,
+    "titleAlone": "Best Nicotine Pouches for Quitting Smoking (2026)",
+    "titleAloneLength": 49,
+    "titleIssues": [],
+    "currentDescription": "Discover the best nicotine pouches for quitting smoking in 2026. Expert guide to strength matching, transition strategies, and real product recommendations.",
+    "descriptionLength": 156,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-nicotine-pouches-for-women",
+    "currentTitle": "Best Nicotine Pouches for Women in 2026",
+    "titleLength": 39,
+    "titleAlone": "Best Nicotine Pouches for Women in 2026",
+    "titleAloneLength": 39,
+    "titleIssues": [],
+    "currentDescription": "Discover the best nicotine pouches for women in 2026. From low-strength options to discreet mini formats, find the perfect pouch for your preferences.",
+    "descriptionLength": 150,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-nicotine-pouches-no-aftertaste",
+    "currentTitle": "Best Nicotine Pouches with No Aftertaste (2026)",
+    "titleLength": 47,
+    "titleAlone": "Best Nicotine Pouches with No Aftertaste (2026)",
+    "titleAloneLength": 47,
+    "titleIssues": [],
+    "currentDescription": "Discover the best nicotine pouches with no aftertaste in 2026. Top-rated clean-tasting brands, tips to avoid chemical flavours, and expert recommendations for smooth nicotine pouch use.",
+    "descriptionLength": 185,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-slim-nicotine-pouches",
+    "currentTitle": "Best Slim Nicotine Pouches: Comfortable & Discreet (2026)",
+    "titleLength": 57,
+    "titleAlone": "Best Slim Nicotine Pouches: Comfortable & Discreet (2026)",
+    "titleAloneLength": 57,
+    "titleIssues": [],
+    "currentDescription": "Discover the best slim nicotine pouches for comfort and discretion. Compare premium, mid-range, budget, and strong options. 92% of our catalogue is slim—here's why.",
+    "descriptionLength": 164,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/best-strong-nicotine-pouches",
+    "currentTitle": "Best Strong Nicotine Pouches (10-20mg): 2026 Guide",
+    "titleLength": 50,
+    "titleAlone": "Best Strong Nicotine Pouches (10-20mg): 2026 Guide",
+    "titleAloneLength": 50,
+    "titleIssues": [],
+    "currentDescription": "Discover the best strong nicotine pouches (10-20mg) for 2026. Expert rankings, safety guidance, and recommendations for experienced users seeking that powerful kick.",
+    "descriptionLength": 165,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/buying-nicotine-pouches-austria-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/buying-nicotine-pouches-denmark-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/buying-nicotine-pouches-finland-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/buying-nicotine-pouches-norway-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/buying-nicotine-pouches-poland-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/can-you-swallow-nicotine-pouches",
+    "currentTitle": "Can You Swallow Nicotine Pouches? Safety Guide & What Happens",
+    "titleLength": 61,
+    "titleAlone": "Can You Swallow Nicotine Pouches? Safety Guide & What Happens",
+    "titleAloneLength": 61,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "What happens if you swallow a nicotine pouch? Complete guide to accidental ingestion, safety risks, absorption rates, and when to seek medical attention.",
+    "descriptionLength": 153,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/fumi-nicotine-pouches-complete-guide",
+    "currentTitle": "FUMI Nicotine Pouches: Complete 2026 Guide",
+    "titleLength": 42,
+    "titleAlone": "FUMI Nicotine Pouches: Complete 2026 Guide",
+    "titleAloneLength": 42,
+    "titleIssues": [],
+    "currentDescription": "FUMI nicotine pouches reviewed — Swedish-made with eccentric Nordic flavours. Salty Raspberry, Fiery Mango, Zingy Ginger and more. Plant-based and vegan.",
+    "descriptionLength": 153,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/how-long-do-nicotine-pouches-last",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/how-many-nicotine-pouches-a-day",
+    "currentTitle": "How Many Nicotine Pouches a Day? Safe Dosing Guide & Tapering",
+    "titleLength": 61,
+    "titleAlone": "How Many Nicotine Pouches a Day? Safe Dosing Guide & Tapering",
+    "titleAloneLength": 61,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "How many nicotine pouches per day is safe? Dosing guide by strength, tolerance, tapering strategies, and comparison with cigarettes and vaping.",
+    "descriptionLength": 143,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/how-much-do-nicotine-pouches-cost",
+    "currentTitle": "How Much Do Nicotine Pouches Cost? 2026 Price Guide (Real Data)",
+    "titleLength": 63,
+    "titleAlone": "How Much Do Nicotine Pouches Cost? 2026 Price Guide (Real Data)",
+    "titleAloneLength": 63,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "Real pricing data on nicotine pouches in 2026. Compare costs by brand tier, user type, and pack size. Calculate your daily and monthly expenses.",
+    "descriptionLength": 144,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/how-to-choose-your-strength",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/how-to-spot-fake-nicotine-pouches",
+    "currentTitle": "How to Spot Fake Nicotine Pouches: Authentication Guide (2026)",
+    "titleLength": 62,
+    "titleAlone": "How to Spot Fake Nicotine Pouches: Authentication Guide (2026)",
+    "titleAloneLength": 62,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "Learn how to identify counterfeit nicotine pouches. Check packaging, batch codes, holograms, and authorised retailers. Protect yourself from fake ZYN, VELO, and other brands.",
+    "descriptionLength": 174,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/how-to-store-nicotine-pouches",
+    "currentTitle": "How to Store Nicotine Pouches: Shelf Life, Freshness & Tips",
+    "titleLength": 59,
+    "titleAlone": "How to Store Nicotine Pouches: Shelf Life, Freshness & Tips",
+    "titleAloneLength": 59,
+    "titleIssues": [],
+    "currentDescription": "Learn how to store nicotine pouches to keep them fresh. Covers shelf life, temperature, refrigeration, travel storage, and signs of expired pouches.",
+    "descriptionLength": 148,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/how-to-use-nicotine-pouches",
+    "currentTitle": "How to Use Nicotine Pouches: Step-by-Step Guide",
+    "titleLength": 47,
+    "titleAlone": "How to Use Nicotine Pouches: Step-by-Step Guide",
+    "titleAloneLength": 47,
+    "titleIssues": [],
+    "currentDescription": "Learn how to use nicotine pouches correctly. Step-by-step instructions, what to expect your first time, tips for comfort, and common mistakes to avoid.",
+    "descriptionLength": 151,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/iceberg-nicotine-pouches-complete-guide",
+    "currentTitle": "ICEBERG Nicotine Pouches: Complete 2026 Guide",
+    "titleLength": 45,
+    "titleAlone": "ICEBERG Nicotine Pouches: Complete 2026 Guide",
+    "titleAloneLength": 45,
+    "titleIssues": [],
+    "currentDescription": "ICEBERG nicotine pouches reviewed — strengths from 6 to 40 mg, 13 products, bold icy flavours. The Polish brand built for experienced users.",
+    "descriptionLength": 140,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/index",
+    "currentTitle": "Nicotine Pouch Guides & Reviews | ${tenant.name}",
+    "titleLength": 48,
+    "titleAlone": "Nicotine Pouch Guides & Reviews | ${tenant.name}",
+    "titleAloneLength": 48,
+    "titleIssues": [],
+    "currentDescription": "Guides, reviews, and news about nicotine pouches from ${tenant.name}. Learn about strengths, flavours, brands, and more.",
+    "descriptionLength": 120,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/klar-nicotine-pouches-complete-guide",
+    "currentTitle": "KLAR Nicotine Pouches: Bioceramic 2026 Guide",
+    "titleLength": 44,
+    "titleAlone": "KLAR Nicotine Pouches: Bioceramic 2026 Guide",
+    "titleAloneLength": 44,
+    "titleIssues": [],
+    "currentDescription": "KLAR nicotine pouches — the world's first bioceramic pouch with 80% faster nicotine release. 6 products, mint and unflavoured, 3-9 mg. Full review.",
+    "descriptionLength": 147,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/klar-vs-fumi-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/loop-nicotine-pouches-complete-guide",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/loop-vs-skruf",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouch-buying-guide-europe",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouch-flavour-guide",
+    "currentTitle": "Nicotine Pouch Flavour Guide: All Categories (2026)",
+    "titleLength": 51,
+    "titleAlone": "Nicotine Pouch Flavour Guide: All Categories (2026)",
+    "titleAloneLength": 51,
+    "titleIssues": [],
+    "currentDescription": "Every nicotine pouch flavour category explained — mint, berry, citrus, coffee, fruit, licorice, and more. Best brands for each flavour plus strength ranges.",
+    "descriptionLength": 156,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouch-ingredients-explained",
+    "currentTitle": "Nicotine Pouch Ingredients Explained: What's Actually Inside?",
+    "titleLength": 61,
+    "titleAlone": "Nicotine Pouch Ingredients Explained: What's Actually Inside?",
+    "titleAloneLength": 61,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "What's inside a nicotine pouch? Complete breakdown of every ingredient — nicotine source, fillers, pH adjusters, flavourings, and sweeteners. No tobacco, no smoke.",
+    "descriptionLength": 163,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouch-side-effects",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouch-subscription-guide",
+    "currentTitle": "Nicotine Pouch Subscription: Is It Worth It in 2026?",
+    "titleLength": 52,
+    "titleAlone": "Nicotine Pouch Subscription: Is It Worth It in 2026?",
+    "titleAloneLength": 52,
+    "titleIssues": [],
+    "currentDescription": "Is a nicotine pouch subscription worth it in 2026? Compare subscription costs vs bulk buying, explore pros and cons, and discover how SnusFriend's low prices rival subscription savings.",
+    "descriptionLength": 185,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouch-tax-regulations-2026",
+    "currentTitle": "Nicotine Pouch Tax Regulations 2026: EU Guide to Compliance and Pricing",
+    "titleLength": 71,
+    "titleAlone": "Nicotine Pouch Tax Regulations 2026: EU Guide to Compliance and Pricing",
+    "titleAloneLength": 71,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "EU nicotine pouch tax regulations 2026: TPD3 timeline, country-by-country status, Belgium ban, import rules, and how regulations affect pricing across Europe.",
+    "descriptionLength": 158,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouch-trends-new-brands-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouches-legal-europe-2026",
+    "currentTitle": "Nicotine Pouches Legal Europe: 2026 Country Guide",
+    "titleLength": 49,
+    "titleAlone": "Nicotine Pouches Legal Europe: 2026 Country Guide",
+    "titleAloneLength": 49,
+    "titleIssues": [],
+    "currentDescription": "Are nicotine pouches legal where you live? Updated 2026 country-by-country guide covering 14 European countries, bans, age limits, and the TPD3 outlook.",
+    "descriptionLength": 152,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouches-vs-cigarettes",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouches-vs-gum-vs-lozenges",
+    "currentTitle": "Nicotine Pouches vs Gum vs Lozenges Compared",
+    "titleLength": 44,
+    "titleAlone": "Nicotine Pouches vs Gum vs Lozenges Compared",
+    "titleAloneLength": 44,
+    "titleIssues": [],
+    "currentDescription": "Nicotine pouches, gum, lozenges, and patches compared. Cost, speed, flavour, discretion, and side effects — find the right nicotine format for you.",
+    "descriptionLength": 147,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouches-vs-snus",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nicotine-pouches-vs-vaping",
+    "currentTitle": "Nicotine Pouches vs Vaping: 2026 Comparison",
+    "titleLength": 43,
+    "titleAlone": "Nicotine Pouches vs Vaping: 2026 Comparison",
+    "titleAloneLength": 43,
+    "titleIssues": [],
+    "currentDescription": "Nicotine pouches vs vaping compared on health, cost, convenience, flavour, and legality. Data-driven guide to choosing the right nicotine format for you.",
+    "descriptionLength": 153,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/nordic-spirit-nicotine-pouches-complete-guide",
+    "currentTitle": "Nordic Spirit Nicotine Pouches: 2026 Guide",
+    "titleLength": 42,
+    "titleAlone": "Nordic Spirit Nicotine Pouches: 2026 Guide",
+    "titleAloneLength": 42,
+    "titleIssues": [],
+    "currentDescription": "Nordic Spirit by JTI reviewed — the UK's favourite nicotine pouch brand. 12 flavours from Bergamot Wildberry to Frosty Mint, strengths 6-17 mg.",
+    "descriptionLength": 143,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/on-nicotine-pouches-complete-guide",
+    "currentTitle": "ON! Nicotine Pouches Complete Guide 2026: Flavours, Strength, and Comparison",
+    "titleLength": 76,
+    "titleAlone": "ON! Nicotine Pouches Complete Guide 2026: Flavours, Strength, and Comparison",
+    "titleAloneLength": 76,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "Complete ON! nicotine pouches guide: product lineup, flavour profiles, strength tiers, NICOSILK technology, comparison with ZYN/VELO/LOOP, and how to buy in Europe.",
+    "descriptionLength": 164,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/pablo-nicotine-pouches-complete-guide",
+    "currentTitle": "Pablo Nicotine Pouches: Complete 2026 Guide",
+    "titleLength": 43,
+    "titleAlone": "Pablo Nicotine Pouches: Complete 2026 Guide",
+    "titleAloneLength": 43,
+    "titleIssues": [],
+    "currentDescription": "Everything about Pablo nicotine pouches — the high-strength brand from NGP Empire. Flavours, strengths from 10 to 50 mg, safety notes, and honest reviews.",
+    "descriptionLength": 154,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/rave-nicotine-pouches-review",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/siberia-nicotine-pouches-complete-guide",
+    "currentTitle": "Siberia Snus & Pouches: Complete 2026 Guide",
+    "titleLength": 43,
+    "titleAlone": "Siberia Snus & Pouches: Complete 2026 Guide",
+    "titleAloneLength": 43,
+    "titleIssues": [],
+    "currentDescription": "Siberia — the legendary ultra-strong brand. From 16.5 mg slim to 49.5 mg maxi, every product explained with essential safety guidance for extreme-strength users.",
+    "descriptionLength": 161,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/skruf-nicotine-pouches-complete-guide",
+    "currentTitle": "Skruf Nicotine Pouches: Complete 2026 Guide",
+    "titleLength": 43,
+    "titleAlone": "Skruf Nicotine Pouches: Complete 2026 Guide",
+    "titleAloneLength": 43,
+    "titleIssues": [],
+    "currentDescription": "Skruf nicotine pouches reviewed — Sweden's craft brand by Imperial Brands. 15 products, strengths 6-11.5 mg, flavours from Purple Cassice to Fresh Freeze.",
+    "descriptionLength": 154,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/strongest-nicotine-pouches-ranked-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/strongest-snus-brands-compared-beginners-warning",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/switching-from-cigarettes-to-nicotine-pouches",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/top-10-mint-flavours",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/velo-flavours-complete-guide",
+    "currentTitle": "VELO Flavours: Complete 2026 Guide & Rankings",
+    "titleLength": 45,
+    "titleAlone": "VELO Flavours: Complete 2026 Guide & Rankings",
+    "titleAloneLength": 45,
+    "titleIssues": [],
+    "currentDescription": "Every VELO flavour reviewed and ranked. From Freezing Peppermint to Tropical Mango, strengths 0-17 mg. Find your perfect VELO at SnusFriend.",
+    "descriptionLength": 140,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/velo-nicotine-pouches-complete-guide",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/velo-vs-loop-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/velo-vs-nordic-spirit",
+    "currentTitle": "VELO vs Nordic Spirit: Complete Brand Comparison 2026",
+    "titleLength": 53,
+    "titleAlone": "VELO vs Nordic Spirit: Complete Brand Comparison 2026",
+    "titleAloneLength": 53,
+    "titleIssues": [],
+    "currentDescription": "Compare VELO vs Nordic Spirit: strength ranges, flavour profiles, pouch comfort, pricing, nicotine release, and which brand is best for beginners or experienced users.",
+    "descriptionLength": 167,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/velo-vs-on-nicotine-pouches",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/what-are-nicotine-pouches",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/white-fox-nicotine-pouches-complete-guide",
+    "currentTitle": "White Fox Nicotine Pouches: Complete 2026 Guide",
+    "titleLength": 47,
+    "titleAlone": "White Fox Nicotine Pouches: Complete 2026 Guide",
+    "titleAloneLength": 47,
+    "titleIssues": [],
+    "currentDescription": "White Fox nicotine pouches reviewed — GN Tobacco's mint-focused powerhouse. From 12 mg to Black Edition 24 mg, every product ranked and explained.",
+    "descriptionLength": 146,
+    "descriptionIssues": [],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/white-fox-vs-siberia-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/zyn-flavours-complete-guide",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/zyn-nicotine-pouches-complete-guide",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/zyn-strength-chart-every-level-explained",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/zyn-vs-loop-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/zyn-vs-nordic-spirit",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/zyn-vs-skruf-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/blog/zyn-vs-velo-2026",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P0"
+  },
+  {
+    "page": "/brands/[slug]",
+    "currentTitle": "${b.name} Nicotine Pouches | SnusFriend",
+    "titleLength": 39,
+    "titleAlone": "${b.name} Nicotine Pouches | SnusFriend",
+    "titleAloneLength": 39,
+    "titleIssues": [],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/brands/[slug]/flavours",
+    "currentTitle": null,
+    "titleLength": 0,
+    "titleAlone": null,
+    "titleAloneLength": 0,
+    "titleIssues": [
+      "missing"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/brands/[slug]/review",
+    "currentTitle": null,
+    "titleLength": 0,
+    "titleAlone": null,
+    "titleAloneLength": 0,
+    "titleIssues": [
+      "missing"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/brands/[slug]/strengths",
+    "currentTitle": null,
+    "titleLength": 0,
+    "titleAlone": null,
+    "titleAloneLength": 0,
+    "titleIssues": [
+      "missing"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/brands/index",
+    "currentTitle": "Nicotine Pouch Brands | SnusFriend",
+    "titleLength": 34,
+    "titleAlone": "Nicotine Pouch Brands | SnusFriend",
+    "titleAloneLength": 34,
+    "titleIssues": [],
+    "currentDescription": "Browse all ${brands.length} nicotine pouch brands we carry. VELO, ZYN, LOOP, Siberia, PABLO and many more. Find your favourite brand and shop the full range.",
+    "descriptionLength": 157,
+    "descriptionIssues": [],
+    "priority": "P1"
+  },
+  {
+    "page": "/countries/[slug]",
+    "currentTitle": "${country.h1} | SnusFriend",
+    "titleLength": 26,
+    "titleAlone": "${country.h1} | SnusFriend",
+    "titleAloneLength": 26,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/nicotine-pouch-brands-compared",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/products/[slug]",
+    "currentTitle": "${p.name} | SnusFriend",
+    "titleLength": 22,
+    "titleAlone": "${p.name} | SnusFriend",
+    "titleAloneLength": 22,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/products/flavor/[key]",
+    "currentTitle": "${meta.h1} | SnusFriend",
+    "titleLength": 23,
+    "titleAlone": "${meta.h1} | SnusFriend",
+    "titleAloneLength": 23,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/products/index",
+    "currentTitle": "Shop All Nicotine Pouches | SnusFriend",
+    "titleLength": 38,
+    "titleAlone": "Shop All Nicotine Pouches | SnusFriend",
+    "titleAloneLength": 38,
+    "titleIssues": [],
+    "currentDescription": "Browse our full collection of ${products.length}+ premium nicotine pouches from top European brands. Filter by strength, flavour, brand and format. Free EU shipping on qualifying orders.",
+    "descriptionLength": 186,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/products/strength/[key]",
+    "currentTitle": "${meta.h1} | SnusFriend",
+    "titleLength": 23,
+    "titleAlone": "${meta.h1} | SnusFriend",
+    "titleAloneLength": 23,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P1"
+  },
+  {
+    "page": "/",
+    "currentTitle": null,
+    "titleLength": 0,
+    "titleAlone": null,
+    "titleAloneLength": 0,
+    "titleIssues": [
+      "missing"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/404",
+    "currentTitle": "Page Not Found | ${tenant.name}",
+    "titleLength": 31,
+    "titleAlone": "Page Not Found | ${tenant.name}",
+    "titleAloneLength": 31,
+    "titleIssues": [],
+    "currentDescription": "The page you're looking for doesn't exist or has been moved.",
+    "descriptionLength": 60,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/about",
+    "currentTitle": "About Us — Nicotine Pouches Done Right | ${tenant.name}",
+    "titleLength": 55,
+    "titleAlone": "About Us — Nicotine Pouches Done Right | ${tenant.name}",
+    "titleAloneLength": 55,
+    "titleIssues": [],
+    "currentDescription": "Meet ${tenant.name}: Europe's curated nicotine pouch shop. ${allProducts.length}+ pouches, ${activeBrandCount} brands, rewards programme, honest prices, next-day dispatch. Run by a founder who actually cares.",
+    "descriptionLength": 208,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/account",
+    "currentTitle": "Account | ${tenant.name}",
+    "titleLength": 24,
+    "titleAlone": "Account | ${tenant.name}",
+    "titleAloneLength": 24,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": "Manage your account, orders, and membership.",
+    "descriptionLength": 44,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/auth/confirm",
+    "currentTitle": "Email Confirmed | ${tenant.name}",
+    "titleLength": 32,
+    "titleAlone": "Email Confirmed | ${tenant.name}",
+    "titleAloneLength": 32,
+    "titleIssues": [],
+    "currentDescription": "Confirming your email address.",
+    "descriptionLength": 30,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/authors/erik-lindqvist",
+    "currentTitle": null,
+    "titleLength": 0,
+    "titleAlone": null,
+    "titleAloneLength": 0,
+    "titleIssues": [
+      "missing"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/beginners",
+    "currentTitle": "New to Nicotine Pouches? Start Here | SnusFriend",
+    "titleLength": 48,
+    "titleAlone": "New to Nicotine Pouches? Start Here | SnusFriend",
+    "titleAloneLength": 48,
+    "titleIssues": [],
+    "currentDescription": "Your complete beginner's guide to nicotine pouches. Learn how they work, what strength to start with, and browse our curated starter picks — all gentle, all recommended for first-time users.",
+    "descriptionLength": 190,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/cart",
+    "currentTitle": "Your Cart | SnusFriend",
+    "titleLength": 22,
+    "titleAlone": "Your Cart | SnusFriend",
+    "titleAloneLength": 22,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/checkout",
+    "currentTitle": "Checkout | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "Checkout | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": "Complete your purchase securely.",
+    "descriptionLength": 32,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/community",
+    "currentTitle": "Community — Connect, Compete & Earn | ${tenant.name}",
+    "titleLength": 52,
+    "titleAlone": "Community — Connect, Compete & Earn | ${tenant.name}",
+    "titleAloneLength": 52,
+    "titleIssues": [],
+    "currentDescription": "Join the ${tenant.name} community. Share reviews, climb the leaderboard, complete quests, unlock achievements, and earn exclusive rewards through our gamified loyalty system.",
+    "descriptionLength": 174,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/compare",
+    "currentTitle": "Compare Nicotine Pouches Side by Side | SnusFriend",
+    "titleLength": 50,
+    "titleAlone": "Compare Nicotine Pouches Side by Side | SnusFriend",
+    "titleAloneLength": 50,
+    "titleIssues": [],
+    "currentDescription": "Compare nicotine pouches side by side — strength, flavour, price, format, and brand. Select 2-4 products and see how they stack up.",
+    "descriptionLength": 131,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/contact",
+    "currentTitle": "Contact Us — Support & Help | ${tenant.name}",
+    "titleLength": 44,
+    "titleAlone": "Contact Us — Support & Help | ${tenant.name}",
+    "titleAloneLength": 44,
+    "titleIssues": [],
+    "currentDescription": "Get in touch with ${tenant.name}. Questions about orders, products, or shipping? We typically reply within a few hours.",
+    "descriptionLength": 119,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/cookies",
+    "currentTitle": "Cookie Policy | ${tenant.name}",
+    "titleLength": 30,
+    "titleAlone": "Cookie Policy | ${tenant.name}",
+    "titleAloneLength": 30,
+    "titleIssues": [],
+    "currentDescription": "Cookie policy for ${tenant.name}. Learn what cookies we use and how to manage your preferences.",
+    "descriptionLength": 95,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/deals",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/editorial-policy",
+    "currentTitle": null,
+    "titleLength": 0,
+    "titleAlone": null,
+    "titleAloneLength": 0,
+    "titleIssues": [
+      "missing"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/faq",
+    "currentTitle": "Frequently Asked Questions — Nicotine Pouches | ${tenant.name}",
+    "titleLength": 62,
+    "titleAlone": "Frequently Asked Questions — Nicotine Pouches | ${tenant.name}",
+    "titleAloneLength": 62,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "Frequently asked questions about nicotine pouches, shipping, returns, age verification, and ordering from SnusFriend.",
+    "descriptionLength": 117,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/flavor-quiz",
+    "currentTitle": "Flavour Quiz — Find Your Perfect Nicotine Pouch | ${tenant.name}",
+    "titleLength": 64,
+    "titleAlone": "Flavour Quiz — Find Your Perfect Nicotine Pouch | ${tenant.name}",
+    "titleAloneLength": 64,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "Take our flavour quiz to discover your perfect nicotine pouch. Answer a few questions and get personalised recommendations from ${allProducts.length}+ products.",
+    "descriptionLength": 160,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/forgot-password",
+    "currentTitle": "Forgot Password | ${tenant.name}",
+    "titleLength": 32,
+    "titleAlone": "Forgot Password | ${tenant.name}",
+    "titleAloneLength": 32,
+    "titleIssues": [],
+    "currentDescription": "Reset your password to regain access to your account.",
+    "descriptionLength": 53,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/login",
+    "currentTitle": "Sign In | ${tenant.name}",
+    "titleLength": 24,
+    "titleAlone": "Sign In | ${tenant.name}",
+    "titleAloneLength": 24,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": "Sign in to your ${tenant.name} account to manage orders, earn rewards, and track deliveries.",
+    "descriptionLength": 92,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/membership",
+    "currentTitle": "Membership Tiers | ${tenant.name}",
+    "titleLength": 33,
+    "titleAlone": "Membership Tiers | ${tenant.name}",
+    "titleAloneLength": 33,
+    "titleIssues": [],
+    "currentDescription": "Discover ${tenant.name} membership tiers — from Newcomer to Legend. Earn points, unlock perks, and level up your nicotine pouch experience.",
+    "descriptionLength": 139,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/nicotine-free-pouches",
+    "currentTitle": "Nicotine-Free Pouches | Zero Nicotine Oral Pouches | ${tenant.name}",
+    "titleLength": 67,
+    "titleAlone": "Nicotine-Free Pouches | Zero Nicotine Oral Pouches | ${tenant.name}",
+    "titleAloneLength": 67,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/nicotine-pouch-flavours",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/nicotine-pouches",
+    "currentTitle": "Buy Nicotine Pouches Online — ${totalProducts}+ Products | ${tenant.name}",
+    "titleLength": 73,
+    "titleAlone": "Buy Nicotine Pouches Online — ${totalProducts}+ Products | ${tenant.name}",
+    "titleAloneLength": 73,
+    "titleIssues": [
+      "too_long"
+    ],
+    "currentDescription": "Shop ${totalProducts}+ tobacco-free nicotine pouches from ${brandCount} leading brands. Browse by strength, flavour, and format. Fast EU shipping on all orders. 18+ only.",
+    "descriptionLength": 170,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/nicotine-reduction-guide",
+    "currentTitle": "Nicotine Reduction Guide - Step-Down Schedule and Tips",
+    "titleLength": 54,
+    "titleAlone": "Nicotine Reduction Guide - Step-Down Schedule and Tips",
+    "titleAloneLength": 54,
+    "titleIssues": [],
+    "currentDescription": "A complete nicotine reduction guide with step-down schedule, timeline for how long nicotine stays in your body, and practical tips for managing cravings at every stage.",
+    "descriptionLength": 168,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/nicotine-strength-chart",
+    "currentTitle": "${title} | ${tenant.name}",
+    "titleLength": 25,
+    "titleAlone": "${title} | ${tenant.name}",
+    "titleAloneLength": 25,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/order-confirmation",
+    "currentTitle": "Order Confirmation | ${tenant.name}",
+    "titleLength": 35,
+    "titleAlone": "Order Confirmation | ${tenant.name}",
+    "titleAloneLength": 35,
+    "titleIssues": [],
+    "currentDescription": "Your order has been placed successfully.",
+    "descriptionLength": 40,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/privacy",
+    "currentTitle": "Privacy Policy | ${tenant.name}",
+    "titleLength": 31,
+    "titleAlone": "Privacy Policy | ${tenant.name}",
+    "titleAloneLength": 31,
+    "titleIssues": [],
+    "currentDescription": "Privacy policy for ${tenant.name}. Learn how we collect, use, and protect your personal data in compliance with GDPR.",
+    "descriptionLength": 117,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/referral",
+    "currentTitle": "Refer a Friend — Earn Points Together | ${tenant.name}",
+    "titleLength": 54,
+    "titleAlone": "Refer a Friend — Earn Points Together | ${tenant.name}",
+    "titleAloneLength": 54,
+    "titleIssues": [],
+    "currentDescription": "Share your ${tenant.name} referral code with friends. They get 50 SnusPoints, you get 100. Earn rewards for every friend who joins.",
+    "descriptionLength": 131,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/register",
+    "currentTitle": "Create Account | ${tenant.name}",
+    "titleLength": 31,
+    "titleAlone": "Create Account | ${tenant.name}",
+    "titleAloneLength": 31,
+    "titleIssues": [],
+    "currentDescription": "Join ${tenant.name} to earn rewards, track orders, and get exclusive offers on nicotine pouches.",
+    "descriptionLength": 96,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/returns",
+    "currentTitle": "Returns & Refunds | ${tenant.name}",
+    "titleLength": 34,
+    "titleAlone": "Returns & Refunds | ${tenant.name}",
+    "titleAloneLength": 34,
+    "titleIssues": [],
+    "currentDescription": "${tenant.name} returns policy. 14-day return window for unopened products. Learn how to initiate a return and when to expect your refund.",
+    "descriptionLength": 137,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/rewards",
+    "currentTitle": "Loyalty Rewards — Earn Points & Perks | ${tenant.name}",
+    "titleLength": 54,
+    "titleAlone": "Loyalty Rewards — Earn Points & Perks | ${tenant.name}",
+    "titleAloneLength": 54,
+    "titleIssues": [],
+    "currentDescription": "Earn SnusPoints on every purchase and redeem them for discounts, free products, and exclusive perks. Level up from Newcomer to Legend with ${tenant.name} Rewards.",
+    "descriptionLength": 162,
+    "descriptionIssues": [
+      "too_long"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/search",
+    "currentTitle": null,
+    "titleLength": 0,
+    "titleAlone": null,
+    "titleAloneLength": 0,
+    "titleIssues": [
+      "missing"
+    ],
+    "currentDescription": "Search nicotine pouches, brands, and flavours on ${tenant.name}.",
+    "descriptionLength": 64,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/shipping",
+    "currentTitle": "Shipping Information | ${tenant.name}",
+    "titleLength": 37,
+    "titleAlone": "Shipping Information | ${tenant.name}",
+    "titleAloneLength": 37,
+    "titleIssues": [],
+    "currentDescription": "Fast EU-wide delivery from ${tenant.name}. Free shipping on orders over €${tenant.freeShippingThreshold}. 2-5 business day delivery with full tracking.",
+    "descriptionLength": 151,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/suggestions",
+    "currentTitle": "Suggest a Feature | Help Us Build ${tenant.name}",
+    "titleLength": 48,
+    "titleAlone": "Suggest a Feature | Help Us Build ${tenant.name}",
+    "titleAloneLength": 48,
+    "titleIssues": [],
+    "currentDescription": "Submit your ideas for new features, products, and improvements. The best suggestions earn SnusPoints and the Pioneer badge.",
+    "descriptionLength": 123,
+    "descriptionIssues": [],
+    "priority": "P2"
+  },
+  {
+    "page": "/terms",
+    "currentTitle": "Terms of Service | ${tenant.name}",
+    "titleLength": 33,
+    "titleAlone": "Terms of Service | ${tenant.name}",
+    "titleAloneLength": 33,
+    "titleIssues": [],
+    "currentDescription": "Terms and conditions for using ${tenant.name}, an EU-based nicotine pouch shop.",
+    "descriptionLength": 79,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/update-password",
+    "currentTitle": "Update Password | ${tenant.name}",
+    "titleLength": 32,
+    "titleAlone": "Update Password | ${tenant.name}",
+    "titleAloneLength": 32,
+    "titleIssues": [],
+    "currentDescription": "Set a new password for your account.",
+    "descriptionLength": 36,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/whats-new",
+    "currentTitle": "What's New — Latest Drops & Feature Updates | ${tenant.name}",
+    "titleLength": 60,
+    "titleAlone": "What's New — Latest Drops & Feature Updates | ${tenant.name}",
+    "titleAloneLength": 60,
+    "titleIssues": [],
+    "currentDescription": "See what's new at ${tenant.name}. Release notes, feature updates, and improvements.",
+    "descriptionLength": 83,
+    "descriptionIssues": [
+      "too_short"
+    ],
+    "priority": "P2"
+  },
+  {
+    "page": "/wishlist",
+    "currentTitle": "Wishlist | SnusFriend",
+    "titleLength": 21,
+    "titleAlone": "Wishlist | SnusFriend",
+    "titleAloneLength": 21,
+    "titleIssues": [
+      "too_short"
+    ],
+    "currentDescription": null,
+    "descriptionLength": 0,
+    "descriptionIssues": [
+      "missing"
+    ],
+    "priority": "P2"
+  }
+]
