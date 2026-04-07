@@ -1,0 +1,168 @@
+---
+import { Image } from 'astro:assets';
+import CardAddToCart from '@/components/react/CardAddToCart';
+import { strengthColors, strengthLabels, flavorColors, defaultFlavorColor, brandColors, defaultBrandColor } from '@/data/brand-colors';
+
+interface Props {
+  slug: string;
+  name: string;
+  brand: string;
+  brandSlug: string;
+  imageUrl: string;
+  prices: Record<string, number>;
+  stock: number;
+  nicotineContent: number;
+  strengthKey: string;
+  flavorKey: string;
+  ratings: number;
+  badgeKeys: string[];
+}
+
+const {
+  slug, name, brand, brandSlug, imageUrl, prices, stock,
+  nicotineContent, strengthKey, flavorKey, ratings, badgeKeys,
+} = Astro.props;
+
+const isOutOfStock = stock === 0;
+
+const brandColor = brandColors[brandSlug] ?? defaultBrandColor;
+const strengthColor = strengthColors[strengthKey] ?? strengthColors['normal'];
+const flavorColor = flavorColors[flavorKey] ?? defaultFlavorColor;
+
+const flavorLabelMap: Record<string, string> = {
+  mint: 'Mint', berry: 'Berry', citrus: 'Citrus', fruit: 'Fruit',
+  coffee: 'Coffee', cola: 'Cola', menthol: 'Menthol', wintergreen: 'Wintergreen',
+  tropical: 'Tropical', ice: 'Ice', original: 'Original', tobacco: 'Tobacco',
+  licorice: 'Licorice', vanilla: 'Vanilla',
+};
+const flavorLabel = flavorLabelMap[flavorKey] ?? flavorKey;
+
+const pack1Price = prices.pack1 ?? 0;
+---
+
+<div class="blog-product-card not-prose my-6 overflow-hidden rounded-xl border border-border/50" style={`background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%); box-shadow: 0 2px 12px rgba(0,0,0,0.12);`}>
+  <div class="flex flex-col xs:flex-row items-stretch">
+    {/* Image */}
+    <a
+      href={`/products/${slug}`}
+      data-astro-prefetch
+      class="relative flex w-full xs:w-[100px] shrink-0 items-center justify-center overflow-hidden p-3 xs:p-2"
+      aria-label={`View ${name}`}
+    >
+      <div
+        class="absolute inset-0 opacity-10"
+        style={`background: radial-gradient(circle at 50% 50%, ${flavorColor} 0%, transparent 70%);`}
+      />
+      {imageUrl ? (
+        <Image
+          src={imageUrl}
+          alt={`${name} by ${brand}`}
+          width={80}
+          height={80}
+          loading="lazy"
+          format="webp"
+          quality={80}
+          class="relative z-[1] h-[80px] w-[80px] object-contain drop-shadow-md"
+        />
+      ) : (
+        <div class="flex h-[80px] w-[80px] items-center justify-center rounded-lg" style={`background: ${brandColor}15;`}>
+          <span class="text-2xl font-bold" style={`color: ${brandColor};`}>
+            {brand.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
+          </span>
+        </div>
+      )}
+    </a>
+
+    {/* Content */}
+    <div class="flex flex-1 flex-col gap-1.5 p-3 pt-0 xs:pt-3 xs:pl-1">
+      {/* Brand name */}
+      <a
+        href={`/brands/${brandSlug}`}
+        class="text-[11px] font-semibold uppercase tracking-wider transition-colors hover:brightness-125"
+        style={`color: ${brandColor};`}
+      >
+        {brand}
+      </a>
+
+      {/* Product name */}
+      <a href={`/products/${slug}`} data-astro-prefetch class="group/name">
+        <h4 class="text-sm font-bold leading-tight text-foreground line-clamp-2 group-hover/name:text-primary transition-colors">
+          {name}
+        </h4>
+      </a>
+
+      {/* Pills row: strength dot + mg, flavor */}
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <span
+          class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium border"
+          style={`background-color: ${strengthColor}15; color: ${strengthColor}; border-color: ${strengthColor}25;`}
+        >
+          <span class="inline-block h-2 w-2 rounded-full" style={`background-color: ${strengthColor}; box-shadow: 0 0 4px ${strengthColor}50;`} />
+          {nicotineContent} mg
+        </span>
+        <span
+          class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium border"
+          style={`background-color: ${flavorColor}15; color: ${flavorColor}; border-color: ${flavorColor}25;`}
+        >
+          {flavorLabel}
+        </span>
+        {isOutOfStock && (
+          <span class="rounded-full bg-destructive px-2 py-0.5 text-[10px] font-bold text-destructive-foreground">
+            Out of Stock
+          </span>
+        )}
+      </div>
+
+      {/* Price + Add to Cart row */}
+      <div class="flex items-center justify-between gap-2 mt-auto pt-1">
+        <span class="text-base font-bold text-foreground">
+          &euro;{pack1Price.toFixed(2)}
+        </span>
+        <div class="flex items-center gap-2">
+          <a
+            href={`/products/${slug}`}
+            data-astro-prefetch
+            class="text-xs font-medium text-primary hover:text-foreground transition-colors"
+          >
+            View
+          </a>
+          <CardAddToCart
+            client:visible
+            slug={slug}
+            name={name}
+            brand={brand}
+            imageUrl={imageUrl}
+            prices={prices}
+            stock={stock}
+            nicotineContent={nicotineContent}
+            strengthKey={strengthKey}
+            flavorKey={flavorKey}
+            ratings={ratings}
+            badgeKeys={badgeKeys}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* xs breakpoint for horizontal layout (>=400px) */
+  @media (min-width: 400px) {
+    .blog-product-card .flex-col.xs\:flex-row {
+      flex-direction: row;
+    }
+    .blog-product-card .w-full.xs\:w-\[100px\] {
+      width: 100px;
+    }
+    .blog-product-card .p-3.xs\:p-2 {
+      padding: 0.5rem;
+    }
+    .blog-product-card .pt-0.xs\:pt-3 {
+      padding-top: 0.75rem;
+    }
+    .blog-product-card .xs\:pl-1 {
+      padding-left: 0.25rem;
+    }
+  }
+</style>

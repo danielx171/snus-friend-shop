@@ -67,6 +67,39 @@ const strengthMap: Record<string, number> = {
   'super-strong': 5,
 };
 
+const FLAVOR_FAMILIES: Record<string, string[]> = {
+  mint: ['mint', 'peppermint', 'spearmint', 'menthol', 'wintergreen', 'ice', 'cool', 'frost'],
+  berry: ['berry', 'blueberry', 'strawberry', 'raspberry', 'blackberry', 'mixed berry', 'wildberry', 'cranberry'],
+  citrus: ['citrus', 'lemon', 'lime', 'orange', 'grapefruit', 'yuzu', 'bergamot'],
+  coffee: ['coffee', 'espresso', 'mocha', 'cappuccino'],
+  tropical: ['tropical', 'mango', 'pineapple', 'passionfruit', 'coconut', 'exotic', 'melon', 'watermelon'],
+  sweet: ['vanilla', 'caramel', 'cola', 'candy', 'licorice'],
+  tobacco: ['tobacco', 'original', 'classic'],
+};
+
+function flavorScore(product: { flavorKey: string; name: string }, selectedFlavors: string[]): number {
+  let score = 0;
+  const nameLower = product.name.toLowerCase();
+
+  for (const sel of selectedFlavors) {
+    // Direct flavorKey match = 3 points
+    if (sel === product.flavorKey) { score += 3; continue; }
+
+    // Flavor family match: user selected a specific flavor that belongs to a family matching the product's flavorKey
+    for (const [familyKey, keywords] of Object.entries(FLAVOR_FAMILIES)) {
+      if (keywords.includes(sel) && familyKey === product.flavorKey) {
+        score += 2;
+        break;
+      }
+    }
+
+    // Product name contains the selected flavor keyword = 1 point
+    if (nameLower.includes(sel.toLowerCase())) score += 1;
+  }
+
+  return score;
+}
+
 function StrengthIndicator({ strengthKey }: { strengthKey: string }) {
   const level = strengthMap[strengthKey] ?? 2;
   return (
@@ -139,17 +172,26 @@ const ResultCard = React.memo<{ p: QuizProduct; selectedFlavors: string[] }>(
       [p, isOutOfStock],
     );
 
-    const isFlavorMatch = selectedFlavors.includes(p.flavorKey);
+    const matchScore = flavorScore(p, selectedFlavors);
+    const isDirectMatch = matchScore >= 3;
+    const isFamilyMatch = !isDirectMatch && matchScore >= 2;
 
     return (
       <a
         href={`/products/${p.slug}`}
         className="group relative flex flex-col overflow-hidden rounded-xl bg-card/60 backdrop-blur-sm border border-border transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 hover:border-primary/30"
       >
-        {isFlavorMatch && (
+        {isDirectMatch && (
           <div className="absolute top-2 left-2 z-10">
             <span className="rounded-md bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary">
               Flavour Match
+            </span>
+          </div>
+        )}
+        {isFamilyMatch && (
+          <div className="absolute top-2 left-2 z-10">
+            <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
+              Close Match
             </span>
           </div>
         )}
@@ -259,21 +301,14 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
   const results = useMemo(() => {
     if (step !== 2) return [];
 
-    const filtered = products.filter((p) => {
-      const flavorMatch = selectedFlavors.includes(p.flavorKey);
-      const strengthMatch = allowedStrengths.includes(p.strengthKey as any);
-      return flavorMatch && strengthMatch;
-    });
+    const scored = products
+      .filter(p => allowedStrengths.includes(p.strengthKey as any) && p.stock > 0)
+      .map(p => ({ ...p, _score: flavorScore(p, selectedFlavors) }))
+      .filter(p => p._score > 0)
+      .sort((a, b) => b._score - a._score || b.ratings - a.ratings)
+      .slice(0, 12);
 
-    // Sort: more flavor matches first (for future multi-match), then by ratings
-    filtered.sort((a, b) => {
-      const aMatch = selectedFlavors.includes(a.flavorKey) ? 1 : 0;
-      const bMatch = selectedFlavors.includes(b.flavorKey) ? 1 : 0;
-      if (bMatch !== aMatch) return bMatch - aMatch;
-      return b.ratings - a.ratings;
-    });
-
-    return filtered.slice(0, 8);
+    return scored;
   }, [step, products, selectedFlavors, allowedStrengths]);
 
   const handleEmailSubmit = useCallback(

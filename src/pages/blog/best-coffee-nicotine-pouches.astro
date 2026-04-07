@@ -1,13 +1,32 @@
 ---
 export const prerender = true;
+import { getCollection } from 'astro:content';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 
 const publishDate = '2026-03-27';
 const title = 'Best Coffee-Flavoured Nicotine Pouches: Our Top Picks';
 const description = 'From rich espresso to smooth macchiato — the best coffee nicotine pouches ranked by flavour, strength, and value. Perfect morning pouches.';
+
+// Fetch coffee products for inline cards
+const allProducts = await getCollection('products');
+const coffeeProducts = allProducts.filter((p) => p.data.flavorKey === 'coffee');
+
+// Helper to find a product by brand slug + partial name match
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return coffeeProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const zynCoffee = findProduct('zyn', 'coffee') ?? findProduct('zyn');
+const zynMacchiato = findProduct('zyn', 'macchiato');
+const loopCoffee = findProduct('loop', 'coffee') ?? findProduct('loop');
+const helwitCoffee = findProduct('helwit', 'coffee') ?? findProduct('helwit');
 ---
 
 <Shop
@@ -62,6 +81,7 @@ const description = 'From rich espresso to smooth macchiato — the best coffee 
           minimal drip and a comfortable fit. If you're new to coffee pouches, start here — it's the
           benchmark the others are measured against.
         </p>
+        {zynCoffee && <BlogProductCard {...zynCoffee.data} />}
 
         <h3>ZYN Macchiato Slim S3</h3>
         <p>
@@ -71,6 +91,7 @@ const description = 'From rich espresso to smooth macchiato — the best coffee 
           well as an afternoon pouch when you want something indulgent without being overpowering. The slim
           format is more discreet than the mini and sits flatter under the lip.
         </p>
+        {zynMacchiato && <BlogProductCard {...zynMacchiato.data} />}
 
         <h3>LOOP Coffee</h3>
         <p>
@@ -80,6 +101,7 @@ const description = 'From rich espresso to smooth macchiato — the best coffee 
           you find ZYN's coffee too mild, LOOP is the step up. The flavour develops nicely over 20–30 minutes,
           starting with a punchy roast note and mellowing into a smooth, slightly sweet finish.
         </p>
+        {loopCoffee && <BlogProductCard {...loopCoffee.data} />}
 
         <h3>HELWIT Coffee</h3>
         <p>
@@ -90,6 +112,7 @@ const description = 'From rich espresso to smooth macchiato — the best coffee 
           coffee than espresso — with no harshness or bitterness. An excellent first coffee pouch if you're
           not sure about the category.
         </p>
+        {helwitCoffee && <BlogProductCard {...helwitCoffee.data} />}
 
         <h3>ON! Coffee Mini</h3>
         <p>
