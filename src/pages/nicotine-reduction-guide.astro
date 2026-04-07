@@ -1,0 +1,313 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+---
+
+<Shop
+  title="Nicotine Reduction Guide - Step-Down Schedule and Tips"
+  description="A complete nicotine reduction guide with step-down schedule, timeline for how long nicotine stays in your body, and practical tips for managing cravings at every stage."
+  canonical="/nicotine-reduction-guide"
+  ogType="article"
+  ogImage="/images/og/og-best-of.svg"
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Your Nicotine Reduction Guide - Step-Down Schedule and Tips",
+    "description": "A complete nicotine reduction guide with step-down schedule, timeline for how long nicotine stays in your body, and practical tips for managing cravings.",
+    "image": "https://snusfriends.com/images/og/og-best-of.svg",
+    "datePublished": "2026-04-07",
+    "dateModified": "2026-04-07",
+    "author": {
+      "@type": "Organization",
+      "name": "SnusFriends",
+      "url": "https://snusfriends.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SnusFriends",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://snusfriends.com/logo.png"
+      }
+    }
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How long does nicotine stay in your system?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nicotine has a half-life of about 2 hours in your blood. Most physical withdrawal symptoms peak at 3 days. Physical dependence largely fades within 2-4 weeks, and cravings reduce significantly after 1-3 months of consistent reduction."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How fast should I reduce my nicotine strength?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A safe pace is one strength tier every 4 weeks. Dropping too quickly causes intense cravings and increases the risk of reverting to higher strengths. Give your body time to adjust at each level before stepping down."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the withdrawal symptoms when reducing nicotine?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common symptoms include irritability, difficulty concentrating, increased appetite, trouble sleeping, and mild headaches. These typically peak 2-3 days after each step-down and fade within 1-2 weeks. Staying hydrated and physically active helps."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I skip strength tiers to speed up reduction?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Skipping tiers is not recommended. Each step down should feel manageable, not painful. If you jump from 12mg to 4mg, the withdrawal will likely be severe enough to push you back. Gradual steps have a much higher success rate."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if I plateau and cannot reduce further?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Plateaus are normal, especially at the 4-6mg range. Stay at your current level for an extra 2-4 weeks. Try reducing the number of pouches per day before dropping the strength further. Some people maintain at a low level indefinitely, which is a valid outcome."
+        }
+      }
+    ]
+  })} />
+
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <Breadcrumb items={[
+      { label: 'Nicotine Reduction Guide' },
+    ]} />
+
+    <BlogHero
+      category="Guide"
+      title="Your Nicotine Reduction Guide"
+      description="Take control of your nicotine intake. A step-by-step plan to gradually reduce your strength, understand withdrawal timelines, and reach your goal."
+      date="7 April 2026"
+      readTime="7 min read"
+    />
+
+    <!-- Key Takeaways -->
+    <aside style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--muted)) 100%); border-left: 4px solid hsl(var(--primary)); padding: 24px; border-radius: 6px; margin: 32px 0;">
+      <h3 style="color: hsl(var(--primary)); margin-top: 0;">Key Takeaways</h3>
+      <ul>
+        <li>Nicotine leaves your blood within 2 hours, but physical dependence takes 2-4 weeks to fade</li>
+        <li>A 5-tier step-down schedule (4 weeks per tier) is the safest way to reduce</li>
+        <li>Dropping one strength tier at a time prevents severe withdrawal symptoms</li>
+        <li>Hydration, physical activity, and consistent timing help manage cravings</li>
+        <li>Reaching 0mg or maintaining at a low level are both valid outcomes</li>
+      </ul>
+    </aside>
+
+    <!-- Section 1: How Long Nicotine Stays in Your Body -->
+    <h2>How Long Nicotine Stays in Your Body</h2>
+
+    <p>Understanding the timeline helps you anticipate what your body will go through at each stage of reduction. Nicotine does not leave your system overnight — it follows a predictable pattern.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr; gap: 16px; margin: 24px 0;">
+      <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <span style="background: hsl(var(--primary)); color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem;">2h</span>
+          <strong>Blood (2 hours)</strong>
+        </div>
+        <p style="margin: 0; color: hsl(var(--muted-foreground));">Nicotine's half-life in your blood is about 2 hours. Within 8-12 hours, most nicotine is metabolised into cotinine. This is when the first cravings appear after your last pouch.</p>
+      </div>
+
+      <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <span style="background: hsl(var(--primary)); color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem;">3d</span>
+          <strong>Withdrawal Peak (3 days)</strong>
+        </div>
+        <p style="margin: 0; color: hsl(var(--muted-foreground));">Physical withdrawal symptoms — irritability, headaches, difficulty concentrating — peak around 72 hours after a significant reduction. This is the hardest window. Push through it.</p>
+      </div>
+
+      <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <span style="background: hsl(var(--primary)); color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.75rem;">2-4w</span>
+          <strong>Physical Dependence Fades (2-4 weeks)</strong>
+        </div>
+        <p style="margin: 0; color: hsl(var(--muted-foreground));">Your body adjusts to the new nicotine level. Sleep normalises, appetite stabilises, and the constant background craving fades. This is why each tier lasts 4 weeks.</p>
+      </div>
+
+      <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <span style="background: hsl(var(--primary)); color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.75rem;">1-3m</span>
+          <strong>Cravings Reduce (1-3 months)</strong>
+        </div>
+        <p style="margin: 0; color: hsl(var(--muted-foreground));">Psychological cravings — the habitual reach for a pouch in certain situations — gradually weaken. After 3 months at a reduced level, most people report cravings are manageable or gone entirely.</p>
+      </div>
+    </div>
+
+    <p>This timeline applies at <em>each</em> step-down, not just the final one. When you drop from 12mg to 8mg, expect the 3-day peak and 2-4 week adjustment period. Plan accordingly.</p>
+
+    <!-- Section 2: Step-Down Schedule -->
+    <h2>The Step-Down Schedule</h2>
+
+    <p>A structured step-down plan is the safest way to reduce your nicotine intake. Each tier lasts 4 weeks, giving your body enough time to adapt before the next drop. Rushing leads to relapse.</p>
+
+    <!-- Tier 1 -->
+    <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 24px; margin: 20px 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <h3 style="margin: 0;">Tier 1: Heavy (12+ mg)</h3>
+        <span style="background: hsl(var(--destructive)); color: white; padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 600;">Weeks 1-4</span>
+      </div>
+      <p>If you are currently using 12mg or higher products, this is your starting point. The goal is not to reduce yet — it is to stabilise and commit to the schedule.</p>
+      <p><strong>Recommended products:</strong></p>
+      <ul>
+        <li><a href="/brands/siberia">Siberia -80 Degrees</a> (24mg) — for extremely heavy users stepping down from the strongest products</li>
+        <li><a href="/products/klint-freeze-mint-5">Klint Freeze Mint #5</a> (12.5mg) — strong but more moderate starting point</li>
+        <li><a href="/products/zyn-cool-mint-extra-strong">ZYN Cool Mint Extra Strong</a> (11mg) — reliable, consistent delivery</li>
+      </ul>
+      <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">Use 6-10 pouches per day. Do not exceed your current daily intake. Track your usage.</p>
+    </div>
+
+    <!-- Tier 2 -->
+    <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 24px; margin: 20px 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <h3 style="margin: 0;">Tier 2: Strong (8-11 mg)</h3>
+        <span style="background: hsl(var(--chart-4)); color: white; padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 600;">Weeks 5-8</span>
+      </div>
+      <p>Your first real step-down. Expect the 3-day withdrawal peak around days 29-31. By the end of week 6, it should feel normal.</p>
+      <p><strong>Recommended products:</strong></p>
+      <ul>
+        <li><a href="/products/velo-mighty-peppermint">VELO Mighty Peppermint</a> (10.9mg) — strong enough to prevent breakthrough cravings</li>
+        <li><a href="/products/loop-smooth-mint-strong">Loop Smooth Mint Strong</a> (8.9mg) — good mid-range option for this tier</li>
+        <li><a href="/products/skruf-fresh-mint-s3">Skruf Fresh Mint S3</a> (9.0mg) — crisp, reliable delivery</li>
+      </ul>
+      <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">Maintain the same number of pouches per day. Only change the strength, not the frequency.</p>
+    </div>
+
+    <!-- Tier 3 -->
+    <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 24px; margin: 20px 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <h3 style="margin: 0;">Tier 3: Medium (5-7 mg)</h3>
+        <span style="background: hsl(var(--chart-2)); color: white; padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 600;">Weeks 9-12</span>
+      </div>
+      <p>The middle ground. Many people find this the most comfortable tier because the nicotine is noticeable but not overwhelming. Some choose to stay here long-term.</p>
+      <p><strong>Recommended products:</strong></p>
+      <ul>
+        <li><a href="/products/zyn-gentle-mint-slim">ZYN Gentle Mint Slim</a> (6.5mg) — the classic mid-strength pouch</li>
+        <li><a href="/products/clew-cool-mint-5mg">CLEW Cool Mint</a> (5.0mg) — affordable and consistent</li>
+        <li><a href="/products/chainpop-raspberry-lemon">Chainpop Raspberry Lemon</a> (5.0mg) — fruity option if you want a flavour change</li>
+      </ul>
+      <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">You can start reducing frequency here — try dropping one pouch per day each week.</p>
+    </div>
+
+    <!-- Tier 4 -->
+    <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 24px; margin: 20px 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <h3 style="margin: 0;">Tier 4: Light (2-4 mg)</h3>
+        <span style="background: hsl(var(--chart-1)); color: white; padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 600;">Weeks 13-16</span>
+      </div>
+      <p>This is where it gets real. The nicotine effect is mild. Your body is adjusting to near-baseline levels. Cravings may return briefly but they are weaker than earlier tiers.</p>
+      <p><strong>Recommended products:</strong></p>
+      <ul>
+        <li><a href="/products/helwit-mint-slim">HELWIT Mint Slim</a> (4.5mg) — gentle, slim format, easy on the gum</li>
+        <li><a href="/brands/zyn">ZYN Mini Dry Cool Mint</a> (3mg) — low strength with a clean taste</li>
+        <li><a href="/brands/velo">VELO Easy Mint Mini</a> (4mg) — small, discreet, minimal nicotine</li>
+      </ul>
+      <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">At this level, try extending the time between pouches. Going from 6 per day to 3-4 makes the final step easier.</p>
+    </div>
+
+    <!-- Tier 5 -->
+    <div style="background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 24px; margin: 20px 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <h3 style="margin: 0;">Tier 5: Nicotine-Free (0 mg)</h3>
+        <span style="background: hsl(var(--primary)); color: white; padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 600;">Week 17+</span>
+      </div>
+      <p>The final step. Nicotine-free pouches give you the oral ritual without any nicotine. Use these for as long as you need to break the physical habit, then stop entirely when you are ready.</p>
+      <p><strong>Recommended products:</strong></p>
+      <ul>
+        <li><a href="/brands/helwit">HELWIT Nicotine Free Mint</a> — same familiar format, zero nicotine</li>
+        <li><a href="/brands/loop">Loop Nicotine Free</a> — smooth flavour options without the kick</li>
+      </ul>
+      <p style="color: hsl(var(--muted-foreground)); font-size: 0.9rem;">No rush to stop using these. The habit fades naturally when nicotine is no longer driving it.</p>
+    </div>
+
+    <!-- Section 3: Tips for Each Step -->
+    <h2>Tips for Managing Cravings at Each Step</h2>
+
+    <p>Every time you drop a tier, your body notices. Here is what actually helps:</p>
+
+    <h3>The First 3 Days After a Step-Down</h3>
+    <ul>
+      <li><strong>Stay hydrated.</strong> Dehydration amplifies irritability and headaches. Aim for 2-3 litres of water per day during the adjustment window.</li>
+      <li><strong>Move your body.</strong> Even a 15-minute walk triggers dopamine release that partially offsets the nicotine drop. Exercise is the single most effective craving killer.</li>
+      <li><strong>Do not skip meals.</strong> Blood sugar crashes make cravings worse. Eat regular, balanced meals, especially in the first 72 hours.</li>
+      <li><strong>Use your pouches on schedule.</strong> Do not wait until cravings hit. Proactive dosing at consistent times keeps your nicotine level stable and prevents the spike-crash cycle.</li>
+    </ul>
+
+    <h3>Weeks 1-2 of Each Tier</h3>
+    <ul>
+      <li><strong>Keep the same routine.</strong> Change the strength, not the timing. If you used a pouch with morning coffee before, keep doing that. The habit stability helps your brain adjust to less nicotine.</li>
+      <li><strong>Avoid alcohol in week 1.</strong> Alcohol lowers inhibition and is the number one trigger for reaching for a stronger pouch or a cigarette. Give yourself one clean week.</li>
+      <li><strong>Tell someone.</strong> Accountability helps. Even a brief message to a friend — "I'm dropping to 6mg this week" — creates external motivation.</li>
+    </ul>
+
+    <h3>When You Hit a Plateau</h3>
+    <ul>
+      <li><strong>Reduce frequency before strength.</strong> If dropping from 6mg to 4mg feels impossible, stay at 6mg but cut one pouch per day each week. Once you are at 3-4 pouches daily, the strength drop is easier.</li>
+      <li><strong>Add a delay.</strong> When a craving hits, set a 10-minute timer. Most cravings peak and pass within 5-7 minutes. If the craving is still strong after 10 minutes, use a pouch.</li>
+      <li><strong>Switch flavours.</strong> A new flavour at the same strength can make the tier feel fresh, which helps with the psychological monotony of a long schedule.</li>
+    </ul>
+
+    <div style="background: hsl(var(--primary) / 0.08); border-left: 4px solid hsl(var(--primary)); padding: 16px; border-radius: 4px; margin: 24px 0;">
+      <strong style="color: hsl(var(--primary));">Important:</strong> If you experience severe anxiety, depression, or feel unable to function at a reduced tier, go back up one level and try again in 2 weeks. Reduction should be uncomfortable, not unbearable. Consult your doctor if symptoms persist.
+    </div>
+
+    <!-- Section 4: CTA -->
+    <h2>Start Your Reduction Journey</h2>
+
+    <p>Ready to take the first step? Create a free SnusFriends account to track your reduction progress, set step-down reminders, and log your daily usage. Your reduction goal tracker lives on your account page.</p>
+
+    <div style="text-align: center; margin: 32px 0;">
+      <a
+        href="/register?redirect=/account"
+        style="display: inline-block; background: hsl(var(--primary)); color: white; padding: 16px 32px; border-radius: 8px; font-weight: 600; font-size: 1.1rem; text-decoration: none; transition: opacity 0.2s;"
+      >
+        Start Your Reduction Journey
+      </a>
+      <p style="color: hsl(var(--muted-foreground)); font-size: 0.85rem; margin-top: 12px;">Free account. Set your goal. Track every step.</p>
+    </div>
+
+    <!-- Section 5: FAQ -->
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>How long does nicotine stay in your system?</h3>
+    <p>Nicotine has a half-life of about 2 hours in your blood. Most physical withdrawal symptoms peak at 3 days. Physical dependence largely fades within 2-4 weeks, and cravings reduce significantly after 1-3 months of consistent reduction.</p>
+
+    <h3>How fast should I reduce my nicotine strength?</h3>
+    <p>A safe pace is one strength tier every 4 weeks. Dropping too quickly causes intense cravings and increases the risk of reverting to higher strengths. Give your body time to adjust at each level before stepping down.</p>
+
+    <h3>What are the withdrawal symptoms when reducing nicotine?</h3>
+    <p>Common symptoms include irritability, difficulty concentrating, increased appetite, trouble sleeping, and mild headaches. These typically peak 2-3 days after each step-down and fade within 1-2 weeks. Staying hydrated and physically active helps.</p>
+
+    <h3>Can I skip strength tiers to speed up reduction?</h3>
+    <p>Skipping tiers is not recommended. Each step down should feel manageable, not painful. If you jump from 12mg to 4mg, the withdrawal will likely be severe enough to push you back. Gradual steps have a much higher success rate.</p>
+
+    <h3>What if I plateau and cannot reduce further?</h3>
+    <p>Plateaus are normal, especially at the 4-6mg range. Stay at your current level for an extra 2-4 weeks. Try reducing the number of pouches per day before dropping the strength further. Some people maintain at a low level indefinitely, which is a valid outcome.</p>
+
+    <!-- Related Reading -->
+    <h2>Related Reading</h2>
+    <ul style="list-style-type: disc; padding-left: 24px; margin: 20px 0;">
+      <li><a href="/blog/best-nicotine-pouches-for-quitting-smoking">Best Pouches for Quitting Smoking</a> — Strength matching and product recommendations</li>
+      <li><a href="/blog/switching-from-cigarettes-to-nicotine-pouches">Switching from Cigarettes</a> — Detailed 4-week transition plan</li>
+      <li><a href="/blog/how-to-choose-your-strength">Strength Selection Guide</a> — Match pouches to your current nicotine intake</li>
+      <li><a href="/blog/nicotine-pouch-side-effects">Side Effects Guide</a> — What to expect during reduction</li>
+      <li><a href="/beginners">Beginner Mode</a> — Filtered product view for newcomers</li>
+    </ul>
+
+    <p style="background: hsl(var(--muted)); padding: 24px; border-radius: 6px; margin-top: 48px; font-size: 0.95rem; color: hsl(var(--muted-foreground));">
+      <strong>About this guide:</strong> SnusFriends provides evidence-informed harm reduction guidance. This guide references NHS stop smoking resources and WHO tobacco cessation guidelines. Nicotine reduction should be done at your own pace. Consult your doctor if you have cardiovascular conditions, are pregnant, or experience severe withdrawal symptoms.
+    </p>
+  </article>
+</Shop>

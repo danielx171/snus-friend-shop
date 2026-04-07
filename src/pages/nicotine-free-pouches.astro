@@ -1,0 +1,226 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import ProductCard from '@/components/astro/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { tenant } from '@/config/tenant';
+
+const allProducts = await getCollection('products');
+const nicotineFreeProducts = allProducts.filter(
+  p => p.data.categoryKey === 'nicotineFree' || p.data.nicotineContent === 0
+);
+const veryLowNicotineProducts = allProducts.filter(
+  p => p.data.nicotineContent > 0 && p.data.nicotineContent <= 2
+    && p.data.categoryKey !== 'nicotineFree'
+);
+
+const showVeryLowSection = nicotineFreeProducts.length < 12 && veryLowNicotineProducts.length > 0;
+
+const faqItems = [
+  {
+    question: 'What are nicotine-free pouches?',
+    answer: 'Nicotine-free pouches are tobacco-free, nicotine-free oral pouches that deliver flavour and a satisfying mouth feel without any nicotine. They use the same plant-fibre base as regular nicotine pouches but replace the nicotine with ingredients like caffeine, vitamins, or simply flavouring. You use them the same way: tuck one between your upper lip and gum for 20 to 40 minutes.'
+  },
+  {
+    question: 'Are nicotine-free pouches safe?',
+    answer: 'Nicotine-free pouches contain no tobacco and no nicotine, which removes the two primary concerns associated with traditional oral tobacco products. They are made from food-grade ingredients. However, no oral pouch product has been studied long-term, so it is best to use them in moderation and consult your doctor if you have specific health concerns.'
+  },
+  {
+    question: 'Do nicotine-free pouches help quit nicotine?',
+    answer: 'Many users find nicotine-free pouches helpful as the final step in a step-down plan. After gradually reducing nicotine strength over weeks or months, switching to a zero-nicotine pouch lets you keep the oral habit and ritual while eliminating nicotine entirely. They are not a medical cessation product, but the behavioural replacement can make the transition easier.'
+  },
+  {
+    question: 'What brands make nicotine-free pouches?',
+    answer: 'Several brands now offer zero-nicotine options. RAVE Energy pouches deliver caffeine instead of nicotine. Other brands like VELO and ZYN have explored nicotine-free variants in select markets. The category is growing as more consumers look for tobacco-free and nicotine-free alternatives.'
+  }
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(item => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer
+    }
+  }))
+};
+
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Nicotine-Free Pouches',
+  description: `Browse ${nicotineFreeProducts.length} nicotine-free pouches at ${tenant.name}. Enjoy the pouch experience without nicotine.`,
+  url: `https://${tenant.domain}/nicotine-free-pouches`,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: tenant.name,
+    url: `https://${tenant.domain}`
+  }
+};
+---
+
+<Shop
+  title={`Nicotine-Free Pouches | Zero Nicotine Oral Pouches | ${tenant.name}`}
+  description={`Shop ${nicotineFreeProducts.length > 0 ? nicotineFreeProducts.length : ''} nicotine-free pouches — all the flavour and ritual, none of the nicotine. Caffeine pouches, flavour-only pouches, and more. Fast EU shipping.`}
+  canonical="/nicotine-free-pouches"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <Breadcrumb items={[
+    { label: 'Nicotine Pouches', href: '/nicotine-pouches' },
+    { label: 'Nicotine-Free Pouches' }
+  ]} />
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Hero -->
+    <div class="relative mb-10 overflow-hidden rounded-2xl px-6 py-10 sm:px-10 sm:py-14" style="background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%); border: 1px solid hsl(var(--border));">
+      <div class="relative z-10 max-w-2xl">
+        <span class="mb-3 inline-block rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/25">
+          0 mg Nicotine
+        </span>
+        <h1 class="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          Nicotine-Free Pouches
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-muted-foreground">
+          All the flavour, ritual, and satisfaction of an oral pouch — without any nicotine. Perfect for anyone who enjoys the pouch experience but wants to stay nicotine-free.
+        </p>
+      </div>
+    </div>
+
+    <!-- Intro section -->
+    <article class="mb-10 max-w-3xl space-y-4 text-base leading-relaxed text-muted-foreground">
+      <h2 class="text-xl font-semibold text-foreground">Who are nicotine-free pouches for?</h2>
+      <p>
+        Nicotine-free pouches appeal to a surprisingly wide audience. If you are stepping down from
+        nicotine and have already worked your way through lower strengths, a zero-nicotine pouch
+        lets you keep the oral fixation and daily ritual without any nicotine intake at all. Many
+        users find this final step far easier than going cold turkey because the hand-to-mouth
+        habit and the familiar tuck-under-the-lip sensation remain unchanged.
+      </p>
+      <p>
+        They are also popular with people who have never used nicotine but enjoy the sensory
+        experience — the cooling burst of mint, the sweetness of berry, or the gentle tingle
+        against the gum. Caffeine-based pouches like
+        <a href="/brands/rave" class="underline hover:text-foreground">RAVE Energy</a> go a step
+        further by delivering a functional energy boost without nicotine, making them a discreet
+        alternative to energy drinks or coffee when you need focus on the go.
+      </p>
+    </article>
+
+    <!-- Nicotine-Free Product Grid -->
+    <section class="mb-12">
+      <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-foreground">
+          Nicotine-Free Pouches
+        </h2>
+        <p class="text-sm text-muted-foreground">
+          {nicotineFreeProducts.length} {nicotineFreeProducts.length === 1 ? 'product' : 'products'}
+        </p>
+      </div>
+
+      {nicotineFreeProducts.length > 0 ? (
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+          {nicotineFreeProducts.map((product) => (
+            <ProductCard
+              slug={product.id}
+              name={product.data.name}
+              brand={product.data.brand}
+              brandSlug={product.data.brandSlug}
+              imageUrl={product.data.imageUrl}
+              prices={product.data.prices}
+              stock={product.data.stock}
+              nicotineContent={product.data.nicotineContent}
+              strengthKey={product.data.strengthKey}
+              flavorKey={product.data.flavorKey}
+              ratings={product.data.ratings}
+              badgeKeys={product.data.badgeKeys}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="rounded-xl border border-border bg-card/50 px-6 py-12 text-center">
+          <p class="text-lg text-muted-foreground">
+            No nicotine-free pouches in stock right now. Check back soon — we are adding new products regularly.
+          </p>
+        </div>
+      )}
+    </section>
+
+    <!-- Very Low Nicotine section (shown when few nicotine-free products) -->
+    {showVeryLowSection && (
+      <section class="mb-12">
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold text-foreground">
+            Very Low Nicotine (1-2 mg)
+          </h2>
+          <p class="mt-1 text-sm text-muted-foreground">
+            If you are stepping down gradually, these ultra-low nicotine pouches are the next best thing to zero.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+          {veryLowNicotineProducts.map((product) => (
+            <ProductCard
+              slug={product.id}
+              name={product.data.name}
+              brand={product.data.brand}
+              brandSlug={product.data.brandSlug}
+              imageUrl={product.data.imageUrl}
+              prices={product.data.prices}
+              stock={product.data.stock}
+              nicotineContent={product.data.nicotineContent}
+              strengthKey={product.data.strengthKey}
+              flavorKey={product.data.flavorKey}
+              ratings={product.data.ratings}
+              badgeKeys={product.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- FAQ Section -->
+    <section class="mb-12">
+      <h2 class="mb-6 text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+      <div class="space-y-4 max-w-3xl">
+        {faqItems.map((item) => (
+          <details class="group rounded-xl border border-border bg-card/50 backdrop-blur">
+            <summary class="flex cursor-pointer items-center justify-between px-5 py-4 text-base font-medium text-foreground list-none">
+              <span>{item.question}</span>
+              <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </summary>
+            <p class="px-5 pb-4 text-sm leading-relaxed text-muted-foreground">
+              {item.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="rounded-2xl border border-border bg-card/50 px-6 py-8 text-center sm:px-10">
+      <h2 class="text-xl font-bold text-foreground">Looking to reduce your nicotine intake?</h2>
+      <p class="mx-auto mt-2 max-w-lg text-muted-foreground">
+        Going from high strength to zero does not have to happen overnight. Our step-down guide walks you through a gradual reduction plan that works.
+      </p>
+      <a
+        href="/blog/how-to-choose-your-strength"
+        class="mt-5 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:brightness-110"
+      >
+        Read the Step-Down Guide
+        <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</Shop>

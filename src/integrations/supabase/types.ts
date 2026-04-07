@@ -665,6 +665,12 @@ export type Database = {
         Update: { id?: string; user_id?: string; prize_key?: string; prize_value?: Json; spin_date?: string; spun_at?: string }
         Relationships: []
       }
+      reduction_goals: {
+        Row: { id: string; user_id: string; current_mg: number; target_mg: number; step_interval_days: number; started_at: string; next_step_at: string | null; status: string; created_at: string }
+        Insert: { id?: string; user_id: string; current_mg: number; target_mg: number; step_interval_days: number; started_at?: string; next_step_at?: string | null; status?: string; created_at?: string }
+        Update: { id?: string; user_id?: string; current_mg?: number; target_mg?: number; step_interval_days?: number; started_at?: string; next_step_at?: string | null; status?: string; created_at?: string }
+        Relationships: []
+      }
       vouchers: {
         Row: { id: string; user_id: string; type: string; value: Json; status: string; source: string; expires_at: string; used_at: string | null; created_at: string }
         Insert: { id?: string; user_id: string; type: string; value: Json; status?: string; source?: string; expires_at: string; used_at?: string | null; created_at?: string }
