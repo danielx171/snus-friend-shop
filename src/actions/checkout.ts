@@ -3,8 +3,11 @@ import { z } from 'astro/zod';
 
 const cartItemSchema = z.object({
   sku: z.string(),
+  slug: z.string(),
   quantity: z.number().int().positive(),
   product_name: z.string(),
+  brand: z.string(),
+  image_url: z.string(),
   pack_label: z.string(),
   unit_price: z.number().positive(),
 });

@@ -37,9 +37,12 @@ const SHIPPING_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 interface CheckoutItem {
   sku: string;
+  slug: string;
   quantity: number;
   /** Display fields — persisted in line_items_snapshot for order confirmation UI */
   product_name?: string;
+  brand?: string;
+  image_url?: string;
   pack_label?: string;
   unit_price?: number;
 }

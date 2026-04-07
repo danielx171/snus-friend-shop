@@ -142,7 +142,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         if (orderRows) {
           for (const order of orderRows) {
             if (!order.user_id || verifiedBuyerIds.has(order.user_id)) continue;
-            // line_items_snapshot is JSON — check if product_id appears in it
+            // line_items_snapshot is JSON — check if slug appears in it
             const snapshot = order.line_items_snapshot;
             if (snapshot && typeof snapshot === 'object') {
               const items = Array.isArray(snapshot) ? snapshot : [];
