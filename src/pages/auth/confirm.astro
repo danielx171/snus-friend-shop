@@ -66,9 +66,15 @@ if (!supabaseUrl || !supabaseKey) {
   description="Confirming your email address."
   noindex={true}
 >
-  <section class="bg-background text-foreground min-h-[60vh] flex items-center justify-center">
+  <section class="bg-background text-foreground min-h-[80vh] flex items-center justify-center">
     <div class="max-w-md w-full mx-auto px-4 py-12">
-      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
+      <div class="text-center mb-8">
+        <a href="/" class="inline-flex items-center gap-2 text-primary font-black text-xl tracking-tight">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground text-base font-black">S</span>
+          {tenant.name}
+        </a>
+      </div>
+      <div class="rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center shadow-sm">
 
         {errorMessage ? (
           <>
