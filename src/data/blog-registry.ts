@@ -269,4 +269,5 @@ export const blogArticles: BlogArticle[] = [
   { title: 'Nicotine Pouches in Norway: 2026 Rules & Alternatives', excerpt: 'Why nicotine pouches are banned in Norway, how snus remains legal, and what Norwegian users do now.', slug: 'buying-nicotine-pouches-norway-2026', tag: 'Buying Guide', date: '2026-04-08' },
   { title: 'Nicotine Pouches in Finland: 2026 Guide & Rules', excerpt: 'Distance selling ban, flavour restrictions, personal import rules, and what Finnish users need to know.', slug: 'buying-nicotine-pouches-finland-2026', tag: 'Buying Guide', date: '2026-04-08' },
   { title: 'Buy Nicotine Pouches in Poland: 2026 Guide', excerpt: 'Europe\'s fastest-growing market — excise tax changes, popular brands, prices in PLN, and ordering online.', slug: 'buying-nicotine-pouches-poland-2026', tag: 'Buying Guide', date: '2026-04-08' },
+  { title: 'Best Nicotine Pouches for Sensitive Gums (2026 Guide)', excerpt: 'Gum irritation from nicotine pouches? These 8 gentle picks use softer materials and lower pH for a comfortable experience.', slug: 'best-nicotine-pouches-sensitive-gums', tag: 'Buying Guide', date: '2026-04-08' },
 ];

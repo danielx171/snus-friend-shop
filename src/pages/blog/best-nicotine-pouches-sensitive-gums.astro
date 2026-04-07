@@ -1,0 +1,261 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-04-08';
+const title = 'Best Nicotine Pouches for Sensitive Gums (2026 Guide)';
+const description = 'Gum irritation from nicotine pouches? These 8 gentle picks use softer materials and lower pH for a comfortable experience.';
+---
+
+<Shop title={title} description={description} ogType="article">
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Sensitive Gums Guide' },
+      ]} />
+
+      <BlogHero
+        category="Buying Guide"
+        title={title}
+        description={description}
+        date="April 8, 2026"
+        readTime="8 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Introduction: Why Nicotine Pouches Irritate Gums</h2>
+        <p>If you've experienced redness, soreness, or swelling after using nicotine pouches, you're not alone. Gum irritation is one of the most common complaints among new and experienced users. Unlike traditional snus, nicotine pouches deliver nicotine without tobacco leaf — but the delivery mechanism, pouch material, and pH balance can still cause inflammation in sensitive mouths.</p>
+
+        <p>The good news? Choosing the right pouch and adjusting your usage habits can dramatically reduce irritation. In this guide, we'll explore what causes gum problems and recommend 8 of the gentlest pouches available in 2026.</p>
+
+        <h2>What Causes Gum Irritation from Nicotine Pouches?</h2>
+
+        <h3>1. pH Level and Alkalinity</h3>
+        <p>Nicotine naturally raises the pH of your mouth, creating an alkaline environment. This causes the mucous membranes (gums) to swell and become inflamed. Pouches with higher alkalinity irritate more, while those with lower pH are gentler. Most premium brands have optimized their formulations to reduce this effect.</p>
+
+        <h3>2. Pouch Material</h3>
+        <p>The outer pouch material makes a significant difference. Fleece or ultra-thin cellulose pouches create less friction and allow for faster, more uniform nicotine release, reducing concentrated chemical exposure. Thicker, rougher materials can cause micro-abrasions on delicate gum tissue.</p>
+
+        <h3>3. Nicotine Strength</h3>
+        <p>Higher nicotine concentrations (15mg+) deliver more alkaline compounds and cause greater irritation. Lighter strengths (3–8mg) are gentler, making mini and slim formats with modest nicotine content ideal for sensitive users.</p>
+
+        <h3>4. Placement Duration and Rotation</h3>
+        <p>Wearing a pouch in the same spot for hours causes cumulative chemical exposure. Rotating placement between lower and upper gums, and alternating sides, helps distribute stress and reduces localized irritation.</p>
+
+        <h2>Material and Format Differences</h2>
+
+        <div class="not-prose overflow-x-auto my-6">
+          <table class="w-full text-sm border-collapse border border-border">
+            <thead>
+              <tr class="bg-primary/10">
+                <th class="px-4 py-3 text-left font-semibold text-primary border-b border-border">Format</th>
+                <th class="px-4 py-3 text-left font-semibold text-primary border-b border-border">Thickness</th>
+                <th class="px-4 py-3 text-left font-semibold text-primary border-b border-border">Comfort</th>
+                <th class="px-4 py-3 text-left font-semibold text-primary border-b border-border">Release Speed</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border">
+                <td class="px-4 py-3">Mini/Slim</td>
+                <td class="px-4 py-3">Ultra-thin</td>
+                <td class="px-4 py-3">High (less bulk)</td>
+                <td class="px-4 py-3">Slower (less irritant surge)</td>
+              </tr>
+              <tr class="border-b border-border">
+                <td class="px-4 py-3">Regular</td>
+                <td class="px-4 py-3">Standard</td>
+                <td class="px-4 py-3">Medium</td>
+                <td class="px-4 py-3">Standard</td>
+              </tr>
+              <tr class="border-b border-border">
+                <td class="px-4 py-3">Large/Extra</td>
+                <td class="px-4 py-3">Thick</td>
+                <td class="px-4 py-3">Lower (bulky)</td>
+                <td class="px-4 py-3">Faster (more localized stress)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>Fleece vs. cellulose:</strong> Fleece pouches are softer and conform better to gum contours, reducing friction. Cellulose is more durable but can feel slightly rougher. For sensitive gums, fleece is preferable.</p>
+
+        <h2>8 Best Nicotine Pouches for Sensitive Gums</h2>
+
+        <h3>1. Helwit Blueberry Medium</h3>
+        <p><strong>Strength:</strong> 6–8mg | <strong>Format:</strong> Regular | <strong>Material:</strong> Fleece</p>
+        <p>Helwit is known for gentle, low-pH formulations. Their blueberry variant uses soft fleece and moderate nicotine, making it ideal for gum-sensitive users. The fruity flavour masks any chemical notes, and the slow release minimizes irritation spikes.</p>
+
+        <h3>2. Zyn Gentle Mint Mini S1</h3>
+        <p><strong>Strength:</strong> 3mg | <strong>Format:</strong> Mini | <strong>Material:</strong> Ultra-thin cellulose</p>
+        <p>Zyn's mini line and lowest-strength (S1) versions are specifically designed for comfort. The ultra-thin pouch sits almost invisibly, and 3mg is low enough to minimize gum stress while still providing subtle nicotine presence.</p>
+
+        <h3>3. ON! Mint</h3>
+        <p><strong>Strength:</strong> 8mg | <strong>Format:</strong> Slim | <strong>Material:</strong> Fleece</p>
+        <p>ON! uses a proprietary gentle pouch design with pH-balanced nicotine. The slim format reduces gum contact area, and the menthol flavour provides a cooling sensation that many users find soothing rather than irritating.</p>
+
+        <h3>4. Nordic Spirit Spearmint</h3>
+        <p><strong>Strength:</strong> 7–9mg | <strong>Format:</strong> Slim | <strong>Material:</strong> Fleece</p>
+        <p>Nordic Spirit products are engineered for comfort, with lower alkalinity and softer pouches. Spearmint is a fresh, clean flavour that doesn't leave a harsh aftertaste, and users report minimal irritation even with extended wear.</p>
+
+        <h3>5. Skruf Fresh Mint S4</h3>
+        <p><strong>Strength:</strong> 4mg | <strong>Format:</strong> Slim | <strong>Material:</strong> Fleece</p>
+        <p>Swedish-made Skruf prioritizes gum health. Their S4 (lowest strength) in slim format is one of the mildest options on the market. The fresh mint flavour is crisp without being numbing, and the gentle nicotine delivery causes virtually no irritation.</p>
+
+        <h3>6. Velo Ice Cool Mini</h3>
+        <p><strong>Strength:</strong> 4mg | <strong>Format:</strong> Mini | <strong>Material:</strong> Ultra-thin fleece</p>
+        <p>Velo's mini line features ultra-thin, super-soft fleece. The ice cool flavour provides a soothing sensation, and the low nicotine content means gentle absorption. Many sensitive users prefer Velo's texture to other brands.</p>
+
+        <h3>7. LOOP Mint Mania Mini</h3>
+        <p><strong>Strength:</strong> 5–6mg | <strong>Format:</strong> Mini | <strong>Material:</strong> Soft fleece</p>
+        <p>LOOP is a newer brand focused on user comfort. Their mini format and fleece composition minimize irritation, and the simple mint flavour doesn't introduce additional chemical compounds that might aggravate gums.</p>
+
+        <h3>8. White Fox Mint Mini</h3>
+        <p><strong>Strength:</strong> 4–5mg | <strong>Format:</strong> Mini | <strong>Material:</strong> Premium fleece</p>
+        <p>White Fox uses premium fleece that's exceptionally soft and biocompatible. Their mint mini is one of the gentlest formulations available, with balanced nicotine and minimal pH spike. Ideal for users with severe gum sensitivity.</p>
+
+        <h2>Recommended Products</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('helwit-blueberry-medium') && <BlogProductCard product={find('helwit-blueberry-medium')} />}
+          {find('zyn-gentle-mint-mini-s1') && <BlogProductCard product={find('zyn-gentle-mint-mini-s1')} />}
+          {find('on-mint') && <BlogProductCard product={find('on-mint')} />}
+          {find('nordic-spirit-spearmint') && <BlogProductCard product={find('nordic-spirit-spearmint')} />}
+          {find('skruf-fresh-mint-s4') && <BlogProductCard product={find('skruf-fresh-mint-s4')} />}
+          {find('velo-ice-cool-mini') && <BlogProductCard product={find('velo-ice-cool-mini')} />}
+          {find('loop-mint-mania-mini') && <BlogProductCard product={find('loop-mint-mania-mini')} />}
+          {find('white-fox-mint-mini') && <BlogProductCard product={find('white-fox-mint-mini')} />}
+        </div>
+
+        <h2>Prevention and Usage Tips</h2>
+
+        <h3>Rotate Placement</h3>
+        <p>Don't always place pouches in the same spot. Alternate between upper and lower gums, left and right sides. This distributes chemical exposure and gives one area time to recover.</p>
+
+        <h3>Limit Duration</h3>
+        <p>The longer a pouch stays in, the more irritation accumulates. Start with 20–30 minute sessions, especially if you're new to pouches or have sensitive gums. Extended use (2+ hours) significantly increases risk.</p>
+
+        <h3>Stay Hydrated</h3>
+        <p>Nicotine is a mild diuretic. Drinking plenty of water keeps oral tissues hydrated and more resilient to chemical exposure. Dry gums are more prone to irritation.</p>
+
+        <h3>Choose Lower Strengths</h3>
+        <p>If you experience irritation, switch to S1 or S2 strength. The nicotine dose is lower, and your gums will thank you. You can always use more pouches throughout the day if needed.</p>
+
+        <h3>Use Protective Barriers (Optional)</h3>
+        <p>Some users apply a thin layer of lip balm or protective cream to the area before placing a pouch. While not necessary with gentle pouches, it can help if irritation persists.</p>
+
+        <h3>Take Breaks</h3>
+        <p>If you use nicotine pouches regularly, take days off. Give your gums time to heal and regenerate tissue. Even gentle pouches cause some stress; recovery time is essential.</p>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <h3>Can I use nicotine pouches if I have gum disease?</h3>
+        <p>No. If you have gingivitis, periodontitis, or active gum disease, nicotine pouches will worsen inflammation. Consult your dentist before resuming use. Nicotine slows healing, so it's best to avoid pouches entirely during active treatment.</p>
+
+        <h3>How long does gum irritation usually last?</h3>
+        <p>Mild irritation (redness, slight swelling) typically resolves within 24–48 hours of stopping use. Severe cases may take 3–7 days. If irritation persists longer than a week, see a dentist.</p>
+
+        <h3>Are white/grey gums after pouch use normal?</h3>
+        <p>Yes. The whitening is temporary tissue bleaching from nicotine and alkaline compounds. It fades within minutes to hours. However, if whiteness persists or spreads beyond the pouch area, consult a dentist — it could indicate chemical burn.</p>
+
+        <h3>Should I switch brands if I'm irritated?</h3>
+        <p>Not necessarily — try adjusting usage first (shorter sessions, lower strength, more rotation). If irritation continues after 1–2 weeks of adjustments, try a gentler brand from this list. Switching brands too frequently prevents you from learning what your gums tolerate.</p>
+
+        <h3>Can mouthwash help with nicotine pouch irritation?</h3>
+        <p>Some users find alcohol-free mouthwash soothing. However, strong antiseptic rinses (especially alcohol-based) can worsen irritation. Saltwater rinses are gentler and can promote healing. Avoid rinsing immediately after pouch use — wait 30 minutes to let tissues recover.</p>
+
+        <h3>Are mini pouches always less irritating than regular?</h3>
+        <p>Usually, but not always. A regular pouch with ultra-low strength and premium material can be gentler than a mini with higher nicotine. The key factors are: strength, pouch material (fleece vs. cellulose), pH formulation, and your placement habits.</p>
+
+        <div class="not-prose bg-muted/50 border-l-4 border-primary rounded-md p-4 my-6">
+          <p class="text-sm text-muted-foreground"><strong class="text-primary">If gum irritation is severe or doesn't improve within one week,</strong> see a dentist before continuing pouch use. Persistent inflammation can lead to gum recession and long-term damage.</p>
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>Sensitive gums don't mean you have to quit nicotine pouches. By choosing gentler brands, opting for lower strengths and mini/slim formats, and rotating your placement, most users can enjoy pouches comfortably. Start with the products above, adjust your habits based on your mouth's response, and remember: quality over quantity. A gentle, 30-minute session is better for your gums than a harsh 2-hour ordeal.</p>
+
+        <p>For more pouch recommendations and reviews, explore our full <a href="/nicotine-pouches">nicotine pouch catalog</a> or read our <a href="/blog">blog for tips on finding the perfect pouch for your lifestyle.</a></p>
+
+      </div>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
+        "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-sensitive-gums` },
+        "description": description
+      })} />
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can I use nicotine pouches if I have gum disease?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. If you have gingivitis, periodontitis, or active gum disease, nicotine pouches will worsen inflammation. Consult your dentist before resuming use. Nicotine slows healing, so it's best to avoid pouches entirely during active treatment."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long does gum irritation usually last?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Mild irritation (redness, slight swelling) typically resolves within 24–48 hours of stopping use. Severe cases may take 3–7 days. If irritation persists longer than a week, see a dentist."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are white/grey gums after pouch use normal?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The whitening is temporary tissue bleaching from nicotine and alkaline compounds. It fades within minutes to hours. However, if whiteness persists or spreads beyond the pouch area, consult a dentist—it could indicate chemical burn."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I switch brands if I'm irritated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not necessarily—try adjusting usage first (shorter sessions, lower strength, more rotation). If irritation continues after 1–2 weeks of adjustments, try a gentler brand from this list. Switching brands too frequently prevents you from learning what your gums tolerate."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can mouthwash help with nicotine pouch irritation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Some users find alcohol-free mouthwash soothing. However, strong antiseptic rinses (especially alcohol-based) can worsen irritation. Saltwater rinses are gentler and can promote healing. Avoid rinsing immediately after pouch use—wait 30 minutes to let tissues recover."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are mini pouches always less irritating than regular?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Usually, but not always. A regular pouch with ultra-low strength and premium material can be gentler than a mini with higher nicotine. The key factors are: strength, pouch material (fleece vs. cellulose), pH formulation, and your placement habits."
+            }
+          }
+        ]
+      })} />
+
+      <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+        Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+      </p>
+    </div>
+  </article>
+</Shop>
