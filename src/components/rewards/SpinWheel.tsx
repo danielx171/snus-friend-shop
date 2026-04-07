@@ -52,8 +52,14 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
 
   const spinning = isSpinning || localSpinning;
 
+  // Refs so handleSpin always reads the latest values without needing them in dep array
+  const spinningRef = useRef(spinning);
+  const exhaustedRef = useRef(isExhausted);
+  spinningRef.current = spinning;
+  exhaustedRef.current = isExhausted;
+
   const handleSpin = useCallback(async () => {
-    if (spinning || isExhausted) return;
+    if (spinningRef.current || exhaustedRef.current) return;
 
     setLocalSpinning(true);
 
@@ -84,7 +90,7 @@ function SpinWheelInner({ onSpin, isSpinning, isExhausted, onPrizeWon }: SpinWhe
     } finally {
       setLocalSpinning(false);
     }
-  }, [spinning, isExhausted, onSpin, onPrizeWon, controls]);
+  }, [onSpin, onPrizeWon, controls]);
 
   const cx = 200;
   const cy = 200;
