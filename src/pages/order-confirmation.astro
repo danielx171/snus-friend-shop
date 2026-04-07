@@ -43,14 +43,22 @@ if (orderId && supabase) {
   }
 }
 
-// Parse customer metadata for shipping address
+// Parse shipping address — normalize raw NYE fields to renderer-expected shape
 let shippingAddress: any = null;
-if (order?.customer_metadata) {
+if (order?.shipping_address) {
   try {
-    const meta = typeof order.customer_metadata === 'string'
-      ? JSON.parse(order.customer_metadata)
-      : order.customer_metadata;
-    shippingAddress = meta?.shipping_address ?? meta?.address ?? null;
+    const raw = typeof order.shipping_address === 'string'
+      ? JSON.parse(order.shipping_address)
+      : order.shipping_address;
+    shippingAddress = {
+      name: [raw.firstname, raw.lastname].filter(Boolean).join(' ') || raw.name || null,
+      line1: raw.address || raw.line1 || null,
+      line2: raw.line2 ?? null,
+      city: raw.city || null,
+      postal_code: raw.postcode || raw.postal_code || null,
+      state: raw.state ?? null,
+      country: raw.country || null,
+    };
   } catch {
     shippingAddress = null;
   }
@@ -87,9 +95,7 @@ function formatPrice(amount: number, currency: string = 'EUR') {
 
 // Compute subtotal from line items
 const subtotal = lineItems.reduce((sum: number, item: any) => {
-  const price = item.price ?? item.unit_price ?? 0;
-  const qty = item.quantity ?? 1;
-  return sum + (price * qty);
+  return sum + (item.unit_price * item.quantity);
 }, 0);
 ---
 
@@ -141,18 +147,12 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
             {/* Line items */}
             <div class="divide-y divide-border">
-              {lineItems.map((item: any) => {
-                const itemName = item.name ?? item.product_name ?? 'Product';
-                const itemPrice = item.price ?? item.unit_price ?? 0;
-                const itemQty = item.quantity ?? 1;
-                const itemImage = item.image_url ?? item.imageUrl ?? null;
-
-                return (
+              {lineItems.map((item: any) => (
                   <div class="flex items-center gap-4 py-3">
-                    {itemImage ? (
+                    {item.image_url ? (
                       <Image
-                        src={itemImage}
-                        alt={itemName}
+                        src={item.image_url}
+                        alt={item.product_name}
                         width={56}
                         height={56}
                         format="webp"
@@ -167,15 +167,14 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
                       </div>
                     )}
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-foreground truncate">{itemName}</p>
-                      <p class="text-xs text-muted-foreground">Qty: {itemQty}</p>
+                      <p class="text-sm font-medium text-foreground truncate">{item.product_name}</p>
+                      <p class="text-xs text-muted-foreground">Qty: {item.quantity}</p>
                     </div>
                     <p class="text-sm font-medium text-foreground whitespace-nowrap">
-                      {formatPrice(itemPrice * itemQty, order.currency)}
+                      {formatPrice(item.unit_price * item.quantity, order.currency)}
                     </p>
                   </div>
-                );
-              })}
+              ))}
             </div>
 
             {/* Totals */}
