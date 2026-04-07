@@ -26,7 +26,7 @@ export function useOrders(userId: string | null) {
         .from('orders')
         .select('id, created_at, total_price, line_items_snapshot')
         .eq('user_id', userId)
-        .eq('checkout_status', 'completed')
+        .in('checkout_status', ['confirmed', 'shipped'])
         .order('created_at', { ascending: false })
         .limit(20);
 
@@ -42,10 +42,10 @@ export function useOrders(userId: string | null) {
           if (Array.isArray(snapshot)) {
             for (const item of snapshot) {
               items.push({
-                slug: item.slug ?? item.product_slug ?? item.sku ?? '',
-                name: item.name ?? item.product_name ?? '',
-                brand: item.brand ?? '',
-                quantity: item.quantity ?? 1,
+                slug: item.slug,
+                name: item.product_name,
+                brand: item.brand,
+                quantity: item.quantity,
               });
             }
           }
