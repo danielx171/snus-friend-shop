@@ -148,7 +148,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
               const items = Array.isArray(snapshot) ? snapshot : [];
               const hasProduct = items.some(
                 (item: Record<string, unknown>) =>
-                  item && (item.slug === productId || item.product_id === productId || item.id === productId),
+                  item && item.slug === productId,
               );
               if (hasProduct) verifiedBuyerIds.add(order.user_id);
             }
