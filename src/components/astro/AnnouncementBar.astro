@@ -36,18 +36,23 @@
 
 <style>
   @keyframes announcement-cycle {
-    0%, 30% { opacity: 1; }
-    33%, 97% { opacity: 0; }
-    100% { opacity: 1; }
+    0%, 30% { opacity: 1; visibility: visible; }
+    33%, 97% { opacity: 0; visibility: hidden; }
+    100% { opacity: 1; visibility: visible; }
   }
 
   .announcement-rotate {
     animation: announcement-cycle 9s ease-in-out infinite;
+    pointer-events: none;
   }
   .announcement-delay-1 {
     animation-delay: 3s;
+    opacity: 0;
+    visibility: hidden;
   }
   .announcement-delay-2 {
     animation-delay: 6s;
+    opacity: 0;
+    visibility: hidden;
   }
 </style>
