@@ -1,0 +1,243 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-04-09';
+const title = 'Best Nicotine Pouches in the Netherlands 2026: Top 10 Picks';
+const description = 'The 10 best nicotine pouches available in the Netherlands for 2026. Fast Benelux shipping from EU warehouse, competitive EUR prices.';
+---
+
+<Shop title={title} description={description} ogType="article">
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Netherlands Guide' },
+      ]} />
+
+      <BlogHero
+        category="Country Guide"
+        title={title}
+        description={description}
+        date={publishDate}
+        readTime="8 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div style="background: hsl(var(--muted)); border-left: 4px solid hsl(var(--primary)); padding: 1.25rem; margin: 1.5rem 0; border-radius: 4px; font-size: 0.95rem;">
+          <p><strong>Quick Answer:</strong> The best nicotine pouches in the Netherlands for 2026 are ZYN Cool Mint S2 (top overall), VELO Freeze S4 (strongest), and Nordic Spirit Bergamot Wildberry (most unique). The Dutch market is booming—tobacco-free pouches are fully legal, prices range €2.50–€4.50 per can, and EU warehouse shipping means 1–2 days to your door. We've covered 10 proven picks plus pricing and legal info.</p>
+        </div>
+
+        <h2>Nicotine Pouches: Legal Status in the Netherlands</h2>
+
+        <p>Nicotine pouches are <strong>completely legal in the Netherlands</strong>. Unlike traditional snus (which remains banned across the EU except Sweden), tobacco-free nicotine pouches fall outside the <em>Tabaks- en rookwarenwet</em> (Tobacco and Smoking Products Act) because they contain no tobacco leaf. The NVWA (Autoriteit Consument en Markt) monitors the category but has not restricted sales.</p>
+
+        <p>The Dutch pouch market is accelerating. Traditional tobacco shops, convenience stores, and online retailers stock major brands. The category offers a legal, smoke-free alternative in a country with a strong harm-reduction mindset. No age-gate delays, no border customs—just direct access to top global and Scandinavian brands.</p>
+
+        <p>Note: The distinction matters. Marketing as "snus" is illegal (snus is Sweden-only tobacco product). We sell tobacco-free nicotine pouches, which are not snus and are not subject to the same EU restrictions.</p>
+
+        <h2>Top 10 Nicotine Pouches in the Netherlands (2026)</h2>
+
+        <h3>1. ZYN Cool Mint S2</h3>
+        <p>The global benchmark for consistency. ZYN Cool Mint delivers a crisp, clean mint with a smooth nicotine feel—3 mg/pouch, discreet white pouch, dissolves cleanly. Best for all-day use and beginners transitioning to pouches. ZYN's quality control and flavor accuracy are unmatched. It's the #1 gateway product in the Netherlands. <a href="/brands/zyn">ZYN brand page</a></p>
+
+        <h3>2. VELO Freeze S4</h3>
+        <p>For users who want real strength. VELO Freeze delivers 4 mg/pouch with an intense cooling sensation—think menthol on ice. Fast nicotine release, bold flavour. VELO is the strongest mainstream brand available in Dutch shops. If you want a serious kick, this is it. <a href="/brands/velo">VELO brand page</a></p>
+
+        <h3>3. Nordic Spirit Bergamot Wildberry</h3>
+        <p>The most unique flavour in the list. Nordic Spirit blends bergamot (Earl Grey tea) with forest berries—complex, sophisticated, unexpected. 4 mg/pouch, white format. Stands out in a sea of straight mints. For adventurous users who want flavour depth. <a href="/brands/nordic-spirit">Nordic Spirit</a></p>
+
+        <h3>4. LOOP Jalapeno Lime</h3>
+        <p>The boldest flavour contender. LOOP Jalapeno Lime is spicy heat meets citrus—3 mg/pouch, organic nicotine, paper-based format. Not for conservative palates, but if you want something that pushes boundaries, this delivers. LOOP is the indie favourite. Jalapeno Lime proves that nicotine pouches can be adventurous.</p>
+
+        <h3>5. Skruf Super White Fresh Mint S2</h3>
+        <p>The perfect daily driver. Skruf Super White is a workhorse mint—3 mg/pouch, ultra-thin white pouch, barely noticeable in your mouth, clean finish. No frills, no surprises, just reliable mint every time. Skruf is the discreet professional's choice. Wear it all day without anyone noticing.</p>
+
+        <h3>6. White Fox Peppered Mint</h3>
+        <p>The strongest mint option. White Fox Peppered Mint is 4.5 mg/pouch with a peppery undertone—slow, satisfying release. Best for experienced users who want sustained strength without the cooling shock. White Fox is Sweden's premium brand. Peppered Mint is complex: mint-forward but with spice depth.</p>
+
+        <h3>7. Helwit Violet</h3>
+        <p>The most unusual pouch in the Netherlands market. Helwit Violet is a floral-sweet profile with a hint of berries—3 mg/pouch, white pouch, completely unexpected. Niche appeal, but cult following. For users bored by mint-or-nothing. Violet proves the category has room for real creativity.</p>
+
+        <h3>8. ON! Coffee</h3>
+        <p>The best non-mint option. ON! Coffee is a genuine coffee flavour—3 mg/pouch, brown pouch, aromatic and warm. Perfect for morning use or coffee lovers. Most pouch brands default to mint. ON! Coffee shows that non-mint categories exist and work for daytime rhythm matching.</p>
+
+        <h3>9. Klar Cloudberry</h3>
+        <p>The best Scandinavian pick. Klar Cloudberry is a Swedish specialty—rare berries, 4 mg/pouch, white pouch. Scandinavian heritage in every pouch. Limited availability in the Netherlands but worth seeking out. Represents the premium Nordic category. If you appreciate Scandinavian quality, Cloudberry is the flavour to try.</p>
+
+        <h3>10. Fumi Salty Liquorice</h3>
+        <p>The most Dutch-friendly choice. Fumi Salty Liquorice is a celebration of Dutch candy culture—salt, liquorice, 4 mg/pouch. The Netherlands has a 200+ year tradition of salt liquorice. This pouch bridges that heritage with modern nicotine. Unique to Dutch market preferences. If you love Dutch drop (liquorice), Fumi is your brand.</p>
+
+        <h2>Price Comparison: Netherlands vs Europe</h2>
+        <p>Nicotine pouch pricing in the Netherlands varies by channel:</p>
+
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem;">
+            <thead style="background: hsl(var(--muted));">
+              <tr>
+                <th style="border: 1px solid hsl(var(--border)); padding: 0.75rem; text-align: left;">Channel</th>
+                <th style="border: 1px solid hsl(var(--border)); padding: 0.75rem; text-align: left;">Price per Can</th>
+                <th style="border: 1px solid hsl(var(--border)); padding: 0.75rem; text-align: left;">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Tobacco shops (Amsterdam/Rotterdam)</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">€3.50–€4.50</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Walk-in retail, instant access</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Convenience stores</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">€3.00–€4.00</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Variable stock, limited selection</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Online EU warehouse (SnusFriend)</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">€2.50–€3.50</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Direct EU, 1–2 day delivery, no customs</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Swedish online (international shipping)</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">€2.00–€3.00 + shipping</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Cheaper per can, but 5–7 day EU transit</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>SnusFriend advantage:</strong> We stock from a Benelux EU warehouse. No customs delays, no VAT surprises, and orders arrive in 24–48 hours to Amsterdam, Rotterdam, Utrecht, and throughout the Netherlands. Free shipping on orders over €25.</p>
+
+        <h2>Shipping &amp; Delivery to the Netherlands</h2>
+        <p>We ship nicotine pouches via PostNord and DHL from our EU warehouse to all Dutch provinces. Standard delivery:</p>
+        <ul>
+          <li><strong>1–2 days</strong> to major cities (Amsterdam, Rotterdam, Utrecht, Groningen)</li>
+          <li><strong>2–3 days</strong> to rural areas</li>
+          <li><strong>Free shipping</strong> on orders over €25</li>
+          <li><strong>No customs</strong> — EU warehouse means no border delays or VAT recalculations</li>
+          <li><strong>No age verification delays</strong> — 18+ check at checkout, shipment proceeds immediately</li>
+        </ul>
+        <p>You can track your package in real-time via your order confirmation email. PostNord and DHL both offer next-day delivery options on request.</p>
+
+        <h2>Recommended Products</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-cool-mint-s2') && <BlogProductCard product={find('zyn-cool-mint-s2')} />}
+          {find('velo-freeze-s4') && <BlogProductCard product={find('velo-freeze-s4')} />}
+          {find('nordic-spirit-bergamot-wildberry') && <BlogProductCard product={find('nordic-spirit-bergamot-wildberry')} />}
+          {find('loop-jalapeno-lime') && <BlogProductCard product={find('loop-jalapeno-lime')} />}
+          {find('fumi-salty-liquorice') && <BlogProductCard product={find('fumi-salty-liquorice')} />}
+        </div>
+
+        <h2>Next Steps: Find Your Perfect Pouch</h2>
+        <p>Not sure where to start? Check out our <a href="/beginners">Beginner's Guide to Nicotine Pouches</a> for strength recommendations and FAQs. If you want to explore all available brands and flavours, visit our <a href="/nicotine-pouches">full product catalog</a>. For flavour-focused exploration, see our guides to <a href="/blog/best-nicotine-pouches-2026">best nicotine pouches globally</a> and <a href="/blog/best-nicotine-pouches-for-beginners-2026">best pouches for beginners</a>.</p>
+
+      </div>
+
+      <details class="mt-10 border border-border rounded-lg">
+        <summary class="cursor-pointer px-4 py-3 font-semibold text-foreground">Frequently Asked Questions</summary>
+        <div class="px-4 pb-4 space-y-4 text-muted-foreground">
+          <h3 class="text-foreground font-semibold mt-4">Zijn nikotinezakjes legaal in Nederland? (Are nicotine pouches legal in the Netherlands?)</h3>
+          <p>Yes. Tobacco-free nicotine pouches are legal in the Netherlands. They fall outside the Tobacco and Smoking Products Act because they contain no tobacco. The NVWA monitors the category but has not restricted sales. They are widely available in shops, convenience stores, and online.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Where can you buy nicotine pouches in the Netherlands?</h3>
+          <p>Nicotine pouches are sold in tobacco shops, convenience stores (Albert Heijn, Jumbo), petrol stations, and major online retailers. SnusFriend ships direct from our EU warehouse with 1–2 day delivery and competitive EUR pricing. You can also order from Swedish retailers, but expect 5–7 day transit and potential VAT complications.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">What's the most popular nicotine pouch brand in the Netherlands?</h3>
+          <p>ZYN is the market leader globally and in the Netherlands. It's the most stocked brand in Dutch tobacco shops and has the highest repeat-purchase rate. VELO and Nordic Spirit are close second and third. For niche preferences (spicy, fruity, unique flavours), LOOP and Helwit have growing cult followings.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">How much do nicotine pouches cost in the Netherlands?</h3>
+          <p>Retail price range is €2.50–€4.50 per can, depending on brand, strength, and where you shop. Tobacco shops typically charge €3.50–€4.50. Online EU retailers (including SnusFriend) offer €2.50–€3.50 due to lower overhead. Swedish online retailers sometimes undercut at €2.00–€3.00 before shipping.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">How fast is delivery to the Netherlands?</h3>
+          <p>SnusFriend delivers in 1–2 days to major cities via PostNord and DHL. We ship from an EU warehouse, so there are no customs delays or border re-processing. Rural areas may take 2–3 days. Tracking is provided in your order confirmation email.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Is there an age limit for nicotine pouches in the Netherlands?</h3>
+          <p>Yes. Nicotine pouches are restricted to 18+, just like cigarettes and snus. Our age verification at checkout ensures compliance. No ID checks are performed at delivery—the 18+ verification happens during online purchase.</p>
+        </div>
+      </details>
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist" },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-netherlands-2026` },
+        "description": description
+      })} />
+
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Zijn nikotinezakjes legaal in Nederland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja. Tabaksvrije nikotinezakjes zijn legaal in Nederland. Ze vallen buiten de Tabaks- en rookwarenwet omdat ze geen tabak bevatten. De NVWA monitort de categorie maar heeft de verkoop niet beperkt. Ze zijn wijdverspreid verkrijgbaar in winkels en online."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can you buy nicotine pouches in the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine pouches are sold in tobacco shops, convenience stores like Albert Heijn and Jumbo, petrol stations, and online retailers. SnusFriend ships direct from an EU warehouse with 1-2 day delivery and competitive EUR pricing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's the most popular nicotine pouch brand in the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ZYN is the market leader. It has the highest stock levels in Dutch tobacco shops and the highest repeat-purchase rate. VELO and Nordic Spirit are close competitors. For niche flavours, LOOP and Helwit have growing followings."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much do nicotine pouches cost in the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retail price range is €2.50–€4.50 per can. Tobacco shops charge €3.50–€4.50. Online EU retailers offer €2.50–€3.50 due to lower overhead. Swedish online retailers sometimes offer €2.00–€3.00 before shipping costs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How fast is delivery to the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SnusFriend delivers in 1-2 days to major cities via PostNord and DHL from an EU warehouse. No customs delays. Tracking is provided with your order confirmation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there an age limit for nicotine pouches in the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Nicotine pouches are restricted to 18+. Age verification happens during checkout. No ID checks at delivery."
+            }
+          }
+        ]
+      })} />
+
+      <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+        <strong>Medical Disclaimer:</strong> Nicotine is addictive. This article is for educational and informational purposes only and does not constitute medical advice. Consult a healthcare provider before starting nicotine products. Nicotine pouches are intended for adults 18+ who are existing users of nicotine products. Not recommended for pregnant or breastfeeding individuals or people with heart conditions, high blood pressure, or nicotine sensitivity.
+      </p>
+    </div>
+  </article>
+</Shop>
