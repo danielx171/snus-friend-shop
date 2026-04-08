@@ -46,11 +46,11 @@ const CookieConsentBanner: React.FC = () => {
   return (
     <>
     {/* Spacer to prevent content from being hidden behind fixed banner */}
-    <div className="h-16 sm:h-14" />
-    <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-card p-4 shadow-lg">
+    <div className="h-12 sm:h-10" />
+    <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-card p-3 sm:p-4 shadow-lg">
       {!showManage ? (
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 sm:flex-row sm:justify-between">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             We use cookies to improve your experience.
           </p>
           <div className="flex w-full gap-3 sm:w-auto">
