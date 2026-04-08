@@ -155,10 +155,16 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
         {badgeKeys.map((badge) => (
           <span
             key={badge}
-            className="rounded-full px-2.5 py-0.5 text-[10px] font-bold text-white shadow-sm"
+            className="rounded-full px-2.5 py-0.5 text-[10px] font-bold shadow-sm"
             style={{
-              backgroundColor: badge === 'popular' || badge === 'bestseller' ? '#f59e0b'
-                : badge === 'new' ? '#22c55e' : 'hsl(var(--primary))',
+              backgroundColor: badge === 'popular' || badge === 'bestseller' ? '#fde68a'
+                : badge === 'new' ? '#bbf7d0'
+                : badge === 'newPrice' || badge === 'NewPrice' ? '#dbeafe'
+                : '#fde68a',
+              color: badge === 'popular' || badge === 'bestseller' ? '#92400e'
+                : badge === 'new' ? '#166534'
+                : badge === 'newPrice' || badge === 'NewPrice' ? '#1e40af'
+                : '#92400e',
             }}
           >
             {formatBadge(badge)}
