@@ -26,6 +26,16 @@ const categoryColors: Record<string, string> = {
 };
 
 const color = categoryColors[category] ?? '#2E7D32';
+
+// Normalize dates to consistent "DD Month YYYY" format
+function formatDate(raw: string): string {
+  const d = new Date(raw);
+  if (!isNaN(d.getTime())) {
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+  return raw; // fallback to whatever was passed
+}
+const displayDate = formatDate(date);
 ---
 
 <div class="rounded-2xl overflow-hidden mb-8" style={`background: linear-gradient(135deg, ${color}dd, ${color}88);`}>
@@ -50,9 +60,9 @@ const color = categoryColors[category] ?? '#2E7D32';
       {description}
     </p>
     <div class="mt-4 flex items-center gap-3 text-sm text-white/60">
-      <span>By SnusFriend Editorial</span>
+      <span>By Erik Lindqvist</span>
       <span>&middot;</span>
-      <time>{date}</time>
+      <time>{displayDate}</time>
       <span>&middot;</span>
       <span>{readTime}</span>
     </div>
