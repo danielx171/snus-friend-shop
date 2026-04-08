@@ -264,20 +264,37 @@ Codex ran a full audit and found real issues. Some are already fixed, others rem
 - **Blog index + RSS** — Hand-maintained article arrays in `src/pages/blog/index.astro` and
   `src/pages/rss.xml.ts` were missing 14+ posts. All articles are now registered.
 
+### FIXED (April 8, 2026 — Launch Polish Sprint)
+
+- **Blog registry** — Centralized in `src/data/blog-registry.ts` (83 entries). Both `/blog`
+  index and `/rss.xml` import from it. 6 missing articles added.
+- **publishDate→date prop** — All articles now pass `date={publishDate}` correctly.
+- **RecommendationsIsland hooks** — False alarm. All `useCallback` hooks are above the early
+  returns at line 276. No violation.
+- **Medical disclaimers** — All 76 articles now have disclaimers (3 were missing).
+- **Author schema** — All 76 articles use Person author with sameAs links.
+- **Mobile announcement bar** — Fixed text overlap with `visibility: hidden` on inactive slides.
+- **BREAKING ticker** — Removed from homepage. Was spammy, not premium.
+- **Product badge contrast** — Popular/New badges switched from white-on-bright to dark-on-light
+  (2.15:1 → 7:1+). Meets WCAG AA.
+- **Heading DOM noise** — AgeGate `<h2>` changed to `<p role="heading">`, MegaMenu `<h3>` labels
+  changed to `<div>`. Clean heading tree for screen readers.
+- **Product 404** — `zyn-cool-mint-s2` → `zyn-cool-mint-slim-s2` in blog references.
+- **Blog category contrast** — Buying Guide tag color `#E65100` → `#BF360C` (3.4:1 → 7.7:1).
+
 ### REMAINING (not yet fixed)
 
 - **`src/pages/compare.astro:142+`** — innerHTML with unescaped product data (XSS/breakage risk).
-  Product names with `<` would break layout. Low practical risk (data is from our own DB) but
-  should migrate to Astro template expressions.
-- **`src/components/react/RecommendationsIsland.tsx:249,269`** — `useCallback` called after
-  early `return null` — Rules-of-Hooks violation. Move hooks above early returns.
-- **Blog system** — Still hand-maintained arrays. Should be replaced with a content collection
-  or auto-generated registry so new posts can't be missed. Codex counted 14 posts missing from
-  `/blog` index and 22 from RSS before our fix.
-- **Verification noise** — `bun run lint` has 115 errors (mostly ESLint parsing .astro files),
-  `bun run check` has 68 errors (Astro.locals typing gap), `bun run test` has 1 stale assertion
-  (ReputationBadge class) and Supabase storage error in test setup. Fix order: add `.astro` to
-  ESLint ignores, fix `App.Locals` typing in `env.d.ts`, update stale test assertion.
-- **`src/pages/blog/all-velo-flavors-ranked-2026.astro:54`** and
-  **`src/pages/blog/zyn-flavours-complete-guide.astro:71`** — Pass `publishDate` to BlogHero
-  which expects `date`. Rename prop to `date` in those files.
+  Low practical risk (data from our own DB, already uses `escapeHtml()`), but should migrate to
+  Astro template expressions.
+- **12 articles without PAA blocks** — `all-velo-flavors-ranked-2026`, `best-berry-nicotine-pouches`,
+  `best-citrus-nicotine-pouches`, `best-mint-nicotine-pouches-2026`, `best-nicotine-pouches-all-day-use`,
+  `iceberg-nicotine-pouches-complete-guide`, `nicotine-pouch-buying-guide-europe`,
+  `on-nicotine-pouches-complete-guide`, `pablo-nicotine-pouches-complete-guide`, `top-10-mint-flavours`,
+  `velo-nicotine-pouches-complete-guide`, `velo-vs-nordic-spirit`. Need Cowork batch 3.
+- **Product card conversion** — Missing review counts, savings emphasis, pack-size clarity vs
+  competitors (Haypp benchmark). See `cowork/content/codex-visual-audit.md` findings.
+- **Brand page logos** — Brand header uses placeholder letter squares instead of real logos.
+  Need brand logo assets or higher-fidelity branded treatment.
+- **Verification noise** — `bun run lint` has ~9 errors (reduced from 114), `bun run check` has
+  68 errors (Astro.locals typing gap). Low priority — doesn't affect production builds.

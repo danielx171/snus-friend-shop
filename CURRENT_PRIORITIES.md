@@ -1,96 +1,89 @@
 # Current Priorities
 
-Last updated: 2026-03-30
+Last updated: 2026-04-08
 
-## Astro 6 Migration: COMPLETE
+## Launch Polish Sprint (April 8-14)
 
-Migrated from Vite SPA to Astro 6 with React islands. Deployed and live on snusfriends.com.
+Active sprint to bring SEO to 90+, GEO to 85+, and visual quality to 8+/10.
+Design spec: `docs/superpowers/specs/2026-04-08-launch-polish-design.md`
+Implementation plan: `docs/superpowers/plans/2026-04-08-launch-polish.md`
+Codex visual audit: `cowork/content/codex-visual-audit.md`
 
-- 30 Astro pages (18 SSG + 12 SSR)
-- 18 React island components (cart, product cards, filters, search, reviews)
-- 7 nanostores (cart, auth, theme, wishlist, cookie-consent, language, easter)
-- Content Layer: Supabase loader for products + brands at build time
-- Tailwind v4 + shadcn/ui + `@astrojs/vercel` adapter
-- Auto-generated sitemap via `@astrojs/sitemap`
+## Lighthouse Scores (April 8, 2026 — Codex audit)
 
-## Lighthouse Scores (March 26, 2026)
+| Metric | Homepage | /nicotine-pouches | /blog | /brands/zyn | Product Page |
+|--------|----------|-------------------|-------|-------------|-------------|
+| SEO | **100** | **100** | **100** | **100** | **100** |
+| Performance | 83 | 60 | 92 | 91 | 85 |
+| Accessibility | 97 | 94 | 96 | 97 | 97 |
+| Best Practices | 96 | 96 | 96 | 96 | 96 |
 
-| Metric | Homepage | Product Page | Brands Page |
-|--------|----------|-------------|-------------|
-| SEO | **100** | **100** | **100** |
-| Performance (LCP) | 173ms | 119ms | 113ms |
-| Best Practices | 96 | 100 | 100 |
-| Accessibility | 83 | 89 | 95 |
+## Completed (April 8 Sprint)
 
-## Active Workstreams
+### SEO
+- [x] Medical disclaimers on all 76 articles (was 73/76)
+- [x] Person author schema on all 76 articles (was 74/76)
+- [x] Author sameAs links on all 76 articles (LinkedIn + X)
+- [x] PAA/Quick Answer blocks on 64/76 articles (was 19/76)
+- [x] Source citations added to top 20 articles (FDA, WHO, PHE, PubMed)
+- [x] Blog registry: 83 entries, all discoverable in /blog index + RSS
+- [x] Sitemap lastmod dates via @astrojs/sitemap serialize
+- [x] IndexNow protocol for Bing/Yandex
+- [x] CSP header (report-only mode)
+- [x] Brand mentions embedded in 15 top articles for AI citability
+- [x] Internal linking strengthened across 7+ weakly-linked articles
+- [x] 8 thin articles expanded with 300-500 word depth sections
+- [x] Blog index intro shortened (cards visible sooner on mobile)
+- [x] Buying Guide tag contrast fixed (#E65100 → #BF360C)
+- [x] llms.txt updated with 83-article inventory
 
-### 1. SEO Content (HIGH — revenue impact)
-- [ ] Category page intro copy (12 flavor/strength pages need 100-200 words each)
-- [ ] `/nicotine-pouches` landing page: created, needs richer copy post-launch
-- [ ] Blog seed content (3-5 posts targeting long-tail keywords)
-- [ ] Brand page descriptions
-- Plan: `docs/plans/2026-03-26-seo-maximization-plan.md`
+### Visual/UX
+- [x] Mobile announcement bar text overlap fixed (visibility toggle)
+- [x] BREAKING ticker removed from homepage (spammy → clean)
+- [x] Product badge contrast fixed (Popular/New: 2.15:1 → 7:1+)
+- [x] Cookie consent banner compacted on mobile
+- [x] Product 404 slug fixed (zyn-cool-mint-s2 → zyn-cool-mint-slim-s2)
+- [x] Hidden heading DOM noise fixed (AgeGate h2 → p, MegaMenu h3 → div)
 
-### 2. Accessibility Fixes (MEDIUM)
-- [ ] Color contrast: navy text on dark backgrounds (1.4:1 → need 4.5:1)
-- [x] Strength indicator: added `role="img"` for ARIA compliance
-- [x] Login link: fixed aria-label/text mismatch
-- [x] Brand links: added padding for touch target compliance
-- [ ] Review progressbar accessible names
+### Infrastructure
+- [x] Age gate already had correct ARIA (role="dialog", aria-modal, aria-labelledby)
+- [x] CheckoutForm already had role="alert" aria-live="assertive"
+- [x] HowTo schema already on all 4 how-to articles
+- [x] robots.txt already had OAI-SearchBot + Google-Extended
+- [x] /auth/confirm already excluded from sitemap
 
-### 3. Gamification (LIVE — all core features complete)
-- [x] A0: Spin wheel DB tables + edge function + SpinWheelIsland
-- [x] A1: Order → quest progress trigger (client + DB)
-- [x] A2: Quest → avatar unlock (9 avatars, fire-and-forget)
-- [x] C1-C2: Points balance + transactions + redemption
-- [ ] C3: Membership tiers (deferred)
-- [ ] C4: Transactional email (Resend — deferred)
-- Plan: `.claude/plans/federated-gathering-lecun.md`
+## Remaining This Sprint
 
-### 4. Analytics & Email (NEW — March 29-30)
-- [x] PostHog custom events: add_to_cart, product_viewed, checkout_started, search, quiz, spin wheel, beginner mode, newsletter
-- [x] PostHog dashboard: "SnusFriend Core Metrics" with trends + gamification insights
-- [x] Sentry: InvalidStateError suppressed (Chrome 146 View Transitions bug)
-- [x] Community page: dynamic stats from Supabase (replaces hardcoded fake numbers)
-- [x] Search: multi-word query + flavour synonym matching (50+ synonyms)
-- [x] Achievements: fixed logged-out loading state
-- [x] Klaviyo: Welcome email template (ID Tjf23a) + Post-purchase template (ID UtA6PL)
-- [x] Klaviyo: Welcome campaign created (draft, targets Email List XSsBfF)
-- [ ] Klaviyo: Set up automated welcome flow in Klaviyo UI (can't be done via API)
-- [ ] Klaviyo: Browse abandonment flow (future)
+### HIGH — Pending Codex/Cowork deliverables
+- [ ] PAA blocks for 12 remaining articles (need Cowork batch 3)
+- [ ] Title tag optimization on low-CTR pages (need Codex GSC data)
+- [ ] Homepage copy refresh (Cowork variations ready in `cowork/content/homepage-copy-variations.md`)
 
-### 5. Nyehandel Integration Hardening (NEW — March 31)
-- [x] SKU pre-validation: checkout verifies each SKU against NYE `/products/find` before submission
-- [x] Dynamic shipping validation: checkout validates shipping methods against live NYE `/shipping-methods` (cached 5 min)
-- [x] 3-layer duplicate prevention: idempotency check → pg_advisory_lock → re-check after lock
-- [x] Ops alert on SKU mismatch: auto-creates `ops_alerts` row when a SKU isn't in NYE catalog
-- [ ] Order cancellation edge function (`cancel-nyehandel-order`) — spec ready
-- [ ] Order update/edit flow (`update-nyehandel-order`) — spec ready
-- [ ] VAT-safe discount distribution (`_shared/discount-distribution.ts`) — spec ready
-- [ ] Real-time stock sync cron (`sync-nyehandel-stock`, every 10 min) — spec ready
-- Design spec: `docs/superpowers/specs/2026-03-31-nyehandel-gaps-design.md`
+### HIGH — Visual Polish (from Codex visual audit)
+- [ ] Product card conversion improvements: review counts, savings emphasis, pack-size clarity
+- [ ] Brand page logo treatment: replace placeholder letter squares with real assets
+- [ ] /nicotine-pouches performance: 60 score needs investigation (products.json? FilterableProductGrid?)
 
-### 6. Pre-Launch Blockers
-- [ ] Solicitor sign-off on Terms, Privacy, Cookie pages
-- [ ] Final checkout smoke test with real payment
-- [ ] Remove preview mode (set env var)
+### MEDIUM
+- [ ] Products.json optimization (280KB → target <150KB)
+- [ ] Rewards page hero redesign (feels like help page, not gamified destination)
+- [ ] Blog card visual richness (thumbnails, date, author line)
 
-### 7. Nice to Have
-- [ ] Uptime monitoring (UptimeRobot)
+### LOW
+- [ ] compare.astro innerHTML → Astro template expressions
 - [ ] OG images per page
-- [ ] Product image quality improvements
-- [ ] Multi-brand white-label architecture (3-6 months)
+- [ ] hreflang for DE/SV translations (future)
 
 ## Current State
 
 - Site live at snusfriends.com
-- 708 active products from Supabase (47 tables, 22 edge functions, 44 migrations)
-- Astro 6 SSG/SSR hybrid, React islands for interactivity
-- 94+ pages (43 blog, 57 brands, 5 country pages)
-- Checkout fully working — Nyehandel payment + shipping
-- Gamification fully live — spin wheel, quests, points, avatars, achievements
-- PostHog analytics instrumented (9 custom events), Sentry error monitoring
-- Klaviyo: 2 email templates (welcome + post-purchase), 1 draft campaign
+- 708 active products, 55 brands
+- 76 blog articles (83 in registry including redirected slugs)
+- 94+ total pages (SSG + SSR hybrid)
+- Astro 6, React islands, nanostores, Tailwind v4
+- SEO score: ~90/100 (up from 80)
+- GEO score: ~85/100 (up from 74)
+- Visual quality: ~7.5/10 (up from 6.0)
 - Version: 1.5.0
 
 ## Key Reference Files
@@ -100,6 +93,7 @@ Migrated from Vite SPA to Astro 6 with React islands. Deployed and live on snusf
 | `ROADMAP.md` | Delivery sequence, Steps 1-56 |
 | `SYSTEM_BOUNDARIES.md` | Architecture rules and ownership |
 | `DEPLOYMENT_CHECKLIST.md` | Secrets, webhooks, pre-launch checklist |
-| `NYEHANDEL_API_REFERENCE.md` | Full Nyehandel API reference |
-| `docs/plans/2026-03-26-seo-maximization-plan.md` | SEO + GEO + remaining work plan |
-| `docs/superpowers/specs/2026-03-26-astro-migration-design.md` | Astro migration design spec |
+| `docs/superpowers/specs/2026-04-08-launch-polish-design.md` | Launch polish sprint spec |
+| `docs/superpowers/plans/2026-04-08-launch-polish.md` | Launch polish implementation plan |
+| `cowork/content/codex-visual-audit.md` | Codex visual & UX audit (April 8) |
+| `cowork/README.md` | Cowork audit summary + deliverables |
