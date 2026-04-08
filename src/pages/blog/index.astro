@@ -23,7 +23,7 @@ const articles = blogArticles;
 const tagColors: Record<string, string> = {
   'Brand Spotlight': '#2E7D32',
   'Comparison': '#1565C0',
-  'Buying Guide': '#E65100',
+  'Buying Guide': '#BF360C',
   'Guide': '#2E7D32',
   'Ranking': '#6A1B9A',
   'Flavour Guide': '#00838F',
@@ -103,25 +103,12 @@ const blogJsonLd = {
       <Breadcrumb items={[{ label: 'Blog' }]} />
 
       <h1 class="text-4xl font-bold tracking-tight mb-3">Nicotine Pouch Guides & Reviews</h1>
-      <div class="mb-10 max-w-2xl space-y-3 text-base leading-relaxed text-muted-foreground">
-        <p>
-          Honest, fact-checked content is the backbone of SnusFriend. Because nicotine advertising
-          is banned on most platforms, we built our reputation the old-fashioned way: by publishing
-          the most thorough guides, brand comparisons, and buying advice in the European nicotine
-          pouch space. Every article below is written by our editorial team, verified against
-          manufacturer data and independent sources, and updated whenever the market moves.
-        </p>
-        <p>
-          Whether you're a first-time buyer choosing your
-          <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="underline hover:text-foreground">starter pouch</a>,
-          an experienced user comparing
-          <a href="/blog/zyn-vs-velo-2026" class="underline hover:text-foreground">ZYN vs VELO</a>,
-          or just curious about
-          <a href="/blog/nicotine-pouch-side-effects" class="underline hover:text-foreground">side effects</a>
-          and <a href="/blog/nicotine-pouch-buying-guide-europe" class="underline hover:text-foreground">EU regulations</a>,
-          you'll find straightforward answers below — no filler, no upsell.
-        </p>
-      </div>
+      <p class="mb-8 max-w-2xl text-base leading-relaxed text-muted-foreground">
+        Fact-checked guides, brand comparisons, and buying advice — written by our editorial team and updated whenever the market moves.
+        Whether you're choosing your <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="underline hover:text-foreground">first pouch</a>,
+        comparing <a href="/blog/zyn-vs-velo-2026" class="underline hover:text-foreground">ZYN vs VELO</a>,
+        or researching <a href="/blog/nicotine-pouch-side-effects" class="underline hover:text-foreground">side effects</a> — no filler, no upsell.
+      </p>
 
       {/* Featured Articles */}
       <section class="mb-14">
