@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2026-04-07
+Last-Updated: 2026-04-08
 License: CC-BY-4.0
 See-Also: /llms-full.txt
 Cite-As: "SnusFriend (snusfriends.com)"
@@ -112,9 +112,24 @@ ZYN, VELO, LOOP, Skruf, White Fox, Siberia, ACE, Pablo, ICEBERG, KILLA, Nordic S
 - How long do pouches last? https://snusfriends.com/blog/how-long-do-nicotine-pouches-last
 - How to store nicotine pouches: https://snusfriends.com/blog/how-to-store-nicotine-pouches
 - How much do pouches cost? https://snusfriends.com/blog/how-much-do-nicotine-pouches-cost
+- Nicotine pouch flavour guide: https://snusfriends.com/blog/nicotine-pouch-flavour-guide
+- Nicotine pouch trends 2026: https://snusfriends.com/blog/nicotine-pouch-trends-new-brands-2026
+- Nicotine pouches legal in Europe: https://snusfriends.com/blog/nicotine-pouches-legal-europe-2026
+- Nicotine pouch tax & regulations 2026: https://snusfriends.com/blog/nicotine-pouch-tax-regulations-2026
+- Complete buying guide for Europe: https://snusfriends.com/blog/nicotine-pouch-buying-guide-europe
+- Switching from cigarettes to pouches: https://snusfriends.com/blog/switching-from-cigarettes-to-nicotine-pouches
 
 ### Comparisons
 - ZYN vs VELO: https://snusfriends.com/blog/zyn-vs-velo-2026
+- ZYN vs LOOP: https://snusfriends.com/blog/zyn-vs-loop-2026
+- ZYN vs Skruf: https://snusfriends.com/blog/zyn-vs-skruf-2026
+- ZYN vs Nordic Spirit: https://snusfriends.com/blog/zyn-vs-nordic-spirit
+- VELO vs LOOP: https://snusfriends.com/blog/velo-vs-loop-2026
+- VELO vs Nordic Spirit: https://snusfriends.com/blog/velo-vs-nordic-spirit
+- VELO vs ON!: https://snusfriends.com/blog/velo-vs-on-nicotine-pouches
+- LOOP vs Skruf: https://snusfriends.com/blog/loop-vs-skruf
+- KLAR vs FUMI: https://snusfriends.com/blog/klar-vs-fumi-2026
+- White Fox vs Siberia: https://snusfriends.com/blog/white-fox-vs-siberia-2026
 - Nicotine pouches vs cigarettes: https://snusfriends.com/blog/nicotine-pouches-vs-cigarettes
 - Nicotine pouches vs vaping: https://snusfriends.com/blog/nicotine-pouches-vs-vaping
 - Nicotine pouches vs snus: https://snusfriends.com/blog/nicotine-pouches-vs-snus
@@ -122,17 +137,54 @@ ZYN, VELO, LOOP, Skruf, White Fox, Siberia, ACE, Pablo, ICEBERG, KILLA, Nordic S
 
 ### Brand Guides
 - ZYN complete guide: https://snusfriends.com/blog/zyn-nicotine-pouches-complete-guide
+- ZYN flavours guide: https://snusfriends.com/blog/zyn-flavours-complete-guide
+- ZYN strength chart: https://snusfriends.com/blog/zyn-strength-chart-every-level-explained
 - VELO complete guide: https://snusfriends.com/blog/velo-nicotine-pouches-complete-guide
+- VELO flavours guide: https://snusfriends.com/blog/velo-flavours-complete-guide
+- All VELO flavours ranked: https://snusfriends.com/blog/all-velo-flavors-ranked-2026
 - LOOP complete guide: https://snusfriends.com/blog/loop-nicotine-pouches-complete-guide
 - Skruf complete guide: https://snusfriends.com/blog/skruf-nicotine-pouches-complete-guide
 - White Fox complete guide: https://snusfriends.com/blog/white-fox-nicotine-pouches-complete-guide
 - Siberia complete guide: https://snusfriends.com/blog/siberia-nicotine-pouches-complete-guide
+- Nordic Spirit complete guide: https://snusfriends.com/blog/nordic-spirit-nicotine-pouches-complete-guide
+- Pablo complete guide: https://snusfriends.com/blog/pablo-nicotine-pouches-complete-guide
+- ICEBERG complete guide: https://snusfriends.com/blog/iceberg-nicotine-pouches-complete-guide
+- KLAR complete guide: https://snusfriends.com/blog/klar-nicotine-pouches-complete-guide
+- FUMI complete guide: https://snusfriends.com/blog/fumi-nicotine-pouches-complete-guide
+- ON! complete guide: https://snusfriends.com/blog/on-nicotine-pouches-complete-guide
+- RAVE review 2026: https://snusfriends.com/blog/rave-nicotine-pouches-review
 
-### Rankings
+### Flavour Guides
+- Best mint pouches: https://snusfriends.com/blog/best-mint-nicotine-pouches-2026
+- Top 10 mint flavours: https://snusfriends.com/blog/top-10-mint-flavours
+- Best citrus pouches: https://snusfriends.com/blog/best-citrus-nicotine-pouches
+- Best berry pouches: https://snusfriends.com/blog/best-berry-nicotine-pouches
+- Best coffee pouches: https://snusfriends.com/blog/best-coffee-nicotine-pouches
+
+### Rankings & Buying Guides
 - Best nicotine pouches 2026: https://snusfriends.com/blog/best-nicotine-pouches-2026
 - Strongest pouches ranked: https://snusfriends.com/blog/strongest-nicotine-pouches-ranked-2026
+- Strongest snus brands: https://snusfriends.com/blog/strongest-snus-brands-compared-beginners-warning
 - Best for beginners: https://snusfriends.com/blog/best-nicotine-pouches-for-beginners-2026
-- Best mint pouches: https://snusfriends.com/blog/best-mint-nicotine-pouches-2026
+- Best for quitting smoking: https://snusfriends.com/blog/best-nicotine-pouches-for-quitting-smoking
+- Best strong pouches (10–20mg): https://snusfriends.com/blog/best-strong-nicotine-pouches
+- Best slim pouches: https://snusfriends.com/blog/best-slim-nicotine-pouches
+- Best all-day pouches: https://snusfriends.com/blog/best-nicotine-pouches-all-day-use
+- Best pouches with no aftertaste: https://snusfriends.com/blog/best-nicotine-pouches-no-aftertaste
+- Best pouches for women: https://snusfriends.com/blog/best-nicotine-pouches-for-women
+- Best budget pouches (under €3): https://snusfriends.com/blog/best-budget-nicotine-pouches
+- Best pouches under €2: https://snusfriends.com/blog/best-nicotine-pouches-under-2-euros
+- Best pouches for sensitive gums: https://snusfriends.com/blog/best-nicotine-pouches-sensitive-gums
+- Best pouches for gym & sports: https://snusfriends.com/blog/best-nicotine-pouches-gym-sports
+- Best pouches by occasion: https://snusfriends.com/blog/best-nicotine-pouches-by-occasion
+- Nicotine pouch subscription guide: https://snusfriends.com/blog/nicotine-pouch-subscription-guide
+
+### Country Guides
+- Buy in Austria: https://snusfriends.com/blog/buying-nicotine-pouches-austria-2026
+- Buy in Denmark: https://snusfriends.com/blog/buying-nicotine-pouches-denmark-2026
+- Pouches in Norway: https://snusfriends.com/blog/buying-nicotine-pouches-norway-2026
+- Pouches in Finland: https://snusfriends.com/blog/buying-nicotine-pouches-finland-2026
+- Buy in Poland: https://snusfriends.com/blog/buying-nicotine-pouches-poland-2026
 
 ## Nicotine Pouch Safety Profile (vs cigarettes)
 
