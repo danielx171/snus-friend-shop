@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
-import { $cartCount, openCart } from '@/stores/cart';
+import { $cartCount, openCart, syncCartFromStorage } from '@/stores/cart';
 
 const HeaderCartButton = React.memo(function HeaderCartButton() {
   const count = useStore($cartCount);
@@ -8,14 +8,27 @@ const HeaderCartButton = React.memo(function HeaderCartButton() {
   // Prevent hydration mismatch: server renders 0 (no localStorage),
   // so suppress the badge until after first client mount.
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    // Periodically sync cart count from localStorage for cross-island consistency
+    const sync = () => syncCartFromStorage();
+    window.addEventListener('open-cart', sync);
+    // Also sync on focus (catches state from other tabs)
+    window.addEventListener('focus', sync);
+    // Initial sync
+    sync();
+    return () => {
+      window.removeEventListener('open-cart', sync);
+      window.removeEventListener('focus', sync);
+    };
+  }, []);
 
   const displayCount = mounted ? count : 0;
 
   return (
     <button
       type="button"
-      onClick={openCart}
+      onClick={() => { syncCartFromStorage(); openCart(); }}
       className="relative p-3 -m-3 text-foreground hover:text-primary transition"
       aria-label={`Shopping cart${displayCount > 0 ? `, ${displayCount} items` : ''}`}
     >

@@ -14,6 +14,7 @@ import {
   upgradePackSize,
   getPackSavings,
   $mixDiscount,
+  syncCartFromStorage,
 } from '@/stores/cart';
 import type { CartItem } from '@/stores/cart';
 import type { PackSize } from '@/data/products';
@@ -199,8 +200,13 @@ export default function CartDrawer() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
-    // Listen for open-cart event from MobileBottomNav (Astro component)
-    const handler = () => openCart();
+    // Listen for open-cart event from other islands (AddToCartButton, MobileBottomNav, etc.)
+    // Re-read cart from localStorage first — Astro islands have separate module instances,
+    // so persistentAtom in the adding island wrote to localStorage but our instance doesn't know.
+    const handler = () => {
+      syncCartFromStorage();
+      openCart();
+    };
     window.addEventListener('open-cart', handler);
     return () => window.removeEventListener('open-cart', handler);
   }, []);

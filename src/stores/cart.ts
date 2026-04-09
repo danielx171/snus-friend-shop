@@ -19,18 +19,21 @@ export const $cartItems = persistentAtom<CartItem[]>(
 
 export const $cartOpen = atom(false);
 
-// Cross-island sync: Astro bundles each island separately, so persistentAtom
-// instances in different islands won't share in-memory state. The storage event
-// only fires cross-tab, not within the same page. Force it so other islands'
-// persistentAtom listeners re-read from localStorage.
-if (typeof window !== 'undefined') {
-  $cartItems.listen(() => {
-    const key = tenant.storage.cartKey;
-    window.dispatchEvent(new StorageEvent('storage', {
-      key,
-      newValue: localStorage.getItem(key),
-    }));
-  });
+/**
+ * Re-read cart items from localStorage into the in-memory atom.
+ * Called by CartDrawer before opening to sync cross-island state —
+ * Astro bundles each island separately, so persistentAtom instances
+ * don't share in-memory state within the same page.
+ */
+export function syncCartFromStorage() {
+  if (typeof window === 'undefined') return;
+  try {
+    const raw = localStorage.getItem(tenant.storage.cartKey);
+    if (raw) {
+      const items: CartItem[] = JSON.parse(raw);
+      $cartItems.set(items);
+    }
+  } catch { /* ignore malformed storage */ }
 }
 
 export const $cartTotal = computed($cartItems, (items) =>
