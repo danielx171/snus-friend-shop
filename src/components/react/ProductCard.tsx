@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { addToCart, openCart } from '@/stores/cart';
+import React, { useCallback } from 'react';
+import { addToCart } from '@/stores/cart';
 import { cartToast } from '@/lib/toast';
 import type { Product } from '@/data/products';
 import { brandColors, strengthColors, strengthLabels, defaultBrandColor, flavorColors, defaultFlavorColor } from '@/data/brand-colors';
@@ -75,25 +75,6 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
   slug, name, brand, brandSlug, imageUrl, prices, stock,
   nicotineContent, strengthKey, flavorKey, ratings, badgeKeys,
 }) {
-  const cardRef = useRef<HTMLAnchorElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!cardRef.current) return;
-    const r = cardRef.current.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    const x = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height / 2))) * 12;
-    const y = Math.max(-1, Math.min(1, -(e.clientX - cx) / (r.width / 2))) * 12;
-    setTilt({ x, y });
-  }, []);
-
-  const resetTilt = useCallback(() => {
-    setTilt({ x: 0, y: 0 });
-    setIsHovered(false);
-  }, []);
-
   const isOutOfStock = stock === 0;
   const displayPrice = prices.pack1;
   const brandColor = brandColors[brandSlug] ?? defaultBrandColor;
@@ -118,31 +99,18 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
         manufacturer: brand, stock,
       };
       addToCart(product, 'pack1');
-      openCart();
+      window.dispatchEvent(new CustomEvent('open-cart'));
       cartToast(name);
     },
     [slug, name, brand, imageUrl, prices, stock, nicotineContent, strengthKey, flavorKey, ratings, badgeKeys, isOutOfStock],
   );
 
   return (
-    <div style={{ perspective: '800px' }}>
     <a
-      ref={cardRef}
       href={`/products/${slug}`}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={resetTilt}
-      className="product-card group relative flex flex-col overflow-hidden rounded-2xl"
+      className="product-card group relative flex flex-col overflow-hidden rounded-2xl shadow-md transition-transform transition-shadow duration-300 hover:scale-[1.02] hover:shadow-xl"
       style={{
         background: 'linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%)',
-        transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) ${isHovered ? 'scale(1.04) translateY(-8px)' : 'scale(1)'}`,
-        transformStyle: 'preserve-3d',
-        transition: isHovered
-          ? 'box-shadow 0.2s, transform 0.08s ease-out'
-          : 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
-        boxShadow: isHovered
-          ? `0 35px 60px -15px rgba(0,0,0,0.5), 0 0 40px -10px ${flavorColor}20, inset 0 1px 0 rgba(255,255,255,0.08)`
-          : '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03)',
       }}
     >
       {/* Badges — pill style with glow */}
@@ -290,17 +258,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
         </div>
       </div>
 
-      {/* Holographic light sweep on hover */}
-      <div
-        className="absolute inset-0 z-20 pointer-events-none rounded-2xl"
-        style={{
-          opacity: isHovered ? 0.08 : 0,
-          transition: 'opacity 0.4s',
-          background: `linear-gradient(${130 + tilt.y * 4}deg, transparent 30%, rgba(255,255,255,0.5) ${49 + tilt.y}%, transparent ${51 + tilt.y}%, transparent)`,
-        }}
-      />
     </a>
-    </div>
   );
 });
 
