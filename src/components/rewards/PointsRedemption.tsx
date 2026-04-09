@@ -121,14 +121,14 @@ const PointsRedemption = React.memo(function PointsRedemption({ balance }: Props
               disabled={!canAfford || isRedeeming}
               onClick={() => handleRedeem(reward.type, reward.name)}
               className="w-full"
-              aria-label={`Redeem ${reward.name} for ${reward.cost} points`}
+              aria-label={`Redeem ${reward.name} for ${reward.cost} SnusCoins`}
             >
               {isRedeeming ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : canAfford ? (
                 'Redeem'
               ) : (
-                'Not enough points'
+                'Not enough SnusCoins'
               )}
             </Button>
           </div>

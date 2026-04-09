@@ -20,7 +20,7 @@ interface PrizeRevealProps {
 /* ------------------------------------------------------------------ */
 
 const TYPE_CONFIG: Record<string, { Icon: React.ElementType; glowColor: string; ringColor: string; subtitle: string }> = {
-  points: { Icon: Coins, glowColor: '#22d3ee', ringColor: 'rgba(34,211,238,0.3)', subtitle: 'SnusPoints earned!' },
+  points: { Icon: Coins, glowColor: '#22d3ee', ringColor: 'rgba(34,211,238,0.3)', subtitle: 'SnusCoins earned!' },
   voucher: { Icon: Percent, glowColor: '#a855f7', ringColor: 'rgba(168,85,247,0.3)', subtitle: 'Voucher won!' },
   jackpot: { Icon: Trophy, glowColor: '#fbbf24', ringColor: 'rgba(251,191,36,0.3)', subtitle: 'JACKPOT!' },
 };
@@ -243,7 +243,7 @@ function PrizeRevealInner({ prize, onClose, guestMode }: PrizeRevealProps) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.9 }}
               >
-                Added to your SnusPoints balance
+                Added to your SnusCoins balance
               </motion.p>
             ) : (prizeType === 'voucher' || prizeType === 'jackpot') ? (
               <motion.p

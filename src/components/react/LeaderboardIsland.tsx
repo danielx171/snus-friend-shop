@@ -90,7 +90,7 @@ const LeaderboardRow = React.memo(function LeaderboardRow({
       {/* Points */}
       <span className="shrink-0 text-sm font-semibold tabular-nums text-foreground">
         {entry.total_points.toLocaleString()}
-        <span className="ml-0.5 text-xs font-normal text-muted-foreground">pts</span>
+        <span className="ml-0.5 text-xs font-normal text-muted-foreground">coins</span>
       </span>
     </div>
   );
@@ -179,7 +179,7 @@ function LeaderboardInner() {
       setEntries(combined);
     } catch (err) {
       console.error('[Leaderboard] Fetch error:', err);
-      setError('Failed to load leaderboard. Please try again.');
+      setError('Failed to load The Board. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -202,7 +202,7 @@ function LeaderboardInner() {
   return (
     <div className="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-2xl font-semibold">Leaderboard</h2>
+        <h2 className="text-2xl font-semibold">The Board</h2>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
@@ -230,7 +230,7 @@ function LeaderboardInner() {
       {!loading && !error && entries.length === 0 && (
         <div className="rounded-lg bg-muted/40 p-8 text-center">
           <p className="text-muted-foreground text-sm">
-            No rankings yet. Be the first to earn points!
+            No rankings yet. Be the first to earn SnusCoins!
           </p>
           <a
             href="/products"
@@ -257,7 +257,7 @@ function LeaderboardInner() {
           {currentUserId && !currentUserInList && (
             <div className="mt-4 rounded-lg border border-dashed border-primary/30 bg-primary/5 p-3 text-center">
               <p className="text-sm text-muted-foreground">
-                Keep earning points to make the leaderboard!
+                Keep earning SnusCoins to make The Board!
               </p>
             </div>
           )}

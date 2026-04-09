@@ -14,7 +14,7 @@ function AchievementGridInner() {
   if (!authChecked) {
     return (
       <div className="text-center py-8 text-sm text-muted-foreground">
-        Loading achievements...
+        Loading badges...
       </div>
     );
   }
@@ -24,7 +24,7 @@ function AchievementGridInner() {
     return (
       <div className="text-center py-8">
         <p className="text-sm text-muted-foreground mb-3">
-          Sign in to track your achievements and earn rewards.
+          Sign in to track your badges and earn rewards.
         </p>
         <a
           href="/login"
@@ -39,7 +39,7 @@ function AchievementGridInner() {
   if (isLoading) {
     return (
       <div className="text-center py-8 text-sm text-muted-foreground">
-        Loading achievements...
+        Loading badges...
       </div>
     );
   }
@@ -47,7 +47,7 @@ function AchievementGridInner() {
   if (!achievementData || achievementData.totalCount === 0) {
     return (
       <div className="text-center py-8 text-sm text-muted-foreground">
-        No achievements available yet.
+        No badges available yet.
       </div>
     );
   }

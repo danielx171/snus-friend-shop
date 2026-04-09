@@ -165,7 +165,7 @@
     "estimated_delivery": "Voraussichtliche Lieferung",
     "track_order": "Bestellung verfolgen",
     "continue_shopping": "Weiter einkaufen",
-    "points_earned": "Du hast {{points}} SnusPoints verdient!"
+    "points_earned": "Du hast {{points}} SnusCoins verdient!"
   },
 
   "account": {
@@ -241,10 +241,10 @@
 
   "gamification": {
     "spin_wheel": "Glücksrad drehen",
-    "daily_spin": "Tägliche Drehung",
+    "daily_spin": "Täglicher Drop",
     "spin_available": "Du hast eine Drehung verfügbar!",
     "spin_tomorrow": "Nächste Drehung morgen",
-    "points": "SnusPoints",
+    "points": "SnusCoins",
     "points_balance": "Dein Punktestand",
     "redeem_points": "Punkte einlösen",
     "level": "Level",

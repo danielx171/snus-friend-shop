@@ -92,7 +92,7 @@ function QuestBoardInner({ quests, isLoading }: QuestBoardProps) {
     return (
       <div className="text-center py-12 text-muted-foreground">
         <Swords className="h-10 w-10 mx-auto mb-3 opacity-40" />
-        <p className="text-sm">No quests available right now. Check back soon!</p>
+        <p className="text-sm">No missions available right now. Check back soon!</p>
       </div>
     );
   }
@@ -102,7 +102,7 @@ function QuestBoardInner({ quests, isLoading }: QuestBoardProps) {
       {/* Active quests */}
       {active.length > 0 && (
         <div>
-          <SectionHeader title="Active Quests" count={active.length} />
+          <SectionHeader title="Active Missions" count={active.length} />
           <QuestGrid quests={active} />
         </div>
       )}
@@ -110,7 +110,7 @@ function QuestBoardInner({ quests, isLoading }: QuestBoardProps) {
       {/* Available quests */}
       {available.length > 0 && (
         <div>
-          <SectionHeader title="Available Quests" count={available.length} />
+          <SectionHeader title="Available Missions" count={available.length} />
           <QuestGrid quests={available} />
         </div>
       )}

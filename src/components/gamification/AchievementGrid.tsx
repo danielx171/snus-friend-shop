@@ -55,7 +55,7 @@ export function AchievementGrid({ grouped, unlockedCount, totalCount }: Achievem
     <div className="flex flex-col gap-8">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold">Achievements</h2>
+        <h2 className="text-xl font-bold">Badges</h2>
         <span className="text-sm text-muted-foreground font-medium">
           {unlockedCount} / {totalCount} unlocked
         </span>

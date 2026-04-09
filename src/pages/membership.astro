@@ -40,7 +40,7 @@ const tierList = tiers ?? [];
 
 <Shop
   title={`Membership Tiers | ${tenant.name}`}
-  description={`Discover ${tenant.name} membership tiers — from Newcomer to Legend. Earn points, unlock perks, and level up your nicotine pouch experience.`}
+  description={`Discover ${tenant.name} membership tiers — from Explorer to Founder. Earn SnusCoins, unlock perks, and level up your nicotine pouch experience.`}
 >
   <section class="bg-background text-foreground">
     <div class="max-w-4xl mx-auto px-4 py-12">
@@ -50,7 +50,7 @@ const tierList = tiers ?? [];
       <div class="text-center mb-12">
         <h1 class="text-4xl font-bold tracking-tight mb-3">Membership Tiers</h1>
         <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Every purchase and interaction earns you SnusPoints. The more you earn, the higher you climb — unlocking exclusive perks at every level.
+          Every purchase and interaction earns you SnusCoins. The more you earn, the higher you climb — unlocking exclusive perks at every level.
         </p>
       </div>
 
@@ -61,17 +61,17 @@ const tierList = tiers ?? [];
             <div>
               <p class="text-sm text-muted-foreground">Your current tier</p>
               <p class="text-2xl font-bold text-primary">
-                {tierList.find(t => t.level === userReputation!.level)?.name ?? 'Newcomer'}
+                {tierList.find(t => t.level === userReputation!.level)?.name ?? 'Explorer'}
               </p>
               <p class="text-sm text-muted-foreground mt-1">
-                {userReputation.lifetime_earned.toLocaleString()} lifetime points earned
+                {userReputation.lifetime_earned.toLocaleString()} lifetime SnusCoins earned
               </p>
             </div>
             {userReputation.next_level_name && userReputation.next_level_min_points && (
               <div class="w-full sm:w-64">
                 <div class="flex justify-between text-xs text-muted-foreground mb-1.5">
                   <span>Progress</span>
-                  <span>{userReputation.next_level_name} ({userReputation.next_level_min_points.toLocaleString()} pts)</span>
+                  <span>{userReputation.next_level_name} ({userReputation.next_level_min_points.toLocaleString()} coins)</span>
                 </div>
                 <div class="w-full h-2.5 bg-background/50 rounded-full overflow-hidden border border-border/50">
                   <div
@@ -80,7 +80,7 @@ const tierList = tiers ?? [];
                   />
                 </div>
                 <p class="text-xs text-muted-foreground mt-1.5">
-                  {(userReputation.next_level_min_points - userReputation.lifetime_earned).toLocaleString()} points to go
+                  {(userReputation.next_level_min_points - userReputation.lifetime_earned).toLocaleString()} SnusCoins to go
                 </p>
               </div>
             )}
@@ -116,7 +116,7 @@ const tierList = tiers ?? [];
                     {tier.name}
                   </p>
                   <p class="text-xs text-muted-foreground">
-                    {tier.min_points === 0 ? 'Start here' : `${tier.min_points.toLocaleString()} pts`}
+                    {tier.min_points === 0 ? 'Start here' : `${tier.min_points.toLocaleString()} coins`}
                   </p>
                 </div>
               </div>
@@ -147,7 +147,7 @@ const tierList = tiers ?? [];
                   <div>
                     <h3 class="text-lg font-bold text-foreground">{tier.name}</h3>
                     <p class="text-xs text-muted-foreground mt-0.5">
-                      {tier.min_points === 0 ? 'Starting tier' : `${tier.min_points.toLocaleString()} points`}
+                      {tier.min_points === 0 ? 'Starting tier' : `${tier.min_points.toLocaleString()} SnusCoins`}
                     </p>
                   </div>
                   <div class:list={[
@@ -190,15 +190,15 @@ const tierList = tiers ?? [];
 
       <!-- How to earn points -->
       <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-12">
-        <h2 class="text-xl font-bold mb-4">How to Earn Points</h2>
+        <h2 class="text-xl font-bold mb-4">How to Earn SnusCoins</h2>
         <div class="grid gap-4 sm:grid-cols-2">
           {[
-            { action: 'Place orders', detail: '1 point per EUR spent', icon: '\uD83D\uDED2' },
-            { action: 'Write reviews', detail: '50 points per review', icon: '\u2B50' },
-            { action: 'Daily spin', detail: 'Up to 50 points per day', icon: '\uD83C\uDFA1' },
-            { action: 'Complete quests', detail: 'Bonus points for challenges', icon: '\uD83C\uDFAF' },
-            { action: 'Refer a friend', detail: 'Both earn 200 points', icon: '\uD83E\uDD1D' },
-            { action: 'Birthday bonus', detail: 'Double points on your birthday', icon: '\uD83C\uDF82' },
+            { action: 'Place orders', detail: '1 SnusCoin per EUR spent', icon: '\uD83D\uDED2' },
+            { action: 'Write reviews', detail: '50 SnusCoins per review', icon: '\u2B50' },
+            { action: 'Daily Drop', detail: 'Up to 50 SnusCoins per day', icon: '\uD83C\uDFA1' },
+            { action: 'Complete missions', detail: 'Bonus SnusCoins for challenges', icon: '\uD83C\uDFAF' },
+            { action: 'Refer a friend', detail: 'Both earn 200 SnusCoins', icon: '\uD83E\uDD1D' },
+            { action: 'Birthday bonus', detail: 'Double SnusCoins on your birthday', icon: '\uD83C\uDF82' },
           ].map((item) => (
             <div class="flex items-start gap-3">
               <span class="text-xl shrink-0" aria-hidden="true">{item.icon}</span>
@@ -216,7 +216,7 @@ const tierList = tiers ?? [];
         <div class="rounded-xl border border-primary/30 bg-primary/5 p-8 text-center">
           <h2 class="text-xl font-bold mb-2">Start Your Journey</h2>
           <p class="text-muted-foreground text-sm max-w-md mx-auto mb-6">
-            Create a free account and start earning points on every purchase. Your first spin is waiting!
+            Create a free account and start earning SnusCoins on every purchase. Your first spin is waiting!
           </p>
           <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a

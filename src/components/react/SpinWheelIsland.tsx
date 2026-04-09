@@ -9,13 +9,13 @@ import PrizeReveal from '@/components/rewards/PrizeReveal';
 
 /* Guest spin — visual only, random prize for animation */
 const GUEST_PRIZES: SpinResult[] = [
-  { prize_key: 'points_5',      prize_display: { icon: '💰', title: '5 Points',    description: 'SnusPoints for your balance',     type: 'points'  }, points_awarded: 5 },
-  { prize_key: 'points_10',     prize_display: { icon: '💰', title: '10 Points',   description: 'SnusPoints for your balance',     type: 'points'  }, points_awarded: 10 },
+  { prize_key: 'points_5',      prize_display: { icon: '💰', title: '5 SnusCoins',    description: 'SnusCoins for your balance',       type: 'points'  }, points_awarded: 5 },
+  { prize_key: 'points_10',     prize_display: { icon: '💰', title: '10 SnusCoins',   description: 'SnusCoins for your balance',    type: 'points'  }, points_awarded: 10 },
   { prize_key: 'voucher_15pct', prize_display: { icon: '🎟️', title: '15% Off',     description: 'Discount on your next order',     type: 'voucher' } },
-  { prize_key: 'points_25',     prize_display: { icon: '⚡', title: '25 Points',   description: 'SnusPoints for your balance',     type: 'points'  }, points_awarded: 25 },
-  { prize_key: 'points_5b',     prize_display: { icon: '💰', title: '5 Points',    description: 'SnusPoints for your balance',     type: 'points'  }, points_awarded: 5 },
+  { prize_key: 'points_25',     prize_display: { icon: '⚡', title: '25 SnusCoins',   description: 'SnusCoins for your balance',    type: 'points'  }, points_awarded: 25 },
+  { prize_key: 'points_5b',     prize_display: { icon: '💰', title: '5 SnusCoins',    description: 'SnusCoins for your balance',    type: 'points'  }, points_awarded: 5 },
   { prize_key: 'free_can',      prize_display: { icon: '🎁', title: 'Free Can',    description: 'A free can with your next order', type: 'voucher' } },
-  { prize_key: 'points_50',     prize_display: { icon: '⭐', title: '50 Points',   description: 'SnusPoints for your balance',     type: 'points'  }, points_awarded: 50 },
+  { prize_key: 'points_50',     prize_display: { icon: '⭐', title: '50 SnusCoins',   description: 'SnusCoins for your balance',    type: 'points'  }, points_awarded: 50 },
   { prize_key: 'free_month',    prize_display: { icon: '🏆', title: 'Free Month!', description: 'A free month of SnusFriend!',     type: 'jackpot' } },
 ];
 

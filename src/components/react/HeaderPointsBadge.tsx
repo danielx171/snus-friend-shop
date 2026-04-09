@@ -39,7 +39,7 @@ function PointsBadgeInner() {
         >
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
-        Earn points
+        Earn SnusCoins
       </a>
     );
   }
@@ -51,7 +51,7 @@ function PointsBadgeInner() {
     <a
       href="/rewards"
       className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
-      aria-label={`${balance} SnusPoints — view rewards`}
+      aria-label={`${balance} SnusCoins — view rewards`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +63,7 @@ function PointsBadgeInner() {
       >
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
       </svg>
-      {balance.toLocaleString()} pts
+      {balance.toLocaleString()} coins
     </a>
   );
 }

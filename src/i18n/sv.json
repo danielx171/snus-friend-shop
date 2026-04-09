@@ -165,7 +165,7 @@
     "estimated_delivery": "Beräknad leverans",
     "track_order": "Spåra din beställning",
     "continue_shopping": "Fortsätt handla",
-    "points_earned": "Du tjänade {{points}} SnusPoints!"
+    "points_earned": "Du tjänade {{points}} SnusCoins!"
   },
 
   "account": {
@@ -241,10 +241,10 @@
 
   "gamification": {
     "spin_wheel": "Snurra hjulet",
-    "daily_spin": "Daglig snurr",
+    "daily_spin": "Daglig Drop",
     "spin_available": "Du har en snurr tillgänglig!",
     "spin_tomorrow": "Nästa snurr imorgon",
-    "points": "SnusPoints",
+    "points": "SnusCoins",
     "points_balance": "Ditt poängsaldo",
     "redeem_points": "Lös in poäng",
     "level": "Nivå",

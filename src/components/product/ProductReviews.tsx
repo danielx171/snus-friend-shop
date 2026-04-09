@@ -462,7 +462,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
 
       toast({
         title: 'Review submitted',
-        description: `Thank you! You earned ${earnedPoints} SnusPoints for this review.`,
+        description: `Thank you! You earned ${earnedPoints} SnusCoins for this review.`,
       });
       // Fire-and-forget quest progress + avatar unlock checks
       apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review_submitted' } }).catch(() => {});

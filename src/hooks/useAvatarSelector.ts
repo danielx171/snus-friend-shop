@@ -43,7 +43,7 @@ function buildUnlockHint(
     case 'quest':
       return 'Complete a special quest';
     case 'points':
-      return `Earn ${avatar.unlock_threshold.toLocaleString()} SnusPoints`;
+      return `Earn ${avatar.unlock_threshold.toLocaleString()} SnusCoins`;
     case 'orders':
       return `Place ${avatar.unlock_threshold} order${avatar.unlock_threshold !== 1 ? 's' : ''}`;
     case 'reviews':

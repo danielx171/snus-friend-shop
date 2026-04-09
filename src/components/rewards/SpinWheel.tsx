@@ -17,14 +17,14 @@ interface Segment {
 }
 
 const SEGMENTS: Segment[] = [
-  { key: 'points_5',      label: '5 Points',    shortLabel: '5 pts',   bgFrom: 'hsl(240 12% 18%)', bgTo: 'hsl(240 12% 14%)', accent: 'hsl(var(--primary))', emoji: '💰' },
-  { key: 'points_10',     label: '10 Points',   shortLabel: '10 pts',  bgFrom: 'hsl(240 12% 20%)', bgTo: 'hsl(240 12% 16%)', accent: 'hsl(var(--primary) / 0.9)', emoji: '💰' },
-  { key: 'voucher_15pct', label: '15% Off',     shortLabel: '15%',     bgFrom: 'hsl(270 35% 22%)', bgTo: 'hsl(270 35% 18%)', accent: 'hsl(270 50% 60%)', emoji: '🎟️' },
-  { key: 'points_25',     label: '25 Points',   shortLabel: '25 pts',  bgFrom: 'hsl(240 12% 19%)', bgTo: 'hsl(240 12% 15%)', accent: 'hsl(var(--primary) / 0.85)', emoji: '⚡' },
-  { key: 'points_5b',     label: '5 Points',    shortLabel: '5 pts',   bgFrom: 'hsl(240 12% 21%)', bgTo: 'hsl(240 12% 17%)', accent: 'hsl(var(--primary))', emoji: '💰' },
-  { key: 'free_can',      label: 'Free Can',    shortLabel: 'Free!',   bgFrom: 'hsl(0 50% 22%)', bgTo: 'hsl(0 50% 18%)', accent: 'hsl(var(--destructive) / 0.8)', emoji: '🎁' },
-  { key: 'points_50',     label: '50 Points',   shortLabel: '50 pts',  bgFrom: 'hsl(240 12% 18%)', bgTo: 'hsl(240 12% 14%)', accent: 'hsl(var(--success))', emoji: '⭐' },
-  { key: 'free_month',    label: 'Free Month!', shortLabel: 'JACKPOT', bgFrom: 'hsl(44 95% 24%)', bgTo: 'hsl(44 95% 20%)', accent: 'hsl(44 100% 60%)', emoji: '🏆' },
+  { key: 'points_5',      label: '5 Coins',     shortLabel: '5 coins',  bgFrom: 'hsl(240 12% 18%)', bgTo: 'hsl(240 12% 14%)', accent: 'hsl(var(--primary))', emoji: '💰' },
+  { key: 'points_10',     label: '10 Coins',    shortLabel: '10 coins', bgFrom: 'hsl(240 12% 20%)', bgTo: 'hsl(240 12% 16%)', accent: 'hsl(var(--primary) / 0.9)', emoji: '💰' },
+  { key: 'voucher_15pct', label: '15% Off',     shortLabel: '15%',      bgFrom: 'hsl(270 35% 22%)', bgTo: 'hsl(270 35% 18%)', accent: 'hsl(270 50% 60%)', emoji: '🎟️' },
+  { key: 'points_25',     label: '25 Coins',    shortLabel: '25 coins', bgFrom: 'hsl(240 12% 19%)', bgTo: 'hsl(240 12% 15%)', accent: 'hsl(var(--primary) / 0.85)', emoji: '⚡' },
+  { key: 'points_5b',     label: '5 Coins',     shortLabel: '5 coins',  bgFrom: 'hsl(240 12% 21%)', bgTo: 'hsl(240 12% 17%)', accent: 'hsl(var(--primary))', emoji: '💰' },
+  { key: 'free_can',      label: 'Free Can',    shortLabel: 'Free!',    bgFrom: 'hsl(0 50% 22%)', bgTo: 'hsl(0 50% 18%)', accent: 'hsl(var(--destructive) / 0.8)', emoji: '🎁' },
+  { key: 'points_50',     label: '50 Coins',    shortLabel: '50 coins', bgFrom: 'hsl(240 12% 18%)', bgTo: 'hsl(240 12% 14%)', accent: 'hsl(var(--success))', emoji: '⭐' },
+  { key: 'free_month',    label: 'Free Month!', shortLabel: 'JACKPOT',  bgFrom: 'hsl(44 95% 24%)', bgTo: 'hsl(44 95% 20%)', accent: 'hsl(44 100% 60%)', emoji: '🏆' },
 ];
 
 const SEGMENT_COUNT = SEGMENTS.length;

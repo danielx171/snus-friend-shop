@@ -88,8 +88,8 @@ const ShareButton = React.memo(function ShareButton({
             }
             if (!result?.alreadyShared && userId) {
               toast({
-                title: '+10 SnusPoints!',
-                description: `Thanks for sharing! You earned 10 points.`,
+                title: '+10 SnusCoins!',
+                description: `Thanks for sharing! You earned 10 SnusCoins.`,
               });
             }
           },

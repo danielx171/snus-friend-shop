@@ -209,7 +209,7 @@ function QuestCompleteInner({ quest, onDismiss, open }: QuestCompleteProps) {
             >
               <div className="flex items-center gap-1.5 text-sm font-medium">
                 <Coins className="h-4 w-4 text-primary" />
-                <span>+{quest.reward_points} SnusPoints earned</span>
+                <span>+{quest.reward_points} SnusCoins earned</span>
               </div>
 
               {quest.rewardAvatarName && (

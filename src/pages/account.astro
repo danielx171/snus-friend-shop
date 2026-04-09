@@ -73,11 +73,11 @@ function statusColor(status: string): string {
 const balance = pointsBalance?.balance ?? 0;
 const lifetime = pointsBalance?.lifetime_earned ?? 0;
 function getTier(pts: number) {
-  if (pts >= 5000) return { name: 'Legend', next: null, threshold: 5000 };
-  if (pts >= 2000) return { name: 'Expert', next: 'Legend', threshold: 5000 };
-  if (pts >= 500) return { name: 'Enthusiast', next: 'Expert', threshold: 2000 };
-  if (pts >= 100) return { name: 'Regular', next: 'Enthusiast', threshold: 500 };
-  return { name: 'Newcomer', next: 'Regular', threshold: 100 };
+  if (pts >= 5000) return { name: 'Founder', next: null, threshold: 5000 };
+  if (pts >= 2000) return { name: 'Specialist', next: 'Founder', threshold: 5000 };
+  if (pts >= 500) return { name: 'Connoisseur', next: 'Specialist', threshold: 2000 };
+  if (pts >= 100) return { name: 'Member', next: 'Connoisseur', threshold: 500 };
+  return { name: 'Explorer', next: 'Member', threshold: 100 };
 }
 const tier = getTier(lifetime);
 const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold) * 100)) : 100;
@@ -422,7 +422,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
             <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6">
               <h3 class="text-sm font-semibold mb-3">Refer a Friend</h3>
               <p class="text-sm text-muted-foreground mb-4">
-                Share your code with friends. They get 50 SnusPoints, you get 100 — everyone wins.
+                Share your code with friends. They get 50 SnusCoins, you get 100 — everyone wins.
               </p>
               <div class="flex items-center gap-2 mb-4">
                 <div class="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 font-mono text-sm text-foreground select-all">

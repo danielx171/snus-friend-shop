@@ -143,7 +143,7 @@ const ProfileCard = React.memo(function ProfileCard({
             <span className="text-lg font-semibold text-primary tabular-nums">
               {stats?.snusPoints ?? 0}
             </span>
-            <span className="text-xs text-muted-foreground">SnusPoints</span>
+            <span className="text-xs text-muted-foreground">SnusCoins</span>
           </div>
         </div>
 
