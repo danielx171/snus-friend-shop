@@ -33,6 +33,16 @@
       "source": "/blog/best-nicotine-pouches-for-beginners",
       "destination": "/blog/best-nicotine-pouches-for-beginners-2026",
       "permanent": true
+    },
+    {
+      "source": "/products/strength/mild",
+      "destination": "/products/strength/light",
+      "permanent": true
+    },
+    {
+      "source": "/products/strength/regular",
+      "destination": "/products/strength/normal",
+      "permanent": true
     }
   ],
   "headers": [

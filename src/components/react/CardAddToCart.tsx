@@ -1,4 +1,4 @@
-import { addToCart, openCart } from '@/stores/cart';
+import { addToCart } from '@/stores/cart';
 import { cartToast } from '@/lib/toast';
 import { cn } from '@/lib/utils';
 import type { Product, PackSize } from '@/data/products';
@@ -62,7 +62,7 @@ const CardAddToCart = memo(function CardAddToCart(props: CardAddToCartProps) {
       stock: props.stock,
     };
     addToCart(product, selectedPack);
-    openCart();
+    window.dispatchEvent(new CustomEvent('open-cart'));
     cartToast(props.name);
 
     setJustAdded(true);

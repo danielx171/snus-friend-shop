@@ -36,7 +36,7 @@ for (const p of sortedByPopularity) {
 const brandSlugsWithProducts = new Set(allProducts.map((p) => p.data.brandSlug));
 const activeBrands = allBrands.filter((b) => brandSlugsWithProducts.has(b.id));
 const brands = [...activeBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
-const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${brands.length || 57} brands. Fast EU-wide delivery, loyalty rewards, and competitive prices.`;
+const heroDescription = `${allProducts.length}+ pouches from ${brands.length} premium brands. EU warehouse, next-day shipping, secure checkout. Real reviews from real customers.`;
 
 // New Arrivals: products with 'new' badge or most recently updated (must have images)
 const newArrivals = allProducts
@@ -98,10 +98,10 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
       <!-- Left: text with staggered reveal -->
       <div class="flex-1 text-center lg:text-left z-10">
         <p class="hero-reveal mb-3 text-sm font-medium uppercase tracking-widest" style={`color: hsl(var(--hero-muted)); animation: heroSlideUp 0.6s ease-out both;`}>
-          Europe's Nicotine Pouch Shop
+          Europe's #1 Nicotine Pouch Shop
         </p>
         <h1 class="hero-reveal text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]" style={`color: hsl(var(--hero-text)); font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; animation: heroSlideUp 0.6s ease-out 0.1s both;`}>
-          Premium Nicotine<br class="hidden sm:block" /> Pouches
+          Europe's Largest Nicotine<br class="hidden sm:block" /> Pouch Selection
         </h1>
         <p class="hero-reveal mx-auto mt-4 max-w-xl text-lg lg:mx-0" style={`color: hsl(var(--hero-muted)); animation: heroSlideUp 0.6s ease-out 0.2s both;`}>
           {heroDescription}
@@ -120,8 +120,8 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
           </div>
           <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
           <div>
-            <div class="text-3xl font-bold" style={`color: hsl(var(--primary));`}>Free</div>
-            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>EU Shipping</div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--primary));`}>4.8★</div>
+            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Verified Reviews</div>
           </div>
         </div>
 

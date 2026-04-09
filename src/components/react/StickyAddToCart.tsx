@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useCallback } from 'react';
-import { addToCart, openCart } from '@/stores/cart';
+import { addToCart } from '@/stores/cart';
 import { cartToast } from '@/lib/toast';
 import type { Product, PackSize } from '@/data/products';
 
@@ -59,7 +59,7 @@ const StickyAddToCart = memo(function StickyAddToCart(props: StickyAddToCartProp
       stock: props.stock,
     };
     addToCart(product, 'pack1');
-    openCart();
+    window.dispatchEvent(new CustomEvent('open-cart'));
     cartToast(props.name);
   }, [props]);
 

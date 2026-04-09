@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { addToCart, openCart } from '@/stores/cart';
+import { addToCart } from '@/stores/cart';
 import type { Product, PackSize } from '@/data/products';
 
 interface AddToCartButtonProps {
@@ -56,7 +56,7 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
     const handleAdd = useCallback(() => {
       if (isOutOfStock) return;
       addToCart(buildCartProduct(), selectedPack, quantity);
-      openCart();
+      window.dispatchEvent(new CustomEvent('open-cart'));
     }, [buildCartProduct, selectedPack, quantity, isOutOfStock]);
 
     const handleBuyNow = useCallback(() => {

@@ -636,7 +636,7 @@ export default function FilterableProductGrid({
         <div className="flex-1">
           {loading ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5" role="status" aria-label="Loading products">
-              {Array.from({ length: 12 }).map((_, i) => (
+              {Array.from({ length: 24 }).map((_, i) => (
                 <div key={i} className="rounded-xl border border-border bg-card/50 p-4">
                   <div className="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
                   <div className="mb-2 h-4 w-3/4 rounded bg-muted/30 animate-pulse" />
