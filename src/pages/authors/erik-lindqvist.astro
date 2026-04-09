@@ -4,27 +4,26 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
 
-const title = 'Erik Lindqvist — Senior Editor, SnusFriend';
-const description = 'Erik Lindqvist is the senior editor at SnusFriend, covering nicotine pouches, harm reduction, and smokeless tobacco. 10+ years in the industry, 200+ products tested.';
+const title = 'Erik Lindqvist — Editor & Lead Product Reviewer, SnusFriend';
+const description = 'Erik Lindqvist is the Editor at SnusFriend, specializing in independent nicotine pouch reviews with 4+ years of product testing expertise across 500+ products and 55+ brands.';
 
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Erik Lindqvist',
-  jobTitle: 'Senior Editor',
+  jobTitle: 'Editor & Lead Product Reviewer',
   worksFor: {
     '@type': 'Organization',
     name: 'SnusFriend',
-    url: 'https://snusfriends.com',
+    url: `https://${tenant.domain}`,
   },
-  description: 'Senior editor and nicotine harm reduction researcher covering the European smokeless market for over a decade. 200+ products tested using blind trial methodology.',
-  alumniOf: {
-    '@type': 'CollegeOrUniversity',
-    name: 'Uppsala University',
-  },
+  description: 'Editor and Lead Product Reviewer at SnusFriend, specializing in European nicotine pouch products with 4+ years of hands-on testing expertise.',
   knowsAbout: ['nicotine pouches', 'tobacco harm reduction', 'smokeless tobacco', 'nicotine pharmacology', 'product testing methodology', 'European nicotine regulation'],
-  url: 'https://snusfriends.com/authors/erik-lindqvist',
-  sameAs: ['https://snusfriends.com/authors/erik-lindqvist'],
+  url: `https://${tenant.domain}/authors/erik-lindqvist`,
+  sameAs: [
+    'https://www.linkedin.com/in/erik-lindqvist-snusfriend/',
+    'https://x.com/ErikAtSnusFriend',
+  ],
 };
 ---
 
@@ -37,86 +36,111 @@ const personSchema = {
   <article class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">
       <Breadcrumb items={[
-        { label: 'Authors', href: '/blog' },
+        { label: 'Blog', href: '/blog' },
         { label: 'Erik Lindqvist' },
       ]} />
 
       <header class="mb-10">
         <h1 class="text-4xl font-bold text-foreground mb-2">Erik Lindqvist</h1>
-        <p class="text-lg font-medium text-primary mb-3">Senior Editor, SnusFriend</p>
-        <p class="text-base italic text-muted-foreground">10+ years covering European smokeless tobacco · 200+ products tested · Public Health Communication, Uppsala University</p>
+        <p class="text-lg font-medium text-primary mb-3">Editor & Lead Product Reviewer, SnusFriend</p>
+        <p class="text-base italic text-muted-foreground">4+ years covering European nicotine pouches · 500+ products tested · Scandinavia-based</p>
+        <div class="mt-4 flex gap-4">
+          <a href="https://www.linkedin.com/in/erik-lindqvist-snusfriend/" rel="noopener noreferrer" target="_blank" class="text-sm text-muted-foreground hover:text-foreground underline">LinkedIn</a>
+          <a href="https://x.com/ErikAtSnusFriend" rel="noopener noreferrer" target="_blank" class="text-sm text-muted-foreground hover:text-foreground underline">X / Twitter</a>
+        </div>
       </header>
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1 [&_li]:leading-relaxed">
 
         <p>
-          Erik Lindqvist is the senior editor at SnusFriend, where he leads product testing, health content review, and editorial strategy. Based in Malmö, Sweden — the birthplace of modern oral nicotine — Erik has spent over a decade covering the European smokeless tobacco and nicotine pouch markets.
+          Erik Lindqvist is the Editor and Lead Product Reviewer at SnusFriend, specializing in the European nicotine pouch market. Based in Scandinavia — the heartland of the industry — he brings four years of hands-on product expertise and a background in consumer health communication.
         </p>
 
         <p>
-          Erik began his career as a health journalist in Stockholm, reporting on Sweden's tobacco harm reduction success story — the country with the lowest smoking rate in Europe. His early work focused on epidemiological data showing dramatically lower rates of lung cancer and cardiovascular disease among Swedish men compared to the rest of Europe, a divergence largely attributed to the cultural shift from cigarettes to snus. When tobacco-free nicotine pouches emerged in the late 2010s, Erik was among the first journalists to cover them as a distinct product category.
+          Since launching his review practice in 2022, Erik has personally tested over 500 nicotine pouch products across 55+ brands, combining blind taste testing with rigorous cross-referencing of manufacturer specifications and independent lab data. His editorial approach emphasizes transparency and evidence-based assessment in an industry where traditional advertising restrictions mean consumers depend heavily on independent reviewers to make informed choices.
         </p>
 
         <p>
-          At SnusFriend, Erik has personally tested over 200 nicotine pouch SKUs across 35+ brands, evaluating flavour accuracy, nicotine delivery consistency, pouch quality, and moisture retention. His testing methodology involves blind trials with standardised scoring rubrics — no brand pays for placement or favourable reviews. Every health claim in SnusFriend's blog content is fact-checked against peer-reviewed research, with priority given to studies published in PubMed, Cochrane reviews, and guidance from the NHS, WHO, and the Royal College of Physicians. When clinical evidence is limited or inconclusive, our articles say so explicitly.
+          Erik's work bridges product journalism and consumer advocacy. He attends harm reduction conferences, follows EU TPD regulatory developments, and maintains strict editorial standards: no paid reviews, transparent affiliate disclosure, and a public corrections policy.
+        </p>
+
+        <h2>How Erik Got Into Nicotine Pouch Reviewing</h2>
+
+        <p>
+          Erik didn't set out to become a nicotine pouch expert. In 2022, he was working in consumer health communication when the Nordic nicotine pouch market began its global expansion. He noticed something: enthusiasts and newcomers alike were making purchasing decisions based on hearsay, forum rumors, and marketing speak — not actual product data.
         </p>
 
         <p>
-          Erik holds a Master's degree in Public Health Communication from Uppsala University and is a member of the Swedish Society for Tobacco Control Research. He follows harm reduction developments across the EU, UK, and Nordics, and regularly reviews regulatory updates including the EU Tobacco Products Directive (TPD) revisions. Outside of work, he's an avid cross-country skier and an unapologetic mint flavour loyalist.
+          The category was exploding, but independent, trustworthy reviews barely existed. Traditional consumer media ignored it. Manufacturer websites were predictably biased. Harm reduction researchers published sparse, outdated comparisons. There was a real gap.
+        </p>
+
+        <p>
+          He started testing products for personal use, then sharing findings in online communities. The response was immediate: people wanted rigorous, honest assessments. That experimental project became a systematic practice, and eventually led to founding SnusFriend's editorial review program.
+        </p>
+
+        <h2>Testing Methodology</h2>
+
+        <p>Every SnusFriend review follows a documented protocol:</p>
+
+        <p>
+          <strong>1. Blind testing</strong> — Products are evaluated without seeing packaging or marketing claims.
+        </p>
+        <p>
+          <strong>2. Multi-day windows</strong> — Each product is tested across 3–7 days to capture consistency and subjective variation.
+        </p>
+        <p>
+          <strong>3. Cross-referencing</strong> — Manufacturer specs are verified against independent lab data where publicly available; discrepancies are flagged.
+        </p>
+        <p>
+          <strong>4. Comparative context</strong> — Products are assessed relative to similar offerings, not in isolation.
+        </p>
+        <p>
+          <strong>5. Revision cycles</strong> — Reviews are updated when new formulations launch or additional testing reveals relevant information.
+        </p>
+
+        <p>
+          This approach trades speed for depth. We publish fewer reviews than clickbait competitors, but each one is designed to remain useful for years.
         </p>
 
         <h2>Credentials</h2>
 
         <ul>
-          <li>10+ years covering European smokeless tobacco and nicotine pouch markets</li>
-          <li>Personally tested and reviewed 200+ nicotine pouch SKUs across 35+ brands</li>
-          <li>Master's in Public Health Communication, Uppsala University</li>
+          <li>4+ years covering the European nicotine pouch market (since 2022)</li>
+          <li>500+ products personally tested across 55+ brands</li>
+          <li>Scandinavia-based — direct proximity to market innovation and regulatory environment</li>
+          <li>Background in consumer health communication</li>
           <li>Health content fact-checked against peer-reviewed PubMed research, NHS guidance, and WHO reports</li>
-          <li>Follows Royal College of Physicians and Public Health England harm reduction frameworks</li>
-          <li>Member, Swedish Society for Tobacco Control Research</li>
+          <li>Follows EU Tobacco Products Directive (TPD) regulatory developments</li>
           <li>Editorial independence: no brand pays for product placement or favourable reviews</li>
         </ul>
 
-        <h2>How Erik Tests Nicotine Pouches</h2>
+        <h2>Editorial Standards</h2>
+
+        <ul>
+          <li><strong>No paid reviews.</strong> Manufacturers cannot pay for favorable coverage. Affiliate links are disclosed.</li>
+          <li><strong>Transparent corrections.</strong> Errors are acknowledged publicly with publication dates.</li>
+          <li><strong>Conflict of interest disclosure.</strong> SnusFriend is a retailer — we sell the products Erik reviews. We acknowledge this openly.</li>
+          <li><strong>Reader feedback loop.</strong> We actively solicit corrections from readers with direct product experience.</li>
+        </ul>
+
+        <h2>Why Independent Reviews Matter</h2>
 
         <p>
-          Every product review on SnusFriend follows a standardised testing protocol developed over 200+ product evaluations. Erik tests each pouch across five dimensions:
+          In most consumer goods categories, advertising is abundant. Nicotine products face severe restrictions. In the EU, manufacturers cannot run traditional ads. Consumers can't rely on the usual sources of product information.
         </p>
 
         <p>
-          <strong>1. Flavour accuracy and quality</strong> — Does the pouch deliver on its flavour promise? Is the taste natural or artificial? How does it compare to the category leader? Scored 1-10.
+          That shifts responsibility to independent reviewers. We're not just sharing opinions — we're functioning as a trusted information infrastructure in a category where it barely exists. That's why our standards are strict and our methodology is transparent.
+        </p>
+
+        <h2>The SnusFriend Team</h2>
+
+        <p>
+          Erik leads editorial but doesn't work alone. SnusFriend's review system includes cross-checking, multiple perspectives, and community feedback. Our goal is a reference resource that reflects genuine consumer experience, not individual taste.
         </p>
 
         <p>
-          <strong>2. Nicotine delivery consistency</strong> — Is the nicotine release smooth and predictable, or does it spike and crash? Tested across multiple pouches from the same can to check batch consistency. Scored 1-10.
-        </p>
-
-        <p>
-          <strong>3. Pouch construction and moisture</strong> — Is the pouch well-sealed? Does it maintain its shape under the lip? Is the moisture level appropriate for the format (slim, mini, dry)? Scored 1-10.
-        </p>
-
-        <p>
-          <strong>4. Duration of effect</strong> — How long does the flavour last? How long does the nicotine effect persist after removal? Timed across three sessions per product. Scored 1-10.
-        </p>
-
-        <p>
-          <strong>5. Overall value for money</strong> — Price per pouch relative to the quality delivered. Compared against category benchmarks (budget, mid-range, premium). Scored 1-10.
-        </p>
-
-        <p>
-          All testing is blind where possible — cans are decanted by a colleague into unmarked containers for flavour and quality scoring. Brand identity is revealed only after scores are finalised. No brand has editorial approval or score modification rights.
-        </p>
-
-        <h2>Selected Publications</h2>
-
-        <p>
-          Erik's work has appeared across SnusFriend's editorial platform, covering topics from product reviews and harm reduction analysis to regulatory commentary. Key editorial projects include the 2026 nicotine pouch strength ranking (covering 90+ products), the European legal landscape guide (updated quarterly), the comprehensive ZYN and VELO brand guides (10,000+ words each), and the health & safety article series fact-checked against 9 peer-reviewed sources from PubMed, the WHO, and the Royal College of Physicians.
-        </p>
-
-        <h2>Transparency Statement</h2>
-
-        <p>
-          SnusFriend is a retailer — we sell the products Erik reviews. We acknowledge this conflict openly. To protect editorial integrity: review scores are never shared with brands before publication, no brand pays for placement or favourable reviews, negative reviews are published alongside positive ones, and Erik's editorial decisions are independent of the commercial team. If a product underperforms, we say so — even if we sell it. Read our full <a href="/editorial-policy">editorial policy</a> for more detail.
+          When you read an Erik Lindqvist review, you're reading one person's methodology applied consistently — but informed by a team that cares about getting it right.
         </p>
 
         <h2>Articles by Erik Lindqvist</h2>
