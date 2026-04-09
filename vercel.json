@@ -37,12 +37,14 @@
     {
       "source": "/products/strength/mild",
       "destination": "/products/strength/light",
-      "permanent": true
+      "permanent": true,
+      "statusCode": 301
     },
     {
       "source": "/products/strength/regular",
       "destination": "/products/strength/normal",
-      "permanent": true
+      "permanent": true,
+      "statusCode": 301
     }
   ],
   "headers": [

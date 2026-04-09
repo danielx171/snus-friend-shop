@@ -184,6 +184,11 @@ const footerLinks = {
         </div>
       </div>
 
+      {/* Company info */}
+      <div class="mt-6 text-center text-xs text-muted-foreground/60">
+        <p>{tenant.legalName} · {tenant.address.streetAddress}, {tenant.address.postalCode} {tenant.address.addressLocality}, Sweden</p>
+      </div>
+
       {/* Social links */}
       <div class="flex items-center justify-center gap-4">
         <a href="https://instagram.com/snusfriends" target="_blank" rel="noopener noreferrer" class="p-2 text-muted-foreground hover:text-foreground transition-colors" aria-label="SnusFriend on Instagram">

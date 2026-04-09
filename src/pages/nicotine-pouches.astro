@@ -31,6 +31,53 @@ const itemListJsonLd = {
     name: p.data.name,
   })),
 };
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What are nicotine pouches?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Nicotine pouches are small, pre-portioned sachets containing food-grade plant fibre, flavouring, and pharmaceutical-grade nicotine — with zero tobacco leaf. You place one between your gum and upper lip for a discreet nicotine experience lasting 20-40 minutes.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do you use nicotine pouches?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Place a nicotine pouch between your upper lip and gum. Leave it in place for 20-40 minutes. You may feel a slight tingling as the nicotine is absorbed. Remove and dispose responsibly when done.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How many brands does SnusFriend carry?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `SnusFriend carries ${totalProducts}+ products from ${brandCount} brands including ZYN, VELO, LOOP, Siberia, Pablo, KILLA, and many more. All ship from our EU warehouse with tracking.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What nicotine strength should I choose?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Beginners should start with light strength (1-4mg). Regular users typically prefer normal (4-6mg) or strong (6-12mg). Extra strong (12-20mg) and super strong (20mg+) are for experienced users only.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does SnusFriend offer free shipping?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, SnusFriend offers free EU-wide shipping on orders over €29. Most orders arrive within 2-5 business days with full tracking.',
+      },
+    },
+  ],
+};
 ---
 
 <Shop
@@ -39,6 +86,7 @@ const itemListJsonLd = {
   canonical="/nicotine-pouches"
 >
   <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   <Breadcrumb items={[{ label: 'Nicotine Pouches' }]} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

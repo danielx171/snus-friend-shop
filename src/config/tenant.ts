@@ -5,6 +5,18 @@ export interface TenantConfig {
   readonly tagline: string;
   readonly domain: string;
   readonly supportEmail: string;
+  readonly legalName: string;
+  readonly address: {
+    readonly streetAddress: string;
+    readonly addressLocality: string;
+    readonly postalCode: string;
+    readonly addressCountry: string;
+  };
+  readonly social: {
+    readonly instagram: string;
+    readonly tiktok: string;
+    readonly x: string;
+  };
   readonly loyaltyProgramName: string;
   readonly currencyCode: string;
   readonly theme: {
@@ -59,6 +71,18 @@ export const tenant: TenantConfig = {
   tagline: 'Premium Nicotine Pouches',
   domain: 'snusfriends.com',
   supportEmail: 'support@snusfriends.com',
+  legalName: 'Nordic Express AB',
+  address: {
+    streetAddress: 'Akimsverkstadsväg 1',
+    addressLocality: 'Göteborg',
+    postalCode: '426 21',
+    addressCountry: 'SE',
+  },
+  social: {
+    instagram: 'https://www.instagram.com/snusfriends/',
+    tiktok: 'https://www.tiktok.com/@snusfriends',
+    x: 'https://x.com/snusfriends',
+  },
   loyaltyProgramName: 'SnusFriends Rewards',
   currencyCode: 'EUR',
   theme: {

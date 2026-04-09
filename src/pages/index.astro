@@ -674,15 +674,25 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "SnusFriend",
+    "legalName": tenant.legalName,
     "url": "https://snusfriends.com",
     "logo": "https://snusfriends.com/favicon.png",
     "description": `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${brands.length || 57} brands.`,
+    "foundingDate": "2024",
+    "email": tenant.supportEmail,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": tenant.address.streetAddress,
+      "addressLocality": tenant.address.addressLocality,
+      "postalCode": tenant.address.postalCode,
+      "addressCountry": tenant.address.addressCountry
+    },
     "contactPoint": {
       "@type": "ContactPoint",
-      "email": "support@snusfriends.com",
+      "email": tenant.supportEmail,
       "contactType": "customer service"
     },
-    "sameAs": ["https://snusfriends.com"]
+    "sameAs": [tenant.social.instagram, tenant.social.tiktok, tenant.social.x]
   })} />
 
   <script type="application/ld+json" set:html={JSON.stringify({
