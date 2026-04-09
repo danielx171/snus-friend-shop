@@ -267,6 +267,37 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
           </ul>
         </div>
 
+        {/* Rewards next-step nudge */}
+        <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6 mb-6">
+          <h2 class="text-lg font-semibold text-foreground mb-1">Nice choice. Here's what's next.</h2>
+          <p class="text-sm text-muted-foreground mb-4">
+            Your SnusCoins will land once your order ships. In the meantime, keep the momentum going:
+          </p>
+          <div class="grid gap-3 sm:grid-cols-3">
+            <a href="/rewards#spin" class="flex items-center gap-3 rounded-lg border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-sm" data-astro-prefetch>
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-lg">🎡</span>
+              <div>
+                <p class="text-sm font-medium text-foreground">Spin the Daily Drop</p>
+                <p class="text-xs text-muted-foreground">Free rewards every day</p>
+              </div>
+            </a>
+            <a href="/rewards#missions" class="flex items-center gap-3 rounded-lg border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-sm" data-astro-prefetch>
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-lg">⚡</span>
+              <div>
+                <p class="text-sm font-medium text-foreground">Start a Mission</p>
+                <p class="text-xs text-muted-foreground">Earn bonus SnusCoins</p>
+              </div>
+            </a>
+            <a href="/account#reviews" class="flex items-center gap-3 rounded-lg border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-sm" data-astro-prefetch>
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-lg">✍️</span>
+              <div>
+                <p class="text-sm font-medium text-foreground">Write a Review</p>
+                <p class="text-xs text-muted-foreground">15 bonus coins per product</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
         {/* Quest trigger — fires order_placed progress update */}
         {order && user && orderId && (
           <OrderQuestTrigger client:idle orderId={orderId} />

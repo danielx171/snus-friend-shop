@@ -46,51 +46,106 @@ const tierList = tiers ?? [];
     <div class="max-w-4xl mx-auto px-4 py-12">
       <Breadcrumb items={[{ label: 'Rewards', href: '/rewards' }, { label: 'Membership' }]} />
 
-      <!-- Hero -->
-      <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold tracking-tight mb-3">Membership Tiers</h1>
-        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Every purchase and interaction earns you SnusCoins. The more you earn, the higher you climb — unlocking exclusive perks at every level.
-        </p>
-      </div>
+      {!user ? (
+        <div class="rounded-2xl border border-border bg-gradient-to-br from-primary/5 via-card/60 to-background p-8 sm:p-10 mb-12">
+          <div class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Your taste deserves a tier.</h1>
+            <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+              SnusFriend Membership is a five-circle progression system. The more you explore, review, and contribute, the higher you rise — and the better your rewards get. No subscription fee. No catch. Just show up and be yourself.
+            </p>
+          </div>
 
-      <!-- User progress banner (logged in only) -->
-      {userReputation && (
-        <div class="rounded-xl border border-primary/30 bg-primary/5 p-6 mb-10">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <p class="text-sm text-muted-foreground">Your current tier</p>
-              <p class="text-2xl font-bold text-primary">
-                {tierList.find(t => t.level === userReputation!.level)?.name ?? 'Explorer'}
-              </p>
-              <p class="text-sm text-muted-foreground mt-1">
-                {userReputation.lifetime_earned.toLocaleString()} lifetime SnusCoins earned
+          <div class="grid gap-6 sm:grid-cols-3 mb-8">
+            <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 text-center">
+              <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+              <h3 class="text-lg font-semibold mb-2">Five Circles, One Path</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Explorer, Member, Connoisseur, Specialist, Founder. Each circle unlocks perks, multipliers, and exclusive access. You progress by doing what you already do.
               </p>
             </div>
-            {userReputation.next_level_name && userReputation.next_level_min_points && (
-              <div class="w-full sm:w-64">
-                <div class="flex justify-between text-xs text-muted-foreground mb-1.5">
-                  <span>Progress</span>
-                  <span>{userReputation.next_level_name} ({userReputation.next_level_min_points.toLocaleString()} coins)</span>
-                </div>
-                <div class="w-full h-2.5 bg-background/50 rounded-full overflow-hidden border border-border/50">
-                  <div
-                    class="h-full bg-primary rounded-full transition-all"
-                    style={`width: ${Math.min(100, Math.round((userReputation.lifetime_earned / userReputation.next_level_min_points) * 100))}%`}
-                  />
-                </div>
-                <p class="text-xs text-muted-foreground mt-1.5">
-                  {(userReputation.next_level_min_points - userReputation.lifetime_earned).toLocaleString()} SnusCoins to go
-                </p>
+
+            <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 text-center">
+              <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/15">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
               </div>
-            )}
-            {!userReputation.next_level_name && (
-              <div class="text-sm text-primary font-medium">
-                You have reached the highest tier!
+              <h3 class="text-lg font-semibold mb-2">Your Flavor Passport</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Track every brand and flavour you've tried. Unlock stamps, complete collections, and build a taste profile that's uniquely yours.
+              </p>
+            </div>
+
+            <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 text-center">
+              <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/15">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
               </div>
-            )}
+              <h3 class="text-lg font-semibold mb-2">The Step-Down</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                An optional, private journey for members who want to reduce their nicotine strength over time. Set your baseline, track progress, and earn badges.
+              </p>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <a
+              href="/register?redirect=/membership"
+              class="inline-flex items-center justify-center rounded-lg bg-primary px-8 h-12 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Create your free membership
+              <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <p class="mt-3 text-xs text-muted-foreground">Free forever. No credit card. No subscription.</p>
           </div>
         </div>
+      ) : (
+        <Fragment>
+          <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold tracking-tight mb-3">Membership Tiers</h1>
+            <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Every purchase and interaction earns you SnusCoins. The more you earn, the higher you climb — unlocking exclusive perks at every level.
+            </p>
+          </div>
+
+          <!-- User progress banner -->
+          {userReputation && (
+            <div class="rounded-xl border border-primary/30 bg-primary/5 p-6 mb-10">
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <p class="text-sm text-muted-foreground">Your current tier</p>
+                  <p class="text-2xl font-bold text-primary">
+                    {tierList.find(t => t.level === userReputation!.level)?.name ?? 'Explorer'}
+                  </p>
+                  <p class="text-sm text-muted-foreground mt-1">
+                    {userReputation.lifetime_earned.toLocaleString()} lifetime SnusCoins earned
+                  </p>
+                </div>
+                {userReputation.next_level_name && userReputation.next_level_min_points && (
+                  <div class="w-full sm:w-64">
+                    <div class="flex justify-between text-xs text-muted-foreground mb-1.5">
+                      <span>Progress</span>
+                      <span>{userReputation.next_level_name} ({userReputation.next_level_min_points.toLocaleString()} coins)</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-background/50 rounded-full overflow-hidden border border-border/50">
+                      <div
+                        class="h-full bg-primary rounded-full transition-all"
+                        style={`width: ${Math.min(100, Math.round((userReputation.lifetime_earned / userReputation.next_level_min_points) * 100))}%`}
+                      />
+                    </div>
+                    <p class="text-xs text-muted-foreground mt-1.5">
+                      {(userReputation.next_level_min_points - userReputation.lifetime_earned).toLocaleString()} SnusCoins to go
+                    </p>
+                  </div>
+                )}
+                {!userReputation.next_level_name && (
+                  <div class="text-sm text-primary font-medium">
+                    You have reached the highest tier!
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </Fragment>
       )}
 
       <!-- Visual tier progression -->
