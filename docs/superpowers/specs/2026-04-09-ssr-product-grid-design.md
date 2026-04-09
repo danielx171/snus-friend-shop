@@ -1,136 +1,129 @@
-# SSR Product Grid — /nicotine-pouches Performance Redesign
+# /nicotine-pouches Performance Redesign — Phased Approach
 
 **Date:** 2026-04-09
-**Goal:** Take /nicotine-pouches from Performance 61 → 85+ by server-rendering the first page of products and deferring React to user interaction.
+**Goal:** Take /nicotine-pouches from Performance ~78-81 → 85+ through phased improvements.
+**Success criteria:** Median of 3 mobile PageSpeed runs. Track LCP and visual first paint, not just headline score.
 
 ## Problem
 
-`/nicotine-pouches` is the worst-performing page on the site (Performance 61, LCP ~4.3s). The root cause is architectural: the entire product catalog is a React island (`FilterableProductGrid`) that:
+`/nicotine-pouches` is the lowest-performing page on the site (Performance 78-81 after recent fixes, down from 61). The root cause is architectural: the product catalog is a React island (`FilterableProductGrid`) that fetches `/data/products.json` (276KB) client-side before rendering any real content.
 
-1. Renders 24 skeleton cards on first paint (no real content)
-2. Fetches `/data/products.json` (276KB) client-side
-3. Parses 708 products, computes filters, renders cards — all in JS
-4. First meaningful paint requires: hydration → fetch → parse → render
+The strength and flavor sub-pages already prove a better pattern — they pass inline JSON to FilterableProductGrid and get instant first paint. `/nicotine-pouches` is the only major page still using the client-fetch path.
 
-The strength and flavor sub-pages already prove the SSR pattern works — they pass inline JSON to FilterableProductGrid and get instant first paint. But `/nicotine-pouches` is the main catalog entry point and needs the deepest optimization.
+## Two-Phase Rollout
 
-## Approach: Static Astro Grid + Lazy React Swap
+### Phase 1: Inline productsJson (do first, measure, then decide)
 
-Render the first 24 products as pure Astro HTML using the existing `ProductCard.astro` component. Defer the full interactive FilterableProductGrid until the user actually interacts with filters, sort, or "Show More".
+Swap `/nicotine-pouches` from `productsJsonUrl="/data/products.json"` (client fetch) to `productsJson={productsJson}` (inline data). This is the same pattern already working on `/products`, `/products/strength/[key]`, and `/products/flavor/[key]`.
 
-### First Paint (Zero JS)
-
-- **Product grid:** 24 `ProductCard.astro` cards, sorted by popularity (same logic as homepage best-sellers: products with `popular` badge first, brand diversity max 1 per brand, then by name)
-- **Filter sidebar:** Static HTML using `<details>/<summary>` for collapsible sections, real `<input type="checkbox">` elements with counts
-- **Sort dropdown:** Static `<select>` with options (Featured, Price Low→High, etc.)
-- **"Show More" button:** Static button showing total product count
-- **Quick filter pills:** Unchanged (already static `<a>` links)
-- **SEO content:** Unchanged (static text below grid)
-
-### Data Embedding
-
-Products data for hydration is embedded in the page:
-```html
-<script type="application/json" id="products-data">
-  {JSON.stringify(slimProductData(allProducts))}
-</script>
+**What changes:**
+```diff
+- <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
++ <FilterableProductGrid client:idle productsJson={productsJson} />
 ```
 
-This avoids a network fetch. The HTML payload grows by ~300KB raw, but gzips to ~40KB (structured JSON compresses well). This is faster than a separate fetch because it arrives with the initial HTML response.
-
-### Interaction Trigger → React Swap
-
-A thin React island `ProductGridActivator` (`client:idle`) handles the swap:
-
-1. On mount: checks URL params — if filters are present, triggers swap immediately
-2. Listens for clicks on filter checkboxes, sort changes, or "Show More" via event delegation
-3. On first interaction:
-   - Reads checked state from DOM checkboxes → builds `FilterState`
-   - Reads sort value from `<select>`
-   - Reads products JSON from `<script id="products-data">`
-   - Dynamically imports FilterableProductGrid
-   - Swaps static grid for React grid with CSS opacity crossfade (300ms)
-4. After swap: removes static grid from DOM, all subsequent interactions are client-side React
-
-### Component Inventory
-
-| Component | Type | Role |
-|-----------|------|------|
-| `ProductCard.astro` | Existing | SSR product cards (already exists, identical styling) |
-| `ProductGridActivator.tsx` | **New** | Thin island: detects interaction, swaps static → React |
-| `FilterableProductGrid.tsx` | Existing | Full interactive grid (no changes needed — already supports `productsJson` prop) |
-| `slimProductData()` | Existing | Shapes product data for client consumption |
-| `filterProducts()` | Existing | Sorting/filtering logic in `src/lib/search.ts` |
-
-### Static Filter Sidebar
-
-Computed at build time in Astro frontmatter:
-- **Brands:** Extract unique brands from all products, sorted alphabetically, with product counts
-- **Strengths:** Fixed list (Light, Normal, Strong, Extra Strong, Super Strong) with counts
-- **Flavors:** Fixed list (Mint, Berry, Citrus, etc.) with counts
-- **Formats:** Fixed list (Slim, Mini, Regular, Large) with counts
-
-Rendered as:
-```html
-<aside id="static-filters">
-  <details open>
-    <summary>Strength</summary>
-    <label><input type="checkbox" name="strength" value="strong"> Strong (142)</label>
-    ...
-  </details>
-  ...
-</aside>
+Plus in the frontmatter:
+```ts
+const productsJson = JSON.stringify(slimProductData(products));
 ```
 
-On swap, activator reads all `input[type=checkbox]:checked` elements to capture user's selections.
+**Why this should help:**
+- Eliminates the fetch waterfall (hydration → fetch → parse → render becomes hydration → render)
+- Products data arrives with the initial HTML (gzips to ~40KB, faster than a separate request)
+- No new components, no swap logic, no architectural change
+- 15-minute implementation
 
-### The Swap Moment
+**What it does NOT fix:**
+- First paint is still skeleton cards until React hydrates
+- Full 708-product JSON still parsed client-side
 
+**After deploy:** Run 3 mobile PageSpeed tests, record median Performance + LCP. If 85+, stop here. If not, proceed to Phase 2.
+
+### Phase 2: Static Astro Grid + Lazy React Swap (only if Phase 1 misses target)
+
+Server-render the first 24 products as pure Astro HTML using `ProductCard.astro`. Defer the full interactive FilterableProductGrid until user interaction.
+
+**First paint (real catalog content before grid hydration):**
+- 24 `ProductCard.astro` cards, using a shared featured ordering helper
+- Static filter sidebar using `<details>/<summary>` + real checkboxes
+- Static sort `<select>` and "Show More" button
+- Note: `ProductCard.astro` includes `CardAddToCart client:visible` and a tilt init script, so this is "real content first" not "zero JS"
+
+**Shared featured ordering helper:**
+Both the static shell and FilterableProductGrid's `featured` sort must use the same ordering function. Extract to `src/lib/catalog-order.ts`:
+```ts
+export function featuredOrder(products: SlimProduct[]): SlimProduct[] {
+  // popular badge first, brand diversity (max 1 per brand in top 24), then alphabetical
+}
 ```
-User clicks checkbox/sort/show-more
-  → Activator intercepts (event delegation on sidebar + grid containers)
-  → Dynamic import: FilterableProductGrid
-  → Read products from <script id="products-data">
-  → Read checked filters + sort from DOM
-  → Fade out static grid (opacity: 0, 300ms)
-  → Mount React grid with productsJson + initialFilters
-  → Fade in React grid (opacity: 1, 300ms)
-  → Remove static grid from DOM
-```
+This prevents the grid reshuffling when the swap happens.
 
-### Edge Cases
+**Interaction trigger → React swap:**
+A thin `ProductGridActivator.tsx` island (`client:idle`):
+1. On mount: if URL params or beginner mode active → mount React grid immediately (no static shell flash)
+2. On filter/sort/show-more interaction → dynamically import FilterableProductGrid, swap with CSS crossfade
 
-- **JS disabled:** Static grid stays visible permanently. Quick filter pills (static `<a>` links to `/products/strength/strong` etc.) provide navigation without JS.
-- **URL params on load:** If user arrives with `?brand=zyn`, activator triggers swap on mount since filters are active. Brief flash of unfiltered static grid → filtered React grid.
-- **Slow hydration:** Static grid is real content with real product links. Users can browse and click products before React loads.
-- **Empty filter results:** Handled by existing FilterableProductGrid "No products match" state.
-- **Astro ProductCard 3D tilt:** The SSR `ProductCard.astro` has a JS-powered 3D tilt effect that initializes via IntersectionObserver + requestIdleCallback. This runs independently of the React swap and doesn't affect first paint.
+**Skip-static rules (no flash of unfiltered content):**
+- If URL has filter params (`?brand=`, `?strength=`, etc.) → mount React grid immediately
+- If beginner mode is active (read from localStorage/nanostore) → mount React grid immediately
+- Only show static shell for clean `/nicotine-pouches` visits with no active filters
 
-### Performance Expectations
+**Mobile pre-hydration:**
+- Static filter sidebar hidden on mobile (same as current React behavior)
+- Mobile "Filters" button is inert until React mounts
+- Mobile filter sheet lives entirely in FilterableProductGrid (no static equivalent needed)
 
-| Metric | Current | Expected |
-|--------|---------|----------|
-| LCP | ~4.3s | <1.5s (real product cards in first HTML response) |
-| CLS | 0 (already fixed) | 0 (static grid has stable dimensions) |
-| FCP | ~2s | <0.8s (no JS needed for first paint) |
-| Performance score | 61 | 85+ |
+**FilterableProductGrid changes (Phase 2 only):**
+- Extract shared facet definitions (brand list, strength labels, etc.) to a shared module
+- Extract shared featured ordering helper
+- Accept `initialVisibleCount` prop to match static shell's 24-card count
+- Ensure dynamic import doesn't eagerly pull the full grid into the initial bundle
 
-### Files to Modify
+### Data Embedding (both phases)
 
-| File | Change |
-|------|--------|
-| `src/pages/nicotine-pouches.astro` | Replace FilterableProductGrid with static grid + activator |
-| `src/components/react/ProductGridActivator.tsx` | **New** — thin swap island |
-| `src/components/react/FilterableProductGrid.tsx` | No changes (already supports inline JSON) |
-| `src/components/astro/ProductCard.astro` | No changes (already exists) |
-| `src/lib/product-json.ts` | No changes |
+Phase 1: Inline JSON as component prop (same as `/products` pattern).
+Phase 2: Additionally embed in `<script type="application/json" id="products-data">` for the activator to read without parsing the prop.
 
-### What This Does NOT Change
+HTML payload grows ~300KB raw but gzips to ~40KB. Faster than a separate fetch.
 
-- FilterableProductGrid internals (no refactor)
+## Component Inventory
+
+| Component | Phase | Status |
+|-----------|-------|--------|
+| `FilterableProductGrid.tsx` | 1 | Existing, no changes (already supports `productsJson`) |
+| `slimProductData()` in `src/lib/product-json.ts` | 1 | Existing, no changes |
+| `nicotine-pouches.astro` | 1 | Modify: swap `productsJsonUrl` → `productsJson` |
+| `ProductCard.astro` | 2 | Existing, no changes |
+| `ProductGridActivator.tsx` | 2 | **New** — thin swap island |
+| `src/lib/catalog-order.ts` | 2 | **New** — shared featured ordering helper |
+| `FilterableProductGrid.tsx` | 2 | Minor changes (shared ordering, initialVisibleCount) |
+
+## Performance Expectations
+
+| Metric | Before fixes | After Phase 1 (est.) | After Phase 2 (est.) |
+|--------|-------------|----------------------|----------------------|
+| Performance | 61-63 | 82-88 | 88-92 |
+| LCP | ~4.3s | ~2.5s | <1.5s |
+| CLS | 0.587 → 0 (fixed) | 0 | 0 |
+
+**Note:** 90+ may require global asset tuning beyond grid architecture. Current non-grid overhead includes Sentry (~74KB), Plus Jakarta Sans (~49KB), Space Grotesk (~43KB). Those are separate optimization targets.
+
+## Verification
+
+After each phase:
+1. `bun run build` succeeds
+2. Deploy + promote to production
+3. Run 3 mobile PageSpeed tests on `/nicotine-pouches`, record median
+4. Codex visual verification: product cards visible on first paint, no skeleton flash (Phase 2)
+5. Filter interaction works: click a filter → grid updates correctly
+6. Beginner mode: toggle on → products filter to low-strength
+7. URL params: `/nicotine-pouches?strength=strong` → shows filtered results
+
+## What This Does NOT Change
+
 - Product data pipeline (Supabase → content layer → slimProductData)
 - URL-based filter state management
-- Mobile filter sheet UX
 - Strength/flavor sub-pages (already SSR)
 - Homepage product grid
 - Product detail pages
+- Mobile filter sheet UX (lives in FilterableProductGrid)
