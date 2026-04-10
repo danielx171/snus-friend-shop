@@ -19,6 +19,19 @@ const brands = allBrands
   .filter((b) => (productCountByBrand.get(b.id) ?? 0) > 0)
   .sort((a, b) => a.data.name.localeCompare(b.data.name));
 
+// Pick best product image per brand (popular/bestseller first)
+const brandHeroImage = new Map<string, string>();
+for (const p of allProducts) {
+  if (!p.data.imageUrl) continue;
+  if (p.data.badgeKeys?.includes('popular') || p.data.badgeKeys?.includes('bestseller')) {
+    brandHeroImage.set(p.data.brandSlug, p.data.imageUrl);
+  }
+}
+for (const p of allProducts) {
+  if (!p.data.imageUrl || brandHeroImage.has(p.data.brandSlug)) continue;
+  brandHeroImage.set(p.data.brandSlug, p.data.imageUrl);
+}
+
 const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
@@ -136,6 +149,19 @@ const collectionJsonLd = {
                   loading="lazy"
                   format="webp"
                   class="h-full w-full object-contain"
+                />
+              </div>
+            ) : brandHeroImage.get(brand.id) ? (
+              <div
+                class="mb-3 flex h-[68px] w-[68px] items-center justify-center overflow-hidden rounded-full"
+                style={`background: radial-gradient(circle, ${bColor}20 0%, transparent 70%);`}
+              >
+                <img
+                  src={brandHeroImage.get(brand.id)}
+                  alt={`${brand.data.name} product`}
+                  width={68} height={68} loading="lazy"
+                  class="h-full w-full object-contain"
+                  style="filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));"
                 />
               </div>
             ) : (

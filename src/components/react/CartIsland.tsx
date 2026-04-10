@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import {
   $cartItems,
@@ -6,10 +6,12 @@ import {
   $freeShippingProgress,
   updateCartQuantity,
   removeFromCart,
+  syncCartFromStorage,
 } from '@/stores/cart';
 import type { PackSize } from '@/data/products';
 
 function CartIsland() {
+  useEffect(() => { syncCartFromStorage(); }, []);
   const items = useStore($cartItems);
   const total = useStore($cartTotal);
   const shipping = useStore($freeShippingProgress);

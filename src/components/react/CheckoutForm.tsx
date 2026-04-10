@@ -1,6 +1,6 @@
-import { useState, useMemo, useCallback, type FormEvent } from 'react';
+import { useState, useMemo, useCallback, useEffect, type FormEvent } from 'react';
 import { useStore } from '@nanostores/react';
-import { $cartItems, $cartTotal, clearCart, $mixDiscount, type CartItem } from '@/stores/cart';
+import { $cartItems, $cartTotal, clearCart, $mixDiscount, syncCartFromStorage, type CartItem } from '@/stores/cart';
 import { packSizeMultipliers, type PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
 import { actions } from 'astro:actions';
@@ -79,6 +79,7 @@ function packLabel(packSize: PackSize): string {
 }
 
 export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }: Props) {
+  useEffect(() => { syncCartFromStorage(); }, []);
   const storeCartItems = useStore($cartItems);
   const storeCartTotal = useStore($cartTotal);
 

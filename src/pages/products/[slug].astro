@@ -120,7 +120,7 @@ const flavorLabel = flavorLabels[p.flavorKey] ?? p.flavorKey;
 const flavorColor = 'bg-primary/10 text-primary border-primary/20';
 
 // Generate an accurate fallback description from real product attributes
-const generatedDescription = `${p.name} by ${p.brand}. ${p.nicotineContent} mg/pouch nicotine pouches in ${p.formatKey || 'slim'} format with ${flavorLabel.toLowerCase()} flavour. ${strengthLabel} strength. ${p.portionsPerCan} portions per can.`;
+const generatedDescription = `${p.name} — ${p.nicotineContent}mg ${flavorLabel.toLowerCase()} nicotine pouches, ${strengthLabel.toLowerCase()} strength. ${p.portionsPerCan} portions. Free EU shipping.`;
 
 // Detect bad template descriptions: if the stored description mentions a different
 // format or contains "cool mint" for a non-cool-mint product, use the generated one instead
@@ -133,7 +133,7 @@ const isBadDescription = !p.description
   || storedDesc.includes('shop snusfriends.com');
 
 const description = isBadDescription ? generatedDescription : p.description;
-const metaDescription = description.length > 160 ? description.slice(0, 157) + '...' : description;
+const metaDescription = description.length > 155 ? description.slice(0, 152) + '...' : description;
 
 const packTiers = [
   { key: 'pack1', label: '1 can', qty: 1 },

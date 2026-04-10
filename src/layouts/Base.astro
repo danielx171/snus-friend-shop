@@ -73,6 +73,9 @@ const props = Astro.props;
       }
     })();
   </script>
+  <script is:inline>
+    window.addEventListener('error',function(e){if(e.message&&e.message.includes('Importing a module script failed')){if(!sessionStorage.getItem('sf_reload')){sessionStorage.setItem('sf_reload','1');window.location.reload()}}});sessionStorage.removeItem('sf_reload');
+  </script>
 </head>
 <body class:list={['min-h-screen bg-background text-foreground antialiased', props.class]}>
   <slot />
