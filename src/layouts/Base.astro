@@ -83,6 +83,14 @@ const props = Astro.props;
   <script>
     import { $theme } from '@/stores/theme';
 
+    // Apply theme BEFORE the swapped page is shown (prevents flash)
+    document.addEventListener('astro:after-swap', () => {
+      const theme = $theme.get();
+      const root = document.documentElement;
+      root.classList.remove(...(window.__validThemes ?? ['forest', 'copper']));
+      root.classList.add(theme);
+    });
+
     document.addEventListener('astro:page-load', () => {
       const theme = $theme.get();
       const root = document.documentElement;

@@ -159,6 +159,26 @@ export function clearCart() { $cartItems.set([]); }
 export function openCart() { $cartOpen.set(true); }
 export function closeCart() { $cartOpen.set(false); }
 
+/* ── Cross-tab cart sync via BroadcastChannel ── */
+
+let _bcReceiving = false;
+
+if (typeof window !== 'undefined' && typeof BroadcastChannel !== 'undefined') {
+  const bc = new BroadcastChannel('sf-cart');
+
+  // Broadcast local changes to other tabs
+  $cartItems.listen((items) => {
+    if (_bcReceiving) return;
+    try { bc.postMessage(items); } catch { /* ignore */ }
+  });
+
+  // Receive changes from other tabs
+  bc.onmessage = (event) => {
+    _bcReceiving = true;
+    try { $cartItems.set(event.data); } finally { _bcReceiving = false; }
+  };
+}
+
 /** Upgrade a cart item from pack1 to a larger pack size. */
 export function upgradePackSize(productId: string, fromPack: PackSize, toPack: PackSize) {
   $cartItems.set(

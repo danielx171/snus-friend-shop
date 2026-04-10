@@ -53,6 +53,23 @@ const staffPicks = staffPickBrands
   })
   .filter(Boolean);
 
+// Popular Brands: top brands by product count (GSC internal linking signal)
+const brandProductCounts = new Map<string, number>();
+for (const p of allProducts) {
+  brandProductCounts.set(p.data.brandSlug, (brandProductCounts.get(p.data.brandSlug) ?? 0) + 1);
+}
+const popularBrands = [...activeBrands]
+  .sort((a, b) => (brandProductCounts.get(b.id) ?? 0) - (brandProductCounts.get(a.id) ?? 0))
+  .slice(0, 8);
+
+// For each popular brand, pick the top-rated product with an image as the showcase
+const popularBrandShowcase = popularBrands.map((brand) => {
+  const topProduct = allProducts
+    .filter((p) => p.data.brandSlug === brand.id && p.data.imageUrl)
+    .sort((a, b) => (b.data.ratings || 0) - (a.data.ratings || 0))[0];
+  return { brand, productCount: brandProductCounts.get(brand.id) ?? 0, topProduct };
+});
+
 // Pick 10 hero products with diverse brands for the 3D showcase
 const heroBrandTargets = ['zyn', 'velo', 'siberia', 'loop', 'skruf', 'nordic-spirit', 'pablo', 'iceberg', 'white-fox', 'killa'];
 const heroProducts = heroBrandTargets
@@ -456,6 +473,60 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
       </div>
     </section>
   )}
+
+  <!-- Popular Brands — top brands by product count for GSC internal linking -->
+  <section class="border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="mb-3 text-center text-2xl font-bold text-foreground sm:text-3xl">
+        Popular Brands
+      </h2>
+      <p class="mb-10 text-center text-muted-foreground">
+        The most-stocked brands in our catalogue — trusted by thousands of pouch users across Europe
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
+        {popularBrandShowcase.map(({ brand, productCount, topProduct }) => {
+          const bColor = brandColors[brand.id] ?? defaultBrandColor;
+          return (
+            <a
+              href={`/brands/${brand.id}`}
+              class="group relative flex flex-col items-center rounded-2xl border border-border bg-background p-5 transition hover:border-primary/30 hover:shadow-lg"
+              data-astro-prefetch
+            >
+              {topProduct?.data.imageUrl ? (
+                <img
+                  src={topProduct.data.imageUrl}
+                  alt={`${brand.data.name} — ${topProduct.data.name}`}
+                  width="100"
+                  height="100"
+                  loading="lazy"
+                  class="mb-3 h-20 w-20 object-contain rounded-xl transition-transform duration-300 group-hover:scale-110"
+                  style={`filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));`}
+                />
+              ) : (
+                <div
+                  class="mb-3 flex h-20 w-20 items-center justify-center rounded-xl"
+                  style={`background: linear-gradient(135deg, ${bColor}30, ${bColor}15);`}
+                >
+                  <span class="text-xl font-extrabold" style={`color: ${bColor};`}>
+                    {brand.data.name.substring(0, 3).toUpperCase()}
+                  </span>
+                </div>
+              )}
+              <h3 class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                {brand.data.name}
+              </h3>
+              <p class="text-xs text-muted-foreground">{productCount} products</p>
+            </a>
+          );
+        })}
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/brands" class="text-sm font-medium text-primary hover:underline" data-astro-prefetch>
+          Browse all {brands.length} brands &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- Popular Guides — internal linking to top blog content -->
   <section class="border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">

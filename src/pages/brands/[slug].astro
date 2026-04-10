@@ -161,6 +161,23 @@ const faqs = brandFaqs[brand.id];
         </div>
       )}
 
+      <!-- Mobile product strip — visible only on small screens -->
+      {mosaicProducts.length > 0 && (
+        <div class="absolute bottom-0 right-0 left-0 flex items-end justify-end gap-1 p-3 sm:hidden" style="mask-image: linear-gradient(to right, transparent 0%, black 40%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);">
+          {mosaicProducts.slice(0, 3).map((p, i) => (
+            <img
+              src={p.data.imageUrl}
+              alt={`${b.name} product`}
+              width="60"
+              height="60"
+              loading="lazy"
+              class="rounded-lg object-contain"
+              style={`width: 52px; height: 52px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); opacity: ${0.9 - i * 0.15};`}
+            />
+          ))}
+        </div>
+      )}
+
       <!-- Dark overlay gradient: full opacity left → semi-transparent right (text readability) -->
       <div class="absolute inset-0" style="background: linear-gradient(90deg, #0c1018 0%, #0c1018dd 40%, #0c101888 70%, #0c101866 100%);"></div>
 
