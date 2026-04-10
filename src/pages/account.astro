@@ -21,28 +21,42 @@ const supabase = Astro.locals.supabase;
 // Tab selection via query param (default: orders)
 const tab = Astro.url.searchParams.get('tab') || 'orders';
 
-// Fetch all independent queries in parallel (referral_codes moved here to unblock the waterfall)
-const [
-  { data: orders },
-  { data: pointsBalance },
-  { count: reviewsCount },
-  { data: subscriptions },
-  { data: referralCode },
-  { data: referralCodeRow },
-] = await Promise.all([
-  supabase.from('orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(20),
-  supabase.from('points_balances').select('*').eq('user_id', user.id).single(),
-  supabase.from('product_reviews').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
-  supabase.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
-  supabase.rpc('get_or_create_referral_code', { p_user_id: user.id }),
-  supabase.from('referral_codes').select('id').eq('user_id', user.id).single(),
-]);
+// Tab-aware data fetching — only query what the active tab needs
+const { data: pointsBalance } = await supabase
+  .from('points_balances').select('*').eq('user_id', user.id).single();
 
-// Fast follow-up: referral redemption count (single indexed WHERE, ~50ms)
-const { count: referralCount } = await supabase
-  .from('referral_redemptions')
-  .select('id', { count: 'exact', head: true })
-  .eq('referral_code_id', referralCodeRow?.id ?? '00000000-0000-0000-0000-000000000000');
+let orders: any[] | null = null;
+let reviewsCount: number | null = 0;
+let subscriptions: any[] | null = null;
+let referralCode: string | null = null;
+let referralCodeRow: { id: string } | null = null;
+let referralCount: number | null = 0;
+
+if (tab === 'orders') {
+  const [ordersRes, reviewsRes] = await Promise.all([
+    supabase.from('orders').select('*').eq('user_id', user.id)
+      .order('created_at', { ascending: false }).limit(20),
+    supabase.from('product_reviews').select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id),
+  ]);
+  orders = ordersRes.data;
+  reviewsCount = reviewsRes.count ?? 0;
+} else if (tab === 'subscriptions') {
+  const res = await supabase.from('subscriptions').select('*')
+    .eq('user_id', user.id).order('created_at', { ascending: false });
+  subscriptions = res.data;
+} else if (tab === 'membership') {
+  const [codeRes, codeRowRes] = await Promise.all([
+    supabase.rpc('get_or_create_referral_code', { p_user_id: user.id }),
+    supabase.from('referral_codes').select('id').eq('user_id', user.id).single(),
+  ]);
+  referralCode = codeRes.data;
+  referralCodeRow = codeRowRes.data;
+  const { count } = await supabase.from('referral_redemptions')
+    .select('id', { count: 'exact', head: true })
+    .eq('referral_code_id', referralCodeRow?.id ?? '00000000-0000-0000-0000-000000000000');
+  referralCount = count ?? 0;
+}
 
 // User metadata + nickname
 import { generateNickname } from '@/lib/nickname';

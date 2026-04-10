@@ -185,13 +185,13 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
                     filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
                     backface-visibility: hidden;
                   `}
-                  loading="eager"
+                  loading="lazy"
                 />
               );
             })}
           </div>
 
-          <!-- Center featured product (larger, floating) -->
+          <!-- Center featured product (larger, floating) — LCP element -->
           {heroProducts[0] && (
             <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
               <img
@@ -199,6 +199,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
                 alt={heroProducts[0]!.data.name}
                 width="180"
                 height="180"
+                fetchpriority="high"
                 class="hero-center-can rounded-2xl"
                 style="animation: heroCenterFloat 4s ease-in-out infinite; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) drop-shadow(0 0 20px hsl(var(--primary) / 0.15));"
                 loading="eager"
@@ -221,7 +222,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
             height="112"
             class="flex-shrink-0 snap-center rounded-xl w-24 h-24 sm:w-28 sm:h-28 hero-can"
             style={`animation: heroFloat${(i % 4) + 1} ${6 + i * 0.5}s ease-in-out infinite ${i * 0.3}s; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.3));`}
-            loading="eager"
+            loading={i === 0 ? 'eager' : 'lazy'}
           />
         ))}
       </div>
