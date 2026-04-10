@@ -205,13 +205,23 @@ export default function CartDrawer() {
     // so persistentAtom in the adding island wrote to localStorage but our instance doesn't know.
     const handler = () => {
       syncCartFromStorage();
-      openCart();
+      // Small delay to let React process the $cartItems update before opening
+      requestAnimationFrame(() => {
+        syncCartFromStorage(); // re-read in case first was batched
+        openCart();
+      });
     };
     window.addEventListener('open-cart', handler);
     return () => window.removeEventListener('open-cart', handler);
   }, []);
 
+  // Sync cart from localStorage whenever the drawer opens
+  useEffect(() => {
+    if (isOpen) syncCartFromStorage();
+  }, [isOpen]);
+
   const handleOpenChange = useCallback((open: boolean) => {
+    if (open) syncCartFromStorage();
     if (!open) closeCart();
   }, []);
 

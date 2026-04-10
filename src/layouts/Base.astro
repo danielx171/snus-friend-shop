@@ -62,7 +62,7 @@ const props = Astro.props;
     (function() {
       try {
         var raw = localStorage.getItem(storageKey);
-        var stored = raw || null;
+        try { var stored = raw ? JSON.parse(raw) : null; } catch(e) { var stored = raw; }
         var theme = (stored && validThemeList.indexOf(stored) !== -1) ? stored : defaultTheme;
         document.documentElement.classList.add(theme);
         window.__validThemes = validThemeList;
