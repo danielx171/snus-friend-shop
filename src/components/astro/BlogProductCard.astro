@@ -47,6 +47,11 @@ const flavorLabelMap: Record<string, string> = {
 };
 const flavorLabel = flavorLabelMap[flavorKey] ?? flavorKey;
 
+const strengthMap: Record<string, number> = {
+  light: 1, normal: 2, strong: 3, 'extra-strong': 4, 'super-strong': 5,
+};
+const strengthDots = strengthMap[strengthKey] ?? 2;
+
 const pack1Price = prices.pack1 ?? 0;
 ---
 
@@ -93,6 +98,16 @@ const pack1Price = prices.pack1 ?? 0;
       >
         {brand}
       </a>
+
+      {/* Strength dots */}
+      <div class="flex items-center gap-0.5 mt-0.5">
+        {Array.from({ length: 5 }, (_, i) => (
+          <div
+            class="rounded-full"
+            style={`width: ${i < strengthDots ? 5 : 4}px; height: ${i < strengthDots ? 5 : 4}px; background-color: ${i < strengthDots ? strengthColor : 'rgba(128,128,128,0.2)'};`}
+          />
+        ))}
+      </div>
 
       {/* Product name */}
       <a href={`/products/${slug}`} data-astro-prefetch class="group/name">

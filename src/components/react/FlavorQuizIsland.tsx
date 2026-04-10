@@ -1,10 +1,8 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { addToCart } from '@/stores/cart';
-import { cartToast } from '@/lib/toast';
-import type { Product } from '@/data/products';
 import { trackQuizCompleted } from '@/lib/analytics';
 import { useAuthUser } from '@/hooks/useAuthUser';
 import { supabase } from '@/integrations/supabase/client';
+import ProductCard from '@/components/react/ProductCard';
 
 interface QuizProduct {
   slug: string;
@@ -61,14 +59,6 @@ const STRENGTH_OPTIONS = [
   },
 ] as const;
 
-const strengthMap: Record<string, number> = {
-  light: 1,
-  normal: 2,
-  strong: 3,
-  'extra-strong': 4,
-  'super-strong': 5,
-};
-
 const FLAVOR_FAMILIES: Record<string, string[]> = {
   mint: ['mint', 'peppermint', 'spearmint', 'menthol', 'wintergreen', 'ice', 'cool', 'frost'],
   berry: ['berry', 'blueberry', 'strawberry', 'raspberry', 'blackberry', 'mixed berry', 'wildberry', 'cranberry'],
@@ -102,22 +92,6 @@ function flavorScore(product: { flavorKey: string; name: string }, selectedFlavo
   return score;
 }
 
-function StrengthIndicator({ strengthKey }: { strengthKey: string }) {
-  const level = strengthMap[strengthKey] ?? 2;
-  return (
-    <div className="flex items-center gap-0.5" role="img" aria-label={`Strength ${level} of 5`}>
-      {Array.from({ length: 5 }, (_, i) => (
-        <span
-          key={i}
-          className={`inline-block h-1.5 w-1.5 rounded-full ${
-            i < level ? 'bg-primary' : 'bg-muted-foreground/25'
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
-
 function ProgressBar({ step, total }: { step: number; total: number }) {
   return (
     <div className="flex items-center justify-center gap-2 mb-8">
@@ -136,131 +110,6 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
     </div>
   );
 }
-
-const ResultCard = React.memo<{ p: QuizProduct; selectedFlavors: string[] }>(
-  function ResultCard({ p, selectedFlavors }) {
-    const isOutOfStock = p.stock === 0;
-    const displayPrice = p.prices.pack1;
-
-    const handleAddToCart = useCallback(
-      (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (isOutOfStock) return;
-
-        const product: Product = {
-          id: p.slug,
-          name: p.name,
-          brand: p.brand,
-          categoryKey: 'nicotinePouches',
-          flavorKey: p.flavorKey as Product['flavorKey'],
-          strengthKey: p.strengthKey as Product['strengthKey'],
-          formatKey: 'slim',
-          nicotineContent: p.nicotineContent,
-          portionsPerCan: 20,
-          descriptionKey: '',
-          image: p.imageUrl,
-          ratings: p.ratings,
-          badgeKeys: [] as Product['badgeKeys'],
-          prices: p.prices as Product['prices'],
-          manufacturer: p.brand,
-          stock: p.stock,
-        };
-
-        addToCart(product, 'pack1');
-        window.dispatchEvent(new CustomEvent('open-cart'));
-        cartToast(p.name);
-      },
-      [p, isOutOfStock],
-    );
-
-    const matchScore = flavorScore(p, selectedFlavors);
-    const isDirectMatch = matchScore >= 3;
-    const isFamilyMatch = !isDirectMatch && matchScore >= 2;
-
-    return (
-      <a
-        href={`/products/${p.slug}`}
-        className="group relative flex flex-col overflow-hidden rounded-xl bg-card/60 backdrop-blur-sm border border-border transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 hover:border-primary/30"
-      >
-        {isDirectMatch && (
-          <div className="absolute top-2 left-2 z-10">
-            <span className="rounded-md bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary">
-              Flavour Match
-            </span>
-          </div>
-        )}
-        {isFamilyMatch && (
-          <div className="absolute top-2 left-2 z-10">
-            <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
-              Close Match
-            </span>
-          </div>
-        )}
-
-        <div className="relative aspect-square w-full overflow-hidden bg-muted">
-          {p.imageUrl ? (
-            <img
-              src={p.imageUrl}
-              alt={`${p.name} by ${p.brand}`}
-              width={300}
-              height={300}
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-              onError={(e) => {
-                const target = e.currentTarget;
-                target.style.display = 'none';
-                target.parentElement?.classList.add('flex', 'items-center', 'justify-center');
-              }}
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <svg
-                viewBox="0 0 64 64"
-                fill="none"
-                className="h-16 w-16 text-muted-foreground/40"
-                aria-hidden="true"
-              >
-                <ellipse cx="32" cy="32" rx="28" ry="10" stroke="currentColor" strokeWidth="2" />
-                <ellipse cx="32" cy="28" rx="28" ry="10" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.08" />
-                <path d="M4 28v4c0 5.523 12.536 10 28 10s28-4.477 28-10v-4" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-1 flex-col gap-1.5 p-3">
-          <span className="text-xs text-muted-foreground">{p.brand}</span>
-          <h3 className="text-sm font-bold leading-tight text-foreground line-clamp-2">{p.name}</h3>
-
-          <div className="flex items-center gap-2">
-            <StrengthIndicator strengthKey={p.strengthKey} />
-            <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
-              {p.flavorKey}
-            </span>
-          </div>
-
-          <span className="text-xs text-muted-foreground">{p.nicotineContent} mg/portion</span>
-
-          <div className="mt-auto flex items-end justify-between pt-2">
-            <span className="text-lg font-bold text-foreground">
-              &euro;{displayPrice?.toFixed(2)}
-            </span>
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              disabled={isOutOfStock}
-              aria-label={isOutOfStock ? `Sold Out \u2013 ${p.name}` : `Add to Cart \u2013 ${p.name}`}
-              className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
-            </button>
-          </div>
-        </div>
-      </a>
-    );
-  },
-);
 
 export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
   const [step, setStep] = useState(0);
@@ -528,9 +377,23 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
           </div>
 
           {results.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
-              {results.map((p) => (
-                <ResultCard key={p.slug} p={p} selectedFlavors={selectedFlavors} />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
+              {results.slice(0, 5).map((p) => (
+                <ProductCard
+                  key={p.slug}
+                  slug={p.slug}
+                  name={p.name}
+                  brand={p.brand}
+                  brandSlug={p.brandSlug}
+                  imageUrl={p.imageUrl}
+                  prices={p.prices}
+                  stock={p.stock}
+                  nicotineContent={p.nicotineContent}
+                  strengthKey={p.strengthKey}
+                  flavorKey={p.flavorKey}
+                  ratings={p.ratings}
+                  badgeKeys={[]}
+                />
               ))}
             </div>
           ) : (

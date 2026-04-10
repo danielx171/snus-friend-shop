@@ -129,15 +129,18 @@ const faqs = brandFaqs[brand.id];
       <!-- Brand color ambient glow — subtle, anchored to top-left -->
       <div class="absolute inset-0" style={`background: radial-gradient(ellipse at 10% 30%, ${bColor}25 0%, transparent 50%), radial-gradient(ellipse at 90% 80%, ${bColor}10 0%, transparent 40%);`}></div>
 
+      <!-- Brand-colored radial glow behind mosaic -->
+      <div class="absolute right-0 top-0 bottom-0 w-2/3 pointer-events-none" style={`background: radial-gradient(ellipse at 70% 50%, ${bColor}15 0%, transparent 70%);`} />
+
       <!-- Product mosaic grid — right side, fades in from right -->
       {mosaicProducts.length > 0 && (
         <div
           class="absolute top-0 right-0 bottom-0 hidden sm:grid"
-          style="width: 55%; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; mask-image: linear-gradient(to right, transparent 0%, black 30%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%);"
+          style="width: 65%; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; mask-image: linear-gradient(to right, transparent 0%, black 30%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%);"
         >
           {mosaicProducts.map((p, i) => {
             const pos = mosaicPositions[i];
-            const imgSize = pos.size === 'lg' ? 140 : 80;
+            const imgSize = pos.size === 'lg' ? 200 : 120;
             return (
               <div
                 class="relative overflow-hidden flex items-center justify-center"
@@ -184,14 +187,9 @@ const faqs = brandFaqs[brand.id];
             />
           </div>
         ) : (
-          <div
-            class="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl"
-            style={`background: linear-gradient(135deg, ${bColor}30, ${bColor}15); border: 1px solid ${bColor}25; backdrop-filter: blur(12px);`}
-          >
-            <span class="text-2xl font-extrabold" style={`color: ${bColor};`}>
-              {b.name.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
-            </span>
-          </div>
+          <span class="text-3xl font-extrabold tracking-tight" style={`color: ${bColor}`}>
+            {b.name}
+          </span>
         )}
 
         <!-- Brand info -->

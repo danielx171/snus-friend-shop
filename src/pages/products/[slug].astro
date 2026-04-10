@@ -13,18 +13,44 @@ import { rewards } from '@/config/rewards';
 
 export async function getStaticPaths() {
   const allProducts = await getCollection('products');
-  return allProducts.map((product) => ({
-    params: { slug: product.id },
-    props: {
-      product,
-      relatedProducts: allProducts
-        .filter((rp) => rp.data.brandSlug === product.data.brandSlug && rp.id !== product.id)
-        .slice(0, 4),
-    },
-  }));
+  return allProducts.map((product) => {
+    const relatedProducts = allProducts
+      .filter((rp) => rp.data.brandSlug === product.data.brandSlug && rp.id !== product.id)
+      .slice(0, 4);
+
+    // Same flavour, different brand
+    const sameFlavour = allProducts
+      .filter((rp) => rp.data.flavorKey === product.data.flavorKey
+        && rp.data.brandSlug !== product.data.brandSlug
+        && rp.id !== product.id
+        && rp.data.imageUrl
+        && rp.data.stock > 0)
+      .sort((a, b) => (b.data.ratings || 0) - (a.data.ratings || 0))
+      .slice(0, 4);
+
+    // Similar strength, better value (sorted by price ascending)
+    const similarStrength = allProducts
+      .filter((rp) => rp.data.strengthKey === product.data.strengthKey
+        && rp.id !== product.id
+        && rp.data.imageUrl
+        && rp.data.stock > 0
+        && rp.data.brandSlug !== product.data.brandSlug)
+      .sort((a, b) => (a.data.prices?.pack1 || 99) - (b.data.prices?.pack1 || 99))
+      .slice(0, 4);
+
+    return {
+      params: { slug: product.id },
+      props: {
+        product,
+        relatedProducts,
+        sameFlavour,
+        similarStrength,
+      },
+    };
+  });
 }
 
-const { product, relatedProducts } = Astro.props;
+const { product, relatedProducts, sameFlavour, similarStrength } = Astro.props;
 const p = product.data;
 const bColor = brandColors[p.brandSlug] ?? defaultBrandColor;
 
@@ -437,6 +463,56 @@ const jsonLd = {
     <section class="mt-12">
       <ProductReviewsIsland client:visible productId={product.id} />
     </section>
+
+    <!-- Same flavour, different brand -->
+    {sameFlavour.length > 0 && (
+      <section class="mt-12">
+        <h2 class="mb-4 text-lg font-bold text-foreground">Same flavour, different brand</h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {sameFlavour.map((rp: any) => (
+            <ProductCard
+              slug={rp.id}
+              name={rp.data.name}
+              brand={rp.data.brand}
+              brandSlug={rp.data.brandSlug}
+              imageUrl={rp.data.imageUrl}
+              prices={rp.data.prices}
+              stock={rp.data.stock}
+              nicotineContent={rp.data.nicotineContent}
+              strengthKey={rp.data.strengthKey}
+              flavorKey={rp.data.flavorKey}
+              ratings={rp.data.ratings}
+              badgeKeys={rp.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Similar strength, great value -->
+    {similarStrength.length > 0 && (
+      <section class="mt-12">
+        <h2 class="mb-4 text-lg font-bold text-foreground">Similar strength, great value</h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {similarStrength.map((rp: any) => (
+            <ProductCard
+              slug={rp.id}
+              name={rp.data.name}
+              brand={rp.data.brand}
+              brandSlug={rp.data.brandSlug}
+              imageUrl={rp.data.imageUrl}
+              prices={rp.data.prices}
+              stock={rp.data.stock}
+              nicotineContent={rp.data.nicotineContent}
+              strengthKey={rp.data.strengthKey}
+              flavorKey={rp.data.flavorKey}
+              ratings={rp.data.ratings}
+              badgeKeys={rp.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- Related Products -->
     {relatedProducts.length > 0 && (
