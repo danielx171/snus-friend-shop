@@ -99,6 +99,43 @@ const tiers = [
         ))}
       </div>
 
+      <div class="prose prose-sm max-w-none text-muted-foreground mb-4">
+        <p>
+          The Vault is your personal rewards dashboard at SnusFriend — where every order, review, and interaction earns you SnusCoins that translate into real discounts, free shipping, and exclusive perks.
+        </p>
+        <p class="mt-3">
+          Getting started takes 30 seconds. Create a free SnusFriend account and you're automatically enrolled. From your very first order, SnusCoins start accumulating in your Vault. There are no minimum purchase thresholds, no complicated tiers to unlock before earning begins — if you buy a single can, you earn coins.
+        </p>
+        <p class="mt-3">
+          Here's how it works in practice: place an order, and you earn SnusCoins for every euro you spend — automatically. Write a review for a product you've tried, and you'll earn bonus coins. Spin the Daily Drop wheel each day for a chance at extra coins. Complete Missions — small challenges like "Try 3 brands this month" or "Rate your last 5 orders" — and earn coins per Mission completed. Refer a friend who places their first order, and you both get rewarded.
+        </p>
+        <p class="mt-3">
+          Once you've accumulated coins, redeem them for store credit, percentage discounts on your next order, free shipping upgrades, or mystery boxes curated by our editorial team. Your coins never expire as long as your account remains active.
+        </p>
+      </div>
+
+      <!-- Earning rates table -->
+      <div class="mt-8 overflow-x-auto mb-12">
+        <table class="w-full text-sm border border-border rounded-lg overflow-hidden">
+          <thead class="bg-muted/30">
+            <tr>
+              <th class="text-left px-4 py-3 text-foreground font-semibold">Action</th>
+              <th class="text-left px-4 py-3 text-foreground font-semibold">SnusCoins Earned</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Per €1 spent on orders</td><td class="px-4 py-2.5 text-foreground font-medium">1 SnusCoin</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Write a product review</td><td class="px-4 py-2.5 text-foreground font-medium">50 SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Daily Drop spin</td><td class="px-4 py-2.5 text-foreground font-medium">5–50 SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Complete a Mission</td><td class="px-4 py-2.5 text-foreground font-medium">10–100 SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (you receive)</td><td class="px-4 py-2.5 text-foreground font-medium">100 SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (friend receives)</td><td class="px-4 py-2.5 text-foreground font-medium">50 SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Welcome bonus (first order)</td><td class="px-4 py-2.5 text-foreground font-medium">25 SnusCoins</td></tr>
+          </tbody>
+        </table>
+        <p class="mt-3 text-sm text-muted-foreground">All earning is automatic — coins appear in your Vault within minutes of the qualifying action. There's no need to activate offers or clip coupons.</p>
+      </div>
+
       <!-- Tier cards -->
       <h2 class="text-2xl font-bold tracking-tight mb-6">Tier Overview</h2>
       <div class="grid gap-6 sm:grid-cols-2 mb-12">
@@ -120,6 +157,43 @@ const tiers = [
         ))}
       </div>
 
+      <!-- Tier descriptions -->
+      <div class="prose prose-sm max-w-none text-muted-foreground mb-12">
+        <p>
+          As you earn lifetime SnusCoins, you progress through five membership Circles. Each Circle unlocks increasingly better perks. Your Circle is based on total lifetime coins earned, not your current balance — spending coins doesn't lower your tier.
+        </p>
+
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Explorer (0 SnusCoins)</h3>
+        <p>
+          Your starting point. Every new member begins as an Explorer. You get full access to earning on orders, the Daily Drop wheel, and your first welcome bonus. Think of this as your orientation — you're here, you're earning, and the journey has started.
+        </p>
+        <p class="mt-1"><strong class="text-foreground">Perks:</strong> Welcome bonus, Daily Drop access, member-only newsletter with early access to new product announcements.</p>
+
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Member (100 SnusCoins)</h3>
+        <p>
+          After your first order or two, you'll cross into the Member Circle. This is where community features unlock — you can post in the SnusFriend community, react to other users' reviews, and your reviews carry a "Verified Member" badge.
+        </p>
+        <p class="mt-1"><strong class="text-foreground">Perks:</strong> Community posting, review reactions, Verified Member badge, birthday bonus.</p>
+
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Connoisseur (500 SnusCoins)</h3>
+        <p>
+          You know what you like, and your purchase history proves it. Connoisseurs get early access to flash sales (typically 24 hours before the general public), a custom avatar border in the community, and access to limited-edition products when they drop.
+        </p>
+        <p class="mt-1"><strong class="text-foreground">Perks:</strong> Custom avatar border, early sale access, limited-edition product access.</p>
+
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Specialist (2,000 SnusCoins)</h3>
+        <p>
+          Your taste is your credential. Specialists are the serious enthusiasts — they've tried enough brands and flavours to have genuine expertise. Specialist reviews are highlighted in the community, and you earn double coins on all Missions.
+        </p>
+        <p class="mt-1"><strong class="text-foreground">Perks:</strong> Double Mission rewards, exclusive polls (vote on which products we stock next), priority customer support.</p>
+
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Founder (5,000 SnusCoins)</h3>
+        <p>
+          The inner circle. Founders helped build this community through consistent engagement and purchasing. The Founder badge is gold, your name appears on The Board's hall of fame, and you get access to Founder-only voucher codes that aren't available to any other tier.
+        </p>
+        <p class="mt-1"><strong class="text-foreground">Perks:</strong> Gold badge, VIP support, Founder-only voucher codes, early access to everything, community recognition on The Board.</p>
+      </div>
+
       <!-- Daily Drop -->
       <section class="mb-12">
         <h2 class="text-2xl font-bold tracking-tight mb-6">Daily Drop</h2>
@@ -131,6 +205,65 @@ const tiers = [
         <h2 class="text-2xl font-bold tracking-tight mb-6">Redeem Your SnusCoins</h2>
         <PointsRedemptionIsland client:idle />
       </section>
+
+      <!-- FAQ -->
+      <section class="mt-12 mb-12">
+        <h2 class="text-2xl font-bold text-foreground mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden">
+            <summary class="flex cursor-pointer items-center justify-between px-6 py-4 text-foreground font-medium">
+              How do I earn SnusCoins?
+              <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-4 text-sm text-muted-foreground">
+              SnusCoins are earned automatically on every order, by writing product reviews, spinning the Daily Drop wheel daily, completing Missions, and referring friends. No activation required — just shop, review, and engage.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden">
+            <summary class="flex cursor-pointer items-center justify-between px-6 py-4 text-foreground font-medium">
+              Do SnusCoins expire?
+              <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-4 text-sm text-muted-foreground">
+              No. Your SnusCoins never expire as long as your SnusFriend account remains active. If your account has been inactive for 24 months, we'll send a reminder email before any expiration takes effect.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden">
+            <summary class="flex cursor-pointer items-center justify-between px-6 py-4 text-foreground font-medium">
+              What can I redeem SnusCoins for?
+              <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-4 text-sm text-muted-foreground">
+              You can redeem SnusCoins for store credit (applied at checkout), percentage discounts on individual orders, free shipping upgrades, and curated mystery boxes. Redemption rates and available options are shown in the Vault dashboard.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden">
+            <summary class="flex cursor-pointer items-center justify-between px-6 py-4 text-foreground font-medium">
+              How do I check my balance?
+              <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-4 text-sm text-muted-foreground">
+              Your SnusCoin balance is visible at the top of the Vault page when logged in. It's also shown in the header bar next to the cart icon, and in your account dashboard. You'll receive email notifications when coins are earned or when you're close to a Circle upgrade.
+            </div>
+          </details>
+          <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden">
+            <summary class="flex cursor-pointer items-center justify-between px-6 py-4 text-foreground font-medium">
+              Can I earn coins on every order?
+              <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-4 text-sm text-muted-foreground">
+              Yes, every order earns SnusCoins with no minimum purchase. Even a single can order earns coins. Subscribe & Save orders earn coins too — applied automatically to each delivery.
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- Terms summary -->
+      <div class="mb-12">
+        <p class="text-xs text-muted-foreground leading-relaxed">
+          SnusCoins are a non-transferable reward currency issued by SnusFriend (Nordic Express AB). They have no cash value and cannot be exchanged for money. SnusFriend reserves the right to modify the earning rates, redemption options, and Circle thresholds with 30 days' notice to members. Circle status is determined by lifetime earned SnusCoins — spending or redeeming coins does not affect your Circle tier. Full terms are available in our <a href="/terms" class="underline hover:text-foreground">Terms of Service</a>.
+        </p>
+      </div>
 
       <!-- CTA -->
       <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
@@ -176,5 +309,52 @@ const tiers = [
         { '@type': 'ListItem', position: 2, name: 'Rewards', item: 'https://snusfriends.com/rewards' },
       ],
     },
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'How do I earn SnusCoins?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'SnusCoins are earned automatically on every order, by writing product reviews, spinning the Daily Drop wheel daily, completing Missions, and referring friends. No activation required — just shop, review, and engage.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Do SnusCoins expire?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'No. Your SnusCoins never expire as long as your SnusFriend account remains active. If your account has been inactive for 24 months, we\'ll send a reminder email before any expiration takes effect.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What can I redeem SnusCoins for?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'You can redeem SnusCoins for store credit (applied at checkout), percentage discounts on individual orders, free shipping upgrades, and curated mystery boxes. Redemption rates and available options are shown in the Vault dashboard.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'How do I check my balance?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Your SnusCoin balance is visible at the top of the Vault page when logged in. It\'s also shown in the header bar next to the cart icon, and in your account dashboard. You\'ll receive email notifications when coins are earned or when you\'re close to a Circle upgrade.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can I earn coins on every order?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes, every order earns SnusCoins with no minimum purchase. Even a single can order earns coins. Subscribe & Save orders earn coins too — applied automatically to each delivery.',
+        },
+      },
+    ],
   })} />
 </Shop>

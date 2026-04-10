@@ -6,6 +6,9 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import { getCollection } from 'astro:content';
 import { brandColors, defaultBrandColor } from '@/data/brand-colors';
+import { brandDescriptions } from '@/data/brand-descriptions';
+import { brandFaqs } from '@/data/brand-faqs';
+import { brandMeta } from '@/data/brand-meta';
 
 export async function getStaticPaths() {
   const brands = await getCollection('brands');
@@ -69,16 +72,28 @@ const mosaicPositions = [
   { gridColumn: '3 / 4', gridRow: '2 / 3', size: 'sm' },
 ];
 
-const metaDescription = b.description
-  ? (b.description.length > 160 ? b.description.slice(0, 157) + '...' : b.description)
-  : `Shop ${b.name} nicotine pouches at SnusFriend. Browse the full range of ${b.name} products with free EU shipping on qualifying orders.`;
+const meta = brandMeta[brand.id];
+const metaTitle = meta?.title || `${b.name} Nicotine Pouches | SnusFriend`;
+const metaDescription = meta?.description || `Shop ${b.name} nicotine pouches at SnusFriend. Browse the full range with free EU shipping.`;
+const faqs = brandFaqs[brand.id];
 ---
 
 <Shop
-  title={`${b.name} Nicotine Pouches | SnusFriend`}
+  title={metaTitle}
   description={metaDescription}
   canonical={`/brands/${brand.id}`}
 >
+  {faqs && faqs.length > 0 && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(f => ({
+        "@type": "Question",
+        "name": f.question,
+        "acceptedAnswer": { "@type": "Answer", "text": f.answer },
+      })),
+    })} />
+  )}
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -233,18 +248,13 @@ const metaDescription = b.description
       <a href={`/brands/${brand.id}/review`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Review</a>
     </div>
 
-    {/* Collapsible description */}
-    {b.description && (
-      <details class="mb-8 group">
-        <summary class="cursor-pointer text-sm font-medium text-primary hover:underline list-none">
-          <span class="group-open:hidden">About {b.name} — Read more</span>
-          <span class="hidden group-open:inline">About {b.name} — Show less</span>
-        </summary>
-        <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          {b.description}
-        </p>
-      </details>
-    )}
+    {/* Brand description — always visible */}
+    <div class="mb-8 max-w-3xl">
+      <h2 class="text-lg font-semibold text-foreground mb-3">About {b.name}</h2>
+      <p class="text-sm leading-relaxed text-muted-foreground">
+        {brandDescriptions[brand.id] || b.description || `${b.name} nicotine pouches are available on SnusFriend with fast EU-wide delivery.`}
+      </p>
+    </div>
 
     <!-- New on Brand section -->
     {newProducts.length > 0 && (
@@ -386,5 +396,18 @@ const metaDescription = b.description
         </div>
       )}
     </div>
+
+    {/* Brand FAQ section */}
+    {faqs && faqs.length > 0 && (
+      <section class="mt-12 max-w-3xl">
+        <h2 class="text-xl font-bold text-foreground mb-6">{b.name} FAQ</h2>
+        {faqs.map(faq => (
+          <details class="mb-3 rounded-lg border border-border bg-card/40 px-4 py-3">
+            <summary class="cursor-pointer font-medium text-foreground">{faq.question}</summary>
+            <p class="mt-2 text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+          </details>
+        ))}
+      </section>
+    )}
   </div>
 </Shop>
