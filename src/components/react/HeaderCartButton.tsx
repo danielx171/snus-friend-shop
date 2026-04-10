@@ -10,17 +10,10 @@ const HeaderCartButton = React.memo(function HeaderCartButton() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
-    // Periodically sync cart count from localStorage for cross-island consistency
+    syncCartFromStorage();
     const sync = () => syncCartFromStorage();
     window.addEventListener('open-cart', sync);
-    // Also sync on focus (catches state from other tabs)
-    window.addEventListener('focus', sync);
-    // Initial sync
-    sync();
-    return () => {
-      window.removeEventListener('open-cart', sync);
-      window.removeEventListener('focus', sync);
-    };
+    return () => window.removeEventListener('open-cart', sync);
   }, []);
 
   const displayCount = mounted ? count : 0;

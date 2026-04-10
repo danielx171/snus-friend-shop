@@ -45,3 +45,14 @@ Snus/
 
 # Generated during build
 public/data/products.json
+
+# Audit artifacts (large, findings already integrated)
+cowork/content/final-audit/
+cowork/content/overnight-audit/
+cowork/content/visual-audit/
+cowork/content/crawls/
+cowork/content/pagespeed/
+.superpowers/brainstorm/
+
+# Converted HTML drafts (all now .astro pages)
+blog-drafts/

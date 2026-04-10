@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { addToCart, openCart } from '@/stores/cart';
+import { addToCart } from '@/stores/cart';
 import { cartToast } from '@/lib/toast';
 import type { Product } from '@/data/products';
 import { trackQuizCompleted } from '@/lib/analytics';
@@ -168,7 +168,7 @@ const ResultCard = React.memo<{ p: QuizProduct; selectedFlavors: string[] }>(
         };
 
         addToCart(product, 'pack1');
-        openCart();
+        window.dispatchEvent(new CustomEvent('open-cart'));
         cartToast(p.name);
       },
       [p, isOutOfStock],

@@ -5,10 +5,9 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
-import { slimProductData, ensureProductsJson } from '@/lib/product-json';
+import { slimProductData } from '@/lib/product-json';
 
 const products = await getCollection('products');
-ensureProductsJson(products);
 const productsJson = JSON.stringify(slimProductData(products));
 
 const totalProducts = products.length;
@@ -74,6 +73,38 @@ const faqJsonLd = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Yes, SnusFriend offers free EU-wide shipping on orders over €29. Most orders arrive within 2-5 business days with full tracking.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are nicotine pouches safer than cigarettes?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Nicotine pouches contain no tobacco leaf and produce no smoke or vapour, which eliminates exposure to tar and combustion byproducts. While no nicotine product is risk-free, Public Health England and the Royal College of Physicians consider tobacco-free nicotine products significantly less harmful than smoking.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does a nicotine pouch last?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most users keep a nicotine pouch in for 20 to 40 minutes. Nicotine absorption peaks at around 20 to 30 minutes, after which the flavour and effect gradually fade.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I use nicotine pouches indoors or on a plane?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Because nicotine pouches produce no smoke, vapour, or odour, they can generally be used anywhere — including on flights, in offices, and in restaurants.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do nicotine pouches stain your teeth?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Unlike traditional snus or chewing tobacco, nicotine pouches are white and contain no tobacco leaf, so they do not cause staining.',
       },
     },
   ],
@@ -204,16 +235,5 @@ const faqJsonLd = {
         "name": p.data.name,
       })),
     },
-  })} />
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "Are nicotine pouches safer than cigarettes?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches contain no tobacco leaf and produce no smoke or vapour, which eliminates exposure to tar and combustion byproducts. While no nicotine product is risk-free, Public Health England and the Royal College of Physicians consider tobacco-free nicotine products significantly less harmful than smoking. Long-term studies specific to nicotine pouches are still ongoing." } },
-      { "@type": "Question", "name": "How long does a nicotine pouch last?", "acceptedAnswer": { "@type": "Answer", "text": "Most users keep a nicotine pouch in for 20 to 40 minutes. Nicotine absorption peaks at around 20 to 30 minutes, after which the flavour and effect gradually fade. Slim pouches tend to release flavour slightly faster than regular format pouches." } },
-      { "@type": "Question", "name": "What nicotine strength should a beginner start with?", "acceptedAnswer": { "@type": "Answer", "text": "Beginners should start with a light or normal strength pouch — typically 2 to 6 mg of nicotine per pouch. If you currently smoke fewer than 10 cigarettes a day, 4 mg is a common starting point. You can increase gradually if the effect feels too mild." } },
-      { "@type": "Question", "name": "Can I use nicotine pouches on a plane or indoors?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Because nicotine pouches produce no smoke, vapour, or odour, they can generally be used anywhere — including on flights, in offices, and in restaurants. There is no legal restriction on using them indoors in most European countries, though individual venues may set their own policies." } },
-      { "@type": "Question", "name": "Do nicotine pouches stain your teeth?", "acceptedAnswer": { "@type": "Answer", "text": "No. Unlike traditional snus or chewing tobacco, nicotine pouches are white and contain no tobacco leaf, so they do not cause the brown staining associated with tobacco-based oral products." } }
-    ]
   })} />
 </Shop>
