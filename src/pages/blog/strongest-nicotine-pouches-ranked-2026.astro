@@ -12,7 +12,7 @@ const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-28';
-const modifiedDate = '2026-03-31';
+const modifiedDate = '2026-04-10';
 const title = 'Strongest Nicotine Pouches 2026: 50mg Ranked';
 const description = 'Every strong nicotine pouch ranked by mg — from White Fox (16mg) to Siberia (49mg). Includes beginner warnings and a step-down guide.';
 ---
@@ -70,6 +70,8 @@ const description = 'Every strong nicotine pouch ranked by mg — from White Fox
           {find('velo-freezing-peppermint-ultra-es') && <BlogProductCard product={find('velo-freezing-peppermint-ultra-es')} />}
           {find('white-fox-black-edition') && <BlogProductCard product={find('white-fox-black-edition')} />}
         </div>
+
+        <p>SnusFriend's strength database covers every product above 6mg in the European market, giving us a comprehensive view of what's available and how products compare.</p>
 
         <h2>The Growing High-Strength Market</h2>
         <p>

@@ -41,7 +41,32 @@ export default defineConfig({
         return !exclude.some((p) => page.includes(p));
       },
       serialize: (item) => {
-        item.lastmod = new Date().toISOString().split('T')[0];
+        const url = item.url;
+        // Blog articles modified in the April 8-10 sprint
+        const aprilModified = [
+          'best-nicotine-pouches-2026', 'are-nicotine-pouches-safe',
+          'zyn-nicotine-pouches-complete-guide', 'strongest-nicotine-pouches-ranked-2026',
+          'how-to-use-nicotine-pouches', 'nicotine-pouches-vs-cigarettes',
+          'best-nicotine-pouches-for-beginners-2026', 'zyn-flavours-complete-guide',
+          'nicotine-pouch-side-effects', 'what-are-nicotine-pouches',
+          'best-berry-nicotine-pouches', 'best-citrus-nicotine-pouches',
+          'best-coffee-nicotine-pouches', 'best-mint-nicotine-pouches-2026',
+          'best-nicotine-pouches-germany-2026', 'best-nicotine-pouches-netherlands-2026',
+          'best-nicotine-pouches-uk-2026', 'best-value-nicotine-pouches-2026',
+          'best-nicotine-pouches-gym-sports', 'best-nicotine-pouches-sensitive-gums',
+          'best-nicotine-pouches-under-2-euros', 'best-nicotine-pouches-by-occasion',
+          'nicotine-pouches-vs-snus', 'switching-from-cigarettes-to-nicotine-pouches',
+          'loop-nicotine-pouches-complete-guide', 'velo-nicotine-pouches-complete-guide',
+          'zyn-nicotine-pouches-complete-guide', 'top-10-mint-flavours',
+        ];
+        if (url.includes('/blog/')) {
+          const slug = url.split('/blog/')[1]?.replace(/\/$/, '');
+          item.lastmod = aprilModified.includes(slug) ? '2026-04-10' : '2026-03-28';
+        } else if (url.includes('/products/') || url.includes('/brands/')) {
+          item.lastmod = '2026-04-09';
+        } else {
+          item.lastmod = new Date().toISOString().split('T')[0];
+        }
         return item;
       },
     }),
