@@ -222,6 +222,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
           email,
           firstname: firstName,
           lastname: lastName,
+          phone: phone || undefined,
         },
         billing_address: {
           address,
@@ -266,7 +267,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
       setError('Something went wrong. Please try again.');
       setSubmitting(false);
     }
-  }, [cartItems, email, firstName, lastName, address, postcode, city, country, shippingMethod, ageVerified, orderTotal]);
+  }, [cartItems, email, firstName, lastName, phone, address, postcode, city, country, shippingMethod, ageVerified, orderTotal]);
 
   if (cartItems.length === 0 && !submitting) {
     return (

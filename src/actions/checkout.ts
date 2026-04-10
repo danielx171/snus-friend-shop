@@ -21,6 +21,7 @@ export const checkout = {
         email: z.string().email(),
         firstname: z.string().min(1),
         lastname: z.string().min(1),
+        phone: z.string().optional(),
       }),
       billing_address: z.object({
         address: z.string().min(1),

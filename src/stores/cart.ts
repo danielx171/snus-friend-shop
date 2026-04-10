@@ -214,10 +214,7 @@ $cartItems.listen((items) => {
   if (items.length === 0) return; // Don't snapshot empty carts
 
   _snapshotTimer = setTimeout(() => {
-    const supabaseUrl =
-      (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_SUPABASE_URL) ||
-      (window as any).__SUPABASE_URL__ ||
-      '';
+    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL ?? '';
     if (!supabaseUrl) return;
 
     const total = items.reduce((sum, item) => {

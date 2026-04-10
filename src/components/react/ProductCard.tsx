@@ -3,6 +3,7 @@ import { addToCart } from '@/stores/cart';
 import { cartToast } from '@/lib/toast';
 import type { Product } from '@/data/products';
 import { brandColors, strengthColors, strengthLabels, defaultBrandColor, flavorColors, defaultFlavorColor } from '@/data/brand-colors';
+import { strengthDotMap, flavorLabels, formatBadge } from '@/data/product-labels';
 
 interface ProductCardProps {
   slug: string;
@@ -18,25 +19,6 @@ interface ProductCardProps {
   ratings: number;
   badgeKeys: string[];
 }
-
-const badgeLabelMap: Record<string, string> = {
-  NewPrice: 'New Price', newPrice: 'New Price', popular: 'Popular',
-  bestseller: 'Bestseller', new: 'New',
-};
-function formatBadge(key: string): string {
-  return badgeLabelMap[key] ?? key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase());
-}
-
-const strengthMap: Record<string, number> = {
-  light: 1, normal: 2, strong: 3, 'extra-strong': 4, 'super-strong': 5,
-};
-
-const flavorLabelMap: Record<string, string> = {
-  mint: 'Mint', berry: 'Berry', citrus: 'Citrus', fruit: 'Fruit',
-  coffee: 'Coffee', cola: 'Cola', menthol: 'Menthol', wintergreen: 'Wintergreen',
-  tropical: 'Tropical', ice: 'Ice', original: 'Original', tobacco: 'Tobacco',
-  licorice: 'Licorice', vanilla: 'Vanilla',
-};
 
 function StarRating({ rating }: { rating: number }) {
   if (!rating || rating <= 0) return null;
@@ -80,8 +62,8 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
   const brandColor = brandColors[brandSlug] ?? defaultBrandColor;
   const strengthColor = strengthColors[strengthKey] ?? strengthColors['normal'];
   const flavorColor = flavorColors[flavorKey] ?? defaultFlavorColor;
-  const strengthDots = strengthMap[strengthKey] ?? 2;
-  const flavorLabel = flavorLabelMap[flavorKey] ?? flavorKey;
+  const strengthDots = strengthDotMap[strengthKey] ?? 2;
+  const flavorLabel = flavorLabels[flavorKey] ?? flavorKey;
 
   const handleAddToCart = useCallback(
     (e: React.MouseEvent) => {

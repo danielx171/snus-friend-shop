@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import CardAddToCart from '@/components/react/CardAddToCart';
 import { strengthColors, strengthLabels, flavorColors, defaultFlavorColor, brandColors, defaultBrandColor } from '@/data/brand-colors';
+import { strengthDotMap, flavorLabels } from '@/data/product-labels';
 
 interface ProductData {
   slug?: string;
@@ -39,18 +40,8 @@ const brandColor = brandColors[brandSlug] ?? defaultBrandColor;
 const strengthColor = strengthColors[strengthKey] ?? strengthColors['normal'];
 const flavorColor = flavorColors[flavorKey] ?? defaultFlavorColor;
 
-const flavorLabelMap: Record<string, string> = {
-  mint: 'Mint', berry: 'Berry', citrus: 'Citrus', fruit: 'Fruit',
-  coffee: 'Coffee', cola: 'Cola', menthol: 'Menthol', wintergreen: 'Wintergreen',
-  tropical: 'Tropical', ice: 'Ice', original: 'Original', tobacco: 'Tobacco',
-  licorice: 'Licorice', vanilla: 'Vanilla',
-};
-const flavorLabel = flavorLabelMap[flavorKey] ?? flavorKey;
-
-const strengthMap: Record<string, number> = {
-  light: 1, normal: 2, strong: 3, 'extra-strong': 4, 'super-strong': 5,
-};
-const strengthDots = strengthMap[strengthKey] ?? 2;
+const flavorLabel = flavorLabels[flavorKey] ?? flavorKey;
+const strengthDots = strengthDotMap[strengthKey] ?? 2;
 
 const pack1Price = prices.pack1 ?? 0;
 ---

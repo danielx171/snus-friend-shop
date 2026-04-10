@@ -378,6 +378,7 @@ export default function FilterableProductGrid({
   // Products state — loaded from inline JSON or fetched from URL
   const [fetchedProducts, setFetchedProducts] = useState<SearchableProduct[]>([]);
   const [loading, setLoading] = useState(!!productsJsonUrl);
+  const [fetchError, setFetchError] = useState(false);
 
   // Parse inline products if provided
   const inlineProducts = useMemo<SearchableProduct[]>(() => {
@@ -398,7 +399,7 @@ export default function FilterableProductGrid({
         setFetchedProducts(data);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => { setFetchError(true); setLoading(false); });
   }, [productsJsonUrl, productsJson]);
 
   const rawProducts = productsJson ? inlineProducts : fetchedProducts;
@@ -634,6 +635,17 @@ export default function FilterableProductGrid({
 
         {/* Product grid */}
         <div className="flex-1">
+          {fetchError && (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-6 text-center">
+              <p className="text-sm text-destructive mb-2">Failed to load products.</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="text-xs font-medium text-primary hover:underline"
+              >
+                Refresh page
+              </button>
+            </div>
+          )}
           {loading ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5" role="status" aria-label="Loading products">
               {Array.from({ length: 24 }).map((_, i) => (
