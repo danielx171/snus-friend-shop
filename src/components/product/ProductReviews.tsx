@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Star, Heart, MessageSquare, Flag, ArrowUpDown, Check, X, Plus, Camera, ImageIcon } from 'lucide-react';
+import { Star, Heart, MessageSquare, Flag, ArrowUpDown, Check, X, Plus, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useProductReviews, type ProductReview, type DimensionAverages } from '@/hooks/useProductReviews';
 import { useReviewLikes } from '@/hooks/useReviewLikes';
@@ -39,19 +39,26 @@ type ReviewSortOption = 'relevant' | 'newest' | 'highest' | 'helpful';
 
 function sortReviews(reviews: ProductReview[], sort: ReviewSortOption): ProductReview[] {
   const sorted = [...reviews];
+
+  /** Verified-first tiebreaker applied to every sort mode */
+  const verifiedFirst = (a: ProductReview, b: ProductReview) =>
+    (b.verified_buyer ? 1 : 0) - (a.verified_buyer ? 1 : 0);
+
   switch (sort) {
     case 'newest':
-      return sorted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      return sorted.sort((a, b) => verifiedFirst(a, b) || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     case 'highest':
-      return sorted.sort((a, b) => b.rating - a.rating || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      return sorted.sort((a, b) => verifiedFirst(a, b) || b.rating - a.rating || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     case 'helpful':
-      return sorted.sort((a, b) => b.helpful_count - a.helpful_count || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      return sorted.sort((a, b) => verifiedFirst(a, b) || b.helpful_count - a.helpful_count || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     case 'relevant':
     default: {
       // Weighted combo: helpful votes + recency bonus (reviews from last 30 days get a boost)
       const now = Date.now();
       const thirtyDays = 30 * 24 * 60 * 60 * 1000;
       return sorted.sort((a, b) => {
+        const vf = verifiedFirst(a, b);
+        if (vf !== 0) return vf;
         const recencyA = Math.max(0, 1 - (now - new Date(a.created_at).getTime()) / thirtyDays);
         const recencyB = Math.max(0, 1 - (now - new Date(b.created_at).getTime()) / thirtyDays);
         const scoreA = a.helpful_count * 2 + recencyA * 3 + a.rating * 0.5;
@@ -277,9 +284,14 @@ const ReviewCard = React.memo(function ReviewCard({
               <div>
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-semibold text-foreground">{displayName}</p>
-                  {review.verified_buyer && (
-                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  {review.verified_buyer ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/15 px-2.5 py-0.5 text-xs font-medium text-green-400">
+                      <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
                       Verified Buyer
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                      Community Review
                     </span>
                   )}
                 </div>

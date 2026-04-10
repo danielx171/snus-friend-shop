@@ -42,3 +42,23 @@ export function generateNickname(userId: string): string {
   const suffixIdx = Math.abs(hash >> 8) % SUFFIXES.length;
   return `${PREFIXES[prefixIdx]} ${SUFFIXES[suffixIdx]}`;
 }
+
+/**
+ * Display name priority: user-set name → tier title → email local part → fantasy nickname
+ */
+export function getDisplayName(opts: {
+  displayName?: string | null;
+  tierName?: string | null;
+  email?: string | null;
+  userId: string;
+}): string {
+  if (opts.displayName?.trim()) return opts.displayName.trim();
+  if (opts.tierName?.trim()) return opts.tierName.trim();
+  if (opts.email) {
+    const local = opts.email.split('@')[0];
+    if (local && local.length > 1) {
+      return local.charAt(0).toUpperCase() + local.slice(1);
+    }
+  }
+  return generateNickname(opts.userId);
+}

@@ -83,7 +83,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
       // Fetch reviews (unflagged only)
       const { data: reviewRows, error: reviewErr } = await supabase
         .from('product_reviews')
-        .select('id, product_id, user_id, rating, title, body, pros, cons, photo_urls, helpful_count, flagged, created_at, flavor_intensity, sweetness, burn, moisture, longevity')
+        .select('*')
         .eq('product_id', productId)
         .eq('flagged', false)
         .order('created_at', { ascending: false });
@@ -129,38 +129,11 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         }
       }
 
-      // Batch-check verified buyer status: find which reviewers have a completed order
-      // containing this product in their line_items_snapshot
-      const verifiedBuyerIds = new Set<string>();
-      if (uniqueUserIds.length > 0) {
-        const { data: orderRows } = await supabase
-          .from('orders')
-          .select('user_id, line_items_snapshot')
-          .in('user_id', uniqueUserIds)
-          .in('checkout_status', ['confirmed', 'shipped']);
-
-        if (orderRows) {
-          for (const order of orderRows) {
-            if (!order.user_id || verifiedBuyerIds.has(order.user_id)) continue;
-            // line_items_snapshot is JSON — check if slug appears in it
-            const snapshot = order.line_items_snapshot;
-            if (snapshot && typeof snapshot === 'object') {
-              const items = Array.isArray(snapshot) ? snapshot : [];
-              const hasProduct = items.some(
-                (item: Record<string, unknown>) =>
-                  item && item.slug === productId,
-              );
-              if (hasProduct) verifiedBuyerIds.add(order.user_id);
-            }
-          }
-        }
-      }
-
-      // Merge reviews with profiles and verified buyer status
+      // Merge reviews with profiles and persisted verified-purchase flag
       const reviews: ProductReview[] = rows.map((r) => ({
         ...r,
         profile: profileMap[r.user_id] ?? null,
-        verified_buyer: verifiedBuyerIds.has(r.user_id),
+        verified_buyer: r.is_verified_purchase ?? false,
       }));
 
       // Aggregate stats

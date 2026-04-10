@@ -771,6 +771,7 @@ export type Database = {
           flavor_intensity: number | null
           helpful_count: number
           id: string
+          is_verified_purchase: boolean
           longevity: number | null
           moisture: number | null
           photo_urls: string[]
@@ -790,6 +791,7 @@ export type Database = {
           flavor_intensity?: number | null
           helpful_count?: number
           id?: string
+          is_verified_purchase?: boolean
           longevity?: number | null
           moisture?: number | null
           photo_urls?: string[]
@@ -809,6 +811,7 @@ export type Database = {
           flavor_intensity?: number | null
           helpful_count?: number
           id?: string
+          is_verified_purchase?: boolean
           longevity?: number | null
           moisture?: number | null
           photo_urls?: string[]
@@ -1847,6 +1850,15 @@ export type Database = {
       }
     }
     Views: {
+      leaderboard_monthly: {
+        Row: {
+          user_id: string
+          total_points: number
+          display_name: string | null
+          avatar_url: string | null
+        }
+        Relationships: []
+      }
       leaderboard_top_users: {
         Row: {
           user_id: string

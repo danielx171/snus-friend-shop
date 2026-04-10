@@ -38,6 +38,21 @@ export async function getStaticPaths() {
       .sort((a, b) => (a.data.prices?.pack1 || 99) - (b.data.prices?.pack1 || 99))
       .slice(0, 4);
 
+    // Step-down suggestion: same brand + same flavor, one strength level lower
+    const strengthOrder = ['light', 'normal', 'strong', 'extra-strong', 'super-strong'];
+    const currentStrengthIdx = strengthOrder.indexOf(product.data.strengthKey);
+    const lowerStrengths = currentStrengthIdx > 0 ? strengthOrder.slice(0, currentStrengthIdx) : [];
+
+    const stepDownProduct = lowerStrengths.length > 0
+      ? allProducts.find((rp) =>
+          rp.data.brandSlug === product.data.brandSlug
+          && rp.data.flavorKey === product.data.flavorKey
+          && lowerStrengths.includes(rp.data.strengthKey)
+          && rp.data.stock > 0
+          && rp.id !== product.id
+        ) ?? null
+      : null;
+
     return {
       params: { slug: product.id },
       props: {
@@ -45,12 +60,13 @@ export async function getStaticPaths() {
         relatedProducts,
         sameFlavour,
         similarStrength,
+        stepDownProduct,
       },
     };
   });
 }
 
-const { product, relatedProducts, sameFlavour, similarStrength } = Astro.props;
+const { product, relatedProducts, sameFlavour, similarStrength, stepDownProduct } = Astro.props;
 const p = product.data;
 const bColor = brandColors[p.brandSlug] ?? defaultBrandColor;
 
@@ -73,6 +89,9 @@ const strengthMap: Record<string, number> = {
   'super-strong': 5,
 };
 const strengthLevel = strengthMap[p.strengthKey] ?? 2;
+
+const stepDownStrengthOrder = ['light', 'normal', 'strong', 'extra-strong', 'super-strong'];
+const currentStrengthIdx = stepDownStrengthOrder.indexOf(p.strengthKey);
 
 const strengthLabels: Record<string, string> = {
   normal: 'Normal',
@@ -362,6 +381,20 @@ const jsonLd = {
             Earn <strong class="text-primary">{Math.floor(singlePrice * rewards.earnRatePerEur)}</strong> SnusCoins with this purchase
             <a href="/rewards" class="underline hover:text-foreground ml-1">Learn more</a>
           </p>
+        )}
+
+        {/* Step-down suggestion for extra-strong and super-strong products */}
+        {stepDownProduct && (currentStrengthIdx >= 3) && (
+          <div class="mb-6 rounded-lg border border-border/50 bg-muted/20 p-4 flex items-center gap-3">
+            <span class="text-lg" aria-hidden="true">💡</span>
+            <p class="text-sm text-muted-foreground">
+              Thinking about stepping down? Try
+              <a href={`/products/${stepDownProduct.id}`} class="text-primary underline font-medium">
+                {stepDownProduct.data.name}
+              </a>
+              at {stepDownProduct.data.nicotineContent}mg — same brand, same flavour, gentler strength.
+            </p>
+          </div>
         )}
 
         {/* Subscribe & Save */}

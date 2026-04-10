@@ -121,6 +121,7 @@ function LeaderboardInner() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [period, setPeriod] = useState<'alltime' | 'monthly'>('alltime');
 
   useEffect(() => {
     setMounted(true);
@@ -143,9 +144,10 @@ function LeaderboardInner() {
     setError(null);
 
     try {
-      // Fetch top 20 from leaderboard view
+      // Fetch top 20 from leaderboard view (monthly or all-time)
+      const viewName = period === 'monthly' ? 'leaderboard_monthly' : 'leaderboard_top_users';
       const { data: leaderboardData, error: lbError } = await supabase
-        .from('leaderboard_top_users')
+        .from(viewName)
         .select('user_id, total_points, display_name, avatar_url')
         .order('total_points', { ascending: false })
         .limit(20);
@@ -183,13 +185,13 @@ function LeaderboardInner() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [period]);
 
   useEffect(() => {
     if (mounted) {
       fetchLeaderboard();
     }
-  }, [mounted, fetchLeaderboard]);
+  }, [mounted, fetchLeaderboard, period]);
 
   // Check if current user is in the top list
   const currentUserInList = useMemo(
@@ -210,6 +212,27 @@ function LeaderboardInner() {
           </span>
           Live
         </span>
+      </div>
+
+      <div className="flex gap-2 mb-4">
+        <button
+          onClick={() => setPeriod('alltime')}
+          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+            period === 'alltime' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          }`}
+          type="button"
+        >
+          All Time
+        </button>
+        <button
+          onClick={() => setPeriod('monthly')}
+          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+            period === 'monthly' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          }`}
+          type="button"
+        >
+          This Month
+        </button>
       </div>
 
       {loading && <LeaderboardSkeleton />}
