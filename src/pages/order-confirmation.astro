@@ -5,6 +5,7 @@ import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
 import OrderQuestTrigger from '@/components/react/OrderQuestTrigger';
 
 const orderId = Astro.url.searchParams.get('order');
@@ -292,7 +293,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
               <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-lg">✍️</span>
               <div>
                 <p class="text-sm font-medium text-foreground">Write a Review</p>
-                <p class="text-xs text-muted-foreground">50 SnusCoins per review</p>
+                <p class="text-xs text-muted-foreground">{rewards.verifiedReview} SnusCoins per review</p>
               </div>
             </a>
           </div>

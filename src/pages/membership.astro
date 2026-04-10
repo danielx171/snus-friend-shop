@@ -4,6 +4,7 @@ export const prerender = false;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
 
 // Fetch reputation levels from DB
 const supabase = Astro.locals.supabase;
@@ -248,11 +249,11 @@ const tierList = tiers ?? [];
         <h2 class="text-xl font-bold mb-4">How to Earn SnusCoins</h2>
         <div class="grid gap-4 sm:grid-cols-2">
           {[
-            { action: 'Place orders', detail: '1 SnusCoin per EUR spent', icon: '\uD83D\uDED2' },
-            { action: 'Write reviews', detail: '50 SnusCoins per review', icon: '\u2B50' },
-            { action: 'Daily Drop', detail: 'Up to 50 SnusCoins per day', icon: '\uD83C\uDFA1' },
+            { action: 'Place orders', detail: `${rewards.earnRatePerEur} SnusCoin per EUR spent`, icon: '\uD83D\uDED2' },
+            { action: 'Write reviews', detail: `${rewards.verifiedReview} SnusCoins per review`, icon: '\u2B50' },
+            { action: 'Daily Drop', detail: `Up to ${rewards.dailyDropMax} SnusCoins per day`, icon: '\uD83C\uDFA1' },
             { action: 'Complete missions', detail: 'Bonus SnusCoins for challenges', icon: '\uD83C\uDFAF' },
-            { action: 'Refer a friend', detail: 'You earn 100, your friend earns 50 SnusCoins', icon: '\uD83E\uDD1D' },
+            { action: 'Refer a friend', detail: `You earn ${rewards.referralSelf}, your friend earns ${rewards.referralFriend} SnusCoins`, icon: '\uD83E\uDD1D' },
             { action: 'Birthday bonus', detail: 'Double SnusCoins on your birthday', icon: '\uD83C\uDF82' },
           ].map((item) => (
             <div class="flex items-start gap-3">

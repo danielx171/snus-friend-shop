@@ -6,6 +6,7 @@ import QuestBoardIsland from '@/components/react/QuestBoardIsland';
 import LeaderboardIsland from '@/components/react/LeaderboardIsland';
 import AchievementGridIsland from '@/components/react/AchievementGridIsland';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
 import { supabase, hasSupabaseEnv } from '@/integrations/supabase/client';
 
 // Query real community stats at build time
@@ -183,7 +184,7 @@ const showStats = memberCount >= 10;
               <span class="text-4xl">⭐</span>
             </div>
             <h3 class="text-lg font-bold mb-2">Member</h3>
-            <div class="text-2xl font-bold text-blue-400 mb-2">100+</div>
+            <div class="text-2xl font-bold text-blue-400 mb-2">{rewards.tiers[1].threshold}+</div>
             <p class="text-sm text-muted-foreground mb-4">
               Active member with community privileges.
             </p>
@@ -199,7 +200,7 @@ const showStats = memberCount >= 10;
               <span class="text-4xl">🔥</span>
             </div>
             <h3 class="text-lg font-bold mb-2">Connoisseur</h3>
-            <div class="text-2xl font-bold text-emerald-400 mb-2">500+</div>
+            <div class="text-2xl font-bold text-emerald-400 mb-2">{rewards.tiers[2].threshold}+</div>
             <p class="text-sm text-muted-foreground mb-4">
               Dedicated member with exclusive perks.
             </p>
@@ -215,7 +216,7 @@ const showStats = memberCount >= 10;
               <span class="text-4xl">🏆</span>
             </div>
             <h3 class="text-lg font-bold mb-2">Specialist</h3>
-            <div class="text-2xl font-bold text-purple-400 mb-2">2,000+</div>
+            <div class="text-2xl font-bold text-purple-400 mb-2">{rewards.tiers[3].threshold.toLocaleString()}+</div>
             <p class="text-sm text-muted-foreground mb-4">
               Highly experienced with premium perks.
             </p>
@@ -231,7 +232,7 @@ const showStats = memberCount >= 10;
               <span class="text-4xl">👑</span>
             </div>
             <h3 class="text-lg font-bold mb-2">Founder</h3>
-            <div class="text-2xl font-bold text-amber-400 mb-2">5,000+</div>
+            <div class="text-2xl font-bold text-amber-400 mb-2">{rewards.tiers[4].threshold.toLocaleString()}+</div>
             <p class="text-sm text-muted-foreground mb-4">
               Legendary status in the community.
             </p>
@@ -251,21 +252,21 @@ const showStats = memberCount >= 10;
               <span class="flex-shrink-0 text-2xl">⭐</span>
               <div>
                 <h4 class="font-semibold mb-1">Write a Review</h4>
-                <p class="text-sm text-muted-foreground">Post a product review and earn up to 50 SnusCoins.</p>
+                <p class="text-sm text-muted-foreground">Post a product review and earn up to {rewards.verifiedReviewFirst} SnusCoins.</p>
               </div>
             </div>
             <div class="flex gap-4">
               <span class="flex-shrink-0 text-2xl">🛍️</span>
               <div>
                 <h4 class="font-semibold mb-1">Make a Purchase</h4>
-                <p class="text-sm text-muted-foreground">Earn 1 SnusCoin per EUR spent on products.</p>
+                <p class="text-sm text-muted-foreground">Earn {rewards.earnRatePerEur} SnusCoin per EUR spent on products.</p>
               </div>
             </div>
             <div class="flex gap-4">
               <span class="flex-shrink-0 text-2xl">✅</span>
               <div>
                 <h4 class="font-semibold mb-1">Complete Missions</h4>
-                <p class="text-sm text-muted-foreground">Daily and weekly missions award 10–100 SnusCoins.</p>
+                <p class="text-sm text-muted-foreground">Daily and weekly missions award {rewards.missionMin}–{rewards.missionMax} SnusCoins.</p>
               </div>
             </div>
             <div class="flex gap-4">
@@ -292,7 +293,7 @@ const showStats = memberCount >= 10;
 
         <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 sm:p-8">
           <p class="text-muted-foreground mb-6">
-            Every review helps fellow pouch enthusiasts make better choices. Share your honest experience with any product you've tried — you'll earn 50 SnusCoins for each review.
+            Every review helps fellow pouch enthusiasts make better choices. Share your honest experience with any product you've tried — you'll earn {rewards.verifiedReview} SnusCoins for each review.
           </p>
 
           <div class="flex gap-3">

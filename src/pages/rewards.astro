@@ -5,14 +5,28 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import SpinWheelIsland from '@/components/react/SpinWheelIsland';
 import PointsRedemptionIsland from '@/components/react/PointsRedemptionIsland';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
 
-const tiers = [
-  { name: 'Explorer', points: '0', perks: ['1 SnusCoin per EUR spent', 'Welcome spin bonus', 'Member-only newsletter'], color: 'from-zinc-500/20 to-zinc-600/10' },
-  { name: 'Member', points: '100', perks: ['Community posting', 'Review reactions', 'Birthday bonus'], color: 'from-blue-500/20 to-blue-600/10' },
-  { name: 'Connoisseur', points: '500', perks: ['Custom avatar border', 'Early sale access'], color: 'from-emerald-500/20 to-emerald-600/10' },
-  { name: 'Specialist', points: '2,000', perks: ['Double mission rewards', 'Exclusive polls', 'Priority customer support'], color: 'from-purple-500/20 to-purple-600/10' },
-  { name: 'Founder', points: '5,000', perks: ['Gold badge', 'VIP support', 'Founder-only vouchers'], color: 'from-amber-500/20 to-amber-600/10' },
+const tierColors = [
+  'from-zinc-500/20 to-zinc-600/10',
+  'from-blue-500/20 to-blue-600/10',
+  'from-emerald-500/20 to-emerald-600/10',
+  'from-purple-500/20 to-purple-600/10',
+  'from-amber-500/20 to-amber-600/10',
 ];
+const tierPerks: Record<string, string[]> = {
+  Explorer: [`${rewards.earnRatePerEur} SnusCoin per EUR spent`, 'Welcome spin bonus', 'Member-only newsletter'],
+  Member: ['Community posting', 'Review reactions', 'Birthday bonus'],
+  Connoisseur: ['Custom avatar border', 'Early sale access'],
+  Specialist: ['Double mission rewards', 'Exclusive polls', 'Priority customer support'],
+  Founder: ['Gold badge', 'VIP support', 'Founder-only vouchers'],
+};
+const tiers = rewards.tiers.map((t, i) => ({
+  name: t.name,
+  points: t.threshold.toLocaleString(),
+  perks: tierPerks[t.name] ?? [],
+  color: tierColors[i] ?? tierColors[0],
+}));
 ---
 
 <Shop
@@ -124,13 +138,13 @@ const tiers = [
             </tr>
           </thead>
           <tbody class="divide-y divide-border">
-            <tr><td class="px-4 py-2.5 text-muted-foreground">Per €1 spent on orders</td><td class="px-4 py-2.5 text-foreground font-medium">1 SnusCoin</td></tr>
-            <tr><td class="px-4 py-2.5 text-muted-foreground">Write a product review</td><td class="px-4 py-2.5 text-foreground font-medium">50 SnusCoins</td></tr>
-            <tr><td class="px-4 py-2.5 text-muted-foreground">Daily Drop spin</td><td class="px-4 py-2.5 text-foreground font-medium">5–50 SnusCoins</td></tr>
-            <tr><td class="px-4 py-2.5 text-muted-foreground">Complete a Mission</td><td class="px-4 py-2.5 text-foreground font-medium">10–100 SnusCoins</td></tr>
-            <tr><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (you receive)</td><td class="px-4 py-2.5 text-foreground font-medium">100 SnusCoins</td></tr>
-            <tr><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (friend receives)</td><td class="px-4 py-2.5 text-foreground font-medium">50 SnusCoins</td></tr>
-            <tr><td class="px-4 py-2.5 text-muted-foreground">Welcome bonus (first order)</td><td class="px-4 py-2.5 text-foreground font-medium">25 SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Per €1 spent on orders</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.earnRatePerEur} SnusCoin</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Write a product review</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.verifiedReview} SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Daily Drop spin</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.dailyDropMin}–{rewards.dailyDropMax} SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Complete a Mission</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.missionMin}–{rewards.missionMax} SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (you receive)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.referralSelf} SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (friend receives)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.referralFriend} SnusCoins</td></tr>
+            <tr><td class="px-4 py-2.5 text-muted-foreground">Welcome bonus (first order)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.welcomeBonus} SnusCoins</td></tr>
           </tbody>
         </table>
         <p class="mt-3 text-sm text-muted-foreground">All earning is automatic — coins appear in your Vault within minutes of the qualifying action. There's no need to activate offers or clip coupons.</p>
@@ -163,31 +177,31 @@ const tiers = [
           As you earn lifetime SnusCoins, you progress through five membership Circles. Each Circle unlocks increasingly better perks. Your Circle is based on total lifetime coins earned, not your current balance — spending coins doesn't lower your tier.
         </p>
 
-        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Explorer (0 SnusCoins)</h3>
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Explorer ({rewards.tiers[0].threshold} SnusCoins)</h3>
         <p>
           Your starting point. Every new member begins as an Explorer. You get full access to earning on orders, the Daily Drop wheel, and your first welcome bonus. Think of this as your orientation — you're here, you're earning, and the journey has started.
         </p>
         <p class="mt-1"><strong class="text-foreground">Perks:</strong> Welcome bonus, Daily Drop access, member-only newsletter with early access to new product announcements.</p>
 
-        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Member (100 SnusCoins)</h3>
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Member ({rewards.tiers[1].threshold} SnusCoins)</h3>
         <p>
           After your first order or two, you'll cross into the Member Circle. This is where community features unlock — you can post in the SnusFriend community, react to other users' reviews, and your reviews carry a "Verified Member" badge.
         </p>
         <p class="mt-1"><strong class="text-foreground">Perks:</strong> Community posting, review reactions, Verified Member badge, birthday bonus.</p>
 
-        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Connoisseur (500 SnusCoins)</h3>
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Connoisseur ({rewards.tiers[2].threshold} SnusCoins)</h3>
         <p>
           You know what you like, and your purchase history proves it. Connoisseurs get early access to flash sales (typically 24 hours before the general public), a custom avatar border in the community, and access to limited-edition products when they drop.
         </p>
         <p class="mt-1"><strong class="text-foreground">Perks:</strong> Custom avatar border, early sale access, limited-edition product access.</p>
 
-        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Specialist (2,000 SnusCoins)</h3>
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Specialist ({rewards.tiers[3].threshold.toLocaleString()} SnusCoins)</h3>
         <p>
           Your taste is your credential. Specialists are the serious enthusiasts — they've tried enough brands and flavours to have genuine expertise. Specialist reviews are highlighted in the community, and you earn double coins on all Missions.
         </p>
         <p class="mt-1"><strong class="text-foreground">Perks:</strong> Double Mission rewards, exclusive polls (vote on which products we stock next), priority customer support.</p>
 
-        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Founder (5,000 SnusCoins)</h3>
+        <h3 class="text-lg font-semibold text-foreground mt-6 mb-2">Founder ({rewards.tiers[4].threshold.toLocaleString()} SnusCoins)</h3>
         <p>
           The inner circle. Founders helped build this community through consistent engagement and purchasing. The Founder badge is gold, your name appears on The Board's hall of fame, and you get access to Founder-only voucher codes that aren't available to any other tier.
         </p>

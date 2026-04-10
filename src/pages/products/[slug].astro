@@ -9,6 +9,7 @@ import StickyAddToCart from '@/components/react/StickyAddToCart';
 import ProductReviewsIsland from '@/components/react/ProductReviewsIsland';
 import { getCollection } from 'astro:content';
 import { brandColors, defaultBrandColor } from '@/data/brand-colors';
+import { rewards } from '@/config/rewards';
 
 export async function getStaticPaths() {
   const allProducts = await getCollection('products');
@@ -332,7 +333,7 @@ const jsonLd = {
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="text-primary" aria-hidden="true">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
-            Earn <strong class="text-primary">{Math.floor(singlePrice * 10)}</strong> SnusCoins with this purchase
+            Earn <strong class="text-primary">{Math.floor(singlePrice * rewards.earnRatePerEur)}</strong> SnusCoins with this purchase
             <a href="/rewards" class="underline hover:text-foreground ml-1">Learn more</a>
           </p>
         )}

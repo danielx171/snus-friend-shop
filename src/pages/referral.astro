@@ -3,18 +3,19 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
 ---
 
 <Shop
   title={`Refer a Friend — Earn SnusCoins Together | ${tenant.name}`}
-  description={`Share your ${tenant.name} referral code with friends. They get 50 SnusCoins, you get 100. Earn rewards for every friend who joins.`}
+  description={`Share your ${tenant.name} referral code with friends. They get ${rewards.referralFriend} SnusCoins, you get ${rewards.referralSelf}. Earn rewards for every friend who joins.`}
   canonical="/referral"
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "How does the SnusFriend referral program work?", "acceptedAnswer": { "@type": "Answer", "text": "Share your unique referral code with friends. When they create an account using your code, they receive 50 SnusCoins and you receive 100 SnusCoins. There's no limit to how many friends you can refer." } },
+      { "@type": "Question", "name": "How does the SnusFriend referral program work?", "acceptedAnswer": { "@type": "Answer", "text": `Share your unique referral code with friends. When they create an account using your code, they receive ${rewards.referralFriend} SnusCoins and you receive ${rewards.referralSelf} SnusCoins. There's no limit to how many friends you can refer.` } },
       { "@type": "Question", "name": "Where do I find my referral code?", "acceptedAnswer": { "@type": "Answer", "text": "Log in to your account, go to the Membership tab, and scroll down to the Refer a Friend section. Your unique code will be displayed there with a copy button and sharing options." } },
       { "@type": "Question", "name": "Can I use SnusCoins for discounts?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. SnusCoins can be redeemed for discounts on future orders. Check the Rewards page for current redemption rates and available rewards." } }
     ]
@@ -54,7 +55,7 @@ import { tenant } from '@/config/tenant';
             <span class="text-xl font-bold text-primary">3</span>
           </div>
           <h3 class="font-semibold mb-2">Both Earn SnusCoins</h3>
-          <p class="text-sm text-muted-foreground">They get 50 SnusCoins, you get 100. Use SnusCoins for discounts on your next order.</p>
+          <p class="text-sm text-muted-foreground">They get {rewards.referralFriend} SnusCoins, you get {rewards.referralSelf}. Use SnusCoins for discounts on your next order.</p>
         </div>
       </div>
 
@@ -84,7 +85,7 @@ import { tenant } from '@/config/tenant';
         <div class="space-y-4">
           <details class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-5 group">
             <summary class="font-medium cursor-pointer text-foreground">How does the referral program work?</summary>
-            <p class="mt-3 text-sm text-muted-foreground">Share your unique referral code (found in your account's Membership tab). When a friend creates an account and enters your code during registration, they receive 50 SnusCoins and you receive 100 SnusCoins. There's no limit to how many friends you can refer.</p>
+            <p class="mt-3 text-sm text-muted-foreground">Share your unique referral code (found in your account's Membership tab). When a friend creates an account and enters your code during registration, they receive {rewards.referralFriend} SnusCoins and you receive {rewards.referralSelf} SnusCoins. There's no limit to how many friends you can refer.</p>
           </details>
 
           <details class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-5 group">
@@ -94,12 +95,12 @@ import { tenant } from '@/config/tenant';
 
           <details class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-5 group">
             <summary class="font-medium cursor-pointer text-foreground">What can I do with SnusCoins?</summary>
-            <p class="mt-3 text-sm text-muted-foreground">SnusCoins can be redeemed for discounts on future orders. You also earn SnusCoins by placing orders (1 coin per EUR), writing reviews (50 coins each), completing missions, and spinning the Daily Drop.</p>
+            <p class="mt-3 text-sm text-muted-foreground">SnusCoins can be redeemed for discounts on future orders. You also earn SnusCoins by placing orders ({rewards.earnRatePerEur} coin per EUR), writing reviews ({rewards.verifiedReview} coins each), completing missions, and spinning the Daily Drop.</p>
           </details>
 
           <details class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-5 group">
             <summary class="font-medium cursor-pointer text-foreground">Is there a limit to how many friends I can refer?</summary>
-            <p class="mt-3 text-sm text-muted-foreground">No limit. Refer as many friends as you like — you earn 100 SnusCoins for each one who joins. Your friends can also start referring once they have an account.</p>
+            <p class="mt-3 text-sm text-muted-foreground">No limit. Refer as many friends as you like — you earn {rewards.referralSelf} SnusCoins for each one who joins. Your friends can also start referring once they have an account.</p>
           </details>
         </div>
       </div>

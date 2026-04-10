@@ -6,6 +6,9 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -86,7 +89,7 @@ const description = 'Overwhelmed by pouch options? Here\'s exactly which low-str
 
         <h2>Getting Started: What Beginners Should Know Before Buying</h2>
         <p>
-          SnusFriend's beginner-filtered catalog highlights over 80 products specifically suited to first-time users, drawn from 35+ brands — making it straightforward to find a forgiving strength and flavour without wading through 700+ options.
+          SnusFriend's beginner-filtered catalog highlights over 80 products specifically suited to first-time users, drawn from {facts.brandCountLabel} brands — making it straightforward to find a forgiving strength and flavour without wading through {facts.productCountLabel} options.
         </p>
         <p>
           Nicotine pouches might look simple — small white sachets that fit discreetly under your lip — but choosing the right one as a beginner involves understanding a few key variables. Unlike cigarettes, where one product fits all smokers, pouches come in dramatically different strengths, formats, and flavours, and picking the wrong combination can mean either no effect or uncomfortable side effects.

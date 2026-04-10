@@ -8,6 +8,7 @@ import AvatarSelectorIsland from '@/components/react/AvatarSelectorIsland';
 import AchievementGridIsland from '@/components/react/AchievementGridIsland';
 import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
 
 // Auth check
 const user = Astro.locals.user;
@@ -73,11 +74,12 @@ function statusColor(status: string): string {
 const balance = pointsBalance?.balance ?? 0;
 const lifetime = pointsBalance?.lifetime_earned ?? 0;
 function getTier(pts: number) {
-  if (pts >= 5000) return { name: 'Founder', next: null, threshold: 5000 };
-  if (pts >= 2000) return { name: 'Specialist', next: 'Founder', threshold: 5000 };
-  if (pts >= 500) return { name: 'Connoisseur', next: 'Specialist', threshold: 2000 };
-  if (pts >= 100) return { name: 'Member', next: 'Connoisseur', threshold: 500 };
-  return { name: 'Explorer', next: 'Member', threshold: 100 };
+  const t = rewards.tiers;
+  if (pts >= t[4].threshold) return { name: t[4].name, next: null, threshold: t[4].threshold };
+  if (pts >= t[3].threshold) return { name: t[3].name, next: t[4].name, threshold: t[4].threshold };
+  if (pts >= t[2].threshold) return { name: t[2].name, next: t[3].name, threshold: t[3].threshold };
+  if (pts >= t[1].threshold) return { name: t[1].name, next: t[2].name, threshold: t[2].threshold };
+  return { name: t[0].name, next: t[1].name, threshold: t[1].threshold };
 }
 const tier = getTier(lifetime);
 const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold) * 100)) : 100;
@@ -400,11 +402,11 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Place orders — earn 1 point per EUR spent
+                Place orders — earn {rewards.earnRatePerEur} point per EUR spent
               </li>
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Write product reviews — earn 50 points each
+                Write product reviews — earn {rewards.verifiedReview} points each
               </li>
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
@@ -422,7 +424,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
             <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6">
               <h3 class="text-sm font-semibold mb-3">Refer a Friend</h3>
               <p class="text-sm text-muted-foreground mb-4">
-                Share your code with friends. They get 50 SnusCoins, you get 100 — everyone wins.
+                Share your code with friends. They get {rewards.referralFriend} SnusCoins, you get {rewards.referralSelf} — everyone wins.
               </p>
               <div class="flex items-center gap-2 mb-4">
                 <div class="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 font-mono text-sm text-foreground select-all">
@@ -439,11 +441,11 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
               </div>
               <div class="flex items-center gap-4 text-xs text-muted-foreground">
                 <span>{referralCount ?? 0} friend{(referralCount ?? 0) !== 1 ? 's' : ''} referred</span>
-                <span>{((referralCount ?? 0) * 100).toLocaleString()} points earned</span>
+                <span>{((referralCount ?? 0) * rewards.referralSelf).toLocaleString()} points earned</span>
               </div>
               <div class="flex gap-2 mt-4">
                 <a
-                  href={`https://wa.me/?text=${encodeURIComponent(`Join SnusFriend and get 50 bonus points! Use my code: ${referralCode} — https://snusfriends.com/register?ref=${referralCode}`)}`}
+                  href={`https://wa.me/?text=${encodeURIComponent(`Join SnusFriend and get ${rewards.referralFriend} bonus points! Use my code: ${referralCode} — https://snusfriends.com/register?ref=${referralCode}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-center text-xs font-medium text-foreground hover:bg-muted transition"
@@ -451,7 +453,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
                   WhatsApp
                 </a>
                 <a
-                  href={`mailto:?subject=Join SnusFriend&body=${encodeURIComponent(`Hey! Join SnusFriend and get 50 bonus points. Use my referral code: ${referralCode}\n\nhttps://snusfriends.com/register?ref=${referralCode}`)}`}
+                  href={`mailto:?subject=Join SnusFriend&body=${encodeURIComponent(`Hey! Join SnusFriend and get ${rewards.referralFriend} bonus points. Use my referral code: ${referralCode}\n\nhttps://snusfriends.com/register?ref=${referralCode}`)}`}
                   class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-center text-xs font-medium text-foreground hover:bg-muted transition"
                 >
                   Email

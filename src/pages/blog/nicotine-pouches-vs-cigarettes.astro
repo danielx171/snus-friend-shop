@@ -4,7 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
+const facts = await getEditorialFacts();
 const publishDate = '2026-03-29';
 const title = 'Nicotine Pouches vs Cigarettes Compared (2026)';
 const description = 'Compare nicotine pouches to cigarettes. Explore health differences, costs, nicotine delivery, convenience, social impact, and environmental effects.';
@@ -437,7 +439,7 @@ const description = 'Compare nicotine pouches to cigarettes. Explore health diff
         <p class="mt-8 font-semibold text-foreground">
           Ready to explore nicotine pouches? Browse our <a href="/products">full product range</a> to find strengths and flavours that match your preferences.
         </p>
-        <p>SnusFriend stocks 708 tobacco-free nicotine pouches spanning strengths from 2 mg to 50 mg — covering the full range that ex-smokers need to match their previous nicotine intake and step down at their own pace.</p>
+        <p>SnusFriend stocks {facts.productCountLabel} tobacco-free nicotine pouches spanning strengths from 2 mg to 50 mg — covering the full range that ex-smokers need to match their previous nicotine intake and step down at their own pace.</p>
 
       </div>
     </div>

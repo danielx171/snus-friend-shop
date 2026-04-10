@@ -292,16 +292,23 @@ const description = 'KLAR vs FUMI compared head-to-head. Flavor, strength, SERAT
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "ComparisonChart",
-    "headline": "KLAR vs FUMI: Scandinavian Craft Pouches Compared (2026)",
-    "description": "Head-to-head comparison of KLAR (minimalist, bioceramic tech, 2 flavors) and FUMI (adventurous, 9 flavors, affordable).",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
     "datePublished": publishDate,
+    "dateModified": publishDate,
     "author": {
       "@type": "Person",
       "name": "Erik Lindqvist",
       "url": "https://snusfriends.com/authors/erik-lindqvist",
       "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"]
     },
+    "publisher": {
+      "@type": "Organization",
+      "name": tenant.name,
+      "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/klar-vs-fumi-2026` },
     "mainEntity": {
       "@type": "FAQPage",
       "mainEntity": [

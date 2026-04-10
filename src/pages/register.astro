@@ -4,6 +4,7 @@ export const prerender = false;
 import Shop from '@/layouts/Shop.astro';
 import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
 
 const result = Astro.getActionResult(actions.auth.register);
 
@@ -150,7 +151,7 @@ const refCode = Astro.url.searchParams.get('ref') ?? '';
                   placeholder="e.g. SF-A1B2C3D4"
                   class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
                 />
-                <p class="text-xs text-muted-foreground mt-1">Have a friend's code? Enter it for 50 bonus SnusCoins.</p>
+                <p class="text-xs text-muted-foreground mt-1">Have a friend's code? Enter it for {rewards.referralFriend} bonus SnusCoins.</p>
               </div>
             )}
 

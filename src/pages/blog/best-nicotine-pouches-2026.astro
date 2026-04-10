@@ -7,6 +7,9 @@ import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -29,7 +32,7 @@ const kellyPremium = findProduct('kelly', 'white');
 
 <Shop
   title="10 Best Nicotine Pouches 2026: Top Picks Ranked"
-  description="We tested 708 nicotine pouches from 35+ brands. Here are the 10 best for flavour, strength, and value — updated monthly by our editorial team."
+  description={`We tested ${facts.productCountLabel} nicotine pouches from ${facts.brandCountLabel} brands. Here are the 10 best for flavour, strength, and value — updated monthly by our editorial team.`}
   canonical="/blog/best-nicotine-pouches-2026"
   ogType="article"
   ogImage="/images/og/og-best-of.svg"
@@ -68,7 +71,7 @@ const kellyPremium = findProduct('kelly', 'white');
     <BlogHero
       category="Ranking"
       title="10 Best Nicotine Pouches 2026: Top Picks Ranked"
-      description="We tested 708 nicotine pouches from 35+ brands. Here are the 10 best for flavour, strength, and value — updated monthly by our editorial team."
+      description={`We tested ${facts.productCountLabel} nicotine pouches from ${facts.brandCountLabel} brands. Here are the 10 best for flavour, strength, and value — updated monthly by our editorial team.`}
       date="28 March 2026"
       readTime="12 min read"
     />
@@ -97,7 +100,7 @@ const kellyPremium = findProduct('kelly', 'white');
 
     <p>The nicotine pouch market has exploded. <strong>In 2023, Europe alone hit EUR 1.6 billion — and the category is growing at 28.8% annually</strong> (source: <a href="https://www.grandviewresearch.com/industry-analysis/nicotine-pouches-market-report">Grand View Research</a>). With more than 50 brands now competing for shelf space, choosing the right pouch has become harder, not easier.</p>
 
-    <p>Based on SnusFriend's testing of over 700 products across 55 brands, we identified clear winners in seven categories — from best overall to best value.</p>
+    <p>Based on SnusFriend's testing of over {facts.productCountLabel} products across {facts.brandCountLabel} brands, we identified clear winners in seven categories — from best overall to best value.</p>
 
     <p>We've tested hundreds of pouches across strength, flavour, pouch comfort, and value. This guide cuts through the noise and identifies the category winners you can actually trust. Whether you're after the world's most consistent brand, the gentlest entry point, or legendary strength, we've got you covered.</p>
 
@@ -301,7 +304,7 @@ const kellyPremium = findProduct('kelly', 'white');
     <h2>The Bottom Line</h2>
 
     <p>The nicotine pouch market is crowded, but quality is increasingly concentrated in a handful of proven leaders. If you want consistency and availability, ZYN Cool Mint wins. If you're exploring, VELO's breadth is unmatched. If you want refined quality, Kelly White and Skruf deliver.</p>
-    <p>Based on SnusFriend's analysis of over 700 products across 35+ brands, ZYN and VELO together account for the majority of sales, but the fastest-growing segment in 2026 is premium Scandinavian independents like White Fox, Skruf, and LOOP.</p>
+    <p>Based on SnusFriend's analysis of over {facts.productCountLabel} products across {facts.brandCountLabel} brands, ZYN and VELO together account for the majority of sales, but the fastest-growing segment in 2026 is premium Scandinavian independents like White Fox, Skruf, and LOOP.</p>
 
     <p>The "best" pouch is the one you reach for daily. Use our category winners as a starting point, commit to a tin, and adjust from there. Most users settle into one or two trusted brands within weeks.</p>
 

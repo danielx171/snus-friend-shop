@@ -6,6 +6,9 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -198,7 +201,7 @@ const description = 'Nicotine pouch strength guide — from light (2mg) to super
         <a href="/products/strength/super-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Super Strong (20+ mg)</a>
       </nav>
 
-        <p>SnusFriend's catalog covers every strength tier from 2 mg to 50 mg across 35+ brands — meaning you can find your starting point and step up incrementally without switching retailers.</p>
+        <p>SnusFriend's catalog covers every strength tier from 2 mg to 50 mg across {facts.brandCountLabel} brands — meaning you can find your starting point and step up incrementally without switching retailers.</p>
 
         <h2>Related Guides</h2>
         <ul>

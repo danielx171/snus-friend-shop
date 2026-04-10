@@ -241,7 +241,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
             </span>
             {displayPrice > 0 && (
               <span className="text-[10px] font-medium text-primary">
-                +{Math.floor(displayPrice * 10)} pts
+                +{Math.floor(displayPrice * 1)} pts {/* matches rewards.earnRatePerEur */}
               </span>
             )}
           </div>
