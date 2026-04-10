@@ -4,6 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
 ---
 
 <Shop
@@ -167,7 +170,7 @@ import { tenant } from '@/config/tenant';
 
     <h2>Why SnusFriend Is a Safe Source</h2>
     <p>We source all products directly from manufacturers or their authorised European distributors. Every can in our warehouse has a verifiable chain of custody from production to your door. We are a registered EU business, we verify age at checkout, and we offer full returns on any product you are unsatisfied with.</p>
-    <p>Our product range of <a href="/nicotine-pouches">700+ products from 35+ brands</a> is sourced through legitimate supply chains. We do not buy from grey-market sources, and we do not sell products of uncertain origin. When you order from SnusFriend, you know what you are getting.</p>
+    <p>Our product range of <a href="/nicotine-pouches">{facts.productCountLabel} products from {facts.brandCountLabel} brands</a> is sourced through legitimate supply chains. We do not buy from grey-market sources, and we do not sell products of uncertain origin. When you order from SnusFriend, you know what you are getting.</p>
 
     <div style="background: hsl(var(--muted)); border-radius: 8px; padding: 24px; margin: 40px 0;">
       <h2 style="margin-top: 0;">Shop Authentic Nicotine Pouches</h2>

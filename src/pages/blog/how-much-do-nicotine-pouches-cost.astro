@@ -73,7 +73,7 @@ const lightMonthlyCost = lightDailyCost * 30;
 const moderateMonthlyCost = moderateDailyCost * 30;
 const heavyMonthlyCost = heavyDailyCost * 30;
 
-const schemaFAQ = JSON.stringify({
+const schemaBlogPosting = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": "How Much Do Nicotine Pouches Cost? 2026 Price Guide (Real Data)",
@@ -90,35 +90,38 @@ const schemaFAQ = JSON.stringify({
       "url": "https://snusfriends.com/logo.png"
     }
   },
-  "mainEntity": {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What's the average price of a nicotine pouch in 2026?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Based on our live catalog, the average price per can ranges from €0.59 (budget brands) to €3.14 (premium brands). Mid-range pouches average around €1.50–€2.00 per can. Price varies significantly by brand, pack size, and strength level."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How does nicotine pouch cost compare to cigarettes and vaping?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Cigarettes in the EU cost €8–€12 per pack (typically 20 cigarettes). Vaping liquid averages €15–€30 per month. Nicotine pouches average €15–€45 per month depending on usage intensity, making them competitive with both alternatives. Budget brands can cost as little as €12–€18 per month for light users."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do larger pack sizes offer a discount?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Buying in bulk reduces the per-can cost. A single can may cost €3.00, but a 10-pack might cost €2.50 per can (about 17% savings). A 30-pack can drop to €2.00 per can or lower. Always compare total cost, not just package price."
-        }
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/how-much-do-nicotine-pouches-cost" }
+});
+
+const schemaFAQ = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What's the average price of a nicotine pouch in 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Based on our live catalog, the average price per can ranges from €0.59 (budget brands) to €3.14 (premium brands). Mid-range pouches average around €1.50–€2.00 per can. Price varies significantly by brand, pack size, and strength level."
       }
-    ]
-  }
+    },
+    {
+      "@type": "Question",
+      "name": "How does nicotine pouch cost compare to cigarettes and vaping?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cigarettes in the EU cost €8–€12 per pack (typically 20 cigarettes). Vaping liquid averages €15–€30 per month. Nicotine pouches average €15–€45 per month depending on usage intensity, making them competitive with both alternatives. Budget brands can cost as little as €12–€18 per month for light users."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do larger pack sizes offer a discount?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Buying in bulk reduces the per-can cost. A single can may cost €3.00, but a 10-pack might cost €2.50 per can (about 17% savings). A 30-pack can drop to €2.00 per can or lower. Always compare total cost, not just package price."
+      }
+    }
+  ]
 });
 ---
 
@@ -129,6 +132,7 @@ const schemaFAQ = JSON.stringify({
   ogType="article"
   ogImage="/images/og/og-guide.svg"
 >
+  <script type="application/ld+json" set:html={schemaBlogPosting} />
   <script type="application/ld+json" set:html={schemaFAQ} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">

@@ -5,6 +5,9 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
 ---
 
 <Shop
@@ -90,7 +93,7 @@ import { tenant } from '@/config/tenant';
       <p style="margin-top: 12px;">No—nicotine pouches are designed to sit between your gum and lip without chewing. Chewing can damage the pouch, cause uneven nicotine release, and increase stomach upset; simply leave the pouch in place and allow nicotine to absorb through the gum.</p>
     </details>
 
-    <p>According to SnusFriend's beginner guide team, the number one mistake new users make is choosing a strength that's too high for their tolerance.</p>
+    <p>Based on our beginner guide team's experience, the number one mistake new users make is choosing a strength that's too high for their tolerance.</p>
 
     <section>
       <h2>What Are Nicotine Pouches?</h2>
@@ -191,9 +194,9 @@ import { tenant } from '@/config/tenant';
 
     <section>
       <h2>Ready to Get Started?</h2>
-      <p>SnusFriend carries over 700 tobacco-free nicotine pouches from 35+ brands, covering every strength from 2 mg beginner options to 50 mg ultra-extreme — so you can start at the right level and step up as your tolerance develops.</p>
+      <p>SnusFriend carries over {facts.productCountLabel} tobacco-free nicotine pouches from {facts.brandCountLabel} brands, covering every strength from 2 mg beginner options to 50 mg ultra-extreme — so you can start at the right level and step up as your tolerance develops.</p>
       <p>Now that you know how to use nicotine pouches correctly, explore our <a href="/products">full product range</a> or take our <a href="/flavor-quiz">flavour quiz</a> to find your perfect match. If you're switching from cigarettes, check out our guide on <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">switching to nicotine pouches</a> or explore <a href="/blog/nicotine-pouch-side-effects">what to expect in terms of side effects</a>.</p>
-      <p>Based on SnusFriend's analysis of first-time buyer data, we recommend starting with our <a href="/blog/best-nicotine-pouches-for-beginners-2026">best nicotine pouches for beginners</a> guide, which highlights the most forgiving and flavourful options for first-time users.</p>
+      <p>Based on our analysis of first-time buyer data, we recommend starting with our <a href="/blog/best-nicotine-pouches-for-beginners-2026">best nicotine pouches for beginners</a> guide, which highlights the most forgiving and flavourful options for first-time users.</p>
     </section>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

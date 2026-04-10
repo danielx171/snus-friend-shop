@@ -133,7 +133,13 @@ const isBadDescription = !p.description
   || storedDesc.includes('shop snusfriends.com');
 
 const description = isBadDescription ? generatedDescription : p.description;
-const metaDescription = description.length > 155 ? description.slice(0, 152) + '...' : description;
+
+// Tiered meta description — stays under 155 chars naturally, never truncates with "..."
+const priceStr = singlePrice > 0 ? ` From €${singlePrice.toFixed(2)}.` : '';
+const metaA = `Buy ${p.name} — ${p.nicotineContent}mg ${flavorLabel.toLowerCase()} pouches, ${strengthLabel.toLowerCase()} strength.${priceStr} Free EU shipping.`;
+const metaB = `Buy ${p.name} — ${p.nicotineContent}mg ${flavorLabel.toLowerCase()} nicotine pouches.${priceStr} Free EU shipping.`;
+const metaC = `${p.name} — ${p.nicotineContent}mg nicotine pouches.${priceStr} Free EU shipping.`;
+const metaDescription = metaA.length <= 155 ? metaA : metaB.length <= 155 ? metaB : metaC;
 
 const packTiers = [
   { key: 'pack1', label: '1 can', qty: 1 },

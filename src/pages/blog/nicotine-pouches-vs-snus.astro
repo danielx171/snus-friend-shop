@@ -4,7 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
+const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
 const title = 'Nicotine Pouches vs Snus: What\'s the Difference?';
 const description = 'Confused about nicotine pouches and snus? We break down the key differences — ingredients, legality, strength, flavour, and which is right for you.';
@@ -195,7 +197,7 @@ const description = 'Confused about nicotine pouches and snus? We break down the
         </p>
         <h3>Future Regulatory Trajectory</h3>
         <p>
-          As of 2026, the legal landscape strongly favours pouches. Sweden has signalled no plans to rescind its snus exemption, and there's zero appetite within the EU to ban pouches — they're seen as a positive alternative to smoking in most health contexts. If you're a user in Germany, France, Italy, or anywhere outside Sweden, pouches represent your only legal nicotine pouch option without grey-market risk. SnusFriend's catalog of 708 tobacco-free pouches — entirely snus-free and EU-legal — ships to 25+ European countries with DHL and UPS.
+          As of 2026, the legal landscape strongly favours pouches. Sweden has signalled no plans to rescind its snus exemption, and there's zero appetite within the EU to ban pouches — they're seen as a positive alternative to smoking in most health contexts. If you're a user in Germany, France, Italy, or anywhere outside Sweden, pouches represent your only legal nicotine pouch option without grey-market risk. SnusFriend's catalog of {facts.productCountLabel} tobacco-free pouches — entirely snus-free and EU-legal — ships to 25+ European countries with DHL and UPS.
         </p>
 
       </div>

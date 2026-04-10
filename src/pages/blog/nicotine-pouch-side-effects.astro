@@ -5,7 +5,9 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
+const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
 const modifiedDate = '2026-04-10';
 const title = 'Nicotine Pouch Side Effects: What Research Says';
@@ -70,7 +72,7 @@ const description = 'An honest look at nicotine pouch side effects based on publ
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
 
-        <p>According to SnusFriend's review of clinical literature and user experience data across 700+ products, the most commonly reported side effects are mild and temporary.</p>
+        <p>Based on our review of clinical literature and user experience data across {facts.productCountLabel} products, the most commonly reported side effects are mild and temporary.</p>
 
         <h2>Honest Answers, Not Marketing</h2>
         <p>
@@ -312,7 +314,7 @@ const description = 'An honest look at nicotine pouch side effects based on publ
 
         <h2>The Bottom Line</h2>
         <p>
-          Based on SnusFriend's review of 708 products across 35+ brands, the most frequently reported side effects cluster around the first week of use and with pouches above 12 mg — supporting the general advice to start low and step up gradually.
+          Based on our review of {facts.productCountLabel} products across {facts.brandCountLabel} brands, the most frequently reported side effects cluster around the first week of use and with pouches above 12 mg — supporting the general advice to start low and step up gradually.
         </p>
         <p>
           Nicotine pouches carry real side effects — mostly mild and manageable with common sense. The short-term profile is well-documented: hiccups, nausea, gum irritation, and elevated heart rate, all of which tend to resolve with experience and proper strength selection. The long-term picture is less clear: independent research is ongoing, and the honest answer is that we'll know more in five to ten years.

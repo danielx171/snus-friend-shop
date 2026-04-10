@@ -7,8 +7,10 @@ import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
 const allProducts = await getCollection('products');
+const facts = await getEditorialFacts();
 const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-28';
@@ -88,7 +90,7 @@ const description = 'Every strong nicotine pouch ranked by mg — from White Fox
           <strong>Brand competition:</strong> Rabbit, Siberia, and CUBA dominate the ultra-extreme tier. Mid-range brands like
           <a href="/brands/velo">VELO</a> (max 17 mg), <a href="/brands/zyn">ZYN</a> (max 16.5 mg), and
           <a href="/brands/loop">Loop</a> (max 15.6 mg) deliberately cap their strength ranges, positioning as "responsible" alternatives.
-          Our data shows the ultra-strong tier (15+ mg) accounts for approximately 35% of our 708 active products.
+          Our data shows the ultra-strong tier (15+ mg) accounts for approximately 35% of our {facts.productCountLabel} active products.
         </p>
 
         <h2>Understanding High-Strength Pouches</h2>
@@ -209,7 +211,7 @@ const description = 'Every strong nicotine pouch ranked by mg — from White Fox
 
         <h2>Complete Brand Strength Table — SnusFriend Catalog Data</h2>
         <p>
-          The table below is generated from SnusFriend's live product database (708 active products, March 2026).
+          The table below is generated from SnusFriend's live product database ({facts.productCountLabel} active products, March 2026).
           These are verified mg/pouch figures from our catalog, not marketing claims.
         </p>
 
@@ -237,7 +239,7 @@ const description = 'Every strong nicotine pouch ranked by mg — from White Fox
           </tbody>
         </table>
         </div>
-        <p><em>Data: SnusFriend product database, 708 active products, March 2026.</em></p>
+        <p><em>Data: SnusFriend product database, {facts.productCountLabel} active products, March 2026.</em></p>
         <p>
           <strong>Key finding:</strong> The top 4 brands account for the ultra-extreme tier (40+ mg). There's a significant
           gap between ICEBERG at 40 mg and STNG at 27.5 mg — products above 40 mg are genuinely in a different category
@@ -348,7 +350,7 @@ const description = 'Every strong nicotine pouch ranked by mg — from White Fox
         <p>
           Rabbit Pepper Mint Extreme at 50 mg/pouch is the single strongest product in our catalog. Siberia Maxi All
           White Portion at 49.5 mg is a close second. Both are in the ultra-extreme tier — only for users with established heavy tolerance.
-          SnusFriend's catalog spans over 50 strength variants across 35+ brands, ranging from 2 mg beginner options all the way to 50 mg ultra-extreme pouches — the widest strength range of any European retailer.
+          SnusFriend's catalog spans over 50 strength variants across {facts.brandCountLabel}+ brands, ranging from 2 mg beginner options all the way to 50 mg ultra-extreme pouches — the widest strength range of any European retailer.
         </p>
 
         <h3>Are there any nicotine pouches stronger than 50 mg?</h3>

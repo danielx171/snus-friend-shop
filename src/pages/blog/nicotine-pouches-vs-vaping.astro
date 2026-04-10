@@ -5,6 +5,9 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
 ---
 
 <Shop
@@ -172,7 +175,7 @@ import { tenant } from '@/config/tenant';
         <li>Value the 95% harm reduction established by Public Health England research</li>
       </ul>
 
-      <p><strong>Many users do both:</strong> Some vapers use pouches during work and vape socially. Some switchers from smoking start with vaping for the familiar ritual but switch to pouches for cost and convenience. There's no rule—choose what works for your life. SnusFriend stocks 708 tobacco-free pouches from 35+ brands, covering every strength tier from 2 mg to 50 mg — so switchers from vaping can precisely match their current nicotine intake.</p>
+      <p><strong>Many users do both:</strong> Some vapers use pouches during work and vape socially. Some switchers from smoking start with vaping for the familiar ritual but switch to pouches for cost and convenience. There's no rule—choose what works for your life. SnusFriend stocks {facts.productCountLabel} tobacco-free pouches from {facts.brandCountLabel} brands, covering every strength tier from 2 mg to 50 mg — so switchers from vaping can precisely match their current nicotine intake.</p>
     </section>
 
     <section>

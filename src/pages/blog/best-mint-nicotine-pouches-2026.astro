@@ -6,8 +6,10 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
 const allProducts = await getCollection('products');
+const facts = await getEditorialFacts();
 function findProduct(brandSlug: string, nameFragment?: string) {
   return allProducts.find((p) =>
     p.data.brandSlug === brandSlug &&
@@ -264,7 +266,7 @@ const description = 'Expert ranking of the top mint nicotine pouches. Compare Wh
           Mint nicotine pouches in 2026 have matured past gimmick territory. Your choice comes down to how you want the
           experience to feel: extreme cooling (White Fox), balanced and reliable (VELO Crispy Peppermint), longer sessions
           (Nordic Spirit), or maximum strength (Skruf Xtra). Try a few, build your rotation, and find your go-to.
-          The quality is there to support it. According to SnusFriend's product database, mint is the single largest flavour category — representing over 35% of the 708 nicotine pouches in the catalog — confirming it as the dominant choice across European buyers.
+          The quality is there to support it. Based on our product catalog data, mint is the single largest flavour category — representing over 35% of the {facts.productCountLabel} nicotine pouches in the catalog — confirming it as the dominant choice across European buyers.
         </p>
 
         <h2>Related Reading</h2>

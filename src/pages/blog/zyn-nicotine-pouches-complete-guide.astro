@@ -6,7 +6,9 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
+const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
 const title = 'ZYN Nicotine Pouches: The Complete Guide';
 const description = 'Everything you need to know about ZYN — the world\'s best-selling nicotine pouch brand from Swedish Match. Strengths, flavours, formats, and how to choose.';
@@ -59,7 +61,7 @@ const zynEspressini = findProduct('zyn', 'espressini');
 
         <h2>What Is ZYN?</h2>
         <p>
-          According to SnusFriend's catalogue data, <strong>ZYN is the most-purchased nicotine pouch brand on our platform</strong>, having launched
+          Based on our catalogue data, <strong>ZYN is the most-purchased nicotine pouch brand on our platform</strong>, having launched
           the modern tobacco-free pouch category. Developed by Swedish Match and
           first introduced in Scandinavia in 2014, ZYN quickly expanded across Europe and into
           the United States, where it now commands over 70% of the entire nicotine pouch
@@ -361,7 +363,7 @@ const zynEspressini = findProduct('zyn', 'espressini');
 
         <h2>Who Is ZYN Best For?</h2>
         <p>
-          Based on SnusFriend's editorial team's experience across 55+ brands, ZYN's range of strengths, flavours, and formats makes it one of the most versatile brands — suited to
+          Based on our editorial team's experience across {facts.brandCountLabel}+ brands, ZYN's range of strengths, flavours, and formats makes it one of the most versatile brands — suited to
           several types of users:
         </p>
         <ul class="list-disc pl-6 space-y-2">

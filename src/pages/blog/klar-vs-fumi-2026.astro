@@ -308,59 +308,61 @@ const description = 'KLAR vs FUMI compared head-to-head. Flavor, strength, SERAT
       "name": tenant.name,
       "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` }
     },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/klar-vs-fumi-2026` },
-    "mainEntity": {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Which brand has faster nicotine absorption?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "KLAR's SERATEK bioceramic technology is designed for faster absorption. Users report effects within 5–10 minutes, versus 10–15 for standard pouches. FUMI uses conventional materials, so absorption is standard. If speed matters to you, KLAR has a genuine edge."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I use FUMI if I'm new to pouches?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "FUMI's minimum strength is 8mg, which is moderate-to-strong. If you're brand new to nicotine pouches, KLAR's 3mg Mini is a better starting point. Once you've acclimated, FUMI becomes an option."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are these brands available internationally?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Both are Scandinavian-rooted and widely available in EU markets, including the Nordic countries and Germany. Availability outside Europe varies by distributor. Check your local retailer or online shops."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What's the shelf life of KLAR and FUMI pouches?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Most nicotine pouches maintain potency for 12–18 months if stored in cool, dry conditions. Both KLAR and FUMI should be stored in the original can or an airtight container to preserve freshness."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I mix KLAR and FUMI in a session?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Technically yes, but it's not recommended. Mixing brands means unpredictable nicotine strength and flavor combinations. Stick to one brand per session for a consistent experience."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Which brand is more sustainable?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Both use plant-based cellulose pouches (no plastic). KLAR's SERATEK bioceramics are food-grade and biodegradable. Neither brand publishes comprehensive sustainability reports, so claims are limited. Both are better than traditional snus in terms of environmental footprint."
-          }
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/klar-vs-fumi-2026` }
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Which brand has faster nicotine absorption?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "KLAR's SERATEK bioceramic technology is designed for faster absorption. Users report effects within 5–10 minutes, versus 10–15 for standard pouches. FUMI uses conventional materials, so absorption is standard. If speed matters to you, KLAR has a genuine edge."
         }
-      ]
-    }
-  })}} />
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use FUMI if I'm new to pouches?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "FUMI's minimum strength is 8mg, which is moderate-to-strong. If you're brand new to nicotine pouches, KLAR's 3mg Mini is a better starting point. Once you've acclimated, FUMI becomes an option."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are these brands available internationally?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Both are Scandinavian-rooted and widely available in EU markets, including the Nordic countries and Germany. Availability outside Europe varies by distributor. Check your local retailer or online shops."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the shelf life of KLAR and FUMI pouches?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most nicotine pouches maintain potency for 12–18 months if stored in cool, dry conditions. Both KLAR and FUMI should be stored in the original can or an airtight container to preserve freshness."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I mix KLAR and FUMI in a session?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Technically yes, but it's not recommended. Mixing brands means unpredictable nicotine strength and flavor combinations. Stick to one brand per session for a consistent experience."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which brand is more sustainable?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Both use plant-based cellulose pouches (no plastic). KLAR's SERATEK bioceramics are food-grade and biodegradable. Neither brand publishes comprehensive sustainability reports, so claims are limited. Both are better than traditional snus in terms of environmental footprint."
+        }
+      }
+    ]
+  })} />
 </Shop>
