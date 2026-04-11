@@ -16,11 +16,13 @@ interface Props {
   flavorKey: string;
   ratings: number;
   badgeKeys: string[];
+  portionsPerCan?: number;
 }
 
 const {
   slug, name, brand, brandSlug, imageUrl, prices, stock,
   nicotineContent, strengthKey, flavorKey, ratings, badgeKeys,
+  portionsPerCan = 20,
 } = Astro.props;
 
 const isOutOfStock = stock === 0;
@@ -60,6 +62,7 @@ const flavorLabelMap: Record<string, string> = {
 const flavorLabel = flavorLabelMap[flavorKey] ?? flavorKey;
 
 const pack1Price = prices.pack1 ?? 0;
+const perPouchPrice = pack1Price > 0 ? (pack1Price / portionsPerCan).toFixed(2) : null;
 ---
 
 <a
@@ -191,6 +194,14 @@ const pack1Price = prices.pack1 ?? 0;
         <span class="text-xs text-muted-foreground">{ratings.toFixed(1)}</span>
       </div>
     )}
+
+    {/* Price + per-pouch */}
+    <div class="flex items-baseline justify-between mt-auto pt-1">
+      <span class="text-base font-bold text-foreground">&euro;{pack1Price.toFixed(2)}</span>
+      {perPouchPrice && (
+        <span class="text-[10px] text-muted-foreground">&euro;{perPouchPrice}/pouch &middot; {portionsPerCan}pcs</span>
+      )}
+    </div>
 
     <CardAddToCart
       client:visible

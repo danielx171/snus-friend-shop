@@ -36,7 +36,7 @@ for (const p of sortedByPopularity) {
 const brandSlugsWithProducts = new Set(allProducts.map((p) => p.data.brandSlug));
 const activeBrands = allBrands.filter((b) => brandSlugsWithProducts.has(b.id));
 const brands = [...activeBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
-const heroDescription = `${allProducts.length}+ pouches from ${brands.length} premium brands. EU warehouse, next-day shipping, secure checkout. Real reviews from real customers.`;
+const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${brands.length} brands. EU warehouse, next-day shipping, secure checkout, and rewards on every order.`;
 
 // New Arrivals: products with 'new' badge or most recently updated (must have images)
 const newArrivals = allProducts
@@ -139,8 +139,8 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
           </div>
           <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
           <div>
-            <div class="text-3xl font-bold" style={`color: hsl(var(--primary));`}>4.8★</div>
-            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Verified Reviews</div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--hero-text));`}>Free</div>
+            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>EU Shipping</div>
           </div>
         </div>
 
@@ -395,6 +395,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
               flavorKey={product.data.flavorKey}
               ratings={product.data.ratings}
               badgeKeys={product.data.badgeKeys}
+              portionsPerCan={product.data.portionsPerCan}
             />
           ))
         ) : (
@@ -464,6 +465,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
               flavorKey={product.data.flavorKey}
               ratings={product.data.ratings}
               badgeKeys={product.data.badgeKeys}
+              portionsPerCan={product.data.portionsPerCan}
             />
           ))}
         </div>
