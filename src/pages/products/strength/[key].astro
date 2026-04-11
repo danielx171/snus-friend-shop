@@ -64,6 +64,10 @@ const { key } = Astro.props;
 const meta = STRENGTH_META[key as keyof typeof STRENGTH_META];
 const allProducts = await getCollection('products');
 const products = allProducts.filter((p) => p.data.strengthKey === key);
+// For super-strong, sort by nicotine content descending so highest mg (Cuba, Rabbit, Siberia) appear first
+const sortedProducts = key === 'super-strong'
+  ? [...products].sort((a, b) => (b.data.nicotineContent ?? 0) - (a.data.nicotineContent ?? 0))
+  : products;
 
 ensureProductsJson(allProducts);
 
@@ -98,22 +102,22 @@ const jsonLd = {
       { label: meta.label },
     ]} />
 
-    <header class="mb-8">
-      <h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+    <header class="mb-4">
+      <h1 class="mb-1 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
         {meta.h1}
       </h1>
-      <p class="max-w-3xl text-base leading-relaxed text-muted-foreground">
-        {meta.intro}
+      <p class="mt-1 text-sm text-muted-foreground">
+        {meta.range} &middot; {products.length} products
       </p>
-      <p class="mt-2 text-sm text-muted-foreground">
-        Nicotine range: <strong class="text-foreground">{meta.range}</strong> &middot; {products.length} cans
+      <p class="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground line-clamp-3">
+        {meta.intro}
       </p>
     </header>
 
     <h2 class="sr-only">Product Catalog</h2>
     <FilterableProductGrid
       client:idle
-      productsJson={JSON.stringify(slimProductData(products))}
+      productsJson={JSON.stringify(slimProductData(sortedProducts))}
       initialFilters={JSON.stringify({ strengths: [key] })}
     />
 

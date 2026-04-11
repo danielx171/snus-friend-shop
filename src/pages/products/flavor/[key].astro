@@ -98,7 +98,15 @@ const STRENGTH_LINKS = [
 const { key } = Astro.props;
 const meta = FLAVOR_META[key as keyof typeof FLAVOR_META];
 const allProducts = await getCollection('products');
-const products = allProducts.filter((p) => p.data.flavorKey === key);
+let products = allProducts.filter((p) => p.data.flavorKey === key);
+
+// Fallback: if no products have this exact flavorKey, match by product name
+// (e.g. tropical products may be tagged 'fruit' in the DB)
+const useFallback = products.length === 0;
+if (useFallback) {
+  const term = key.toLowerCase();
+  products = allProducts.filter((p) => p.data.name.toLowerCase().includes(term));
+}
 
 ensureProductsJson(allProducts);
 
@@ -133,15 +141,13 @@ const jsonLd = {
       { label: meta.label },
     ]} />
 
-    <header class="mb-8">
-      <h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+    <header class="mb-4">
+      <h1 class="mb-1 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
         {meta.h1}
       </h1>
-      <p class="max-w-3xl text-base leading-relaxed text-muted-foreground">
+      <p class="mt-1 text-sm text-muted-foreground">{products.length} products</p>
+      <p class="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground line-clamp-3">
         {meta.intro}
-      </p>
-      <p class="mt-2 text-sm text-muted-foreground">
-        {products.length} cans
       </p>
     </header>
 
@@ -149,7 +155,7 @@ const jsonLd = {
     <FilterableProductGrid
       client:idle
       productsJson={JSON.stringify(slimProductData(products))}
-      initialFilters={JSON.stringify({ flavors: [key] })}
+      initialFilters={useFallback ? undefined : JSON.stringify({ flavors: [key] })}
     />
 
     <!-- Cross-links to other flavor categories -->
