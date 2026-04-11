@@ -1,7 +1,7 @@
 /**
  * Brand primary colors for visual differentiation in product cards and brand pages.
  * Used for: image background tints, brand page header gradients.
- * Fallback for unmapped brands: #e8f0e8 (muted green)
+ * Fallback for unmapped brands: #4a7a5a (dark accessible green, contrast ≥ 4.5:1 on white)
  */
 export const brandColors: Record<string, string> = {
   zyn: '#4CAF50',
@@ -32,6 +32,15 @@ export const brandColors: Record<string, string> = {
   clew: '#0277BD',
   vid: '#4E342E',
   garant: '#1B5E20',
+  // Previously unmapped — caused near-invisible brand text on light cards
+  rabbit: '#7B3F00',
+  nois: '#1A3A4A',
+  thunder: '#5C3A1E',
+  pearl: '#4A4560',
+  volt: '#4B6B00',
+  dope: '#1C2B4A',
+  thor: '#5A3070',
+  gallantry: '#2D4A3E',
 };
 
 /** Strength level color coding for product cards */
@@ -51,7 +60,7 @@ export const strengthLabels: Record<string, string> = {
   'super-strong': 'Super Strong',
 };
 
-export const defaultBrandColor = '#e8f0e8';
+export const defaultBrandColor = '#4a7a5a'; // dark accessible green — contrast ≥ 4.5:1 on white
 
 /** Flavor family colors for product card left borders */
 export const flavorColors: Record<string, string> = {
