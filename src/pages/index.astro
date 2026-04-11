@@ -368,7 +368,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   </section>
 
   <!-- Best Sellers -->
-  <section id="best-sellers" class="border-b border-border bg-background py-16 sm:py-20 lg:py-24 lg:py-24">
+  <section id="best-sellers" class="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mb-10 flex items-end justify-between">
         <div>
@@ -400,7 +400,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         ) : (
           <div role="status" aria-label="Loading cans" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:gap-6">
             {Array.from({ length: 8 }).map(() => (
-              <div class="group rounded-xl border border-border bg-card/50 p-4 backdrop-blur">
+              <div class="group rounded-xl border border-border bg-card/80 p-4">
                 <div class="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
                 <div class="mb-2 h-4 w-3/4 rounded bg-muted/30 animate-pulse" />
                 <div class="h-3 w-1/2 rounded bg-muted/30 animate-pulse" />
@@ -409,38 +409,32 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
           </div>
         )}
       </div>
+
+      {staffPicks.length > 0 && (
+        <>
+          <h3 class="text-lg font-semibold text-foreground mt-10 mb-4">Staff Picks</h3>
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
+            {staffPicks.map((product) => product && (
+              <ProductCard
+                slug={product.id}
+                name={product.data.name}
+                brand={product.data.brand}
+                brandSlug={product.data.brandSlug}
+                imageUrl={product.data.imageUrl}
+                prices={product.data.prices}
+                stock={product.data.stock}
+                nicotineContent={product.data.nicotineContent}
+                strengthKey={product.data.strengthKey}
+                flavorKey={product.data.flavorKey}
+                ratings={product.data.ratings}
+                badgeKeys={product.data.badgeKeys}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   </section>
-
-  <!-- Staff Picks -->
-  {staffPicks.length > 0 && (
-    <section id="staff-picks" class="border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="mb-10">
-          <h2 class="text-2xl font-bold text-foreground sm:text-3xl">Staff Picks</h2>
-          <p class="mt-2 text-muted-foreground">Curated by our editorial team — one standout from each top brand</p>
-        </div>
-        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
-          {staffPicks.map((product) => product && (
-            <ProductCard
-              slug={product.id}
-              name={product.data.name}
-              brand={product.data.brand}
-              brandSlug={product.data.brandSlug}
-              imageUrl={product.data.imageUrl}
-              prices={product.data.prices}
-              stock={product.data.stock}
-              nicotineContent={product.data.nicotineContent}
-              strengthKey={product.data.strengthKey}
-              flavorKey={product.data.flavorKey}
-              ratings={product.data.ratings}
-              badgeKeys={product.data.badgeKeys}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
 
   <!-- New Arrivals -->
   {newArrivals.length > 0 && (
@@ -532,7 +526,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   </section>
 
   <!-- Popular Guides — internal linking to top blog content -->
-  <section class="border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">
+  <section class="border-b border-border bg-card/30 py-12 sm:py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-3 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Expert Guides & Reviews
@@ -572,41 +566,6 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
             <p class="mt-2 text-sm text-muted-foreground">Rankings, comparisons, brand deep-dives, and more</p>
           </div>
         </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Why SnusFriend -->
-  <section class="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
-    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-      <h2 class="mb-6 text-center text-2xl font-bold text-foreground sm:text-3xl">
-        Why Europeans Choose SnusFriend
-      </h2>
-      <div class="space-y-4 text-base leading-relaxed text-muted-foreground">
-        <p>
-          SnusFriend exists for one reason: to give nicotine pouch users the selection, the
-          information, and the service that mainstream tobacco retailers never bothered with.
-          We stock <strong class="text-foreground">{allProducts.length}+ cans</strong> from
-          <strong class="text-foreground">{brands.length} brands</strong> — from global leaders
-          like ZYN and VELO to cult favourites like Siberia, LOOP, and Pablo — all in one place,
-          all with transparent pricing and honest product descriptions.
-        </p>
-        <p>
-          Because Google Ads bans nicotine advertising, you won't find us through flashy paid
-          campaigns. Instead, we earn every visit by publishing the most thorough
-          <a href="/blog" class="underline hover:text-foreground">guides and reviews</a> in the
-          nicotine pouch space — from our <a href="/blog/strongest-nicotine-pouches-ranked-2026" class="underline hover:text-foreground">strongest pouches ranking</a> to the <a href="/blog/zyn-flavours-complete-guide" class="underline hover:text-foreground">complete ZYN flavour guide</a> — fact-checked, regularly updated, and written for real users rather than search algorithms. That editorial approach shapes our entire store: every
-          brand page includes the manufacturer, country of origin, strength range, and an honest
-          description so you know exactly what you're buying.
-        </p>
-        <p>
-          Orders ship from our EU warehouse within 24 hours, with tracking on every parcel and
-          free shipping on orders over &euro;{tenant.freeShippingThreshold}. Our
-          <a href="/rewards" class="underline hover:text-foreground">loyalty program</a> rewards
-          repeat customers with points, quests, and exclusive perks — because the pouch community
-          deserves better than one-and-done checkout experiences. We only sell to customers aged
-          18 and over, and we comply with all applicable EU regulations on nicotine products.
-        </p>
       </div>
     </div>
   </section>
@@ -719,7 +678,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   </section>
 
   <!-- CTA -->
-  <section class="bg-background py-16 sm:py-20 lg:py-24">
+  <section class="bg-background py-6 sm:py-8">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-2xl font-bold text-foreground sm:text-3xl">
         Ready to find your perfect pouch?
@@ -736,7 +695,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         </a>
         <a
           href="/products"
-          class="inline-flex h-12 items-center rounded-lg border border-border bg-card/60 px-8 text-base font-semibold text-foreground backdrop-blur transition hover:bg-card"
+          class="inline-flex h-12 items-center rounded-lg border border-border bg-card/80 px-8 text-base font-semibold text-foreground transition hover:bg-card"
         >
           Browse All Cans
         </a>
