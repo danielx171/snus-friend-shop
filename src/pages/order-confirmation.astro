@@ -111,7 +111,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
       <div class="mx-auto">
         {/* Success header */}
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center mb-6">
+        <div class="rounded-xl border border-border bg-card/80 p-8 text-center mb-6">
           <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
             <svg class="h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -143,7 +143,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
         {/* Order details */}
         {order && lineItems.length > 0 && (
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6 mb-6">
             <h2 class="text-lg font-semibold mb-4">Order Details</h2>
 
             {/* Line items */}
@@ -206,7 +206,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
         {/* Shipping address */}
         {order && shippingAddress && (
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6 mb-6">
             <h2 class="text-lg font-semibold mb-3">Shipping Address</h2>
             <div class="text-sm text-muted-foreground space-y-0.5">
               {shippingAddress.name && <p class="text-foreground font-medium">{shippingAddress.name}</p>}
@@ -224,7 +224,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
         {/* Tracking link */}
         {order?.tracking_url && (
-          <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6 mb-6">
+          <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 mb-6">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                 <svg class="h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -250,7 +250,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
         )}
 
         {/* What happens next */}
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+        <div class="rounded-xl border border-border bg-card/80 p-6 mb-6">
           <h2 class="text-sm font-semibold text-foreground mb-2">What happens next?</h2>
           <ul class="space-y-2 text-sm text-muted-foreground">
             <li class="flex items-start gap-2">
@@ -269,7 +269,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
         </div>
 
         {/* Rewards next-step nudge */}
-        <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6 mb-6">
+        <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 mb-6">
           <h2 class="text-lg font-semibold text-foreground mb-1">Nice choice. Here's what's next.</h2>
           <p class="text-sm text-muted-foreground mb-4">
             Your SnusCoins will land once your order ships. In the meantime, keep the momentum going:
@@ -306,7 +306,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
         {/* Guest account creation prompt */}
         {!user && order && (
-          <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6 mb-6 text-center">
+          <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 mb-6 text-center">
             <h2 class="text-lg font-semibold mb-2">Track your order & earn rewards</h2>
             <p class="text-sm text-muted-foreground mb-4">
               Create an account to track this order, earn SnusCoins on future purchases, and get exclusive deals.

@@ -301,19 +301,19 @@ const jsonLd = {
 
         {/* Quick Specs */}
         <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+          <div class="rounded-lg border border-border bg-card/60 p-3 text-center">
             <p class="text-xs text-muted-foreground">Nicotine</p>
             <p class="text-sm font-semibold text-foreground">{p.nicotineContent} mg/pouch</p>
           </div>
-          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+          <div class="rounded-lg border border-border bg-card/60 p-3 text-center">
             <p class="text-xs text-muted-foreground">Portions</p>
             <p class="text-sm font-semibold text-foreground">{p.portionsPerCan}/can</p>
           </div>
-          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+          <div class="rounded-lg border border-border bg-card/60 p-3 text-center">
             <p class="text-xs text-muted-foreground">Format</p>
             <p class="text-sm font-semibold text-foreground capitalize">{p.formatKey}</p>
           </div>
-          <div class="rounded-lg border border-primary/20 bg-primary/5 p-3 text-center backdrop-blur">
+          <div class="rounded-lg border border-primary/20 bg-primary/5 p-3 text-center">
             <p class="text-xs text-muted-foreground">Price/Pouch</p>
             <p class="text-sm font-semibold text-primary">&euro;{(singlePrice / (p.portionsPerCan || 20)).toFixed(2)}</p>
           </div>
@@ -354,7 +354,7 @@ const jsonLd = {
               }}
             />
           ) : (
-            <div class="rounded-xl border border-border bg-card/30 p-5 backdrop-blur">
+            <div class="rounded-xl border border-border bg-card/50 p-5">
               <p class="text-sm font-semibold text-foreground mb-1">Get notified when it's back</p>
               <p class="text-xs text-muted-foreground mb-3">We'll email you as soon as this product is restocked.</p>
               <form class="flex gap-2" data-notify-form data-product-slug={p.slug}>
@@ -405,7 +405,7 @@ const jsonLd = {
 
         {/* Subscribe & Save */}
         {inStock && (
-          <div class="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-5 backdrop-blur" id="subscribe-section">
+          <div class="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-5" id="subscribe-section">
             <div class="flex items-center justify-between mb-3">
               <h2 class="text-sm font-semibold text-foreground">Subscribe & Save</h2>
               <span class="text-xs font-bold text-primary">Up to 15% off</span>
@@ -456,7 +456,7 @@ const jsonLd = {
 
         {/* Description */}
         {description && (
-          <div class="rounded-xl border border-border bg-card/30 p-5 backdrop-blur">
+          <div class="rounded-xl border border-border bg-card/50 p-5">
             <h2 class="mb-2 text-sm font-semibold text-foreground">Description</h2>
             <p class="text-sm leading-relaxed text-muted-foreground">
               {description}

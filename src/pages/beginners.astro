@@ -76,23 +76,29 @@ const jsonLd = {
   <section class="border-b border-border bg-background py-16">
     <div class="mx-auto max-w-4xl px-4">
       <h2 class="text-2xl font-bold text-foreground text-center sm:text-3xl mb-10">How Nicotine Pouches Work</h2>
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center">
-          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">1</div>
-          <h3 class="font-semibold text-foreground mb-2">Place Under Your Lip</h3>
-          <p class="text-sm text-muted-foreground">Tuck the pouch between your upper lip and gum. It sits discreetly — nobody will notice.</p>
-        </div>
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center">
-          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">2</div>
-          <h3 class="font-semibold text-foreground mb-2">Wait 20-40 Minutes</h3>
-          <p class="text-sm text-muted-foreground">You'll feel a gentle tingling — that's the nicotine releasing. The flavour peaks around 5-10 minutes.</p>
-        </div>
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center">
-          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">3</div>
-          <h3 class="font-semibold text-foreground mb-2">Remove & Bin</h3>
-          <p class="text-sm text-muted-foreground">When the flavour fades, take it out and dispose. No spitting, no smoke, no residue.</p>
-        </div>
-      </div>
+      <ol class="space-y-6 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-10">
+        <li class="flex items-start gap-4">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">1</span>
+          <div>
+            <h3 class="font-semibold text-foreground">Place Under Your Lip</h3>
+            <p class="mt-1 text-sm text-muted-foreground">Tuck the pouch between your upper lip and gum. It sits discreetly — nobody will notice.</p>
+          </div>
+        </li>
+        <li class="flex items-start gap-4">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">2</span>
+          <div>
+            <h3 class="font-semibold text-foreground">Wait 20-40 Minutes</h3>
+            <p class="mt-1 text-sm text-muted-foreground">You'll feel a gentle tingling — that's the nicotine releasing. The flavour peaks around 5-10 minutes.</p>
+          </div>
+        </li>
+        <li class="flex items-start gap-4">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">3</span>
+          <div>
+            <h3 class="font-semibold text-foreground">Remove & Bin</h3>
+            <p class="mt-1 text-sm text-muted-foreground">When the flavour fades, take it out and dispose. No spitting, no smoke, no residue.</p>
+          </div>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -208,7 +214,7 @@ const jsonLd = {
       <h2 class="text-2xl font-bold text-foreground text-center sm:text-3xl mb-10">Beginner FAQ</h2>
       <div class="space-y-3">
         {faqItems.map((item) => (
-          <details class="group rounded-xl border border-border bg-card/60 backdrop-blur-sm">
+          <details class="group rounded-xl border border-border bg-card/80">
             <summary class="cursor-pointer select-none px-6 py-4 font-medium text-foreground flex items-center justify-between">
               {item.q}
               <span class="text-muted-foreground transition-transform group-open:rotate-45">+</span>

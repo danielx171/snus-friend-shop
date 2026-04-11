@@ -181,22 +181,22 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
     <section class="mb-12">
       <h2 class="mb-6 text-2xl font-bold text-foreground">How It Works</h2>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
+        <div class="rounded-xl border border-border bg-card/70 p-5">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-lg">1</div>
           <h3 class="mb-1 font-semibold text-foreground">Submit Your Idea</h3>
           <p class="text-sm text-muted-foreground">Describe what you want and why it matters -- one sentence is enough, but detail helps.</p>
         </div>
-        <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
+        <div class="rounded-xl border border-border bg-card/70 p-5">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-lg">2</div>
           <h3 class="mb-1 font-semibold text-foreground">The Community Votes</h3>
           <p class="text-sm text-muted-foreground">Other members upvote the suggestions they want most. Popular ideas rise to the top.</p>
         </div>
-        <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
+        <div class="rounded-xl border border-border bg-card/70 p-5">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-lg">3</div>
           <h3 class="mb-1 font-semibold text-foreground">We Build It</h3>
           <p class="text-sm text-muted-foreground">Our team reviews the most-requested ideas each month and ships the best ones.</p>
         </div>
-        <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
+        <div class="rounded-xl border border-border bg-card/70 p-5">
           <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary font-bold text-lg">4</div>
           <h3 class="mb-1 font-semibold text-foreground">You Get Rewarded</h3>
           <p class="text-sm text-muted-foreground">If your suggestion ships, you earn the exclusive Pioneer badge and 200 SnusCoins.</p>
@@ -208,7 +208,7 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
     <section class="mb-12">
       <h2 class="mb-6 text-2xl font-bold text-foreground">Guidelines</h2>
       <div class="grid gap-6 sm:grid-cols-2">
-        <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
+        <div class="rounded-xl border border-border bg-card/70 p-5">
           <h3 class="mb-3 font-semibold text-foreground">What makes a great suggestion</h3>
           <ul class="space-y-2 text-sm text-muted-foreground">
             <li>Be specific. "Add a flavour comparison tool" is better than "make the site better."</li>
@@ -218,7 +218,7 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
             <li>Keep it constructive. Criticism is welcome when it comes with a solution.</li>
           </ul>
         </div>
-        <div class="rounded-xl border border-border bg-card/50 p-5 backdrop-blur">
+        <div class="rounded-xl border border-border bg-card/70 p-5">
           <h3 class="mb-3 font-semibold text-foreground">What is out of scope</h3>
           <ul class="space-y-2 text-sm text-muted-foreground">
             <li>Requests for specific product stock or pricing changes (that is a purchasing decision, not a feature)</li>
@@ -246,7 +246,7 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
 
       <form
         method="POST"
-        class="mx-auto max-w-xl space-y-4 rounded-2xl border border-border bg-card/50 p-6 backdrop-blur sm:p-8"
+        class="mx-auto max-w-xl space-y-4 rounded-2xl border border-border bg-card/70 p-6 sm:p-8"
       >
         <input type="hidden" name="_action" value="submit" />
         <div>
@@ -298,7 +298,7 @@ const statusColors: Record<string, { bg: string; text: string; label: string }> 
             const voted = userVotedIds.has(s.id);
             const status = statusColors[s.status] ?? statusColors.open;
             return (
-              <div class="flex items-start gap-4 rounded-xl border border-border bg-card/50 p-4 backdrop-blur sm:p-5">
+              <div class="flex items-start gap-4 rounded-xl border border-border bg-card/70 p-4 sm:p-5">
                 {/* Vote button */}
                 <form method="POST" class="shrink-0">
                   <input type="hidden" name="_action" value="vote" />
