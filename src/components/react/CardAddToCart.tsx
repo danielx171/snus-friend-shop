@@ -88,7 +88,7 @@ const CardAddToCart = memo(function CardAddToCart(props: CardAddToCartProps) {
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedPack(pk); }}
                 className={cn(
-                  "text-[10px] px-2 py-1 rounded-full border font-medium transition-all",
+                  "text-[10px] px-2 py-1 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 rounded-full border font-medium transition-all",
                   pk === selectedPack
                     ? "bg-primary text-primary-foreground border-primary"
                     : "border-border bg-transparent text-muted-foreground hover:border-primary/40"
@@ -123,6 +123,11 @@ const CardAddToCart = memo(function CardAddToCart(props: CardAddToCartProps) {
               €{displayPerCan.toFixed(2)} per can
             </span>
           )}
+          {displayPrice > 0 && (
+            <span className="text-[10px] font-medium text-primary">
+              +{Math.floor(displayPrice)} pts
+            </span>
+          )}
         </div>
         <button
           ref={btnRef}
@@ -130,7 +135,7 @@ const CardAddToCart = memo(function CardAddToCart(props: CardAddToCartProps) {
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAdd(); }}
           disabled={isOutOfStock}
           aria-label={isOutOfStock ? `Sold Out – ${props.name}` : `Add ${packSizeMultipliers[selectedPack]} to cart – ${props.name}`}
-          className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-9 w-9 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isOutOfStock ? '✕' : justAdded ? '✓' : '+'}
         </button>

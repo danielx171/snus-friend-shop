@@ -329,7 +329,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   <!-- Purchase-based recommendations (logged-in users only) -->
   <RecommendationsIsland
     client:idle
-    productsJson={JSON.stringify(allProducts.slice(0, 200).map((p) => ({
+    productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
       slug: p.id,
       name: p.data.name,
       brand: p.data.brand,
@@ -344,7 +344,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   <!-- Recently Viewed (client-side, shows only if user has browsing history) -->
   <RecentlyViewedIsland
     client:idle
-    productsJson={JSON.stringify(allProducts.slice(0, 200).map((p) => ({
+    productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
       slug: p.id,
       name: p.data.name,
       brand: p.data.brand,

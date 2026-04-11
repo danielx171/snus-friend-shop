@@ -297,22 +297,30 @@ function MobileFilterSheet({
   onToggle: (group: keyof Omit<FilterState, 'sort'>, value: string, checked: boolean) => void;
   onClearAll: () => void;
 }) {
-  // Lock body scroll when open
+  // Lock body scroll when open + Escape key handler
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') onClose();
+      };
+      document.addEventListener('keydown', handleEscape);
+      return () => {
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', handleEscape);
+      };
     } else {
       document.body.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
     };
-  }, [open]);
+  }, [open, onClose]);
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col">
+    <div className="fixed inset-0 z-50 flex flex-col" role="dialog" aria-modal="true" aria-labelledby="mobile-filter-heading">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
 
@@ -320,7 +328,7 @@ function MobileFilterSheet({
       <div className="relative mt-auto flex max-h-[85vh] flex-col rounded-t-2xl bg-card">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
-          <h2 className="text-base font-semibold text-foreground">
+          <h2 id="mobile-filter-heading" className="text-base font-semibold text-foreground">
             Filters{activeCount > 0 ? ` (${activeCount})` : ''}
           </h2>
           <div className="flex items-center gap-3">

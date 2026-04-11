@@ -162,16 +162,14 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
       <div className="flex flex-1 flex-col gap-1.5 p-3">
         {/* Brand + strength dots */}
         <div className="flex items-center justify-between">
-          <span
-            role="link"
-            tabIndex={0}
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.location.href = `/brands/${brandSlug}`; }}
-            onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); window.location.href = `/brands/${brandSlug}`; } }}
-            className="text-xs font-semibold uppercase tracking-wider cursor-pointer transition-all hover:brightness-125"
+          <a
+            href={`/brands/${brandSlug}`}
+            onClick={(e) => { e.stopPropagation(); }}
+            className="text-xs font-semibold uppercase tracking-wider transition-all hover:brightness-125"
             style={{ color: brandColor }}
           >
             {brand}
-          </span>
+          </a>
           <div className="flex items-center gap-0.5" role="img" aria-label={`${strengthLabels[strengthKey] ?? 'Normal'} strength, ${strengthDots} of 5`}>
             {Array.from({ length: 5 }, (_, i) => (
               <div

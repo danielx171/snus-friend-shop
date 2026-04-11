@@ -5,10 +5,10 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
-import { slimProductData } from '@/lib/product-json';
+import { ensureProductsJson } from '@/lib/product-json';
 
 const products = await getCollection('products');
-const productsJson = JSON.stringify(slimProductData(products));
+ensureProductsJson(products);
 
 const totalProducts = products.length;
 const brandCount = new Set(products.map(p => p.data.brand)).size;
@@ -142,7 +142,7 @@ const faqJsonLd = {
     <!-- Product grid — above the fold -->
     <div class="mt-8" style="min-height: 80vh;">
       <h2 class="sr-only">Product Catalog</h2>
-      <FilterableProductGrid client:idle productsJson={productsJson} />
+      <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
     </div>
 
     <!-- SEO content — below products for crawlers -->
