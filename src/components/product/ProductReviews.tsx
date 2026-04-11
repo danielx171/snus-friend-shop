@@ -789,9 +789,15 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
 
       {/* ── Empty state ── */}
       {!isLoading && totalCount === 0 && (
-        <p className="text-sm text-muted-foreground">
-          No reviews yet. Be the first to share your thoughts!
-        </p>
+        <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border bg-muted/30 py-12 px-6 text-center">
+          <p className="text-base text-muted-foreground">
+            No reviews yet — be the first and earn 25 SnusCoins
+          </p>
+          <Button size="sm" onClick={() => setDialogOpen(true)}>
+            <MessageSquare className="mr-2 h-4 w-4" />
+            Write a Review
+          </Button>
+        </div>
       )}
 
       {/* ── Sort dropdown + Review list ── */}

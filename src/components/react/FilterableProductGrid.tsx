@@ -594,7 +594,7 @@ export default function FilterableProductGrid({
 
         {/* Product count */}
         <span className="text-sm text-muted-foreground">
-          Showing {filteredProducts.length} of {allProducts.length} cans
+          Showing {filteredProducts.length} of {allProducts.length} products
         </span>
 
         {/* Sort dropdown */}

@@ -9,7 +9,7 @@ const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_
 const footerLinks = {
   shop: [
     { href: '/nicotine-pouches', label: 'Buy Nicotine Pouches' },
-    { href: '/products', label: 'All Cans' },
+    { href: '/products', label: 'All Products' },
     { href: '/brands', label: 'Brands' },
     { href: '/shipping', label: 'Shipping' },
     { href: '/returns', label: 'Returns' },
@@ -187,7 +187,6 @@ const footerLinks = {
       {/* Company info */}
       <div class="mt-6 text-center text-xs text-muted-foreground/60">
         <p>{tenant.legalName} · {tenant.address.streetAddress}, {tenant.address.postalCode} {tenant.address.addressLocality}, Sweden</p>
-        <p class="text-muted-foreground/40 mt-1">Currently in preview · Full launch coming soon</p>
       </div>
 
       {/* Social links */}

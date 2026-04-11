@@ -38,11 +38,19 @@ const activeBrands = allBrands.filter((b) => brandSlugsWithProducts.has(b.id));
 const brands = [...activeBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
 const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${brands.length} brands. EU warehouse, next-day shipping, secure checkout, and rewards on every order.`;
 
-// New Arrivals: products with 'new' badge or most recently updated (must have images)
-const newArrivals = allProducts
+// New Arrivals: products with 'new' badge or NewPrice badge (must have images), max 1 per brand
+const newArrivalCandidates = allProducts
   .filter((p) => p.data.imageUrl && (p.data.badgeKeys.includes('new') || p.data.badgeKeys.includes('NewPrice')))
-  .sort((a, b) => (b.data.updatedAt ?? '').localeCompare(a.data.updatedAt ?? ''))
-  .slice(0, 4);
+  .sort((a, b) => (b.data.updatedAt ?? '').localeCompare(a.data.updatedAt ?? ''));
+const newArrivals: typeof newArrivalCandidates = [];
+const newArrivalBrandCount: Record<string, number> = {};
+for (const p of newArrivalCandidates) {
+  if (newArrivals.length >= 4) break;
+  const b = p.data.brand;
+  if ((newArrivalBrandCount[b] ?? 0) >= 1) continue;
+  newArrivalBrandCount[b] = (newArrivalBrandCount[b] ?? 0) + 1;
+  newArrivals.push(p);
+}
 
 // Staff Picks: curated top-rated products across diverse brands (1 per brand)
 const staffPickBrands = ['zyn', 'velo', 'loop', 'skruf'];
@@ -399,7 +407,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
             />
           ))
         ) : (
-          <div role="status" aria-label="Loading cans" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:gap-6">
+          <div role="status" aria-label="Loading products" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:gap-6">
             {Array.from({ length: 8 }).map(() => (
               <div class="group rounded-xl border border-border bg-card/80 p-4">
                 <div class="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
@@ -413,7 +421,10 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
 
       {staffPicks.length > 0 && (
         <>
-          <h3 class="text-lg font-semibold text-foreground mt-10 mb-4">Staff Picks</h3>
+          <div class="mt-10 mb-4 rounded-lg bg-card/30 px-4 py-3 border-l-2 border-primary/40">
+            <h3 class="text-lg font-semibold text-foreground">Staff Picks</h3>
+            <p class="text-xs text-muted-foreground mt-0.5">Curated by our team — one standout from each top brand</p>
+          </div>
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
             {staffPicks.map((product) => product && (
               <ProductCard
@@ -444,7 +455,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         <div class="mb-10 flex items-end justify-between">
           <div>
             <h2 class="text-2xl font-bold text-foreground sm:text-3xl">New Arrivals</h2>
-            <p class="mt-2 text-muted-foreground">Latest additions and updated cans</p>
+            <p class="mt-2 text-muted-foreground">Latest additions and updated products</p>
           </div>
           <a href="/products" class="hidden text-sm font-medium text-primary hover:underline sm:block">
             View all &rarr;
@@ -648,12 +659,15 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
           <p class="mt-2 text-sm font-medium" style={`color: hsl(var(--hero-muted));`}>
             Earning starts at your first order. <a href="/rewards" class="underline transition" style={`color: hsl(var(--hero-text));`}>See how it works &rarr;</a>
           </p>
-          <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <a href="/rewards" class="inline-flex h-11 items-center justify-center rounded-lg px-6 text-sm font-semibold transition" style={`background: hsl(var(--hero-cta-bg)); color: hsl(var(--hero-cta-text));`}>
               Start Earning SnusCoins
             </a>
             <a href="/community" class="inline-flex h-11 items-center justify-center rounded-lg border px-6 text-sm font-semibold transition" style={`border-color: hsl(var(--hero-text) / 0.2); color: hsl(var(--hero-text));`}>
               View The Board
+            </a>
+            <a href="/flavor-quiz" class="inline-flex h-11 items-center justify-center rounded-lg border border-foreground/20 px-6 text-sm font-semibold text-foreground transition hover:bg-white/5">
+              Take the Flavour Quiz
             </a>
           </div>
         </div>
@@ -675,32 +689,6 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
             <div class="mt-1 text-xs font-medium" style={`color: hsl(var(--hero-muted));`}>The Board</div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="bg-background py-6 sm:py-8">
-    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-2xl font-bold text-foreground sm:text-3xl">
-        Ready to find your perfect pouch?
-      </h2>
-      <p class="mt-4 text-lg text-muted-foreground">
-        Take our flavour quiz and get personalised recommendations in under a minute.
-      </p>
-      <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <a
-          href="/flavor-quiz"
-          class="inline-flex h-12 items-center rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90"
-        >
-          Take the Quiz
-        </a>
-        <a
-          href="/products"
-          class="inline-flex h-12 items-center rounded-lg border border-border bg-card/80 px-8 text-base font-semibold text-foreground transition hover:bg-card"
-        >
-          Browse All Cans
-        </a>
       </div>
     </div>
   </section>

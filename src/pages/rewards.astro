@@ -141,11 +141,11 @@ const tiers = rewards.tiers.map((t, i) => ({
       <!-- Tier cards -->
       <h2 class="text-2xl font-bold tracking-tight mb-6">Tier Overview</h2>
       <div class="grid gap-6 sm:grid-cols-2 mb-12">
-        {tiers.map((tier) => (
-          <div class={`rounded-xl border border-border border-l-[3px] ${tier.border} bg-card/80 overflow-hidden`}>
+        {tiers.map((tier, i) => (
+          <div class={`rounded-xl border border-border ${i === tiers.length - 1 ? 'border-l-[4px] sm:col-span-2' : 'border-l-[3px]'} ${tier.border} bg-card/80 overflow-hidden`}>
             <div class={`bg-gradient-to-r ${tier.color} px-6 py-4`}>
-              <h3 class="text-lg font-bold text-foreground">{tier.name}</h3>
-              <p class="text-sm text-foreground/80">{tier.points} SnusCoins to unlock</p>
+              <h3 class="text-lg font-bold text-foreground">{i === tiers.length - 1 ? '🏆 ' : ''}{tier.name}</h3>
+              <p class="text-sm text-foreground/80">{tier.points === '0' ? 'Starting tier — everyone begins here' : `${tier.points} SnusCoins to unlock`}</p>
             </div>
             <ul class="p-6 space-y-2">
               {tier.perks.map((perk) => (
