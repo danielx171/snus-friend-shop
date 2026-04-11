@@ -40,7 +40,6 @@ export interface TenantConfig {
     readonly ageGate: boolean;
     readonly flavorQuiz: boolean;
     readonly bundleBuilder: boolean;
-    readonly easterEgg: boolean;
   };
   readonly seo: {
     readonly titleTemplate: string;
@@ -58,7 +57,6 @@ export interface TenantConfig {
     readonly wishlistKey: string;
     readonly themeKey: string;
     readonly languageKey: string;
-    readonly easterKey: string;
     readonly consentKey: string;
     readonly ageVerifiedKey: string;
   };
@@ -106,7 +104,6 @@ export const tenant: TenantConfig = {
     ageGate: true,
     flavorQuiz: true,
     bundleBuilder: true,
-    easterEgg: true,
   },
   seo: {
     titleTemplate: '%s | SnusFriend',
@@ -124,7 +121,6 @@ export const tenant: TenantConfig = {
     wishlistKey: 'snusfriend_wishlist',
     themeKey: 'theme',
     languageKey: 'snusfriend-language',
-    easterKey: 'sf_easter_mode',
     consentKey: 'cookie-consent',
     ageVerifiedKey: 'age_verified',
   },

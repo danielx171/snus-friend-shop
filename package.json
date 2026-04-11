@@ -12,9 +12,12 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "indexnow": "node scripts/indexnow-ping.mjs",
+    "indexnow:dry": "node scripts/indexnow-ping.mjs --dry-run",
     "sitemap": "bun run scripts/generate-sitemap.ts",
     "images:download": "bun run scripts/download-product-images.ts",
-    "images:upload": "bun run scripts/upload-images-to-supabase.ts"
+    "images:upload": "bun run scripts/upload-images-to-supabase.ts",
+    "init": "bun install && npx vercel env pull .env.local --yes && bun run build"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.1",
