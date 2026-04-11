@@ -3,12 +3,7 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
-import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
-import { getCollection } from 'astro:content';
-
-const allProducts = await getCollection('products');
-const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-04-07';
 const title = 'Nicotine Pouches in Norway: 2026 Rules Guide';
@@ -40,8 +35,12 @@ const description = 'Nicotine pouches in Norway 2026. Why they\'re banned, snus 
         <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
           <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
           <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
-            Nicotine pouches are banned in Norway. Manufacturing, importing, selling, and possessing them is illegal under Norwegian law, enforced since late 2024. Norwegian customs (Tolletaten) actively confiscates parcels containing pouches, even if purchased legally abroad. Traditional moist snus remains fully legal. No online retailer can legally ship nicotine pouches to Norway, and personal importation is not exempt from the ban.
+            Nicotine pouches are banned in Norway. SnusFriend does not ship nicotine pouches to Norway. Manufacturing, importing, selling, and possessing them is illegal under Norwegian law, enforced since late 2024. Norwegian customs (Tolletaten) actively confiscates parcels containing pouches, even if purchased legally abroad. Traditional moist snus remains fully legal. No online retailer can legally ship nicotine pouches to Norway, and personal importation is not exempt from the ban.
           </p>
+        </div>
+
+        <div style="margin: 16px 0 24px; padding: 14px 18px; background: hsl(var(--muted)); border-left: 3px solid hsl(var(--primary) / 0.4); border-radius: 6px; font-size: 13px; color: hsl(var(--muted-foreground));">
+          <strong style="color: hsl(var(--foreground));">Regulatory notice:</strong> Nicotine pouch regulations vary by country and change frequently. This article reflects our understanding as of the publication date. Always verify current local regulations before ordering. SnusFriend does not ship to countries where nicotine pouches are prohibited.
         </div>
 
         <p>Norway is the world's snus heartland—over 20% of Norwegian adults use snus daily, a tradition spanning centuries. Yet the country faces a regulatory paradox: traditional tobacco snus thrives, while tobacco-free nicotine pouches remain <strong>banned for retail sale and import</strong>. This guide explains why, what options exist, and how Norwegian users navigate the reality of 2026.</p>
@@ -139,7 +138,7 @@ const description = 'Nicotine pouches in Norway 2026. Why they\'re banned, snus 
           <li>Retailers cannot guarantee delivery</li>
         </ul>
 
-        <p><strong>SnusFriend's position:</strong> We ship nicotine pouches throughout the EU, but we cannot legally ship to Norway. Customers who attempt to order from Norway do so at their own risk, with the clear understanding that packages may be seized by Norwegian customs.</p>
+        <p><strong>SnusFriend's position:</strong> We ship nicotine pouches throughout the EU, but we do not ship to Norway. Norwegian law prohibits import, and we do not accept orders from Norwegian addresses.</p>
 
         <h3>Option 4: Using Nicotine Pouches While Traveling (Legal)</h3>
 
@@ -201,13 +200,10 @@ const description = 'Nicotine pouches in Norway 2026. Why they\'re banned, snus 
 
         <p>For first-time pouch users from Norway, start with ZYN or Skruf (brands you know) and mid-strength varieties (9–11mg).</p>
 
-        <h2>Recommended Products</h2>
-        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
-          {find('zyn-cool-mint-9mg') && <BlogProductCard product={find('zyn-cool-mint-9mg')} />}
-          {find('skruf-fresh-mint-3') && <BlogProductCard product={find('skruf-fresh-mint-3')} />}
-          {find('white-fox-peppered-mint-16mg') && <BlogProductCard product={find('white-fox-peppered-mint-16mg')} />}
-          {find('loop-mint-mania-9-4mg') && <BlogProductCard product={find('loop-mint-mania-9-4mg')} />}
-          {find('siberia-80-degrees-24mg') && <BlogProductCard product={find('siberia-80-degrees-24mg')} />}
+        <div class="not-prose" style="background: hsl(var(--muted)); border-radius: 10px; padding: 18px 22px; margin: 24px 0;">
+          <p style="font-size: 14px; color: hsl(var(--muted-foreground)); margin: 0;">
+            <strong style="color: hsl(var(--foreground));">Note for Norwegian readers:</strong> This article is for informational purposes. SnusFriend does not ship nicotine pouches to Norway. Norwegian customers should be aware of their country's regulations before seeking nicotine products abroad.
+          </p>
         </div>
 
         <h2>The Bottom Line</h2>
@@ -235,7 +231,7 @@ const description = 'Nicotine pouches in Norway 2026. Why they\'re banned, snus 
           <p>Snus is regulated as a tobacco product and has a grandfathered exemption under Norway's EEA agreement. Nicotine pouches contain no tobacco and are classified as medicinal products—but no brand has obtained medicinal product approval in Norway. The regulatory pathway is different, resulting in prohibition.</p>
 
           <h3 class="text-foreground font-semibold mt-4">Can I order nicotine pouches online to Norway from abroad?</h3>
-          <p>Technically, no. Norwegian customs actively intercepts incoming parcels containing nicotine pouches. Your package is likely to be seized and destroyed. There is no legal recourse, and retailers cannot refund seized orders.</p>
+          <p>No. Importing nicotine pouches into Norway is illegal. Norwegian customs actively intercepts incoming parcels and seizes them without refund. SnusFriend does not ship to Norway. No reputable EU retailer can legally fulfil orders to Norwegian addresses.</p>
 
           <h3 class="text-foreground font-semibold mt-4">Hva er forskjellen mellom snus og nikotinposer?</h3>
           <p>Snus inneholder tobakk; nikotinposer gj&oslash;r ikke det. Snus er fuktig og brun; nikotinposer er hvite. Nikotinposer frigj&oslash;r nikotin langsommere og stekker ikke tennene. Smaksvariasjonen er bredere i snus.</p>
@@ -292,7 +288,7 @@ const description = 'Nicotine pouches in Norway 2026. Why they\'re banned, snus 
             "name": "Can I order nicotine pouches online to Norway from abroad?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Technically, no. Norwegian customs actively intercepts incoming parcels containing nicotine pouches. Your package is likely to be seized and destroyed. There is no legal recourse, and retailers cannot refund seized orders."
+              "text": "No. Importing nicotine pouches into Norway is illegal. Norwegian customs actively intercepts incoming parcels and seizes them without refund. SnusFriend does not ship to Norway. No reputable EU retailer can legally fulfil orders to Norwegian addresses."
             }
           },
           {

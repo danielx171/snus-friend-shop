@@ -29,11 +29,11 @@ import { tenant } from '@/config/tenant';
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "Are nicotine pouches legal in the EU?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouch legality varies across the EU. They are fully legal in Sweden, Germany, UK, Italy, Austria, and Poland, but banned outright in France, Netherlands, Belgium, and Norway. Other countries have restrictions on strength, flavours, or retail channels. No harmonised EU-wide regulation exists yet; TPD3 (expected draft in 2026) will likely change this." } },
+      { "@type": "Question", "name": "Are nicotine pouches legal in the EU?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouch legality varies across the EU. They are fully legal in Sweden, Germany, UK, Italy, Austria, Poland, and the Netherlands, but banned outright in France, Belgium, and Norway. Other countries have restrictions on strength, flavours, or retail channels. No harmonised EU-wide regulation exists yet; TPD3 (expected draft in 2026) will likely change this." } },
       { "@type": "Question", "name": "Can I bring nicotine pouches on a plane?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, nicotine pouches are permitted in carry-on and checked baggage on aircraft for personal use, as they contain no tobacco smoke or combustion. However, check your destination country's import laws before travelling\u2014some countries ban them at customs." } },
       { "@type": "Question", "name": "What is TPD3?", "acceptedAnswer": { "@type": "Answer", "text": "TPD3 (Tobacco Products Directive 3) is the EU's upcoming revision to tobacco product regulation. Expected draft in H1 2026, with implementation likely 2028\u20132029. It will bring nicotine pouches under harmonised EU regulation for the first time, introducing nicotine caps, packaging rules, age verification, and cross-border sales controls." } },
-      { "@type": "Question", "name": "Are nicotine pouches age-restricted?", "acceptedAnswer": { "@type": "Answer", "text": "In all European countries where nicotine pouches are legal, they are restricted to 18+ only. This applies to Sweden, Germany, UK, Italy, Spain, Poland, Austria, Denmark, and Finland. France, Netherlands, Belgium, and Norway have bans that supersede age restrictions." } },
-      { "@type": "Question", "name": "Which European countries have banned nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Four countries have comprehensive retail bans: France (effective April 2026), Netherlands (January 2025), Belgium, and Norway. France allows personal import but bans manufacture, sale, and import for retail. Norway permits personal import but manufacturers often add trace tobacco to exploit the snus loophole." } }
+      { "@type": "Question", "name": "Are nicotine pouches age-restricted?", "acceptedAnswer": { "@type": "Answer", "text": "In all European countries where nicotine pouches are legal, they are restricted to 18+ only. This applies to Sweden, Germany, UK, Italy, Spain, Poland, Austria, Denmark, Finland, and the Netherlands. France, Belgium, and Norway have bans that supersede age restrictions." } },
+      { "@type": "Question", "name": "Which European countries have banned nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Three countries have comprehensive retail bans: France (effective April 2026), Belgium, and Norway. France allows personal import but bans manufacture, sale, and import for retail. Norway permits personal import but manufacturers often add trace tobacco to exploit the snus loophole. The Netherlands is NOT banned — nicotine pouches are fully legal there." } }
     ]
   })} />
 
@@ -54,16 +54,20 @@ import { tenant } from '@/config/tenant';
     <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
       <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
       <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
-        Nicotine pouches are legal in most European countries as of 2026. They are not classified as tobacco products under the EU Tobacco Products Directive because they contain no tobacco leaf. Some countries have introduced specific regulations: the Netherlands and Belgium have restrictions, Denmark is implementing strength caps (April 2026), and Norway taxes them as nicotine products. The EU TPD3 revision (expected 2028+) may introduce EU-wide rules.
+        Nicotine pouches are legal in most European countries as of 2026. They are not classified as tobacco products under the EU Tobacco Products Directive because they contain no tobacco leaf. Some countries have introduced specific regulations: Belgium has banned them, Denmark is implementing strength caps (April 2026), and Norway taxes them as nicotine products. The Netherlands is fully legal. The EU TPD3 revision (expected 2028+) may introduce EU-wide rules.
       </p>
+    </div>
+
+    <div style="margin: 16px 0 24px; padding: 14px 18px; background: hsl(var(--muted)); border-left: 3px solid hsl(var(--primary) / 0.4); border-radius: 6px; font-size: 13px; color: hsl(var(--muted-foreground));">
+      <strong style="color: hsl(var(--foreground));">Regulatory notice:</strong> Nicotine pouch regulations vary by country and change frequently. This article reflects our understanding as of the publication date. Always verify current local regulations before ordering. SnusFriend does not ship to countries where nicotine pouches are prohibited.
     </div>
 
     <section>
       <h2>Key Takeaways</h2>
       <ul>
-        <li><strong>No EU-wide rule yet.</strong> Nicotine pouch legality is set by individual member states—fully legal in 7 countries, banned in 4, restricted in 3.</li>
+        <li><strong>No EU-wide rule yet.</strong> Nicotine pouch legality is set by individual member states—fully legal in 8 countries, banned in 3, restricted in 3.</li>
         <li><strong>Sweden led the way.</strong> The world's first tobacco-free nicotine regulation (2022 Act) made pouches a legal alternative to snus across all retail channels.</li>
-        <li><strong>France and Netherlands bans.</strong> Both countries have now implemented full retail bans; France's effective from April 2026 includes legal challenges pending June 2026.</li>
+        <li><strong>France ban.</strong> France has implemented a full retail ban effective April 2026, with legal challenges pending June 2026. The Netherlands is NOT banned — pouches are fully legal there.</li>
         <li><strong>TPD3 changes everything (2028–2029).</strong> The EU's upcoming revision will harmonise nicotine pouch regulation across all member states for the first time, introducing caps, packaging rules, and age verification.</li>
       </ul>
     </section>
@@ -97,6 +101,7 @@ import { tenant } from '@/config/tenant';
           <tr><td><strong>Austria</strong></td><td>Legal (restricted)</td><td>18+</td><td>Licensed Trafiken only from 2026; mandatory health warnings; excise tax</td><td>Licensed tobacco retailers (Trafiken) only</td></tr>
           <tr><td><strong>Denmark</strong></td><td>Restricted</td><td>18+</td><td>From April 2026: tobacco &amp; menthol flavours only; max 9 mg/pouch; excise tax</td><td>Licensed retailers (restricted range)</td></tr>
           <tr><td><strong>Finland</strong></td><td>Effectively banned</td><td>18+</td><td>Classified as nicotine replacement therapy (NRT); mint/menthol only; max 16.6 mg/g</td><td>Pharmacies only (if available)</td></tr>
+          <tr><td><strong>Netherlands</strong></td><td>Fully legal</td><td>18+</td><td>Not classified as tobacco under <em>Tabaks- en rookwarenwet</em>; NVWA monitors but has not restricted sales</td><td>Tobacco shops, convenience stores, petrol stations, online</td></tr>
         </tbody>
       </table>
       <p><em>Note: Restrictions and retail channels are subject to change. Always verify current rules with your local health authority before purchase.</em></p>
@@ -104,17 +109,12 @@ import { tenant } from '@/config/tenant';
 
     <section>
       <h2>Countries Where Nicotine Pouches Are Banned</h2>
-      <p>Four European countries have implemented comprehensive retail bans on nicotine pouches. Each ban reflects different regulatory reasoning:</p>
+      <p>Three European countries have implemented comprehensive retail bans on nicotine pouches. Each ban reflects different regulatory reasoning:</p>
 
       <h3>France (Effective April 2026)</h3>
       <p>France issued a decree banning the manufacture, sale, and import of nicotine pouches for retail purposes, effective 1 April 2026. The ban does not prevent personal import for private consumption, but commercial distribution is prohibited.</p>
       <p><strong>Current status:</strong> A legal challenge was filed and is expected to be heard in June 2026. Some retailers have continued sales pending the court ruling, creating temporary legal uncertainty.</p>
       <p><strong>What it means:</strong> French consumers cannot legally purchase pouches from domestic retailers after April 2026, though personal imports remain technically allowed. This effectively removes the category from the French market.</p>
-
-      <h3>Netherlands (January 2025)</h3>
-      <p>The Netherlands implemented a full retail ban on nicotine pouches from 1 January 2025, citing insufficient evidence of harm reduction and concerns over youth appeal. The ban applies to all forms of nicotine pouches regardless of strength or flavour.</p>
-      <p><strong>Current status:</strong> The ban is in force. Online retailers are blocked from shipping to Dutch addresses.</p>
-      <p><strong>What it means:</strong> Dutch consumers must look to cross-border purchasing (particularly Germany and Belgium for online orders, though Belgium also bans them) or travel to neighbouring countries. Personal import is technically allowed but resale is prohibited.</p>
 
       <h3>Belgium</h3>
       <p>Belgium enacted a full retail ban on nicotine pouches, treating them as novel products without sufficient regulatory authorisation. The decision was made on precautionary grounds pending EU-level harmonisation.</p>
@@ -192,7 +192,7 @@ import { tenant } from '@/config/tenant';
       <p>Nicotine pouches contain no tobacco smoke, open flame, or combustion—the regulatory concerns that restrict traditional tobacco products. TSA (US), EASA (EU), and most global aviation authorities classify them as safe for cabin transport.</p>
 
       <h3>But Check Your Destination</h3>
-      <p>While the flight itself is no problem, <em>your destination country's customs laws</em> matter. Bringing pouches into a banned country (France, Netherlands, Belgium, Norway) may result in confiscation at customs or duty-free shop restrictions.</p>
+      <p>While the flight itself is no problem, <em>your destination country's customs laws</em> matter. Bringing pouches into a banned country (France, Belgium, Norway) may result in confiscation at customs or duty-free shop restrictions. Note: the Netherlands is NOT a banned country—pouches are fully legal there.</p>
 
       <h3>Best Practice</h3>
       <ul>
@@ -209,9 +209,9 @@ import { tenant } from '@/config/tenant';
 
       <h3>Country-by-Country Compliance</h3>
       <ul>
-        <li><strong>Legal markets (Sweden, UK, Germany, Italy, Austria, Poland):</strong> We ship directly to residential addresses with full age verification at checkout.</li>
+        <li><strong>Legal markets (Sweden, UK, Germany, Italy, Austria, Poland, Netherlands):</strong> We ship directly to residential addresses with full age verification at checkout.</li>
         <li><strong>Restricted markets (Denmark, Spain, Finland):</strong> We verify compliance with local limits (flavours, strength, retail channels) before dispatch.</li>
-        <li><strong>Banned markets (France, Netherlands, Belgium, Norway):</strong> We do not ship to these countries. Attempted orders are blocked at checkout.</li>
+        <li><strong>Banned markets (France, Belgium, Norway):</strong> We do not ship to these countries. Attempted orders are blocked at checkout.</li>
       </ul>
 
       <h3>Age Verification</h3>
@@ -228,13 +228,13 @@ import { tenant } from '@/config/tenant';
       <h2>Frequently Asked Questions</h2>
 
       <h3>Q: Will nicotine pouches become legal everywhere in Europe?</h3>
-      <p><strong>A:</strong> Unlikely in the near term. TPD3 will harmonise regulation but probably won't make pouches fully legal in currently banned countries like France, Netherlands, and Belgium. However, some countries may liberalise if TPD3 adopts a permissive framework. The most likely outcome is a "middle ground" regulation: pouches allowed across the EU but with strength caps, flavour restrictions, and tighter age verification than today.</p>
+      <p><strong>A:</strong> Unlikely in the near term. TPD3 will harmonise regulation but probably won't make pouches fully legal in currently banned countries like France and Belgium. The Netherlands is already fully legal. Some banned countries may liberalise if TPD3 adopts a permissive framework. The most likely outcome is a "middle ground" regulation: pouches allowed across the EU but with strength caps, flavour restrictions, and tighter age verification than today.</p>
 
       <h3>Q: Are nicotine pouches covered by the TPD (Tobacco Products Directive) today?</h3>
       <p><strong>A:</strong> Partially. The current TPD (2014) applies to products with tobacco content. Since most nicotine pouches contain zero tobacco, they fall into regulatory grey areas—some countries treat them as food, others as medicines or novel products. TPD3 will close this gap by explicitly covering tobacco-free nicotine products.</p>
 
       <h3>Q: If I buy pouches online in a banned country, will customs seize them?</h3>
-      <p><strong>A:</strong> Possibly. France, Netherlands, and Belgium monitor international deliveries of banned products. While small personal-use quantities may pass through, large orders or resale quantities are flagged. To be safe, only order to countries where pouches are legal.</p>
+      <p><strong>A:</strong> Possibly. France and Belgium monitor international deliveries of banned products. While small personal-use quantities may pass through, large orders or resale quantities are flagged. To be safe, only order to countries where pouches are legal. Note: the Netherlands is legal — ordering there is fine.</p>
 
       <h3>Q: Why is Spain considering a 0.99 mg cap? That seems extremely low.</h3>
       <p><strong>A:</strong> Yes—0.99 mg is below the sensory threshold for most users. The proposal is driven by concerns over youth appeal and normalisation. If enacted, it would effectively remove pouches from the Spanish market. Industry groups are actively lobbying against it, and the rule is not yet law.</p>
