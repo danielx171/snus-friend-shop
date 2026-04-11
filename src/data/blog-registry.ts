@@ -236,14 +236,8 @@ export const blogArticles: BlogArticle[] = [
   { title: 'Nicotine Pouch Subscription: Is It Worth It in 2026?', excerpt: 'Compare subscription offerings, calculate savings, and find out if auto-delivery makes sense for you.', slug: 'nicotine-pouch-subscription-guide', tag: 'Buying Guide', date: '2026-03-28' },
   // New articles — March 29, 2026 (batch 2)
   { title: 'Nicotine Pouches vs Cigarettes: Health, Cost & Convenience Compared', excerpt: 'A side-by-side comparison of nicotine pouches and cigarettes — nicotine delivery, health considerations, monthly cost, and lifestyle impact.', slug: 'nicotine-pouches-vs-cigarettes', tag: 'Comparison', date: '2026-03-29' },
-  { title: 'How Much Do Nicotine Pouches Cost? 2026 Price Guide', excerpt: 'Real pricing data from our catalog — average cost per can, cost per pouch, and monthly spend for light, moderate, and heavy users.', slug: 'how-much-do-nicotine-pouches-cost', tag: 'Guide', date: '2026-03-29' },
-  { title: 'How to Store Nicotine Pouches: Shelf Life & Freshness Tips', excerpt: 'Keep your pouches fresh — storage temperature, shelf life, signs of expiry, and whether to refrigerate.', slug: 'how-to-store-nicotine-pouches', tag: 'Guide', date: '2026-03-29' },
-  // New articles — March 29 batch 3
-  { title: 'Can You Swallow Nicotine Pouches? Safety Facts', excerpt: 'What happens if you swallow a nicotine pouch — safety facts, what to do, and why it happens.', slug: 'can-you-swallow-nicotine-pouches', tag: 'FAQ', date: '2026-03-29' },
-  { title: 'Are ZYNs Bad for You? Health Facts in 2026', excerpt: 'An evidence-based look at ZYN health effects — what the research says about nicotine pouches and your body.', slug: 'are-zyns-bad-for-you', tag: 'Guide', date: '2026-03-29' },
-  { title: 'How Many Nicotine Pouches a Day Is Safe?', excerpt: 'Daily usage guidance — how many pouches most users go through and when to cut back.', slug: 'how-many-nicotine-pouches-a-day', tag: 'FAQ', date: '2026-03-29' },
+  // (duplicates removed — improved versions in Cowork audit section below)
   { title: 'VELO vs Nordic Spirit: Which Is Better in 2026?', excerpt: 'Head-to-head comparison of VELO and Nordic Spirit — flavours, strength, format, and which brand suits you.', slug: 'velo-vs-nordic-spirit', tag: 'Comparison', date: '2026-03-29' },
-  { title: 'Nicotine Pouch Tax & Regulations 2026', excerpt: 'Country-by-country breakdown of nicotine pouch taxation and regulations across Europe in 2026.', slug: 'nicotine-pouch-tax-regulations-2026', tag: 'Guide', date: '2026-03-29' },
   { title: 'ON! Nicotine Pouches: Complete Brand Guide', excerpt: 'Everything about ON! — Altria\'s compact nicotine pouch brand. Product range, strengths, flavours, and who it\'s best for.', slug: 'on-nicotine-pouches-complete-guide', tag: 'Brand Spotlight', date: '2026-03-29' },
   { title: 'RAVE Nicotine Pouches Review 2026: Every Flavour & Strength Tested', excerpt: 'We tested all 26 RAVE products. Here\'s the honest breakdown of flavours, strength, and value.', slug: 'rave-nicotine-pouches-review', tag: 'Brand Spotlight', date: '2026-04-04' },
   // New articles — April 2026 (recent additions)
@@ -284,4 +278,6 @@ export const blogArticles: BlogArticle[] = [
   { slug: 'best-nicotine-pouches-netherlands-2026', title: 'Best Nicotine Pouches in the Netherlands 2026: Top 10 Picks', excerpt: 'The 10 best nicotine pouches available in the Netherlands for 2026. Fast Benelux shipping from EU warehouse, competitive EUR prices.', tag: 'Country Guide', date: '2026-04-09' },
   { slug: 'best-nicotine-pouches-uk-2026', title: 'Best Nicotine Pouches in the UK 2026: Top 10 Picks', excerpt: 'The 10 best nicotine pouches in the UK for 2026. Post-Brexit regulations explained, GBP pricing, and fast delivery. Expert picks from SnusFriend.', tag: 'Country Guide', date: '2026-04-09' },
   { slug: 'best-value-nicotine-pouches-2026', title: 'Best Value Nicotine Pouches 2026: Quality ÷ Price Rankings', excerpt: 'We ranked nicotine pouches by value — not just price. See which brands deliver the best quality per euro with our price-per-pouch analysis.', tag: 'Buying Guide', date: '2026-04-09' },
+  // New articles — April 11, 2026
+  { slug: 'healthiest-nicotine-pouches-2026', title: 'Healthiest Nicotine Pouches 2026: Lower-Risk Picks', excerpt: 'Which nicotine pouches are the healthiest? We rank by ingredient transparency, low nicotine, and gentle formats. Evidence-based picks for harm-conscious users.', tag: 'Safety & Health', date: '2026-04-11' },
 ];

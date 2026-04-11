@@ -31,6 +31,7 @@ const description = 'Nicotine pouch strength guide — from light (2mg) to super
 <Shop
   title={title}
   description={description}
+  canonical="/blog/how-to-choose-your-strength"
   ogType="article"
   ogImage="/images/og/og-guide.svg"
 >
@@ -181,39 +182,29 @@ const description = 'Nicotine pouch strength guide — from light (2mg) to super
           Ready to find your match? Browse our full selection by strength level:
         </p>
 
+        <h2>Browse by Strength</h2>
+        <p>SnusFriend's catalog covers every strength tier from 2 mg to 50 mg across {facts.brandCountLabel} brands — find your starting point and step up incrementally without switching retailers.</p>
+
+        <nav class="flex flex-wrap gap-3 not-prose" aria-label="Browse by strength">
+          <a href="/products/strength/light" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Light (2-4 mg)</a>
+          <a href="/products/strength/normal" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Normal (4-8 mg)</a>
+          <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strong (8-12 mg)</a>
+          <a href="/products/strength/extra-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Extra Strong (12-20 mg)</a>
+          <a href="/products/strength/super-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Super Strong (20+ mg)</a>
+        </nav>
+
         <h2>Related Reading</h2>
         <ul class="list-disc pl-6 space-y-2">
           <li><a href="/blog/what-are-nicotine-pouches">What Are Nicotine Pouches?</a> — Complete beginner's introduction</li>
           <li><a href="/blog/how-many-nicotine-pouches-a-day">How Many Pouches a Day?</a> — Daily dosing guide by strength tier</li>
           <li><a href="/blog/zyn-strength-chart-every-level-explained">ZYN Strength Chart</a> — Every ZYN strength level mapped</li>
           <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest Pouches Ranked</a> — Highest mg options reviewed</li>
+          <li><a href="/blog/strongest-snus-brands-compared-beginners-warning">Strong Brands Compared (Beginner Warning)</a></li>
           <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best for Beginners</a> — Beginner-friendly strength recommendations</li>
+          <li><a href="/blog/best-nicotine-pouches-for-quitting-smoking">Best for Quitting Smoking</a> — Strength-matched picks</li>
           <li><a href="/blog/best-nicotine-pouches-all-day-use">Best for All-Day Use</a> — Strength advice for sustained use</li>
           <li><a href="/blog/nicotine-pouch-side-effects">Nicotine Pouch Side Effects</a> — Understand strength-related effects</li>
         </ul>
-      </div>
-
-      <nav class="mt-6 flex flex-wrap gap-3" aria-label="Browse by strength">
-        <a href="/products/strength/light" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Light (2-4 mg)</a>
-        <a href="/products/strength/normal" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Normal (4-8 mg)</a>
-        <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strong (8-12 mg)</a>
-        <a href="/products/strength/extra-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Extra Strong (12-20 mg)</a>
-        <a href="/products/strength/super-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Super Strong (20+ mg)</a>
-      </nav>
-
-        <p>SnusFriend's catalog covers every strength tier from 2 mg to 50 mg across {facts.brandCountLabel} brands — meaning you can find your starting point and step up incrementally without switching retailers.</p>
-
-        <h2>Related Guides</h2>
-        <ul>
-          <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest Pouches Ranked</a> — from 12mg to 50mg</li>
-          <li><a href="/blog/strongest-snus-brands-compared-beginners-warning">Strong Brands Compared (Beginner Warning)</a></li>
-          <li><a href="/blog/best-nicotine-pouches-for-quitting-smoking">Best for Quitting Smoking</a> — strength-matched</li>
-          <li><a href="/blog/best-nicotine-pouches-for-women">Best for Women</a> — comfort-focused picks</li>
-          <li><a href="/blog/best-nicotine-pouches-no-aftertaste">Best with No Aftertaste</a></li>
-          <li><a href="/blog/best-slim-nicotine-pouches">Best Slim Pouches</a> — discreet and comfortable</li>
-          <li><a href="/blog/best-nicotine-pouches-all-day-use">Best for All-Day Use</a></li>
-        </ul>
-
 
         <section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
           <h2>Frequently Asked Questions</h2>
@@ -237,11 +228,13 @@ const description = 'Nicotine pouch strength guide — from light (2mg) to super
             <p>The most effective approach is gradual reduction: move down one tier every 2–4 weeks (e.g., 11 mg → 6 mg → 4 mg). Some users alternate between their current strength and the next lower one before fully switching.</p>
           </div>
         </section>
-</div>
-          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+
+        <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
         </p>
-</article>
+      </div>
+    </div>
+  </article>
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
