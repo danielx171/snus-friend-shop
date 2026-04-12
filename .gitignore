@@ -56,3 +56,6 @@ cowork/content/pagespeed/
 
 # Converted HTML drafts (all now .astro pages)
 blog-drafts/
+
+# OG images generated at build time by scripts/generate-og-images.ts
+public/og/*.png
