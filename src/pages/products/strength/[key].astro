@@ -4,7 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
-import { ensureProductsJson, slimProductData } from '@/lib/product-json';
+import { slimProductData, writeProductsJson } from '@/lib/product-json';
 
 const STRENGTH_META: Record<string, { label: string; range: string; h1: string; desc: string; intro: string }> = {
   'light': {
@@ -69,7 +69,7 @@ const sortedProducts = key === 'super-strong'
   ? [...products].sort((a, b) => (b.data.nicotineContent ?? 0) - (a.data.nicotineContent ?? 0))
   : products;
 
-ensureProductsJson(allProducts);
+writeProductsJson(allProducts);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -115,11 +115,21 @@ const jsonLd = {
     </header>
 
     <h2 class="sr-only">Product Catalog</h2>
-    <FilterableProductGrid
-      client:idle
-      productsJson={JSON.stringify(slimProductData(sortedProducts))}
-      initialFilters={JSON.stringify({ strengths: [key] })}
-    />
+    {key === 'super-strong' ? (
+      /* Super-strong needs nicotine-desc custom sort (highest mg first)
+         which the client grid doesn't offer, so ship the pre-sorted set. */
+      <FilterableProductGrid
+        client:idle
+        productsJson={JSON.stringify(slimProductData(sortedProducts))}
+      />
+    ) : (
+      /* Other strengths — grid lazy-fetches /data/products.json and filters client-side. */
+      <FilterableProductGrid
+        client:idle
+        productsJsonUrl="/data/products.json"
+        initialFilters={JSON.stringify({ strengths: [key] })}
+      />
+    )}
 
     <!-- Cross-links to other strength categories -->
     <nav class="mt-12 border-t border-border pt-8" aria-label="Browse by strength">

@@ -21,7 +21,12 @@ function findProduct(brandSlug: string, nameFragment?: string) {
 const mildPick = findProduct('zyn', 'citrus');
 const mediumPick = findProduct('zyn', 'cool mint') ?? findProduct('velo', 'ice cool');
 const strongPick = findProduct('velo', 'freeze') ?? findProduct('loop', 'jalapeno');
-const extraStrongPick = findProduct('siberia') ?? findProduct('pablo');
+// Extra Strong band is 12-20 mg. Siberia/Pablo are super-strong (40-50 mg)
+// which belong on a different card — pick actual 12-20 mg pouches here.
+const extraStrongPick =
+  findProduct('white-fox', 'full charge') ??
+  findProduct('velo', 'freezing peppermint ultra') ??
+  findProduct('white-fox');
 
 const publishDate = '2026-03-26';
 const title = 'How to Choose the Right Nicotine Pouch Strength';

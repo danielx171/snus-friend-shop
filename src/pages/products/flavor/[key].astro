@@ -4,7 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
-import { ensureProductsJson, slimProductData } from '@/lib/product-json';
+import { ensureProductsJson, slimProductData, writeProductsJson } from '@/lib/product-json';
 
 const FLAVOR_META: Record<string, { label: string; h1: string; desc: string; intro: string }> = {
   'mint': {
@@ -108,7 +108,8 @@ if (useFallback) {
   products = allProducts.filter((p) => p.data.name.toLowerCase().includes(term));
 }
 
-ensureProductsJson(allProducts);
+// Always overwrite so /data/products.json stays fresh across builds
+writeProductsJson(allProducts);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -152,11 +153,21 @@ const jsonLd = {
     </header>
 
     <h2 class="sr-only">Product Catalog</h2>
-    <FilterableProductGrid
-      client:idle
-      productsJson={JSON.stringify(slimProductData(products))}
-      initialFilters={useFallback ? undefined : JSON.stringify({ flavors: [key] })}
-    />
+    {useFallback ? (
+      /* Fallback: name-includes search isn't expressible as a grid filter,
+         so we ship the pre-matched slim data inline for this rare case. */
+      <FilterableProductGrid
+        client:idle
+        productsJson={JSON.stringify(slimProductData(products))}
+      />
+    ) : (
+      /* Normal path — grid lazy-fetches /data/products.json and filters client-side. */
+      <FilterableProductGrid
+        client:idle
+        productsJsonUrl="/data/products.json"
+        initialFilters={JSON.stringify({ flavors: [key] })}
+      />
+    )}
 
     <!-- Cross-links to other flavor categories -->
     <nav class="mt-12 border-t border-border pt-8" aria-label="Browse by flavour">

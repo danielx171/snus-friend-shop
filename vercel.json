@@ -75,7 +75,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.vercel-scripts.com https://*.vercel-insights.com https://*.posthog.com https://*.sentry.io https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://*.posthog.com https://*.sentry.io https://*.google-analytics.com; frame-src 'none'"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.vercel-scripts.com https://*.vercel-insights.com https://*.posthog.com https://*.sentry.io https://browser.sentry-cdn.com https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://*.posthog.com https://*.sentry.io https://*.google-analytics.com; frame-src 'none'"
         }
       ]
     },
@@ -93,7 +93,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
         }
       ]
     }
