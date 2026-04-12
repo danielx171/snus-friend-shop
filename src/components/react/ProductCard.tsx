@@ -165,7 +165,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
           <a
             href={`/brands/${brandSlug}`}
             onClick={(e) => { e.stopPropagation(); }}
-            className="text-xs font-semibold uppercase tracking-wider transition-all hover:brightness-125"
+            className="inline-flex items-center min-h-[44px] -my-2 px-2 -mx-2 text-xs font-semibold uppercase tracking-wider transition-all hover:brightness-125 sm:min-h-0 sm:my-0 sm:px-0 sm:mx-0"
             style={{ color: brandColor }}
           >
             {brand}

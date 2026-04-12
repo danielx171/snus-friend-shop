@@ -8,6 +8,7 @@ import {
   type FilterState,
   type SortOption,
 } from '@/lib/search';
+import { expandImageUrl } from '@/lib/image-cdn';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -388,11 +389,15 @@ export default function FilterableProductGrid({
   const [loading, setLoading] = useState(!!productsJsonUrl);
   const [fetchError, setFetchError] = useState(false);
 
-  // Parse inline products if provided
+  // Parse inline products if provided (expand shortened image URLs)
   const inlineProducts = useMemo<SearchableProduct[]>(() => {
     if (!productsJson) return [];
     try {
-      return JSON.parse(productsJson);
+      const parsed = JSON.parse(productsJson) as SearchableProduct[];
+      return parsed.map((p) => ({
+        ...p,
+        imageUrl: expandImageUrl(p.imageUrl),
+      }));
     } catch {
       return [];
     }
@@ -403,8 +408,13 @@ export default function FilterableProductGrid({
     if (!productsJsonUrl || productsJson) return;
     fetch(productsJsonUrl)
       .then((r) => r.json())
-      .then((data) => {
-        setFetchedProducts(data);
+      .then((data: SearchableProduct[]) => {
+        // Expand shortened image URLs (CDN prefix extracted at build time)
+        const expanded = data.map((p) => ({
+          ...p,
+          imageUrl: expandImageUrl(p.imageUrl),
+        }));
+        setFetchedProducts(expanded);
         setLoading(false);
       })
       .catch(() => { setFetchError(true); setLoading(false); });

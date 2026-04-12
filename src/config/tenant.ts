@@ -16,6 +16,20 @@ export interface TenantConfig {
     readonly instagram: string;
     readonly tiktok: string;
     readonly x: string;
+    readonly linkedin?: string;
+    readonly facebook?: string;
+    readonly youtube?: string;
+  };
+  /** Trust signals surfaced in Organization schema and footer (fill when you have values). */
+  readonly trust: {
+    /** Swedish company registration number — e.g. "556123-4567". */
+    readonly corporateRegistration?: string;
+    /** EU VAT ID — e.g. "SE556123456701". */
+    readonly vatId?: string;
+    /** Trustpilot profile URL — becomes another sameAs when present. */
+    readonly trustpilotUrl?: string;
+    /** Year founded — ISO 8601. */
+    readonly foundingDate?: string;
   };
   readonly loyaltyProgramName: string;
   readonly currencyCode: string;
@@ -80,6 +94,17 @@ export const tenant: TenantConfig = {
     instagram: 'https://www.instagram.com/snusfriends/',
     tiktok: 'https://www.tiktok.com/@snusfriends',
     x: 'https://x.com/snusfriends',
+    // Fill when accounts are live:
+    // linkedin: 'https://www.linkedin.com/company/snusfriends',
+    // facebook: 'https://www.facebook.com/snusfriends',
+    // youtube: 'https://www.youtube.com/@snusfriends',
+  },
+  trust: {
+    foundingDate: '2024',
+    // Fill from company registration certificate:
+    // corporateRegistration: '556XXX-XXXX',
+    // vatId: 'SE556XXXXXXXX01',
+    // trustpilotUrl: 'https://www.trustpilot.com/review/snusfriends.com',
   },
   loyaltyProgramName: 'SnusFriends Rewards',
   currencyCode: 'EUR',

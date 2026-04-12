@@ -1,10 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { IMAGE_CDN_PREFIX } from './image-cdn';
+
+// Re-export so existing `from '@/lib/product-json'` imports in server-only
+// code keep working; client islands should import from `./image-cdn` directly.
+export { IMAGE_CDN_PREFIX, expandImageUrl } from './image-cdn';
 
 /**
  * Slim product data for the client-side FilterableProductGrid.
  * Only includes fields needed for filtering, sorting, and card display.
- * Reduces JSON from ~688KB to ~300KB (57% smaller).
+ * Image URLs are stored as suffixes (common CDN prefix extracted).
+ * Stock is stored as boolean to save bytes.
  */
 export function slimProductData(products: Array<{ id: string; data: any }>) {
   return products.map((p) => ({
@@ -12,14 +18,14 @@ export function slimProductData(products: Array<{ id: string; data: any }>) {
     name: p.data.name,
     brand: p.data.brand,
     brandSlug: p.data.brandSlug,
-    imageUrl: p.data.imageUrl,
+    imageUrl: (p.data.imageUrl ?? '').replace(IMAGE_CDN_PREFIX, ''),
     prices: { pack1: p.data.prices?.pack1 ?? 0 },
     nicotineContent: p.data.nicotineContent,
     strengthKey: p.data.strengthKey,
     flavorKey: p.data.flavorKey,
     formatKey: p.data.formatKey,
     ratings: p.data.ratings,
-    stock: p.data.stock,
+    stock: p.data.stock > 0 ? 1 : 0,
     badgeKeys: p.data.badgeKeys ?? [],
   }));
 }

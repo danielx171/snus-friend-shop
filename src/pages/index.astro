@@ -701,7 +701,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
     "url": "https://snusfriends.com",
     "logo": "https://snusfriends.com/favicon.png",
     "description": `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${brands.length || 57} brands.`,
-    "foundingDate": "2024",
+    "foundingDate": tenant.trust.foundingDate ?? "2024",
     "email": tenant.supportEmail,
     "address": {
       "@type": "PostalAddress",
@@ -715,7 +715,17 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
       "email": tenant.supportEmail,
       "contactType": "customer service"
     },
-    "sameAs": [tenant.social.instagram, tenant.social.tiktok, tenant.social.x]
+    ...(tenant.trust.corporateRegistration ? { "identifier": tenant.trust.corporateRegistration } : {}),
+    ...(tenant.trust.vatId ? { "taxID": tenant.trust.vatId, "vatID": tenant.trust.vatId } : {}),
+    "sameAs": [
+      tenant.social.instagram,
+      tenant.social.tiktok,
+      tenant.social.x,
+      tenant.social.linkedin,
+      tenant.social.facebook,
+      tenant.social.youtube,
+      tenant.trust.trustpilotUrl,
+    ].filter(Boolean)
   })} />
 
   <script type="application/ld+json" set:html={JSON.stringify({

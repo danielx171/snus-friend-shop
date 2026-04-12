@@ -188,6 +188,26 @@ Available via MCP servers — use these instead of manual browser research:
 
 **Error workflow:** Sentry (identify issues) → fix code → Vercel (deploy) → Sentry (verify resolution)
 
+## Multi-AI Workflow
+
+Three AIs, three lanes. Claude orchestrates; Codex and Gemini are invoked via `Bash` and return to Claude — no human in the middle.
+
+| AI | Role | How invoked |
+|---|---|---|
+| **Claude** | Plan, implement, commit, ship | This session |
+| **Codex** | Correctness review on diffs before merge (ChatGPT subscription) | `/codex-review` — auto-runs as step 1.5 of `/ship` |
+| **Gemini** | Long-context audits, SEO/content bulk work (Google One Premium monthly credits) | `/gemini-audit <path>` |
+
+**Gemini lane — use it or lose it:**
+- Full-repo or `cowork/` content audits (2M context > Claude here)
+- SEO + competitor passes (pair with DataForSEO MCP)
+- Bulk lint/cleanup sweeps that don't need deep reasoning
+- Imagen UI for product / blog hero images — 200 credits/month, unused = lost
+
+**Codex lane — keep it tight:** correctness on diffs only. Auto-runs before every ship. Blocks commit on 🔴.
+
+**Disagreement protocol:** when Codex and Gemini disagree (via `/triple`), Claude reads both, re-examines the code, and decides — never silently averages them.
+
 ## Astro 6 Architecture (LIVE — deployed March 2026)
 
 Migrated from Vite SPA to Astro 6 for SSG/SSR. Google Ads bans nicotine — all

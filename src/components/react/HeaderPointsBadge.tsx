@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useSnusPoints } from '@/hooks/useSnusPoints';
-import QueryProvider from './QueryProvider';
+import { useSnusPointsLite } from '@/hooks/useSnusPointsLite';
 
-function PointsBadgeInner() {
+export default function HeaderPointsBadge() {
   const [userId, setUserId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -14,11 +13,10 @@ function PointsBadgeInner() {
     });
   }, []);
 
-  const { data: points } = useSnusPoints(userId);
+  const { balance } = useSnusPointsLite(userId);
 
   if (!mounted) return null;
 
-  // Logged-out: subtle "Earn points" link
   if (!userId) {
     return (
       <a
@@ -44,9 +42,6 @@ function PointsBadgeInner() {
     );
   }
 
-  // Logged-in: show balance
-  const balance = points?.balance ?? 0;
-
   return (
     <a
       href="/rewards"
@@ -65,13 +60,5 @@ function PointsBadgeInner() {
       </svg>
       {balance.toLocaleString()} coins
     </a>
-  );
-}
-
-export default function HeaderPointsBadge() {
-  return (
-    <QueryProvider>
-      <PointsBadgeInner />
-    </QueryProvider>
   );
 }

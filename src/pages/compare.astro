@@ -3,7 +3,7 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { getCollection } from 'astro:content';
-import { ensureProductsJson } from '@/lib/product-json';
+import { ensureProductsJson, IMAGE_CDN_PREFIX } from '@/lib/product-json';
 import { tenant } from '@/config/tenant';
 
 const products = await getCollection('products');
@@ -88,7 +88,7 @@ const flavorLabels: Record<string, string> = {
     </div>
   </div>
 
-  <script is:inline define:vars={{ strengthLabels, flavorLabels, currencyCode: tenant.currencyCode }}>
+  <script is:inline define:vars={{ strengthLabels, flavorLabels, currencyCode: tenant.currencyCode, IMAGE_CDN_PREFIX }}>
   document.addEventListener('astro:page-load', function() {
     function escapeHtml(str) {
       var div = document.createElement('div');
@@ -107,6 +107,12 @@ const flavorLabels: Record<string, string> = {
 
     // Load products
     fetch('/data/products.json').then(function(r) { return r.json(); }).then(function(products) {
+      // Expand CDN prefix (stripped at build time to save bytes)
+      products.forEach(function(p) {
+        if (p.imageUrl && p.imageUrl.indexOf('http') !== 0) {
+          p.imageUrl = IMAGE_CDN_PREFIX + p.imageUrl;
+        }
+      });
       allProducts = products;
       var params = new URLSearchParams(window.location.search);
       var initial = params.get('products');

@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import ProductCard from './ProductCard';
 import { scoreProduct, type SearchableProduct } from '@/lib/search';
 import { trackSearchPerformed } from '@/lib/analytics';
+import { expandImageUrl } from '@/lib/image-cdn';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -43,10 +44,10 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
   }, [productsJsonUrl, productsJson]);
 
   const allProducts = useMemo<SearchableProduct[]>(() => {
-    if (productsJson) {
-      try { return JSON.parse(productsJson); } catch { return []; }
-    }
-    return fetchedProducts ?? [];
+    const raw: SearchableProduct[] = productsJson
+      ? (() => { try { return JSON.parse(productsJson); } catch { return []; } })()
+      : (fetchedProducts ?? []);
+    return raw.map((p) => ({ ...p, imageUrl: expandImageUrl(p.imageUrl) }));
   }, [productsJson, fetchedProducts]);
 
   const [query, setQuery] = useState(initialQuery ?? '');

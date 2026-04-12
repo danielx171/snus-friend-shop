@@ -172,14 +172,10 @@ const jsonLd = {
     availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
   },
   url: `https://snusfriends.com/products/${p.slug}`,
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: p.ratings > 0 ? p.ratings.toFixed(1) : '4.5',
-    bestRating: '5',
-    worstRating: '1',
-    reviewCount: p.ratings > 0 ? 1 : 1,
-    ratingCount: p.ratings > 0 ? 1 : 1,
-  },
+  // aggregateRating intentionally omitted — `p.ratings` is a denormalized average on the
+  // product row, not a count of reviews. Emitting aggregateRating with a fabricated
+  // ratingCount/reviewCount would be misleading per Google's structured-data policy.
+  // Re-enable when Supabase `reviews` counts are joined at build time (planned Wave C).
 };
 ---
 
