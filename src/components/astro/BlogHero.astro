@@ -14,6 +14,12 @@ interface Props {
 
 const { category, title, description, date, readTime, illustrationSrc } = Astro.props;
 
+// Derive per-article OG art (scripts/generate-og-images.ts) when no explicit
+// illustration was passed. Falls back to gradient-only hero if the PNG doesn't
+// exist (the <img onerror> hides it).
+const slugFromPath = Astro.url.pathname.replace(/\/$/, '').split('/').pop() ?? '';
+const effectiveIllustration = illustrationSrc ?? (slugFromPath ? `/og/article-${slugFromPath}.png` : undefined);
+
 const categoryColors: Record<string, string> = {
   'Brand Spotlight': '#2E7D32',
   'Comparison': '#1565C0',
@@ -39,14 +45,15 @@ const displayDate = formatDate(date);
 ---
 
 <div class="rounded-2xl overflow-hidden mb-8" style={`background: linear-gradient(135deg, ${color}dd, ${color}88);`}>
-  {illustrationSrc && (
+  {effectiveIllustration && (
     <img
-      src={illustrationSrc}
+      src={effectiveIllustration}
       alt=""
       class="w-full rounded-xl mb-8"
       style="aspect-ratio: 2/1; object-fit: cover;"
       loading="eager"
       decoding="async"
+      onerror="this.remove()"
     />
   )}
   <div class="px-6 py-10 sm:px-8 sm:py-14">
