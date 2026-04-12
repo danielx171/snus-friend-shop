@@ -1,7 +1,8 @@
 # SnusFriend Roadmap
 
-> Migrated from Vite SPA to Astro 6 (March 2026). Steps 1-55 complete. Astro migration live.
+> Migrated from Vite SPA to Astro 6 (March 2026). Steps 1-52 + 54-56 done; Step 53 (password strength meter + confetti reduced-motion) still open.
 > Original checkout migrated Shopify → Nyehandel (Steps 25-40). Shopify fully removed.
+> Launch Polish Sprint (Apr 8-12) complete: all waves shipped. See `CURRENT_PRIORITIES.md` for the active punch list.
 
 ## UX & Infrastructure (completed 2026-03-20)
 
@@ -115,7 +116,7 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 
 ### Tech Debt
 - [x] Step 54: Centralize SITE_URL config (3 pages → import from config/brand). Review photo upload limits already in place (3 photos, 5MB, jpeg/png/webp).
-- [ ] Step 55: Critical path tests — checkout validation, cart operations, email regex, auth flow.
+- [x] Step 55: Critical path tests — 43 new tests across cart, email regex, checkout/NYE line items, auth schemas. 54/54 green.
 
 ### Go-Live
 - [x] Step 56: Remove preview mode (VITE_PREVIEW_MODE deleted — was dead code, never used). Site live on snusfriends.com.

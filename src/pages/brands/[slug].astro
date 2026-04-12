@@ -204,9 +204,18 @@ const faqs = brandFaqs[brand.id];
             />
           </div>
         ) : (
-          <span class="text-3xl font-extrabold tracking-tight" style={`color: ${bColor}`}>
-            {b.name}
-          </span>
+          <div
+            class="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl"
+            style={`background: linear-gradient(135deg, ${bColor}, ${bColor}cc); box-shadow: 0 8px 24px ${bColor}40, inset 0 1px 0 rgba(255,255,255,0.15); border: 1px solid ${bColor}66;`}
+            aria-hidden="true"
+          >
+            <span
+              class="text-2xl font-extrabold tracking-tight"
+              style="color: #ffffff; font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; text-shadow: 0 1px 2px rgba(0,0,0,0.25);"
+            >
+              {b.name.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
+            </span>
+          </div>
         )}
 
         <!-- Brand info -->

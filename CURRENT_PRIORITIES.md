@@ -1,114 +1,136 @@
 # Current Priorities
 
-Last updated: 2026-04-10
+Last updated: 2026-04-12
 
-## Site Status: Soft Launch (Preview)
+## Site Status: Live
 
-Live at snusfriends.com. Checkout functional but not actively selling yet.
+Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 
 ## Current State
 
 - **Products:** 708 active, 55 brands
 - **Blog:** 80 articles, 87 registry entries (includes redirected slugs)
-- **Quick Answers:** 58/80 articles have Quick Answer blocks
-- **BlogPosting schema:** 80/80
-- **FAQPage schema:** 80/80 articles + brand pages + catalog + rewards
-- **Performance:** /nicotine-pouches at 92 (was 61), CLS 0
-- **Cart:** Cross-island sync v4 deployed, needs Codex verification
-- **Rewards:** Canonical config at `src/config/rewards.ts` — 1 SnusCoin/€1
+- **Quick Answers:** 80/80 articles ✅
+- **PAA blocks:** 80/80 articles ✅
+- **BlogPosting + FAQPage schema:** 80/80 articles + brand pages + catalog + rewards
+- **Tests:** 54 passing (cart, email regex, checkout/NYE line items, auth schemas, components, hooks)
+- **Performance:** `/nicotine-pouches` 92, PDPs 94, homepage 82 (LCP ~4s — next optimization target)
+- **OG images:** Satori pipeline generating per-page PNGs; blog posts auto-resolve to `/og/article-{slug}.png`
+- **Rewards:** Canonical config at `src/config/rewards.ts` — **10 SnusCoins per €1** (aligned with DB trigger)
 - **Gamification:** The Vault, SnusCoins, Circles, Missions, Badges, Daily Drop, The Board
 - **Version:** 1.6.1
 
-## Completed (April 8-10 Sprint)
-
-### SEO/Schema
-- [x] BlogPosting schema on all 80 articles
-- [x] Product aggregateRating + mpn on all 708 products
-- [x] Organization schema with PostalAddress + social sameAs
-- [x] FAQPage on /nicotine-pouches (9 questions) + all brand pages (3 each)
-- [x] Strength redirects 301 (/mild→/light, /regular→/normal)
-- [x] Sitemap lastmod differentiation (3 distinct dates)
-- [x] RSS autodiscovery link
-- [x] Preconnect to Nyehandel image CDN
-- [x] hreflang x-default + en tags
-- [x] IndexNow key verification file
-- [x] Author page updated with Cowork bio + Person schema
-- [x] Author credential consistency (Master's in Public Health)
-- [x] Meta-length fixes (3 pages)
-- [x] Brand meta descriptions fixed (no more "..." truncation)
-
-### Content
-- [x] "According to SnusFriend" attribution in top 10 articles
-- [x] Commercial bridge sections in 10 articles
-- [x] Quick Answer blocks added to 38→58 articles
-- [x] Internal links added to 12+ articles
-- [x] Blog card date + author line on index page
-- [x] Dynamic editorial facts helper (no hardcoded counts)
-- [x] dateModified updated on 10 modified articles
-
-### Performance
-- [x] /nicotine-pouches inline productsJson (eliminates fetch waterfall)
-- [x] ProductCard 3D tilt removed (CLS fix)
-- [x] Skeleton count matched to ITEMS_PER_PAGE
-- [x] min-height on grid wrapper
-
-### Gamification
-- [x] Full naming overhaul (33 files): The Vault, SnusCoins, Circles, Missions, etc.
-- [x] Logged-out preview layers on rewards, community, membership
-- [x] SnusCoin teasers on PDP, cart drawer, order confirmation
-- [x] Canonical rewards config (src/config/rewards.ts)
-- [x] DB triggers fixed: 1 coin/€1 (was 10), review rewards 40/25
-- [x] Rewards page expanded to 800+ words
-- [x] Brand pages: visible descriptions + mini-FAQ + SEO meta
-- [x] Gamification DB migration applied (tiers + quests + achievements)
-
-### Conversion/UX
-- [x] Brand page hero: enlarged mosaic, removed monogram, brand glow
-- [x] Flavour quiz results → real ProductCards with add-to-cart
-- [x] BlogProductCard strength dots
-- [x] PDP suggestion rows (same flavour + similar strength)
-- [x] Membership page aspirational "The Circles" heading
-- [x] Verified vs community review badges + sort (DB + UI)
-- [x] Display name priority chain
-- [x] Leaderboard monthly/alltime toggle
-- [x] Step-down suggestions on high-strength PDPs
-
-### Trust
-- [x] Physical address in footer (Nordic Express AB, Göteborg)
-- [x] Soft-launch preview note in footer
-- [x] Theme toggle fix
-- [x] What's New page updated (v1.6.1)
-- [x] FAQ tail section layout fix
-- [x] Entity naming consistency
-
 ## Remaining
 
-### HIGH — Needs Codex/Cowork
-- [ ] Cart verification (Codex browser test — v4 sync deployed)
-- [ ] Quick Answers for remaining 22 articles (Cowork batch 4)
+### HIGH — Codex 🔴 blockers (prod safety)
+
+- [ ] `supabase/functions/process-subscriptions/index.ts:128` — no idempotency guard on `subscription_delivery:${sub.id}:${date}`. Retries/concurrent runs can double-credit points.
+- [ ] `supabase/functions/manage-subscription/index.ts:102` — writes `discount_pct` but column is absent from migrations + `src/integrations/supabase/types.ts`. Will fail in prod.
+- [ ] `src/pages/register.astro:98` — resend form posts native form-data but `src/actions/auth.ts:120` expects JSON. Form is silently broken.
+
+### HIGH — Blocked on external deliverables
+
 - [ ] Finland/Norway legal content reconciliation (Cowork legal review)
 - [ ] Medical reviewer persona for YMYL articles (Cowork)
-- [ ] Full-tool audit: PageSpeed ×10 pages, GSC index status, Sentry errors
+- [ ] Homepage copy refresh (awaiting `cowork/content/homepage-copy-variations.md`)
+- [ ] Title CTR refresh on low-CTR GSC pages (awaiting Codex GSC list)
+- [ ] Klaviyo wiring (5 template IDs exist; needs Klaviyo UI setup + events from `create-nyehandel-checkout`)
+- [ ] Trustpilot business profile + footer widget (20 min account creation)
+- [ ] Cart verification via Codex browser test (v4 BroadcastChannel sync deployed)
+- [ ] Full-tool audit: PageSpeed ×10 pages, GSC index status, Sentry triage (periodic)
 
 ### MEDIUM
-- [ ] Phase 2 SSR product grid (only if /nicotine-pouches < 85 after measurement)
-- [ ] Brand page real logos (need assets)
-- [ ] OG images per page type (Cowork design specs)
-- [ ] products.json further optimization (marginal gain)
 
-### LOW
-- [ ] compare.astro → React island (large scope)
-- [ ] hreflang for DE/SV translations (future)
+- [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
+- [ ] Brand page real logos (still placeholder for brands without `logoUrl` — monogram tile is the fallback)
+- [ ] `products.json` aggressive slim (236KB → ≤150KB target; would need gzip or dropping more fields)
+- [ ] Password strength meter on `/register` + confetti `prefers-reduced-motion` check (ROADMAP Step 53)
+- [ ] Blog read-time field on cards (registry schema supports it, not populated)
+
+### LOW — Future
+
+- [ ] hreflang for DE/SV translations
 - [ ] Screaming Frog full crawl analysis
+- [ ] Figma MCP integration (next visual sprint)
+- [ ] Ahrefs / Brand Radar MCP (AI citation + backlink tracking)
+- [ ] `alert-manager` + `rank-tracker` configuration
+- [ ] `memory-management` skill activation
+
+## Completed in Apr 8–12 Launch Polish Sprint
+
+### SEO / Schema
+- [x] BlogPosting + FAQPage schema on all 80 articles
+- [x] Quick Answer blocks: 38 → 80/80
+- [x] PAA blocks: 68 → 80/80
+- [x] Product aggregateRating + mpn on all 708 products
+- [x] Organization schema with PostalAddress + social sameAs
+- [x] Strength redirects (/mild→/light, /regular→/normal)
+- [x] Sitemap lastmod differentiation + RSS autodiscovery
+- [x] hreflang x-default + en tags, preconnect to Nyehandel CDN
+- [x] IndexNow key verification file
+- [x] Meta descriptions: length + "..." truncation fixed across brands
+- [x] Satori per-page OG pipeline (`/og/article-{slug}.png`, brand, category, gamification templates)
+- [x] 64 blog posts: stripped SVG `ogImage` overrides — each now inherits Satori PNG
+
+### Content
+- [x] Dynamic editorial-facts helper (no hardcoded counts)
+- [x] Author page: Cowork bio + Person schema + credential consistency
+- [x] `dateModified` + blog card date/author line
+- [x] Internal links in 12+ articles + commercial bridges in 10
+- [x] "According to SnusFriend" attribution in top 10 articles
+
+### Performance
+- [x] `/nicotine-pouches` 61 → 92 (URL variant for products.json, `client:idle` grid)
+- [x] `writeProductsJson` replaces `ensureProductsJson` — prevents stale JSON across rebuilds
+- [x] ProductCard 3D tilt removed, skeleton count matched, grid min-height set
+- [x] Excessive `backdrop-blur-sm` reduced (79 → 1 occurrence)
+- [x] Homepage consolidated from 13 → ~9 sections
+
+### Conversion / UX
+- [x] ProductCard conversion polish — review count, compare price + savings %, per-pouch cost, SnusCoin earn line
+- [x] Rewards page: gamified hero (destination feel, live-balance slot, CTA row)
+- [x] Blog cards: magazine-style thumbnails (OG as hero), author + date line, category accent
+- [x] Brand page monogram tile fallback when `logoUrl` missing
+- [x] `compare.astro` → `CompareIsland` React island (CLAUDE.md XSS debt closed)
+- [x] Homepage trust bar + rewards strip above-fold + newsletter CTAs on top 5 blog posts
+- [x] Mobile bottom nav, cross-island cart sync v4 (BroadcastChannel)
+- [x] Verified vs community review badges, leaderboard toggle, step-down PDP suggestions
+- [x] Hover smudge, live coins, subscribe breakdown, register flow — polish pass
+
+### Gamification
+- [x] Full naming overhaul (33 files): The Vault, SnusCoins, Circles, Missions
+- [x] DB triggers aligned: **10 SnusCoins per €1** (was mismatched 1 client / 10 DB)
+- [x] Review rewards 40/25, logged-out preview layers, PDP SnusCoin teasers
+- [x] Canonical `src/config/rewards.ts` as single source of truth
+- [x] Rewards page expanded to 800+ words
+
+### Design Polish
+- [x] Global CSS utilities: `text-gradient-primary`, `glow-breathe`, `ring-pulse`, `shimmer-sweep`, `tier-line-gradient`
+- [x] Rewards + membership + community pages: CSS effects respect `prefers-reduced-motion`
+- [x] Brand colors: missing rabbit/nois/+6 added; `defaultBrandColor` darkened for WCAG text contrast
+- [x] Product badges: white-on-bright → dark-on-light (2.15:1 → 7:1)
+- [x] Heading DOM noise cleaned (AgeGate h2, MegaMenu h3)
+
+### Testing / Quality
+- [x] 43 new tests: cart operations, email regex, checkout/NYE line items, auth schemas (ROADMAP Step 55)
+- [x] Mix-discount regression test (nanostores computed args bug)
+- [x] Email regex guards against `.includes('@')` substitution
+
+### Trust / Legal
+- [x] Physical address in footer (Nordic Express AB, Göteborg)
+- [x] Legal disclaimers + Norway framing accuracy, Netherlands contradiction fix
+- [x] Age gate full-screen with localStorage persistence
+- [x] Theme toggle fix, entity naming consistency
 
 ## Key Reference Files
 
 | File | Purpose |
 |------|---------|
-| `ROADMAP.md` | Delivery sequence, Steps 1-56 |
-| `src/config/rewards.ts` | Canonical rewards config (single source of truth) |
+| `ROADMAP.md` | Delivery sequence, Steps 1–52 + 54–56 done (Step 53 open) |
+| `src/config/rewards.ts` | Canonical rewards config |
 | `src/data/editorial-facts.ts` | Dynamic product/brand counts |
-| `docs/superpowers/specs/2026-04-10-wave2-seo-conversion-design.md` | Wave 2 spec |
-| `docs/superpowers/specs/2026-04-10-wave3-community-moat-design.md` | Wave 3 spec |
-| `docs/superpowers/specs/2026-04-09-ssr-product-grid-design.md` | SSR product grid spec |
-| `cowork/content/codex-rewards-and-blog-credibility-audit-apr10.md` | Codex trust audit |
+| `src/data/blog-registry.ts` | Blog index metadata (87 entries) |
+| `src/lib/product-json.ts` | Slim products.json generator |
+| `scripts/generate-og-images.ts` | Satori OG PNG pipeline |
+| `src/components/astro/SEO.astro` | Per-page OG + hreflang + canonical |
+| `src/components/react/CompareIsland.tsx` | Compare flow (replaces inline IIFE) |

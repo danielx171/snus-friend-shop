@@ -145,27 +145,27 @@ Conflict patterns:
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-03-29 evening)
+## Where Things Stand (as of 2026-04-12 — Launch Polish Sprint closed)
 
 - Astro 6 migration: ✅ Live on snusfriends.com (SSG + SSR hybrid)
-- Steps 1–56: ✅ Done (checkout, catalog sync, auth, security, gamification UI, go-live sprint)
-- Version: 1.5.0 — Astro 6, React islands, nanostores, Tailwind v4
-- Codebase: 47 tables, 22 edge functions, 44 migrations, ~20 hooks, 94+ pages
-- Products: 708 active (deactivated 23 display/accessory items), all with English descriptions + images
-- Sitemap: 1,115 pages indexed by Pagefind, sitemap resubmitted to GSC
-- GSC: 2 pages indexed (new site), 12 impressions, appearing for 5 queries (pos 9-59)
-- Lighthouse: SEO 100, Performance LCP <200ms, Accessibility 93-100, Best Practices 100
+- Steps 1–52 + 54–56: ✅ Done. Step 53 (password strength meter + confetti reduced-motion) still open. Launch Polish Sprint (Apr 8–12) shipped in full. See `CURRENT_PRIORITIES.md` for the live punch list.
+- Version: 1.6.1 — Astro 6, React islands, nanostores, Tailwind v4
+- Products: 708 active, 55 brands (all with English descriptions + images)
+- Blog: 80 articles, 87 registry entries. Quick Answers 80/80, PAA 80/80, BlogPosting + FAQPage schema 80/80.
+- Sitemap: 1,152 pages indexed by Pagefind
+- Performance: `/nicotine-pouches` 92, PDPs 94, homepage 82 (LCP ~4s — next target)
+- Lighthouse: SEO 100, Accessibility 93–100, Best Practices 100
 - Domain: ✅ snusfriends.com primary (non-www), www redirects via 301
-- Visual: ✅ Logo, trust bar, split hero, colored brand headers, blog hero banners, mobile bottom nav
-- SEO: ✅ All schemas (BreadcrumbList, FAQPage, ItemList, Product), RSS feed, sitemap, llms.txt
-- Gamification: ✅ LIVE — spin wheel, quests, points, avatars, order triggers, homepage CTA
-- UX: ✅ Scroll position memory, browsing history, pack upsell, beginner mode, mobile bottom nav
-- Beginner Mode: ✅ /beginners landing page, nanostore toggle, homepage filtering, FilterableProductGrid filtering
+- OG images: Satori pipeline — `/og/article-{slug}.png`, brand, category, gamification templates generated at build
+- Tests: 54 passing (cart ops, email regex, NYE line-item validation, auth schemas, components, hooks) — ROADMAP Step 55 done
+- SEO: ✅ All schemas (BreadcrumbList, FAQPage, ItemList, Product, Organization), RSS feed, sitemap, llms.txt, hreflang
+- Gamification: ✅ LIVE — spin wheel, quests, SnusCoins (10/€, aligned with DB trigger), avatars, The Vault, The Board
+- UX: ✅ Scroll memory, browsing history, pack upsell, beginner mode, mobile bottom nav, cross-tab cart sync (BroadcastChannel)
 - Review System: ✅ Full review UI + DB + post-purchase email cron (daily 10:00 UTC, 7-day delay)
-- Email: ✅ 4 Resend templates (order_confirmed, order_shipped, welcome, review_request)
+- Email: ✅ 4 Resend templates (Klaviyo wiring still pending)
 - Cron: ✅ 8 active jobs (sync, ops, reviews, blog, news, retry-orders, batch-summaries, review-emails)
-- Legal pages: 🟡 Need solicitor sign-off
-- Cowork: 15 audits in `cowork/audits/`, 14 mockups in `cowork/mockups/`, 10 content files in `cowork/content/`
+- Remaining real work: 3 Codex 🔴 blockers (subscription idempotency, `discount_pct` migration, register.astro form mismatch), homepage LCP, content awaiting Cowork/Codex deliverables, Klaviyo + Trustpilot setup, legal solicitor sign-off
+- Cowork: audits in `cowork/audits/`, mockups in `cowork/mockups/`, active briefs in `cowork/content/`
 
 ## MCP Tools (Connected)
 
@@ -302,19 +302,36 @@ Codex ran a full audit and found real issues. Some are already fixed, others rem
 - **Product 404** — `zyn-cool-mint-s2` → `zyn-cool-mint-slim-s2` in blog references.
 - **Blog category contrast** — Buying Guide tag color `#E65100` → `#BF360C` (3.4:1 → 7.7:1).
 
+### FIXED (April 8–12, 2026 — Launch Polish Sprint close)
+
+- **`src/pages/compare.astro`** — Inline IIFE with `innerHTML` + `escapeHtml()` replaced by
+  `src/components/react/CompareIsland.tsx` (client:idle). Shared labels reused from
+  `@/data/brand-colors` (strengthLabels) + `@/data/product-labels` (flavorLabels). Closes XSS debt.
+- **PAA blocks: 68 → 80/80.** All 12 missing articles (`all-velo-flavors-ranked-2026` etc.) now covered.
+- **Quick Answers: 58 → 80/80.**
+- **Product card conversion** — `ProductCard.tsx` now renders review count, compare-price
+  strikethrough + savings %, per-pouch cost line, and SnusCoin earn preview.
+- **Brand page logo fallback** — `/brands/[slug]` now renders an 80×80 gradient monogram tile
+  in Space Grotesk when `logoUrl` is null, instead of plain brand-name text. Real brand
+  logo assets still wanted for higher fidelity.
+- **OG images** — 64 blog posts no longer override the Satori-generated PNG with broken SVGs.
+  Each post now inherits `/og/article-{slug}.png` via `SEO.astro` `deriveOgPath`.
+- **`writeProductsJson`** replaces `ensureProductsJson` on `/nicotine-pouches` + `/compare` —
+  prevents stale JSON across rebuilds.
+- **Critical-path tests (ROADMAP Step 55)** — 43 new tests across cart, email regex,
+  NYE line-item validation, auth schemas. 54/54 green.
+
 ### REMAINING (not yet fixed)
 
-- **`src/pages/compare.astro:142+`** — innerHTML with unescaped product data (XSS/breakage risk).
-  Low practical risk (data from our own DB, already uses `escapeHtml()`), but should migrate to
-  Astro template expressions.
-- **12 articles without PAA blocks** — `all-velo-flavors-ranked-2026`, `best-berry-nicotine-pouches`,
-  `best-citrus-nicotine-pouches`, `best-mint-nicotine-pouches-2026`, `best-nicotine-pouches-all-day-use`,
-  `iceberg-nicotine-pouches-complete-guide`, `nicotine-pouch-buying-guide-europe`,
-  `on-nicotine-pouches-complete-guide`, `pablo-nicotine-pouches-complete-guide`, `top-10-mint-flavours`,
-  `velo-nicotine-pouches-complete-guide`, `velo-vs-nordic-spirit`. Need Cowork batch 3.
-- **Product card conversion** — Missing review counts, savings emphasis, pack-size clarity vs
-  competitors (Haypp benchmark). See `cowork/content/codex-visual-audit.md` findings.
-- **Brand page logos** — Brand header uses placeholder letter squares instead of real logos.
-  Need brand logo assets or higher-fidelity branded treatment.
-- **Verification noise** — `bun run lint` has ~9 errors (reduced from 114), `bun run check` has
-  68 errors (Astro.locals typing gap). Low priority — doesn't affect production builds.
+- **3 Codex 🔴 blockers** (tracked in `CURRENT_PRIORITIES.md`):
+  - `supabase/functions/process-subscriptions/index.ts:128` — missing idempotency guard on
+    `subscription_delivery:${sub.id}:${date}`. Retries = double-credit.
+  - `supabase/functions/manage-subscription/index.ts:102` — writes `discount_pct` but column
+    missing from migrations + `src/integrations/supabase/types.ts`. Will fail in prod.
+  - `src/pages/register.astro:98` — resend form posts native form-data but
+    `src/actions/auth.ts:120` expects JSON.
+- **Homepage LCP** — 82 score, LCP ~4s. Needs above-fold profile + defer non-critical islands.
+- **`products.json` aggressive slim** — 236KB today, ≤150KB target (needs gzip or further field drops).
+- **Verification noise** — `bun run lint` has 6 errors (all pre-existing in
+  `scripts/generate-og-images.ts`), `bun run check` has 67 errors (Astro.locals typing gap).
+  Low priority — doesn't affect production builds.

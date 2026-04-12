@@ -1,5 +1,9 @@
 # SnusFriend Full Audit Fix List — March 30, 2026
 
+> **⚠ SUPERSEDED (2026-04-12).** Historical snapshot from the pre-launch audit.
+> Live punch list is now in `CURRENT_PRIORITIES.md` and `ROADMAP.md`.
+> Most items below shipped in the Apr 8–12 Launch Polish Sprint. Keep as reference only.
+
 ## Status Update (March 30, 2026 — Claude Session)
 
 ### DONE by Claude via MCP:
