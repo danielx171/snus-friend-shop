@@ -17,6 +17,12 @@ export interface SearchableProduct {
   flavorKey: string;
   formatKey?: string;
   ratings: number;
+  /** Optional — number of verified reviews, injected at build time when known. */
+  reviewCount?: number;
+  /** Optional — retail MSRP for strikethrough/savings display. */
+  comparePrice?: number;
+  /** Optional — portions per can, used for per-pouch cost helper. */
+  portionsPerCan?: number;
   badgeKeys: string[];
 }
 

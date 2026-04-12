@@ -705,6 +705,9 @@ export default function FilterableProductGrid({
                     strengthKey={product.strengthKey}
                     flavorKey={product.flavorKey}
                     ratings={product.ratings}
+                    reviewCount={product.reviewCount}
+                    comparePrice={product.comparePrice}
+                    portionsPerCan={product.portionsPerCan}
                     badgeKeys={product.badgeKeys}
                   />
                 ))}

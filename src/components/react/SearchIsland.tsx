@@ -196,6 +196,9 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
                 strengthKey={product.strengthKey}
                 flavorKey={product.flavorKey}
                 ratings={product.ratings}
+                reviewCount={product.reviewCount}
+                comparePrice={product.comparePrice}
+                portionsPerCan={product.portionsPerCan}
                 badgeKeys={product.badgeKeys}
               />
             ))}

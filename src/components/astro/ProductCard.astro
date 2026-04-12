@@ -17,12 +17,18 @@ interface Props {
   ratings: number;
   badgeKeys: string[];
   portionsPerCan?: number;
+  /** Shown as "(N)" after star rating when > 0 */
+  reviewCount?: number;
+  /** Retail MSRP — strikethrough + savings % rendered when > displayPrice */
+  comparePrice?: number;
 }
 
 const {
   slug, name, brand, brandSlug, imageUrl, prices, stock,
   nicotineContent, strengthKey, flavorKey, ratings, badgeKeys,
   portionsPerCan = 20,
+  reviewCount,
+  comparePrice,
 } = Astro.props;
 
 const isOutOfStock = stock === 0;
@@ -63,6 +69,8 @@ const flavorLabel = flavorLabelMap[flavorKey] ?? flavorKey;
 
 const pack1Price = prices.pack1 ?? 0;
 const perPouchPrice = pack1Price > 0 ? (pack1Price / portionsPerCan).toFixed(2) : null;
+const hasDiscount = comparePrice != null && comparePrice > pack1Price && pack1Price > 0;
+const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comparePrice!) * 100) : 0;
 ---
 
 <a
@@ -191,13 +199,26 @@ const perPouchPrice = pack1Price > 0 ? (pack1Price / portionsPerCan).toFixed(2) 
             </svg>
           ))}
         </div>
-        <span class="text-xs text-muted-foreground">{ratings.toFixed(1)}</span>
+        <span class="text-xs text-muted-foreground">
+          {ratings.toFixed(1)}
+          {reviewCount != null && reviewCount > 0 && (
+            <span class="ml-1 text-muted-foreground/70">({reviewCount})</span>
+          )}
+        </span>
       </div>
     )}
 
-    {/* Price + per-pouch */}
-    <div class="flex items-baseline justify-between mt-auto pt-1">
-      <span class="text-base font-bold text-foreground">&euro;{pack1Price.toFixed(2)}</span>
+    {/* Price + strikethrough + savings % + per-pouch */}
+    <div class="flex flex-col mt-auto pt-1">
+      <div class="flex items-baseline gap-1.5 flex-wrap">
+        <span class="text-base font-bold text-foreground">&euro;{pack1Price.toFixed(2)}</span>
+        {hasDiscount && (
+          <>
+            <span class="text-xs text-muted-foreground line-through">&euro;{comparePrice!.toFixed(2)}</span>
+            <span class="rounded-sm bg-primary/15 px-1 text-[10px] font-bold text-primary">-{savingsPct}%</span>
+          </>
+        )}
+      </div>
       {perPouchPrice && (
         <span class="text-[10px] text-muted-foreground">&euro;{perPouchPrice}/pouch &middot; {portionsPerCan}pcs</span>
       )}

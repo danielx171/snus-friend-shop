@@ -13,21 +13,31 @@ export { IMAGE_CDN_PREFIX, expandImageUrl } from './image-cdn';
  * Stock is stored as boolean to save bytes.
  */
 export function slimProductData(products: Array<{ id: string; data: any }>) {
-  return products.map((p) => ({
-    slug: p.id,
-    name: p.data.name,
-    brand: p.data.brand,
-    brandSlug: p.data.brandSlug,
-    imageUrl: (p.data.imageUrl ?? '').replace(IMAGE_CDN_PREFIX, ''),
-    prices: { pack1: p.data.prices?.pack1 ?? 0 },
-    nicotineContent: p.data.nicotineContent,
-    strengthKey: p.data.strengthKey,
-    flavorKey: p.data.flavorKey,
-    formatKey: p.data.formatKey,
-    ratings: p.data.ratings,
-    stock: p.data.stock > 0 ? 1 : 0,
-    badgeKeys: p.data.badgeKeys ?? [],
-  }));
+  return products.map((p) => {
+    const base: Record<string, unknown> = {
+      slug: p.id,
+      name: p.data.name,
+      brand: p.data.brand,
+      brandSlug: p.data.brandSlug,
+      imageUrl: (p.data.imageUrl ?? '').replace(IMAGE_CDN_PREFIX, ''),
+      prices: { pack1: p.data.prices?.pack1 ?? 0 },
+      nicotineContent: p.data.nicotineContent,
+      strengthKey: p.data.strengthKey,
+      flavorKey: p.data.flavorKey,
+      formatKey: p.data.formatKey,
+      ratings: p.data.ratings,
+      stock: p.data.stock > 0 ? 1 : 0,
+      badgeKeys: p.data.badgeKeys ?? [],
+    };
+    // Only include optional fields when present — keeps the JSON small.
+    if (typeof p.data.comparePrice === 'number' && p.data.comparePrice > 0) {
+      base.comparePrice = p.data.comparePrice;
+    }
+    if (typeof p.data.portionsPerCan === 'number' && p.data.portionsPerCan > 0) {
+      base.portionsPerCan = p.data.portionsPerCan;
+    }
+    return base;
+  });
 }
 
 /** Write slim products.json to public/data/ if it doesn't exist yet. */

@@ -17,6 +17,12 @@ interface ProductCardProps {
   strengthKey: string;
   flavorKey: string;
   ratings: number;
+  /** Shown as "(N)" after star rating when > 0 */
+  reviewCount?: number;
+  /** Retail MSRP — strikethrough rendered + savings % badge when > displayPrice */
+  comparePrice?: number;
+  /** Portions per can — enables per-pouch cost helper */
+  portionsPerCan?: number;
   badgeKeys: string[];
 }
 
@@ -55,7 +61,8 @@ function StarRating({ rating }: { rating: number }) {
 
 const ProductCard = React.memo<ProductCardProps>(function ProductCard({
   slug, name, brand, brandSlug, imageUrl, prices, stock,
-  nicotineContent, strengthKey, flavorKey, ratings, badgeKeys,
+  nicotineContent, strengthKey, flavorKey, ratings, reviewCount,
+  comparePrice, portionsPerCan, badgeKeys,
 }) {
   const isOutOfStock = stock === 0;
   const displayPrice = prices.pack1;
@@ -64,6 +71,11 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
   const flavorColor = flavorColors[flavorKey] ?? defaultFlavorColor;
   const strengthDots = strengthDotMap[strengthKey] ?? 2;
   const flavorLabel = flavorLabels[flavorKey] ?? flavorKey;
+  const hasDiscount = comparePrice != null && comparePrice > displayPrice && displayPrice > 0;
+  const savingsPct = hasDiscount ? Math.round(((comparePrice! - displayPrice) / comparePrice!) * 100) : 0;
+  const perPouch = portionsPerCan && portionsPerCan > 0 && displayPrice > 0
+    ? displayPrice / portionsPerCan
+    : null;
 
   const handleAddToCart = useCallback(
     (e: React.MouseEvent) => {
@@ -205,23 +217,45 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
           </span>
         </div>
 
-        {/* Star rating */}
+        {/* Star rating + optional review count */}
         {ratings > 0 && (
           <div className="flex items-center gap-1">
             <StarRating rating={ratings} />
-            <span className="text-xs text-muted-foreground">{ratings.toFixed(1)}</span>
+            <span className="text-xs text-muted-foreground">
+              {ratings.toFixed(1)}
+              {reviewCount != null && reviewCount > 0 && (
+                <span className="ml-1 text-muted-foreground/70">({reviewCount})</span>
+              )}
+            </span>
           </div>
         )}
 
         {/* Price + Cart */}
         <div className="mt-auto flex items-end justify-between pt-2">
           <div className="flex flex-col">
-            <span className="text-lg font-bold text-foreground">
-              &euro;{displayPrice.toFixed(2)}
+            <span className="flex items-baseline gap-1.5">
+              <span className="text-lg font-bold text-foreground">
+                &euro;{displayPrice.toFixed(2)}
+              </span>
+              {hasDiscount && (
+                <>
+                  <span className="text-xs text-muted-foreground line-through">
+                    &euro;{comparePrice!.toFixed(2)}
+                  </span>
+                  <span className="rounded-sm bg-primary/15 px-1 text-[10px] font-bold text-primary">
+                    -{savingsPct}%
+                  </span>
+                </>
+              )}
             </span>
+            {perPouch != null && (
+              <span className="text-[10px] text-muted-foreground">
+                &euro;{perPouch.toFixed(2)}/pouch
+              </span>
+            )}
             {displayPrice > 0 && (
               <span className="text-[10px] font-medium text-primary">
-                +{Math.floor(displayPrice * 1)} pts {/* matches rewards.earnRatePerEur */}
+                +{Math.floor(displayPrice * 1)} SnusCoins {/* matches rewards.earnRatePerEur */}
               </span>
             )}
           </div>
