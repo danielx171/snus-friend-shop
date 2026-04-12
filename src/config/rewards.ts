@@ -6,7 +6,11 @@
  */
 export const rewards = {
   // ── Earning ──
-  earnRatePerEur: 1,
+  // 10 SnusCoins per €1. Must match the `pts := floor(NEW.total_price * 10)`
+  // calculation in supabase/migrations/20260320000002_snuspoints_and_audit_fixes.sql
+  // (trg_award_points on orders). Any change here should be paired with a new
+  // migration updating the trigger.
+  earnRatePerEur: 10,
 
   // ── Reviews ──
   verifiedReviewFirst: 40,   // First verified review on a product

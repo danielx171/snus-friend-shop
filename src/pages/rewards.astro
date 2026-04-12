@@ -22,7 +22,7 @@ const tierBorders = [
   'border-l-amber-400',
 ];
 const tierPerks: Record<string, string[]> = {
-  Explorer: [`${rewards.earnRatePerEur} SnusCoin per EUR spent`, 'Welcome spin bonus', 'Member-only newsletter'],
+  Explorer: [`${rewards.earnRatePerEur} SnusCoins per EUR spent`, 'Welcome spin bonus', 'Member-only newsletter'],
   Member: ['Community posting', 'Review reactions', 'Birthday bonus'],
   Connoisseur: ['Custom avatar border', 'Early sale access'],
   Specialist: ['Double mission rewards', 'Exclusive polls', 'Priority customer support'],
@@ -253,7 +253,7 @@ const tiers = rewards.tiers.map((t, i) => ({
             </tr>
           </thead>
           <tbody class="divide-y divide-border">
-            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Per €1 spent on orders</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.earnRatePerEur} SnusCoin</td></tr>
+            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Per €1 spent on orders</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.earnRatePerEur} SnusCoins</td></tr>
             <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Write a product review</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.verifiedReview} SnusCoins</td></tr>
             <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Daily Drop spin</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.dailyDropMin}–{rewards.dailyDropMax} SnusCoins</td></tr>
             <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Complete a Mission</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.missionMin}–{rewards.missionMax} SnusCoins</td></tr>
