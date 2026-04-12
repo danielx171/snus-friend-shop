@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { addToCart } from '@/stores/cart';
 import type { Product, PackSize } from '@/data/products';
+import { rewards } from '@/config/rewards';
 
 interface AddToCartButtonProps {
   product: {
@@ -177,11 +178,22 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
           )}
         </div>
 
-        {/* Selected price summary */}
-        {selectedPrice != null && quantity > 1 && (
-          <p className="text-sm text-muted-foreground">
-            Total: <span className="font-semibold text-foreground">&euro;{(selectedPrice * quantity).toFixed(2)}</span>
-          </p>
+        {/* Live total + SnusCoin earn — scales with pack + quantity */}
+        {selectedPrice != null && (
+          <div className="rounded-lg border border-border/60 bg-card/40 px-4 py-3 text-sm">
+            <p className="flex items-baseline justify-between">
+              <span className="text-muted-foreground">Total</span>
+              <span className="text-lg font-bold text-foreground">
+                &euro;{(selectedPrice * quantity).toFixed(2)}
+              </span>
+            </p>
+            <p className="mt-1 flex items-baseline justify-between text-xs">
+              <span className="text-muted-foreground">You'll earn</span>
+              <span className="font-semibold text-primary">
+                {Math.floor(selectedPrice * quantity * rewards.earnRatePerEur).toLocaleString()} SnusCoins
+              </span>
+            </p>
+          </div>
         )}
       </div>
     );

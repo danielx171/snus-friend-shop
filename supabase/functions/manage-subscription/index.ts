@@ -59,8 +59,8 @@ Deno.serve(async (req) => {
   if (action === "create") {
     const productSlug = body.product_slug as string;
     const productName = body.product_name as string;
-    const packSize = (body.pack_size as string) || "pack1";
-    const quantity = (body.quantity as number) || 1;
+    const packSize = body.pack_size as string;
+    const quantity = body.quantity as number;
     const interval = body.interval as string;
 
     if (!productSlug || !productName || !interval) {
@@ -69,6 +69,18 @@ Deno.serve(async (req) => {
     if (interval !== "monthly" && interval !== "6monthly") {
       return jsonResponse({ error: "invalid_interval", requestId }, 400);
     }
+    // Validate pack + quantity — reject rather than silently default
+    const validPacks = ["pack1", "pack3", "pack5", "pack10"];
+    if (!packSize || !validPacks.includes(packSize)) {
+      return jsonResponse({ error: "invalid_pack_size", requestId }, 400);
+    }
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 12) {
+      return jsonResponse({ error: "invalid_quantity", requestId }, 400);
+    }
+
+    // Derive discount from interval. Keep in sync with
+    // src/config/rewards.ts subscriptions.{monthly,sixMonthly}.discountPct
+    const discountPct = interval === "monthly" ? 10 : 15;
 
     // Calculate next order date
     const nextOrder = new Date();
@@ -87,6 +99,7 @@ Deno.serve(async (req) => {
         pack_size: packSize,
         quantity,
         interval,
+        discount_pct: discountPct,
         next_order_at: nextOrder.toISOString(),
       })
       .select()

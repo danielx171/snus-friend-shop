@@ -46,4 +46,12 @@ export const rewards = {
     { name: '€10 Off', cost: 350 },
     { name: 'Mystery Box', cost: 500 },
   ],
+
+  // ── Subscribe & Save ──
+  // Keep in sync with supabase/functions/manage-subscription/index.ts
+  // and supabase/functions/process-subscriptions/index.ts
+  subscriptions: {
+    monthly:    { discountPct: 10, pointsMultiplier: 2 },
+    sixMonthly: { discountPct: 15, pointsMultiplier: 2 },
+  },
 } as const;

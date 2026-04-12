@@ -223,6 +223,10 @@ const perPouchPrice = pack1Price > 0 ? (pack1Price / portionsPerCan).toFixed(2) 
 <style>
   .product-card {
     transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+    /* Pin to a stable GPU layer so the tilt rotate doesn't re-rasterize text each frame */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
   }
   .product-card-img {
     transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -251,7 +255,9 @@ const perPouchPrice = pack1Price > 0 ? (pack1Price / portionsPerCan).toFixed(2) 
       const r = el.getBoundingClientRect();
       const x = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height/2)) / (r.height/2))) * 12;
       const y = Math.max(-1, Math.min(1, -(e.clientX - (r.left + r.width/2)) / (r.width/2))) * 12;
-      el.style.transform = `rotateX(${x}deg) rotateY(${y}deg) scale(1.04) translateY(-8px)`;
+      // Drop scale() — the image has its own hover scale and compounding them
+      // knocks text off subpixel antialiasing (smudged text on hover).
+      el.style.transform = `rotateX(${x}deg) rotateY(${y}deg) translateY(-8px)`;
       el.style.boxShadow = '0 35px 60px -15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)';
       el.style.transition = 'box-shadow 0.2s, transform 0.08s ease-out';
     });

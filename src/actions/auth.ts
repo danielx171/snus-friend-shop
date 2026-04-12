@@ -82,7 +82,7 @@ export const auth = {
         import.meta.env.VITE_SITE_URL ??
         'https://snusfriends.com';
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: input.email,
         password: input.password,
         options: {
@@ -98,9 +98,21 @@ export const auth = {
         });
       }
 
+      // If the Supabase project has "Confirm email" OFF, signUp returns a session
+      // immediately — log the user in and redirect. Otherwise, surface an inbox
+      // screen that echoes the email the link was sent to.
+      if (data?.session) {
+        return {
+          success: true,
+          redirect: '/account',
+          email: input.email,
+        };
+      }
+
       return {
         success: true,
         message: 'Account created. Please check your email to confirm your address.',
+        email: input.email,
       };
     },
   }),

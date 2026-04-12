@@ -145,6 +145,16 @@ Deno.serve(async (req) => {
         status: "open",
       });
 
+      // Points are NOT awarded here — this function only creates an ops_alert
+      // (manual processing for MVP). Points flow through the existing
+      // NYE order → order_trigger path once the subscription actually creates
+      // a real order. Granting points at alert-creation time would be:
+      //   (a) premature — no order/charge/delivery exists yet
+      //   (b) non-idempotent — cron retries or concurrent runs would double-credit
+      // The 2× subscription multiplier will be wired into the order trigger
+      // when auto-order-from-subscription lands. Until then the PDP Subscribe
+      // block phrases SnusCoin reward as "on each delivery" (see [slug].astro).
+
       // Advance next_order_at
       const nextOrder = new Date();
       if (sub.interval === "monthly") {
