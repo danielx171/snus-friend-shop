@@ -43,9 +43,18 @@ function typeFilter() {
 }
 
 function getSupabase() {
-  const url = process.env.SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) throw new Error('Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY env vars');
+  const url =
+    process.env.SUPABASE_URL ||
+    process.env.PUBLIC_SUPABASE_URL ||
+    process.env.VITE_SUPABASE_URL ||
+    '';
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    '';
+  if (!url || !key) return null;
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
@@ -226,8 +235,15 @@ async function main() {
   const filter = typeFilter();
   const supa = getSupabase();
 
+  if (!supa) {
+    console.warn(
+      '[og] SUPABASE env vars missing — skipping dynamic (brand/category/article) OG images. ' +
+        'The static types (gamification, info) will still generate and everything else falls back to /og-default.png.'
+    );
+  }
+
   // BRANDS
-  if (!filter || filter === 'brand') {
+  if (supa && (!filter || filter === 'brand')) {
     const { data: brands } = await supa.from('brands').select('slug, name');
     const { data: products } = await supa.from('products').select('brand_slug').eq('is_active', true);
     const countByBrand = new Map<string, number>();
@@ -247,7 +263,7 @@ async function main() {
     console.log(`[og] brand: ${ok} images`);
   }
 
-  // CATEGORY (flavors + strengths + top landing)
+  // CATEGORY (flavors + strengths + top landing) — static list, no DB needed
   if (!filter || filter === 'category') {
     const categories: { slug: string; title: string; subtitle: string; accent: string }[] = [
       { slug: 'nicotine-pouches', title: 'Nicotine Pouches', subtitle: '700+ products \u00b7 EU-stocked', accent: '#3b82f6' },
