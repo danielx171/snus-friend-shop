@@ -4,7 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
-import { slimProductData, writeProductsJson } from '@/lib/product-json';
+import { writeProductsJson } from '@/lib/product-json';
 
 const products = await getCollection('products');
 
@@ -27,9 +27,9 @@ const collectionJsonLd = {
   },
 };
 
-// Generate products.json for search/compare pages that still need it via fetch
+// Write products.json once so the grid lazy-fetches it instead of shipping
+// ~300 KB inline with the HTML — critical for Lighthouse perf.
 writeProductsJson(products);
-const productsJson = JSON.stringify(slimProductData(products));
 ---
 
 <Shop
@@ -56,6 +56,6 @@ const productsJson = JSON.stringify(slimProductData(products));
     </div>
 
     <h2 class="sr-only">Product Catalog</h2>
-    <FilterableProductGrid client:idle productsJson={productsJson} />
+    <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
   </div>
 </Shop>
