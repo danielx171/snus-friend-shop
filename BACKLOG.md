@@ -80,7 +80,7 @@ Priority tiers:
 - [ ] 🧠 Logged-in account performance — tab-aware SSR, pass known user/session into islands, defer referral widgets
 - [x] 🧠 `products.json` slim — Apr 13 measured: 241KB uncompressed, **39.5KB gzipped**. Vercel serves gzipped by default. Shortening keys would save ~22KB gzipped but breaks 3 React consumers for invisible user benefit. Closed — target was based on uncompressed size, which doesn't matter over the wire.
 - [ ] ✍️ Homepage copy refresh — awaiting `cowork/content/homepage-copy-variations.md`
-- [ ] 🧠 Blog read-time field on cards (registry schema supports it, not populated)
+- [x] 🧠 Blog read-time field on cards — `getReadTime(slug)` helper + tag-based heuristic; renders on all blog cards (74/74).
 - [ ] 🧠 Blog product-card relevance audit — many articles now use cards; check intent match article-by-article
 - [ ] 🧠 Brand page real logos — monogram placeholder fallback live; need real asset integration per brand
 
@@ -135,9 +135,9 @@ Priority tiers:
 
 ### Retention + reviews
 
-- [ ] 🧠 Review incentivization — 50 pts per review + 14-day follow-up reminder
-- [ ] 🧠 "Be the first to review" CTA on unreviewed products
-- [ ] 🧠 Compare button on product cards (unique differentiator; no competitor has this)
+- [x] 🧠 Review incentivization — 50 SnusCoins per review (one-per-product idempotency via `review_rewards` ledger + `award-review-reward` edge fn). 14-day follow-up reminder still pending (P2 follow-up).
+- [x] 🧠 "Be the first to review" CTA on unreviewed products — renders on PDPs with `p.ratings === 0`.
+- [x] 🧠 Compare button on product cards — `$compareIds` nanostore (max 4) + `CompareToggleButton` on every card + `HeaderCompareBadge` count link to `/compare`.
 
 ### Content expansion
 
