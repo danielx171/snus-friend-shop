@@ -399,8 +399,11 @@ const jsonLd = {
           </div>
         )}
 
-        {/* Subscribe & Save — pack/qty selector + honest "what you pay / what you get" breakdown */}
-        {inStock && (() => {
+        {/* Subscribe & Save — gated by rewards.subscriptions.enabled.
+            Currently disabled: NYE is hosted-checkout only, no card-on-file
+            means auto-orders can't fire. DB/edge scaffolding stays deployed
+            for revival once a payment rail is chosen. */}
+        {inStock && rewards.subscriptions.enabled && (() => {
           const subMonthly = rewards.subscriptions.monthly;
           const subSix = rewards.subscriptions.sixMonthly;
           const monthlyPerCan = singlePrice * (1 - subMonthly.discountPct / 100);

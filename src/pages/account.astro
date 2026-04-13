@@ -41,7 +41,7 @@ if (tab === 'orders') {
   ]);
   orders = ordersRes.data;
   reviewsCount = reviewsRes.count ?? 0;
-} else if (tab === 'subscriptions') {
+} else if (tab === 'subscriptions' && rewards.subscriptions.enabled) {
   const res = await supabase.from('subscriptions').select('*')
     .eq('user_id', user.id).order('created_at', { ascending: false });
   subscriptions = res.data;
@@ -161,17 +161,19 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
         >
           Membership
         </a>
-        <a
-          href="/account?tab=subscriptions"
-          class:list={[
-            'px-4 py-2.5 text-sm font-medium rounded-t-lg transition',
-            tab === 'subscriptions'
-              ? 'bg-card/60 text-foreground border border-border border-b-transparent -mb-px'
-              : 'text-muted-foreground hover:text-foreground',
-          ]}
-        >
-          Subscriptions
-        </a>
+        {rewards.subscriptions.enabled && (
+          <a
+            href="/account?tab=subscriptions"
+            class:list={[
+              'px-4 py-2.5 text-sm font-medium rounded-t-lg transition',
+              tab === 'subscriptions'
+                ? 'bg-card/60 text-foreground border border-border border-b-transparent -mb-px'
+                : 'text-muted-foreground hover:text-foreground',
+            ]}
+          >
+            Subscriptions
+          </a>
+        )}
       </div>
 
       <!-- Orders Tab -->
@@ -478,8 +480,8 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
         </div>
       )}
 
-      <!-- Subscriptions Tab -->
-      {tab === 'subscriptions' && (
+      <!-- Subscriptions Tab — only renders when rewards.subscriptions.enabled -->
+      {tab === 'subscriptions' && rewards.subscriptions.enabled && (
         <div class="space-y-4">
           {(!subscriptions || subscriptions.length === 0) ? (
             <div class="rounded-xl border border-border bg-card/80 p-8 text-center">

@@ -130,7 +130,7 @@ Priority tiers:
 
 - [ ] 🧠 Multi-currency (SEK, GBP, DKK, NOK, PLN) — competitors all have this
 - [ ] 🧠 Membership tiers (Bronze→Silver→Gold→Platinum) — `points_balances.lifetime_earned` already drives the calculation
-- [ ] 🧠 Subscription model (monthly/6-monthly with discount) — table + types already live, needs UI + auto-order trigger
+- [ ] 🧠 Subscription model — DB + edge function scaffolding retained (`subscriptions` table, `manage-subscription`, `process-subscriptions` cron). UI gated off via `rewards.subscriptions.enabled = false` in `src/config/rewards.ts` because NYE is hosted-checkout only — true auto-orders need a payment-rail decision (Stripe recurring / Adyen tokenization / NYE merchant-initiated). One-flag flip to revive once the rail is chosen.
 - [ ] 🧠 Sample / trial packs (Northerner + Nicokick have this)
 
 ### Retention + reviews

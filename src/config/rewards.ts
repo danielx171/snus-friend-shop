@@ -53,8 +53,13 @@ export const rewards = {
 
   // ── Subscribe & Save ──
   // Keep in sync with supabase/functions/manage-subscription/index.ts
-  // and supabase/functions/process-subscriptions/index.ts
+  // and supabase/functions/process-subscriptions/index.ts.
+  // enabled = false hides the Subscribe UI on PDP + account page. Nyehandel
+  // is hosted-checkout only — true auto-orders need a payment-rail decision
+  // (Stripe recurring / Adyen tokenization / NYE merchant-initiated API).
+  // DB + edge functions stay deployed so revival is a one-flag change.
   subscriptions: {
+    enabled:    false,
     monthly:    { discountPct: 10, pointsMultiplier: 2 },
     sixMonthly: { discountPct: 15, pointsMultiplier: 2 },
   },
