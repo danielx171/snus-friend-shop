@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-04-12
+Last updated: 2026-04-13
 
 ## Site Status: Live
 
@@ -126,7 +126,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 
 | File | Purpose |
 |------|---------|
-| `ROADMAP.md` | Delivery sequence, Steps 1–52 + 54–56 done (Step 53 open) |
+| `ROADMAP.md` | Delivery sequence, Steps 1–56 done |
 | `src/config/rewards.ts` | Canonical rewards config |
 | `src/data/editorial-facts.ts` | Dynamic product/brand counts |
 | `src/data/blog-registry.ts` | Blog index metadata (87 entries) |
