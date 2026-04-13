@@ -3,7 +3,44 @@ export interface BlogArticle {
   title: string;
   excerpt: string;
   tag: string;
+  /** Original publish date. */
   date?: string;
+  /** Last content update. Preferred over `date` for sitemap lastmod + JSON-LD dateModified. */
+  modifiedDate?: string;
+}
+
+/**
+ * Slugs touched in the Apr 8–10, 2026 launch-polish sprint. Treated as
+ * modifiedDate = '2026-04-10' for sitemap/JSON-LD purposes even if the
+ * article's entry doesn't yet carry a per-entry modifiedDate.
+ */
+const APR_10_SPRINT_SLUGS = new Set<string>([
+  'best-nicotine-pouches-2026', 'are-nicotine-pouches-safe',
+  'zyn-nicotine-pouches-complete-guide', 'strongest-nicotine-pouches-ranked-2026',
+  'how-to-use-nicotine-pouches', 'nicotine-pouches-vs-cigarettes',
+  'best-nicotine-pouches-for-beginners-2026', 'zyn-flavours-complete-guide',
+  'nicotine-pouch-side-effects', 'what-are-nicotine-pouches',
+  'best-berry-nicotine-pouches', 'best-citrus-nicotine-pouches',
+  'best-coffee-nicotine-pouches', 'best-mint-nicotine-pouches-2026',
+  'best-nicotine-pouches-germany-2026', 'best-nicotine-pouches-netherlands-2026',
+  'best-nicotine-pouches-uk-2026', 'best-value-nicotine-pouches-2026',
+  'best-nicotine-pouches-gym-sports', 'best-nicotine-pouches-sensitive-gums',
+  'best-nicotine-pouches-under-2-euros', 'best-nicotine-pouches-by-occasion',
+  'nicotine-pouches-vs-snus', 'switching-from-cigarettes-to-nicotine-pouches',
+  'loop-nicotine-pouches-complete-guide', 'velo-nicotine-pouches-complete-guide',
+  'top-10-mint-flavours',
+]);
+
+/**
+ * Resolve the best lastmod date for a blog slug.
+ * Precedence: per-entry modifiedDate → sprint-wide stamp → original date → undefined.
+ * Used by astro.config.mjs sitemap serialize + SEO/article layouts.
+ */
+export function getBlogLastmod(slug: string): string | undefined {
+  const entry = blogArticles.find((a) => a.slug === slug);
+  if (entry?.modifiedDate) return entry.modifiedDate;
+  if (APR_10_SPRINT_SLUGS.has(slug)) return '2026-04-10';
+  return entry?.date;
 }
 
 export const blogArticles: BlogArticle[] = [

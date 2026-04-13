@@ -9,38 +9,67 @@ import { rewards } from '@/config/rewards';
 import OrderQuestTrigger from '@/components/react/OrderQuestTrigger';
 
 const orderId = Astro.url.searchParams.get('order');
+const guestEmail = Astro.url.searchParams.get('email')?.trim().toLowerCase() ?? '';
 const supabase = Astro.locals.supabase;
 const user = Astro.locals.user;
 
-// Fetch order data if we have an orderId and authenticated user
+// Fetch order data.
+// Logged-in: direct query with user_id filter (RLS-enforced ownership).
+// Guest: use the get-order-confirmation edge function which gates on
+//        orderId + customer_email match. Do NOT fall back to a direct
+//        orders query for guests — that would leak order details to
+//        anyone who can guess a UUID.
 let order: any = null;
 let lineItems: any[] = [];
 let fetchError = false;
+let needsGuestEmail = false;
 
-if (orderId && supabase) {
-  // Logged-in: filter by user_id for security. Guest: order ID is a UUID (unguessable).
-  let query = supabase.from('orders').select('*').eq('id', orderId);
-  if (user) {
-    query = query.eq('user_id', user.id);
-  }
-  const { data, error } = await query.single();
-
+if (orderId && user && supabase) {
+  const { data, error } = await supabase
+    .from('orders').select('*').eq('id', orderId).eq('user_id', user.id).single();
   if (error || !data) {
     fetchError = true;
   } else {
     order = data;
-    // Parse line_items_snapshot — stored as JSON
-    if (order.line_items_snapshot) {
-      try {
-        lineItems = typeof order.line_items_snapshot === 'string'
-          ? JSON.parse(order.line_items_snapshot)
-          : Array.isArray(order.line_items_snapshot)
-            ? order.line_items_snapshot
-            : [];
-      } catch {
-        lineItems = [];
+  }
+} else if (orderId && !user) {
+  if (!guestEmail) {
+    needsGuestEmail = true;
+  } else {
+    const supabaseUrl = import.meta.env.SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
+    const anonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    try {
+      const res = await fetch(`${supabaseUrl}/functions/v1/get-order-confirmation`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(anonKey ? { apikey: anonKey, Authorization: `Bearer ${anonKey}` } : {}),
+        },
+        body: JSON.stringify({ orderId, email: guestEmail }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        order = data.order ?? null;
+        if (!order) fetchError = true;
+      } else {
+        fetchError = true;
       }
+    } catch {
+      fetchError = true;
     }
+  }
+}
+
+// Parse line_items_snapshot (same shape from either path)
+if (order?.line_items_snapshot) {
+  try {
+    lineItems = typeof order.line_items_snapshot === 'string'
+      ? JSON.parse(order.line_items_snapshot)
+      : Array.isArray(order.line_items_snapshot)
+        ? order.line_items_snapshot
+        : [];
+  } catch {
+    lineItems = [];
   }
 }
 
@@ -129,9 +158,36 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
                 {status}
               </span>
             </div>
+          ) : needsGuestEmail ? (
+            <div class="text-left max-w-md mx-auto">
+              <p class="text-muted-foreground mb-4">
+                Enter the email address you used for this order to view details.
+              </p>
+              <form method="get" action="/order-confirmation" class="space-y-3">
+                <input type="hidden" name="order" value={orderId} />
+                <label class="block">
+                  <span class="sr-only">Email address</span>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    placeholder="you@example.com"
+                    class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  class="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+                >
+                  View order
+                </button>
+              </form>
+            </div>
           ) : orderId && fetchError ? (
             <p class="text-muted-foreground mb-6">
-              We couldn't find order <strong class="text-foreground font-semibold">#{orderId}</strong>.
+              We couldn't find order <strong class="text-foreground font-semibold">#{orderId}</strong>
+              {guestEmail ? ' for that email address' : ''}.
               It may still be processing. You'll receive a confirmation email shortly.
             </p>
           ) : (

@@ -477,7 +477,10 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
         description: `Thank you! You earned ${earnedPoints} SnusCoins for this review.`,
       });
       // Fire-and-forget quest progress + avatar unlock checks
-      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review_submitted' } }).catch(() => {});
+      apiFetch('update-quest-progress', {
+        method: 'POST',
+        body: { action: 'review_submitted', externalRef: productId },
+      }).catch(() => {});
       apiFetch('check-avatar-unlocks', { method: 'POST' }).catch(() => {});
       setDialogOpen(false);
       setNewRating(0);

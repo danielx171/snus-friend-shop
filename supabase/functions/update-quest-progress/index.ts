@@ -197,11 +197,47 @@ Deno.serve(async (req: Request) => {
       }
     }
 
+    // --- Idempotency ledger guard ---
+    // Each action carries an external_ref that uniquely identifies the
+    // underlying event (orderId / productId / spin date). A UNIQUE
+    // constraint on quest_progress_events blocks double-counting when
+    // retries, cross-tab dedupe, or client bugs fire the same event twice.
+    // order_placed + brands + spend + products quests derive from the
+    // orders table snapshot so they are naturally idempotent, but we still
+    // record the ledger row so the semantics are uniform.
+    const externalRef: string | null = (() => {
+      const b = body as Record<string, unknown>;
+      if (typeof b.externalRef === 'string' && b.externalRef) return b.externalRef;
+      if (typeof b.orderId === 'string' && b.orderId) return b.orderId;
+      if (typeof b.reviewId === 'string' && b.reviewId) return b.reviewId;
+      if (typeof b.productId === 'string' && b.productId) return b.productId;
+      if (typeof b.spinId === 'string' && b.spinId) return b.spinId;
+      if (typeof b.spinDate === 'string' && b.spinDate) return b.spinDate;
+      return null;
+    })();
+
     // --- Process each relevant quest ---
     const updatedQuests: Array<{ quest_id: string; current_value: number; completed: boolean }> = [];
     const newlyCompleted: Array<{ quest_id: string; reward_points: number; reward_avatar_id: string | null }> = [];
+    const skippedQuestIds = new Set<string>();
+
+    if (externalRef) {
+      for (const quest of relevantQuests) {
+        const { error: ledgerErr } = await admin
+          .from('quest_progress_events')
+          .insert({ user_id: userId, quest_id: quest.id, external_ref: externalRef, action });
+        if (ledgerErr && ledgerErr.code === '23505') {
+          // Duplicate — this externalRef already credited this quest. Skip.
+          skippedQuestIds.add(quest.id);
+        } else if (ledgerErr) {
+          console.error('Failed to write quest_progress_events', { error: ledgerErr, quest_id: quest.id, requestId });
+          // Best-effort: proceed without the guard rather than drop the whole request.
+        }
+      }
+    }
 
     for (const quest of relevantQuests) {
+      if (skippedQuestIds.has(quest.id)) continue;
       let progress = progressByQuestId.get(quest.id);
 
       // Auto-start: create progress row if user hasn't started this quest

@@ -1,9 +1,10 @@
 import { supabase } from '@/integrations/supabase/client';
 
-const SUPABASE_URL =
-  import.meta.env.PUBLIC_SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY =
-  import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+// Astro 6 only exposes PUBLIC_-prefixed envs to client bundles, so any
+// fallback to VITE_* here would resolve to undefined at runtime. Keep it
+// PUBLIC_-only. Vercel prod has both PUBLIC_SUPABASE_URL + ANON_KEY set.
+const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
 const FUNCTIONS_BASE = SUPABASE_URL
   ? new URL('functions/v1', SUPABASE_URL).href

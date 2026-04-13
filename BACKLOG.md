@@ -119,7 +119,7 @@ Priority tiers:
 
 ### Brand polish (🧠)
 
-- [ ] 🧠 Brand pages visual identity — content improved, visuals still generic for some brands
+- [ ] 🧠+✍️ Brand pages visual identity — current monogram fallback (gradient + Space Grotesk initials) is the right "cheap" treatment. Upgrade path needs real SVG logos (not in `public/brand-logos/`). Track as Cowork asset sourcing.
 - [ ] 🧠 Exit-intent offer on PDP/cart (low-friction; not a persistent blocker)
 
 ---

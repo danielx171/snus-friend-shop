@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import CardAddToCart from '@/components/react/CardAddToCart';
+import WishlistHeartButton from '@/components/react/WishlistHeartButton';
 import { brandColors, strengthColors, strengthLabels, defaultBrandColor, flavorColors, defaultFlavorColor } from '@/data/brand-colors';
 
 interface Props {
@@ -81,6 +82,15 @@ const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comp
   class="product-card group relative flex min-h-[48px] flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1"
   style={`background: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%); box-shadow: 0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);`}
 >
+  {/* Wishlist heart — top-right, hydrates on scroll-in */}
+  <div class="absolute top-2.5 right-2.5 z-10">
+    <WishlistHeartButton
+      client:visible
+      slug={slug}
+      name={name}
+    />
+  </div>
+
   {/* Badges — pill style with glow */}
   <div class="absolute top-2.5 left-2.5 z-10 flex flex-wrap gap-1">
     {isOutOfStock && (

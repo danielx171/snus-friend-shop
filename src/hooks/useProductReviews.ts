@@ -181,10 +181,15 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
       });
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['product_reviews', productId] });
-      // Fire-and-forget quest + avatar progress after review
-      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review_submitted' } }).catch(() => {});
+      // Fire-and-forget quest + avatar progress after review.
+      // externalRef = product_id → ledger blocks repeat credit if the user
+      // edits/resubmits the same review.
+      apiFetch('update-quest-progress', {
+        method: 'POST',
+        body: { action: 'review_submitted', externalRef: variables.product_id },
+      }).catch(() => {});
       apiFetch('check-avatar-unlocks', { method: 'POST' }).catch(() => {});
     },
   });
