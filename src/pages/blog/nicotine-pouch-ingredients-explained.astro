@@ -4,6 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
 ---
 
 <Shop
@@ -171,7 +174,7 @@ import { tenant } from '@/config/tenant';
         <li>Care about natural ingredients? Try HELWIT, Kelly White, or Lundgrens</li>
         <li>New to pouches? Visit our <a href="/beginners">beginner's guide</a> for personalised recommendations</li>
       </ul>
-      <p style="margin-bottom: 0;">All <a href="/nicotine-pouches">700+ products</a> ship free across the EU on orders over €29.</p>
+      <p style="margin-bottom: 0;">All <a href="/nicotine-pouches">{facts.productCountLabel} products</a> ship free across the EU on orders over €29.</p>
     </div>
 
     <h2>Related Reading</h2>

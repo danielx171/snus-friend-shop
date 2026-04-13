@@ -4,7 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
+const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
 const title = 'How Long Do Nicotine Pouches Last? Full Guide';
 const description = 'A nicotine pouch typically lasts 20-40 minutes per use. We cover usage time, shelf life, storage tips, and how format and strength affect duration.';
@@ -179,12 +181,12 @@ const description = 'A nicotine pouch typically lasts 20-40 minutes per use. We 
 
         <h2>Find Your Perfect Pouch</h2>
         <p>
-          Based on our analysis of duration data across 700+ products, slim-format pouches from brands like Nordic Spirit and Skruf consistently outperform mini formats in active usage time — averaging 35–40 minutes versus 20–25 minutes for mini variants.
+          Based on our analysis of duration data across {facts.productCountLabel} products, slim-format pouches from brands like Nordic Spirit and Skruf consistently outperform mini formats in active usage time — averaging 35–40 minutes versus 20–25 minutes for mini variants.
         </p>
         <p>
           Now you know how long nicotine pouches last and what affects the experience, it is time
           to find the right product for you. Browse our
-          <a href="/nicotine-pouches">full range of over 700 products</a>, take
+          <a href="/nicotine-pouches">full range of {facts.productCountLabel} products</a>, take
           the <a href="/flavor-quiz">flavour quiz</a> for a personalised recommendation, or
           check our <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginner picks</a> if
           you are just getting started.

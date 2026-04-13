@@ -3,9 +3,11 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
+const facts = await getEditorialFacts();
 const title = 'Erik Lindqvist — Editor & Lead Product Reviewer, SnusFriend';
-const description = 'Erik Lindqvist is the Editor at SnusFriend, specializing in independent nicotine pouch reviews with 4+ years of product testing expertise across 500+ products and 55+ brands.';
+const description = `Erik Lindqvist is the Editor at SnusFriend, specializing in independent nicotine pouch reviews with 4+ years of product testing expertise across 500+ products and ${facts.brandCountLabel}+ brands.`;
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -57,7 +59,7 @@ const personSchema = {
         </p>
 
         <p>
-          Since launching his review practice in 2022, Erik has personally tested over 500 nicotine pouch products across 55+ brands, combining blind taste testing with rigorous cross-referencing of manufacturer specifications and independent lab data. His editorial approach emphasizes transparency and evidence-based assessment in an industry where traditional advertising restrictions mean consumers depend heavily on independent reviewers to make informed choices.
+          Since launching his review practice in 2022, Erik has personally tested over 500 nicotine pouch products across {facts.brandCountLabel}+ brands, combining blind taste testing with rigorous cross-referencing of manufacturer specifications and independent lab data. His editorial approach emphasizes transparency and evidence-based assessment in an industry where traditional advertising restrictions mean consumers depend heavily on independent reviewers to make informed choices.
         </p>
 
         <p>
@@ -106,7 +108,7 @@ const personSchema = {
 
         <ul>
           <li>4+ years covering the European nicotine pouch market (since 2022)</li>
-          <li>500+ products personally tested across 55+ brands</li>
+          <li>500+ products personally tested across {facts.brandCountLabel}+ brands</li>
           <li>Scandinavia-based — direct proximity to market innovation and regulatory environment</li>
           <li>Master's in Public Health Communication, Uppsala University</li>
           <li>Health content fact-checked against peer-reviewed PubMed research, NHS guidance, and WHO reports</li>

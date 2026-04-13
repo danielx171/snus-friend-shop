@@ -4,6 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { countries } from '@/data/countries';
 import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
 
 export async function getStaticPaths() {
   return countries.map((c) => ({ params: { slug: c.slug }, props: { country: c } }));
@@ -14,6 +15,19 @@ const allBrands = await getCollection('brands');
 const popularBrands = country.popularBrands
   .map((slug) => allBrands.find((b) => b.id === slug))
   .filter(Boolean);
+
+// Replace editorial-fact tokens ({{productCount}}, {{productCountLabel}},
+// {{brandCount}}, {{brandCountLabel}}) in country prose with live values
+// so catalog growth does not drift against blog/country copy.
+const facts = await getEditorialFacts();
+const tokenMap: Record<string, string> = {
+  productCount: String(facts.productCount),
+  productCountLabel: facts.productCountLabel,
+  brandCount: String(facts.brandCount),
+  brandCountLabel: facts.brandCountLabel,
+};
+const withFacts = (s: string | undefined): string | undefined =>
+  s?.replace(/\{\{(productCount|productCountLabel|brandCount|brandCountLabel)\}\}/g, (_, k) => tokenMap[k]);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -50,7 +64,7 @@ const jsonLd = {
     <div class="space-y-8 text-base leading-relaxed text-muted-foreground max-w-3xl">
 
       <!-- Intro paragraph (enriched if available) -->
-      <p class="text-lg">{country.enrichedIntro ?? country.intro}</p>
+      <p class="text-lg">{withFacts(country.enrichedIntro ?? country.intro)}</p>
 
       <!-- Legal Status -->
       <div>
@@ -75,7 +89,7 @@ const jsonLd = {
       {country.marketContext && (
         <div>
           <h2 class="text-xl font-semibold text-foreground mb-3">{country.marketContextHeading ?? `The ${country.name} Market`}</h2>
-          <p>{country.marketContext}</p>
+          <p>{withFacts(country.marketContext)}</p>
         </div>
       )}
 
@@ -95,7 +109,7 @@ const jsonLd = {
       {country.whySnusFriend && (
         <div class="rounded-xl border border-primary/20 bg-primary/5 p-6">
           <h2 class="text-xl font-semibold text-foreground mb-3">Why Order from SnusFriend?</h2>
-          <p>{country.whySnusFriend}</p>
+          <p>{withFacts(country.whySnusFriend)}</p>
         </div>
       )}
 
@@ -109,7 +123,7 @@ const jsonLd = {
       {country.buyingTips && (
         <div>
           <h2 class="text-xl font-semibold text-foreground mb-3">Buying Tips for {country.name}</h2>
-          <p>{country.buyingTips}</p>
+          <p>{withFacts(country.buyingTips)}</p>
         </div>
       )}
 
