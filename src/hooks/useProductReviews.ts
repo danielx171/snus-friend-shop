@@ -185,30 +185,13 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
       queryClient.invalidateQueries({ queryKey: ['product_reviews', productId] });
 
       // 50-pt review reward — once per user per product.
-      // Ledger UNIQUE (user_id, product_id) = idempotency guard. If RLS blocks
-      // the client insert (no policies on review_rewards, service_role only),
-      // the insert silently fails and no points are awarded — this is by design
-      // until a dedicated edge function is added. 23505 = duplicate = already awarded.
-      try {
-        const { error: ledgerErr } = await supabase
-          .from('review_rewards')
-          .insert({ user_id: variables.user_id, product_id: variables.product_id, points: 50 });
-        if (!ledgerErr) {
-          await supabase.rpc('increment_points_balance', {
-            p_user_id: variables.user_id,
-            p_points: 50,
-          });
-          await supabase.from('points_transactions').insert({
-            user_id: variables.user_id,
-            points: 50,
-            reason: `review_reward:${variables.product_id}`,
-          });
-        } else if (ledgerErr.code !== '23505') {
-          console.warn('[review-reward] ledger insert failed', ledgerErr);
-        }
-      } catch (err) {
-        console.warn('[review-reward] error', err);
-      }
+      // award-review-reward edge fn does the ledger insert + balance increment
+      // + transaction record under service_role. Returns { awarded: true|false }.
+      // Fire-and-forget; the review itself is already saved.
+      apiFetch('award-review-reward', {
+        method: 'POST',
+        body: { product_id: variables.product_id },
+      }).catch((err) => console.warn('[review-reward] award failed', err));
 
       // Fire-and-forget quest + avatar progress after review.
       // externalRef = product_id → ledger blocks repeat credit if the user

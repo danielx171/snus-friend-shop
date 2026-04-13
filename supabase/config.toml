@@ -95,3 +95,6 @@ verify_jwt = true
 
 [functions.validate-discount]
 verify_jwt = false
+
+[functions.award-review-reward]
+verify_jwt = false
