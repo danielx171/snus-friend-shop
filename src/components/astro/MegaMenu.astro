@@ -328,11 +328,12 @@ const getBrandColour = (brandSlug: string): string => {
     );
 
     menuTriggers.forEach((trigger) => {
-      trigger.addEventListener('keydown', (e: KeyboardEvent) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
+      trigger.addEventListener('keydown', (e) => {
+        const ke = e as KeyboardEvent;
+        if (ke.key === 'Enter' || ke.key === ' ') {
+          ke.preventDefault();
           trigger.parentElement?.classList.toggle('active');
-        } else if (e.key === 'Escape') {
+        } else if (ke.key === 'Escape') {
           trigger.parentElement?.classList.remove('active');
         }
       });

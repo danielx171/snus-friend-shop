@@ -86,7 +86,7 @@ export function useSocialShare(userId: string | null) {
         await navigator.clipboard.writeText(shareUrl);
       } else {
         // Try Web Share API on mobile, fall back to popup
-        if (platform !== 'copy_link' && navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+        if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
           try {
             await navigator.share({ title: shareText, url: shareUrl });
           } catch {

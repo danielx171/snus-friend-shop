@@ -60,9 +60,9 @@ function getSupabase() {
 
 // ── Template primitives (plain JSX-like VDOM — satori accepts this shape) ──
 
-type Node = { type: string; props: Record<string, any>; children?: Node[] | string };
+type Node = { type: string; props: Record<string, unknown>; children?: Node[] | string };
 
-function el(type: string, props: Record<string, any> = {}, children?: Node[] | Node | string): Node {
+function el(type: string, props: Record<string, unknown> = {}, children?: Node[] | Node | string): Node {
   return {
     type,
     props,
@@ -71,9 +71,9 @@ function el(type: string, props: Record<string, any> = {}, children?: Node[] | N
 }
 
 // Satori wants React-like elements. We build them as plain objects the library accepts.
-type SatoriEl = any;
-function e(type: string, props: Record<string, any>, ...children: any[]): SatoriEl {
-  return { type, props: { ...props, children: children.length === 1 ? children[0] : children } };
+type SatoriEl = Parameters<typeof satori>[0];
+function e(type: string, props: Record<string, unknown>, ...children: unknown[]): SatoriEl {
+  return { type, props: { ...props, children: children.length === 1 ? children[0] : children } } as SatoriEl;
 }
 
 /** Common frame: dark forest background, ambient glow, SnusFriend wordmark top-right. */
@@ -224,7 +224,7 @@ async function render(elDef: SatoriEl, outPath: string) {
   const svg = await satori(elDef, {
     width: 1200,
     height: 630,
-    fonts: FONTS as any,
+    fonts: FONTS as Parameters<typeof satori>[1]['fonts'],
   });
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng();
   writeFileSync(outPath, png);

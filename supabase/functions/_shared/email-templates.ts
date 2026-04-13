@@ -2,19 +2,14 @@
 // Reusable email templates for SnusFriend transactional emails.
 // Import from other edge functions to compose emails without going through send-email.
 
+// @ts-expect-error — Deno relative .ts import
+import { escapeHtml } from './escape-html.ts';
+
 const BRAND_COLOR = '#a3e635'; // lime-400
 const BG_COLOR = '#121620'; // dark navy
 const TEXT_COLOR = '#e2e8f0';
 const MUTED_COLOR = '#94a3b8';
 const CARD_BG = '#1e293b';
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
 
 function baseTemplate(content: string): string {
   return `<!DOCTYPE html>

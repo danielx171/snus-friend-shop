@@ -5,6 +5,9 @@ declare const Deno: {
   serve: (handler: (req: Request) => Response | Promise<Response>) => void;
 };
 
+// @ts-expect-error — Deno relative .ts import
+import { escapeHtml } from "../_shared/escape-html.ts";
+
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
@@ -91,14 +94,6 @@ function wrapInLayout(bodyHtml: string): string {
 /* ------------------------------------------------------------------ */
 /*  Templates                                                          */
 /* ------------------------------------------------------------------ */
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 function renderOrderConfirmed(data: Record<string, unknown>): string {
   const orderId = escapeHtml(String(data.orderId ?? ""));

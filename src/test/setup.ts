@@ -20,7 +20,7 @@ Object.defineProperty(window, "localStorage", {
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: (query: string) => ({
+  value: (query: string): MediaQueryList => ({
     matches: false,
     media: query,
     onchange: null,
@@ -28,6 +28,6 @@ Object.defineProperty(window, "matchMedia", {
     removeListener: () => {},
     addEventListener: () => {},
     removeEventListener: () => {},
-    dispatchEvent: () => {},
-  }),
+    dispatchEvent: () => true,
+  }) as unknown as MediaQueryList,
 });

@@ -9,10 +9,10 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 ## Current State
 
 - **Products:** 708 active, 55 brands
-- **Blog:** 80 articles, 87 registry entries (includes redirected slugs)
-- **Quick Answers:** 80/80 articles ✅
-- **PAA blocks:** 80/80 articles ✅
-- **BlogPosting + FAQPage schema:** 80/80 articles + brand pages + catalog + rewards
+- **Blog:** 81 articles (registry in sync at 81 slugs)
+- **Quick Answers:** 81/81 articles ✅
+- **PAA blocks:** 81/81 articles ✅
+- **BlogPosting + FAQPage schema:** 81/81 articles + brand pages + catalog + rewards
 - **Tests:** 54 passing (cart, email regex, checkout/NYE line items, auth schemas, components, hooks)
 - **Performance:** `/nicotine-pouches` 92, PDPs 94, homepage 82 (LCP ~4s — next optimization target)
 - **OG images:** Satori pipeline generating per-page PNGs; blog posts auto-resolve to `/og/article-{slug}.png`
@@ -61,7 +61,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 ## Completed in Apr 8–12 Launch Polish Sprint
 
 ### SEO / Schema
-- [x] BlogPosting + FAQPage schema on all 80 articles
+- [x] BlogPosting + FAQPage schema on all 81 articles
 - [x] Quick Answer blocks: 38 → 80/80
 - [x] PAA blocks: 68 → 80/80
 - [x] Product aggregateRating + mpn on all 708 products

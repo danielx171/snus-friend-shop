@@ -37,12 +37,12 @@ export function useReviewSummary(productId: string | undefined, reviewCount: num
         const result = await apiFetch('generate-review-summary', {
           method: 'POST',
           body: { product_id: productId },
-        });
+        }) as { summary?: string; generated_at?: string };
 
         if (result.summary) {
           return {
             summary_text: result.summary,
-            generated_at: result.generated_at,
+            generated_at: result.generated_at ?? new Date().toISOString(),
           };
         }
       } catch {

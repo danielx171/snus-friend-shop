@@ -16,10 +16,10 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.ops-users]
-verify_jwt = false
+verify_jwt = true
 
 [functions.ops-set-role]
-verify_jwt = false
+verify_jwt = true
 
 [functions.push-order-to-nyehandel]
 verify_jwt = true
@@ -31,7 +31,7 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.ops-webhook-inbox]
-verify_jwt = false
+verify_jwt = true
 
 [functions.create-nyehandel-checkout]
 verify_jwt = false

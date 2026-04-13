@@ -1,7 +1,12 @@
 import { supabase } from '@/integrations/supabase/client';
 
-const FUNCTIONS_BASE = import.meta.env.VITE_SUPABASE_URL
-  ? new URL('functions/v1', import.meta.env.VITE_SUPABASE_URL).href
+const SUPABASE_URL =
+  import.meta.env.PUBLIC_SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY =
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+const FUNCTIONS_BASE = SUPABASE_URL
+  ? new URL('functions/v1', SUPABASE_URL).href
   : '';
 
 interface ApiOptions {
@@ -59,7 +64,7 @@ export async function apiFetch<T = unknown>(
   }
 
   const headers: Record<string, string> = {
-    apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+    apikey: SUPABASE_ANON_KEY,
     'Content-Type': 'application/json',
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     ...(opts?.headers ?? {}),

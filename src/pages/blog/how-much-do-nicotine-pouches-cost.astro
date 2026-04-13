@@ -11,13 +11,15 @@ const allProducts = await getCollection('products');
 
 // Filter out inactive products and compute real pricing statistics
 const activeProducts = allProducts
-  .filter(p => p.stock > 0 && p.prices && Object.keys(p.prices).length > 0)
+  .filter(p => p.data.stock > 0 && p.data.prices && Object.keys(p.data.prices).length > 0)
   .map(p => {
-    const packSizes = Object.keys(p.prices);
-    const singleCanPrice = p.prices['1'] || p.prices['pack1'] || Math.min(...Object.values(p.prices as Record<string, number>));
-    const pricePerPouch = p.portionsPerCan > 0 ? singleCanPrice / p.portionsPerCan : 0;
+    const d = p.data;
+    const prices = d.prices as Record<string, number>;
+    const singleCanPrice = prices['1'] || prices.pack1 || Math.min(...Object.values(prices));
+    const portions = d.portionsPerCan ?? 0;
+    const pricePerPouch = portions > 0 ? singleCanPrice / portions : 0;
     return {
-      ...p,
+      ...d,
       singleCanPrice,
       pricePerPouch,
     };

@@ -152,7 +152,7 @@ export default function FlavorQuizIsland({ products }: FlavorQuizIslandProps) {
   }, []);
 
   const strengthOption = STRENGTH_OPTIONS.find((o) => o.key === selectedStrength);
-  const allowedStrengths = strengthOption?.strengths ?? [];
+  const allowedStrengths: readonly string[] = strengthOption?.strengths ?? [];
 
   const results = useMemo(() => {
     if (step !== 2) return [];

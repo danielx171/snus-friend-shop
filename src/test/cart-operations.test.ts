@@ -41,7 +41,7 @@ function makeProduct(id: string, pack1 = 5): Product {
     brand: 'Test',
     ...baseProduct,
     prices: { pack1, pack3: pack1 * 3 * 0.95, pack5: pack1 * 5 * 0.9, pack10: pack1 * 10 * 0.85, pack30: pack1 * 30 * 0.8 },
-  } as Product;
+  } as unknown as Product;
 }
 
 describe('cart operations', () => {

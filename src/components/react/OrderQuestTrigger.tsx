@@ -6,7 +6,7 @@ import { apiFetch } from '@/lib/api';
  * when mounted on the order confirmation page. Fires once per order
  * using sessionStorage to survive page refreshes.
  */
-export default function OrderQuestTrigger({ orderId }: { orderId: string }) {
+export default function OrderQuestTrigger({ orderId }: { orderId: string }): null {
   const fired = useRef(false);
 
   useEffect(() => {

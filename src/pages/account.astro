@@ -87,7 +87,7 @@ function statusColor(status: string): string {
 // Tier calculation
 const balance = pointsBalance?.balance ?? 0;
 const lifetime = pointsBalance?.lifetime_earned ?? 0;
-function getTier(pts: number) {
+function getTier(pts: number): { name: string; next: string | null; threshold: number } {
   const t = rewards.tiers;
   if (pts >= t[4].threshold) return { name: t[4].name, next: null, threshold: t[4].threshold };
   if (pts >= t[3].threshold) return { name: t[3].name, next: t[4].name, threshold: t[4].threshold };
@@ -722,7 +722,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
               descriptionKey: '',
               image: '',
               ratings: 0,
-              badgeKeys: [],
+              badgeKeys: [] as string[],
               prices: { [packSize]: price, pack1: price, pack3: 0, pack5: 0, pack10: 0, pack30: 0 },
               manufacturer: '',
               stock: 99,

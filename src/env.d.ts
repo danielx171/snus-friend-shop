@@ -34,14 +34,15 @@ declare global {
   interface Window {
     __pwaInstallPromptEvent: BeforeInstallPromptEvent | null;
     __AUTH_STATE__: { id: string; email: string } | null;
+    __validThemes: string[];
   }
-}
 
-// Augment Astro locals with auth data
-declare namespace App {
-  interface Locals {
-    user: import('@supabase/supabase-js').User | null;
-    supabase: import('@supabase/supabase-js').SupabaseClient | null;
+  // Augment Astro locals with auth data
+  namespace App {
+    interface Locals {
+      user: import('@supabase/supabase-js').User | null;
+      supabase: import('@supabase/supabase-js').SupabaseClient | null;
+    }
   }
 }
 

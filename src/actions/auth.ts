@@ -68,12 +68,8 @@ export const auth = {
       email: z.string().email('Please enter a valid email address'),
       password: z.string().min(8, 'Password must be at least 8 characters'),
       fullName: z.string().min(1, 'Full name is required'),
-      ageVerified: z.literal('on', {
-        errorMap: () => ({ message: 'You must confirm you are 18 or older' }),
-      }),
-      termsAccepted: z.literal('on', {
-        errorMap: () => ({ message: 'You must accept the terms and conditions' }),
-      }),
+      ageVerified: z.literal('on', { message: 'You must confirm you are 18 or older' }),
+      termsAccepted: z.literal('on', { message: 'You must accept the terms and conditions' }),
     }),
     handler: async (input, ctx) => {
       const supabase = createSupabaseFromContext(ctx);

@@ -1,4 +1,5 @@
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { escapeHtml } from "../_shared/escape-html.ts";
 
 declare const Deno: {
   env: { get: (key: string) => string | undefined };
@@ -49,14 +50,6 @@ function jsonResponse(
     status,
     headers: { ...cors, "Content-Type": "application/json" },
   });
-}
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }
 
 /* ------------------------------------------------------------------ */

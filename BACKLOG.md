@@ -96,7 +96,7 @@ Priority tiers:
 
 ### Observability (🧠)
 
-- [ ] 🧠 Sentry sweep — resolve fresh `TypeError: Importing a module script failed` + `No QueryClient set` errors; tag deploys with release
+- [ ] 🧠 Sentry sweep — Apr 13 only 1 unresolved issue left (`SNUSFRIENDS-A` React hydration "early update" warning, 1 user, 1 event); investigate which island mutates state pre-hydration. Tag future deploys with release version.
 - [ ] 🧠 Sync `supabase/config.toml` JWT settings — 3 ops functions (`ops-users`, `ops-set-role`, `ops-webhook-inbox`) marked false in config but deployed true
 
 ### Bundle + perf (🧠)
@@ -110,7 +110,7 @@ Priority tiers:
 - [ ] 🧠 `makeToggle` helper dedup — currently duplicated in `register.astro` + `update-password.astro`
 - [ ] 🧠 `escapeHtml` dedup — reimplemented in 3 edge functions (`email-templates.ts`, `send-email`, `contact-form`)
 - [ ] 🧠 `src/lib/api.ts` — migrate `VITE_*` envs → `PUBLIC_*` (Astro 6 convention)
-- [ ] 🧠 Blog count drift — docs say 80, `src/pages/blog/` has 81, `blog-registry.ts` has 82 entries; reconcile to one source
+- [x] 🧠 Blog count drift — reconciled: 81 articles, 81 registry slugs (actually in sync; old docs were stale)
 
 ### Type + lint (🧠)
 

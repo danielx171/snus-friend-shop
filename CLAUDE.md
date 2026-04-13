@@ -151,7 +151,7 @@ Conflict patterns:
 - Steps 1–52 + 54–56: ✅ Done. Step 53 (password strength meter + confetti reduced-motion) still open. Launch Polish Sprint (Apr 8–12) shipped in full. See `CURRENT_PRIORITIES.md` for the live punch list.
 - Version: 1.6.1 — Astro 6, React islands, nanostores, Tailwind v4
 - Products: 708 active, 55 brands (all with English descriptions + images)
-- Blog: 80 articles, 87 registry entries. Quick Answers 80/80, PAA 80/80, BlogPosting + FAQPage schema 80/80.
+- Blog: 81 articles, registry in sync at 81 slugs. Quick Answers 81/81, PAA 81/81, BlogPosting + FAQPage schema 81/81.
 - Sitemap: 1,152 pages indexed by Pagefind
 - Performance: `/nicotine-pouches` 92, PDPs 94, homepage 82 (LCP ~4s — next target)
 - Lighthouse: SEO 100, Accessibility 93–100, Best Practices 100

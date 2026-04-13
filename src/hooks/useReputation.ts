@@ -84,7 +84,7 @@ export function useReputation(userId: string | null) {
         level: row.level,
         levelName: row.level_name,
         badgeColor: row.badge_color,
-        perks: Array.isArray(row.perks) ? row.perks : [],
+        perks: (Array.isArray(row.perks) ? row.perks : []) as string[],
         lifetimeEarned,
         nextLevel: row.next_level ?? null,
         nextLevelName: row.next_level_name ?? null,
