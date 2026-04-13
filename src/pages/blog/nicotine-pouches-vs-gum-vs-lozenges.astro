@@ -4,6 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getBlogLastmod } from '@/data/blog-registry';
+
+const dateModified = getBlogLastmod('nicotine-pouches-vs-gum-vs-lozenges');
 ---
 
 <Shop
@@ -19,9 +22,9 @@ import { tenant } from '@/config/tenant';
     "description": "Nicotine pouches, gum, lozenges, and patches compared. Cost, speed, flavour, discretion, and side effects — find the right nicotine format for you.",
     "url": "https://snusfriends.com/blog/nicotine-pouches-vs-gum-vs-lozenges",
     "datePublished": "2026-03-28",
-    "dateModified": "2026-03-28",
+    ...(dateModified && { dateModified }),
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": { "@type": "Organization", "name": "SnusFriend" }
+    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } }
   })} />
 
   <script type="application/ld+json" set:html={JSON.stringify({

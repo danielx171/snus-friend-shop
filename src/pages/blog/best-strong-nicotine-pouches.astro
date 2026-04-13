@@ -26,7 +26,7 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
     "datePublished": "2026-03-28T00:00:00Z",
     "dateModified": "2026-03-28T00:00:00Z",
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/best-strong-nicotine-pouches" }
   })} />
 

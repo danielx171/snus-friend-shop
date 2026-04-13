@@ -4,8 +4,10 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getBlogLastmod } from '@/data/blog-registry';
 
 const publishDate = '2026-04-02';
+const dateModified = getBlogLastmod('nicotine-pouch-trends-new-brands-2026');
 const title = 'Nicotine Pouch Trends 2026: New Brands & Flavours';
 const description = '2026 nicotine pouch trends: KLAR bioceramic innovation, on! PLUS FDA approval, emerging flavours, and regulatory shifts reshaping the market.';
 ---
@@ -22,7 +24,7 @@ const description = '2026 nicotine pouch trends: KLAR bioceramic innovation, on!
     headline: title,
     description,
     datePublished: publishDate,
-    dateModified: publishDate,
+    ...(dateModified && { dateModified }),
     author: { '@type': 'Person', name: 'Erik Lindqvist', url: 'https://snusfriends.com/authors/erik-lindqvist', sameAs: ['https://www.linkedin.com/in/erik-lindqvist-snusfriend/', 'https://x.com/ErikAtSnusFriend'] },
     publisher: { '@type': 'Organization', name: tenant.name, url: 'https://snusfriends.com' },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://snusfriends.com/blog/nicotine-pouch-trends-new-brands-2026' },

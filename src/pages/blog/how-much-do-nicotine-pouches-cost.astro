@@ -86,10 +86,10 @@ const schemaBlogPosting = JSON.stringify({
   "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
   "publisher": {
     "@type": "Organization",
-    "name": "SnusFriend",
+    "name": tenant.name,
     "logo": {
       "@type": "ImageObject",
-      "url": "https://snusfriends.com/logo.png"
+      "url": `https://${tenant.domain}/favicon.png`
     }
   },
   "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/how-much-do-nicotine-pouches-cost" }

@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { getBlogLastmod } from '@/data/blog-registry';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -26,6 +27,7 @@ const fumiGingerSlim = find('fumi-ginger-slim-11mg');
 const fumiStrawberrySlim = find('fumi-strawberry-slim-8mg');
 
 const publishDate = '2026-04-08';
+const dateModified = getBlogLastmod('klar-vs-fumi-2026') ?? publishDate;
 const title = 'KLAR vs FUMI: Scandinavian Pouches Compared (2026)';
 const description = 'KLAR vs FUMI compared head-to-head. Flavor, strength, SERATEK technology, price, and format — which Scandinavian craft pouch brand wins?';
 ---
@@ -301,7 +303,7 @@ const description = 'KLAR vs FUMI compared head-to-head. Flavor, strength, SERAT
     "headline": title,
     "description": description,
     "datePublished": publishDate,
-    "dateModified": publishDate,
+    "dateModified": dateModified,
     "author": {
       "@type": "Person",
       "name": "Erik Lindqvist",
