@@ -512,6 +512,12 @@ export type Database = {
         Update: { id?: string; user_id?: string; order_id?: string | null; points?: number; reason?: string; created_at?: string }
         Relationships: []
       }
+      review_rewards: {
+        Row: { id: string; user_id: string; product_id: string; points: number; created_at: string }
+        Insert: { id?: string; user_id: string; product_id: string; points?: number; created_at?: string }
+        Update: { id?: string; user_id?: string; product_id?: string; points?: number; created_at?: string }
+        Relationships: []
+      }
       subscriptions: {
         Row: { id: string; user_id: string; product_slug: string; product_name: string; pack_size: string; quantity: number; interval: string; discount_pct: number; status: string; next_order_at: string; last_order_at: string | null; created_at: string; updated_at: string }
         Insert: { id?: string; user_id: string; product_slug: string; product_name?: string; pack_size?: string; quantity?: number; interval: string; discount_pct?: number; status?: string; next_order_at: string; last_order_at?: string | null; created_at?: string; updated_at?: string }
@@ -1890,6 +1896,13 @@ export type Database = {
       flag_review: {
         Args: {
           review_id: string
+        }
+        Returns: undefined
+      }
+      increment_points_balance: {
+        Args: {
+          p_user_id: string
+          p_points: number
         }
         Returns: undefined
       }

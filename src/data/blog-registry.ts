@@ -7,6 +7,8 @@ export interface BlogArticle {
   date?: string;
   /** Last content update. Preferred over `date` for sitemap lastmod + JSON-LD dateModified. */
   modifiedDate?: string;
+  /** Est. read time, e.g. "6 min read". Shown on cards. Falls back to a tag-based heuristic. */
+  readTime?: string;
 }
 
 /**
@@ -41,6 +43,20 @@ export function getBlogLastmod(slug: string): string | undefined {
   if (entry?.modifiedDate) return entry.modifiedDate;
   if (APR_10_SPRINT_SLUGS.has(slug)) return '2026-04-10';
   return entry?.date;
+}
+
+/**
+ * Default read-time estimate. Uses an explicit `readTime` field if set,
+ * otherwise falls back to a tag-based heuristic:
+ *   FAQ → 3 min, Data Report / Guide → 9 min, everything else → 6 min.
+ * Called at build time from blog/index.astro to render a small muted line on cards.
+ */
+export function getReadTime(slug: string): string {
+  const entry = blogArticles.find((a) => a.slug === slug);
+  if (entry?.readTime) return entry.readTime;
+  if (entry?.tag === 'FAQ') return '3 min read';
+  if (entry?.tag === 'Data Report' || entry?.tag === 'Guide') return '9 min read';
+  return '6 min read';
 }
 
 export const blogArticles: BlogArticle[] = [

@@ -3,7 +3,7 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
-import { blogArticles } from '@/data/blog-registry';
+import { blogArticles, getReadTime } from '@/data/blog-registry';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -137,6 +137,7 @@ const blogJsonLd = {
                 </div>
                 <div class="p-6 flex flex-col flex-1 gap-2">
                   <h2 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors leading-snug">{article.title}</h2>
+                  <span class="text-xs text-muted-foreground">{getReadTime(article.slug)}</span>
                   <p class="text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-3">
                     {article.excerpt}
                   </p>
@@ -189,6 +190,7 @@ const blogJsonLd = {
                   </div>
                   <div class="p-5 flex flex-col flex-1 gap-1.5">
                     <h3 class="text-base font-semibold text-foreground group-hover:text-primary transition-colors leading-snug">{article.title}</h3>
+                    <span class="text-xs text-muted-foreground">{getReadTime(article.slug)}</span>
                     <p class="text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-2">
                       {article.excerpt}
                     </p>

@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import CardAddToCart from '@/components/react/CardAddToCart';
 import WishlistHeartButton from '@/components/react/WishlistHeartButton';
+import CompareToggleButton from '@/components/react/CompareToggleButton';
 import { brandColors, strengthColors, strengthLabels, defaultBrandColor, flavorColors, defaultFlavorColor } from '@/data/brand-colors';
 
 interface Props {
@@ -232,6 +233,11 @@ const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comp
       {perPouchPrice && (
         <span class="text-[10px] text-muted-foreground">&euro;{perPouchPrice}/pouch &middot; {portionsPerCan}pcs</span>
       )}
+    </div>
+
+    {/* Compare toggle — small text pill above Add-to-Cart, doesn't crowd the wishlist heart */}
+    <div class="pt-1">
+      <CompareToggleButton client:visible slug={slug} name={name} />
     </div>
 
     <CardAddToCart
