@@ -5,11 +5,11 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import SearchIsland from '@/components/react/SearchIsland';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
-import { ensureProductsJson } from '@/lib/product-json';
+import { writeProductsJson } from '@/lib/product-json';
 
 const query = Astro.url.searchParams.get('q')?.trim() ?? '';
 const products = await getCollection('products');
-ensureProductsJson(products);
+writeProductsJson(products);
 ---
 
 <Shop

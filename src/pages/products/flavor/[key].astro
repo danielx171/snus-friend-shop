@@ -4,7 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
-import { ensureProductsJson, slimProductData, writeProductsJson } from '@/lib/product-json';
+import { slimProductData, writeProductsJson } from '@/lib/product-json';
 
 const FLAVOR_META: Record<string, { label: string; h1: string; desc: string; intro: string }> = {
   'mint': {

@@ -40,16 +40,6 @@ export function slimProductData(products: Array<{ id: string; data: any }>) {
   });
 }
 
-/** Write slim products.json to public/data/ if it doesn't exist yet. */
-export function ensureProductsJson(products: Array<{ id: string; data: any }>) {
-  const outDir = path.resolve('./public/data');
-  fs.mkdirSync(outDir, { recursive: true });
-  const jsonPath = path.join(outDir, 'products.json');
-  if (!fs.existsSync(jsonPath)) {
-    fs.writeFileSync(jsonPath, JSON.stringify(slimProductData(products)));
-  }
-}
-
 /** Write slim products.json to public/data/ (always overwrite). */
 export function writeProductsJson(products: Array<{ id: string; data: any }>) {
   const outDir = path.resolve('./public/data');

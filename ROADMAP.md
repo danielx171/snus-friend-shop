@@ -1,6 +1,6 @@
 # SnusFriend Roadmap
 
-> Migrated from Vite SPA to Astro 6 (March 2026). Steps 1-52 + 54-56 done; Step 53 (password strength meter + confetti reduced-motion) still open.
+> Migrated from Vite SPA to Astro 6 (March 2026). Steps 1-56 done.
 > Original checkout migrated Shopify → Nyehandel (Steps 25-40). Shopify fully removed.
 > Launch Polish Sprint (Apr 8-12) complete: all waves shipped. See `CURRENT_PRIORITIES.md` for the active punch list.
 
@@ -112,7 +112,7 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 ### Design Polish
 - [x] Step 51: Establish flagship brand color across all 4 themes. Extract semantic colors to CSS vars.
 - [x] Step 52: FAQ search filter for 80+ questions. Improved blog empty state.
-- [ ] Step 53: Password strength meter on RegisterPage. Confetti prefers-reduced-motion check.
+- [x] Step 53: Password strength meter on RegisterPage. Confetti prefers-reduced-motion check.
 
 ### Tech Debt
 - [x] Step 54: Centralize SITE_URL config (3 pages → import from config/brand). Review photo upload limits already in place (3 photos, 5MB, jpeg/png/webp).

@@ -22,11 +22,12 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 
 ## Remaining
 
-### HIGH — Codex 🔴 blockers (prod safety)
+### HIGH — Schema debt + blocked on external deliverables
 
-- [ ] `supabase/functions/process-subscriptions/index.ts:128` — no idempotency guard on `subscription_delivery:${sub.id}:${date}`. Retries/concurrent runs can double-credit points.
-- [ ] `supabase/functions/manage-subscription/index.ts:102` — writes `discount_pct` but column is absent from migrations + `src/integrations/supabase/types.ts`. Will fail in prod.
-- [ ] `src/pages/register.astro:98` — resend form posts native form-data but `src/actions/auth.ts:120` expects JSON. Form is silently broken.
+- [x] **Subscriptions table migration** — retroactive migration added (`20260413000100_subscriptions.sql`) matching live DB state incl. RLS policies, CHECK constraints, partial index on active rows.
+- [x] **Shopify schema residue dropped** — `product_variants.shopify_variant_id` + `sku_mappings.shopify_sku` removed via `20260413000000_drop_shopify_residue.sql`; types.ts updated.
+- [x] **Phantom code cleanup** — orphan `QuestComplete.tsx` + `browsing-history.ts` deleted; `search.astro` switched to `writeProductsJson`; dead `ensureProductsJson` helper removed.
+- [x] 2026-04-12 Codex 🔴 items verified resolved: `process-subscriptions:128` idempotency (no double-credit — only ops_alert inserted, points flow through NYE order trigger), `manage-subscription:102` `discount_pct` (column present), `register.astro:98` resend (JSON fetch handler at line 351 matches `sendMagicLink` accept mode).
 
 ### HIGH — Blocked on external deliverables
 
@@ -44,7 +45,6 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
 - [ ] Brand page real logos (still placeholder for brands without `logoUrl` — monogram tile is the fallback)
 - [ ] `products.json` aggressive slim (236KB → ≤150KB target; would need gzip or dropping more fields)
-- [ ] Password strength meter on `/register` + confetti `prefers-reduced-motion` check (ROADMAP Step 53)
 - [ ] Blog read-time field on cards (registry schema supports it, not populated)
 
 ### LOW — Future
