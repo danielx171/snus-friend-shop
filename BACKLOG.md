@@ -78,7 +78,7 @@ Priority tiers:
 
 - [ ] 🧠 Homepage LCP 82 → 90+ (~4s → <2.5s) — profile element, defer non-critical islands
 - [ ] 🧠 Logged-in account performance — tab-aware SSR, pass known user/session into islands, defer referral widgets
-- [ ] 🧠 `products.json` slim 236KB → ≤150KB (gzip or field drops)
+- [x] 🧠 `products.json` slim — Apr 13 measured: 241KB uncompressed, **39.5KB gzipped**. Vercel serves gzipped by default. Shortening keys would save ~22KB gzipped but breaks 3 React consumers for invisible user benefit. Closed — target was based on uncompressed size, which doesn't matter over the wire.
 - [ ] ✍️ Homepage copy refresh — awaiting `cowork/content/homepage-copy-variations.md`
 - [ ] 🧠 Blog read-time field on cards (registry schema supports it, not populated)
 - [ ] 🧠 Blog product-card relevance audit — many articles now use cards; check intent match article-by-article
@@ -101,8 +101,8 @@ Priority tiers:
 
 ### Bundle + perf (🧠)
 
-- [ ] 🧠 `lucide-react` — 37MB installed, ~1% icons used; tree-shake or replace with `@iconify` / direct SVG imports
-- [ ] 🧠 `framer-motion` (5.6MB) — lazy-load; only hydrate on gamification pages
+- [x] 🧠 `lucide-react` — Apr 13 verified: 37MB is install-only; Rollup already tree-shakes named imports into per-icon chunks (see `chevron-up.weO0KTtv.js` etc.). Bundle size unchanged when tested with deep-imports. Closed — no action needed.
+- [x] 🧠 `framer-motion` — Apr 13 verified: already in its own chunk (120KB), loaded only by AchievementGridIsland + SpinWheelIsland. Homepage doesn't load it. Closed — no action needed.
 - [ ] 🧠 Image optimization — Astro `<Image>` for WebP/AVIF, responsive srcset, blur placeholder
 
 ### Duplication cleanup (🧠, from Apr 12 audit)

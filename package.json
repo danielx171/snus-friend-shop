@@ -13,6 +13,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "smoke": "bash scripts/smoke-check.sh",
     "indexnow": "node scripts/indexnow-ping.mjs",
     "indexnow:dry": "node scripts/indexnow-ping.mjs --dry-run",
     "sitemap": "bun run scripts/generate-sitemap.ts",
