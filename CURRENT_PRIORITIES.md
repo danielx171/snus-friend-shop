@@ -22,6 +22,8 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 
 ## Remaining
 
+> **Open work lives in [`BACKLOG.md`](./BACKLOG.md)** — single source of truth with P0–P3 tiers and ownership tags (🧠/👤/✍️/🔌). The sections below are kept for archival continuity.
+
 ### HIGH — Schema debt + blocked on external deliverables
 
 - [x] **Subscriptions table migration** — retroactive migration added (`20260413000100_subscriptions.sql`) matching live DB state incl. RLS policies, CHECK constraints, partial index on active rows.

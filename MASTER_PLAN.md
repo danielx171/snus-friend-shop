@@ -1,8 +1,9 @@
 # SnusFriend Master Plan — Pre-Launch & Growth
 
+> **⚠ Historical reference (Mar 30 snapshot).** Live open-work list is [`BACKLOG.md`](./BACKLOG.md). This document preserves the original phase-based strategy.
+
 **Created:** 2026-03-30
-**Status:** Living document — update as items complete
-**Status:** Living document — update as items complete
+**Status:** Historical — see BACKLOG.md for current state
 **Source:** Cross-referenced from 10 Cowork audits, ROADMAP.md, DEPLOYMENT_CHECKLIST.md, codebase scan, live site analysis, and full tool audit (Sentry, Vercel, Klaviyo, Supabase, PostHog — March 30 evening).
 
 ---

@@ -1,8 +1,8 @@
 # SnusFriend Full Audit Fix List — March 30, 2026
 
-> **⚠ SUPERSEDED (2026-04-12).** Historical snapshot from the pre-launch audit.
-> Live punch list is now in `CURRENT_PRIORITIES.md` and `ROADMAP.md`.
-> Most items below shipped in the Apr 8–12 Launch Polish Sprint. Keep as reference only.
+> **⚠ SUPERSEDED (2026-04-13).** Historical snapshot from the pre-launch audit.
+> Live open-work list is [`BACKLOG.md`](./BACKLOG.md).
+> Most items below shipped in the Apr 8–12 Launch Polish Sprint. Kept for Klaviyo template IDs + flow-wiring specifics.
 
 ## Status Update (March 30, 2026 — Claude Session)
 
