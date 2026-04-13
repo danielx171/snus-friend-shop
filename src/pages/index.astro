@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
@@ -107,7 +108,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   ogImage={tenant.seo.ogImage}
 >
   {/* Preload LCP hero image — start CDN fetch before browser discovers the <img> */}
-  {heroProducts[0] && <link rel="preload" as="image" href={heroProducts[0]!.data.imageUrl} />}
+  {heroProducts[0] && <link rel="preload" as="image" href={heroProducts[0]!.data.imageUrl} fetchpriority="high" />}
   <!-- Hero — Immersive 3D product showcase -->
   <section class="relative overflow-hidden border-b border-border" style={`background: hsl(var(--hero-bg));`}>
 
@@ -204,15 +205,18 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
           <!-- Center featured product (larger, floating) — LCP element -->
           {heroProducts[0] && (
             <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-              <img
+              <Image
                 src={heroProducts[0]!.data.imageUrl}
                 alt={heroProducts[0]!.data.name}
-                width="180"
-                height="180"
-                fetchpriority="high"
-                class="hero-center-can rounded-2xl"
-                style="animation: heroCenterFloat 4s ease-in-out infinite; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) drop-shadow(0 0 20px hsl(var(--primary) / 0.15));"
+                width={360}
+                height={360}
+                widths={[180, 360]}
+                sizes="180px"
+                format="webp"
+                quality={80}
                 loading="eager"
+                class="hero-center-can rounded-2xl"
+                style="width: 180px; height: 180px; animation: heroCenterFloat 4s ease-in-out infinite; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) drop-shadow(0 0 20px hsl(var(--primary) / 0.15));"
               />
             </div>
           )}
@@ -225,14 +229,19 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
       <!-- Mobile: scrolling product strip with 3D -->
       <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory px-1" style="perspective: 400px;">
         {heroProducts.slice(0, 6).map((p, i) => p && (
-          <img
+          <Image
             src={p.data.imageUrl}
             alt={p.data.name}
-            width="112"
-            height="112"
+            width={224}
+            height={224}
+            widths={[112, 224]}
+            sizes="112px"
+            format="webp"
+            quality={80}
+            loading={i === 0 ? 'eager' : 'lazy'}
             class="flex-shrink-0 snap-center rounded-xl w-24 h-24 sm:w-28 sm:h-28 hero-can"
             style={`animation: heroFloat${(i % 4) + 1} ${6 + i * 0.5}s ease-in-out infinite ${i * 0.3}s; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.3));`}
-            loading={i === 0 ? 'eager' : 'lazy'}
+            {...(i === 0 ? { fetchpriority: 'high' } : {})}
           />
         ))}
       </div>
@@ -328,7 +337,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
 
   <!-- Purchase-based recommendations (logged-in users only) -->
   <RecommendationsIsland
-    client:idle
+    client:visible
     productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
       slug: p.id,
       name: p.data.name,
@@ -343,7 +352,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
 
   <!-- Recently Viewed (client-side, shows only if user has browsing history) -->
   <RecentlyViewedIsland
-    client:idle
+    client:visible
     productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
       slug: p.id,
       name: p.data.name,
@@ -594,7 +603,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
       </p>
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6">
         {brands.length > 0 ? (
-          brands.slice(0, 15).map((brand) => {
+          brands.map((brand) => {
             const bColor = brandColors[brand.id] ?? defaultBrandColor;
             const tinAbbr = { 'white-fox': 'WF', 'nordic-spirit': 'NS', 'chainpop': 'CHAIN' } as any;
             const tLabel = tinAbbr[brand.id] ?? brand.data.name.toUpperCase();

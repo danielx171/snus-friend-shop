@@ -3,7 +3,7 @@
  * MegaMenu.astro — Desktop mega menu for SnusFriend
  *
  * A hover-activated mega menu component with four columns:
- * 1. Shop by Brand — top 12 brands with coloured dots
+ * 1. Shop by Brand — all brands with coloured dots (scrollable if tall)
  * 2. Shop by Strength — strength categories with visual indicators
  * 3. Shop by Flavour — flavour categories with emojis
  * 4. Popular — Staff Picks, New Arrivals, Best Sellers, Quick Links
@@ -51,14 +51,13 @@ allProducts.forEach((product) => {
   );
 });
 
-// Sort brands by product count (descending) and take top 12
-const topBrands = allBrands
-  .sort((a, b) => {
-    const countA = brandProductCounts.get(a.id) || 0;
-    const countB = brandProductCounts.get(b.id) || 0;
-    return countB - countA;
-  })
-  .slice(0, 12);
+// Sort brands by product count (descending). Render all so Googlebot sees
+// every brand page via sitewide nav — visual overflow is capped by scroll.
+const topBrands = [...allBrands].sort((a, b) => {
+  const countA = brandProductCounts.get(a.id) || 0;
+  const countB = brandProductCounts.get(b.id) || 0;
+  return countB - countA;
+});
 
 // Strength categories with colour indicators
 const strengthCategories = [
@@ -182,7 +181,7 @@ const getBrandColour = (brandSlug: string): string => {
           <div class="text-xs font-semibold uppercase tracking-wider text-primary mb-4">
             Shop by Brand
           </div>
-          <ul class="space-y-2">
+          <ul class="space-y-2 max-h-[60vh] overflow-y-auto pr-1 mega-brand-list">
             {topBrands.map((brand) => {
               const productCount = brandProductCounts.get(brand.id) || 0;
               const brandColour = getBrandColour(brand.id);
