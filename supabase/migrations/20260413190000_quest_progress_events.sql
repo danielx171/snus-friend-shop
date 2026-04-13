@@ -7,7 +7,7 @@
 CREATE TABLE IF NOT EXISTS public.quest_progress_events (
   id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id       uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  quest_id      uuid NOT NULL REFERENCES public.quests(id) ON DELETE CASCADE,
+  quest_id      text NOT NULL REFERENCES public.quests(id) ON DELETE CASCADE,
   external_ref  text NOT NULL,
   action        text NOT NULL,
   created_at    timestamptz NOT NULL DEFAULT now(),
