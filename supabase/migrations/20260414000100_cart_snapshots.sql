@@ -27,10 +27,15 @@ CREATE INDEX IF NOT EXISTS idx_cart_snapshots_abandoned
 
 ALTER TABLE public.cart_snapshots ENABLE ROW LEVEL SECURITY;
 
+-- Replay-safe: drop then recreate so this migration can run on envs that
+-- already have the policies (the table was created in Studio before this
+-- migration was backfilled).
+DROP POLICY IF EXISTS "Service role full access" ON public.cart_snapshots;
 CREATE POLICY "Service role full access"
   ON public.cart_snapshots FOR ALL
   USING (auth.role() = 'service_role');
 
+DROP POLICY IF EXISTS "Users can manage own cart snapshots" ON public.cart_snapshots;
 CREATE POLICY "Users can manage own cart snapshots"
   ON public.cart_snapshots FOR ALL
   USING (auth.uid() = user_id);

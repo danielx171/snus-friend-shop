@@ -100,13 +100,17 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.check-abandoned-carts]
-verify_jwt = true
+# Matches deployed state. Invoked by pg_cron (job "check-abandoned-carts-hourly")
+# with only x-cron-secret — flipping to true would 401 the cron.
+verify_jwt = false
 
 [functions.manage-subscription]
 verify_jwt = true
 
 [functions.process-subscriptions]
-verify_jwt = true
+# Matches deployed state. Invoked by pg_cron (job "process-subscriptions-daily")
+# with only x-cron-secret — flipping to true would 401 the cron.
+verify_jwt = false
 
 [functions.save-cart-snapshot]
 verify_jwt = false

@@ -145,7 +145,7 @@ Conflict patterns:
 - When adding a new edge-function secret, update `.env.example` and
   `DEPLOYMENT_CHECKLIST.md` in the same task.
 
-## Where Things Stand (as of 2026-04-12 — Launch Polish Sprint closed)
+## Where Things Stand (as of 2026-04-14 — Launch Polish + clean-slate Batch A/B/F closed)
 
 - Astro 6 migration: ✅ Live on snusfriends.com (SSG + SSR hybrid)
 - Steps 1–52 + 54–56: ✅ Done. Step 53 (password strength meter + confetti reduced-motion) still open. Launch Polish Sprint (Apr 8–12) shipped in full. See `CURRENT_PRIORITIES.md` for the live punch list.
