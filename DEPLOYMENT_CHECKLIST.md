@@ -82,6 +82,19 @@ Backend: Supabase (already hosted)
 - [x] `public/llms.txt` — GEO file for AI/LLM indexing.
 - [x] `public/sitemap.xml` — dynamic generation via `bun run sitemap` (731 products, 139 brands).
 
+## Observability / Audit Access
+
+- [x] Enable Vercel Web Analytics in the Vercel Dashboard for `snus-friend-shop`.
+- [x] Enable Vercel Speed Insights in the Vercel Dashboard for `snus-friend-shop`.
+- [x] Set `PUBLIC_GA_MEASUREMENT_ID` in Vercel once the GA4 web stream is created.
+- [ ] Set `PUBLIC_GOOGLE_SITE_VERIFICATION` if using Search Console URL-prefix verification.
+      Not required while the active Search Console property is the domain property `sc-domain:snusfriends.com`.
+- [x] Add `PAGESPEED_API_KEY` to Vercel so `bun run audit:pagespeed` can run without anonymous PSI quota limits when the key is exported locally.
+- [x] Grant Google Search Console read access to the property used for `https://snusfriends.com`.
+- [x] Grant GA4 read access to the SnusFriend property and web stream.
+- [ ] In GA4 Admin, change the SnusFriend property defaults from `America/Los_Angeles` / `USD` to `Europe/Stockholm` / `SEK`.
+- [ ] Optional deeper data access: provide a dedicated read-only Supabase credential or a read-only audit endpoint for non-public tables.
+
 ## Uptime Monitoring
 
 - [ ] Sign up for UptimeRobot (free tier) or similar

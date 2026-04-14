@@ -1,0 +1,138 @@
+---
+import { tenant } from '@/config/tenant';
+
+const consentKey = tenant.storage.consentKey;
+const gaMeasurementId = (import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '').trim();
+const isProd = import.meta.env.PROD;
+---
+
+{isProd && (
+  <>
+    <script is:inline define:vars={{ consentKey, gaMeasurementId }}>
+      window.__OBSERVABILITY_CONFIG__ = {
+        consentKey: consentKey,
+        gaMeasurementId: gaMeasurementId,
+      };
+    </script>
+
+    <script>
+      import { inject as injectWebAnalytics, pageview as sendWebAnalyticsPageview } from '@vercel/analytics';
+      import { injectSpeedInsights } from '@vercel/speed-insights';
+
+      function getConfig() {
+        return window.__OBSERVABILITY_CONFIG__ ?? { consentKey: '', gaMeasurementId: '' };
+      }
+
+      function readConsent() {
+        var key = getConfig().consentKey;
+        if (!key) return null;
+
+        try {
+          var raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : null;
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function hasAnalyticsConsent() {
+        var consent = readConsent();
+        return Boolean(consent && consent.analytics === true);
+      }
+
+      function ensureVercelObservability() {
+        if (window.__VERCEL_OBSERVABILITY_ENABLED__) return;
+
+        injectWebAnalytics({
+          disableAutoTrack: true,
+          mode: 'production',
+          debug: false,
+        });
+
+        var speedHandle = injectSpeedInsights({
+          debug: false,
+          route: window.location.pathname,
+        });
+
+        window.__VERCEL_SPEED_INSIGHTS_SET_ROUTE__ = speedHandle?.setRoute ?? null;
+        window.__VERCEL_OBSERVABILITY_ENABLED__ = true;
+      }
+
+      function ensureGa() {
+        var measurementId = getConfig().gaMeasurementId;
+        if (!measurementId || window.__GA4_ENABLED__) return;
+
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () {
+          window.dataLayer.push(arguments);
+        };
+
+        window.gtag('js', new Date());
+        window.gtag('config', measurementId, {
+          anonymize_ip: true,
+          send_page_view: false,
+        });
+
+        if (!document.querySelector('script[data-ga4-loader]')) {
+          var gaScript = document.createElement('script');
+          gaScript.async = true;
+          gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+          gaScript.setAttribute('data-ga4-loader', 'true');
+          document.head.appendChild(gaScript);
+        }
+
+        window.__GA4_ENABLED__ = true;
+      }
+
+      function trackPageviews() {
+        var currentPath = window.location.pathname + window.location.search;
+        if (window.__LAST_OBSERVABILITY_PATH__ === currentPath) return;
+
+        if (window.__VERCEL_OBSERVABILITY_ENABLED__) {
+          sendWebAnalyticsPageview({ path: currentPath });
+          window.__VERCEL_SPEED_INSIGHTS_SET_ROUTE__?.(window.location.pathname);
+        }
+
+        if (window.__GA4_ENABLED__ && window.gtag) {
+          window.gtag('event', 'page_view', {
+            page_title: document.title,
+            page_location: window.location.href,
+            page_path: currentPath,
+          });
+        }
+
+        window.__LAST_OBSERVABILITY_PATH__ = currentPath;
+      }
+
+      function syncObservability() {
+        if (!hasAnalyticsConsent()) return;
+        ensureVercelObservability();
+        ensureGa();
+        trackPageviews();
+      }
+
+      if (!window.__OBSERVABILITY_BOOTSTRAPPED__) {
+        window.__OBSERVABILITY_BOOTSTRAPPED__ = true;
+        window.__refreshObservability__ = syncObservability;
+
+        window.addEventListener('storage', function (event) {
+          if (event.key === getConfig().consentKey) {
+            syncObservability();
+          }
+        });
+
+        window.addEventListener('cookie-consent-updated', function () {
+          syncObservability();
+        });
+
+        document.addEventListener('astro:page-load', function () {
+          if (hasAnalyticsConsent()) {
+            trackPageviews();
+          }
+        });
+      }
+
+      window.__refreshObservability__?.();
+    </script>
+  </>
+)}

@@ -17,10 +17,35 @@ const consentKey = tenant.storage.consentKey;
     define:vars={{ sentryDsn, posthogKey, posthogHost, consentKey }}
   >
     (function () {
+      function readConsent() {
+        var raw = localStorage.getItem(consentKey);
+        try { return raw ? JSON.parse(raw) : null; } catch (_) { return null; }
+      }
+
+      function loadPostHog() {
+        if (!posthogKey || window.__POSTHOG_LOADED__) return;
+
+        var ph = document.createElement('script');
+        ph.async = true;
+        ph.crossOrigin = 'anonymous';
+        ph.src = posthogHost + '/static/array.js';
+        ph.onload = function () {
+          if (window.posthog) {
+            window.posthog.init(posthogKey, {
+              api_host: posthogHost,
+              capture_pageview: true,
+              capture_pageleave: true,
+              persistence: 'localStorage',
+              autocapture: true,
+            });
+            window.__POSTHOG_LOADED__ = true;
+          }
+        };
+        document.head.appendChild(ph);
+      }
+
       // Read consent from localStorage (matches nanostores/persistent format)
-      var raw = localStorage.getItem(consentKey);
-      var consent;
-      try { consent = raw ? JSON.parse(raw) : null; } catch (_) { consent = null; }
+      var consent = readConsent();
       var analyticsAllowed = consent && consent.analytics === true;
 
       // ── Sentry — essential error tracking (no consent needed) ──
@@ -56,34 +81,26 @@ const consentKey = tenant.storage.consentKey;
 
       // ── PostHog — analytics consent required ──
       if (posthogKey && analyticsAllowed) {
-        var ph = document.createElement('script');
-        ph.async = true;
-        ph.crossOrigin = 'anonymous';
-        ph.src = posthogHost + '/static/array.js';
-        ph.onload = function () {
-          if (window.posthog) {
-            window.posthog.init(posthogKey, {
-              api_host: posthogHost,
-              capture_pageview: true,
-              capture_pageleave: true,
-              persistence: 'localStorage',
-              autocapture: true,
-            });
-          }
-        };
-        document.head.appendChild(ph);
+        loadPostHog();
       }
 
-      // Listen for consent changes (user accepts analytics after page load)
+      function handleConsentChange(nextConsent) {
+        if (nextConsent && nextConsent.analytics) {
+          loadPostHog();
+        }
+      }
+
       window.addEventListener('storage', function (e) {
         if (e.key === consentKey) {
           try {
             var updated = e.newValue ? JSON.parse(e.newValue) : null;
-            if (updated && updated.analytics && posthogKey && !window.posthog?.__loaded) {
-              location.reload();
-            }
+            handleConsentChange(updated);
           } catch (_) { /* ignore parse errors */ }
         }
+      });
+
+      window.addEventListener('cookie-consent-updated', function (e) {
+        handleConsentChange(e.detail);
       });
     })();
   </script>
