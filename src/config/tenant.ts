@@ -28,6 +28,10 @@ export interface TenantConfig {
     readonly vatId?: string;
     /** Trustpilot profile URL — becomes another sameAs when present. */
     readonly trustpilotUrl?: string;
+    /** Trustpilot Business Unit ID (from Trustpilot dashboard → Settings). Enables footer widget. */
+    readonly trustpilotBusinessUnitId?: string;
+    /** Trustpilot TrustBox template ID for the footer variant. Recommended: "Micro Combo" = "5419b6ffb0d04a076446a9af". */
+    readonly trustpilotFooterTemplateId?: string;
     /** Year founded — ISO 8601. */
     readonly foundingDate?: string;
   };
@@ -105,6 +109,10 @@ export const tenant: TenantConfig = {
     // corporateRegistration: '556XXX-XXXX',
     // vatId: 'SE556XXXXXXXX01',
     // trustpilotUrl: 'https://www.trustpilot.com/review/snusfriends.com',
+    // Fill after creating Trustpilot Business account — both fields are required
+    // for the footer widget to render. Widget auto-hides if either is missing.
+    // trustpilotBusinessUnitId: '5f...',       // from Trustpilot dashboard
+    // trustpilotFooterTemplateId: '5419b6ffb0d04a076446a9af', // Micro Combo
   },
   loyaltyProgramName: 'SnusFriends Rewards',
   currencyCode: 'EUR',

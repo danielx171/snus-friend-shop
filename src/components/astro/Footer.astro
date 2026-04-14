@@ -2,6 +2,7 @@
 import { tenant } from '@/config/tenant';
 import ThemePicker from '@/components/react/ThemePicker';
 import Logo from '@/components/astro/Logo.astro';
+import TrustpilotWidget from '@/components/astro/TrustpilotWidget.astro';
 
 const currentYear = new Date().getFullYear();
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
@@ -114,6 +115,9 @@ const footerLinks = {
 
     {/* ── Trust & Payment Strip ── */}
     <div class="mt-8 border-t border-border/40 pt-6 flex flex-col items-center gap-6">
+
+      {/* Trustpilot — auto-hides until Business Unit ID is configured */}
+      <TrustpilotWidget variant="footer" />
 
       {/* Payment methods */}
       <div class="flex flex-col items-center gap-2">
