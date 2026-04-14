@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-04-14
+
+- Added read-only Google audit tooling with `scripts/google-auth.ts`, `scripts/google-ga4-report.ts`, and `scripts/google-search-console-report.ts`.
+- Added Bun audit commands `bun run audit:ga4` and `bun run audit:gsc`, plus the `googleapis` dependency required for GA4/Search Console access.
+- Expanded `.env.example` with local-only Google audit configuration keys for credential paths and property identifiers.
+- Updated `DEPLOYMENT_CHECKLIST.md` to document the new audit workflow, confirmed credential access, and the remaining GA timezone follow-up.
+
 ## 2026-03-10
 
 - Completed Roadmap Step 23 security hardening by locking down internal function surfaces and enforcing fail-closed secrets.

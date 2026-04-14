@@ -92,7 +92,12 @@ Backend: Supabase (already hosted)
 - [x] Add `PAGESPEED_API_KEY` to Vercel so `bun run audit:pagespeed` can run without anonymous PSI quota limits when the key is exported locally.
 - [x] Grant Google Search Console read access to the property used for `https://snusfriends.com`.
 - [x] Grant GA4 read access to the SnusFriend property and web stream.
-- [ ] In GA4 Admin, change the SnusFriend property defaults from `America/Los_Angeles` / `USD` to `Europe/Stockholm` / `SEK`.
+- [x] Add local read-only Google audit scripts: `bun run audit:ga4` and `bun run audit:gsc`.
+- [x] Configure local Google credentials via `GOOGLE_APPLICATION_CREDENTIALS` or `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`.
+- [x] Set local audit envs: `GA4_PROPERTY_ID` and `SEARCH_CONSOLE_PROPERTY`.
+- [x] Grant the local read-only Google credential access to the GA4 property and Search Console property.
+- [ ] In GA4 Admin, change the remaining SnusFriend property default from `America/Los_Angeles` to `Europe/Stockholm`.
+      Currency has already been updated to `SEK`, but the current property only exposes U.S. timezone options in the GA admin UI.
 - [ ] Optional deeper data access: provide a dedicated read-only Supabase credential or a read-only audit endpoint for non-public tables.
 
 ## Uptime Monitoring
