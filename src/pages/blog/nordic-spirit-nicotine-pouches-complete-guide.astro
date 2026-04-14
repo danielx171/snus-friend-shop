@@ -6,6 +6,8 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import BrandFactCallout from '@/components/astro/BrandFactCallout.astro';
+import { brandFacts } from '@/data/brand-facts';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -19,11 +21,12 @@ const nordicSpearmint = findProduct('nordic-spirit', 'spearmint');
 const nordicBergamot = findProduct('nordic-spirit', 'bergamot');
 const nordicMint = findProduct('nordic-spirit', 'mint');
 const nordicAny = findProduct('nordic-spirit');
+const nordicSpiritFact = brandFacts.nordicSpirit;
 ---
 
 <Shop
-  title="Nordic Spirit Nicotine Pouches: 2026 Guide"
-  description="Nordic Spirit by JTI reviewed — the UK's favourite nicotine pouch brand. 12 flavours from Bergamot Wildberry to Frosty Mint, strengths 6-17 mg."
+  title="Nordic Spirit Nicotine Pouches: 2026 Brand Guide"
+  description="Nordic Spirit by JTI reviewed with a focus on flavour range, pouch feel, and what varies by market."
   canonical="/blog/nordic-spirit-nicotine-pouches-complete-guide"
   ogType="article"
 >
@@ -40,26 +43,28 @@ const nordicAny = findProduct('nordic-spirit');
     <BlogHero
       category="Brand Spotlight"
       title="Nordic Spirit Nicotine Pouches: Complete Brand Guide"
-      description="Nordic Spirit by JTI reviewed — the UK's favourite nicotine pouch brand. 12 flavours from Bergamot Wildberry to Frosty Mint, strengths 6-17 mg."
+      description="Nordic Spirit by JTI reviewed with a focus on flavour range, pouch feel, and what varies by market."
       date="March 2026"
       readTime="6 min read"
     />
 
+    <BrandFactCallout fact={nordicSpiritFact} />
+
     <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
       <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
       <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
-        Nordic Spirit is a nicotine pouch brand by JTI (Japan Tobacco International) offering a focused range of mint, berry, and citrus flavours from 6mg to 11mg. Known for consistent quality and wide retail availability.
+        Nordic Spirit is a nicotine pouch brand from JTI (Japan Tobacco International) with a focused mint-led flavour range, soft slim pouches, and particularly strong retail visibility in the UK.
       </p>
     </div>
 
     <aside class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
         <h2 style="margin-top: 0;">Key Takeaways</h2>
         <ul>
-            <li><strong>Market leader:</strong> Nordic Spirit dominates the UK nicotine pouch market with consistent, reliable quality</li>
-            <li><strong>12 flavour portfolio:</strong> Strong emphasis on fruit, berry, and mint variants catering to diverse palates</li>
-            <li><strong>Strength range:</strong> 6 mg (Regular), 9 mg (Strong), 11 mg (Extra Strong), 17 mg (Max) options available</li>
-            <li><strong>Manufacturer:</strong> JTI (Japan Tobacco International), established 2018, trusted by millions globally</li>
-            <li><strong>Best for:</strong> UK users seeking subtle, smooth flavours and established brand reliability</li>
+            <li><strong>Ownership:</strong> Nordic Spirit is attributed here to JTI, not Swedish Match.</li>
+            <li><strong>Flavour focus:</strong> Mint, berry, and bergamot-style profiles are the core Nordic Spirit draw rather than extreme novelty flavours.</li>
+            <li><strong>Strength framing:</strong> The live range depends on market, so treat published flavour lists as approximate and retailer-specific.</li>
+            <li><strong>Positioning:</strong> Nordic Spirit sits in the mainstream premium lane: clean packaging, soft pouch feel, and reliable retail distribution.</li>
+            <li><strong>Best for:</strong> Users who want a softer pouch feel and a tighter, easier-to-navigate range than some larger global brands.</li>
         </ul>
     </aside>
 
@@ -68,7 +73,7 @@ const nordicAny = findProduct('nordic-spirit');
 
 <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
   <summary style="font-weight: 600; cursor: pointer;">Who makes Nordic Spirit?</summary>
-  <p style="margin-top: 12px;">Nordic Spirit is owned and manufactured by Swedish Match, one of Scandinavia's largest tobacco and nicotine product companies with over 150 years of heritage. Swedish Match operates multiple nicotine pouch brands and maintains control over Nordic Spirit's production, innovation, and global distribution.</p>
+  <p style="margin-top: 12px;">Nordic Spirit is part of JTI's oral nicotine portfolio. We keep that attribution consistent here because older comparison content often mixes Nordic Spirit into Swedish Match brand families even though JTI is the company tied to Nordic Spirit's current retail presence.</p>
 </details>
 
 <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
@@ -78,7 +83,7 @@ const nordicAny = findProduct('nordic-spirit');
 
 <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
   <summary style="font-weight: 600; cursor: pointer;">Is Nordic Spirit the same as ZYN?</summary>
-  <p style="margin-top: 12px;">No, Nordic Spirit and Zyn are separate brands owned by different companies—Nordic Spirit is made by Swedish Match, while Zyn is owned by Philip Morris International (PMI). While both are premium Scandinavian-quality pouches, they have distinct flavour profiles, nicotine strengths, and product philosophies; Nordic Spirit emphasizes bold, complex flavours, whereas <a href="/brands/zyn-nicotine-pouches" style="color: hsl(var(--primary));">Zyn focuses on subtle, refined blends</a>.</p>
+  <p style="margin-top: 12px;">No. In this guide we describe Nordic Spirit as a JTI brand and ZYN as a Swedish Match / PMI brand. They compete in the same category, but the companies, flavour philosophy, and market footprint are different.</p>
 </details>
 
         <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>
@@ -112,15 +117,15 @@ const nordicAny = findProduct('nordic-spirit');
 
     <section>
         <h2>Who Is Nordic Spirit?</h2>
-        <p>Nordic Spirit is the UK's dominant nicotine pouch brand, manufactured by <strong>JTI (Japan Tobacco International)</strong> since its launch in Sweden in 2018. JTI is a major global tobacco company with operations across 70+ countries and strict adherence to EU tobacco product regulations (TPD 2014/40/EU). The brand has become synonymous with quality and consistency across Scandinavia and the United Kingdom, offering a curated selection of subtle, well-balanced flavours that appeal to both newcomers and experienced users.</p>
+        <p>Nordic Spirit is a mainstream nicotine pouch brand from <strong>JTI (Japan Tobacco International)</strong>. It is best known for a clean package design, a softer pouch feel than some drier competitors, and a range built around mint, berry, and bergamot-adjacent flavours rather than dozens of rotating experiments.</p>
         <p>What sets Nordic Spirit apart is its philosophy: <strong>refined taste experiences designed for smooth, sustained enjoyment</strong> rather than sensational gimmicks. Every flavour is carefully formulated for balanced flavour delivery.</p>
     </section>
 
     <section>
         <h2>Brand History & JTI's Legacy</h2>
-        <p>Japan Tobacco International launched Nordic Spirit in 2018, tapping into Sweden's established snus culture and expanding into the whitening nicotine pouch category. The brand was strategically designed for European consumers seeking a contemporary alternative to traditional snus, with particular emphasis on <strong>mild, fruity profiles for mainstream appeal</strong>.</p>
-        <p>JTI's backing ensured rigorous quality control, consistent manufacturing, and rapid market expansion. By 2022, Nordic Spirit had become the UK's fastest-growing nicotine pouch brand. Today, it commands approximately 35% of the UK market—a testament to brand trust and product consistency. As reported by industry analysts and EU tobacco regulators, Nordic Spirit's market dominance reflects its effective positioning.</p>
-        <p>JTI's experience across tobacco, snus, and heat-not-burn products means Nordic Spirit benefits from decades of flavour science and user research. For context on legal requirements, see our guide on <a href="/blog/nicotine-pouches-legal-europe-2026">nicotine pouch regulations across Europe</a>.</p>
+        <p>Japan Tobacco International launched Nordic Spirit as part of its move into the tobacco-free oral nicotine category. Rather than offering a huge catalogue, the brand has generally stayed focused on a narrower core lineup that feels approachable for mainstream users.</p>
+        <p>JTI's scale helps Nordic Spirit stay visible in large retail channels, especially in the UK. We avoid pinning the brand to one permanent market-share number here because retail share and local assortment can move quickly between countries and reporting periods.</p>
+        <p>JTI's broader nicotine portfolio gives Nordic Spirit strong manufacturing and distribution support. For context on legal requirements, see our guide on <a href="/blog/nicotine-pouches-legal-europe-2026">nicotine pouch regulations across Europe</a>.</p>
     </section>
 
     <section>

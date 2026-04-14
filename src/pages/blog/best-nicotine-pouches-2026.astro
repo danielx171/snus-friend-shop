@@ -8,6 +8,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import { brandFacts } from '@/data/brand-facts';
 
 const facts = await getEditorialFacts();
 
@@ -28,11 +29,15 @@ const siberia = findProduct('siberia', 'red');
 const loopValue = findProduct('loop', 'mint');
 const veloVariety = findProduct('velo');
 const kellyPremium = findProduct('kelly', 'white');
+const zynFact = brandFacts.zyn;
+const veloFact = brandFacts.velo;
+const zynCatalogCount = allProducts.filter((product) => product.data.brandSlug === 'zyn').length;
+const veloCatalogCount = allProducts.filter((product) => product.data.brandSlug === 'velo').length;
 ---
 
 <Shop
-  title="Best Nicotine Pouches 2026: 10 Tested Picks (Taste & Value)"
-  description={`We tested ${facts.productCountLabel} nicotine pouches from ${facts.brandCountLabel} brands. Here are the 10 best for flavour, strength, and value — updated monthly by our editorial team.`}
+  title="Best Nicotine Pouches 2026: 10 Editor-Tested Picks by Type"
+  description={`We reviewed ${facts.productCountLabel} nicotine pouches from ${facts.brandCountLabel} brands and narrowed them to 10 editor-tested picks for flavour, strength, comfort, and value.`}
   canonical="/blog/best-nicotine-pouches-2026"
   ogType="article"
 >
@@ -56,7 +61,7 @@ const kellyPremium = findProduct('kelly', 'white');
       { "@type": "Question", "name": "What strength nicotine pouch should I start with?", "acceptedAnswer": { "@type": "Answer", "text": "If you're new to nicotine pouches, start with 3–6 mg/pouch. This delivers a light buzz without overwhelming effects. VELO Simply Spearmint Mini at 4 mg is specifically designed for beginners — the small format makes it easy to control duration and intensity." } },
       { "@type": "Question", "name": "Are stronger nicotine pouches safer than smoking?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches are fundamentally different from smoking because they don't involve combustion. Even high-strength pouches like Siberia (33 mg/g) pose no smoke-related risks. However, very high strength is habit-forming and not recommended for casual users. Start with moderate strength and increase only if you're a regular user." } },
       { "@type": "Question", "name": "How long does a nicotine pouch last?", "acceptedAnswer": { "@type": "Answer", "text": "Most nicotine pouches release their nicotine over 30–60 minutes. Slim formats tend to last slightly shorter. You can control duration by removing the pouch early. For all-day use, one pouch every 1–2 hours is typical among regular users." } },
-      { "@type": "Question", "name": "What's the difference between ZYN and VELO?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN (owned by Swedish Match) is the world's leading brand, known for consistency and extreme availability. VELO (owned by BAT) offers more variety — 50+ products including zero-nicotine options — and tends toward innovative flavours. Both are high-quality; choice depends on whether you prioritise simplicity (ZYN) or variety (VELO)." } },
+      { "@type": "Question", "name": "What's the difference between ZYN and VELO?", "acceptedAnswer": { "@type": "Answer", "text": `ZYN (${zynFact.owner}) is the safer all-round pick with a cleaner, more standardized range. VELO (${veloFact.owner}) currently shows broader flavour experimentation on SnusFriend, with ${veloCatalogCount} live VELO products versus ${zynCatalogCount} ZYN products in our catalog.` } },
       { "@type": "Question", "name": "Can I use nicotine pouches if I'm pregnant?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine is harmful to foetal development. You should not use any nicotine product — pouches, cigarettes, or vaping — during pregnancy. If you're trying to quit nicotine, speak with a healthcare provider about evidence-based cessation support." } }
     ]
   })} />
@@ -70,7 +75,7 @@ const kellyPremium = findProduct('kelly', 'white');
     <BlogHero
       category="Ranking"
       title="10 Best Nicotine Pouches 2026: Top Picks Ranked"
-      description={`We tested ${facts.productCountLabel} nicotine pouches from ${facts.brandCountLabel} brands. Here are the 10 best for flavour, strength, and value — updated monthly by our editorial team.`}
+      description={`We reviewed ${facts.productCountLabel} nicotine pouches from ${facts.brandCountLabel} brands and narrowed them to 10 editor-tested picks for flavour, strength, comfort, and value.`}
       date="28 March 2026"
       readTime="12 min read"
     />
@@ -78,13 +83,13 @@ const kellyPremium = findProduct('kelly', 'white');
     <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
       <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
       <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
-        The best nicotine pouches in 2026 are ZYN Cool Mint (best overall), VELO Mighty Peppermint (strongest flavour), White Fox Double Mint (best for experienced users), and HELWIT (best for beginners). Rankings are based on flavour quality, nicotine delivery consistency, pouch comfort, and value for money across 200+ products tested.
+        No single pouch is best for everyone, so this guide is split by use case. Our current all-round pick is ZYN Cool Mint, while VELO leads for assortment breadth, LOOP stays strong on value, and White Fox / Siberia remain specialist options for experienced users.
       </p>
     </div>
 
     <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
       <summary style="font-weight: 600; cursor: pointer;">What is the #1 nicotine pouch in 2026?</summary>
-      <p style="margin-top: 12px;">ZYN consistently ranks as the market leader in 2026, available in 25+ flavours and strength options from 3mg to 6mg per pouch. Its smooth delivery, discrete design, and extensive flavour range make it the top choice for both new and experienced users.</p>
+      <p style="margin-top: 12px;">For this ranking, ZYN Cool Mint is the safest all-round recommendation, not a universal winner for every user. We separate “best overall” from “best value”, “best beginner pick”, and “best strong pick” because the right choice depends on your flavour preferences and nicotine tolerance.</p>
     </details>
 
     <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
@@ -101,7 +106,7 @@ const kellyPremium = findProduct('kelly', 'white');
 
     <p>Based on our testing of over {facts.productCountLabel} products across {facts.brandCountLabel} brands, we identified clear winners in seven categories — from best overall to best value.</p>
 
-    <p>We've tested hundreds of pouches across strength, flavour, pouch comfort, and value. This guide cuts through the noise and identifies the category winners you can actually trust. Whether you're after the world's most consistent brand, the gentlest entry point, or legendary strength, we've got you covered.</p>
+    <p>We've tested hundreds of pouches across strength, flavour, pouch comfort, and value. This guide cuts through the noise and identifies the category winners you can actually trust. Whether you're after a reliable daily driver, a gentler entry point, or high strength, we've got you covered.</p>
 
     <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
       {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
@@ -133,9 +138,9 @@ const kellyPremium = findProduct('kelly', 'white');
 
     <p><strong>Strength:</strong> 6 mg/pouch (Regular) or 13.5 mg (Slim S5)</p>
 
-    <p>ZYN owns the crown for one simple reason: it never lets you down. <strong>ZYN Cool Mint is the world's best-selling nicotine pouch—consistent strength, reliable moisture, and authentic flavour.</strong> Made by Swedish Match since 2014, and with <a href="/blog/zyn-nicotine-pouches-complete-guide">56+ distinct flavours across 7 categories</a>, the stats back up its dominance. Consistent strength, reliable moisture, and that signature clean mint that doesn't fade after five minutes.</p>
+    <p>ZYN gets the all-round slot because it is easy to recommend without a long disclaimer. <strong>{zynFact.name} comes from {zynFact.owner}, and our live catalog currently lists {zynCatalogCount} ZYN products.</strong> That combination of recognisable mint profiles, stable pouch feel, and broad availability makes Cool Mint the cleanest default choice for most readers.</p>
 
-    <p>The Regular format hits hard with 6 mg and lasts a full hour. The Slim S5 is our preferred daily driver — 13.5 mg delivers a proper kick without the burn-out. You'll find ZYN in virtually every European shop, online retailer, and petrol station. That's not marketing; that's market dominance.</p>
+    <p>The Regular format gives newer users a familiar starting point, while the stronger slim variants give regular users room to scale up. The key point is consistency, not inflated “best-selling” language.</p>
 
     <p><strong>Runner-up:</strong> VELO (see category below for variety leader)</p>
 
@@ -195,9 +200,9 @@ const kellyPremium = findProduct('kelly', 'white');
 
     <h2>Best Flavour Variety: VELO</h2>
 
-    <p><strong>Range:</strong> 50+ products across 6 categories (mint, fruit, spice, mixed, coffee, zero-nicotine)</p>
+    <p><strong>Range:</strong> {veloCatalogCount}+ live VELO products on SnusFriend across multiple flavour families and strengths.</p>
 
-    <p>VELO is a flavour laboratory. British American Tobacco invests heavily in innovation, and it shows. Beyond the obvious mint, you'll find VELO Peach Mango, VELO Cinnamon Spice, VELO Coffee, and even VELO Nicotine-Free options for users who want the ritual without the drug.</p>
+    <p>VELO is the assortment play. {veloFact.owner} has built the brand around breadth, so you see more experimentation in mint, fruit, spice, and nicotine-free adjacent formats than you get from a tighter brand like ZYN.</p>
 
     <p>Strengths range from 2 mg (ultra-mild) to 20 mg (very strong). If you're a pouch explorer who changes flavours weekly, VELO eliminates flavour boredom. No other brand comes close to this depth.</p>
 
@@ -295,7 +300,7 @@ const kellyPremium = findProduct('kelly', 'white');
     <p>Most nicotine pouches release their nicotine over 30–60 minutes. Slim formats tend to last slightly shorter. You can control duration by removing the pouch early. For all-day use, one pouch every 1–2 hours is typical among regular users.</p>
 
     <h3>What's the difference between ZYN and VELO?</h3>
-    <p>ZYN (owned by Swedish Match) is the world's leading brand, known for consistency and extreme availability. VELO (owned by BAT) offers more variety — 50+ products including zero-nicotine options — and tends toward innovative flavours. Both are high-quality; choice depends on whether you prioritise simplicity (ZYN) or variety (VELO). Brand market presence is tracked by <a href="https://www.euromonitor.com/smokeless-tobacco-global-market-trends" target="_blank" rel="noopener noreferrer">Euromonitor International (2025)</a>.</p>
+    <p>ZYN is the simpler all-round pick with a more standardized lineup, while VELO offers more flavour experimentation and a broader live assortment on SnusFriend. Both are high-quality; the choice comes down to whether you prefer consistency (ZYN) or a wider menu of formats and flavours (VELO).</p>
 
     <h3>Can I use nicotine pouches if I'm pregnant?</h3>
     <p>Nicotine is harmful to foetal development. You should not use any nicotine product — pouches, cigarettes, or vaping — during pregnancy. If you're trying to quit nicotine, speak with a healthcare provider about evidence-based cessation support.</p>
@@ -303,7 +308,7 @@ const kellyPremium = findProduct('kelly', 'white');
     <h2>The Bottom Line</h2>
 
     <p>The nicotine pouch market is crowded, but quality is increasingly concentrated in a handful of proven leaders. If you want consistency and availability, ZYN Cool Mint wins. If you're exploring, VELO's breadth is unmatched. If you want refined quality, Kelly White and Skruf deliver.</p>
-    <p>Based on our analysis of over {facts.productCountLabel} products across {facts.brandCountLabel} brands, ZYN and VELO together account for the majority of sales, but the fastest-growing segment in 2026 is premium Scandinavian independents like White Fox, Skruf, and LOOP.</p>
+    <p>Based on our analysis of over {facts.productCountLabel} products across {facts.brandCountLabel} brands, the safest conclusion is that a small group of mainstream and Scandinavian brands now carries most of the serious buying consideration. Exact market-share movements vary too much by country to present as a timeless fact here.</p>
 
     <p>The "best" pouch is the one you reach for daily. Use our category winners as a starting point, commit to a tin, and adjust from there. Most users settle into one or two trusted brands within weeks.</p>
 

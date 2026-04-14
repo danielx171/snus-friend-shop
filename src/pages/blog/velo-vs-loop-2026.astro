@@ -6,9 +6,12 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { brandFacts } from '@/data/brand-facts';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
+const veloFact = brandFacts.velo;
+const loopFact = brandFacts.loop;
 
 const publishDate = '2026-04-07';
 const title = 'VELO vs LOOP: Which Is Better in 2026?';
@@ -65,15 +68,15 @@ const description = 'VELO vs LOOP compared head-to-head. Strength, flavor, relea
   <p style="margin-top: 12px;">LOOP generally delivers stronger nicotine effects due to its compact pouch design and higher mg/g concentration, while VELO offers a more gradual, sustained release. LOOP's strength-for-strength advantage makes it the choice for experienced users, whereas VELO is better for those seeking milder, longer-lasting sessions. Compare their <a href="/nicotine-pouches" style="color: hsl(var(--primary));">strength charts</a> to find your ideal match.</p>
 </details>
 
-<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
   <summary style="font-weight: 600; cursor: pointer;">Are VELO and LOOP made by the same company?</summary>
-  <p style="margin-top: 12px;">No, VELO is owned by BAT (British American Tobacco) while LOOP is owned by Altria Group and Swedish Match. Both are multinational tobacco companies, but they operate independently and have distinct product strategies. This explains their different pouch designs, flavour portfolios, and marketing approaches.</p>
+  <p style="margin-top: 12px;">No. VELO is part of BAT's oral nicotine portfolio, while LOOP comes from Another Snus Factory in Sweden. They are separate companies with distinct product strategies, which is why the pouch feel and flavour philosophy differ so much.</p>
 </details>
 
 
-        <p><strong>VELO</strong> is made by British American Tobacco (BAT). BAT has invested billions in reduced-risk products. VELO represents their commitment to quality control, global supply chains, and long-term R&D.</p>
+        <p><strong>VELO</strong> is made by British American Tobacco (BAT). In practical terms, that means broad distribution, a large assortment, and a more standardized mainstream product strategy.</p>
 
-        <p><strong>LOOP</strong> comes from Another Snus Factory (ASF), an independent Swedish innovator. They're smaller, leaner, and obsessed with pushing boundaries—especially in flavor development and technology.</p>
+        <p><strong>LOOP</strong> comes from Another Snus Factory (ASF), a Swedish company that leans harder into bolder flavour concepts and a more distinct pouch identity. That's the cleaner framing to use here, rather than mixing LOOP into large tobacco group ownership claims that do not belong to it.</p>
 
         <h2>Product Range and Variety</h2>
 
@@ -88,7 +91,7 @@ const description = 'VELO vs LOOP compared head-to-head. Strength, flavor, relea
         <p><strong>VELO:</strong> Zero (0mg), Medium (6-8mg), Strong (11-13mg), MAX (17mg).</p>
         <p><strong>LOOP:</strong> Zero (0mg), Strong (12-15.6mg). No true "light" options.</p>
 
-        <p>The critical difference: <strong>VELO Freeze MAX at 17mg is the strongest pouch on the European market</strong>. But LOOP's <em>Instant Rush technology</em> means 12-15.6mg LOOP often feels stronger due to faster delivery.</p>
+        <p>The critical difference: VELO reaches one of the stronger mainstream ceilings we stock, while LOOP often feels more immediate due to its quicker release profile. Comparing the user experience matters more than comparing one raw mg number in isolation.</p>
 
         <h2>Flavor Profiles and Philosophy</h2>
 

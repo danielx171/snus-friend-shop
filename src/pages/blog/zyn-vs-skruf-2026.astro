@@ -6,9 +6,14 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { brandFacts } from '@/data/brand-facts';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
+const zynFact = brandFacts.zyn;
+const skrufFact = brandFacts.skruf;
+const zynProductCount = allProducts.filter((product) => product.data.brandSlug === 'zyn').length;
+const skrufProductCount = allProducts.filter((product) => product.data.brandSlug === 'skruf').length;
 
 const publishDate = '2026-04-07';
 const title = 'ZYN vs Skruf: Which Is Better in 2026?';
@@ -44,7 +49,7 @@ const description = 'ZYN vs Skruf compared head-to-head. Flavor, strength, forma
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
 
-        <p>If you're torn between ZYN and Skruf, you're asking the right question. Both brands dominate the nicotine pouch market in Sweden and beyond, but they approach the category from fundamentally different angles. ZYN is the world's best-selling brand—aggressive on volume, innovation, and price. Skruf is the Swedish craft counter-punch: premium positioning, selective flavors, and a fiercely loyal cult following.</p>
+        <p>If you're torn between ZYN and Skruf, you're comparing two Swedish-rooted brands with very different personalities. ZYN is the broader mainstream option with more live SKUs and more markets, while Skruf leans into a tighter, more heritage-driven assortment.</p>
 
         <p>This guide compares them across flavor, strength, format, price, and heritage so you can pick the right brand for your tastes and wallet.</p>
 
@@ -57,20 +62,20 @@ const description = 'ZYN vs Skruf compared head-to-head. Flavor, strength, forma
 
 <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
   <summary style="font-weight: 600; cursor: pointer;">Which is cheaper, ZYN or Skruf?</summary>
-  <p style="margin-top: 12px;">Skruf is generally cheaper than ZYN per pouch or per can, making it the budget-friendly choice. ZYN commands a premium price due to brand positioning and marketing investment by Altria. If cost is your primary concern, Skruf offers excellent value without significant quality compromise, though ZYN offers slightly broader flavour options at the higher price point.</p>
+  <p style="margin-top: 12px;">Skruf is often the simpler value play, while ZYN usually carries a wider assortment and more market-specific formats. We avoid tying ZYN's pricing to Altria here because ZYN is part of Swedish Match / PMI, not Altria.</p>
 </details>
 
 <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
   <summary style="font-weight: 600; cursor: pointer;">Are ZYN and Skruf made by the same company?</summary>
-  <p style="margin-top: 12px;">No, ZYN is owned by Altria Group (US tobacco company) while Skruf is owned by Swedish Match, a separate Swedish manufacturer. Both are major independent players in nicotine pouches with different ownership structures, production facilities, and business strategies. This explains their distinct product designs and pricing approaches in the market.</p>
+  <p style="margin-top: 12px;">No. We attribute ZYN to Swedish Match, part of PMI, while Skruf belongs to Imperial Brands through Skruf Snus AB. Keeping those ownership notes straight matters because older pouch content often swaps them around.</p>
 </details>
 
 
         <h3>ZYN: The Global Powerhouse</h3>
-        <p>ZYN is owned by Swedish Match and distributed globally by PMI (Philip Morris International). Since its launch, it's become the #1 nicotine pouch brand worldwide, with products in 50+ countries. The scale is staggering: ZYN's catalog spans 51 active products, ranging from budget minis at €1.22 per can to premium formats at €4.88.</p>
+        <p>{zynFact.name} comes from {zynFact.owner}. On SnusFriend alone, we currently list {zynProductCount} ZYN products, which is a good shorthand for the brand's broader, retailer-friendly assortment. The global lineup is wider still, but the exact Europe-visible range depends on market.</p>
 
         <h3>Skruf: The Swedish Craft Legacy</h3>
-        <p>Skruf was founded in 2003 in the small Swedish village of Skruf (hence the name) and is now owned by Imperial Brands. The brand has built its reputation on curated quality and heritage. Rather than chasing volume like ZYN, Skruf keeps its catalog lean—just 15 products—and prices them consistently at €3.63 per can. Skruf's real differentiator is the Superslim format, a slim-fit pouch design that no other major brand executes as well.</p>
+        <p>{skrufFact.name} is part of {skrufFact.owner} and still trades heavily on Swedish heritage. On SnusFriend we currently list {skrufProductCount} Skruf products, which captures the core difference versus ZYN: a tighter range, fewer experiments, and a more focused identity.</p>
 
         <h2>Head-to-Head: Flavor Range</h2>
 
@@ -154,8 +159,8 @@ const description = 'ZYN vs Skruf compared head-to-head. Flavor, strength, forma
             </tr>
             <tr style="border-bottom: 1px solid hsl(var(--border));">
               <td style="padding: 0.75rem;">Owner</td>
-              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Swedish Match / PMI</td>
-              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">Imperial Brands</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">{zynFact.owner}</td>
+              <td style="padding: 0.75rem; color: hsl(var(--muted-foreground));">{skrufFact.owner}</td>
             </tr>
             <tr>
               <td style="padding: 0.75rem;">Global Availability</td>
@@ -206,7 +211,7 @@ const description = 'ZYN vs Skruf compared head-to-head. Flavor, strength, forma
 
         <details class="group border border-border rounded-lg p-4 my-3">
           <summary class="cursor-pointer font-semibold text-foreground">Which brand is more popular in Sweden?</summary>
-          <p class="mt-2">ZYN is the global #1 by market share, but Skruf has a devoted local following and outsells ZYN in some Swedish cities.</p>
+          <p class="mt-2">Both brands have strong Swedish recognition, but they serve different audiences. ZYN is the broader mainstream option, while Skruf keeps a tighter, heritage-driven following.</p>
         </details>
 
         <details class="group border border-border rounded-lg p-4 my-3">
@@ -262,7 +267,7 @@ const description = 'ZYN vs Skruf compared head-to-head. Flavor, strength, forma
         "@type": "FAQPage",
         "mainEntity": [
           { "@type": "Question", "name": "Is ZYN stronger than Skruf?", "acceptedAnswer": { "@type": "Answer", "text": "Not necessarily. ZYN's strength range spans 1.5\u201316.5mg, while Skruf focuses on 6\u201312mg." } },
-          { "@type": "Question", "name": "Which brand is more popular in Sweden?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN is the global #1 by market share, but Skruf has a devoted local following in Sweden." } },
+          { "@type": "Question", "name": "Which brand is more popular in Sweden?", "acceptedAnswer": { "@type": "Answer", "text": "Both brands have strong Swedish recognition, but ZYN is the broader mainstream option while Skruf keeps a tighter heritage-driven following." } },
           { "@type": "Question", "name": "Are ZYN and Skruf safe?", "acceptedAnswer": { "@type": "Answer", "text": "Both are regulated nicotine products legal in the EU. They don't contain tobacco leaf. Nicotine is addictive regardless of brand." } },
           { "@type": "Question", "name": "Does Skruf's Superslim really feel that different?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Superslim pouch is noticeably slimmer and less bulky under the lip than ZYN's Slim." } },
           { "@type": "Question", "name": "Which brand has better flavor?", "acceptedAnswer": { "@type": "Answer", "text": "Subjective. ZYN has broader appeal; Skruf's flavors are bolder. ZYN's coffee range is unique; Skruf's Nordic Licorice is iconic." } },

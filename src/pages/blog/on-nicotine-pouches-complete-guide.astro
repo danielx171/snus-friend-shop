@@ -6,6 +6,8 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import BrandFactCallout from '@/components/astro/BrandFactCallout.astro';
+import { brandFacts } from '@/data/brand-facts';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -21,6 +23,7 @@ const onMint = findProduct('on', 'mint');
 const onCitrus = findProduct('on', 'citrus');
 const onCoffee = findProduct('on', 'coffee');
 const onAny = findProduct('on');
+const onFact = brandFacts.on;
 ---
 
 <Shop
@@ -47,6 +50,8 @@ const onAny = findProduct('on');
       readTime="16 min read"
     />
 
+    <BrandFactCallout fact={onFact} />
+
     <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
       <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
       <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
@@ -56,7 +61,7 @@ const onAny = findProduct('on');
 
     <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
       <summary style="font-weight: 600; cursor: pointer;">Who makes ON! nicotine pouches?</summary>
-      <p style="margin-top: 12px;">ON! is produced by Altria Group, one of the largest tobacco companies in the world, headquartered in Richmond, Virginia, USA. Altria acquired the ON! brand in 2019 through its investment in Helix Innovations and developed the NICOSILK delivery technology that powers the ON! PLUS product line.</p>
+      <p style="margin-top: 12px;">ON! sits within Altria's oral nicotine portfolio through Helix Innovations. For editorial consistency, we describe ON! as an Altria-owned, mini-format nicotine pouch brand and avoid treating every market as if it carries the same flavour range or product family.</p>
     </details>
 
     <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
@@ -72,12 +77,12 @@ const onAny = findProduct('on');
     <div class="key-takeaways" style="background: linear-gradient(135deg, #0d5d32 0%, #0a4625 100%); border-radius: 8px; padding: 24px; margin: 40px 0; color: white;">
         <h2 style="margin-top: 0; color: white;">Key Takeaways</h2>
         <ul style="list-style: none; padding: 0;">
-            <li style="padding: 10px 0;"><strong>ON! is produced by Altria and offers two distinct product lines: Classic (traditional pouches) and PLUS (NICOSILK technology with 30% faster nicotine delivery).</strong></li>
-            <li style="padding: 10px 0;"><strong>ON! Classic ranges 2–8 mg; ON! PLUS ranges 2–8 mg. Both offer 8–10 core flavours with options for beginners, everyday users, and ex-smokers.</strong></li>
-            <li style="padding: 10px 0;"><strong>NICOSILK technology uses silk-protein microcapsules for faster, smoother nicotine absorption—exclusive to ON! PLUS and ideal for users transitioning from smoking.</strong></li>
-            <li style="padding: 10px 0;"><strong>ON! costs €0.28–€0.45 per mg of nicotine, making it 10–15% cheaper than ZYN and VELO, and 5–10% cheaper than Nordic Spirit.</strong></li>
-            <li style="padding: 10px 0;"><strong>Flavour-by-flavour breakdown: ON! Mint (cool, balanced), Coffee (robust, earthy), Citrus (bright, zesty), Cinnamon (warm, spiced), Berry (sweet, fruity), and limited editions vary by region.</strong></li>
-            <li style="padding: 10px 0;"><strong>ON! is widely available in Germany, UK, and Northern Europe; limited in Southern Europe; banned in Belgium. Online retailers ship across most of EU with compliance to regional regulations.</strong></li>
+            <li style="padding: 10px 0;"><strong>ON! is best understood here as a compact Altria-owned pouch brand built around mini-format discretion and straightforward mint, coffee, and citrus profiles.</strong></li>
+            <li style="padding: 10px 0;"><strong>The exact ON! lineup changes by market, so we rely on current retailer stock rather than one universal global flavour count.</strong></li>
+            <li style="padding: 10px 0;"><strong>Mini-format sizing is the biggest practical differentiator: ON! usually feels smaller and less bulky than many mainstream slim pouches.</strong></li>
+            <li style="padding: 10px 0;"><strong>Price and availability depend heavily on local distribution, so use live product pages for current strengths, formats, and stock.</strong></li>
+            <li style="padding: 10px 0;"><strong>Our current ON! recommendations centre on Mint, Coffee, and Citrus because those are the SKUs we can verify and compare directly.</strong></li>
+            <li style="padding: 10px 0;"><strong>For Europe-specific buying advice, pair this guide with country pages and live catalog pages instead of assuming every ON! variant ships everywhere.</strong></li>
         </ul>
     </div>
 
@@ -119,7 +124,7 @@ const onAny = findProduct('on');
 
     <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
       <summary style="font-weight: 600; cursor: pointer;">Who makes ON! nicotine pouches?</summary>
-      <p style="margin-top: 12px;">ON! is owned by Swedish Match, one of the world's largest tobacco and nicotine manufacturers with headquarters in Stockholm. Swedish Match produces ON! to the same high standards as their premium Swedish snus brands, ensuring consistency and quality across their product range.</p>
+      <p style="margin-top: 12px;">For this guide, we attribute ON! to Altria's Helix business rather than Swedish Match. That ownership note matters because older articles and comparison pages often mix ON! into Swedish Match or PMI brand families, which creates unnecessary confusion.</p>
     </details>
 
     <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
@@ -132,20 +137,20 @@ const onAny = findProduct('on');
       <p style="margin-top: 12px;">ON! offers a focused range of classic flavours: Mint, Citrus, and Cinnamon are the main options, along with occasional limited editions. <a href="/blog/on-nicotine-pouches-complete-guide" style="color: hsl(var(--primary));">ON! flavours</a> prioritise clean, simple taste profiles over novelty, appealing to users who prefer straightforward, recognisable flavours.</p>
     </details>
 
-    <p>ON! is the American nicotine pouch brand owned by Altria, one of the world's largest tobacco and nicotine companies. While ON! originated in the US market, it has expanded rapidly into Europe since 2023, capitalising on strong distribution networks and investment in regulatory compliance.</p>
-    <p>For European consumers, ON! represents a compelling alternative to established brands like VELO, ZYN, and Nordic Spirit. <strong>ON! offers the best cost-per-mg value among major European brands, proprietary nicotine technology (NICOSILK) exclusive to ON! PLUS, and a flavour portfolio designed for both beginners and experienced users.</strong></p>
+    <p>ON! is an American-born nicotine pouch brand in Altria's oral nicotine portfolio. The European footprint is still uneven, which is why this guide focuses on the products and flavour families we can verify in current retail stock rather than repeating one fixed global spec sheet.</p>
+    <p>For European consumers, ON! is most useful as a discreet alternative to larger slim pouches from brands like VELO, ZYN, and Nordic Spirit. <strong>The compact pouch size is the practical reason many users try ON! first, especially if they want a smaller fit for work, commuting, or shorter sessions.</strong></p>
     <p>This guide covers everything you need to know about ON! nicotine pouches: the full product lineup, detailed flavour tasting notes, strength recommendations by user type, NICOSILK technology explained, and how ON! compares to competitors.</p>
 
     <h2>ON! Brand Overview and History</h2>
-    <p>ON! launched in the US in 2015 as Altria's direct competitor to competitors in the emerging nicotine pouch category. Altria, best known for Marlboro cigarettes and Copenhagen snus, leveraged its vast resources to develop and market ON! as a premium, tobacco-free alternative.</p>
+    <p>ON! launched in the US during the early nicotine pouch expansion cycle and later broadened through Altria's Helix business. For editorial purposes, the safest way to describe its history is simple: ON! started as a compact, tobacco-free oral nicotine brand and later expanded into more markets as retail demand for pouches grew.</p>
     <p><strong>Key milestones:</strong></p>
     <ul>
-        <li><strong>2015–2017:</strong> US market launch and rapid scaling; ON! becomes #2 brand by market share in North America.</li>
-        <li><strong>2018–2022:</strong> Regulatory challenges in US; expansion into Canada and test markets in Europe and Japan.</li>
-        <li><strong>2023–2024:</strong> EU expansion accelerates under TPD3 compliance; ON! establishes German distribution hub and enters UK, Benelux, and Scandinavian markets.</li>
-        <li><strong>2025–2026:</strong> ON! is now one of the top 5 nicotine pouch brands in Europe by volume; pricing strategy favours aggressive market penetration over margin maximisation.</li>
+        <li><strong>2015:</strong> ON! launches in the US as a tobacco-free oral nicotine brand.</li>
+        <li><strong>2019:</strong> Altria deepens its involvement through Helix, which is why ON! is usually linked with Altria in current market references.</li>
+        <li><strong>2023–2026:</strong> European availability becomes more visible, but the live lineup still varies widely by retailer and country.</li>
+        <li><strong>Today:</strong> ON! is best treated as a market-specific pouch family rather than a single universal global assortment.</li>
     </ul>
-    <p><strong>Why Altria chose aggressive European expansion:</strong> Regulated markets (EU, UK) offer stability and higher profit margins than developing markets. Altria's cigarette volumes are declining in developed regions; nicotine pouches are seen as a higher-margin replacement. ON! is the flagship product for this strategy.</p>
+    <p><strong>Why the ownership note matters:</strong> Many comparison articles casually group ON! with whichever large nicotine company they are already discussing. Keeping the attribution anchored to Altria/Helix makes the rest of the comparison work cleaner and avoids readers seeing different ownership claims on different pages.</p>
 
     <h2>ON! Product Lineup: Classic vs PLUS</h2>
     <p><strong>ON! Classic</strong> is the core product line, using traditional plant-fibre pouches with standard nicotine delivery. Designed for beginners and users who prefer gradual nicotine absorption.</p>

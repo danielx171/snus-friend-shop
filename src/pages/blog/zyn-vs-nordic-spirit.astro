@@ -4,10 +4,14 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import BrandFactCallout from '@/components/astro/BrandFactCallout.astro';
+import { brandFacts } from '@/data/brand-facts';
 
 const publishDate = '2026-04-07';
-const title = 'ZYN vs Nordic Spirit 2026: Which Is Better? (Tested)';
-const description = 'ZYN vs Nordic Spirit compared on flavour, strength, format, pricing, and user experience. Which premium Swedish pouch brand is right for you?';
+const title = 'ZYN vs Nordic Spirit 2026: Flavour, Strength, and Pouch Feel Compared';
+const description = 'Choosing between ZYN and Nordic Spirit? Compare flavour range, beginner strengths, pouch feel, and EU availability without the marketing fluff.';
+const zynFact = brandFacts.zyn;
+const nordicSpiritFact = brandFacts.nordicSpirit;
 ---
 
 <Shop
@@ -30,12 +34,15 @@ const description = 'ZYN vs Nordic Spirit compared on flavour, strength, format,
         readTime="10 min read"
       />
 
+      <BrandFactCallout fact={zynFact} title="Brand attribution: ZYN" />
+      <BrandFactCallout fact={nordicSpiritFact} title="Brand attribution: Nordic Spirit" />
+
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
 
         <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 24px 24px; margin: 24px 0 32px;">
           <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
           <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
-            ZYN offers a wider flavour range (15–20 options) and the broadest global availability, with a dry slim pouch and gradual nicotine release that suits beginners starting at 1.5 mg. Nordic Spirit (by Japan Tobacco International) has a slightly moister, faster-activating pouch, a higher entry-point strength (6 mg minimum), and more distinctive flavour profiles — particularly Bergamot Wildberry. Both are priced similarly; choose ZYN for range and availability, Nordic Spirit for design and flavour nuance.
+            ZYN offers the broader mainstream assortment and the lower beginner entry point, while Nordic Spirit leans into a tighter flavour range, a slightly softer pouch feel, and stronger UK shelf presence. Choose ZYN for range; choose Nordic Spirit for a narrower but more curated feel.
           </p>
         </div>
 
@@ -53,11 +60,11 @@ const description = 'ZYN vs Nordic Spirit compared on flavour, strength, format,
 
 <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
   <summary style="font-weight: 600; cursor: pointer;">Are ZYN and Nordic Spirit the same company?</summary>
-  <p style="margin-top: 12px;">No, ZYN is owned by Altria Group (US-based tobacco company), while Nordic Spirit is owned by Swedish Match, a separate Swedish tobacco manufacturer. Both are major players in the nicotine pouch industry but operate independently with distinct product strategies. This explains their different pouch designs, flavour selections, and pricing structures.</p>
+  <p style="margin-top: 12px;">No. ZYN is part of Swedish Match / PMI, while Nordic Spirit is a JTI brand. That distinction matters because many roundup articles still swap those ownership lines around.</p>
 </details>
 
         <p>
-          <a href="/brands/zyn">ZYN</a> and <a href="/brands/nordic-spirit">Nordic Spirit</a> are both premium Swedish nicotine pouch brands, but they appeal to different audiences. ZYN -- the world's best-selling nicotine pouch -- is known for its clean taste and global reach. Nordic Spirit -- owned by Japan Tobacco International -- has built a loyal following with its distinctive cylindrical can, muted design language, and consistent, understated flavour profiles.
+          <a href="/brands/zyn">ZYN</a> and <a href="/brands/nordic-spirit">Nordic Spirit</a> are both premium pouch brands, but they appeal to different audiences. ZYN is the broader, more widely distributed mainstream option, while Nordic Spirit leans into a tighter flavour range and a more understated product feel.
         </p>
         <p>
           This comparison helps you decide which belongs in your rotation. Whether you are <a href="/blog/best-nicotine-pouches-for-beginners-2026">new to pouches</a> or looking to explore premium options, read on.
@@ -66,20 +73,20 @@ const description = 'ZYN vs Nordic Spirit compared on flavour, strength, format,
         <h2>Brand Heritage</h2>
         <h3>ZYN: Swedish Match (Philip Morris International)</h3>
         <p>
-          ZYN was created by Swedish Match, now a Philip Morris International company. ZYN pioneered the modern nicotine pouch category and remains the market leader by a significant margin. In the US alone, ZYN shipped over 500 million cans in 2025. The European range, while smaller than the US lineup, covers the core flavours and strengths that built the brand. Read our <a href="/blog/zyn-nicotine-pouches-complete-guide">complete ZYN guide</a> for the full product breakdown.
+          ZYN was created by Swedish Match, now part of Philip Morris International. The European range is smaller than the global ZYN assortment, which is why we keep talking about market-specific flavour availability rather than one single universal count. Read our <a href="/blog/zyn-nicotine-pouches-complete-guide">complete ZYN guide</a> for the full product breakdown.
         </p>
 
         <h3>Nordic Spirit: Japan Tobacco International</h3>
         <p>
-          Nordic Spirit was launched by JTI (Japan Tobacco International) as a direct competitor to ZYN in the European market. The brand's Scandinavian design ethos -- clean lines, earthy colour palette, minimal branding -- positions it as the sophisticated alternative. Nordic Spirit has been particularly successful in the UK, where it is one of the top-selling nicotine pouch brands. See our <a href="/blog/nordic-spirit-nicotine-pouches-complete-guide">complete Nordic Spirit guide</a> for more detail.
+          Nordic Spirit was launched by JTI (Japan Tobacco International) as a mainstream European pouch brand. The Scandinavian design cues and tighter range position it as the more curated alternative. See our <a href="/blog/nordic-spirit-nicotine-pouches-complete-guide">complete Nordic Spirit guide</a> for more detail.
         </p>
 
         <h2>Head-to-Head: Flavour Range</h2>
         <p>
-          ZYN's European range includes approximately 15-20 flavours spanning mint, citrus, coffee, and berry categories. The core lineup -- Cool Mint, Citrus, Espressino, Bellini -- is tight and well-curated. ZYN flavours tend toward clean, subtle profiles that do not overpower. The approach is minimalist: every flavour in the range is designed to be inoffensive enough for all-day use.
+          ZYN's European range usually lands around the mid-teens for flavours, but the exact mix depends on the country and retailer. The core lineup -- Cool Mint, Citrus, Espressino, Bellini -- is tight and well-curated. ZYN flavours tend toward clean, subtle profiles that do not overpower.
         </p>
         <p>
-          Nordic Spirit offers around 10-12 flavours. Spearmint, Frosty Mint, Bergamot Wildberry, Elderflower, and Mocha are the headliners. Nordic Spirit's flavour philosophy sits between ZYN's subtlety and VELO's boldness -- there is enough character to be interesting, but the profiles remain smooth and composed. Bergamot Wildberry is a standout: a sophisticated berry-floral blend that does not exist elsewhere in the market.
+          Nordic Spirit usually offers a smaller market-specific lineup. Spearmint, Frosty Mint, Bergamot Wildberry, Elderflower, and Mocha are the headliners. Nordic Spirit's flavour philosophy sits between ZYN's subtlety and VELO's boldness -- enough character to stay interesting, without becoming chaotic.
         </p>
         <p>
           <strong>Verdict:</strong> ZYN for a wider selection. Nordic Spirit for more distinctive, nuanced flavour profiles.

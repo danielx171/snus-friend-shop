@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-04-13
+Last updated: 2026-04-14
 
 ## Site Status: Live
 
@@ -19,6 +19,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - **Rewards:** Canonical config at `src/config/rewards.ts` — **10 SnusCoins per €1** (aligned with DB trigger)
 - **Gamification:** The Vault, SnusCoins, Circles, Missions, Badges, Daily Drop, The Board
 - **Version:** 1.6.1
+- **Audit tooling:** Search Console + GA4 read scripts live, new repo-owned sync commands added for GSC / PageSpeed / rank tracking
 
 ## Remaining
 
@@ -35,16 +36,17 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 
 - [ ] Finland/Norway legal content reconciliation (Cowork legal review)
 - [ ] Medical reviewer persona for YMYL articles (Cowork)
-- [ ] Homepage copy refresh (awaiting `cowork/content/homepage-copy-variations.md`)
-- [ ] Title CTR refresh on low-CTR GSC pages (awaiting Codex GSC list)
+- [x] Homepage proof-led copy refresh shipped on hero + guide grid (further Cowork variations optional)
+- [x] First CTR refresh shipped on `/blog/best-nicotine-pouches-netherlands-2026`, `/blog/best-nicotine-pouches-germany-2026`, `/blog/best-nicotine-pouches-sensitive-gums`, `/blog/buying-nicotine-pouches-norway-2026`, `/blog/zyn-vs-nordic-spirit`, and `/blog/best-nicotine-pouches-2026`
 - [ ] Klaviyo wiring (5 template IDs exist; needs Klaviyo UI setup + events from `create-nyehandel-checkout`)
 - [ ] Trustpilot business profile + footer widget (20 min account creation)
 - [ ] Cart verification via Codex browser test (v4 BroadcastChannel sync deployed)
-- [ ] Full-tool audit: PageSpeed ×10 pages, GSC index status, Sentry triage (periodic)
+- [ ] Full-tool audit follow-up: replace the referrer-restricted `PAGESPEED_API_KEY`, add `GOOGLE_CUSTOM_SEARCH_API_KEY`, and expose local Supabase admin envs so the new sync jobs can run end-to-end
 
 ### MEDIUM
 
 - [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
+- [ ] Monitor the refreshed CTR pages in Search Console for 14 days and iterate on snippets/internal links based on impressions + CTR.
 - [ ] Brand page real logos (still placeholder for brands without `logoUrl` — monogram tile is the fallback)
 - [ ] `products.json` aggressive slim (236KB → ≤150KB target; would need gzip or dropping more fields)
 - [ ] Blog read-time field on cards (registry schema supports it, not populated)

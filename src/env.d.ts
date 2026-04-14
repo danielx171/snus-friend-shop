@@ -13,6 +13,11 @@ interface ImportMetaEnv {
   readonly SUPABASE_URL: string;
   readonly SUPABASE_SERVICE_ROLE_KEY: string;
   readonly PAGESPEED_API_KEY: string;
+  readonly GOOGLE_APPLICATION_CREDENTIALS: string;
+  readonly GOOGLE_SERVICE_ACCOUNT_KEY_PATH: string;
+  readonly GA4_PROPERTY_ID: string;
+  readonly SEARCH_CONSOLE_PROPERTY: string;
+  readonly GOOGLE_CUSTOM_SEARCH_API_KEY: string;
   // Legacy VITE_ vars (still used by existing React components during migration)
   readonly VITE_SUPABASE_URL: string;
   readonly VITE_SUPABASE_PUBLISHABLE_KEY: string;

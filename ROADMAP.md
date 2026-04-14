@@ -4,6 +4,32 @@
 > Original checkout migrated Shopify → Nyehandel (Steps 25-40). Shopify fully removed.
 > Launch Polish Sprint (Apr 8-12) complete: all waves shipped. See `CURRENT_PRIORITIES.md` for the active punch list.
 
+## Audit-Driven Growth + Trust Stabilization (2026-04-14)
+
+- [x] Added repo-owned SEO script surfaces in `scripts/`:
+  - `bun run audit:gsc:sync`
+  - `bun run audit:pagespeed:sync`
+  - `bun run audit:rank`
+- [x] Added shared helpers for script-side Supabase admin access, PageSpeed fetch/summarize logic, and fixed PageSpeed target URL configuration.
+- [x] Added a shared brand-facts layer under `src/data/brand-facts.ts` plus a reusable attribution callout for high-risk brand/editorial pages.
+- [x] Reconciled the homepage hero + guide grid away from unsupported superlatives and toward proof-led copy based on catalog size, shipping, and rewards.
+- [x] Reconciled the highest-risk ownership/manufacturer drift on:
+  - `src/pages/blog/on-nicotine-pouches-complete-guide.astro`
+  - `src/pages/blog/nordic-spirit-nicotine-pouches-complete-guide.astro`
+  - `src/pages/blog/velo-vs-loop-2026.astro`
+  - `src/pages/blog/zyn-vs-skruf-2026.astro`
+  - `src/pages/blog/zyn-vs-nordic-spirit.astro`
+  - `src/pages/blog/zyn-flavours-complete-guide.astro`
+- [x] Shipped the first CTR refresh on the six target pages by updating titles/descriptions and strengthening internal linking from the homepage/blog hub.
+- [ ] Add a server-safe `PAGESPEED_API_KEY` for CLI usage.
+  Current key is still HTTP-referrer restricted and fails from the terminal.
+- [ ] Add `GOOGLE_CUSTOM_SEARCH_API_KEY` so `bun run audit:rank` can populate `seo_rank_tracking`.
+- [ ] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.
+- [ ] Continue the second trust pass:
+  - deeper ON! product-line cleanup
+  - country/legal reconciliation with external review
+  - medical/YMYL review workflow before stronger health claims ship
+
 ## UX & Infrastructure (completed 2026-03-20)
 
 - [x] Compact ProductCard variant (`variant: 'compact'`) — 3:2 image, icon-only CTA, denser grid

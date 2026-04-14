@@ -148,10 +148,10 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
       <!-- Left: text with staggered reveal -->
       <div class="flex-1 text-center lg:text-left z-10">
         <p class="hero-reveal mb-3 text-sm font-medium uppercase tracking-widest" style={`color: hsl(var(--hero-muted)); animation: heroSlideUp 0.6s ease-out both;`}>
-          Europe's #1 Nicotine Pouch Shop
+          EU Warehouse • Fast Dispatch • Rewards On Every Order
         </p>
         <h1 class="hero-reveal text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]" style={`color: hsl(var(--hero-text)); font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; animation: heroSlideUp 0.6s ease-out 0.1s both;`}>
-          Europe's Largest Nicotine<br class="hidden sm:block" /> Pouch Selection
+          Shop {allProducts.length}+ Nicotine<br class="hidden sm:block" /> Pouches From {brands.length} Brands
         </h1>
         <p class="hero-reveal mx-auto mt-4 max-w-xl text-lg lg:mx-0" style={`color: hsl(var(--hero-muted)); animation: heroSlideUp 0.6s ease-out 0.2s both;`}>
           {heroDescription}
@@ -170,8 +170,8 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
           </div>
           <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
           <div>
-            <div class="text-3xl font-bold" style={`color: hsl(var(--hero-text));`}>Free</div>
-            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>EU Shipping</div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--hero-text));`}>Rewards</div>
+            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Every order</div>
           </div>
         </div>
 
@@ -555,7 +555,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         Expert Guides & Reviews
       </h2>
       <p class="mb-10 text-center text-muted-foreground">
-        In-depth, fact-checked guides written by nicotine pouch enthusiasts
+        Fresh guides for real buying questions, brand comparisons, and country-specific shopping advice
       </p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <a href="/blog/strongest-nicotine-pouches-ranked-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
@@ -571,17 +571,17 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         <a href="/blog/zyn-flavours-complete-guide" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
           <span class="mb-2 inline-block rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-600">Flavour Guide</span>
           <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">ZYN Flavours: Complete Guide</h3>
-          <p class="mt-2 text-sm text-muted-foreground">All 56+ ZYN flavours ranked — mint, citrus, coffee, berry. Strengths from 1.5 to 16.5 mg.</p>
+          <p class="mt-2 text-sm text-muted-foreground">How the European ZYN lineup compares with the wider global range, plus the flavours worth starting with.</p>
         </a>
-        <a href="/blog/how-to-use-nicotine-pouches" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
-          <span class="mb-2 inline-block rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-600">Beginner</span>
-          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">How to Use Nicotine Pouches</h3>
-          <p class="mt-2 text-sm text-muted-foreground">Step-by-step guide for first-time users. Placement, timing, strength selection, and tips.</p>
+        <a href="/blog/best-nicotine-pouches-germany-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-600">Germany</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Best Nicotine Pouches in Germany</h3>
+          <p class="mt-2 text-sm text-muted-foreground">EU-shipped picks, price ranges, and the short list worth starting with if you are buying from Germany.</p>
         </a>
-        <a href="/blog/nicotine-pouches-vs-vaping" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
-          <span class="mb-2 inline-block rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-600">Comparison</span>
-          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Nicotine Pouches vs Vaping</h3>
-          <p class="mt-2 text-sm text-muted-foreground">Health, cost, convenience, and social factors compared side by side.</p>
+        <a href="/blog/best-nicotine-pouches-netherlands-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-600">Netherlands</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Best Nicotine Pouches in the Netherlands</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Dutch-friendly picks with practical shipping, pricing, and legality context for 2026 shoppers.</p>
         </a>
         <a href="/blog" class="group flex items-center justify-center rounded-xl border border-dashed border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
           <div class="text-center">

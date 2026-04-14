@@ -1,0 +1,35 @@
+---
+import type { BrandFact } from '@/data/brand-facts';
+
+interface Props {
+  fact: BrandFact;
+  title?: string;
+}
+
+const { fact, title = 'Brand attribution' } = Astro.props as Props;
+---
+
+<aside
+  class="not-prose my-6 rounded-xl border border-border bg-card/70 p-4 text-sm text-muted-foreground"
+  aria-label={`${fact.name} brand attribution`}
+>
+  <p class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">{title}</p>
+  <p class="leading-6">
+    <strong class="text-foreground">{fact.name}</strong> is currently described here as owned by
+    <strong class="text-foreground"> {fact.owner}</strong> and made by
+    <strong class="text-foreground"> {fact.manufacturer}</strong>. {fact.positioningLabel}
+    {` ${fact.flavourSkuLabel}`}
+  </p>
+  <p class="mt-3 text-xs">
+    Last verified {fact.lastVerified}. Sources:
+    {fact.sources.map((source, index) => (
+      <>
+        {index > 0 && ', '}
+        <a href={source.url} class="underline hover:text-foreground" target="_blank" rel="noopener noreferrer">
+          {source.label}
+        </a>
+      </>
+    ))}
+    .
+  </p>
+</aside>
