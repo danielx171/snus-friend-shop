@@ -1,6 +1,6 @@
 ---
 export const prerender = true;
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
@@ -96,8 +96,21 @@ if (heroProducts.length < 10) {
   }
 }
 
-// Brand logo images for the marquee
-const topBrandNames = brands.slice(0, 12).map(b => b.data.name);
+const heroCenterProduct = heroProducts[0] ?? null;
+const heroOrbitProducts = heroProducts.slice(1, 5);
+const heroMobileProducts = heroProducts.slice(0, 4);
+const heroCenterImage = heroCenterProduct
+  ? await getImage({
+      src: heroCenterProduct.data.imageUrl,
+      alt: heroCenterProduct.data.name,
+      width: 360,
+      height: 360,
+      widths: [180, 360],
+      sizes: '180px',
+      format: 'webp',
+      quality: 80,
+    })
+  : null;
 
 const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
 ---
@@ -107,8 +120,17 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   description={heroDescription}
   ogImage={tenant.seo.ogImage}
 >
-  {/* Preload LCP hero image — start CDN fetch before browser discovers the <img> */}
-  {heroProducts[0] && <link rel="preload" as="image" href={heroProducts[0]!.data.imageUrl} fetchpriority="high" />}
+  {/* Preload the transformed LCP asset so the browser fetches the exact hero image variant we render. */}
+  {heroCenterImage && (
+    <link
+      rel="preload"
+      as="image"
+      href={heroCenterImage.src}
+      imagesrcset={heroCenterImage.srcSet.attribute}
+      imagesizes="180px"
+      fetchpriority="high"
+    />
+  )}
   <!-- Hero — Immersive 3D product showcase -->
   <section class="relative overflow-hidden border-b border-border" style={`background: hsl(var(--hero-bg));`}>
 
@@ -138,12 +160,12 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         <!-- Animated stats row -->
         <div class="hero-reveal mt-8 flex justify-center gap-8 lg:justify-start" style="animation: heroSlideUp 0.6s ease-out 0.3s both;">
           <div>
-            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`} data-count-to={allProducts.length}>{allProducts.length}</div>
+            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`}>{allProducts.length}</div>
             <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Products</div>
           </div>
           <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
           <div>
-            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`} data-count-to={brands.length}>{brands.length}</div>
+            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`}>{brands.length}</div>
             <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Brands</div>
           </div>
           <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
@@ -177,16 +199,20 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         <div class="hero-orbit relative" style="width: 420px; height: 420px; perspective: 800px;">
           <!-- Orbital ring of products -->
           <div class="hero-orbit-ring absolute inset-0" style="transform-style: preserve-3d; animation: heroOrbit 30s linear infinite;">
-            {heroProducts.slice(0, 8).map((p, i) => {
+            {heroOrbitProducts.map((p, i) => {
               if (!p) return null;
-              const angle = (i / 8) * 360;
-              const radius = 160;
+              const angle = (i / heroOrbitProducts.length) * 360;
+              const radius = 148;
               return (
-                <img
+                <Image
                   src={p.data.imageUrl}
-                  alt={p.data.name}
+                  alt=""
                   width="100"
                   height="100"
+                  widths={[100, 200]}
+                  sizes="100px"
+                  format="webp"
+                  quality={60}
                   class="hero-orbit-item absolute rounded-xl"
                   style={`
                     left: 50%; top: 50%;
@@ -197,24 +223,26 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
                     backface-visibility: hidden;
                   `}
                   loading="lazy"
+                  decoding="async"
+                  aria-hidden="true"
                 />
               );
             })}
           </div>
 
           <!-- Center featured product (larger, floating) — LCP element -->
-          {heroProducts[0] && (
+          {heroCenterProduct && heroCenterImage && (
             <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-              <Image
-                src={heroProducts[0]!.data.imageUrl}
-                alt={heroProducts[0]!.data.name}
-                width={360}
-                height={360}
-                widths={[180, 360]}
+              <img
+                src={heroCenterImage.src}
+                srcset={heroCenterImage.srcSet.attribute}
                 sizes="180px"
-                format="webp"
-                quality={80}
+                alt={heroCenterProduct.data.name}
+                width="180"
+                height="180"
                 loading="eager"
+                decoding="sync"
+                fetchpriority="high"
                 class="hero-center-can rounded-2xl"
                 style="width: 180px; height: 180px; animation: heroCenterFloat 4s ease-in-out infinite; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) drop-shadow(0 0 20px hsl(var(--primary) / 0.15));"
               />
@@ -228,7 +256,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
 
       <!-- Mobile: scrolling product strip with 3D -->
       <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory px-1" style="perspective: 400px;">
-        {heroProducts.slice(0, 6).map((p, i) => p && (
+        {heroMobileProducts.map((p, i) => p && (
           <Image
             src={p.data.imageUrl}
             alt={p.data.name}
@@ -335,33 +363,6 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
     </div>
   </section>
 
-  <!-- Purchase-based recommendations (logged-in users only) -->
-  <RecommendationsIsland
-    client:visible
-    productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
-      slug: p.id,
-      name: p.data.name,
-      brand: p.data.brand,
-      brandSlug: p.data.brandSlug,
-      flavorKey: p.data.flavorKey,
-      imageUrl: p.data.imageUrl,
-      ratings: p.data.ratings,
-      prices: { pack1: p.data.prices.pack1 },
-    })))}
-  />
-
-  <!-- Recently Viewed (client-side, shows only if user has browsing history) -->
-  <RecentlyViewedIsland
-    client:visible
-    productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
-      slug: p.id,
-      name: p.data.name,
-      brand: p.data.brand,
-      imageUrl: p.data.imageUrl,
-      prices: { pack1: p.data.prices.pack1 },
-    })))}
-  />
-
   <!-- Trust bar -->
   <section class="border-b border-border bg-background py-4">
     <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 sm:px-6 lg:px-8 text-muted-foreground">
@@ -385,7 +386,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   </section>
 
   <!-- Best Sellers -->
-  <section id="best-sellers" class="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
+  <section id="best-sellers" class="home-deferred-section border-b border-border bg-background py-16 sm:py-20 lg:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mb-10 flex items-end justify-between">
         <div>
@@ -459,7 +460,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
 
   <!-- New Arrivals -->
   {newArrivals.length > 0 && (
-    <section id="new-arrivals" class="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
+    <section id="new-arrivals" class="home-deferred-section border-b border-border bg-background py-16 sm:py-20 lg:py-24">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mb-10 flex items-end justify-between">
           <div>
@@ -494,7 +495,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   )}
 
   <!-- Popular Brands — top brands by product count for GSC internal linking -->
-  <section class="border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">
+  <section class="home-deferred-section border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-3 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Popular Brands
@@ -548,7 +549,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   </section>
 
   <!-- Popular Guides — internal linking to top blog content -->
-  <section class="border-b border-border bg-card/30 py-12 sm:py-16">
+  <section class="home-deferred-section border-b border-border bg-card/30 py-12 sm:py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-3 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Expert Guides & Reviews
@@ -592,8 +593,34 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
     </div>
   </section>
 
+  <!-- Personalised rows — intentionally lower on the page so the homepage can prioritise generic content and LCP. -->
+  <RecommendationsIsland
+    client:visible
+    productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
+      slug: p.id,
+      name: p.data.name,
+      brand: p.data.brand,
+      brandSlug: p.data.brandSlug,
+      flavorKey: p.data.flavorKey,
+      imageUrl: p.data.imageUrl,
+      ratings: p.data.ratings,
+      prices: { pack1: p.data.prices.pack1 },
+    })))}
+  />
+
+  <RecentlyViewedIsland
+    client:visible
+    productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
+      slug: p.id,
+      name: p.data.name,
+      brand: p.data.brand,
+      imageUrl: p.data.imageUrl,
+      prices: { pack1: p.data.prices.pack1 },
+    })))}
+  />
+
   <!-- Shop by Brand -->
-  <section class="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
+  <section class="home-deferred-section border-b border-border bg-background py-16 sm:py-20 lg:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-10 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Shop by Brand
@@ -655,7 +682,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   </section>
 
   <!-- Rewards & Gamification CTA -->
-  <section class="border-b border-border py-16 sm:py-20 lg:py-24" style={`background: hsl(var(--hero-bg));`}>
+  <section class="home-deferred-section border-b border-border py-16 sm:py-20 lg:py-24" style={`background: hsl(var(--hero-bg));`}>
     <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col items-center gap-8 text-center sm:flex-row sm:text-left">
         <div class="flex-1">
@@ -766,32 +793,15 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
         }
       }
     } catch(e) {}
-
-    // Animated stat counters
-    document.querySelectorAll('[data-count-to]').forEach(function(el) {
-      var target = parseInt(el.getAttribute('data-count-to') || '0');
-      var duration = 1500;
-      var start = performance.now();
-      function step(now) {
-        var progress = Math.min((now - start) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-        el.textContent = Math.round(target * eased) + (progress >= 1 ? '+' : '');
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      // Only animate if in viewport
-      var observer = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
-          start = performance.now();
-          requestAnimationFrame(step);
-        }
-      });
-      observer.observe(el);
-    });
   })();
   </script>
 
   <style>
+    .home-deferred-section {
+      content-visibility: auto;
+      contain-intrinsic-size: 1px 960px;
+    }
+
     /* ═══ 3D Hero Animations ═══ */
 
     /* Text reveal — slide up with fade */

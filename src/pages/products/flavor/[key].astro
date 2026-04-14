@@ -3,15 +3,19 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
+import { getEditorialFacts } from '@/data/editorial-facts';
 import { getCollection } from 'astro:content';
 import { slimProductData, writeProductsJson } from '@/lib/product-json';
+
+const facts = await getEditorialFacts();
+const brandCountText = `${facts.brandCountLabel} brands`;
 
 const FLAVOR_META: Record<string, { label: string; h1: string; desc: string; intro: string }> = {
   'mint': {
     label: 'Mint',
     h1: 'Mint Nicotine Pouches',
-    desc: 'Shop mint nicotine pouches from ZYN, VELO, White Fox, Loop and 50+ brands. Peppermint, spearmint, menthol and ice mint. Free EU delivery over \u20ac29.',
-    intro: 'Mint is the most popular nicotine pouch flavour category by a wide margin, accounting for roughly half of all pouches sold in Europe. The appeal is straightforward: mint provides a clean, cooling sensation that complements nicotine delivery and leaves your breath fresh. But not all mints are created equal. Peppermint pouches deliver a sharp, intense cool; spearmint is softer and slightly sweet; menthol blends hit with an icy blast that numbs the gum; and some brands like White Fox and ICEBERG push the cooling factor to extreme levels. Whether you want a gentle everyday mint from ZYN or HELWIT, a bold double mint from White Fox, or an icy menthol hit from VELO Mighty Peppermint, our mint collection spans every strength and intensity level from over 50 brands.',
+    desc: `Shop mint nicotine pouches from ZYN, VELO, White Fox, Loop and ${brandCountText}. Peppermint, spearmint, menthol and ice mint. Free EU delivery over \u20ac29.`,
+    intro: `Mint is the most popular nicotine pouch flavour category by a wide margin, accounting for roughly half of all pouches sold in Europe. The appeal is straightforward: mint provides a clean, cooling sensation that complements nicotine delivery and leaves your breath fresh. But not all mints are created equal. Peppermint pouches deliver a sharp, intense cool; spearmint is softer and slightly sweet; menthol blends hit with an icy blast that numbs the gum; and some brands like White Fox and ICEBERG push the cooling factor to extreme levels. Whether you want a gentle everyday mint from ZYN or HELWIT, a bold double mint from White Fox, or an icy menthol hit from VELO Mighty Peppermint, our mint collection spans every strength and intensity level from ${brandCountText}.`,
   },
   'citrus': {
     label: 'Citrus',
@@ -34,7 +38,7 @@ const FLAVOR_META: Record<string, { label: string; h1: string; desc: string; int
   'fruit': {
     label: 'Fruit',
     h1: 'Fruit Nicotine Pouches',
-    desc: 'Shop fruit nicotine pouches \u2014 apple, peach, mango, watermelon, banana and more. All strengths, 50+ brands. Free EU delivery over \u20ac29.',
+    desc: `Shop fruit nicotine pouches \u2014 apple, peach, mango, watermelon, banana and more. All strengths from ${brandCountText}. Free EU delivery over \u20ac29.`,
     intro: 'Fruit nicotine pouches cover the widest flavour territory of any category. Apple, peach, mango, watermelon, banana, passion fruit, and dozens of creative combinations mean there is always something new to try. Loop leads the innovation charge with unexpected pairings like jalapeno lime and habanero mint, while VELO and ZYN offer crowd-pleasing options like Tropical Mango and Apple Mint. Chainpop from Gothenburg has built its entire brand identity around premium fruit flavours. The best fruit pouches achieve a natural sweetness rather than an artificial candy taste, though some brands like XQS deliberately lean into candy-inspired profiles. Fruit pouches work across all strength levels and formats, making this the go-to category for users who want variety and enjoy rotating through different flavour experiences.',
   },
   'licorice': {

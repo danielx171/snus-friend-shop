@@ -3,8 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
+import { getEditorialFacts } from '@/data/editorial-facts';
 import { getCollection } from 'astro:content';
 import { slimProductData, writeProductsJson } from '@/lib/product-json';
+
+const facts = await getEditorialFacts();
+const brandCountText = `${facts.brandCountLabel} brands`;
 
 const STRENGTH_META: Record<string, { label: string; range: string; h1: string; desc: string; intro: string }> = {
   'light': {
@@ -25,7 +29,7 @@ const STRENGTH_META: Record<string, { label: string; range: string; h1: string; 
     label: 'Strong',
     range: '6-12mg',
     h1: 'Strong Nicotine Pouches (6\u201312mg)',
-    desc: 'Shop strong nicotine pouches (6-12mg) \u2014 satisfying kick from ZYN, VELO, Loop, Skruf and 50+ brands. Free EU delivery over \u20ac29.',
+    desc: `Shop strong nicotine pouches (6-12mg) \u2014 satisfying kick from ZYN, VELO, Loop, Skruf and ${brandCountText}. Free EU delivery over \u20ac29.`,
     intro: 'Strong nicotine pouches at 6 to 12mg per pouch deliver a noticeable, satisfying kick that experienced users appreciate. This is the bracket where former smokers and traditional snus users typically land when switching to pouches, as it provides enough nicotine to genuinely satisfy cravings. Loop Strong, Skruf Extra Strong, VELO Strong, and ZYN Strong all have excellent options in this range. Klint and VID also sit comfortably here with flavour-forward products. The nicotine sensation is clear but not overwhelming, making these pouches viable for extended sessions of 30 minutes or more. If you have tried normal-strength pouches and find them a bit too mild, strong is the logical next step without venturing into extreme territory.',
   },
   'extra-strong': {

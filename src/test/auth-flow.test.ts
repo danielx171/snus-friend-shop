@@ -17,6 +17,7 @@ const registerSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   fullName: z.string().min(1, 'Full name is required'),
+  referralCode: z.string().optional(),
   ageVerified: z.literal('on', { errorMap: () => ({ message: 'You must confirm you are 18+' }) }),
   termsAccepted: z.literal('on', { errorMap: () => ({ message: 'You must accept the terms' }) }),
 });
@@ -74,6 +75,10 @@ describe('auth: register schema', () => {
   it('rejects when the terms checkbox is not accepted', () => {
     const r = registerSchema.safeParse({ ...valid, termsAccepted: 'off' });
     expect(r.success).toBe(false);
+  });
+
+  it('accepts an optional referral code', () => {
+    expect(registerSchema.safeParse({ ...valid, referralCode: 'SF-AB12CD34' }).success).toBe(true);
   });
 });
 

@@ -3,7 +3,9 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
 import { blogArticles, getReadTime } from '@/data/blog-registry';
+import { formatDisplayDate } from '@/lib/dates';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -19,6 +21,7 @@ if (missing.length > 0) {
 }
 
 const articles = blogArticles;
+const facts = await getEditorialFacts();
 
 const tagColors: Record<string, string> = {
   'Brand Spotlight': '#2E7D32',
@@ -148,7 +151,7 @@ const blogJsonLd = {
                     </div>
                     {article.date && (
                       <time datetime={article.date} class="tabular-nums">
-                        {new Date(article.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {formatDisplayDate(article.date)}
                       </time>
                     )}
                   </div>
@@ -197,7 +200,7 @@ const blogJsonLd = {
                     {article.date && (
                       <p class="text-xs text-muted-foreground pt-2 mt-1 border-t border-border/60">
                         <time datetime={article.date}>
-                          {new Date(article.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          {formatDisplayDate(article.date)}
                         </time>
                         <span class="mx-1.5">&middot;</span>
                         SnusFriend Editorial
@@ -214,7 +217,7 @@ const blogJsonLd = {
       <div class="mt-12 rounded-xl border border-border bg-card/80 p-8 text-center">
         <h2 class="text-xl font-semibold mb-2">Explore More</h2>
         <p class="text-muted-foreground text-sm max-w-md mx-auto mb-6">
-          Browse our full catalogue of nicotine pouches from 50+ European brands.
+          Browse our full catalogue of nicotine pouches from {facts.brandCountLabel} European brands.
         </p>
         <a href="/products" class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
           Shop All Products

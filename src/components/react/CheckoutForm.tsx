@@ -5,6 +5,8 @@ import { packSizeMultipliers, type PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
 import { actions } from 'astro:actions';
 import { trackCheckoutStarted } from '@/lib/analytics';
+import { apiFetch } from '@/lib/api';
+import { getShippingMethodsForCountry } from '@/lib/shipping';
 import ReductionAlert from './ReductionAlert';
 
 interface SavedAddress {
@@ -43,36 +45,6 @@ const SHIPPING_COUNTRIES = [
   { code: 'GB', name: 'United Kingdom' },
 ] as const;
 
-/** Maps frontend shipping IDs to Nyehandel's expected method names */
-const SHIPPING_NAME_MAP: Record<string, string> = {
-  'ups-standard': 'UPS Standard (J229F1)',
-  'ups-express': 'UPS Express Saver',
-  'dhl-economy-eu': 'DHL Economy EU',
-  'dhl-express-eu': 'DHL Express EU',
-  'dhl-economy-intl': 'DHL Economy (Non EU)',
-  'dhl-express-intl': 'DHL Express (Non EU)',
-};
-
-function getShippingMethods(country: string) {
-  if (country === 'SE') {
-    return [
-      { id: 'ups-standard', label: 'UPS Standard (2-3 days)', price: 4.90 },
-      { id: 'ups-express', label: 'UPS Express (1-2 days)', price: 9.90 },
-    ];
-  }
-  const euCountries = ['DE', 'AT', 'DK', 'FI', 'NL', 'BE', 'FR', 'IT', 'ES', 'PL', 'CZ', 'IE', 'PT'];
-  if (euCountries.includes(country)) {
-    return [
-      { id: 'dhl-economy-eu', label: 'DHL Economy EU (5-7 days)', price: 6.90 },
-      { id: 'dhl-express-eu', label: 'DHL Express EU (2-3 days)', price: 12.90 },
-    ];
-  }
-  return [
-    { id: 'dhl-economy-intl', label: 'DHL Economy International (7-14 days)', price: 9.90 },
-    { id: 'dhl-express-intl', label: 'DHL Express International (3-5 days)', price: 19.90 },
-  ];
-}
-
 function packLabel(packSize: PackSize): string {
   const qty = packSizeMultipliers[packSize];
   return qty === 1 ? '1 can' : `${qty} cans`;
@@ -98,10 +70,18 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
     } catch { return false; }
   });
 
-  const cartItems = isBuyNow && buyNowItem ? [buyNowItem] : storeCartItems;
-  const cartTotal = isBuyNow && buyNowItem
-    ? (buyNowItem.product.prices[buyNowItem.packSize] ?? 0) * buyNowItem.quantity
-    : storeCartTotal;
+  const cartItems = useMemo(
+    () => (isBuyNow && buyNowItem ? [buyNowItem] : storeCartItems),
+    [isBuyNow, buyNowItem, storeCartItems],
+  );
+  const cartTotal = useMemo(
+    () => (
+      isBuyNow && buyNowItem
+        ? (buyNowItem.product.prices[buyNowItem.packSize] ?? 0) * buyNowItem.quantity
+        : storeCartTotal
+    ),
+    [isBuyNow, buyNowItem, storeCartTotal],
+  );
 
   const [email, setEmail] = useState(userEmail || '');
   const [firstName, setFirstName] = useState(lastAddress?.firstname ?? '');
@@ -122,8 +102,32 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
   const [discountApplied, setDiscountApplied] = useState<{ code: string; amount: number; type: 'percentage' | 'fixed'; value: number } | null>(null);
   const [discountError, setDiscountError] = useState('');
   const [discountLoading, setDiscountLoading] = useState(false);
+  const [availableShippingNames, setAvailableShippingNames] = useState<string[] | null>(null);
 
-  const shippingMethods = useMemo(() => getShippingMethods(country), [country]);
+  useEffect(() => {
+    let cancelled = false;
+
+    apiFetch<{ methods?: string[] }>('get-shipping-methods')
+      .then((data) => {
+        if (!cancelled) {
+          setAvailableShippingNames(Array.isArray(data.methods) ? data.methods : null);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setAvailableShippingNames(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const shippingMethods = useMemo(
+    () => getShippingMethodsForCountry(country, availableShippingNames),
+    [country, availableShippingNames],
+  );
   const selectedShipping = shippingMethods.find((m) => m.id === shippingMethod);
   const mixDiscount = useStore($mixDiscount);
   const shippingCost = selectedShipping?.price ?? 0;
@@ -231,7 +235,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
           city,
           country,
         },
-        shipping_method: SHIPPING_NAME_MAP[shippingMethod] ?? shippingMethod,
+        shipping_method: selectedShipping?.name ?? shippingMethod,
         discount_code: discountApplied?.code ?? undefined,
         display_total: orderTotal,
         display_currency: tenant.currencyCode,
@@ -268,7 +272,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
       setError('Something went wrong. Please try again.');
       setSubmitting(false);
     }
-  }, [cartItems, email, firstName, lastName, phone, address, postcode, city, country, shippingMethod, ageVerified, orderTotal]);
+  }, [cartItems, cartTotal, email, firstName, lastName, phone, address, postcode, city, country, shippingMethod, ageVerified, orderTotal, selectedShipping, discountApplied]);
 
   if (cartItems.length === 0 && !submitting) {
     return (

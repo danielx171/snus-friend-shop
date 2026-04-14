@@ -1,6 +1,12 @@
 import { defineAction, ActionError } from 'astro:actions';
 import { z } from 'astro/zod';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import {
+  clearPendingReferralCode,
+  normalizeReferralCode,
+  redeemReferralCodeForUser,
+  validateReferralCode,
+} from '@/lib/server-referrals';
 
 /** Create a Supabase client bound to the request's cookies (anon key, respects RLS). */
 function createSupabaseFromContext(ctx: { cookies: any; request: Request }) {
@@ -68,21 +74,36 @@ export const auth = {
       email: z.string().email('Please enter a valid email address'),
       password: z.string().min(8, 'Password must be at least 8 characters'),
       fullName: z.string().min(1, 'Full name is required'),
+      referralCode: z.string().optional(),
       ageVerified: z.literal('on', { message: 'You must confirm you are 18 or older' }),
       termsAccepted: z.literal('on', { message: 'You must accept the terms and conditions' }),
     }),
     handler: async (input, ctx) => {
       const supabase = createSupabaseFromContext(ctx);
+      const referralCode = normalizeReferralCode(input.referralCode);
       const siteUrl =
         import.meta.env.PUBLIC_SITE_URL ??
         import.meta.env.VITE_SITE_URL ??
         'https://snusfriends.com';
 
+      if (referralCode) {
+        const referralValidation = await validateReferralCode(referralCode);
+        if (referralValidation === 'invalid') {
+          throw new ActionError({
+            code: 'BAD_REQUEST',
+            message: 'That referral code is not valid. Check the code and try again.',
+          });
+        }
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email: input.email,
         password: input.password,
         options: {
-          data: { full_name: input.fullName },
+          data: {
+            full_name: input.fullName,
+            ...(referralCode ? { pending_referral_code: referralCode } : {}),
+          },
           emailRedirectTo: `${siteUrl}/auth/confirm`,
         },
       });
@@ -98,6 +119,13 @@ export const auth = {
       // immediately — log the user in and redirect. Otherwise, surface an inbox
       // screen that echoes the email the link was sent to.
       if (data?.session) {
+        if (referralCode && data.user?.id) {
+          const redemptionStatus = await redeemReferralCodeForUser(referralCode, data.user.id);
+          if (redemptionStatus !== 'unavailable') {
+            await clearPendingReferralCode(supabase, data.user.user_metadata).catch(() => {});
+          }
+        }
+
         return {
           success: true,
           redirect: '/account',

@@ -4,6 +4,7 @@ export const prerender = false;
 import { createServerClient } from '@supabase/ssr';
 import Shop from '@/layouts/Shop.astro';
 import { tenant } from '@/config/tenant';
+import { finalizePendingReferral } from '@/lib/server-referrals';
 
 const url = Astro.url;
 const tokenHash = url.searchParams.get('token_hash');
@@ -44,6 +45,10 @@ if (!supabaseUrl || !supabaseKey) {
         ? 'This confirmation link has expired. Please request a new one.'
         : error.message;
     } else {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await finalizePendingReferral(supabase, user);
+      }
       // Recovery → password update page; all other types → account (auto-login)
       return Astro.redirect(type === 'recovery' ? '/update-password' : next, 303);
     }
@@ -53,6 +58,10 @@ if (!supabaseUrl || !supabaseKey) {
     if (error) {
       errorMessage = error.message;
     } else {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await finalizePendingReferral(supabase, user);
+      }
       return Astro.redirect(next, 303);
     }
   } else {

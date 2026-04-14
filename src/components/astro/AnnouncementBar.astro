@@ -3,6 +3,10 @@
  * Rotating announcement bar — cycles between trust, shipping, and catalog messages.
  * Pure CSS animation, no JavaScript.
  */
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
+const catalogMessage = `${facts.productCountLabel} pouches from ${facts.brandCountLabel} brands`;
 ---
 
 <div class="w-full overflow-hidden relative z-10" role="banner" aria-label="Store announcements" style={`background: hsl(var(--hero-bg)); color: hsl(var(--hero-text));`}>
@@ -10,7 +14,7 @@
     {/* Desktop: show all three inline */}
     <div class="hidden md:flex items-center gap-3 text-[13px]">
       <span class="flex items-center gap-1.5">
-        <span>708+ pouches from 55 brands</span>
+        <span>{catalogMessage}</span>
       </span>
       <span style={`color: hsl(var(--hero-text) / 0.3);`}>•</span>
       <span>Free Shipping Over €29</span>
@@ -21,7 +25,7 @@
     {/* Mobile: rotating messages */}
     <div class="md:hidden relative w-full h-full">
       <div class="announcement-rotate absolute inset-0 flex items-center justify-center text-[13px]">
-        <span class="announcement-msg">708+ pouches from 55 brands</span>
+        <span class="announcement-msg">{catalogMessage}</span>
       </div>
       <div class="announcement-rotate announcement-delay-1 absolute inset-0 flex items-center justify-center text-[13px]">
         <span class="announcement-msg">Free EU Shipping Over €29</span>
