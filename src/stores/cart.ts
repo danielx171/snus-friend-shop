@@ -4,6 +4,8 @@ import type { Product, PackSize } from '@/data/products';
 import { packSizeMultipliers } from '@/data/products';
 import { tenant } from '@/config/tenant';
 import { trackAddToCart, trackRemoveFromCart } from '@/lib/analytics';
+import { apiFetch } from '@/lib/api';
+import { hasSupabaseEnv } from '@/integrations/supabase/client';
 
 export interface CartItem {
   product: Product;
@@ -234,8 +236,7 @@ $cartItems.listen((items) => {
   if (items.length === 0) return; // Don't snapshot empty carts
 
   _snapshotTimer = setTimeout(() => {
-    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL ?? '';
-    if (!supabaseUrl) return;
+    if (!hasSupabaseEnv) return; // Explicit no-op when misconfigured locally
 
     const total = items.reduce((sum, item) => {
       const price = item.product.prices[item.packSize] ?? 0;
@@ -246,17 +247,17 @@ $cartItems.listen((items) => {
       return sum + (packSizeMultipliers[item.packSize] ?? 1) * item.quantity;
     }, 0);
 
-    const auth = (window as any).__AUTH_STATE__;
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-
-    fetch(`${supabaseUrl}/functions/v1/save-cart-snapshot`, {
+    // apiFetch attaches the user's JWT from supabase.auth.getSession() (with
+    // cookie fallback). Without a Bearer, save-cart-snapshot silently skips
+    // the write — that's the intended anonymous behavior until guest_email
+    // capture lands in Batch E.
+    apiFetch('save-cart-snapshot', {
       method: 'POST',
-      headers,
-      body: JSON.stringify({
+      body: {
         cart_data: items,
         cart_total: total,
         item_count: canCount,
-      }),
-    }).catch(() => {}); // Fire-and-forget
+      },
+    }).catch(() => {}); // Fire-and-forget; never surface errors to the user
   }, SNAPSHOT_DEBOUNCE_MS);
 });
