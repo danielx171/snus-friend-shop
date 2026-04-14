@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { AchievementCard } from './AchievementCard';
 import type { AchievementWithProgress } from '@/hooks/useAchievements';

@@ -41,7 +41,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [ ] Klaviyo wiring (5 template IDs exist; needs Klaviyo UI setup + events from `create-nyehandel-checkout`)
 - [ ] Trustpilot business profile + footer widget (20 min account creation)
 - [ ] Cart verification via Codex browser test (v4 BroadcastChannel sync deployed)
-- [ ] Full-tool audit follow-up: replace the referrer-restricted `PAGESPEED_API_KEY`, add `GOOGLE_CUSTOM_SEARCH_API_KEY`, and expose local Supabase admin envs so the new sync jobs can run end-to-end
+- [ ] Full-tool audit follow-up: replace the referrer-restricted `PAGESPEED_API_KEY` and add `GOOGLE_CUSTOM_SEARCH_API_KEY` so PageSpeed sync + rank tracking can run end-to-end
 
 ### MEDIUM
 

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -33,8 +33,6 @@ import { useReviewSummary } from '@/hooks/useReviewSummary';
 import ReviewSummaryCard from '@/components/product/ReviewSummaryCard';
 import { useReviewPhotoUpload } from '@/hooks/useReviewPhotoUpload';
 import { useToast } from '@/hooks/use-toast';
-import ShareButton from '@/components/social/ShareButton';
-
 type ReviewSortOption = 'relevant' | 'newest' | 'highest' | 'helpful';
 
 function sortReviews(reviews: ProductReview[], sort: ReviewSortOption): ProductReview[] {
@@ -244,7 +242,7 @@ function AggregateDimensionBars({ averages }: { averages: DimensionAverages }) {
 }
 
 /* ── Single review card ── */
-const ReviewCard = React.memo(function ReviewCard({
+const ReviewCard = memo(function ReviewCard({
   review,
   onFlag,
   liked,

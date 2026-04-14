@@ -101,7 +101,7 @@ Backend: Supabase (already hosted)
 - [x] Set local audit envs: `GA4_PROPERTY_ID` and `SEARCH_CONSOLE_PROPERTY`.
 - [x] Grant the local read-only Google credential access to the GA4 property and Search Console property.
 - [ ] Add `GOOGLE_CUSTOM_SEARCH_API_KEY` before running `bun run audit:rank`.
-- [ ] Expose local `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` when running sync jobs or Astro content-layer checks outside Vercel.
+- [x] Expose local `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` when running sync jobs or Astro content-layer checks outside Vercel.
 - [ ] In GA4 Admin, change the remaining SnusFriend property default from `America/Los_Angeles` to `Europe/Stockholm`.
       Currency has already been updated to `SEK`, but the current property only exposes U.S. timezone options in the GA admin UI.
 - [ ] Optional deeper data access: provide a dedicated read-only Supabase credential or a read-only audit endpoint for non-public tables.
@@ -129,4 +129,4 @@ Backend: Supabase (already hosted)
 - [ ] Solicitor sign-off on Terms, Privacy, Cookie pages.
 - [x] Place and verify test order end-to-end (Step 39 UAT — order #479 confirmed).
 - [x] Security review: sync_config RLS enabled, function search_path fixed, CORS locked.
-- [ ] Deploy frontend to Vercel, configure env vars, go live.
+- [x] Deploy frontend to Vercel, configure env vars, go live.

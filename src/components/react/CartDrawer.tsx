@@ -17,8 +17,6 @@ import {
   syncCartFromStorage,
 } from '@/stores/cart';
 import type { CartItem } from '@/stores/cart';
-import type { PackSize } from '@/data/products';
-import { tenant } from '@/config/tenant';
 
 const packSizeLabels: Record<string, string> = {
   pack1: '1 can',

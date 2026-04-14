@@ -9,9 +9,13 @@ The complete design system for snusfriends.com — Europe's friendliest nicotine
 
 ## Brand Identity
 
-- **Who:** Europe's #1 nicotine pouch marketplace — 2200+ products, 139 brands
+- **Who:** A premium, proof-led nicotine pouch marketplace with dynamic catalog size and editorial guidance
 - **Tone:** Premium but approachable. The pouch sommelier — knowledgeable, trustworthy, never clinical
 - **Positioning:** Between a curated specialty shop and a trusted friend who knows their stuff
+
+> **Canonical source for live counts:** `src/data/editorial-facts.ts` (dynamic, do not hardcode).
+> When writing copy, reference the helper rather than baking numbers into text.
+> Avoid unsupported superlatives like "Europe's #1" or "largest" unless the live page already includes a durable source for the claim.
 
 ## Color System
 
@@ -29,12 +33,19 @@ The complete design system for snusfriends.com — Europe's friendliest nicotine
 | `--text-on-dark` | `#F5F5F5` | Text on dark backgrounds |
 
 ### Strength System (CRITICAL — never color alone, always include text label)
-| Strength | Color | Label | Range |
-|----------|-------|-------|-------|
-| Mild | `#22C55E` (green) | MILD | 1-4mg |
-| Regular | `#EAB308` (yellow) | REGULAR | 5-8mg |
-| Strong | `#F97316` (orange) | STRONG | 9-14mg |
-| Extra Strong | `#EF4444` (red) | EXTRA STRONG | 15mg+ |
+
+Canonical keys live in `src/data/products.ts` (`StrengthKey`) and are shared with the
+filter UI, content layer, and product JSON. The label + color maps are in
+`src/data/brand-colors.ts` (`strengthLabels`, `strengthColors`). Use those imports —
+do not rewrite the table locally.
+
+| Key (code) | Label (UI) | Color | Range |
+|------------|-----------|-------|-------|
+| `light` | Light | green | 1–4 mg |
+| `normal` | Normal | yellow | 4–6 mg |
+| `strong` | Strong | orange | 6–12 mg |
+| `extra-strong` | Extra Strong | red | 12–20 mg |
+| `super-strong` | Super Strong | dark red | 20 mg+ |
 
 Always render as: colored badge + text label. 8% of males are red/green colorblind — text labels are mandatory for WCAG compliance.
 
@@ -119,9 +130,10 @@ Left border or glow on product cards matching the flavor family.
 ```
 
 ### 5. Trust Bar
-Shown on homepage below hero. Builds credibility immediately.
+Shown on homepage below hero. Builds credibility immediately. Pull brand / product counts
+from `src/data/editorial-facts.ts` so the copy stays in sync with the live catalog.
 ```
-139 Brands | Same-Day Shipping | Rewards Program | Lab-Tested
+55 Brands | Same-Day EU Dispatch | SnusCoins Rewards | Lab-Tested
 ```
 
 ## Theme Usage Guide

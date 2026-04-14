@@ -24,7 +24,7 @@
 - [ ] Add a server-safe `PAGESPEED_API_KEY` for CLI usage.
   Current key is still HTTP-referrer restricted and fails from the terminal.
 - [ ] Add `GOOGLE_CUSTOM_SEARCH_API_KEY` so `bun run audit:rank` can populate `seo_rank_tracking`.
-- [ ] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.
+- [x] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.
 - [ ] Continue the second trust pass:
   - deeper ON! product-line cleanup
   - country/legal reconciliation with external review

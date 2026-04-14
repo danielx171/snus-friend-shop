@@ -1,4 +1,3 @@
-import React from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
 import { useAuthUser } from '@/hooks/useAuthUser';
