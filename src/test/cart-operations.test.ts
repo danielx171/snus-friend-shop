@@ -20,7 +20,7 @@ import {
 } from '@/stores/cart';
 import type { Product } from '@/data/products';
 
-const baseProduct = {
+const baseProduct: Omit<Product, 'id' | 'name' | 'brand' | 'prices'> = {
   categoryKey: 'nicotinePouches',
   flavorKey: 'mint',
   strengthKey: 'normal',
@@ -32,7 +32,7 @@ const baseProduct = {
   ratings: 4.5,
   badgeKeys: [],
   manufacturer: 'Test',
-} as const;
+};
 
 function makeProduct(id: string, pack1 = 5): Product {
   return {
@@ -41,7 +41,7 @@ function makeProduct(id: string, pack1 = 5): Product {
     brand: 'Test',
     ...baseProduct,
     prices: { pack1, pack3: pack1 * 3 * 0.95, pack5: pack1 * 5 * 0.9, pack10: pack1 * 10 * 0.85, pack30: pack1 * 30 * 0.8 },
-  } as unknown as Product;
+  };
 }
 
 describe('cart operations', () => {

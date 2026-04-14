@@ -488,6 +488,12 @@ export type Database = {
         }
         Relationships: []
       }
+      cart_snapshots: {
+        Row: { id: string; user_id: string | null; guest_email: string | null; cart_data: Json; cart_total: number; item_count: number; recovered: boolean; email_sent: boolean; created_at: string; updated_at: string }
+        Insert: { id?: string; user_id?: string | null; guest_email?: string | null; cart_data: Json; cart_total?: number; item_count?: number; recovered?: boolean; email_sent?: boolean; created_at?: string; updated_at?: string }
+        Update: { id?: string; user_id?: string | null; guest_email?: string | null; cart_data?: Json; cart_total?: number; item_count?: number; recovered?: boolean; email_sent?: boolean; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
       orders: {
         Row: { id: string; customer_email: string; total_price: number; currency: string; checkout_status: string; line_items_snapshot: Json | null; customer_metadata: Json | null; nyehandel_order_id: string | null; nyehandel_status: string | null; nyehandel_sync_status: string | null; tracking_id: string | null; tracking_url: string | null; shipping_method: string | null; payment_method: string | null; user_id: string | null; review_email_sent_at: string | null; created_at: string; updated_at: string }
         Insert: { id?: string; customer_email: string; total_price: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; review_email_sent_at?: string | null; created_at?: string; updated_at?: string }

@@ -61,7 +61,7 @@ const StickyAddToCart = memo(function StickyAddToCart(props: StickyAddToCartProp
     addToCart(product, 'pack1');
     window.dispatchEvent(new CustomEvent('open-cart'));
     cartToast(props.name);
-  }, [props]);
+  }, [props, isOutOfStock]);
 
   if (!visible) return null;
 

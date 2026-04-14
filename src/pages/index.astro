@@ -222,7 +222,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
           )}
 
           <!-- Glow ring behind orbit -->
-          <div class="absolute inset-8 rounded-full opacity-20" style="background: conic-gradient(from 0deg, hsl(var(--primary) / 0.3), transparent 30%, hsl(153 55% 30% / 0.2) 50%, transparent 70%, hsl(var(--primary) / 0.3)); animation: heroOrbit 20s linear infinite reverse; filter: blur(20px);" />
+          <div class="hero-orbit-glow absolute inset-8 rounded-full opacity-20" style="background: conic-gradient(from 0deg, hsl(var(--primary) / 0.3), transparent 30%, hsl(153 55% 30% / 0.2) 50%, transparent 70%, hsl(var(--primary) / 0.3)); animation: heroOrbit 20s linear infinite reverse; filter: blur(20px);" />
         </div>
       </div>
 
@@ -866,9 +866,13 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
     .hero-center-can { will-change: transform; }
     .hero-can { will-change: transform; transform-style: preserve-3d; }
 
-    /* Accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      .hero-can, .hero-orbit-ring, .hero-center-can,
+    /* Accessibility + mobile perf: kill decorative animations on small viewports
+       and when prefers-reduced-motion is on. Orbit ring + glow are inside a
+       `hidden lg:flex` parent so they're display:none on mobile anyway; this
+       also no-ops them semantically. `hero-can` + ambient glows are the real
+       mobile GPU drain. */
+    @media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+      .hero-can, .hero-orbit-ring, .hero-orbit-glow, .hero-center-can,
       .hero-glow-1, .hero-glow-2, .hero-marquee,
       .live-ticker, .live-ping,
       .hero-reveal { animation: none !important; opacity: 1 !important; transform: none !important; }

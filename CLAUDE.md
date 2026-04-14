@@ -164,7 +164,7 @@ Conflict patterns:
 - Review System: ✅ Full review UI + DB + post-purchase email cron (daily 10:00 UTC, 7-day delay)
 - Email: ✅ 4 Resend templates (Klaviyo wiring still pending)
 - Cron: ✅ 8 active jobs (sync, ops, reviews, blog, news, retry-orders, batch-summaries, review-emails)
-- Remaining real work: 3 Codex 🔴 blockers (subscription idempotency, `discount_pct` migration, register.astro form mismatch), homepage LCP, content awaiting Cowork/Codex deliverables, Klaviyo + Trustpilot setup, legal solicitor sign-off
+- Remaining real work: checkout payment contract (P0 — blocked on NYE sandbox / support answer), homepage LCP mobile animation gating, Cowork content execution (homepage copy, legal FI/NO, medical reviewer), Klaviyo + Trustpilot setup, legal solicitor sign-off
 - Cowork: audits in `cowork/audits/`, mockups in `cowork/mockups/`, active briefs in `cowork/content/`
 
 ## MCP Tools (Connected)
@@ -321,17 +321,16 @@ Codex ran a full audit and found real issues. Some are already fixed, others rem
 - **Critical-path tests (ROADMAP Step 55)** — 43 new tests across cart, email regex,
   NYE line-item validation, auth schemas. 54/54 green.
 
+### FIXED (April 12-13, 2026)
+
+- **`supabase/functions/process-subscriptions/index.ts:128`** — idempotency verified: no double-credit; only `ops_alert` is inserted, points flow through NYE order trigger.
+- **`supabase/functions/manage-subscription/index.ts:102`** — `discount_pct` column confirmed present.
+- **`src/pages/register.astro:98`** — resend path now handled by JSON fetch at `:351` matching `sendMagicLink` accept mode.
+- **`products.json` aggressive slim** — closed: raw 241KB gzips to 39.5KB on wire (Vercel default). Target was uncompressed size, which doesn't matter in transit.
+
 ### REMAINING (not yet fixed)
 
-- **3 Codex 🔴 blockers** (tracked in `CURRENT_PRIORITIES.md`):
-  - `supabase/functions/process-subscriptions/index.ts:128` — missing idempotency guard on
-    `subscription_delivery:${sub.id}:${date}`. Retries = double-credit.
-  - `supabase/functions/manage-subscription/index.ts:102` — writes `discount_pct` but column
-    missing from migrations + `src/integrations/supabase/types.ts`. Will fail in prod.
-  - `src/pages/register.astro:98` — resend form posts native form-data but
-    `src/actions/auth.ts:120` expects JSON.
-- **Homepage LCP** — 82 score, LCP ~4s. Needs above-fold profile + defer non-critical islands.
-- **`products.json` aggressive slim** — 236KB today, ≤150KB target (needs gzip or further field drops).
-- **Verification noise** — `bun run lint` has 6 errors (all pre-existing in
-  `scripts/generate-og-images.ts`), `bun run check` has 67 errors (Astro.locals typing gap).
-  Low priority — doesn't affect production builds.
+- **P0.1 Checkout payment contract** — `create-nyehandel-checkout/index.ts:937` never returns `redirect_url` but `src/actions/checkout.ts:86` + `CheckoutForm.tsx:246` expect it. Same edge fn fires `order_confirmed` email at `:883` before payment. `nyehandel-webhook/index.ts` has no paid-event handler. Blocked on NYE sandbox / support answer — NFC Group Payment customer redirect contract is unknown.
+- **Homepage LCP** — mobile animation gating only. Space Grotesk preload (`Base.astro:29`) + below-fold `client:visible` islands (`index.astro:339,354`) are done. Remaining: gate `.hero-orbit-ring` + conic glow at `index.astro:225` under `@media (max-width: 1023px)`.
+- **Cart-snapshot identity** — `src/stores/cart.ts:249` reads `__AUTH_STATE__` but never adds `Authorization` header or `guest_email`; `save-cart-snapshot:57` always skips. Klaviyo Abandoned Cart blocked on this.
+- **Verification baseline** — `bun run lint` = 0 errors / 6 warnings (pre-existing in `scripts/generate-og-images.ts` + hook deps); `bun run check` = 67 errors (Astro.locals typing gap). Neither blocks prod builds.

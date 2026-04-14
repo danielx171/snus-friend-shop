@@ -83,6 +83,6 @@ schemas. Auto-generated sitemap via `@astrojs/sitemap`. GEO: `llms.txt` + AI cra
 
 **Design system: 8.5/10** — Glass-panel aesthetic, navy+lime palette, premium animations.
 
-**Version: 1.5.0** — Astro 6, SSG/SSR hybrid, React islands, nanostores.
+**Version: 1.6.1** — Astro 6, SSG/SSR hybrid, React islands, nanostores.
 
 **Next:** SEO content (category page copy, blog posts), accessibility fixes, gamification backend wiring.
