@@ -11,10 +11,10 @@ const envOrigin = Deno.env.get("ALLOWED_ORIGIN");
 /** Return CORS headers matching the request origin (www or non-www). */
 export function getCorsHeaders(requestOrigin?: string | null): Record<string, string> {
   let origin: string;
-  if (envOrigin) {
-    origin = envOrigin;
-  } else if (requestOrigin && ALLOWED_ORIGINS.has(requestOrigin)) {
+  if (requestOrigin && ALLOWED_ORIGINS.has(requestOrigin)) {
     origin = requestOrigin;
+  } else if (envOrigin) {
+    origin = envOrigin;
   } else {
     origin = "https://www.snusfriends.com";
   }

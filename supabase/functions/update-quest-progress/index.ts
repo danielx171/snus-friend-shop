@@ -1,9 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // @ts-expect-error — Deno types: Deno file import
-import { corsHeaders } from "../_shared/cors.ts";
-
-const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 const VALID_ACTIONS = ['order_placed', 'review_submitted', 'spin_completed'] as const;
 type Action = typeof VALID_ACTIONS[number];
@@ -16,6 +14,9 @@ const ACTION_TO_QUEST_TYPES: Record<Action, string[]> = {
 };
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req.headers.get('origin'));
+  const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
+
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
