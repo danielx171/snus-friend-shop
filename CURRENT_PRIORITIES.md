@@ -48,6 +48,25 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [x] Deployed guest-account creation on `/order-confirmation` now works end-to-end with a real guest order fixture.
       A production `create-nyehandel-checkout` persistence bug (`orders.total_price` was being inserted as `null`) was fixed first; after deploy, a fresh guest order persisted, the happy-path confirmation page rendered, wrong-email access stayed gated, the first guest-account action succeeded, and repeat attempts stayed single-user (first rate-limited, then a resend-style success with no duplicate `auth.users` row).
 
+## Approved Next Execution Order (2026-04-15)
+
+- [ ] **Batch 1 — Cart runtime crash repair**
+      Fix the dominant Sentry cart error family first (`SNUSFRIENDS-5/6/7/8` around `cart.BjQjs2P5`) before any broader growth work.
+      Scope the fix to `src/stores/cart.ts` and direct cart consumers only, add a regression test, and ship it on its own so the before/after Sentry drop is attributable.
+- [ ] **Batch 2 — Measurement repair (re-check after Batch 1)**
+      Re-read PostHog immediately after the cart fix before assuming a broad instrumentation rewrite is needed.
+      If `$pageview`, `product_viewed`, `add_to_cart`, and `checkout_started` still look implausible, then fix PostHog init/emission and only after that wire the Klaviyo/cart-snapshot identity follow-up.
+- [ ] **Batch 3 — GSC-informed SEO/content follow-through**
+      Use a fresh-thread GSC pass to choose the next CTR/indexation opportunities, queue the title/meta/indexing work, and evaluate post-click ROI only after Batch 2 restores trustworthy product analytics.
+
+### Batch Guardrails
+
+- Do not touch `src/lib/cart-utils.ts` without explicit permission.
+- Do not mix the cart fix, analytics rewiring, Klaviyo work, and SEO execution into one deploy. Keep the next batches isolated.
+- Do not guess at Nyehandel payment-contract changes; only change `create-nyehandel-checkout` / `nyehandel-webhook` with confirmed vendor behavior or explicit scope.
+- Do not pull William-owned automation or Cowork-owned legal/editorial work into these batches.
+- Do not mix local repo noise (`AGENTS.md`, `.claude/settings.local.json`, screenshots) into product commits.
+
 ## Remaining
 
 > **Open work lives in [`BACKLOG.md`](./BACKLOG.md)** — single source of truth with P0–P3 tiers and ownership tags (🧠/👤/✍️/🔌). The sections below are kept for archival continuity.

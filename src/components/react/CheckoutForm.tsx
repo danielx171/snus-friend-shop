@@ -51,7 +51,10 @@ function packLabel(packSize: PackSize): string {
 }
 
 export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }: Props) {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => { syncCartFromStorage(); }, []);
+  useEffect(() => { setMounted(true); }, []);
   const storeCartItems = useStore($cartItems);
   const storeCartTotal = useStore($cartTotal);
 
@@ -273,6 +276,14 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
       setSubmitting(false);
     }
   }, [cartItems, cartTotal, email, firstName, lastName, phone, address, postcode, city, country, shippingMethod, ageVerified, orderTotal, selectedShipping, discountApplied]);
+
+  if (!mounted) {
+    return (
+      <div className="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center max-w-md mx-auto">
+        <p className="text-muted-foreground">Loading checkout…</p>
+      </div>
+    );
+  }
 
   if (cartItems.length === 0 && !submitting) {
     return (

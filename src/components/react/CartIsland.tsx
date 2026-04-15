@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import {
   $cartItems,
@@ -11,10 +11,27 @@ import {
 import type { PackSize } from '@/data/products';
 
 function CartIsland() {
-  useEffect(() => { syncCartFromStorage(); }, []);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    syncCartFromStorage();
+  }, []);
+
   const items = useStore($cartItems);
   const total = useStore($cartTotal);
   const shipping = useStore($freeShippingProgress);
+
+  if (!mounted) {
+    return (
+      <div
+        aria-busy="true"
+        className="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 text-sm text-muted-foreground"
+      >
+        Loading your cart…
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
