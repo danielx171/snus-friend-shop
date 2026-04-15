@@ -19,7 +19,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - **Rewards:** Canonical config at `src/config/rewards.ts` — **10 SnusCoins per €1** (aligned with DB trigger)
 - **Gamification:** The Vault, SnusCoins, Circles, Missions, Badges, Daily Drop, The Board
 - **Version:** 1.6.1
-- **Audit tooling:** Search Console + GA4 read scripts live; PageSpeed CLI is implemented but still blocked locally by `API_KEY_HTTP_REFERRER_BLOCKED`; rank tracking now uses DataForSEO for proactive SERP snapshots and needs local DataForSEO credentials to run end-to-end
+- **Audit tooling:** Search Console + GA4 read scripts live; `audit:preflight`, `audit:measurement:smoke`, and `audit:gsc:sync --days=7` now pass locally; DataForSEO rank tracking has a live 5-keyword validation batch with a confirmed `snusfriends` match-path hit at position `1`
 
 ## Today’s Setup Pass
 
@@ -37,8 +37,9 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
   - `astro-island-budget`
   - `snusfriend-audit-runbook`
   - `trust-sensitive-editorial`
-- [ ] Still blocked: PageSpeed CLI auth and local DataForSEO credential setup.
-- [ ] Next implementation targets: rotate the PageSpeed key, add DataForSEO credentials, run `bun run audit:preflight` and `bun run audit:measurement:smoke`, then continue remaining inline form cleanup on contact/login/order-confirmation.
+- [x] Measurement rollout verified end-to-end: `bun run audit:preflight`, `bun run audit:measurement:smoke`, and `bun run audit:gsc:sync --days=7` all passed locally after rotating the server-safe PageSpeed key and adding DataForSEO credentials.
+- [x] Curated DataForSEO validation cleared: `bun run audit:rank --limit=5` exercised both the no-match path and the tracked-domain match path (`snusfriends` at organic position `1`) with sequential organic result positions.
+- [ ] Next implementation targets: finish the remaining inline form cleanup on contact/login/order-confirmation, then push `astro-migration-clean` for Vercel preview QA.
 
 ## Remaining
 
@@ -60,12 +61,15 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [ ] Klaviyo wiring (5 template IDs exist; needs Klaviyo UI setup + events from `create-nyehandel-checkout`)
 - [ ] Trustpilot business profile + footer widget (20 min account creation)
 - [ ] Cart verification via Codex browser test (v4 BroadcastChannel sync deployed)
-- [ ] Add local + Vercel DataForSEO credentials and run the first end-to-end `seo_rank_tracking` snapshot
+- [x] Add local + Vercel DataForSEO credentials and run the first end-to-end `seo_rank_tracking` snapshot
+- [ ] Run the default full `bun run audit:rank` batch after the current release polish lands.
 
 ### MEDIUM
 
 - [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
 - [ ] Continue inline form-handler cleanup on `contact.astro`, `login.astro`, and `order-confirmation.astro`
+- [ ] Restart local shells or the Codex desktop session after PageSpeed key rotations when needed.
+      This session inherited a stale `PAGESPEED_API_KEY` from `~/.zshrc`; future ad-hoc CLI runs should either start from a fresh shell or unset the inherited key before relying on `.env.local`.
 - [ ] Monitor the refreshed CTR pages in Search Console for 14 days and iterate on snippets/internal links based on impressions + CTR.
 - [ ] Brand page real logos (still placeholder for brands without `logoUrl` — monogram tile is the fallback)
 - [ ] `products.json` aggressive slim (236KB → ≤150KB target; would need gzip or dropping more fields)

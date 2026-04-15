@@ -26,6 +26,9 @@
 - Expanded `supabase/functions/nyehandel-proxy/index.ts` allowlist to include `orders` while keeping Bearer token auth against Nyehandel API.
 ## 2026-04-15
 
+- Verified the audit rollout end-to-end: `bun run audit:preflight`, `bun run audit:measurement:smoke`, `bun run audit:rank --limit=5`, and `bun run audit:gsc:sync --days=7` now all pass locally with live data.
+- Updated `ROADMAP.md`, `CURRENT_PRIORITIES.md`, and `DEPLOYMENT_CHECKLIST.md` so they reflect the real measurement status instead of the earlier PageSpeed/DataForSEO blockers.
+- Added `.playwright-cli/` to `.gitignore` so local browser automation scratch files stop polluting the worktree.
 - Added clearer failure handling in `scripts/rank-audit.ts` for Google Custom Search JSON API `403` responses, including guidance to use a grandfathered project or another SERP provider.
 - Finished the remaining audit-tooling pass in code and docs: `GOOGLE_CUSTOM_SEARCH_API_KEY` is wired locally and in Vercel, rank tracking now reports the Google `403` blocker clearly, and the roadmap/current-priorities docs now reflect that PageSpeed CLI auth is still blocked locally while Google rank tracking remains externally blocked.
 - Consolidated storefront hydration by adding `src/components/react/ProductCardControlsIsland.tsx` and `src/components/react/HeaderUtilityBar.tsx`, then wiring them into `src/components/astro/ProductCard.astro` and `src/components/astro/Header.astro`.

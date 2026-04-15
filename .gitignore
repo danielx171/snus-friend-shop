@@ -40,6 +40,7 @@ stats.html
 
 .vercel
 Snus/
+.playwright-cli/
 
 .env*.local
 

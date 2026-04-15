@@ -45,14 +45,18 @@
   - `src/pages/blog/zyn-vs-nordic-spirit.astro`
   - `src/pages/blog/zyn-flavours-complete-guide.astro`
 - [x] Shipped the first CTR refresh on the six target pages by updating titles/descriptions and strengthening internal linking from the homepage/blog hub.
-- [ ] Fix the PageSpeed CLI auth path.
-  `bun run audit:pagespeed` still fails locally with `API_KEY_HTTP_REFERRER_BLOCKED`, so the current key/restriction setup is not actually CLI-safe yet.
+- [x] Fix the PageSpeed CLI auth path.
+  `bun run audit:measurement:smoke` now passes locally with the server-safe PageSpeed key after rotating the stale inherited shell export and re-running the live CLI verification.
 - [x] Ship the DataForSEO-based proactive rank-tracking backend in code.
   `scripts/rank-audit.ts` is now wired to DataForSEO live organic results for keyword snapshots while GSC remains the primary historical ranking source.
-- [ ] Run the first live DataForSEO snapshots after credential setup.
-  Local + Vercel `DATAFORSEO_LOGIN` / `DATAFORSEO_PASSWORD` still need to be added before `seo_rank_tracking` has real rows from the new backend.
+- [x] Run the first live DataForSEO snapshots after credential setup.
+  `bun run audit:measurement:smoke` and a curated `bun run audit:rank --limit=5` batch both wrote real `seo_rank_tracking` rows, including a confirmed `snusfriends` match-path hit at organic position `1`.
 - [x] Add measurement rollout helpers for the next live audit pass.
   `bun run audit:preflight` now checks the env/dependency surface first, and `bun run audit:measurement:smoke` runs the first PageSpeed + rank smoke flow once keys are in place.
+- [x] Sync the first live Search Console history after the audit rollout.
+  `bun run audit:gsc:sync --days=7` synced 672 rows into `seo_gsc_stats` for `2026-04-08` through `2026-04-14`.
+- [ ] Run the default full DataForSEO rank batch once the release polish lands.
+  The curated 5-keyword validation passed, so the remaining measurement follow-up is the wider default snapshot when we are ready to spend the extra credits.
 - [ ] Remove the fully legacy Google CSE env/config after the transition window.
   `GOOGLE_CUSTOM_SEARCH_API_KEY` and `seo_config.google_cse_cx` are no longer needed by `audit:rank`; clean them up after the first successful DataForSEO runs.
 - [x] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.

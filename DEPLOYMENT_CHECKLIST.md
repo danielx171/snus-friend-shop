@@ -90,8 +90,8 @@ Backend: Supabase (already hosted)
 - [ ] Set `PUBLIC_GOOGLE_SITE_VERIFICATION` if using Search Console URL-prefix verification.
       Not required while the active Search Console property is the domain property `sc-domain:snusfriends.com`.
 - [x] Add `PAGESPEED_API_KEY` to Vercel so `bun run audit:pagespeed` can run without anonymous PSI quota limits when the key is exported locally.
-- [ ] Replace the current `PAGESPEED_API_KEY` with a server-safe key for CLI usage.
-      Create a second Google API key with Application restrictions = `None` and API restrictions = `PageSpeed Insights API` only, then rotate it into local env + Vercel. The current key is HTTP-referrer restricted and returns `API_KEY_HTTP_REFERRER_BLOCKED` from terminal-based audits.
+- [x] Replace the current `PAGESPEED_API_KEY` with a server-safe key for CLI usage.
+      The live CLI smoke now passes with the unrestricted PageSpeed key in local env plus Vercel `production` / `development`. If a shell still sees the old key, restart it or unset the inherited `PAGESPEED_API_KEY` before relying on `.env.local`.
 - [x] Grant Google Search Console read access to the property used for `https://snusfriends.com`.
 - [x] Grant GA4 read access to the SnusFriend property and web stream.
 - [x] Add local read-only Google audit scripts: `bun run audit:ga4` and `bun run audit:gsc`.
@@ -104,10 +104,14 @@ Backend: Supabase (already hosted)
 - [x] Grant the local read-only Google credential access to the GA4 property and Search Console property.
 - [x] Replace the current Google CSE-based rank audit with DataForSEO in code.
       `bun run audit:rank` is wired to DataForSEO live organic results for proactive keyword snapshots while Search Console remains the primary historical ranking source.
-- [ ] Add `DATAFORSEO_LOGIN` + `DATAFORSEO_PASSWORD` locally and in Vercel before relying on `bun run audit:rank`.
-- [ ] Run the first live DataForSEO snapshot after the credentials are in place.
+- [x] Add `DATAFORSEO_LOGIN` + `DATAFORSEO_PASSWORD` locally and in Vercel before relying on `bun run audit:rank`.
+- [x] Run the first live DataForSEO snapshot after the credentials are in place.
+- [x] Run a curated 5-keyword DataForSEO validation batch before the full default rank run.
+      The batch now proves both the tracked-domain match path (`snusfriends` at organic position `1`) and the no-match path while keeping `search_results.position` strictly sequential.
 - [ ] Optional: set `DATAFORSEO_LOCATION_CODE` + `DATAFORSEO_LANGUAGE_CODE` if the default Sweden/en SERP snapshot should be overridden.
-- [ ] After the new PageSpeed key and DataForSEO creds are in place, run `bun run audit:preflight` and then `bun run audit:measurement:smoke`.
+- [x] After the new PageSpeed key and DataForSEO creds are in place, run `bun run audit:preflight` and then `bun run audit:measurement:smoke`.
+- [x] Run `bun run audit:gsc:sync --days=7` once the smoke pass is green.
+      The current local sync wrote 672 rows into `seo_gsc_stats` for `2026-04-08` through `2026-04-14`.
 - [x] Expose local `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` when running sync jobs or Astro content-layer checks outside Vercel.
 - [ ] In GA4 Admin, change the remaining SnusFriend property default from `America/Los_Angeles` to `Europe/Stockholm`.
       Currency has already been updated to `SEK`, but the current property only exposes U.S. timezone options in the GA admin UI.
