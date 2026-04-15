@@ -30,7 +30,7 @@ if (user) {
         <p class="mt-1 text-sm text-muted-foreground">Sign in to your account</p>
       </div>
 
-      <div class="rounded-2xl border border-border bg-card/80 p-7 shadow-sm">
+      <div class="rounded-2xl border border-border bg-card/80 p-7 shadow-sm" data-login-page>
 
         <!-- Error banner -->
         <div id="login-error" role="alert" aria-live="assertive" class="mb-5 rounded-lg border border-destructive/30 bg-destructive/5 p-3.5 text-center hidden">
@@ -130,137 +130,26 @@ if (user) {
   </section>
 </Shop>
 
-<script is:inline>
-(function() {
-  var emailEl = document.getElementById('email');
-  var passwordEl = document.getElementById('password');
-  var loginBtn = document.getElementById('login-btn');
-  var loginSpinner = document.getElementById('login-spinner');
-  var loginBtnText = document.getElementById('login-btn-text');
-  var errBox = document.getElementById('login-error');
-  var errText = document.getElementById('login-error-text');
-  var magicBtn = document.getElementById('magic-link-btn');
-  var magicBtnText = document.getElementById('magic-btn-text');
-  var magicMsg = document.getElementById('magic-link-msg');
-  var togglePw = document.getElementById('toggle-password');
-  var eyeOpen = document.getElementById('eye-open');
-  var eyeClosed = document.getElementById('eye-closed');
+<script>
+  const { bootLoginForms } = await import('@/scripts/login-form');
 
-  var redirect = new URLSearchParams(window.location.search).get('redirect') || '/account';
-
-  // Password visibility toggle
-  if (togglePw && passwordEl) {
-    togglePw.addEventListener('click', function() {
-      var isText = passwordEl.type === 'text';
-      passwordEl.type = isText ? 'password' : 'text';
-      eyeOpen.classList.toggle('hidden', !isText);
-      eyeClosed.classList.toggle('hidden', isText);
-    });
-  }
-
-  // Submit on Enter in password field
-  if (passwordEl) {
-    passwordEl.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') doLogin();
-    });
-  }
-  if (emailEl) {
-    emailEl.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        if (passwordEl && passwordEl.value.length > 0) doLogin();
-        else if (passwordEl) passwordEl.focus();
-      }
-    });
-  }
-
-  // Sign in button
-  if (loginBtn) loginBtn.addEventListener('click', doLogin);
-
-  function doLogin() {
-    var email = emailEl ? emailEl.value.trim() : '';
-    var password = passwordEl ? passwordEl.value : '';
-
-    if (!email) { showError('Please enter your email address.'); emailEl && emailEl.focus(); return; }
-    if (!password) { showError('Please enter your password.'); passwordEl && passwordEl.focus(); return; }
-
-    loginBtn.disabled = true;
-    loginSpinner.classList.remove('hidden');
-    loginBtnText.textContent = 'Signing in\u2026';
-    hideError();
-
-    fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'same-origin',
-      body: JSON.stringify({ email: email, password: password, redirect: redirect })
-    })
-    .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, data: d }; }); })
-    .then(function(result) {
-      if (result.ok && result.data.redirect) {
-        loginBtnText.textContent = 'Success!';
-        window.location.replace(result.data.redirect);
-      } else {
-        showError(result.data.error || 'Incorrect email or password.');
-        loginBtn.disabled = false;
-        loginSpinner.classList.add('hidden');
-        loginBtnText.textContent = 'Sign In';
-      }
-    })
-    .catch(function() {
-      showError('Network error \u2014 please try again.');
-      loginBtn.disabled = false;
-      loginSpinner.classList.add('hidden');
-      loginBtnText.textContent = 'Sign In';
-    });
-  }
-
-  // Magic link — uses the shared email field
-  if (magicBtn) {
-    magicBtn.addEventListener('click', function() {
-      var email = emailEl ? emailEl.value.trim() : '';
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showError('Please enter your email address first.');
-        emailEl && emailEl.focus();
-        return;
-      }
-
-      magicBtn.disabled = true;
-      magicBtnText.textContent = 'Sending\u2026';
-      hideMsg();
-
-      fetch('/_actions/auth.sendMagicLink', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify({ email: email })
-      })
-      .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, body: d }; }); })
-      .then(function(result) {
-        if (result.ok && result.body.data && result.body.data.success) {
-          showMsg(result.body.data.message || 'Check your inbox \u2014 link sent!', false);
-          magicBtnText.textContent = 'Link sent \u2713';
-        } else {
-          var msg = (result.body.error && result.body.error.message) || 'Something went wrong.';
-          showMsg(msg, true);
-          magicBtn.disabled = false;
-          magicBtnText.textContent = 'Send me a login link';
-        }
-      })
-      .catch(function() {
-        showMsg('Network error \u2014 please try again.', true);
-        magicBtn.disabled = false;
-        magicBtnText.textContent = 'Send me a login link';
-      });
-    });
-  }
-
-  function showError(msg) { errText.textContent = msg; errBox.classList.remove('hidden'); }
-  function hideError() { errBox.classList.add('hidden'); }
-  function showMsg(text, isError) {
-    magicMsg.textContent = text;
-    magicMsg.className = 'mt-3 rounded-lg p-3 text-center text-sm ' +
-      (isError ? 'bg-destructive/5 border border-destructive/30 text-destructive' : 'bg-primary/5 border border-primary/30 text-foreground');
-  }
-  function hideMsg() { magicMsg.className = 'mt-3 hidden'; }
-})();
+  bootLoginForms({
+    login: {
+      missingEmailMessage: 'Please enter your email address.',
+      missingPasswordMessage: 'Please enter your password.',
+      invalidCredentialsMessage: 'Incorrect email or password.',
+      networkErrorMessage: 'Network error — please try again.',
+      submittingText: 'Signing in…',
+      successText: 'Success!',
+      idleText: 'Sign In',
+    },
+    magicLink: {
+      missingEmailMessage: 'Please enter your email address first.',
+      networkErrorMessage: 'Network error — please try again.',
+      genericErrorMessage: 'Something went wrong.',
+      submittingText: 'Sending…',
+      successButtonText: 'Link sent ✓',
+      idleText: 'Send me a login link',
+    },
+  });
 </script>

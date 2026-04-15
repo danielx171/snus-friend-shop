@@ -39,7 +39,8 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
   - `trust-sensitive-editorial`
 - [x] Measurement rollout verified end-to-end: `bun run audit:preflight`, `bun run audit:measurement:smoke`, and `bun run audit:gsc:sync --days=7` all passed locally after rotating the server-safe PageSpeed key and adding DataForSEO credentials.
 - [x] Curated DataForSEO validation cleared: `bun run audit:rank --limit=5` exercised both the no-match path and the tracked-domain match path (`snusfriends` at organic position `1`) with sequential organic result positions.
-- [ ] Next implementation targets: finish the remaining inline form cleanup on contact/login/order-confirmation, then push `astro-migration-clean` for Vercel preview QA.
+- [x] Remaining inline form cleanup on contact/login/order-confirmation is now shipped via shared `src/scripts/*` helpers.
+- [ ] Next implementation targets: push `astro-migration-clean` for Vercel preview QA, then inspect the deployed contact/login/order-confirmation flows plus homepage/PDP/blog rendering.
 
 ## Remaining
 
@@ -67,7 +68,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 ### MEDIUM
 
 - [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
-- [ ] Continue inline form-handler cleanup on `contact.astro`, `login.astro`, and `order-confirmation.astro`
+- [ ] Push the current branch for Vercel preview QA and verify contact/login/order-confirmation on the deployed build.
 - [ ] Restart local shells or the Codex desktop session after PageSpeed key rotations when needed.
       This session inherited a stale `PAGESPEED_API_KEY` from `~/.zshrc`; future ad-hoc CLI runs should either start from a fresh shell or unset the inherited key before relying on `.env.local`.
 - [ ] Monitor the refreshed CTR pages in Search Console for 14 days and iterate on snippets/internal links based on impressions + CTR.

@@ -367,7 +367,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
             <p class="text-sm text-muted-foreground mb-4">
               Create an account to track this order, earn SnusCoins on future purchases, and get exclusive deals.
             </p>
-            <form id="guest-register-form" class="max-w-sm mx-auto space-y-3">
+            <form id="guest-register-form" data-guest-register-form class="max-w-sm mx-auto space-y-3">
               <input type="hidden" name="email" value={order.customer_email} />
               <input type="hidden" name="orderId" value={orderId} />
               <div>
@@ -420,56 +420,15 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
   </section>
 </Shop>
 
-<script is:inline>
-(function() {
-  var form = document.getElementById('guest-register-form');
-  if (!form) return;
-  var btn = document.getElementById('guest-register-btn');
-  var errEl = document.getElementById('guest-register-error');
-  var successEl = document.getElementById('guest-register-success');
+<script>
+  const { bootGuestRegisterForms } = await import('@/scripts/guest-register-form');
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var email = form.querySelector('[name=email]').value;
-    var orderId = form.querySelector('[name=orderId]').value;
-    var password = form.querySelector('#guest-password').value;
-    if (!password || password.length < 8) {
-      showError('Password must be at least 8 characters.');
-      return;
-    }
-    btn.disabled = true;
-    btn.textContent = 'Creating account\u2026';
-    hideError();
-
-    fetch('/_actions/auth.guestToAccount', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      credentials: 'same-origin',
-      body: JSON.stringify({ email: email, password: password, orderId: orderId })
-    })
-    .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, body: d }; }); })
-    .then(function(result) {
-      // Astro action response: { data: { success, message }, error: null } or { data: null, error: { message } }
-      if (result.ok && result.body.data && result.body.data.success) {
-        form.querySelector('#guest-password').disabled = true;
-        btn.style.display = 'none';
-        successEl.textContent = result.body.data.message || 'Account created! Check your email to confirm.';
-        successEl.classList.remove('hidden');
-      } else {
-        var msg = (result.body.error && result.body.error.message) || 'Something went wrong.';
-        showError(msg);
-        btn.disabled = false;
-        btn.textContent = 'Create Account & Track Order';
-      }
-    })
-    .catch(function() {
-      showError('Network error. Please try again.');
-      btn.disabled = false;
-      btn.textContent = 'Create Account & Track Order';
-    });
+  bootGuestRegisterForms({
+    passwordTooShortMessage: 'Password must be at least 8 characters.',
+    submittingText: 'Creating account…',
+    idleText: 'Create Account & Track Order',
+    successMessage: 'Account created! Check your email to confirm.',
+    genericErrorMessage: 'Something went wrong.',
+    networkErrorMessage: 'Network error. Please try again.',
   });
-
-  function showError(msg) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
-  function hideError() { errEl.classList.add('hidden'); }
-})();
 </script>

@@ -24,9 +24,10 @@
 - [x] Migrated the long-tail JSON-LD pages to the shared helper.
   The main sweep plus the standalone `src/pages/blog/index.astro` follow-up are now shipped.
 - [x] Extracted a shared waitlist/newsletter form handler for the footer, blog CTA, and deals signup.
+- [x] Replaced the remaining inline form handlers on contact, login, and order confirmation with shared Astro-first script helpers.
 - [ ] Next Astro pass:
-  - replace repeated inline form handlers with shared Astro-first patterns where possible
   - keep trimming clustered islands from high-traffic storefront chrome
+  - profile homepage LCP and remaining high-impact client-side scripts before the next polish sprint
 
 ## Audit-Driven Growth + Trust Stabilization (2026-04-14)
 
