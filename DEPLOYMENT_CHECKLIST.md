@@ -100,7 +100,8 @@ Backend: Supabase (already hosted)
 - [x] Configure local Google credentials via `GOOGLE_APPLICATION_CREDENTIALS` or `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`.
 - [x] Set local audit envs: `GA4_PROPERTY_ID` and `SEARCH_CONSOLE_PROPERTY`.
 - [x] Grant the local read-only Google credential access to the GA4 property and Search Console property.
-- [ ] Add `GOOGLE_CUSTOM_SEARCH_API_KEY` before running `bun run audit:rank`.
+- [ ] Replace the current Google CSE-based rank audit before relying on `bun run audit:rank`.
+      The script still expects `GOOGLE_CUSTOM_SEARCH_API_KEY` today, but Google blocks the backend with `403` for new projects.
 - [x] Expose local `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` when running sync jobs or Astro content-layer checks outside Vercel.
 - [ ] In GA4 Admin, change the remaining SnusFriend property default from `America/Los_Angeles` to `Europe/Stockholm`.
       Currency has already been updated to `SEK`, but the current property only exposes U.S. timezone options in the GA admin UI.

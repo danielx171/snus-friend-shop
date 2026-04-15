@@ -152,7 +152,7 @@ Conflict patterns:
 - Version: 1.6.1 — Astro 6, React islands, nanostores, Tailwind v4
 - Products: 708 active, 55 brands (all with English descriptions + images)
 - Blog: 81 articles, registry in sync at 81 slugs. Quick Answers 81/81, PAA 81/81, BlogPosting + FAQPage schema 81/81.
-- Sitemap: 1,152 pages indexed by Pagefind
+- Sitemap: 1,152 pages in the generated XML sitemap
 - Performance: `/nicotine-pouches` 92, PDPs 94, homepage 82 (LCP ~4s — next target)
 - Lighthouse: SEO 100, Accessibility 93–100, Best Practices 100
 - Domain: ✅ snusfriends.com primary (non-www), www redirects via 301
@@ -286,7 +286,7 @@ Codex ran a full audit and found real issues. Some are already fixed, others rem
 
 ### FIXED (April 8, 2026 — Launch Polish Sprint)
 
-- **Blog registry** — Centralized in `src/data/blog-registry.ts` (83 entries). Both `/blog`
+- **Blog registry** — Centralized in `src/data/blog-registry.ts` (81 entries). Both `/blog`
   index and `/rss.xml` import from it. 6 missing articles added.
 - **publishDate→date prop** — All articles now pass `date={publishDate}` correctly.
 - **RecommendationsIsland hooks** — False alarm. All `useCallback` hooks are above the early

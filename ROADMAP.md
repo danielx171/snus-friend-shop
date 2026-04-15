@@ -19,10 +19,12 @@
   - added `snusfriend-audit-runbook`
   - added `trust-sensitive-editorial`
 - [x] Added a shared `src/components/astro/JsonLd.astro` helper and migrated key storefront/info pages away from repeated inline JSON-LD blocks.
-- [x] Moved Pagefind off the default build path.
-  `bun run build` is now Astro-only; use `bun run search:index` or `bun run build:with-pagefind` when a Pagefind index is explicitly needed.
+- [x] Removed `pagefind` entirely from the repo.
+  Search remains JSON-driven, so the extra dependency and indexing scripts are gone.
+- [x] Migrated the long-tail JSON-LD pages to the shared helper.
+  The main sweep is shipped; `src/pages/blog/index.astro` remains a standalone follow-up so it can land in its own tiny commit.
 - [ ] Next Astro pass:
-  - extend the `JsonLd` helper across the remaining long-tail info/editorial pages still using inline schema scripts
+  - finish the standalone `src/pages/blog/index.astro` JSON-LD follow-up
   - replace repeated inline form handlers with shared Astro-first patterns where possible
   - keep trimming clustered islands from high-traffic storefront chrome
 
@@ -45,8 +47,8 @@
 - [x] Shipped the first CTR refresh on the six target pages by updating titles/descriptions and strengthening internal linking from the homepage/blog hub.
 - [ ] Fix the PageSpeed CLI auth path.
   `bun run audit:pagespeed` still fails locally with `API_KEY_HTTP_REFERRER_BLOCKED`, so the current key/restriction setup is not actually CLI-safe yet.
-- [x] Add `GOOGLE_CUSTOM_SEARCH_API_KEY` so `bun run audit:rank` can attempt to populate `seo_rank_tracking`.
-  Key is present locally + in Vercel, but Google still rejects the request because Custom Search JSON API access is blocked for these projects.
+- [x] Document the legacy Google CSE rank-tracking env path.
+  `GOOGLE_CUSTOM_SEARCH_API_KEY` is still what the current script expects, but Google rejects the backend with `403`, so this is a stopgap until the rank provider is replaced.
 - [ ] Replace Google Programmable Search as the rank-tracking backend.
   Current `bun run audit:rank` surface is implemented, but Google Custom Search JSON API is closed to new customers and returns `403` even with a fresh project/key/CSE.
 - [x] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.

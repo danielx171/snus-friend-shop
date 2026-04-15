@@ -27,8 +27,9 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [x] Header compare/rewards/cart cluster consolidated into one `client:idle` island.
 - [x] Base layout font preload corrected to the actual default sans family.
 - [x] Repo-local Codex MCP config added for Context7, Sentry, and GitHub in `.codex/config.toml`.
-- [x] Shared `JsonLd` helper added and wired into key storefront/info pages; `astro check` hints dropped from 252 to 235.
-- [x] Pagefind moved off the default build; use `bun run search:index` or `bun run build:with-pagefind` only when static search artifacts are needed.
+- [x] Shared `JsonLd` helper now covers the long-tail page sweep too; `astro check` hints dropped from 252 to 128.
+- [ ] Standalone follow-up still pending on `src/pages/blog/index.astro`.
+- [x] `pagefind` removed entirely; search remains JSON-driven and the extra indexing scripts are gone.
 - [x] Skills updated/created for future audits and Astro-first polish:
   - `snusfriend-design-system`
   - `web-quality-audit`
@@ -36,7 +37,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
   - `snusfriend-audit-runbook`
   - `trust-sensitive-editorial`
 - [ ] Still blocked: PageSpeed CLI auth and Google rank backend.
-- [ ] Next implementation targets: extend `JsonLd` across remaining long-tail pages, replace repeated inline form handlers, further storefront island consolidation.
+- [ ] Next implementation targets: finish `blog/index` JSON-LD, replace repeated inline form handlers, further storefront island consolidation.
 
 ## Remaining
 
@@ -63,8 +64,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 ### MEDIUM
 
 - [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
-- [ ] Extend the shared JSON-LD helper across remaining long-tail pages and blog/info templates
-- [ ] Decide whether the `pagefind` dependency should stay at all now that indexing is opt-in and search remains JSON-driven
+- [ ] Finish the standalone `blog/index.astro` JSON-LD follow-up
 - [ ] Monitor the refreshed CTR pages in Search Console for 14 days and iterate on snippets/internal links based on impressions + CTR.
 - [ ] Brand page real logos (still placeholder for brands without `logoUrl` — monogram tile is the fallback)
 - [ ] `products.json` aggressive slim (236KB → ≤150KB target; would need gzip or dropping more fields)
@@ -152,7 +152,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 | `ROADMAP.md` | Delivery sequence, Steps 1–56 done |
 | `src/config/rewards.ts` | Canonical rewards config |
 | `src/data/editorial-facts.ts` | Dynamic product/brand counts |
-| `src/data/blog-registry.ts` | Blog index metadata (87 entries) |
+| `src/data/blog-registry.ts` | Blog index metadata (81 entries) |
 | `src/lib/product-json.ts` | Slim products.json generator |
 | `scripts/generate-og-images.ts` | Satori OG PNG pipeline |
 | `src/components/astro/SEO.astro` | Per-page OG + hreflang + canonical |
