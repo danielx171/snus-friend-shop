@@ -30,6 +30,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [x] Shared `JsonLd` helper now covers the full long-tail page sweep including `src/pages/blog/index.astro`; `astro check` hints dropped from 252 to 124.
 - [x] `pagefind` removed entirely; search remains JSON-driven and the extra indexing scripts are gone.
 - [x] Shared waitlist/newsletter handling now powers the footer, blog CTA, and deals signup via `src/scripts/waitlist-form.ts`.
+- [x] Measurement rollout helpers added: `bun run audit:preflight` for env checks and `bun run audit:measurement:smoke` for the first PageSpeed + rank smoke pass.
 - [x] Skills updated/created for future audits and Astro-first polish:
   - `snusfriend-design-system`
   - `web-quality-audit`
@@ -37,7 +38,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
   - `snusfriend-audit-runbook`
   - `trust-sensitive-editorial`
 - [ ] Still blocked: PageSpeed CLI auth and local DataForSEO credential setup.
-- [ ] Next implementation targets: rotate the PageSpeed key, add DataForSEO credentials and run the first end-to-end audit snapshots, then continue remaining inline form cleanup on contact/login/order-confirmation.
+- [ ] Next implementation targets: rotate the PageSpeed key, add DataForSEO credentials, run `bun run audit:preflight` and `bun run audit:measurement:smoke`, then continue remaining inline form cleanup on contact/login/order-confirmation.
 
 ## Remaining
 

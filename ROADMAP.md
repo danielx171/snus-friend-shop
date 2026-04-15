@@ -49,6 +49,8 @@
   `bun run audit:pagespeed` still fails locally with `API_KEY_HTTP_REFERRER_BLOCKED`, so the current key/restriction setup is not actually CLI-safe yet.
 - [x] Replace Google Programmable Search as the proactive rank-tracking backend.
   `scripts/rank-audit.ts` now uses DataForSEO live organic results for keyword snapshots while GSC remains the primary historical ranking source.
+- [x] Add measurement rollout helpers for the next live audit pass.
+  `bun run audit:preflight` now checks the env/dependency surface first, and `bun run audit:measurement:smoke` runs the first PageSpeed + rank smoke flow once keys are in place.
 - [ ] Remove the fully legacy Google CSE env/config after the transition window.
   `GOOGLE_CUSTOM_SEARCH_API_KEY` and `seo_config.google_cse_cx` are no longer needed by `audit:rank`; clean them up after the first successful DataForSEO runs.
 - [x] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.
