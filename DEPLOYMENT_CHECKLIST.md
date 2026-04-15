@@ -102,9 +102,10 @@ Backend: Supabase (already hosted)
 - [x] Configure local Google credentials via `GOOGLE_APPLICATION_CREDENTIALS` or `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`.
 - [x] Set local audit envs: `GA4_PROPERTY_ID` and `SEARCH_CONSOLE_PROPERTY`.
 - [x] Grant the local read-only Google credential access to the GA4 property and Search Console property.
-- [x] Replace the current Google CSE-based rank audit with DataForSEO.
-      `bun run audit:rank` now reads DataForSEO live organic results for proactive keyword snapshots while Search Console remains the primary historical ranking source.
+- [x] Replace the current Google CSE-based rank audit with DataForSEO in code.
+      `bun run audit:rank` is wired to DataForSEO live organic results for proactive keyword snapshots while Search Console remains the primary historical ranking source.
 - [ ] Add `DATAFORSEO_LOGIN` + `DATAFORSEO_PASSWORD` locally and in Vercel before relying on `bun run audit:rank`.
+- [ ] Run the first live DataForSEO snapshot after the credentials are in place.
 - [ ] Optional: set `DATAFORSEO_LOCATION_CODE` + `DATAFORSEO_LANGUAGE_CODE` if the default Sweden/en SERP snapshot should be overridden.
 - [ ] After the new PageSpeed key and DataForSEO creds are in place, run `bun run audit:preflight` and then `bun run audit:measurement:smoke`.
 - [x] Expose local `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` when running sync jobs or Astro content-layer checks outside Vercel.

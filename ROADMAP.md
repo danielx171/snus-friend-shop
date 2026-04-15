@@ -47,8 +47,10 @@
 - [x] Shipped the first CTR refresh on the six target pages by updating titles/descriptions and strengthening internal linking from the homepage/blog hub.
 - [ ] Fix the PageSpeed CLI auth path.
   `bun run audit:pagespeed` still fails locally with `API_KEY_HTTP_REFERRER_BLOCKED`, so the current key/restriction setup is not actually CLI-safe yet.
-- [x] Replace Google Programmable Search as the proactive rank-tracking backend.
-  `scripts/rank-audit.ts` now uses DataForSEO live organic results for keyword snapshots while GSC remains the primary historical ranking source.
+- [x] Ship the DataForSEO-based proactive rank-tracking backend in code.
+  `scripts/rank-audit.ts` is now wired to DataForSEO live organic results for keyword snapshots while GSC remains the primary historical ranking source.
+- [ ] Run the first live DataForSEO snapshots after credential setup.
+  Local + Vercel `DATAFORSEO_LOGIN` / `DATAFORSEO_PASSWORD` still need to be added before `seo_rank_tracking` has real rows from the new backend.
 - [x] Add measurement rollout helpers for the next live audit pass.
   `bun run audit:preflight` now checks the env/dependency surface first, and `bun run audit:measurement:smoke` runs the first PageSpeed + rank smoke flow once keys are in place.
 - [ ] Remove the fully legacy Google CSE env/config after the transition window.

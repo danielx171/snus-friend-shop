@@ -27,7 +27,6 @@ export interface OrganicSearchSnapshot {
 
 interface DataforseoOrganicItem {
   type?: string | null;
-  rank_absolute?: number | null;
   title?: string | null;
   url?: string | null;
   domain?: string | null;
@@ -97,10 +96,10 @@ const normalizeOrganicItem = (
   item: DataforseoOrganicItem,
   fallbackPosition: number,
 ): NormalizedSearchResult => ({
-  position:
-    typeof item.rank_absolute === 'number' && Number.isFinite(item.rank_absolute)
-      ? Math.round(item.rank_absolute)
-      : fallbackPosition,
+  // Keep this organic-only so the position semantics stay comparable to the
+  // old CSE path and to GSC's ranking data even when feature-heavy SERPs add
+  // AI Overviews, PAA blocks, snippets, or other non-organic elements.
+  position: fallbackPosition,
   title: item.title ?? null,
   link: item.url ?? null,
   displayLink: item.domain ?? getFallbackDisplayLink(item.url ?? null),
@@ -188,6 +187,9 @@ export const fetchOrganicSearchSnapshot = async ({
     keyword: trimmedKeyword,
     locationCode: config.locationCode,
     languageCode: config.languageCode,
+    // DataForSEO depth is still measured across the full SERP, but we only
+    // persist the organic lane here so seo_rank_tracking reflects organic
+    // positions instead of absolute feature-heavy SERP offsets.
     searchResults: organicItems
       .slice(0, maxResults)
       .map((item, index) => normalizeOrganicItem(item, index + 1)),
