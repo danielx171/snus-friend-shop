@@ -1,10 +1,22 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
+const { apiFetchMock } = vi.hoisted(() => ({
+  apiFetchMock: vi.fn(),
+}));
+
 // Analytics fires fetch on add/remove; stub so the cart store stays pure in tests.
 vi.mock('@/lib/analytics', () => ({
   trackAddToCart: vi.fn(),
   trackRemoveFromCart: vi.fn(),
   trackCheckoutStarted: vi.fn(),
+}));
+
+vi.mock('@/lib/api', () => ({
+  apiFetch: apiFetchMock,
+}));
+
+vi.mock('@/integrations/supabase/client', () => ({
+  hasSupabaseEnv: true,
 }));
 
 import {
@@ -17,6 +29,7 @@ import {
   removeFromCart,
   updateCartQuantity,
   clearCart,
+  setStoredGuestEmail,
 } from '@/stores/cart';
 import type { Product } from '@/data/products';
 
@@ -46,7 +59,10 @@ function makeProduct(id: string, pack1 = 5): Product {
 
 describe('cart operations', () => {
   beforeEach(() => {
+    vi.useRealTimers();
+    apiFetchMock.mockReset().mockResolvedValue({ ok: true });
     clearCart();
+    window.localStorage.clear();
   });
 
   it('addToCart inserts a new line item', () => {
@@ -140,5 +156,24 @@ describe('cart operations', () => {
     clearCart();
     expect($cartItems.get()).toHaveLength(0);
     expect($cartTotal.get()).toBe(0);
+  });
+
+  it('includes a valid guest email in abandoned-cart snapshot payloads', async () => {
+    vi.useFakeTimers();
+    setStoredGuestEmail('Guest@Example.com');
+
+    addToCart(makeProduct('a'), 'pack1');
+    await vi.advanceTimersByTimeAsync(30_000);
+
+    expect(apiFetchMock).toHaveBeenCalledWith(
+      'save-cart-snapshot',
+      expect.objectContaining({
+        method: 'POST',
+        body: expect.objectContaining({
+          guest_email: 'guest@example.com',
+          item_count: 1,
+        }),
+      }),
+    );
   });
 });

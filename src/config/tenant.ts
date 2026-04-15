@@ -151,6 +151,7 @@ export const tenant: TenantConfig = {
   },
   storage: {
     cartKey: 'snusfriend_cart',
+    guestEmailKey: 'snusfriend_guest_email',
     wishlistKey: 'snusfriend_wishlist',
     themeKey: 'theme',
     languageKey: 'snusfriend-language',

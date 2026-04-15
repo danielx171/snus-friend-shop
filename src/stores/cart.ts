@@ -21,6 +21,46 @@ export const $cartItems = persistentAtom<CartItem[]>(
 
 export const $cartOpen = atom(false);
 
+const GUEST_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function normalizeGuestEmail(email?: string | null): string | null {
+  const normalized = email?.trim().toLowerCase() ?? '';
+  if (!normalized || !GUEST_EMAIL_PATTERN.test(normalized)) return null;
+  return normalized;
+}
+
+export function getStoredGuestEmail(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return normalizeGuestEmail(localStorage.getItem(tenant.storage.guestEmailKey));
+  } catch {
+    return null;
+  }
+}
+
+export function setStoredGuestEmail(email?: string | null) {
+  if (typeof window === 'undefined') return;
+  try {
+    const normalized = normalizeGuestEmail(email);
+    if (normalized) {
+      localStorage.setItem(tenant.storage.guestEmailKey, normalized);
+    } else {
+      localStorage.removeItem(tenant.storage.guestEmailKey);
+    }
+  } catch {
+    // Ignore storage failures — abandoned cart recovery is best-effort.
+  }
+}
+
+export function clearStoredGuestEmail() {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.removeItem(tenant.storage.guestEmailKey);
+  } catch {
+    // Ignore storage failures — abandoned cart recovery is best-effort.
+  }
+}
+
 /**
  * Re-read cart items from localStorage into the in-memory atom.
  * Called by CartDrawer before opening to sync cross-island state —
@@ -157,7 +197,10 @@ export function updateCartQuantity(productId: string, packSize: PackSize, quanti
   );
 }
 
-export function clearCart() { $cartItems.set([]); }
+export function clearCart() {
+  $cartItems.set([]);
+  clearStoredGuestEmail();
+}
 export function openCart() { $cartOpen.set(true); }
 export function closeCart() { $cartOpen.set(false); }
 
@@ -247,16 +290,18 @@ $cartItems.listen((items) => {
       return sum + (packSizeMultipliers[item.packSize] ?? 1) * item.quantity;
     }, 0);
 
+    const guestEmail = getStoredGuestEmail();
+
     // apiFetch attaches the user's JWT from supabase.auth.getSession() (with
-    // cookie fallback). Without a Bearer, save-cart-snapshot silently skips
-    // the write — that's the intended anonymous behavior until guest_email
-    // capture lands in Batch E.
+    // cookie fallback). Guests can still create recoverable abandoned-cart
+    // snapshots once checkout captures a valid email address.
     apiFetch('save-cart-snapshot', {
       method: 'POST',
       body: {
         cart_data: items,
         cart_total: total,
         item_count: canCount,
+        ...(guestEmail ? { guest_email: guestEmail } : {}),
       },
     }).catch(() => {}); // Fire-and-forget; never surface errors to the user
   }, SNAPSHOT_DEBOUNCE_MS);

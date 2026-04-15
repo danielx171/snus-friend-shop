@@ -1,6 +1,14 @@
 import { useState, useMemo, useCallback, useEffect, type FormEvent } from 'react';
 import { useStore } from '@nanostores/react';
-import { $cartItems, $cartTotal, clearCart, $mixDiscount, syncCartFromStorage, type CartItem } from '@/stores/cart';
+import {
+  $cartItems,
+  $cartTotal,
+  clearCart,
+  $mixDiscount,
+  setStoredGuestEmail,
+  syncCartFromStorage,
+  type CartItem,
+} from '@/stores/cart';
 import { packSizeMultipliers, type PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
 import { actions } from 'astro:actions';
@@ -106,6 +114,14 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
   const [discountError, setDiscountError] = useState('');
   const [discountLoading, setDiscountLoading] = useState(false);
   const [availableShippingNames, setAvailableShippingNames] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    if (!isGuest) {
+      setStoredGuestEmail(null);
+      return;
+    }
+    setStoredGuestEmail(email);
+  }, [email, isGuest]);
 
   useEffect(() => {
     let cancelled = false;
