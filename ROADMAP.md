@@ -22,9 +22,9 @@
 - [x] Removed `pagefind` entirely from the repo.
   Search remains JSON-driven, so the extra dependency and indexing scripts are gone.
 - [x] Migrated the long-tail JSON-LD pages to the shared helper.
-  The main sweep is shipped; `src/pages/blog/index.astro` remains a standalone follow-up so it can land in its own tiny commit.
+  The main sweep plus the standalone `src/pages/blog/index.astro` follow-up are now shipped.
+- [x] Extracted a shared waitlist/newsletter form handler for the footer, blog CTA, and deals signup.
 - [ ] Next Astro pass:
-  - finish the standalone `src/pages/blog/index.astro` JSON-LD follow-up
   - replace repeated inline form handlers with shared Astro-first patterns where possible
   - keep trimming clustered islands from high-traffic storefront chrome
 
@@ -47,11 +47,13 @@
 - [x] Shipped the first CTR refresh on the six target pages by updating titles/descriptions and strengthening internal linking from the homepage/blog hub.
 - [ ] Fix the PageSpeed CLI auth path.
   `bun run audit:pagespeed` still fails locally with `API_KEY_HTTP_REFERRER_BLOCKED`, so the current key/restriction setup is not actually CLI-safe yet.
-- [x] Document the legacy Google CSE rank-tracking env path.
-  `GOOGLE_CUSTOM_SEARCH_API_KEY` is still what the current script expects, but Google rejects the backend with `403`, so this is a stopgap until the rank provider is replaced.
-- [ ] Replace Google Programmable Search as the rank-tracking backend.
-  Current `bun run audit:rank` surface is implemented, but Google Custom Search JSON API is closed to new customers and returns `403` even with a fresh project/key/CSE.
+- [x] Replace Google Programmable Search as the proactive rank-tracking backend.
+  `scripts/rank-audit.ts` now uses DataForSEO live organic results for keyword snapshots while GSC remains the primary historical ranking source.
+- [ ] Remove the fully legacy Google CSE env/config after the transition window.
+  `GOOGLE_CUSTOM_SEARCH_API_KEY` and `seo_config.google_cse_cx` are no longer needed by `audit:rank`; clean them up after the first successful DataForSEO runs.
 - [x] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.
+- [ ] Baseline the SEO audit tables in code.
+  `seo_config`, `seo_keywords`, `seo_rank_tracking`, `seo_pagespeed_audits`, and `seo_gsc_stats` are still missing from generated types and forward-only migrations.
 - [ ] Continue the second trust pass:
   - deeper ON! product-line cleanup
   - country/legal reconciliation with external review

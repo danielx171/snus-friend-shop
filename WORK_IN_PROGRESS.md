@@ -3,5 +3,5 @@
 
 | AI | Task | Files | Status | Started | Updated | Commit |
 |----|------|-------|--------|---------|---------|--------|
-| Codex | JSON-LD long-tail migration | `WORK_IN_PROGRESS.md`, `src/pages/**` | in_review | 2026-04-15 12:20 | 2026-04-15 12:52 | |
-| Claude | Standalone blog index JSON-LD follow-up | `src/pages/blog/index.astro` | pending | 2026-04-15 12:47 | 2026-04-15 12:52 | |
+| Codex | JSON-LD long-tail migration | `WORK_IN_PROGRESS.md`, `src/pages/**` | done | 2026-04-15 12:20 | 2026-04-15 13:04 | `f75b3b49` |
+| Claude | Standalone blog index JSON-LD follow-up | `src/pages/blog/index.astro` | done | 2026-04-15 12:47 | 2026-04-15 13:04 | `f80db572` |

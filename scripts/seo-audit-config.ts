@@ -2,6 +2,8 @@ import process from 'node:process';
 
 export const DEFAULT_GSC_SYNC_DAYS = 28;
 export const DEFAULT_RANK_LIMIT = 20;
+export const DEFAULT_DATAFORSEO_LOCATION_CODE = 2752;
+export const DEFAULT_DATAFORSEO_LANGUAGE_CODE = 'en';
 export const DEFAULT_PAGESPEED_PATHS = [
   '/',
   '/nicotine-pouches',

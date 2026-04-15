@@ -91,7 +91,7 @@ Backend: Supabase (already hosted)
       Not required while the active Search Console property is the domain property `sc-domain:snusfriends.com`.
 - [x] Add `PAGESPEED_API_KEY` to Vercel so `bun run audit:pagespeed` can run without anonymous PSI quota limits when the key is exported locally.
 - [ ] Replace the current `PAGESPEED_API_KEY` with a server-safe key for CLI usage.
-      Current key is HTTP-referrer restricted and returns `API_KEY_HTTP_REFERRER_BLOCKED` from terminal-based audits.
+      Create a second Google API key with Application restrictions = `None` and API restrictions = `PageSpeed Insights API` only, then rotate it into local env + Vercel. The current key is HTTP-referrer restricted and returns `API_KEY_HTTP_REFERRER_BLOCKED` from terminal-based audits.
 - [x] Grant Google Search Console read access to the property used for `https://snusfriends.com`.
 - [x] Grant GA4 read access to the SnusFriend property and web stream.
 - [x] Add local read-only Google audit scripts: `bun run audit:ga4` and `bun run audit:gsc`.
@@ -100,8 +100,10 @@ Backend: Supabase (already hosted)
 - [x] Configure local Google credentials via `GOOGLE_APPLICATION_CREDENTIALS` or `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`.
 - [x] Set local audit envs: `GA4_PROPERTY_ID` and `SEARCH_CONSOLE_PROPERTY`.
 - [x] Grant the local read-only Google credential access to the GA4 property and Search Console property.
-- [ ] Replace the current Google CSE-based rank audit before relying on `bun run audit:rank`.
-      The script still expects `GOOGLE_CUSTOM_SEARCH_API_KEY` today, but Google blocks the backend with `403` for new projects.
+- [x] Replace the current Google CSE-based rank audit with DataForSEO.
+      `bun run audit:rank` now reads DataForSEO live organic results for proactive keyword snapshots while Search Console remains the primary historical ranking source.
+- [ ] Add `DATAFORSEO_LOGIN` + `DATAFORSEO_PASSWORD` locally and in Vercel before relying on `bun run audit:rank`.
+- [ ] Optional: set `DATAFORSEO_LOCATION_CODE` + `DATAFORSEO_LANGUAGE_CODE` if the default Sweden/en SERP snapshot should be overridden.
 - [x] Expose local `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` when running sync jobs or Astro content-layer checks outside Vercel.
 - [ ] In GA4 Admin, change the remaining SnusFriend property default from `America/Los_Angeles` to `Europe/Stockholm`.
       Currency has already been updated to `SEK`, but the current property only exposes U.S. timezone options in the GA admin UI.

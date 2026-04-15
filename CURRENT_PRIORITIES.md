@@ -19,7 +19,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - **Rewards:** Canonical config at `src/config/rewards.ts` — **10 SnusCoins per €1** (aligned with DB trigger)
 - **Gamification:** The Vault, SnusCoins, Circles, Missions, Badges, Daily Drop, The Board
 - **Version:** 1.6.1
-- **Audit tooling:** Search Console + GA4 read scripts live; PageSpeed CLI is implemented but still blocked locally by `API_KEY_HTTP_REFERRER_BLOCKED`; rank tracking is implemented but blocked by Google Custom Search JSON API access
+- **Audit tooling:** Search Console + GA4 read scripts live; PageSpeed CLI is implemented but still blocked locally by `API_KEY_HTTP_REFERRER_BLOCKED`; rank tracking now uses DataForSEO for proactive SERP snapshots and needs local DataForSEO credentials to run end-to-end
 
 ## Today’s Setup Pass
 
@@ -27,17 +27,17 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [x] Header compare/rewards/cart cluster consolidated into one `client:idle` island.
 - [x] Base layout font preload corrected to the actual default sans family.
 - [x] Repo-local Codex MCP config added for Context7, Sentry, and GitHub in `.codex/config.toml`.
-- [x] Shared `JsonLd` helper now covers the long-tail page sweep too; `astro check` hints dropped from 252 to 128.
-- [ ] Standalone follow-up still pending on `src/pages/blog/index.astro`.
+- [x] Shared `JsonLd` helper now covers the full long-tail page sweep including `src/pages/blog/index.astro`; `astro check` hints dropped from 252 to 124.
 - [x] `pagefind` removed entirely; search remains JSON-driven and the extra indexing scripts are gone.
+- [x] Shared waitlist/newsletter handling now powers the footer, blog CTA, and deals signup via `src/scripts/waitlist-form.ts`.
 - [x] Skills updated/created for future audits and Astro-first polish:
   - `snusfriend-design-system`
   - `web-quality-audit`
   - `astro-island-budget`
   - `snusfriend-audit-runbook`
   - `trust-sensitive-editorial`
-- [ ] Still blocked: PageSpeed CLI auth and Google rank backend.
-- [ ] Next implementation targets: finish `blog/index` JSON-LD, replace repeated inline form handlers, further storefront island consolidation.
+- [ ] Still blocked: PageSpeed CLI auth and local DataForSEO credential setup.
+- [ ] Next implementation targets: rotate the PageSpeed key, add DataForSEO credentials and run the first end-to-end audit snapshots, then continue remaining inline form cleanup on contact/login/order-confirmation.
 
 ## Remaining
 
@@ -59,12 +59,12 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [ ] Klaviyo wiring (5 template IDs exist; needs Klaviyo UI setup + events from `create-nyehandel-checkout`)
 - [ ] Trustpilot business profile + footer widget (20 min account creation)
 - [ ] Cart verification via Codex browser test (v4 BroadcastChannel sync deployed)
-- [ ] Full-tool audit follow-up: switch rank tracking away from Google Custom Search JSON API (or use a grandfathered project) so `seo_rank_tracking` can run end-to-end
+- [ ] Add local + Vercel DataForSEO credentials and run the first end-to-end `seo_rank_tracking` snapshot
 
 ### MEDIUM
 
 - [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
-- [ ] Finish the standalone `blog/index.astro` JSON-LD follow-up
+- [ ] Continue inline form-handler cleanup on `contact.astro`, `login.astro`, and `order-confirmation.astro`
 - [ ] Monitor the refreshed CTR pages in Search Console for 14 days and iterate on snippets/internal links based on impressions + CTR.
 - [ ] Brand page real logos (still placeholder for brands without `logoUrl` — monogram tile is the fallback)
 - [ ] `products.json` aggressive slim (236KB → ≤150KB target; would need gzip or dropping more fields)
@@ -78,6 +78,7 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [ ] Ahrefs / Brand Radar MCP (AI citation + backlink tracking)
 - [ ] `alert-manager` + `rank-tracker` configuration
 - [ ] `memory-management` skill activation
+- [ ] Baseline SEO audit tables in `supabase/migrations/` and `src/integrations/supabase/types.ts`
 
 ## Completed in Apr 8–12 Launch Polish Sprint
 

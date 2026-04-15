@@ -17,7 +17,11 @@ interface ImportMetaEnv {
   readonly GOOGLE_SERVICE_ACCOUNT_KEY_PATH: string;
   readonly GA4_PROPERTY_ID: string;
   readonly SEARCH_CONSOLE_PROPERTY: string;
-  // Legacy until `audit:rank` is moved off Google Programmable Search.
+  readonly DATAFORSEO_LOGIN: string;
+  readonly DATAFORSEO_PASSWORD: string;
+  readonly DATAFORSEO_LOCATION_CODE: string;
+  readonly DATAFORSEO_LANGUAGE_CODE: string;
+  // Legacy — no longer read by `audit:rank` after the DataForSEO migration.
   readonly GOOGLE_CUSTOM_SEARCH_API_KEY: string;
   // Legacy VITE_ vars (still used by existing React components during migration)
   readonly VITE_SUPABASE_URL: string;
