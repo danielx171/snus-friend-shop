@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 // Pull real pricing data from the product catalog
 const allProducts = await getCollection('products');
@@ -75,7 +76,7 @@ const lightMonthlyCost = lightDailyCost * 30;
 const moderateMonthlyCost = moderateDailyCost * 30;
 const heavyMonthlyCost = heavyDailyCost * 30;
 
-const schemaBlogPosting = JSON.stringify({
+const blogPostingJsonLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": "How Much Do Nicotine Pouches Cost? 2026 Price Guide (Real Data)",
@@ -93,9 +94,9 @@ const schemaBlogPosting = JSON.stringify({
     }
   },
   "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/how-much-do-nicotine-pouches-cost" }
-});
+};
 
-const schemaFAQ = JSON.stringify({
+const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
@@ -124,7 +125,7 @@ const schemaFAQ = JSON.stringify({
       }
     }
   ]
-});
+};
 ---
 
 <Shop
@@ -133,8 +134,7 @@ const schemaFAQ = JSON.stringify({
   canonical="/blog/how-much-do-nicotine-pouches-cost"
   ogType="article"
 >
-  <script type="application/ld+json" set:html={schemaBlogPosting} />
-  <script type="application/ld+json" set:html={schemaFAQ} />
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

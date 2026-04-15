@@ -8,6 +8,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const facts = await getEditorialFacts();
@@ -26,15 +27,8 @@ const nordicSpiritMint = findProduct('nordic-spirit', 'mint');
 const publishDate = '2026-04-11';
 const title = 'Healthiest Nicotine Pouches 2026: Lower-Risk Picks';
 const description = 'Which nicotine pouches are the healthiest? We rank pouches by ingredient transparency, low nicotine, and gentle formats. Evidence-based picks for harm-conscious users.';
----
 
-<Shop
-  title={`${title} | ${tenant.name}`}
-  description={description}
-  canonical="/blog/healthiest-nicotine-pouches-2026"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
@@ -45,9 +39,9 @@ const description = 'Which nicotine pouches are the healthiest? We rank pouches 
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/healthiest-nicotine-pouches-2026" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -58,7 +52,16 @@ const description = 'Which nicotine pouches are the healthiest? We rank pouches 
       { "@type": "Question", "name": "Are tobacco-free pouches better for you than snus?", "acceptedAnswer": { "@type": "Answer", "text": "Tobacco-free nicotine pouches eliminate the remaining tobacco-related risk factor in snus — tobacco-specific nitrosamines (TSNAs). While Swedish snus already has a strong safety record compared to cigarettes, pouches remove tobacco entirely, produce no staining, and have lower TSNA levels. Both are substantially less harmful than smoking." } },
       { "@type": "Question", "name": "Can I use nicotine pouches to quit smoking?", "acceptedAnswer": { "@type": "Answer", "text": "Many people use nicotine pouches as a harm-reduction tool to stop smoking. Start with a strength that matches your cigarette intake (typically 6–8 mg for a pack-a-day smoker), then gradually reduce over weeks or months. Nicotine pouches are not formally approved as cessation aids, but the harm reduction principle — switching to a less harmful nicotine source — is supported by public health bodies including the Royal College of Physicians." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  canonical="/blog/healthiest-nicotine-pouches-2026"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">

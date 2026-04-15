@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,35 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-07';
 const title = 'ZYN vs LOOP: Which Is Better in 2026?';
 const description = 'ZYN vs LOOP compared head-to-head. Flavours, strength, price, comfort, and availability — find out which nicotine pouch brand wins in 2026.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-loop-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is ZYN stronger than LOOP?", "acceptedAnswer": { "@type": "Answer", "text": "No. Both reach 15\u201316.5mg nicotine. The difference is speed: LOOP delivers nicotine faster via Instant Rush technology." } },
+          { "@type": "Question", "name": "Which has more flavours?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN has more flavours (15+) across 51 products. LOOP has fewer (10+) across 32 products, but they're more adventurous." } },
+          { "@type": "Question", "name": "Which is cheaper?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN is significantly cheaper. Entry-level ZYN starts at \u20ac1.22 per can; LOOP's minimum is \u20ac4.17." } },
+          { "@type": "Question", "name": "Can I use both ZYN and LOOP?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Many users rotate between brands for variety or reserve LOOP for special occasions." } },
+          { "@type": "Question", "name": "Which is better for beginners?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN S1 (1.5mg) is the gentlest introduction to nicotine pouches." } },
+          { "@type": "Question", "name": "Does LOOP really release nicotine faster?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Clinical studies confirm Instant Rush technology delivers nicotine in 3\u20135 minutes, compared to 5\u20138 minutes for traditional pouches." } }
+        ]
+      };
 ---
 
 <Shop
@@ -264,34 +294,7 @@ const description = 'ZYN vs LOOP compared head-to-head. Flavours, strength, pric
 
       </div>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-loop-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          { "@type": "Question", "name": "Is ZYN stronger than LOOP?", "acceptedAnswer": { "@type": "Answer", "text": "No. Both reach 15\u201316.5mg nicotine. The difference is speed: LOOP delivers nicotine faster via Instant Rush technology." } },
-          { "@type": "Question", "name": "Which has more flavours?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN has more flavours (15+) across 51 products. LOOP has fewer (10+) across 32 products, but they're more adventurous." } },
-          { "@type": "Question", "name": "Which is cheaper?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN is significantly cheaper. Entry-level ZYN starts at \u20ac1.22 per can; LOOP's minimum is \u20ac4.17." } },
-          { "@type": "Question", "name": "Can I use both ZYN and LOOP?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Many users rotate between brands for variety or reserve LOOP for special occasions." } },
-          { "@type": "Question", "name": "Which is better for beginners?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN S1 (1.5mg) is the gentlest introduction to nicotine pouches." } },
-          { "@type": "Question", "name": "Does LOOP really release nicotine faster?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Clinical studies confirm Instant Rush technology delivers nicotine in 3\u20135 minutes, compared to 5\u20138 minutes for traditional pouches." } }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

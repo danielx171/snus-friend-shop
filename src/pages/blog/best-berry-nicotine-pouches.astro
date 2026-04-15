@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,24 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-03-27';
 const title = 'Best Berry Nicotine Pouches: Top 10 for 2026';
 const description = 'From sweet strawberry to tart mixed berries — our expert ranking of the best berry-flavoured nicotine pouches across all strengths and brands.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-berry-nicotine-pouches` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best berry nicotine pouch overall?","acceptedAnswer":{"@type":"Answer","text":"ZYN Red Fruits Slim consistently ranks highest for its balanced berry flavour and clean finish. VELO Berry Frost is the top pick if you prefer a cooling berry experience."}},{"@type":"Question","name":"Do berry pouches contain real fruit?","acceptedAnswer":{"@type":"Answer","text":"No. Berry pouches use food-grade flavourings to replicate fruit tastes. They contain no fruit juice, pulp, or natural fruit sugars. The flavour is entirely from flavouring compounds."}},{"@type":"Question","name":"Which berry pouch is best for beginners?","acceptedAnswer":{"@type":"Answer","text":"HELWIT Sour Red Berry (3.5 mg) or XQS Blueberry Mint (4 mg) are good starting points. Both deliver a pleasant berry taste without overwhelming nicotine strength."}},{"@type":"Question","name":"Are berry pouches sweeter than mint?","acceptedAnswer":{"@type":"Answer","text":"Generally, yes. Berry flavours tend to have a sweeter, fruitier profile compared to the sharp cooling of mint. If you find mint too intense, berry is often a more approachable flavour category."}},{"@type":"Question","name":"Can I alternate between berry and mint pouches?","acceptedAnswer":{"@type":"Answer","text":"Absolutely. Many users rotate flavours throughout the day to avoid flavour fatigue. A common pattern is mint in the morning for freshness and berry in the afternoon for variety."}},{"@type":"Question","name":"What is the strongest berry nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"CUBA Berry Mix and Pablo Strawberry Lychee are among the strongest berry options, both exceeding 30 mg/can. These are designed for experienced users with established nicotine tolerance."}}]};
 ---
 
 <Shop
@@ -328,22 +347,7 @@ const description = 'From sweet strawberry to tart mixed berries — our expert 
   </div>
 </section>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-berry-nicotine-pouches` },
-        "description": description
-      })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best berry nicotine pouch overall?","acceptedAnswer":{"@type":"Answer","text":"ZYN Red Fruits Slim consistently ranks highest for its balanced berry flavour and clean finish. VELO Berry Frost is the top pick if you prefer a cooling berry experience."}},{"@type":"Question","name":"Do berry pouches contain real fruit?","acceptedAnswer":{"@type":"Answer","text":"No. Berry pouches use food-grade flavourings to replicate fruit tastes. They contain no fruit juice, pulp, or natural fruit sugars. The flavour is entirely from flavouring compounds."}},{"@type":"Question","name":"Which berry pouch is best for beginners?","acceptedAnswer":{"@type":"Answer","text":"HELWIT Sour Red Berry (3.5 mg) or XQS Blueberry Mint (4 mg) are good starting points. Both deliver a pleasant berry taste without overwhelming nicotine strength."}},{"@type":"Question","name":"Are berry pouches sweeter than mint?","acceptedAnswer":{"@type":"Answer","text":"Generally, yes. Berry flavours tend to have a sweeter, fruitier profile compared to the sharp cooling of mint. If you find mint too intense, berry is often a more approachable flavour category."}},{"@type":"Question","name":"Can I alternate between berry and mint pouches?","acceptedAnswer":{"@type":"Answer","text":"Absolutely. Many users rotate flavours throughout the day to avoid flavour fatigue. A common pattern is mint in the morning for freshness and berry in the afternoon for variety."}},{"@type":"Question","name":"What is the strongest berry nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"CUBA Berry Mix and Pablo Strawberry Lychee are among the strongest berry options, both exceeding 30 mg/can. These are designed for experienced users with established nicotine tolerance."}}]})} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

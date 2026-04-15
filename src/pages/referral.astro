@@ -4,14 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
 import { rewards } from '@/config/rewards';
----
+import JsonLd from '@/components/astro/JsonLd.astro';
 
-<Shop
-  title={`Refer a Friend — Earn SnusCoins Together | ${tenant.name}`}
-  description={`Share your ${tenant.name} referral code with friends. They get ${rewards.referralFriend} SnusCoins, you get ${rewards.referralSelf}. Earn rewards for every friend who joins.`}
-  canonical="/referral"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -19,7 +14,15 @@ import { rewards } from '@/config/rewards';
       { "@type": "Question", "name": "Where do I find my referral code?", "acceptedAnswer": { "@type": "Answer", "text": "Log in to your account, go to the Membership tab, and scroll down to the Refer a Friend section. Your unique code will be displayed there with a copy button and sharing options." } },
       { "@type": "Question", "name": "Can I use SnusCoins for discounts?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. SnusCoins can be redeemed for discounts on future orders. Check the Rewards page for current redemption rates and available rewards." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={`Refer a Friend — Earn SnusCoins Together | ${tenant.name}`}
+  description={`Share your ${tenant.name} referral code with friends. They get ${rewards.referralFriend} SnusCoins, you get ${rewards.referralSelf}. Earn rewards for every friend who joins.`}
+  canonical="/referral"
+>
+  <JsonLd data={faqJsonLd} />
 
   <section class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">

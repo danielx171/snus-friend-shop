@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,35 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-07';
 const title = 'White Fox vs Siberia: Which Is Stronger in 2026?';
 const description = 'White Fox vs Siberia compared. Strength, format, price, cooling sensation, and safety — which extreme nicotine pouch brand wins?';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/white-fox-vs-siberia-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is Siberia really 49.5mg? Can that be safe?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, Siberia Maxi is certified at 49.5mg per pouch. It's safe if used correctly with established tolerance." } },
+          { "@type": "Question", "name": "Which is smoother, White Fox or Siberia?", "acceptedAnswer": { "@type": "Answer", "text": "White Fox is noticeably smoother. Siberia's cooling technology creates a harsher, more intense sensation." } },
+          { "@type": "Question", "name": "Can I use White Fox Black Edition and Siberia interchangeably?", "acceptedAnswer": { "@type": "Answer", "text": "Both are 24mg, so nicotine-wise, yes. But the experience differs significantly." } },
+          { "@type": "Question", "name": "Why is White Fox only in slim format?", "acceptedAnswer": { "@type": "Answer", "text": "Brand identity. White Fox positions itself as the premium, discreet option." } },
+          { "@type": "Question", "name": "Which lasts longer in your mouth?", "acceptedAnswer": { "@type": "Answer", "text": "Siberia Maxi is larger and stays longer. But extreme-strength pouches shouldn't be used more than 20-30 minutes." } },
+          { "@type": "Question", "name": "Which brand has better availability in Europe?", "acceptedAnswer": { "@type": "Answer", "text": "Both are widely available in Nordic countries and EU retailers." } }
+        ]
+      };
 ---
 
 <Shop
@@ -243,34 +273,7 @@ const description = 'White Fox vs Siberia compared. Strength, format, price, coo
 
       </div>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/white-fox-vs-siberia-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          { "@type": "Question", "name": "Is Siberia really 49.5mg? Can that be safe?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, Siberia Maxi is certified at 49.5mg per pouch. It's safe if used correctly with established tolerance." } },
-          { "@type": "Question", "name": "Which is smoother, White Fox or Siberia?", "acceptedAnswer": { "@type": "Answer", "text": "White Fox is noticeably smoother. Siberia's cooling technology creates a harsher, more intense sensation." } },
-          { "@type": "Question", "name": "Can I use White Fox Black Edition and Siberia interchangeably?", "acceptedAnswer": { "@type": "Answer", "text": "Both are 24mg, so nicotine-wise, yes. But the experience differs significantly." } },
-          { "@type": "Question", "name": "Why is White Fox only in slim format?", "acceptedAnswer": { "@type": "Answer", "text": "Brand identity. White Fox positions itself as the premium, discreet option." } },
-          { "@type": "Question", "name": "Which lasts longer in your mouth?", "acceptedAnswer": { "@type": "Answer", "text": "Siberia Maxi is larger and stays longer. But extreme-strength pouches shouldn't be used more than 20-30 minutes." } },
-          { "@type": "Question", "name": "Which brand has better availability in Europe?", "acceptedAnswer": { "@type": "Answer", "text": "Both are widely available in Nordic countries and EU retailers." } }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

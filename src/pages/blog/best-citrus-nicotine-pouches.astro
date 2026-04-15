@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,24 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-03-28';
 const title = 'Best Citrus Nicotine Pouches: 2026 Flavour Guide';
 const description = 'Expert guide to the top citrus nicotine pouches in 2026 — from zesty lemon and lime to smooth orange and grapefruit. Find your perfect citrus pouch.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-citrus-nicotine-pouches` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the most popular citrus nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"ZYN Citrus is the top-selling citrus pouch in Europe. Its balanced lemon-lime profile and wide strength range (1.5–9.5 mg) make it the default choice for citrus fans."}},{"@type":"Question","name":"Do citrus pouches stain teeth?","acceptedAnswer":{"@type":"Answer","text":"No. Despite the citrus flavouring, nicotine pouches contain no pigments that would stain enamel. The citric acid flavouring is minimal and does not erode teeth during normal use."}},{"@type":"Question","name":"Are citrus pouches good for morning use?","acceptedAnswer":{"@type":"Answer","text":"Many users prefer citrus in the morning for its refreshing, wake-up quality — similar to drinking orange juice. The zesty profile pairs well with coffee and breakfast routines."}},{"@type":"Question","name":"What is the difference between lemon and grapefruit pouches?","acceptedAnswer":{"@type":"Answer","text":"Lemon pouches are sharper and tangier. Grapefruit pouches have a slightly bitter, more complex profile with a drier finish. KLINT Pink Grapefruit is the standout in this sub-category."}},{"@type":"Question","name":"Which citrus pouch lasts the longest?","acceptedAnswer":{"@type":"Answer","text":"VELO Lime Flame and ZYN Citrus Slim both maintain flavour for 30+ minutes. Slim formats generally last longer than mini due to their larger surface area and slower moisture release."}}]};
 ---
 
 <Shop
@@ -355,22 +374,7 @@ const description = 'Expert guide to the top citrus nicotine pouches in 2026 —
   </div>
 </section>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-citrus-nicotine-pouches` },
-        "description": description
-      })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the most popular citrus nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"ZYN Citrus is the top-selling citrus pouch in Europe. Its balanced lemon-lime profile and wide strength range (1.5–9.5 mg) make it the default choice for citrus fans."}},{"@type":"Question","name":"Do citrus pouches stain teeth?","acceptedAnswer":{"@type":"Answer","text":"No. Despite the citrus flavouring, nicotine pouches contain no pigments that would stain enamel. The citric acid flavouring is minimal and does not erode teeth during normal use."}},{"@type":"Question","name":"Are citrus pouches good for morning use?","acceptedAnswer":{"@type":"Answer","text":"Many users prefer citrus in the morning for its refreshing, wake-up quality — similar to drinking orange juice. The zesty profile pairs well with coffee and breakfast routines."}},{"@type":"Question","name":"What is the difference between lemon and grapefruit pouches?","acceptedAnswer":{"@type":"Answer","text":"Lemon pouches are sharper and tangier. Grapefruit pouches have a slightly bitter, more complex profile with a drier finish. KLINT Pink Grapefruit is the standout in this sub-category."}},{"@type":"Question","name":"Which citrus pouch lasts the longest?","acceptedAnswer":{"@type":"Answer","text":"VELO Lime Flame and ZYN Citrus Slim both maintain flavour for 30+ minutes. Slim formats generally last longer than mini due to their larger surface area and slower moisture release."}}]})} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

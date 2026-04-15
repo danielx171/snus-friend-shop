@@ -5,19 +5,14 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
 const publishDate = '2026-03-29';
 const title = 'Nicotine Pouches vs Cigarettes Compared (2026)';
 const description = 'Compare nicotine pouches to cigarettes. Explore health differences, costs, nicotine delivery, convenience, social impact, and environmental effects.';
----
 
-<Shop
-  title={title}
-  description={description}
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
@@ -27,9 +22,9 @@ const description = 'Compare nicotine pouches to cigarettes. Explore health diff
     "dateModified": "2026-04-10",
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -58,7 +53,15 @@ const description = 'Compare nicotine pouches to cigarettes. Explore health diff
         }
       }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">

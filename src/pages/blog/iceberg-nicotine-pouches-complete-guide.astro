@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -18,15 +19,8 @@ function findProduct(brandSlug: string, nameFragment?: string) {
 const mintProduct = findProduct('iceberg', 'mint');
 const colaProduct = findProduct('iceberg', 'cola');
 const fallbackProduct = findProduct('iceberg');
----
 
-<Shop
-  title="ICEBERG Nicotine Pouches: Complete 2026 Guide"
-  description="ICEBERG nicotine pouches reviewed — strengths from 6 to 40 mg, 13 products, bold icy flavours. The Polish brand built for experienced users."
-  canonical="/blog/iceberg-nicotine-pouches-complete-guide"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "ICEBERG Nicotine Pouches: Complete Brand Guide",
@@ -36,9 +30,9 @@ const fallbackProduct = findProduct('iceberg');
     "dateModified": "2026-03-28",
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "/logo.png", "width": 250, "height": 60 } }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -48,7 +42,16 @@ const fallbackProduct = findProduct('iceberg');
       { "@type": "Question", "name": "How long does an ICEBERG pouch last?", "acceptedAnswer": { "@type": "Answer", "text": "Most ICEBERG pouches last 30-50 minutes, depending on individual absorption rates, pouch moisture, and the specific strength. Higher-strength variants (30mg+) may feel shorter due to intensity. If a pouch feels too mild, check that you're using the correct strength tier." } },
       { "@type": "Question", "name": "Why is ICEBERG called 'ultra-strength'?", "acceptedAnswer": { "@type": "Answer", "text": "ICEBERG is known as the 'ultra-strength specialist' because it offers an aggressive range of high-nicotine concentrations (up to 40mg at SnusFriend) combined with potent, icy flavours. Even their lower-strength options (6mg) are formulated for intensity rather than casual consumption. The brand's philosophy is unapologetic strength for experienced users." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="ICEBERG Nicotine Pouches: Complete 2026 Guide"
+  description="ICEBERG nicotine pouches reviewed — strengths from 6 to 40 mg, 13 products, bold icy flavours. The Polish brand built for experienced users."
+  canonical="/blog/iceberg-nicotine-pouches-complete-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

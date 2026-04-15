@@ -6,18 +6,12 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
----
 
-<Shop
-  title="Best Nicotine Pouches with No Aftertaste (2026)"
-  description="Best nicotine pouches with no aftertaste in 2026. Top-rated clean-tasting brands, tips to avoid chemical flavours, and expert picks."
-  canonical="/blog/best-nicotine-pouches-no-aftertaste"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Best Nicotine Pouches with No Aftertaste (2026)",
@@ -28,9 +22,9 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/best-nicotine-pouches-no-aftertaste" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -40,7 +34,16 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
       { "@type": "Question", "name": "Does nicotine strength affect aftertaste?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Higher strength pouches (15mg+) naturally have more pronounced flavours and stronger nicotine delivery. If you're sensitive, lower strengths (3–6mg) from premium brands will feel dramatically cleaner. Conversely, lower-strength pouches might feel weak if you're used to high-nicotine products." } },
       { "@type": "Question", "name": "Can I rinse my mouth to remove aftertaste quickly?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Rinsing with water immediately after removing the pouch helps. Some users swear by a quick mouthwash rinse. Eating a mint sweet also works. But the goal is choosing a pouch that doesn't require this." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="Best Nicotine Pouches with No Aftertaste (2026)"
+  description="Best nicotine pouches with no aftertaste in 2026. Top-rated clean-tasting brands, tips to avoid chemical flavours, and expert picks."
+  canonical="/blog/best-nicotine-pouches-no-aftertaste"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

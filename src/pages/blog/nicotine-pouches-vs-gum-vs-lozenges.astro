@@ -5,17 +5,11 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getBlogLastmod } from '@/data/blog-registry';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const dateModified = getBlogLastmod('nicotine-pouches-vs-gum-vs-lozenges');
----
 
-<Shop
-  title="Nicotine Pouches vs Gum vs Lozenges Compared"
-  description="Nicotine pouches, gum, lozenges, and patches compared. Cost, speed, flavour, discretion, and side effects — find the right nicotine format for you."
-  canonical="/blog/nicotine-pouches-vs-gum-vs-lozenges"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Nicotine Pouches vs Gum vs Lozenges: Which NRT Is Right for You?",
@@ -25,9 +19,9 @@ const dateModified = getBlogLastmod('nicotine-pouches-vs-gum-vs-lozenges');
     ...(dateModified && { dateModified }),
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -37,7 +31,16 @@ const dateModified = getBlogLastmod('nicotine-pouches-vs-gum-vs-lozenges');
       { "@type": "Question", "name": "Which option has the most flavour choices?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches offer by far the widest variety, with hundreds of flavours from mint and fruit to more exotic blends. Traditional gum and lozenges have limited flavour ranges (typically mint, fruit, or original tobacco)." } },
       { "@type": "Question", "name": "What are the side effects of each nicotine format?", "acceptedAnswer": { "@type": "Answer", "text": "Pouches may cause gum tingling or hiccups. Gum can cause jaw fatigue, hiccups, or heartburn. Lozenges may irritate the throat or cause nausea. Patches commonly cause skin irritation or sleep disturbance. Most side effects are mild and temporary." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="Nicotine Pouches vs Gum vs Lozenges Compared"
+  description="Nicotine pouches, gum, lozenges, and patches compared. Cost, speed, flavour, discretion, and side effects — find the right nicotine format for you."
+  canonical="/blog/nicotine-pouches-vs-gum-vs-lozenges"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

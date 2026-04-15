@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const nicotineFreeProducts = allProducts.filter(
@@ -68,8 +69,7 @@ const webPageJsonLd = {
   description={`Shop ${nicotineFreeProducts.length > 0 ? nicotineFreeProducts.length : ''} nicotine-free pouches — all the flavour and ritual, none of the nicotine. Caffeine pouches, flavour-only pouches, and more. Fast EU shipping.`}
   canonical="/nicotine-free-pouches"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <JsonLd items={[webPageJsonLd, faqJsonLd]} />
 
   <Breadcrumb items={[
     { label: 'Nicotine Pouches', href: '/nicotine-pouches' },

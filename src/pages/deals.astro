@@ -3,17 +3,12 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const title = 'Discount Codes & Deals';
 const description = 'Find active SnusFriend discount codes, learn how to use them, and sign up for exclusive deals on nicotine pouches. New subscriber codes available.';
----
 
-<Shop
-  title={`${title} | ${tenant.name}`}
-  description={description}
-  canonical="/deals"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -22,7 +17,15 @@ const description = 'Find active SnusFriend discount codes, learn how to use the
       { "@type": "Question", "name": "Do discount codes work on all products?", "acceptedAnswer": { "@type": "Answer", "text": "Most codes apply to the full catalogue, but some are brand-specific or exclude limited-edition items. The terms are shown when you receive the code." } },
       { "@type": "Question", "name": "How often does SnusFriend release new codes?", "acceptedAnswer": { "@type": "Answer", "text": "It varies — newsletter subscribers are always the first to know. We share codes regularly through the newsletter and seasonal promotions." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  canonical="/deals"
+>
+  <JsonLd data={faqJsonLd} />
 
   <div class="bg-background text-foreground">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">

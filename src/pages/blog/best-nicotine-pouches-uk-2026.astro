@@ -7,6 +7,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const facts = await getEditorialFacts();
@@ -15,6 +16,77 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-09';
 const title = 'Best Nicotine Pouches in the UK 2026: Top 10 Picks';
 const description = 'The 10 best nicotine pouches in the UK for 2026. Post-Brexit regulations explained, GBP pricing, and fast delivery. Expert picks from SnusFriend.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-uk-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are nicotine pouches legal in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Nicotine pouches are fully legal consumer products in the UK. They're not classed as tobacco, and the MHRA regulates them as consumer items. Age verification (18+) is required at purchase."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you need to be 18 to buy nicotine pouches in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Age verification is required at purchase, both in-store and online. It's illegal to sell nicotine pouches to under-18s."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can I buy nicotine pouches in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `UK supermarkets (Nordic Spirit at Tesco, Sainsbury's), specialist shops (larger selection), UK online retailers (1–2 days delivery), or SnusFriend for ${facts.productCountLabel} products (3–5 days + customs).`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will nicotine pouches be banned in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Very unlikely. The UK's harm reduction stance is significantly more permissive than the EU. Bans are not on the horizon, though oversight may increase."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much do nicotine pouches cost in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Supermarkets: £4.50–£6.00 per can. UK online retailers: £2.80–£4.50. Bulk orders: £2.00–£3.50 per can."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there customs duty ordering pouches from EU to UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No tariff duty applies (0%), but UK import VAT (20%) will be charged on orders over ~£15. The carrier collects VAT at delivery."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop title={title} description={description} ogType="article">
@@ -214,76 +286,7 @@ const description = 'The 10 best nicotine pouches in the UK for 2026. Post-Brexi
         </div>
       </details>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-uk-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are nicotine pouches legal in the UK?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Nicotine pouches are fully legal consumer products in the UK. They're not classed as tobacco, and the MHRA regulates them as consumer items. Age verification (18+) is required at purchase."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Do you need to be 18 to buy nicotine pouches in the UK?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Age verification is required at purchase, both in-store and online. It's illegal to sell nicotine pouches to under-18s."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Where can I buy nicotine pouches in the UK?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": `UK supermarkets (Nordic Spirit at Tesco, Sainsbury's), specialist shops (larger selection), UK online retailers (1–2 days delivery), or SnusFriend for ${facts.productCountLabel} products (3–5 days + customs).`
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Will nicotine pouches be banned in the UK?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Very unlikely. The UK's harm reduction stance is significantly more permissive than the EU. Bans are not on the horizon, though oversight may increase."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How much do nicotine pouches cost in the UK?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Supermarkets: £4.50–£6.00 per can. UK online retailers: £2.80–£4.50. Bulk orders: £2.00–£3.50 per can."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is there customs duty ordering pouches from EU to UK?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No tariff duty applies (0%), but UK import VAT (20%) will be charged on orders over ~£15. The carrier collects VAT at delivery."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         <strong>Medical Disclaimer:</strong> Nicotine pouches contain nicotine, which is addictive and may be harmful if used regularly or in high quantities. This article is for informational purposes only and is not medical advice. Nicotine pouches are not smoking cessation devices and are not approved by the MHRA as medicines. This product is intended for adult users only (18+). Keep away from children and pets.

@@ -4,6 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
 const title = 'Erik Lindqvist — Editor & Lead Product Reviewer, SnusFriend';
@@ -33,7 +34,7 @@ const personSchema = {
   title={title}
   description={description}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  <JsonLd data={personSchema} />
 
   <article class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">

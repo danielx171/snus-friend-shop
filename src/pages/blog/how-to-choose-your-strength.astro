@@ -7,6 +7,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
 
@@ -31,6 +32,35 @@ const extraStrongPick =
 const publishDate = '2026-03-26';
 const title = 'How to Choose the Right Nicotine Pouch Strength';
 const description = 'Nicotine pouch strength guide — from light (2mg) to super strong (20mg+). Find the right strength for your experience level and goals.';
+
+const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Choose the Right Nicotine Pouch Strength",
+    "description": "A step-by-step decision process to find the nicotine pouch strength that matches your experience level and goals.",
+    "totalTime": "PT5M",
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Assess Your Nicotine Experience", "text": "Determine your current nicotine use: never used nicotine, occasional social smoker, 5-10 cigarettes per day, 10-20 cigarettes per day, 20+ cigarettes per day, or heavy snus user." },
+      { "@type": "HowToStep", "position": 2, "name": "Understand the Strength Tiers", "text": "Nicotine pouches come in five tiers: Light (2-4 mg) for beginners, Normal (4-8 mg) as the sweet spot for most users, Strong (8-12 mg) for experienced users, Extra Strong (12-20 mg) for high tolerance, and Super Strong (20 mg+) for veterans only." },
+      { "@type": "HowToStep", "position": 3, "name": "Match Your Background to a Starting Strength", "text": "Non-smokers start at 2-4 mg. Social smokers at 4-6 mg. Pack-a-day smokers at 8-12 mg. Heavy smokers at 12-16 mg. The mg per pouch number is the best comparison metric across brands." },
+      { "@type": "HowToStep", "position": 4, "name": "Start Low and Go Slow", "text": "Always start with a lower strength than you think you need. It is easier to move up than to recover from starting too high. Give it 3-5 pouches before judging, as the tingling settles with use." },
+      { "@type": "HowToStep", "position": 5, "name": "Adjust Based on Experience", "text": "After your first few pouches, note how the strength feels. If too mild, move up one tier. If you experience dizziness or nausea, move down. Many users keep two strengths for different times of day." }
+    ]
+  };
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/how-to-choose-your-strength` },
+  };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does mg mean on a nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"The mg (milligram) figure indicates the total nicotine content per pouch. A 6 mg pouch contains 6 milligrams of nicotine. Your body absorbs approximately 30–40% of this amount through the gum lining."}},{"@type":"Question","name":"Is 6 mg strong for a beginner?","acceptedAnswer":{"@type":"Answer","text":"For most beginners, 6 mg is a moderate-to-strong experience. If you are a non-smoker with no nicotine tolerance, start at 2–4 mg. If you are switching from 10+ cigarettes per day, 6 mg is a reasonable starting point."}},{"@type":"Question","name":"Can I use different strengths at different times of day?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many experienced users keep two strengths on hand — a stronger pouch for the morning or post-meal craving, and a lighter one for casual afternoon use. This is a practical way to manage daily nicotine intake."}},{"@type":"Question","name":"What happens if I use a pouch that is too strong?","acceptedAnswer":{"@type":"Answer","text":"Common symptoms include dizziness, nausea, headache, and increased heart rate. These effects are temporary — remove the pouch immediately and drink some water. The symptoms usually pass within 15–30 minutes."}},{"@type":"Question","name":"Do mg/pouch and mg/can mean the same thing?","acceptedAnswer":{"@type":"Answer","text":"No, and this is a common source of confusion. Some brands label by mg per pouch (e.g., 6 mg/pouch); others label by total mg per can (e.g., 120 mg for a 20-pouch can). Always check whether the figure refers to per pouch or per can."}},{"@type":"Question","name":"How do I step down in strength?","acceptedAnswer":{"@type":"Answer","text":"The most effective approach is gradual reduction: move down one tier every 2–4 weeks (e.g., 11 mg → 6 mg → 4 mg). Some users alternate between their current strength and the next lower one before fully switching."}}]};
 ---
 
 <Shop
@@ -240,30 +270,5 @@ const description = 'Nicotine pouch strength guide — from light (2mg) to super
     </div>
   </article>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Choose the Right Nicotine Pouch Strength",
-    "description": "A step-by-step decision process to find the nicotine pouch strength that matches your experience level and goals.",
-    "totalTime": "PT5M",
-    "step": [
-      { "@type": "HowToStep", "position": 1, "name": "Assess Your Nicotine Experience", "text": "Determine your current nicotine use: never used nicotine, occasional social smoker, 5-10 cigarettes per day, 10-20 cigarettes per day, 20+ cigarettes per day, or heavy snus user." },
-      { "@type": "HowToStep", "position": 2, "name": "Understand the Strength Tiers", "text": "Nicotine pouches come in five tiers: Light (2-4 mg) for beginners, Normal (4-8 mg) as the sweet spot for most users, Strong (8-12 mg) for experienced users, Extra Strong (12-20 mg) for high tolerance, and Super Strong (20 mg+) for veterans only." },
-      { "@type": "HowToStep", "position": 3, "name": "Match Your Background to a Starting Strength", "text": "Non-smokers start at 2-4 mg. Social smokers at 4-6 mg. Pack-a-day smokers at 8-12 mg. Heavy smokers at 12-16 mg. The mg per pouch number is the best comparison metric across brands." },
-      { "@type": "HowToStep", "position": 4, "name": "Start Low and Go Slow", "text": "Always start with a lower strength than you think you need. It is easier to move up than to recover from starting too high. Give it 3-5 pouches before judging, as the tingling settles with use." },
-      { "@type": "HowToStep", "position": 5, "name": "Adjust Based on Experience", "text": "After your first few pouches, note how the strength feels. If too mild, move up one tier. If you experience dizziness or nausea, move down. Many users keep two strengths for different times of day." }
-    ]
-  })} />
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": publishDate,
-    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/how-to-choose-your-strength` },
-  })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does mg mean on a nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"The mg (milligram) figure indicates the total nicotine content per pouch. A 6 mg pouch contains 6 milligrams of nicotine. Your body absorbs approximately 30–40% of this amount through the gum lining."}},{"@type":"Question","name":"Is 6 mg strong for a beginner?","acceptedAnswer":{"@type":"Answer","text":"For most beginners, 6 mg is a moderate-to-strong experience. If you are a non-smoker with no nicotine tolerance, start at 2–4 mg. If you are switching from 10+ cigarettes per day, 6 mg is a reasonable starting point."}},{"@type":"Question","name":"Can I use different strengths at different times of day?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many experienced users keep two strengths on hand — a stronger pouch for the morning or post-meal craving, and a lighter one for casual afternoon use. This is a practical way to manage daily nicotine intake."}},{"@type":"Question","name":"What happens if I use a pouch that is too strong?","acceptedAnswer":{"@type":"Answer","text":"Common symptoms include dizziness, nausea, headache, and increased heart rate. These effects are temporary — remove the pouch immediately and drink some water. The symptoms usually pass within 15–30 minutes."}},{"@type":"Question","name":"Do mg/pouch and mg/can mean the same thing?","acceptedAnswer":{"@type":"Answer","text":"No, and this is a common source of confusion. Some brands label by mg per pouch (e.g., 6 mg/pouch); others label by total mg per can (e.g., 120 mg for a 20-pouch can). Always check whether the figure refers to per pouch or per can."}},{"@type":"Question","name":"How do I step down in strength?","acceptedAnswer":{"@type":"Answer","text":"The most effective approach is gradual reduction: move down one tier every 2–4 weeks (e.g., 11 mg → 6 mg → 4 mg). Some users alternate between their current strength and the next lower one before fully switching."}}]})} />
+  <JsonLd items={[howToJsonLd, blogPostingJsonLd, faqJsonLd]} />
 </Shop>

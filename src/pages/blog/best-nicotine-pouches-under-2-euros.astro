@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,73 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-08';
 const title = 'Best Nicotine Pouches Under \u20AC2 (2026 Value Guide)';
 const description = 'Find the best nicotine pouches under \u20AC2 per can. We ranked 10 budget-friendly options by flavour, strength, and value.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-under-2-euros` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are budget pouches lower quality?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not necessarily. Budget pouches from established brands (Pablo, Killa, Cuba) use the same basic ingredients and manufacturing standards as mid-premium options. The difference is often packaging, marketing, and formulation optimization. Budget pouches are intentionally designed for affordability, not inferior quality."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why do premium pouches cost more if they're similar?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Premium pricing covers: optimized formulations (lower pH, better flavour stability), proprietary pouch materials, stronger quality control, brand development, and distribution costs. You're paying for consistency and comfort. But for many users, the premium difference isn't worth the 30-50% price markup."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which budget pouch tastes best?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Subjective, but Killa Mint and Cuba Banana rank highest in user reviews. If you prefer clean, neutral flavours, Pablo Classic is reliable. Try a few brands to find your preference — budget enables experimentation without financial commitment."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I know if a deal is actually cheap?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Calculate cost per pouch: can price divided by pouches per can. Budget target is 0.075-0.090 EUR per pouch. Anything above 0.10 EUR is mid-range pricing. Watch for roll pack discounts and auto-delivery savings — those are usually genuine bargains, not marketing gimmicks."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do budget pouches cause more gum irritation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Budget brands typically have higher pH (more alkaline), which causes more gum irritation than premium formulations. If you have sensitive gums, the comfort difference might justify premium pricing. For most users with normal gums, budget is fine with proper rotation and hydration."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will budget pouches expire or degrade in storage?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Properly stored pouches (cool, dry place, sealed cans) last 12-18 months. Budget pouches don't degrade faster than premium. You can safely stock up during sales or subscribe to bulk orders without risk of spoilage."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop title={title} description={description} ogType="article">
@@ -264,72 +332,7 @@ const description = 'Find the best nicotine pouches under \u20AC2 per can. We ra
 
       </div>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` } },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-under-2-euros` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are budget pouches lower quality?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Not necessarily. Budget pouches from established brands (Pablo, Killa, Cuba) use the same basic ingredients and manufacturing standards as mid-premium options. The difference is often packaging, marketing, and formulation optimization. Budget pouches are intentionally designed for affordability, not inferior quality."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why do premium pouches cost more if they're similar?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Premium pricing covers: optimized formulations (lower pH, better flavour stability), proprietary pouch materials, stronger quality control, brand development, and distribution costs. You're paying for consistency and comfort. But for many users, the premium difference isn't worth the 30-50% price markup."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which budget pouch tastes best?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Subjective, but Killa Mint and Cuba Banana rank highest in user reviews. If you prefer clean, neutral flavours, Pablo Classic is reliable. Try a few brands to find your preference — budget enables experimentation without financial commitment."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How do I know if a deal is actually cheap?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Calculate cost per pouch: can price divided by pouches per can. Budget target is 0.075-0.090 EUR per pouch. Anything above 0.10 EUR is mid-range pricing. Watch for roll pack discounts and auto-delivery savings — those are usually genuine bargains, not marketing gimmicks."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Do budget pouches cause more gum irritation?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Budget brands typically have higher pH (more alkaline), which causes more gum irritation than premium formulations. If you have sensitive gums, the comfort difference might justify premium pricing. For most users with normal gums, budget is fine with proper rotation and hydration."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Will budget pouches expire or degrade in storage?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Properly stored pouches (cool, dry place, sealed cans) last 12-18 months. Budget pouches don't degrade faster than premium. You can safely stock up during sales or subscribe to bulk orders without risk of spoilage."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

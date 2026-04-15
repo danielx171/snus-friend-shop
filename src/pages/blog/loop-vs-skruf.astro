@@ -4,10 +4,29 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-03-28';
 const title = 'LOOP vs Skruf: Swedish Brands Compared (2026)';
 const description = 'A detailed comparison of LOOP and Skruf nicotine pouches — flavour range, strength, pouch format, and which brand suits different users.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/loop-vs-skruf` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is LOOP or Skruf better for beginners?","acceptedAnswer":{"@type":"Answer","text":"Skruf is generally better for beginners. It offers milder flavours and more moderate strengths. LOOP's Instant Rush technology delivers nicotine faster, which can be intense for first-time users."}},{"@type":"Question","name":"What is LOOP's Instant Rush technology?","acceptedAnswer":{"@type":"Answer","text":"Instant Rush is LOOP's proprietary moisture and pH formulation that accelerates nicotine absorption through the gum lining. Users typically feel the effect within 30–60 seconds — faster than most competitors."}},{"@type":"Question","name":"Are LOOP and Skruf both Swedish?","acceptedAnswer":{"@type":"Answer","text":"Yes. Both brands are manufactured in Sweden. Skruf has a longer heritage in the traditional snus market, while LOOP launched specifically as a tobacco-free nicotine pouch brand."}},{"@type":"Question","name":"Which has stronger flavours, LOOP or Skruf?","acceptedAnswer":{"@type":"Answer","text":"LOOP is known for bolder, more experimental flavours (Jalapeño Lime, Red Chili Melon). Skruf leans toward classic, clean profiles (Fresh Mint, Nordic Liquorice). If you prefer adventurous tastes, LOOP is the better choice."}},{"@type":"Question","name":"How do LOOP and Skruf compare on price?","acceptedAnswer":{"@type":"Answer","text":"Both brands are priced in the mid-range for European nicotine pouches. LOOP occasionally costs slightly more per can due to its premium positioning, but the difference is typically under €0.50."}},{"@type":"Question","name":"Can I mix LOOP and Skruf throughout the day?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many users alternate between brands — a milder Skruf for morning use and a stronger LOOP for an afternoon boost. There is no issue with switching between brands."}}]};
 ---
 
 <Shop
@@ -235,22 +254,7 @@ const description = 'A detailed comparison of LOOP and Skruf nicotine pouches �
   </div>
 </section>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/loop-vs-skruf` },
-        "description": description
-      })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is LOOP or Skruf better for beginners?","acceptedAnswer":{"@type":"Answer","text":"Skruf is generally better for beginners. It offers milder flavours and more moderate strengths. LOOP's Instant Rush technology delivers nicotine faster, which can be intense for first-time users."}},{"@type":"Question","name":"What is LOOP's Instant Rush technology?","acceptedAnswer":{"@type":"Answer","text":"Instant Rush is LOOP's proprietary moisture and pH formulation that accelerates nicotine absorption through the gum lining. Users typically feel the effect within 30–60 seconds — faster than most competitors."}},{"@type":"Question","name":"Are LOOP and Skruf both Swedish?","acceptedAnswer":{"@type":"Answer","text":"Yes. Both brands are manufactured in Sweden. Skruf has a longer heritage in the traditional snus market, while LOOP launched specifically as a tobacco-free nicotine pouch brand."}},{"@type":"Question","name":"Which has stronger flavours, LOOP or Skruf?","acceptedAnswer":{"@type":"Answer","text":"LOOP is known for bolder, more experimental flavours (Jalapeño Lime, Red Chili Melon). Skruf leans toward classic, clean profiles (Fresh Mint, Nordic Liquorice). If you prefer adventurous tastes, LOOP is the better choice."}},{"@type":"Question","name":"How do LOOP and Skruf compare on price?","acceptedAnswer":{"@type":"Answer","text":"Both brands are priced in the mid-range for European nicotine pouches. LOOP occasionally costs slightly more per can due to its premium positioning, but the difference is typically under €0.50."}},{"@type":"Question","name":"Can I mix LOOP and Skruf throughout the day?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many users alternate between brands — a milder Skruf for morning use and a stronger LOOP for an afternoon boost. There is no issue with switching between brands."}}]})} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

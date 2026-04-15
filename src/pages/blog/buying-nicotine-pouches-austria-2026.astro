@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,85 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-07';
 const title = 'Nicotine Pouches in Austria 2026: Buy Legally Online';
 const description = 'Complete guide to buying nicotine pouches in Austria in 2026. Legal status, Trafik vs online prices, popular brands, and how to order from SnusFriend.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-austria-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Sind Nikotinbeutel in Österreich legal?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja, Nikotinbeutel sind in Österreich legal und werden als Tabakerzeugnisse unter dem TNRSG reguliert. Sie dürfen nur an Personen ab 18 Jahren verkauft werden und sind auf lizenzierte Trafiken und autorisierte Online-Händler beschränkt."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I buy nicotine pouches online in Austria?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. You can purchase from authorized online retailers like SnusFriend, which operates with compliance to Austrian and EU regulations. Age verification (18+) is required during checkout."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much do nicotine pouches cost in Austrian Trafiken?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Prices at Trafiken are typically €4.50–€6.00 per can, depending on the brand and strength. VELO and ZYN average around €5.50. These prices reflect the 2025 excise tax and standard retail margins."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's the age limit for nicotine pouches in Austria?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "18 years old. Age verification is mandatory at all licensed Trafiken and authorized online retailers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Welche Marken gibt es in der Trafik?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Die häufigsten Marken in österreichischen Trafiken sind VELO, ZYN, und gelegentlich Nordic Spirit oder Skruf. Die meisten Trafiken führen nur 2–4 Marken mit insgesamt 10–20 Varianten. Online-Händler wie SnusFriend bieten 50+ Marken an."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is it cheaper to order nicotine pouches online?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, significantly. Online retailers like SnusFriend offer prices 30–50% lower than Trafiken. Value brands start at €1.22 per can, mid-range brands at €2.50–€3.50, and premium brands at €3.50–€4.88. Combined with free shipping over €29, online ordering typically saves €15–€20 per 10-can order."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to pay customs when ordering from SnusFriend?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. SnusFriend ships from an EU warehouse, so shipments to Austria are intra-EU and do not incur customs duties or import taxes. Delivery is 3–5 business days without delays."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop
@@ -194,84 +274,7 @@ const description = 'Complete guide to buying nicotine pouches in Austria in 202
         </div>
       </details>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-austria-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Sind Nikotinbeutel in Österreich legal?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Ja, Nikotinbeutel sind in Österreich legal und werden als Tabakerzeugnisse unter dem TNRSG reguliert. Sie dürfen nur an Personen ab 18 Jahren verkauft werden und sind auf lizenzierte Trafiken und autorisierte Online-Händler beschränkt."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I buy nicotine pouches online in Austria?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. You can purchase from authorized online retailers like SnusFriend, which operates with compliance to Austrian and EU regulations. Age verification (18+) is required during checkout."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How much do nicotine pouches cost in Austrian Trafiken?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Prices at Trafiken are typically €4.50–€6.00 per can, depending on the brand and strength. VELO and ZYN average around €5.50. These prices reflect the 2025 excise tax and standard retail margins."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What's the age limit for nicotine pouches in Austria?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "18 years old. Age verification is mandatory at all licensed Trafiken and authorized online retailers."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Welche Marken gibt es in der Trafik?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Die häufigsten Marken in österreichischen Trafiken sind VELO, ZYN, und gelegentlich Nordic Spirit oder Skruf. Die meisten Trafiken führen nur 2–4 Marken mit insgesamt 10–20 Varianten. Online-Händler wie SnusFriend bieten 50+ Marken an."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is it cheaper to order nicotine pouches online?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, significantly. Online retailers like SnusFriend offer prices 30–50% lower than Trafiken. Value brands start at €1.22 per can, mid-range brands at €2.50–€3.50, and premium brands at €3.50–€4.88. Combined with free shipping over €29, online ordering typically saves €15–€20 per 10-can order."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Do I need to pay customs when ordering from SnusFriend?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. SnusFriend ships from an EU warehouse, so shipments to Austria are intra-EU and do not incur customs duties or import taxes. Delivery is 3–5 business days without delays."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

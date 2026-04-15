@@ -7,6 +7,7 @@ import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -14,15 +15,8 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-03-31';
 const title = "Strongest Snus Brands Compared: Beginner Warning";
 const description = 'Strongest snus brands ranked by mg — Siberia, General, Thunder, and modern pouch brands side by side. Brand-level comparison with beginner safety warnings.';
----
 
-<Shop
-  title={title}
-  description={description}
-  canonical="/blog/strongest-snus-brands-compared-beginners-warning"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
@@ -32,9 +26,9 @@ const description = 'Strongest snus brands ranked by mg — Siberia, General, Th
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/strongest-snus-brands-compared-beginners-warning" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -43,7 +37,16 @@ const description = 'Strongest snus brands ranked by mg — Siberia, General, Th
       { "@type": "Question", "name": "Are strong nicotine pouches more dangerous?", "acceptedAnswer": { "@type": "Answer", "text": "Higher nicotine doses increase the risk of dependency and unpleasant side effects (nausea, dizziness). However, nicotine pouches — even strong ones — are considered significantly less harmful than cigarettes because they don't involve combustion. The risk is primarily about addiction, not acute toxicity at commercial doses." } },
       { "@type": "Question", "name": "How many cigarettes equal one strong nicotine pouch?", "acceptedAnswer": { "@type": "Answer", "text": "A typical cigarette delivers about 1.0-1.5 mg of absorbed nicotine. With oral pouches absorbing approximately 30-40% of their stated nicotine, a 16 mg pouch (like ZYN S6) delivers roughly 5-6 mg — equivalent to 3-6 cigarettes. A 50 mg pouch would be equivalent to roughly 10-20 cigarettes." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  canonical="/blog/strongest-snus-brands-compared-beginners-warning"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">

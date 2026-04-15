@@ -6,21 +6,15 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
 const modifiedDate = '2026-04-10';
 const title = 'Nicotine Pouch Side Effects: What Research Says';
 const description = 'An honest look at nicotine pouch side effects based on published research. Covers common effects, long-term unknowns, and how to reduce risk.';
----
 
-<Shop
-  title={title}
-  description={description}
-  canonical="/blog/nicotine-pouch-side-effects"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
@@ -30,9 +24,9 @@ const description = 'An honest look at nicotine pouch side effects based on publ
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/nicotine-pouch-side-effects" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -42,7 +36,16 @@ const description = 'An honest look at nicotine pouch side effects based on publ
       { "@type": "Question", "name": "Who should not use nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches are not suitable for people under 18, pregnant or breastfeeding women, non-nicotine users (there is no benefit to starting), or anyone managing a heart condition without consulting their doctor first." } },
       { "@type": "Question", "name": "How can I reduce nicotine pouch side effects?", "acceptedAnswer": { "@type": "Answer", "text": "Start with a low strength (3–4 mg), rotate pouch placement between sides, stay hydrated, limit use to 8–12 pouches per day, and avoid using pouches within 2–3 hours of bedtime to prevent sleep disruption." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  canonical="/blog/nicotine-pouch-side-effects"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <div class="bg-background text-foreground">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">

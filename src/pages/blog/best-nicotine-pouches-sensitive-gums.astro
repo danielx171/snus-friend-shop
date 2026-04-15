@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,73 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-08';
 const title = 'Best Nicotine Pouches for Sensitive Gums (2026): Softer, Gentler Picks';
 const description = 'Need a gentler pouch? These 2026 picks focus on softer formats, lower strengths, and practical ways to reduce gum irritation while you find a better fit.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-sensitive-gums` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can I use nicotine pouches if I have gum disease?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. If you have gingivitis, periodontitis, or active gum disease, nicotine pouches will worsen inflammation. Consult your dentist before resuming use. Nicotine slows healing, so it's best to avoid pouches entirely during active treatment."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long does gum irritation usually last?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Mild irritation (redness, slight swelling) typically resolves within 24–48 hours of stopping use. Severe cases may take 3–7 days. If irritation persists longer than a week, see a dentist."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are white/grey gums after pouch use normal?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The whitening is temporary tissue bleaching from nicotine and alkaline compounds. It fades within minutes to hours. However, if whiteness persists or spreads beyond the pouch area, consult a dentist—it could indicate chemical burn."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I switch brands if I'm irritated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not necessarily—try adjusting usage first (shorter sessions, lower strength, more rotation). If irritation continues after 1–2 weeks of adjustments, try a gentler brand from this list. Switching brands too frequently prevents you from learning what your gums tolerate."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can mouthwash help with nicotine pouch irritation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Some users find alcohol-free mouthwash soothing. However, strong antiseptic rinses (especially alcohol-based) can worsen irritation. Saltwater rinses are gentler and can promote healing. Avoid rinsing immediately after pouch use—wait 30 minutes to let tissues recover."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are mini pouches always less irritating than regular?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Usually, but not always. A regular pouch with ultra-low strength and premium material can be gentler than a mini with higher nicotine. The key factors are: strength, pouch material (fleece vs. cellulose), pH formulation, and your placement habits."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop title={title} description={description} ogType="article">
@@ -207,72 +275,7 @@ const description = 'Need a gentler pouch? These 2026 picks focus on softer form
 
       </div>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` } },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-sensitive-gums` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Can I use nicotine pouches if I have gum disease?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. If you have gingivitis, periodontitis, or active gum disease, nicotine pouches will worsen inflammation. Consult your dentist before resuming use. Nicotine slows healing, so it's best to avoid pouches entirely during active treatment."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How long does gum irritation usually last?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Mild irritation (redness, slight swelling) typically resolves within 24–48 hours of stopping use. Severe cases may take 3–7 days. If irritation persists longer than a week, see a dentist."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Are white/grey gums after pouch use normal?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. The whitening is temporary tissue bleaching from nicotine and alkaline compounds. It fades within minutes to hours. However, if whiteness persists or spreads beyond the pouch area, consult a dentist—it could indicate chemical burn."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Should I switch brands if I'm irritated?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Not necessarily—try adjusting usage first (shorter sessions, lower strength, more rotation). If irritation continues after 1–2 weeks of adjustments, try a gentler brand from this list. Switching brands too frequently prevents you from learning what your gums tolerate."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can mouthwash help with nicotine pouch irritation?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Some users find alcohol-free mouthwash soothing. However, strong antiseptic rinses (especially alcohol-based) can worsen irritation. Saltwater rinses are gentler and can promote healing. Avoid rinsing immediately after pouch use—wait 30 minutes to let tissues recover."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Are mini pouches always less irritating than regular?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Usually, but not always. A regular pouch with ultra-low strength and premium material can be gentler than a mini with higher nicotine. The key factors are: strength, pouch material (fleece vs. cellulose), pH formulation, and your placement habits."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

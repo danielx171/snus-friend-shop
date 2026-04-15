@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,77 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-09';
 const title = 'Best Nicotine Pouches in the Netherlands (2026): 10 EU-Shipped Picks';
 const description = 'Shopping for nicotine pouches in the Netherlands? Compare 10 editor-selected picks with Dutch-friendly shipping, pricing, and practical buying notes for 2026.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-netherlands-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Zijn nikotinezakjes legaal in Nederland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja. Tabaksvrije nikotinezakjes zijn legaal in Nederland. Ze vallen buiten de Tabaks- en rookwarenwet omdat ze geen tabak bevatten. De NVWA monitort de categorie maar heeft de verkoop niet beperkt. Ze zijn wijdverspreid verkrijgbaar in winkels en online."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can you buy nicotine pouches in the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine pouches are sold in tobacco shops, convenience stores like Albert Heijn and Jumbo, petrol stations, and online retailers. SnusFriend ships direct from an EU warehouse with 1-2 day delivery and competitive EUR pricing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's the most popular nicotine pouch brand in the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ZYN is the market leader. It has the highest stock levels in Dutch tobacco shops and the highest repeat-purchase rate. VELO and Nordic Spirit are close competitors. For niche flavours, LOOP and Helwit have growing followings."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much do nicotine pouches cost in the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retail price range is €2.50–€4.50 per can. Tobacco shops charge €3.50–€4.50. Online EU retailers offer €2.50–€3.50 due to lower overhead. Swedish online retailers sometimes offer €2.00–€3.00 before shipping costs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How fast is delivery to the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SnusFriend delivers in 1-2 days to major cities via PostNord and DHL from an EU warehouse. No customs delays. Tracking is provided with your order confirmation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there an age limit for nicotine pouches in the Netherlands?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Nicotine pouches are restricted to 18+. Age verification happens during checkout. No ID checks at delivery."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop title={title} description={description} ogType="article">
@@ -168,76 +240,7 @@ const description = 'Shopping for nicotine pouches in the Netherlands? Compare 1
         </div>
       </details>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-netherlands-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Zijn nikotinezakjes legaal in Nederland?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Ja. Tabaksvrije nikotinezakjes zijn legaal in Nederland. Ze vallen buiten de Tabaks- en rookwarenwet omdat ze geen tabak bevatten. De NVWA monitort de categorie maar heeft de verkoop niet beperkt. Ze zijn wijdverspreid verkrijgbaar in winkels en online."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Where can you buy nicotine pouches in the Netherlands?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nicotine pouches are sold in tobacco shops, convenience stores like Albert Heijn and Jumbo, petrol stations, and online retailers. SnusFriend ships direct from an EU warehouse with 1-2 day delivery and competitive EUR pricing."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What's the most popular nicotine pouch brand in the Netherlands?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "ZYN is the market leader. It has the highest stock levels in Dutch tobacco shops and the highest repeat-purchase rate. VELO and Nordic Spirit are close competitors. For niche flavours, LOOP and Helwit have growing followings."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How much do nicotine pouches cost in the Netherlands?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Retail price range is €2.50–€4.50 per can. Tobacco shops charge €3.50–€4.50. Online EU retailers offer €2.50–€3.50 due to lower overhead. Swedish online retailers sometimes offer €2.00–€3.00 before shipping costs."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How fast is delivery to the Netherlands?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "SnusFriend delivers in 1-2 days to major cities via PostNord and DHL from an EU warehouse. No customs delays. Tracking is provided with your order confirmation."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is there an age limit for nicotine pouches in the Netherlands?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Nicotine pouches are restricted to 18+. Age verification happens during checkout. No ID checks at delivery."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         <strong>Medical Disclaimer:</strong> Nicotine is addictive. This article is for educational and informational purposes only and does not constitute medical advice. Consult a healthcare provider before starting nicotine products. Nicotine pouches are intended for adults 18+ who are existing users of nicotine products. Not recommended for pregnant or breastfeeding individuals or people with heart conditions, high blood pressure, or nicotine sensitivity.

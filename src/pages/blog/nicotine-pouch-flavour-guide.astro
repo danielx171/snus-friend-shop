@@ -4,15 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
----
+import JsonLd from '@/components/astro/JsonLd.astro';
 
-<Shop
-  title="Nicotine Pouch Flavour Guide: All Categories (2026)"
-  description="Every nicotine pouch flavour category explained — mint, berry, citrus, coffee, fruit, licorice, and more. Best brands for each flavour plus strength ranges."
-  canonical="/blog/nicotine-pouch-flavour-guide"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Nicotine Pouch Flavour Guide: All Categories (2026)",
@@ -21,9 +15,9 @@ import { tenant } from '@/config/tenant';
     "datePublished": "2026-03-28T00:00:00Z",
     "dateModified": "2026-03-28T00:00:00Z",
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -33,7 +27,16 @@ import { tenant } from '@/config/tenant';
       { "@type": "Question", "name": "Are flavoured pouches stronger than unflavoured?", "acceptedAnswer": { "@type": "Answer", "text": "Not necessarily. Strength is determined by nicotine content (measured in milligrams per pouch), not by flavour. You can find light, regular, strong, and extra-strong variants across all flavour categories. Always check the strength label when selecting a pouch, regardless of flavour." } },
       { "@type": "Question", "name": "Which flavour is best for a beginner?", "acceptedAnswer": { "@type": "Answer", "text": "Mint and peppermint are recommended for beginners because the cooling sensation masks any harshness and the flavour is universally familiar. Start with a light or regular strength (3\u20136 mg per pouch) in mint, then explore citrus or berry if you want variety. Avoid extra-strong varieties until you develop tolerance." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="Nicotine Pouch Flavour Guide: All Categories (2026)"
+  description="Every nicotine pouch flavour category explained — mint, berry, citrus, coffee, fruit, licorice, and more. Best brands for each flavour plus strength ranges."
+  canonical="/blog/nicotine-pouch-flavour-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -21,15 +22,8 @@ const skrufFreshMint = findProduct('skruf', 'fresh mint');
 const skrufFrozenShot = findProduct('skruf', 'frozen shot');
 const skrufFresh = findProduct('skruf', 'fresh');
 const skrufBlackcurrant = findProduct('skruf', 'blackcurrant');
----
 
-<Shop
-  title="Skruf Nicotine Pouches: Complete 2026 Guide"
-  description="Skruf nicotine pouches reviewed — Sweden's craft brand by Imperial Brands. 15 products, strengths 6-11.5 mg, flavours from Purple Cassice to Fresh Freeze."
-  canonical="/blog/skruf-nicotine-pouches-complete-guide"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Skruf Nicotine Pouches: Complete Brand Guide",
@@ -40,9 +34,9 @@ const skrufBlackcurrant = findProduct('skruf', 'blackcurrant');
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/skruf-nicotine-pouches-complete-guide" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -52,7 +46,16 @@ const skrufBlackcurrant = findProduct('skruf', 'blackcurrant');
       { "@type": "Question", "name": "Is Skruf better than Loop or other brands?", "acceptedAnswer": { "@type": "Answer", "text": "There is no universally 'better' brand — preference depends on strength, flavour, and pouch format. Skruf excels at heritage flavours (licorice, berry) and craft authenticity. Loop focuses on Nordic minimalism. We recommend trying both to discover your preference. See our comparison guide for detailed differences." } },
       { "@type": "Question", "name": "Where can I buy Skruf nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "SnusFriend stocks all 15 Skruf products across the EU. Visit /brands/skruf to browse the full range, compare strengths, and order online. We offer discreet delivery and competitive pricing on all Skruf nicotine pouches." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="Skruf Nicotine Pouches: Complete 2026 Guide"
+  description="Skruf nicotine pouches reviewed — Sweden's craft brand by Imperial Brands. 15 products, strengths 6-11.5 mg, flavours from Purple Cassice to Fresh Freeze."
+  canonical="/blog/skruf-nicotine-pouches-complete-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

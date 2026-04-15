@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,69 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-09';
 const title = 'Best Value Nicotine Pouches 2026: €/Can Rankings';
 const description = 'We ranked nicotine pouches by value — not just price. See which brands deliver the best quality per euro with our price-per-pouch analysis.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-value-nicotine-pouches-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What does \"value\" really mean for nicotine pouches?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Value = Quality ÷ Price. It's not the cheapest pouch; it's the pouch that delivers the most satisfaction per euro. A €3.50 pouch lasting 40 minutes is better value than a €1.80 pouch lasting 15 minutes. Our ranking balances price-per-pouch, nicotine delivery, flavor duration, and pouch material quality."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is ZYN so expensive compared to Pablo or Helwit?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ZYN's premium price reflects superior quality control, flavor consistency, and pouch engineering. Every ZYN pouch tastes identical; Pablo and Helwit vary batch-to-batch. For daily users, the €0.35–€0.70 premium per can saves money through reduced consumption and better experience."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do roll packs really save money?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, but modestly. A 10-can roll typically saves 5–8% (€2–€5 per roll). The real savings come from subscription discounts (10% off) and bulk mix-and-match orders."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Helwit Strong actually good quality at €1.80?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, surprisingly. Helwit is produced by a serious Swedish manufacturer. Quality is solid — pouches hold together, nicotine delivery is reliable. The downside is limited flavor variety. Best for budget users or as a budget option in rotation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which value pick is best for beginners?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Skruf Super White Mini at €3.20 for 24 pouches. 24 pouches per can means you can experiment with dosing cheaply, and Skruf's quality is high enough that you won't develop bad first impressions. ZYN Slim is a close second."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop title={title} description={description} ogType="article">
@@ -273,68 +337,7 @@ const description = 'We ranked nicotine pouches by value — not just price. See
         </div>
       </details>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-value-nicotine-pouches-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What does \"value\" really mean for nicotine pouches?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Value = Quality ÷ Price. It's not the cheapest pouch; it's the pouch that delivers the most satisfaction per euro. A €3.50 pouch lasting 40 minutes is better value than a €1.80 pouch lasting 15 minutes. Our ranking balances price-per-pouch, nicotine delivery, flavor duration, and pouch material quality."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why is ZYN so expensive compared to Pablo or Helwit?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "ZYN's premium price reflects superior quality control, flavor consistency, and pouch engineering. Every ZYN pouch tastes identical; Pablo and Helwit vary batch-to-batch. For daily users, the €0.35–€0.70 premium per can saves money through reduced consumption and better experience."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Do roll packs really save money?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, but modestly. A 10-can roll typically saves 5–8% (€2–€5 per roll). The real savings come from subscription discounts (10% off) and bulk mix-and-match orders."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is Helwit Strong actually good quality at €1.80?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, surprisingly. Helwit is produced by a serious Swedish manufacturer. Quality is solid — pouches hold together, nicotine delivery is reliable. The downside is limited flavor variety. Best for budget users or as a budget option in rotation."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which value pick is best for beginners?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Skruf Super White Mini at €3.20 for 24 pouches. 24 pouches per can means you can experiment with dosing cheaply, and Skruf's quality is high enough that you won't develop bad first impressions. ZYN Slim is a close second."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         <strong>Medical Disclaimer:</strong> Nicotine pouches are addictive and not a cessation device. This article is for informational purposes only and does not constitute medical advice. Nicotine pouches are not safe for pregnant or nursing individuals, children, or those with cardiovascular conditions. Consult a healthcare provider before use.

@@ -6,17 +6,11 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
----
 
-<Shop
-  title="How to Use Nicotine Pouches: Step-by-Step Guide"
-  description="Learn how to use nicotine pouches correctly. Step-by-step instructions, what to expect your first time, tips for comfort, and common mistakes to avoid."
-  canonical="/blog/how-to-use-nicotine-pouches"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "How to Use Nicotine Pouches: A Complete Guide",
@@ -26,9 +20,9 @@ const facts = await getEditorialFacts();
     "dateModified": "2026-04-10",
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -38,9 +32,9 @@ const facts = await getEditorialFacts();
       { "@type": "Question", "name": "Can you use a nicotine pouch while eating?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, but it's not ideal. You may accidentally dislodge the pouch while chewing. It's best to remove the pouch before eating and replace it afterwards." } },
       { "@type": "Question", "name": "What should I do if I accidentally swallow a nicotine pouch?", "acceptedAnswer": { "@type": "Answer", "text": "Don't panic. While uncomfortable, a swallowed pouch is unlikely to cause serious harm. You may experience nausea or stomach discomfort. Contact poison control or your doctor if you experience severe symptoms." } }
     ]
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const howToJsonLd = {
     "@context": "https://schema.org",
     "@type": "HowTo",
     "name": "How to Use Nicotine Pouches",
@@ -54,7 +48,16 @@ const facts = await getEditorialFacts();
       { "@type": "HowToStep", "position": 5, "name": "Remove and Dispose", "text": "Once you are done, carefully remove the pouch and place it in the lid compartment of your can. This keeps your space clean and prevents accidental ingestion by children or pets." },
       { "@type": "HowToStep", "position": 6, "name": "Note the Strength for Next Time", "text": "If it is your first time, take note of how the strength feels. This helps you choose the right strength on your next purchase." }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="How to Use Nicotine Pouches: Step-by-Step Guide"
+  description="Learn how to use nicotine pouches correctly. Step-by-step instructions, what to expect your first time, tips for comfort, and common mistakes to avoid."
+  canonical="/blog/how-to-use-nicotine-pouches"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd, howToJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

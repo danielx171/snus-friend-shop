@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,81 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-08';
 const title = 'Best Nicotine Pouches for the Gym 2026: Sport-Friendly Picks';
 const description = 'Many athletes use nicotine pouches during workouts. Here\'s what research says about nicotine and exercise, plus 6 sport-friendly picks.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-gym-sports` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is nicotine banned in professional sports?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine itself is not on the World Anti-Doping Agency (WADA) banned list, so it's legal in most Olympic sports. However, individual sports organizations may have their own rules — check with your sport's governing body. Always verify before competing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use nicotine pouches with pre-workout supplements?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine + caffeine combine as stimulants, elevating heart rate and blood pressure significantly. This increases cardiac stress and nausea risk. If you use pre-workout drinks (which typically contain 200-400mg caffeine), avoid nicotine or use a very low-strength pouch (3mg)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will nicotine help me lose weight?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine slightly increases metabolism and may suppress appetite, leading to minor weight loss (1-2kg over months). However, addiction and long-term health risks far outweigh this marginal benefit. It's not a weight-loss strategy — it's a stimulant with serious trade-offs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What if I feel dizzy or nauseous during exercise with nicotine?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Remove the pouch immediately. Dizziness during exercise indicates nicotine is causing excessive cardiovascular stress. Rest, hydrate, and cool down. Next time, use a lower strength (drop from 8mg to 4mg) or skip nicotine entirely."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is nicotine effective for endurance sports like marathons?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Research shows modest benefits (1-3% time-to-exhaustion improvement), but the cardiovascular stress of high-dose nicotine during long endurance efforts could negate gains. For marathon running, stick to low strength (4-6mg) and practice with it in training first."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can beginners use nicotine pouches for fitness?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not recommended. If you're new to nicotine, your body hasn't developed tolerance. Low-strength pouches (3-4mg) with moderate exercise are the only safe option. New users are more prone to nausea, dizziness, and adverse effects. Build fitness first."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I use nicotine for strength training or cardio?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine is more beneficial for activities requiring focus and endurance (cardio, tactical sports) than pure strength training. For weight lifting, the focus gain may be marginal, and cardiovascular stress during heavy lifts is a real concern."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop title={title} description={description} ogType="article">
@@ -199,80 +275,7 @@ const description = 'Many athletes use nicotine pouches during workouts. Here\'s
 
       </div>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` } },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-gym-sports` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is nicotine banned in professional sports?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nicotine itself is not on the World Anti-Doping Agency (WADA) banned list, so it's legal in most Olympic sports. However, individual sports organizations may have their own rules — check with your sport's governing body. Always verify before competing."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I use nicotine pouches with pre-workout supplements?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nicotine + caffeine combine as stimulants, elevating heart rate and blood pressure significantly. This increases cardiac stress and nausea risk. If you use pre-workout drinks (which typically contain 200-400mg caffeine), avoid nicotine or use a very low-strength pouch (3mg)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Will nicotine help me lose weight?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nicotine slightly increases metabolism and may suppress appetite, leading to minor weight loss (1-2kg over months). However, addiction and long-term health risks far outweigh this marginal benefit. It's not a weight-loss strategy — it's a stimulant with serious trade-offs."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What if I feel dizzy or nauseous during exercise with nicotine?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Remove the pouch immediately. Dizziness during exercise indicates nicotine is causing excessive cardiovascular stress. Rest, hydrate, and cool down. Next time, use a lower strength (drop from 8mg to 4mg) or skip nicotine entirely."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is nicotine effective for endurance sports like marathons?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Research shows modest benefits (1-3% time-to-exhaustion improvement), but the cardiovascular stress of high-dose nicotine during long endurance efforts could negate gains. For marathon running, stick to low strength (4-6mg) and practice with it in training first."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can beginners use nicotine pouches for fitness?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Not recommended. If you're new to nicotine, your body hasn't developed tolerance. Low-strength pouches (3-4mg) with moderate exercise are the only safe option. New users are more prone to nausea, dizziness, and adverse effects. Build fitness first."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Should I use nicotine for strength training or cardio?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nicotine is more beneficial for activities requiring focus and endurance (cardio, tactical sports) than pure strength training. For weight lifting, the focus gain may be marginal, and cardiovascular stress during heavy lifts is a real concern."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

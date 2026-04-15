@@ -6,12 +6,84 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import BrandFactCallout from '@/components/astro/BrandFactCallout.astro';
 import { brandFacts } from '@/data/brand-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-04-07';
 const title = 'ZYN vs Nordic Spirit 2026: Flavour, Strength, and Pouch Feel Compared';
 const description = 'Choosing between ZYN and Nordic Spirit? Compare flavour range, beginner strengths, pouch feel, and EU availability without the marketing fluff.';
 const zynFact = brandFacts.zyn;
 const nordicSpiritFact = brandFacts.nordicSpirit;
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-nordic-spirit` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is ZYN or Nordic Spirit stronger?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nordic Spirit starts at a higher minimum strength (6 mg vs ZYN's 1.5 mg) and reaches up to 13 mg in some markets. ZYN offers a wider range from 1.5 mg to 11 mg, making it better for both light and moderate users."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which tastes better, ZYN or Nordic Spirit?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ZYN favours subtle, clean flavours designed for all-day use. Nordic Spirit offers more distinctive profiles -- Bergamot Wildberry and Elderflower are unique to the category. Taste is subjective; try one can of each to decide."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are ZYN and Nordic Spirit both Swedish?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. ZYN is made by Swedish Match (now owned by Philip Morris International) and Nordic Spirit is made by JTI (Japan Tobacco International). Both brands originate from Sweden."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is Nordic Spirit's can different?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nordic Spirit uses a tall, cylindrical can instead of the traditional flat round design. It is a deliberate premium positioning choice with matte finish, muted earth tones, and minimal branding."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which is better for beginners?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ZYN is better for beginners because it offers lower strength options starting at 1.5 mg. Nordic Spirit's lowest strength is typically 6 mg, which may be too intense for someone new to nicotine pouches."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I buy both brands from SnusFriend?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. SnusFriend stocks the full range of both ZYN and Nordic Spirit nicotine pouches, with delivery available across Europe regardless of local retail availability."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop
@@ -286,75 +358,7 @@ const nordicSpiritFact = brandFacts.nordicSpirit;
         </div>
       </section>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-nordic-spirit` },
-        "description": description
-      })} />
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is ZYN or Nordic Spirit stronger?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nordic Spirit starts at a higher minimum strength (6 mg vs ZYN's 1.5 mg) and reaches up to 13 mg in some markets. ZYN offers a wider range from 1.5 mg to 11 mg, making it better for both light and moderate users."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which tastes better, ZYN or Nordic Spirit?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "ZYN favours subtle, clean flavours designed for all-day use. Nordic Spirit offers more distinctive profiles -- Bergamot Wildberry and Elderflower are unique to the category. Taste is subjective; try one can of each to decide."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Are ZYN and Nordic Spirit both Swedish?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. ZYN is made by Swedish Match (now owned by Philip Morris International) and Nordic Spirit is made by JTI (Japan Tobacco International). Both brands originate from Sweden."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why is Nordic Spirit's can different?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nordic Spirit uses a tall, cylindrical can instead of the traditional flat round design. It is a deliberate premium positioning choice with matte finish, muted earth tones, and minimal branding."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which is better for beginners?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "ZYN is better for beginners because it offers lower strength options starting at 1.5 mg. Nordic Spirit's lowest strength is typically 6 mg, which may be too intense for someone new to nicotine pouches."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I buy both brands from SnusFriend?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. SnusFriend stocks the full range of both ZYN and Nordic Spirit nicotine pouches, with delivery available across Europe regardless of local retail availability."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

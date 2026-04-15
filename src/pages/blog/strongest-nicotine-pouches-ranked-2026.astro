@@ -8,6 +8,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const facts = await getEditorialFacts();
@@ -17,6 +18,34 @@ const publishDate = '2026-03-28';
 const modifiedDate = '2026-04-10';
 const title = 'Strongest Nicotine Pouches 2026: Highest mg Ranked';
 const description = 'Every strong nicotine pouch ranked by mg — from White Fox (16mg) to Siberia (49mg). Includes beginner warnings and a step-down guide.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": modifiedDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/strongest-nicotine-pouches-ranked-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Can I switch brands at the same strength level?", "acceptedAnswer": { "@type": "Answer", "text": "Mostly yes — but don't expect identical sensations. CUBA Black (43 mg) and Siberia 40 mg both deliver extreme strength, but CUBA hits faster and Siberia sustains longer. The nicotine load is the same; the delivery is different." } },
+          { "@type": "Question", "name": "Why do some 30 mg pouches feel weaker than some 25 mg pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Absorption speed. A wetter, higher-pH 25 mg pouch might deliver nicotine faster than a dry 30 mg pouch. Your body feels the speed of delivery as much as the total load." } },
+          { "@type": "Question", "name": "What's the strongest nicotine pouch available at SnusFriend?", "acceptedAnswer": { "@type": "Answer", "text": "Rabbit Pepper Mint Extreme at 50 mg/pouch is the single strongest product in our catalog. Siberia Maxi All White Portion at 49.5 mg is a close second. Both are in the ultra-extreme tier — only for users with established heavy tolerance." } },
+          { "@type": "Question", "name": "Are there any nicotine pouches stronger than 50 mg?", "acceptedAnswer": { "@type": "Answer", "text": "Not from any reputable commercial brand as of 2026. 50 mg/pouch represents the practical ceiling for consumer products. Products claiming higher strengths should be treated with caution." } },
+          { "@type": "Question", "name": "How do nicotine pouch strengths compare to cigarettes?", "acceptedAnswer": { "@type": "Answer", "text": "A typical cigarette delivers 1.0–1.5 mg of absorbed nicotine. Nicotine pouches deliver approximately 30–40% of their stated mg through oral absorption. So a 50 mg pouch delivers roughly 15–20 mg — equivalent to 10–20 cigarettes." } }
+        ]
+      };
 ---
 
 <Shop
@@ -394,33 +423,7 @@ const description = 'Every strong nicotine pouch ranked by mg — from White Fox
         </div>
       </nav>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": modifiedDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/strongest-nicotine-pouches-ranked-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          { "@type": "Question", "name": "Can I switch brands at the same strength level?", "acceptedAnswer": { "@type": "Answer", "text": "Mostly yes — but don't expect identical sensations. CUBA Black (43 mg) and Siberia 40 mg both deliver extreme strength, but CUBA hits faster and Siberia sustains longer. The nicotine load is the same; the delivery is different." } },
-          { "@type": "Question", "name": "Why do some 30 mg pouches feel weaker than some 25 mg pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Absorption speed. A wetter, higher-pH 25 mg pouch might deliver nicotine faster than a dry 30 mg pouch. Your body feels the speed of delivery as much as the total load." } },
-          { "@type": "Question", "name": "What's the strongest nicotine pouch available at SnusFriend?", "acceptedAnswer": { "@type": "Answer", "text": "Rabbit Pepper Mint Extreme at 50 mg/pouch is the single strongest product in our catalog. Siberia Maxi All White Portion at 49.5 mg is a close second. Both are in the ultra-extreme tier — only for users with established heavy tolerance." } },
-          { "@type": "Question", "name": "Are there any nicotine pouches stronger than 50 mg?", "acceptedAnswer": { "@type": "Answer", "text": "Not from any reputable commercial brand as of 2026. 50 mg/pouch represents the practical ceiling for consumer products. Products claiming higher strengths should be treated with caution." } },
-          { "@type": "Question", "name": "How do nicotine pouch strengths compare to cigarettes?", "acceptedAnswer": { "@type": "Answer", "text": "A typical cigarette delivers 1.0–1.5 mg of absorbed nicotine. Nicotine pouches deliver approximately 30–40% of their stated mg through oral absorption. So a 50 mg pouch delivers roughly 15–20 mg — equivalent to 10–20 cigarettes." } }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

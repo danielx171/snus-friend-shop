@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -19,15 +20,8 @@ const veloCrispy = findProduct('velo', 'crispy peppermint');
 const veloFreeze = findProduct('velo', 'freezing peppermint');
 const veloRuby = findProduct('velo', 'ruby');
 const veloIce = findProduct('velo', 'ice');
----
 
-<Shop
-  title="VELO Flavours: Complete 2026 Guide & Rankings"
-  description="Every VELO flavour reviewed and ranked. From Freezing Peppermint to Tropical Mango, strengths 0-17 mg. Find your perfect VELO at SnusFriend."
-  canonical="/blog/velo-flavours-complete-guide"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "VELO Flavours: Complete 2026 Guide & Rankings",
@@ -38,9 +32,9 @@ const veloIce = findProduct('velo', 'ice');
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } },
     "description": "Every VELO flavour reviewed and ranked. From Freezing Peppermint to Tropical Mango, strengths 0-17 mg. Find your perfect VELO at SnusFriend.",
     "articleBody": "Complete guide to VELO nicotine pouches with flavour breakdowns, strength levels, rankings, and selection guide."
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -50,7 +44,16 @@ const veloIce = findProduct('velo', 'ice');
       { "@type": "Question", "name": "How do I know if a VELO flavour is right for me?", "acceptedAnswer": { "@type": "Answer", "text": "Visit our Flavour Quiz for a guided recommendation. Otherwise: mint enthusiasts → Crispy Peppermint; fruit lovers → Tropical Mango; adventurers → Shift Hot Dragonfruit. Purchase a sampler to test multiple strengths before committing to bulk packs." } },
       { "@type": "Question", "name": "What's the difference between VELO and Zyn?", "acceptedAnswer": { "@type": "Answer", "text": "Both are premium nicotine pouches; VELO (BAT) dominates EU; Zyn (Philip Morris) leads US. VELO offers more flavours (60+ variants); Zyn more consistent international availability. Strength ranges overlap (0–17 mg). Taste is subjective; user preference splits roughly 50/50 in overlap markets." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="VELO Flavours: Complete 2026 Guide & Rankings"
+  description="Every VELO flavour reviewed and ranked. From Freezing Peppermint to Tropical Mango, strengths 0-17 mg. Find your perfect VELO at SnusFriend."
+  canonical="/blog/velo-flavours-complete-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

@@ -6,17 +6,11 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
----
 
-<Shop
-  title="Nicotine Pouches vs Vaping: 2026 Comparison"
-  description="Nicotine pouches vs vaping compared on health, cost, convenience, flavour, and legality. Data-driven guide to choosing the right nicotine format for you."
-  canonical="/blog/nicotine-pouches-vs-vaping"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Nicotine Pouches vs Vaping: Which Is Better in 2026?",
@@ -26,9 +20,9 @@ const facts = await getEditorialFacts();
     "dateModified": "2026-03-28",
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -38,7 +32,16 @@ const facts = await getEditorialFacts();
       { "@type": "Question", "name": "Which has more flavours: pouches or vaping?", "acceptedAnswer": { "@type": "Answer", "text": "Vaping has far more flavour options\u2014tens of thousands from independent and brand manufacturers. Nicotine pouches are growing but more limited, typically 10\u201330 flavours per brand. However, pouch flavours tend to be more refined and subtle, focusing on refreshing sensations like peppermint and fruit." } },
       { "@type": "Question", "name": "Are nicotine pouches legal in Europe?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Nicotine pouches are legal throughout the EU and are currently less regulated than vaping products. However, TPD3 (the third revision of the Tobacco Products Directive) is coming, which may tighten rules. Both pouches and vaping are age-restricted to 18+. Always check your local jurisdiction for the latest regulations." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="Nicotine Pouches vs Vaping: 2026 Comparison"
+  description="Nicotine pouches vs vaping compared on health, cost, convenience, flavour, and legality. Data-driven guide to choosing the right nicotine format for you."
+  canonical="/blog/nicotine-pouches-vs-vaping"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

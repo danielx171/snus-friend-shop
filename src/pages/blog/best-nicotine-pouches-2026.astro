@@ -9,6 +9,7 @@ import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
 import { brandFacts } from '@/data/brand-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
 
@@ -33,15 +34,8 @@ const zynFact = brandFacts.zyn;
 const veloFact = brandFacts.velo;
 const zynCatalogCount = allProducts.filter((product) => product.data.brandSlug === 'zyn').length;
 const veloCatalogCount = allProducts.filter((product) => product.data.brandSlug === 'velo').length;
----
 
-<Shop
-  title="Best Nicotine Pouches 2026: 10 Editor-Tested Picks by Type"
-  description={`We reviewed ${facts.productCountLabel} nicotine pouches from ${facts.brandCountLabel} brands and narrowed them to 10 editor-tested picks for flavour, strength, comfort, and value.`}
-  canonical="/blog/best-nicotine-pouches-2026"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "10 Best Nicotine Pouches 2026: Top Picks Ranked",
@@ -52,9 +46,9 @@ const veloCatalogCount = allProducts.filter((product) => product.data.brandSlug 
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/best-nicotine-pouches-2026" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -64,7 +58,16 @@ const veloCatalogCount = allProducts.filter((product) => product.data.brandSlug 
       { "@type": "Question", "name": "What's the difference between ZYN and VELO?", "acceptedAnswer": { "@type": "Answer", "text": `ZYN (${zynFact.owner}) is the safer all-round pick with a cleaner, more standardized range. VELO (${veloFact.owner}) currently shows broader flavour experimentation on SnusFriend, with ${veloCatalogCount} live VELO products versus ${zynCatalogCount} ZYN products in our catalog.` } },
       { "@type": "Question", "name": "Can I use nicotine pouches if I'm pregnant?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine is harmful to foetal development. You should not use any nicotine product — pouches, cigarettes, or vaping — during pregnancy. If you're trying to quit nicotine, speak with a healthcare provider about evidence-based cessation support." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="Best Nicotine Pouches 2026: 10 Editor-Tested Picks by Type"
+  description={`We reviewed ${facts.productCountLabel} nicotine pouches from ${facts.brandCountLabel} brands and narrowed them to 10 editor-tested picks for flavour, strength, comfort, and value.`}
+  canonical="/blog/best-nicotine-pouches-2026"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

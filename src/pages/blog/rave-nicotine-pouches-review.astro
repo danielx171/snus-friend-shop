@@ -7,6 +7,7 @@ import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -23,16 +24,8 @@ const fallbackProduct = findProduct('rave');
 const publishDate = '2026-03-31';
 const title = 'RAVE Nicotine Pouches Review: All Flavours (2026)';
 const description = 'RAVE nicotine pouches review covering all 26 products — nicotine (9.6-19.5mg) and caffeine energy pouches. Flavours, strengths, and ratings.';
----
 
-<Shop
-  title={title}
-  description={description}
-  canonical="/blog/rave-nicotine-pouches-review"
-  ogType="article"
->
-
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
@@ -42,8 +35,19 @@ const description = 'RAVE nicotine pouches review covering all 26 products — n
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/rave-nicotine-pouches-review" }
-  })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How strong are RAVE nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"RAVE offers two tiers: Strong (9.6 mg/pouch) and Ultra Strong (19.5 mg/pouch). The Ultra Strong line is among the strongest pouches available in Europe and is not recommended for beginners."}},{"@type":"Question","name":"Does RAVE make caffeine pouches?","acceptedAnswer":{"@type":"Answer","text":"Yes. RAVE Energy is a separate line of caffeine-based pouches with no nicotine. They are designed for an energy boost without nicotine dependence — popular among users who want the pouch format with caffeine instead."}},{"@type":"Question","name":"How does RAVE compare to ZYN?","acceptedAnswer":{"@type":"Answer","text":"RAVE is stronger and bolder than ZYN. ZYN focuses on moderate strengths (3–11 mg) with clean flavours. RAVE targets experienced users who want higher nicotine content and more intense flavour profiles."}},{"@type":"Question","name":"Where is RAVE made?","acceptedAnswer":{"@type":"Answer","text":"RAVE is a European brand. The pouches are manufactured in the EU to European product safety standards. Check the can for the specific production facility information."}},{"@type":"Question","name":"Is RAVE good for beginners?","acceptedAnswer":{"@type":"Answer","text":"No. Even RAVE's 'Strong' tier at 9.6 mg/pouch is too intense for new users. Beginners should start with 2–4 mg pouches from brands like ZYN, VELO, or HELWIT before considering RAVE."}}]})} />
+  };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How strong are RAVE nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"RAVE offers two tiers: Strong (9.6 mg/pouch) and Ultra Strong (19.5 mg/pouch). The Ultra Strong line is among the strongest pouches available in Europe and is not recommended for beginners."}},{"@type":"Question","name":"Does RAVE make caffeine pouches?","acceptedAnswer":{"@type":"Answer","text":"Yes. RAVE Energy is a separate line of caffeine-based pouches with no nicotine. They are designed for an energy boost without nicotine dependence — popular among users who want the pouch format with caffeine instead."}},{"@type":"Question","name":"How does RAVE compare to ZYN?","acceptedAnswer":{"@type":"Answer","text":"RAVE is stronger and bolder than ZYN. ZYN focuses on moderate strengths (3–11 mg) with clean flavours. RAVE targets experienced users who want higher nicotine content and more intense flavour profiles."}},{"@type":"Question","name":"Where is RAVE made?","acceptedAnswer":{"@type":"Answer","text":"RAVE is a European brand. The pouches are manufactured in the EU to European product safety standards. Check the can for the specific production facility information."}},{"@type":"Question","name":"Is RAVE good for beginners?","acceptedAnswer":{"@type":"Answer","text":"No. Even RAVE's 'Strong' tier at 9.6 mg/pouch is too intense for new users. Beginners should start with 2–4 mg pouches from brands like ZYN, VELO, or HELWIT before considering RAVE."}}]};
+---
+
+<Shop
+  title={title}
+  description={description}
+  canonical="/blog/rave-nicotine-pouches-review"
+  ogType="article"
+>
+
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">

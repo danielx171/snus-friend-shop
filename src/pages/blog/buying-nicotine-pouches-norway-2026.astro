@@ -4,10 +4,90 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-04-07';
 const title = 'Nicotine Pouches in Norway (2026): Rules, Availability, and Travel Notes';
 const description = 'What is the current situation for nicotine pouches in Norway? This guide covers the restrictions, why SnusFriend does not ship there, and what travelers should know.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-norway-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Er nikotinposer lovlige i Norge?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nei. Nikotinposer er forbudt for salg og import i Norge. De er klassifisert som legemidler og har ikke godkjenning fra Statens legemiddelverk. Tollmyndighetene (Tolletaten) beslaglegger regelmessig pakker som inneholder nikotinposer."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is snus legal but nicotine pouches banned in Norway?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Snus is regulated as a tobacco product and has a grandfathered exemption under Norway's EEA agreement. Nicotine pouches contain no tobacco and are classified as medicinal products—but no brand has obtained medicinal product approval in Norway. The regulatory pathway is different, resulting in prohibition."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I order nicotine pouches online to Norway from abroad?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Importing nicotine pouches into Norway is illegal. Norwegian customs actively intercepts incoming parcels and seizes them without refund. SnusFriend does not ship to Norway. No reputable EU retailer can legally fulfil orders to Norwegian addresses."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Hva er forskjellen mellom snus og nikotinposer?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Snus inneholder tobakk; nikotinposer gjør ikke det. Snus er fuktig og brun; nikotinposer er hvite. Nikotinposer frigjør nikotin langsommere og stekker ikke tennene. Smaksvariasjonen er bredere i snus."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens if Norwegian customs seizes my nicotine pouch package?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The package is destroyed at no refund. If you used a credit card, you may file a chargeback with your bank, but the product will not be returned. Repeated attempts to import can result in customs monitoring of your address."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can Norwegians legally buy nicotine pouches?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Only outside Norway—when traveling to EU countries where they are legal. Sweden, Denmark, and Germany all have freely available nicotine pouches. You can purchase for personal consumption while traveling, though importing them back to Norway is technically illegal."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are nicotine pouches safer than snus?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Both deliver nicotine and carry addiction risk. Pouches do not stain teeth and contain no tobacco. Snus is a more established product with longer safety history. Neither is \"safe\"—both are nicotine products intended for adult users only."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop
@@ -247,84 +327,7 @@ const description = 'What is the current situation for nicotine pouches in Norwa
         </div>
       </details>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-norway-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Er nikotinposer lovlige i Norge?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Nei. Nikotinposer er forbudt for salg og import i Norge. De er klassifisert som legemidler og har ikke godkjenning fra Statens legemiddelverk. Tollmyndighetene (Tolletaten) beslaglegger regelmessig pakker som inneholder nikotinposer."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why is snus legal but nicotine pouches banned in Norway?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Snus is regulated as a tobacco product and has a grandfathered exemption under Norway's EEA agreement. Nicotine pouches contain no tobacco and are classified as medicinal products—but no brand has obtained medicinal product approval in Norway. The regulatory pathway is different, resulting in prohibition."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I order nicotine pouches online to Norway from abroad?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. Importing nicotine pouches into Norway is illegal. Norwegian customs actively intercepts incoming parcels and seizes them without refund. SnusFriend does not ship to Norway. No reputable EU retailer can legally fulfil orders to Norwegian addresses."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Hva er forskjellen mellom snus og nikotinposer?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Snus inneholder tobakk; nikotinposer gjør ikke det. Snus er fuktig og brun; nikotinposer er hvite. Nikotinposer frigjør nikotin langsommere og stekker ikke tennene. Smaksvariasjonen er bredere i snus."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What happens if Norwegian customs seizes my nicotine pouch package?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The package is destroyed at no refund. If you used a credit card, you may file a chargeback with your bank, but the product will not be returned. Repeated attempts to import can result in customs monitoring of your address."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Where can Norwegians legally buy nicotine pouches?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Only outside Norway—when traveling to EU countries where they are legal. Sweden, Denmark, and Germany all have freely available nicotine pouches. You can purchase for personal consumption while traveling, though importing them back to Norway is technically illegal."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Are nicotine pouches safer than snus?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Both deliver nicotine and carry addiction risk. Pouches do not stain teeth and contain no tobacco. Snus is a more established product with longer safety history. Neither is \"safe\"—both are nicotine products intended for adult users only."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

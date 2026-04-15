@@ -7,6 +7,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { brandFacts } from '@/data/brand-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -16,6 +17,35 @@ const loopFact = brandFacts.loop;
 const publishDate = '2026-04-07';
 const title = 'VELO vs LOOP: Which Is Better in 2026?';
 const description = 'VELO vs LOOP compared head-to-head. Strength, flavor, release technology, price, and sustainability — find out which nicotine pouch brand wins in 2026.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-vs-loop-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is VELO stronger than LOOP?", "acceptedAnswer": { "@type": "Answer", "text": "By raw nicotine content, yes\u2014VELO MAX's 17mg beats LOOP's 15.6mg ceiling. But LOOP's Instant Rush technology makes it feel stronger due to faster delivery." } },
+          { "@type": "Question", "name": "Can I get nicotine without flavor?", "acceptedAnswer": { "@type": "Answer", "text": "Both VELO and LOOP offer zero-nic options for oral stimulation without nicotine." } },
+          { "@type": "Question", "name": "Which has better quality control?", "acceptedAnswer": { "@type": "Answer", "text": "VELO, by virtue of BAT's corporate oversight. LOOP maintains high standards but is a smaller company." } },
+          { "@type": "Question", "name": "Are VELO and LOOP the same product?", "acceptedAnswer": { "@type": "Answer", "text": "No. They're completely different formulations, release technologies, flavor profiles, and companies." } },
+          { "@type": "Question", "name": "Which is better for quitting smoking?", "acceptedAnswer": { "@type": "Answer", "text": "LOOP's Instant Rush better mimics the quick nicotine hit of a cigarette. VELO's slower release is better for long-term maintenance." } },
+          { "@type": "Question", "name": "Can I use both brands?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Many users rotate between VELO for routine and LOOP for variety." } }
+        ]
+      };
 ---
 
 <Shop
@@ -248,34 +278,7 @@ const description = 'VELO vs LOOP compared head-to-head. Strength, flavor, relea
 
       </div>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-vs-loop-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          { "@type": "Question", "name": "Is VELO stronger than LOOP?", "acceptedAnswer": { "@type": "Answer", "text": "By raw nicotine content, yes\u2014VELO MAX's 17mg beats LOOP's 15.6mg ceiling. But LOOP's Instant Rush technology makes it feel stronger due to faster delivery." } },
-          { "@type": "Question", "name": "Can I get nicotine without flavor?", "acceptedAnswer": { "@type": "Answer", "text": "Both VELO and LOOP offer zero-nic options for oral stimulation without nicotine." } },
-          { "@type": "Question", "name": "Which has better quality control?", "acceptedAnswer": { "@type": "Answer", "text": "VELO, by virtue of BAT's corporate oversight. LOOP maintains high standards but is a smaller company." } },
-          { "@type": "Question", "name": "Are VELO and LOOP the same product?", "acceptedAnswer": { "@type": "Answer", "text": "No. They're completely different formulations, release technologies, flavor profiles, and companies." } },
-          { "@type": "Question", "name": "Which is better for quitting smoking?", "acceptedAnswer": { "@type": "Answer", "text": "LOOP's Instant Rush better mimics the quick nicotine hit of a cigarette. VELO's slower release is better for long-term maintenance." } },
-          { "@type": "Question", "name": "Can I use both brands?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Many users rotate between VELO for routine and LOOP for variety." } }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

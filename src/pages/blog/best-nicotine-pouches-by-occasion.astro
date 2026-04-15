@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,35 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-07';
 const title = 'Best Nicotine Pouches for Every Occasion in 2026';
 const description = 'Best nicotine pouches for work, gym, social events, morning coffee, driving, studying, and bedtime. Find the perfect pouch for every moment.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-by-occasion` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Can I use the same pouch for everything?", "acceptedAnswer": { "@type": "Answer", "text": "Technically, yes\u2014but most people find that having 2\u20133 options makes the whole experience better." } },
+          { "@type": "Question", "name": "What's the most discreet pouch for work?", "acceptedAnswer": { "@type": "Answer", "text": "ON! Mint Extra Strong Mini. It's genuinely the smallest pouch on the market." } },
+          { "@type": "Question", "name": "Should I use stronger pouches for the gym?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Go for 15mg+. VELO Freezing Peppermint MAX at 17mg is perfect here." } },
+          { "@type": "Question", "name": "Is it OK to use pouches before bed?", "acceptedAnswer": { "@type": "Answer", "text": "Light pouches (3\u20136.5mg) are fine if you find them relaxing. Strong pouches can disrupt sleep quality." } },
+          { "@type": "Question", "name": "How many pouches should I use per day?", "acceptedAnswer": { "@type": "Answer", "text": "Most regular users average 4\u20136 pouches daily, spread across their day." } },
+          { "@type": "Question", "name": "What's the best all-rounder if I only want one brand?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN is probably your safest bet\u2014consistent quality, wide range of strengths, multiple formats, and reliable flavor." } }
+        ]
+      };
 ---
 
 <Shop
@@ -244,34 +274,7 @@ const description = 'Best nicotine pouches for work, gym, social events, morning
 
       </div>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-by-occasion` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          { "@type": "Question", "name": "Can I use the same pouch for everything?", "acceptedAnswer": { "@type": "Answer", "text": "Technically, yes\u2014but most people find that having 2\u20133 options makes the whole experience better." } },
-          { "@type": "Question", "name": "What's the most discreet pouch for work?", "acceptedAnswer": { "@type": "Answer", "text": "ON! Mint Extra Strong Mini. It's genuinely the smallest pouch on the market." } },
-          { "@type": "Question", "name": "Should I use stronger pouches for the gym?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Go for 15mg+. VELO Freezing Peppermint MAX at 17mg is perfect here." } },
-          { "@type": "Question", "name": "Is it OK to use pouches before bed?", "acceptedAnswer": { "@type": "Answer", "text": "Light pouches (3\u20136.5mg) are fine if you find them relaxing. Strong pouches can disrupt sleep quality." } },
-          { "@type": "Question", "name": "How many pouches should I use per day?", "acceptedAnswer": { "@type": "Answer", "text": "Most regular users average 4\u20136 pouches daily, spread across their day." } },
-          { "@type": "Question", "name": "What's the best all-rounder if I only want one brand?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN is probably your safest bet\u2014consistent quality, wide range of strengths, multiple formats, and reliable flavor." } }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

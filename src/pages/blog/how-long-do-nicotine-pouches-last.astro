@@ -5,11 +5,55 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
 const title = 'How Long Do Nicotine Pouches Last? Full Guide';
 const description = 'A nicotine pouch typically lasts 20-40 minutes per use. We cover usage time, shelf life, storage tips, and how format and strength affect duration.';
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/how-long-do-nicotine-pouches-last` },
+  };
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How long does a nicotine pouch last?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A nicotine pouch typically lasts 20 to 40 minutes per use. Flavour peaks within 5 to 10 minutes, and nicotine absorbs gradually throughout. Mini pouches tend to last closer to 15-20 minutes, while slim and regular formats last 30-40 minutes. Remove the pouch once the flavour fades."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many nicotine pouches can I use per day?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most regular users go through 5 to 15 nicotine pouches per day. The exact number depends on the strength of the pouch and personal preference. If you experience nausea or dizziness, reduce your usage or switch to a milder strength."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do nicotine pouches expire?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, nicotine pouches have a shelf life of 12 to 18 months from the date of manufacture. The expiry date is printed on the bottom of the can. After this date, flavour and nicotine potency will degrade. Store cans in a cool, dry place — no refrigeration needed."
+        }
+      }
+    ]
+  };
 ---
 
 <Shop
@@ -198,46 +242,5 @@ const description = 'A nicotine pouch typically lasts 20-40 minutes per use. We 
         </p>
 </article>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": publishDate,
-    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/how-long-do-nicotine-pouches-last` },
-  })} />
-
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How long does a nicotine pouch last?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "A nicotine pouch typically lasts 20 to 40 minutes per use. Flavour peaks within 5 to 10 minutes, and nicotine absorbs gradually throughout. Mini pouches tend to last closer to 15-20 minutes, while slim and regular formats last 30-40 minutes. Remove the pouch once the flavour fades."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How many nicotine pouches can I use per day?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Most regular users go through 5 to 15 nicotine pouches per day. The exact number depends on the strength of the pouch and personal preference. If you experience nausea or dizziness, reduce your usage or switch to a milder strength."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do nicotine pouches expire?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, nicotine pouches have a shelf life of 12 to 18 months from the date of manufacture. The expiry date is printed on the bottom of the can. After this date, flavour and nicotine potency will degrade. Store cans in a cool, dry place — no refrigeration needed."
-        }
-      }
-    ]
-  })} />
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 </Shop>

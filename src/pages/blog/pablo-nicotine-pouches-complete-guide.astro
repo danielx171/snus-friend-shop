@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -19,15 +20,8 @@ const pabloIceCold = findProduct('pablo', 'ice cold');
 const pabloBanana = findProduct('pablo', 'banana');
 const pabloFrost = findProduct('pablo', 'frost');
 const pabloAny = findProduct('pablo');
----
 
-<Shop
-  title="Pablo Nicotine Pouches: Complete 2026 Guide"
-  description="Everything about Pablo nicotine pouches — the high-strength brand from NGP Empire. Flavours, strengths from 10 to 50 mg, safety notes, and honest reviews."
-  canonical="/blog/pablo-nicotine-pouches-complete-guide"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Pablo Nicotine Pouches: Complete Brand Guide",
@@ -37,9 +31,9 @@ const pabloAny = findProduct('pablo');
     "dateModified": "2026-03-28",
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "/logo.png", "width": 250, "height": 60 } }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -49,7 +43,16 @@ const pabloAny = findProduct('pablo');
       { "@type": "Question", "name": "How long do Pablo pouches last?", "acceptedAnswer": { "@type": "Answer", "text": "Most Pablo pouches last 30-60 minutes depending on your personal absorption rate and the strength. Higher-strength varieties may feel shorter due to intensity." } },
       { "@type": "Question", "name": "What's the best Pablo flavour for beginners?", "acceptedAnswer": { "@type": "Answer", "text": "Pablo is NOT recommended for beginners at all. If you must try Pablo, start with their Silver strength (10mg) in a familiar flavour like Frosted Mint. However, we recommend beginners choose brands specifically designed for entry-level users." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="Pablo Nicotine Pouches: Complete 2026 Guide"
+  description="Everything about Pablo nicotine pouches — the high-strength brand from NGP Empire. Flavours, strengths from 10 to 50 mg, safety notes, and honest reviews."
+  canonical="/blog/pablo-nicotine-pouches-complete-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

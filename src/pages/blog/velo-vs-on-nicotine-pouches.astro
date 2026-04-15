@@ -4,10 +4,74 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-04-07';
 const title = 'VELO vs ON! Nicotine Pouches Compared (2026)';
 const description = 'Head-to-head comparison of VELO and ON! nicotine pouches -- flavour range, strength, format, price, and which brand suits your needs. Updated for 2026.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-vs-on-nicotine-pouches` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is VELO or ON! stronger?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "VELO offers higher maximum strengths (up to 17 mg per pouch in some European markets), while ON! tops out at 8 mg. VELO also delivers a faster initial nicotine hit due to higher pouch moisture. ON! provides a gentler, more sustained release."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are ON! pouches smaller than VELO?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. ON! specialises in mini-format pouches that are among the smallest on the market -- roughly thumbnail-sized. VELO offers both slim and mini formats, but even VELO's mini is larger than an ON! mini."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is ON! FDA approved?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The on! PLUS range received FDA marketing authorisation in the United States in 2025 -- the first nicotine pouch to achieve this. This does not directly apply to European sales but signals rigorous safety testing. VELO has not pursued FDA authorisation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which is cheaper, VELO or ON!?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Prices are similar in most European markets. VELO cans run EUR 3.50-5.50 and ON! cans EUR 3.00-5.00 for 20 pouches each. On a per-milligram basis, VELO often provides more total nicotine per can due to higher-strength options."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I switch between VELO and ON!?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Many users keep both brands on rotation -- VELO for flavour variety and intensity, ON! for discreet, lighter use. The main adjustment is pouch size and nicotine delivery speed."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop
@@ -277,67 +341,7 @@ const description = 'Head-to-head comparison of VELO and ON! nicotine pouches --
         </div>
       </section>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-vs-on-nicotine-pouches` },
-        "description": description
-      })} />
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is VELO or ON! stronger?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "VELO offers higher maximum strengths (up to 17 mg per pouch in some European markets), while ON! tops out at 8 mg. VELO also delivers a faster initial nicotine hit due to higher pouch moisture. ON! provides a gentler, more sustained release."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Are ON! pouches smaller than VELO?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. ON! specialises in mini-format pouches that are among the smallest on the market -- roughly thumbnail-sized. VELO offers both slim and mini formats, but even VELO's mini is larger than an ON! mini."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is ON! FDA approved?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The on! PLUS range received FDA marketing authorisation in the United States in 2025 -- the first nicotine pouch to achieve this. This does not directly apply to European sales but signals rigorous safety testing. VELO has not pursued FDA authorisation."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which is cheaper, VELO or ON!?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Prices are similar in most European markets. VELO cans run EUR 3.50-5.50 and ON! cans EUR 3.00-5.00 for 20 pouches each. On a per-milligram basis, VELO often provides more total nicotine per can due to higher-strength options."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I switch between VELO and ON!?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Many users keep both brands on rotation -- VELO for flavour variety and intensity, ON! for discreet, lighter use. The main adjustment is pouch size and nicotine delivery speed."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

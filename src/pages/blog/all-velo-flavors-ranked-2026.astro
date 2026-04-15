@@ -5,19 +5,13 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-03-31';
 const title = 'Every VELO Flavour Ranked: 2026 Guide';
 const description = 'All 30+ VELO nicotine pouch flavours ranked. From Freezing Peppermint to Ruby Berry and the new VELO Shift collection — find your best match.';
----
 
-<Shop
-  title={title}
-  description={description}
-  canonical="/blog/all-velo-flavors-ranked-2026"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
@@ -27,9 +21,9 @@ const description = 'All 30+ VELO nicotine pouch flavours ranked. From Freezing 
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/all-velo-flavors-ranked-2026" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -38,7 +32,16 @@ const description = 'All 30+ VELO nicotine pouch flavours ranked. From Freezing 
       { "@type": "Question", "name": "What is VELO Shift?", "acceptedAnswer": { "@type": "Answer", "text": "VELO Shift is a reformulated line launched in autumn 2025 with a new slim pouch design and eco-friendlier can. The flavours emphasise heating or cooling effects. Standouts include Shift Spearmint and Shift Berry Frost." } },
       { "@type": "Question", "name": "Is VELO better than ZYN?", "acceptedAnswer": { "@type": "Answer", "text": "It depends on preference. ZYN offers more consistency and a focused flavour range. VELO offers more variety, bolder flavours, and goes up to higher strengths (17 mg vs ZYN's 16.5 mg). Try both to see which approach suits you." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  canonical="/blog/all-velo-flavors-ranked-2026"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <div class="bg-background text-foreground">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">

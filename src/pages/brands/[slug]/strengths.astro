@@ -4,6 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 export async function getStaticPaths() {
   const brands = await getCollection('brands');
@@ -67,7 +68,7 @@ const jsonLd = {
 ---
 
 <Shop title={title} description={description} canonical={`/brands/${brand.id}/strengths`}>
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <JsonLd data={jsonLd} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
     <Breadcrumb items={[

@@ -5,9 +5,18 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import CompareIsland from '@/components/react/CompareIsland';
 import { getCollection } from 'astro:content';
 import { writeProductsJson } from '@/lib/product-json';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const products = await getCollection('products');
 writeProductsJson(products);
+
+const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Compare Nicotine Pouches",
+    "description": "Compare nicotine pouches side by side — strength, flavour, price, format, and brand.",
+    "url": "https://snusfriends.com/compare",
+  };
 ---
 
 <Shop
@@ -15,13 +24,7 @@ writeProductsJson(products);
   description="Compare nicotine pouches side by side — strength, flavour, price, format, and brand. Select 2-4 products and see how they stack up."
   canonical="/compare"
 >
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Compare Nicotine Pouches",
-    "description": "Compare nicotine pouches side by side — strength, flavour, price, format, and brand.",
-    "url": "https://snusfriends.com/compare",
-  })} />
+  <JsonLd data={webPageJsonLd} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
     <Breadcrumb items={[{ label: 'Compare' }]} />

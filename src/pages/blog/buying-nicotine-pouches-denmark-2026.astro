@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,85 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-07';
 const title = 'Nicotine Pouches in Denmark 2026: 9mg Rules + Buying Guide';
 const description = 'Your guide to buying nicotine pouches in Denmark in 2026. Post-snus-ban rules, the new 9mg cap, flavor restrictions, popular brands, and ordering online.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-denmark-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Er nikotinposer lovlige i Danmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, nicotine pouches are legal in Denmark as of 2025—with strict conditions. They must contain no more than 9mg of nicotine per pouch, feature only tobacco or menthol/mint flavors, and comply with standardized packaging rules. Retailers must verify you're 18+. Snus (tobacco-containing) is not legal; nicotine pouches (tobacco-free) are."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What changed for nicotine pouches in Denmark in July 2025?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In July 2025, Denmark introduced three major restrictions: a 9mg nicotine cap, a flavor ban (only tobacco and menthol/mint permitted), and standardized packaging requirements. These rules eliminated the wide selection of strong and exotic-flavored products that existed before."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I still buy strong nicotine pouches in Denmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The 9mg ceiling is binding for domestic sales. Products above 9mg are prohibited. If you order from international retailers, you risk customs seizure. Stick to 9mg-or-below products sold by reputable retailers to guarantee compliance."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Hvad koster nikotinposer i Danmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retail prices in Danish kiosks and supermarkets range from 45-65 DKK per can (€6-€8.70). Online ordering often undercuts this. International retailers like SnusFriend offer lower unit pricing, though with shipping time and customs risk factored in."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is snus legal in Denmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Snus (moist tobacco for oral use) has been banned in Denmark since 1992 and remains illegal. Only nicotine pouches (which contain no tobacco) are legal. The EU banned snus continent-wide in 2019; Sweden has a historical exemption, but Denmark does not."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I order nicotine pouches online to Denmark?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, but with caveats. Domestic retailers ship reliably. International retailers like SnusFriend can ship to Denmark, but only compliant products (9mg or under, tobacco or menthol/mint flavors) are guaranteed to clear customs. Non-compliant shipments may be seized."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What flavors are available in Denmark after the ban?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Only tobacco and menthol/mint flavors are legal. Fruit, candy, spice, dessert, and other novelty flavors are prohibited. The July 2025 regulation deliberately narrowed flavor choice to reduce youth appeal."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop
@@ -178,84 +258,7 @@ const description = 'Your guide to buying nicotine pouches in Denmark in 2026. P
         </div>
       </details>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-denmark-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Er nikotinposer lovlige i Danmark?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, nicotine pouches are legal in Denmark as of 2025—with strict conditions. They must contain no more than 9mg of nicotine per pouch, feature only tobacco or menthol/mint flavors, and comply with standardized packaging rules. Retailers must verify you're 18+. Snus (tobacco-containing) is not legal; nicotine pouches (tobacco-free) are."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What changed for nicotine pouches in Denmark in July 2025?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "In July 2025, Denmark introduced three major restrictions: a 9mg nicotine cap, a flavor ban (only tobacco and menthol/mint permitted), and standardized packaging requirements. These rules eliminated the wide selection of strong and exotic-flavored products that existed before."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I still buy strong nicotine pouches in Denmark?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. The 9mg ceiling is binding for domestic sales. Products above 9mg are prohibited. If you order from international retailers, you risk customs seizure. Stick to 9mg-or-below products sold by reputable retailers to guarantee compliance."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Hvad koster nikotinposer i Danmark?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Retail prices in Danish kiosks and supermarkets range from 45-65 DKK per can (€6-€8.70). Online ordering often undercuts this. International retailers like SnusFriend offer lower unit pricing, though with shipping time and customs risk factored in."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is snus legal in Denmark?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. Snus (moist tobacco for oral use) has been banned in Denmark since 1992 and remains illegal. Only nicotine pouches (which contain no tobacco) are legal. The EU banned snus continent-wide in 2019; Sweden has a historical exemption, but Denmark does not."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I order nicotine pouches online to Denmark?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, but with caveats. Domestic retailers ship reliably. International retailers like SnusFriend can ship to Denmark, but only compliant products (9mg or under, tobacco or menthol/mint flavors) are guaranteed to clear customs. Non-compliant shipments may be seized."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What flavors are available in Denmark after the ban?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Only tobacco and menthol/mint flavors are legal. Fruit, candy, spice, dessert, and other novelty flavors are prohibited. The July 2025 regulation deliberately narrowed flavor choice to reduce youth appeal."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

@@ -4,10 +4,29 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-03-28';
 const title = 'ZYN vs VELO in 2026: The Definitive Comparison';
 const description = 'Updated 2026 comparison of ZYN and VELO nicotine pouches. Head-to-head analysis of flavours, strength, format, pricing, and performance.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-velo-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is ZYN or VELO stronger?","acceptedAnswer":{"@type":"Answer","text":"VELO offers higher maximum strengths in Europe (up to 17 mg/pouch in some markets), while ZYN typically tops out at 9.5–11 mg. For everyday use, both brands cover the 3–11 mg range with comparable nicotine delivery."}},{"@type":"Question","name":"Which tastes better, ZYN or VELO?","acceptedAnswer":{"@type":"Answer","text":"Taste is subjective. ZYN is known for cleaner, more subtle flavours — their Cool Mint and Citrus are best-sellers. VELO offers bolder, more intense flavour profiles like Mighty Peppermint and Berry Frost. Try one of each to decide."}},{"@type":"Question","name":"Are ZYN and VELO made by the same company?","acceptedAnswer":{"@type":"Answer","text":"No. ZYN is made by Swedish Match, now owned by Philip Morris International. VELO is made by British American Tobacco. They are direct competitors."}},{"@type":"Question","name":"Can I switch between ZYN and VELO?","acceptedAnswer":{"@type":"Answer","text":"Yes. The formats are similar enough that switching is seamless. The main difference you will notice is flavour intensity and pouch moisture — VELO pouches tend to be slightly moister with a faster flavour release."}},{"@type":"Question","name":"Which is cheaper, ZYN or VELO?","acceptedAnswer":{"@type":"Answer","text":"Prices vary by market. In most European countries, ZYN and VELO are priced within 10–15% of each other. VELO occasionally offers larger cans (30 pouches vs 20), which improves per-pouch value."}},{"@type":"Question","name":"Which brand has more flavours?","acceptedAnswer":{"@type":"Answer","text":"VELO has a larger European flavour range (50+ SKUs vs ZYN's 30+). VELO covers more fruit and tropical options, while ZYN focuses on a tighter core range with consistent quality."}}]};
 ---
 
 <Shop
@@ -275,22 +294,7 @@ const description = 'Updated 2026 comparison of ZYN and VELO nicotine pouches. H
   </div>
 </section>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-velo-2026` },
-        "description": description
-      })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is ZYN or VELO stronger?","acceptedAnswer":{"@type":"Answer","text":"VELO offers higher maximum strengths in Europe (up to 17 mg/pouch in some markets), while ZYN typically tops out at 9.5–11 mg. For everyday use, both brands cover the 3–11 mg range with comparable nicotine delivery."}},{"@type":"Question","name":"Which tastes better, ZYN or VELO?","acceptedAnswer":{"@type":"Answer","text":"Taste is subjective. ZYN is known for cleaner, more subtle flavours — their Cool Mint and Citrus are best-sellers. VELO offers bolder, more intense flavour profiles like Mighty Peppermint and Berry Frost. Try one of each to decide."}},{"@type":"Question","name":"Are ZYN and VELO made by the same company?","acceptedAnswer":{"@type":"Answer","text":"No. ZYN is made by Swedish Match, now owned by Philip Morris International. VELO is made by British American Tobacco. They are direct competitors."}},{"@type":"Question","name":"Can I switch between ZYN and VELO?","acceptedAnswer":{"@type":"Answer","text":"Yes. The formats are similar enough that switching is seamless. The main difference you will notice is flavour intensity and pouch moisture — VELO pouches tend to be slightly moister with a faster flavour release."}},{"@type":"Question","name":"Which is cheaper, ZYN or VELO?","acceptedAnswer":{"@type":"Answer","text":"Prices vary by market. In most European countries, ZYN and VELO are priced within 10–15% of each other. VELO occasionally offers larger cans (30 pouches vs 20), which improves per-pouch value."}},{"@type":"Question","name":"Which brand has more flavours?","acceptedAnswer":{"@type":"Answer","text":"VELO has a larger European flavour range (50+ SKUs vs ZYN's 30+). VELO covers more fruit and tropical options, while ZYN focuses on a tighter core range with consistent quality."}}]})} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

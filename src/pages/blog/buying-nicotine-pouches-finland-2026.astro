@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -13,6 +14,77 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-07';
 const title = 'Nicotine Pouches in Finland 2026: Legal Status & Buying Guide';
 const description = 'Nicotine pouches in Finland 2026. Distance selling ban, flavor restrictions, personal import rules, popular brands, and what users need to know.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-finland-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are nicotine pouches legal in Finland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, nicotine pouches are legal to buy and use in Finland, but with restrictions. You can purchase them from physical retailers like R-kioski and supermarkets. However, online/distance sales have been banned since August 2025. Only mint and menthol flavors are permitted under current regulations."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I order nicotine pouches online to Finland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The distance selling ban implemented in August 2025 prohibits international and domestic online retailers from shipping nicotine pouches to Finnish addresses. This is actively enforced by Finnish customs. Your only option for online ordering is to arrange shipment to a non-Finnish EU address and collect in person while traveling."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much can I bring back from Estonia or Sweden?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can legally import up to 1 kg per day of nicotine pouches from other EU countries for personal use. This applies to travel to Estonia, Sweden, Germany, and other EU member states. Amounts beyond this may be considered commercial import and could be restricted."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What brands are available in Finnish shops?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The most widely available brands are VELO, ZYN, and occasionally LOOP. Selection is limited to 2-4 mint or menthol variants per brand. Smaller retailers may stock Skruf or White Fox. Expect limited selection compared to online retailers in other EU countries."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is snus banned but nicotine pouches allowed in Finland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Snus is a tobacco product covered by the EU-wide snus ban. Finland, unlike Sweden, has no exemption. Nicotine pouches are tobacco-free white portions containing only nicotine salts and were not initially covered by snus restrictions. However, new regulations in 2025 have now tightened pouch sales through the distance selling ban."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do Finnish prices compare to other EU countries?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Finland has the highest retail prices in the Nordic region. Products cost €5-€7 per can in Finland compared to €3-€4 in Estonia and Sweden. This price difference is due to higher Finnish taxes and a smaller market, which drives significant cross-border shopping."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop
@@ -271,76 +343,7 @@ const description = 'Nicotine pouches in Finland 2026. Distance selling ban, fla
         </div>
       </details>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-finland-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are nicotine pouches legal in Finland?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, nicotine pouches are legal to buy and use in Finland, but with restrictions. You can purchase them from physical retailers like R-kioski and supermarkets. However, online/distance sales have been banned since August 2025. Only mint and menthol flavors are permitted under current regulations."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I order nicotine pouches online to Finland?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. The distance selling ban implemented in August 2025 prohibits international and domestic online retailers from shipping nicotine pouches to Finnish addresses. This is actively enforced by Finnish customs. Your only option for online ordering is to arrange shipment to a non-Finnish EU address and collect in person while traveling."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How much can I bring back from Estonia or Sweden?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "You can legally import up to 1 kg per day of nicotine pouches from other EU countries for personal use. This applies to travel to Estonia, Sweden, Germany, and other EU member states. Amounts beyond this may be considered commercial import and could be restricted."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What brands are available in Finnish shops?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The most widely available brands are VELO, ZYN, and occasionally LOOP. Selection is limited to 2-4 mint or menthol variants per brand. Smaller retailers may stock Skruf or White Fox. Expect limited selection compared to online retailers in other EU countries."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why is snus banned but nicotine pouches allowed in Finland?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Snus is a tobacco product covered by the EU-wide snus ban. Finland, unlike Sweden, has no exemption. Nicotine pouches are tobacco-free white portions containing only nicotine salts and were not initially covered by snus restrictions. However, new regulations in 2025 have now tightened pouch sales through the distance selling ban."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How do Finnish prices compare to other EU countries?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Finland has the highest retail prices in the Nordic region. Products cost €5-€7 per can in Finland compared to €3-€4 in Estonia and Sweden. This price difference is due to higher Finnish taxes and a smaller market, which drives significant cross-border shopping."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

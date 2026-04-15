@@ -7,6 +7,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const facts = await getEditorialFacts();
@@ -15,6 +16,85 @@ const find = (slug: string) => allProducts.find(p => p.id === slug);
 const publishDate = '2026-04-07';
 const title = 'Nicotine Pouches in Poland 2026: Legal + Best Brands';
 const description = 'Guide to buying nicotine pouches in Poland. Legal status, excise tax changes, popular brands, PLN prices, and how to order online.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-poland-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Czy saszetki nikotynowe są legalne w Polsce?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Nicotine pouches are fully legal in Poland, regulated under EU Directive 2014/40/EU and Polish Tobacco Products Act. They're widely sold and age-verified at 18+."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much do nicotine pouches cost in Poland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retail prices at Żabka: 12–25 PLN per can, depending on brand and strength. Online bulk orders from SnusFriend: €40–50 for 10-can rolls."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Jaki podatek akcyzowy obowiązuje?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Poland's excise tax (introduced April 2025): 200 PLN/kg of nicotine (2026), rising to 280 PLN (2027) and 360 PLN (2028)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I legally buy nicotine pouches online in Poland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, as of April 2026. Online sales remain fully legal; restrictions are under discussion but not yet implemented."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's the strongest nicotine pouch available in Poland?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The EU limit is 20mg/gram. Most extreme strength brands max out at 16–20mg. Pablo and Killa variants hit the ceiling."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can I buy nicotine pouches in Warsaw?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Żabka, Orlen stations, Rossmann, and supermarkets stock nicotine pouches in city centers. Online: SnusFriend (EU warehouse, 3–6 days)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is it cheaper to buy from SnusFriend or at Żabka?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Bulk orders from SnusFriend are 15–25% cheaper per pouch. Single-can Żabka purchases are more convenient for casual users."
+            }
+          }
+        ]
+      };
 ---
 
 <Shop
@@ -240,84 +320,7 @@ const description = 'Guide to buying nicotine pouches in Poland. Legal status, e
         </div>
       </details>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/buying-nicotine-pouches-poland-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Czy saszetki nikotynowe są legalne w Polsce?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Nicotine pouches are fully legal in Poland, regulated under EU Directive 2014/40/EU and Polish Tobacco Products Act. They're widely sold and age-verified at 18+."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How much do nicotine pouches cost in Poland?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Retail prices at Żabka: 12–25 PLN per can, depending on brand and strength. Online bulk orders from SnusFriend: €40–50 for 10-can rolls."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Jaki podatek akcyzowy obowiązuje?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Poland's excise tax (introduced April 2025): 200 PLN/kg of nicotine (2026), rising to 280 PLN (2027) and 360 PLN (2028)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I legally buy nicotine pouches online in Poland?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, as of April 2026. Online sales remain fully legal; restrictions are under discussion but not yet implemented."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What's the strongest nicotine pouch available in Poland?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The EU limit is 20mg/gram. Most extreme strength brands max out at 16–20mg. Pablo and Killa variants hit the ceiling."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Where can I buy nicotine pouches in Warsaw?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Żabka, Orlen stations, Rossmann, and supermarkets stock nicotine pouches in city centers. Online: SnusFriend (EU warehouse, 3–6 days)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is it cheaper to buy from SnusFriend or at Żabka?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Bulk orders from SnusFriend are 15–25% cheaper per pouch. Single-can Żabka purchases are more convenient for casual users."
-            }
-          }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

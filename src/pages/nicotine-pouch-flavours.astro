@@ -4,6 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const totalProducts = allProducts.length;
@@ -93,7 +94,7 @@ const faqJsonLd = {
   ogType="article"
   canonical="/nicotine-pouch-flavours"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <JsonLd data={faqJsonLd} />
 
   <article class="bg-background text-foreground">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

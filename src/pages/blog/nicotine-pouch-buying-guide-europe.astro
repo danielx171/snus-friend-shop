@@ -4,10 +4,29 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-03-28';
 const title = 'Nicotine Pouch Buying Guide for Europe (2026)';
 const description = 'Everything European buyers need to know about choosing, buying, and using nicotine pouches. Strength tiers, regulations, top brands, and honest tips.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/nicotine-pouch-buying-guide-europe` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are nicotine pouches safer than cigarettes?","acceptedAnswer":{"@type":"Answer","text":"While no nicotine product is risk-free, nicotine pouches eliminate combustion, tar, and the 7,000+ chemicals found in cigarette smoke. Public health bodies including the Royal College of Physicians recognise tobacco-free nicotine products as substantially less harmful than smoking."}},{"@type":"Question","name":"Can I buy nicotine pouches online in Europe?","acceptedAnswer":{"@type":"Answer","text":"Yes. Online sales are legal in most EU countries. Some nations (notably the Netherlands and Belgium) have specific restrictions. Always check your local regulations before ordering."}},{"@type":"Question","name":"How much do nicotine pouches cost in Europe?","acceptedAnswer":{"@type":"Answer","text":"Prices typically range from €3–6 per can of 20 pouches, depending on the brand and your country. Premium brands like ZYN and VELO sit at the higher end; budget brands like 77 Pouches and Chainpop are more affordable."}},{"@type":"Question","name":"What is the difference between nicotine pouches and snus?","acceptedAnswer":{"@type":"Answer","text":"Snus contains tobacco leaf; nicotine pouches do not. Snus is banned in the EU (except Sweden) under the Tobacco Products Directive. Nicotine pouches fall outside this ban because they are tobacco-free."}},{"@type":"Question","name":"How should I store nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Store unopened cans in a cool, dry place away from direct sunlight. Once opened, use within 1–2 weeks for best flavour. Refrigeration extends freshness but is not required."}},{"@type":"Question","name":"Do I need to be 18 to buy nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"In most European countries, you must be 18+ to purchase nicotine products. Some countries set the minimum age at 16 or have no specific age restriction for non-tobacco nicotine. SnusFriend requires customers to be 18+."}}]};
 ---
 
 <Shop
@@ -317,22 +336,7 @@ const description = 'Everything European buyers need to know about choosing, buy
           <li><a href="/blog/nicotine-pouch-tax-regulations-2026">Tax and Regulations 2026</a> — Import duties and regulatory overview</li>
         </ul>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/nicotine-pouch-buying-guide-europe` },
-        "description": description
-      })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are nicotine pouches safer than cigarettes?","acceptedAnswer":{"@type":"Answer","text":"While no nicotine product is risk-free, nicotine pouches eliminate combustion, tar, and the 7,000+ chemicals found in cigarette smoke. Public health bodies including the Royal College of Physicians recognise tobacco-free nicotine products as substantially less harmful than smoking."}},{"@type":"Question","name":"Can I buy nicotine pouches online in Europe?","acceptedAnswer":{"@type":"Answer","text":"Yes. Online sales are legal in most EU countries. Some nations (notably the Netherlands and Belgium) have specific restrictions. Always check your local regulations before ordering."}},{"@type":"Question","name":"How much do nicotine pouches cost in Europe?","acceptedAnswer":{"@type":"Answer","text":"Prices typically range from €3–6 per can of 20 pouches, depending on the brand and your country. Premium brands like ZYN and VELO sit at the higher end; budget brands like 77 Pouches and Chainpop are more affordable."}},{"@type":"Question","name":"What is the difference between nicotine pouches and snus?","acceptedAnswer":{"@type":"Answer","text":"Snus contains tobacco leaf; nicotine pouches do not. Snus is banned in the EU (except Sweden) under the Tobacco Products Directive. Nicotine pouches fall outside this ban because they are tobacco-free."}},{"@type":"Question","name":"How should I store nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Store unopened cans in a cool, dry place away from direct sunlight. Once opened, use within 1–2 weeks for best flavour. Refrigeration extends freshness but is not required."}},{"@type":"Question","name":"Do I need to be 18 to buy nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"In most European countries, you must be 18+ to purchase nicotine products. Some countries set the minimum age at 16 or have no specific age restriction for non-tobacco nicotine. SnusFriend requires customers to be 18+."}}]})} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

@@ -6,6 +6,7 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-03-27';
 const title = 'Best Coffee Nicotine Pouches: Top Picks (2026)';
@@ -27,6 +28,24 @@ const zynCoffee = findProduct('zyn', 'coffee') ?? findProduct('zyn');
 const zynMacchiato = findProduct('zyn', 'macchiato');
 const loopCoffee = findProduct('loop', 'coffee') ?? findProduct('loop');
 const helwitCoffee = findProduct('helwit', 'coffee') ?? findProduct('helwit');
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-coffee-nicotine-pouches` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which coffee nicotine pouch tastes most like real coffee?","acceptedAnswer":{"@type":"Answer","text":"ZYN Coffee and ZYN Macchiato are the most realistic. ZYN Coffee has a dark-roast, slightly bitter profile; Macchiato adds a creamy, milky sweetness similar to a café macchiato."}},{"@type":"Question","name":"Can I use a coffee pouch while drinking coffee?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many users enjoy the double-hit of caffeine and nicotine together. The flavour pairing is natural. Just be mindful of your total caffeine and nicotine intake if you are sensitive to either."}},{"@type":"Question","name":"Are coffee pouches popular compared to mint?","acceptedAnswer":{"@type":"Answer","text":"Coffee is a niche flavour — mint accounts for roughly 60% of all pouch sales. However, coffee pouches have a dedicated following, particularly among morning users and ex-smokers who paired cigarettes with coffee."}},{"@type":"Question","name":"Do coffee pouches contain caffeine?","acceptedAnswer":{"@type":"Answer","text":"Standard coffee nicotine pouches contain only nicotine — the coffee flavour comes from flavourings, not actual coffee extract. Some specialist brands (like RAVE Energy) offer separate caffeine-based pouches."}},{"@type":"Question","name":"What strength are most coffee pouches?","acceptedAnswer":{"@type":"Answer","text":"Coffee pouches tend to be available in light-to-medium strengths (3–8 mg). Very few brands offer coffee in extra-strong or super-strong variants, making them suitable for a wider range of users."}}]};
 ---
 
 <Shop
@@ -288,22 +307,7 @@ const helwitCoffee = findProduct('helwit', 'coffee') ?? findProduct('helwit');
   </div>
 </section>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-coffee-nicotine-pouches` },
-        "description": description
-      })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which coffee nicotine pouch tastes most like real coffee?","acceptedAnswer":{"@type":"Answer","text":"ZYN Coffee and ZYN Macchiato are the most realistic. ZYN Coffee has a dark-roast, slightly bitter profile; Macchiato adds a creamy, milky sweetness similar to a café macchiato."}},{"@type":"Question","name":"Can I use a coffee pouch while drinking coffee?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many users enjoy the double-hit of caffeine and nicotine together. The flavour pairing is natural. Just be mindful of your total caffeine and nicotine intake if you are sensitive to either."}},{"@type":"Question","name":"Are coffee pouches popular compared to mint?","acceptedAnswer":{"@type":"Answer","text":"Coffee is a niche flavour — mint accounts for roughly 60% of all pouch sales. However, coffee pouches have a dedicated following, particularly among morning users and ex-smokers who paired cigarettes with coffee."}},{"@type":"Question","name":"Do coffee pouches contain caffeine?","acceptedAnswer":{"@type":"Answer","text":"Standard coffee nicotine pouches contain only nicotine — the coffee flavour comes from flavourings, not actual coffee extract. Some specialist brands (like RAVE Energy) offer separate caffeine-based pouches."}},{"@type":"Question","name":"What strength are most coffee pouches?","acceptedAnswer":{"@type":"Answer","text":"Coffee pouches tend to be available in light-to-medium strengths (3–8 mg). Very few brands offer coffee in extra-strong or super-strong variants, making them suitable for a wider range of users."}}]})} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

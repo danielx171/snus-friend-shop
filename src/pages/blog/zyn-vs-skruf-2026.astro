@@ -7,6 +7,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { brandFacts } from '@/data/brand-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -18,6 +19,35 @@ const skrufProductCount = allProducts.filter((product) => product.data.brandSlug
 const publishDate = '2026-04-07';
 const title = 'ZYN vs Skruf: Which Is Better in 2026?';
 const description = 'ZYN vs Skruf compared head-to-head. Flavor, strength, format, price, and heritage — find out which Swedish nicotine pouch brand wins in 2026.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-skruf-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is ZYN stronger than Skruf?", "acceptedAnswer": { "@type": "Answer", "text": "Not necessarily. ZYN's strength range spans 1.5\u201316.5mg, while Skruf focuses on 6\u201312mg." } },
+          { "@type": "Question", "name": "Which brand is more popular in Sweden?", "acceptedAnswer": { "@type": "Answer", "text": "Both brands have strong Swedish recognition, but ZYN is the broader mainstream option while Skruf keeps a tighter heritage-driven following." } },
+          { "@type": "Question", "name": "Are ZYN and Skruf safe?", "acceptedAnswer": { "@type": "Answer", "text": "Both are regulated nicotine products legal in the EU. They don't contain tobacco leaf. Nicotine is addictive regardless of brand." } },
+          { "@type": "Question", "name": "Does Skruf's Superslim really feel that different?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Superslim pouch is noticeably slimmer and less bulky under the lip than ZYN's Slim." } },
+          { "@type": "Question", "name": "Which brand has better flavor?", "acceptedAnswer": { "@type": "Answer", "text": "Subjective. ZYN has broader appeal; Skruf's flavors are bolder. ZYN's coffee range is unique; Skruf's Nordic Licorice is iconic." } },
+          { "@type": "Question", "name": "Can I find Skruf outside Sweden?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, but you may need to order online. ZYN is easier to find in physical shops outside Scandinavia." } }
+        ]
+      };
 ---
 
 <Shop
@@ -246,34 +276,7 @@ const description = 'ZYN vs Skruf compared head-to-head. Flavor, strength, forma
 
       </div>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-skruf-2026` },
-        "description": description
-      })} />
-
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          { "@type": "Question", "name": "Is ZYN stronger than Skruf?", "acceptedAnswer": { "@type": "Answer", "text": "Not necessarily. ZYN's strength range spans 1.5\u201316.5mg, while Skruf focuses on 6\u201312mg." } },
-          { "@type": "Question", "name": "Which brand is more popular in Sweden?", "acceptedAnswer": { "@type": "Answer", "text": "Both brands have strong Swedish recognition, but ZYN is the broader mainstream option while Skruf keeps a tighter heritage-driven following." } },
-          { "@type": "Question", "name": "Are ZYN and Skruf safe?", "acceptedAnswer": { "@type": "Answer", "text": "Both are regulated nicotine products legal in the EU. They don't contain tobacco leaf. Nicotine is addictive regardless of brand." } },
-          { "@type": "Question", "name": "Does Skruf's Superslim really feel that different?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Superslim pouch is noticeably slimmer and less bulky under the lip than ZYN's Slim." } },
-          { "@type": "Question", "name": "Which brand has better flavor?", "acceptedAnswer": { "@type": "Answer", "text": "Subjective. ZYN has broader appeal; Skruf's flavors are bolder. ZYN's coffee range is unique; Skruf's Nordic Licorice is iconic." } },
-          { "@type": "Question", "name": "Can I find Skruf outside Sweden?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, but you may need to order online. ZYN is easier to find in physical shops outside Scandinavia." } }
-        ]
-      })} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
       <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
         Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

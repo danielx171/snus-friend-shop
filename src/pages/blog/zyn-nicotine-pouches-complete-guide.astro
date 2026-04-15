@@ -7,6 +7,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
@@ -27,6 +28,20 @@ const zynCoolMint = findProduct('zyn', 'cool mint');
 const zynCitrus = findProduct('zyn', 'citrus');
 const zynAppleMint = findProduct('zyn', 'apple mint');
 const zynEspressini = findProduct('zyn', 'espressini');
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": "2026-04-10",
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-nicotine-pouches-complete-guide` },
+  };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is ZYN made?","acceptedAnswer":{"@type":"Answer","text":"ZYN is made by Swedish Match, now owned by Philip Morris International (PMI). The pouches are manufactured in Sweden and in Owensboro, Kentucky (for the US market). European ZYN products come from Swedish production facilities."}},{"@type":"Question","name":"How many ZYN flavours are there?","acceptedAnswer":{"@type":"Answer","text":"The European ZYN range includes approximately 15-20 flavours across mint, citrus, coffee, berry, fruit, and licorice categories. Core flavours include Cool Mint, Citrus, Espressino, Macchiato, Bellini, Spearmint, Apple Mint, and Violet Licorice. Each flavour is typically available in 2-3 strength levels."}},{"@type":"Question","name":"What is the strongest ZYN pouch?","acceptedAnswer":{"@type":"Answer","text":"The strongest ZYN available in Europe is ZYN Strong Slim at 9.5 mg per pouch (also labelled as S4 in some markets). For users wanting extra-strong options (12+ mg), brands like White Fox, LOOP Hyper Strong, or Siberia go higher."}},{"@type":"Question","name":"Is ZYN better than VELO?","acceptedAnswer":{"@type":"Answer","text":"Neither is objectively better -- it depends on preferences. ZYN is known for cleaner, more subtle flavours and a drier pouch. VELO offers bolder profiles, moister pouches with faster release, and a wider European range (50+ SKUs vs ZYN's ~20). ZYN is the all-rounder; VELO is for users who want more intensity and variety."}},{"@type":"Question","name":"How much nicotine is in a ZYN pouch?","acceptedAnswer":{"@type":"Answer","text":"European ZYN pouches range from 1.5 mg (Mini) to 9.5 mg (Strong Slim) per pouch. Your body absorbs roughly 30-40% of the labelled amount. A 6 mg ZYN delivers approximately 1.8-2.4 mg of absorbed nicotine -- comparable to one cigarette."}},{"@type":"Question","name":"Are ZYNs safe?","acceptedAnswer":{"@type":"Answer","text":"ZYN pouches are substantially less harmful than cigarettes -- no tobacco, no smoke, no tar. However, nicotine is addictive and has cardiovascular effects. Common side effects include mild gum irritation and hiccups. ZYN is intended for adult nicotine users, not non-users or minors."}},{"@type":"Question","name":"How long does a ZYN pouch last?","acceptedAnswer":{"@type":"Answer","text":"A ZYN slim pouch typically lasts 25-40 minutes, with noticeable flavour for the first 20-30 minutes. Mini pouches last 20-30 minutes. ZYN's drier formulation means a slower, more gradual release compared to moister competitors."}},{"@type":"Question","name":"What is the most popular ZYN flavour?","acceptedAnswer":{"@type":"Answer","text":"ZYN Cool Mint is the best-selling ZYN flavour worldwide, accounting for an estimated 40-50% of all ZYN sales. Citrus is second, followed by Spearmint and Espressino."}}]};
 ---
 
 <Shop
@@ -495,17 +510,5 @@ const zynEspressini = findProduct('zyn', 'espressini');
         </p>
 </article>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": "2026-04-10",
-    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-nicotine-pouches-complete-guide` },
-  })} />
-
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is ZYN made?","acceptedAnswer":{"@type":"Answer","text":"ZYN is made by Swedish Match, now owned by Philip Morris International (PMI). The pouches are manufactured in Sweden and in Owensboro, Kentucky (for the US market). European ZYN products come from Swedish production facilities."}},{"@type":"Question","name":"How many ZYN flavours are there?","acceptedAnswer":{"@type":"Answer","text":"The European ZYN range includes approximately 15-20 flavours across mint, citrus, coffee, berry, fruit, and licorice categories. Core flavours include Cool Mint, Citrus, Espressino, Macchiato, Bellini, Spearmint, Apple Mint, and Violet Licorice. Each flavour is typically available in 2-3 strength levels."}},{"@type":"Question","name":"What is the strongest ZYN pouch?","acceptedAnswer":{"@type":"Answer","text":"The strongest ZYN available in Europe is ZYN Strong Slim at 9.5 mg per pouch (also labelled as S4 in some markets). For users wanting extra-strong options (12+ mg), brands like White Fox, LOOP Hyper Strong, or Siberia go higher."}},{"@type":"Question","name":"Is ZYN better than VELO?","acceptedAnswer":{"@type":"Answer","text":"Neither is objectively better -- it depends on preferences. ZYN is known for cleaner, more subtle flavours and a drier pouch. VELO offers bolder profiles, moister pouches with faster release, and a wider European range (50+ SKUs vs ZYN's ~20). ZYN is the all-rounder; VELO is for users who want more intensity and variety."}},{"@type":"Question","name":"How much nicotine is in a ZYN pouch?","acceptedAnswer":{"@type":"Answer","text":"European ZYN pouches range from 1.5 mg (Mini) to 9.5 mg (Strong Slim) per pouch. Your body absorbs roughly 30-40% of the labelled amount. A 6 mg ZYN delivers approximately 1.8-2.4 mg of absorbed nicotine -- comparable to one cigarette."}},{"@type":"Question","name":"Are ZYNs safe?","acceptedAnswer":{"@type":"Answer","text":"ZYN pouches are substantially less harmful than cigarettes -- no tobacco, no smoke, no tar. However, nicotine is addictive and has cardiovascular effects. Common side effects include mild gum irritation and hiccups. ZYN is intended for adult nicotine users, not non-users or minors."}},{"@type":"Question","name":"How long does a ZYN pouch last?","acceptedAnswer":{"@type":"Answer","text":"A ZYN slim pouch typically lasts 25-40 minutes, with noticeable flavour for the first 20-30 minutes. Mini pouches last 20-30 minutes. ZYN's drier formulation means a slower, more gradual release compared to moister competitors."}},{"@type":"Question","name":"What is the most popular ZYN flavour?","acceptedAnswer":{"@type":"Answer","text":"ZYN Cool Mint is the best-selling ZYN flavour worldwide, accounting for an estimated 40-50% of all ZYN sales. Citrus is second, followed by Spearmint and Espressino."}}]})} />
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 </Shop>

@@ -4,15 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
----
+import JsonLd from '@/components/astro/JsonLd.astro';
 
-<Shop
-  title="How to Store Nicotine Pouches: Shelf Life, Freshness & Tips"
-  description="Learn how to store nicotine pouches to keep them fresh. Covers shelf life, temperature, refrigeration, travel storage, and signs of expired pouches."
-  canonical="/blog/how-to-store-nicotine-pouches"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const howToJsonLd = {
     "@context": "https://schema.org",
     "@type": "HowTo",
     "name": "How to Store Nicotine Pouches",
@@ -25,9 +19,9 @@ import { tenant } from '@/config/tenant';
       { "@type": "HowToStep", "position": 4, "name": "Refrigerate for Bulk Storage", "text": "If storing 10 or more tins, refrigerate at 2-8 degrees Celsius to extend freshness by 2-3 months. Store in an airtight container and let pouches return to room temperature before opening." },
       { "@type": "HowToStep", "position": 5, "name": "Check for Signs of Expiry", "text": "Look for dry or hardened pouches, weak or off flavour, discoloration or browning, and reduced nicotine sensation. Discard any pouches past their printed expiry date or showing these signs." }
     ]
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "How to Store Nicotine Pouches: Shelf Life, Freshness & Tips",
@@ -38,9 +32,9 @@ import { tenant } from '@/config/tenant';
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/how-to-store-nicotine-pouches" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -48,7 +42,16 @@ import { tenant } from '@/config/tenant';
       { "@type": "Question", "name": "Should I refrigerate nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Refrigeration is optional for single tins but recommended for bulk storage. If you're storing 10+ tins, keep them in the fridge at 2–8°C to extend freshness by 2–3 months and slow flavour degradation. After removing from the fridge, let pouches return to room temperature before opening to prevent condensation and moisture buildup." } },
       { "@type": "Question", "name": "How can I tell if nicotine pouches have expired?", "acceptedAnswer": { "@type": "Answer", "text": "Signs of expiry include: dry or hardened pouches (should be moist), weak or off flavour, discoloration or browning, and reduced nicotine sensation. Check the expiry date on the tin first. If pouches are past their date or show any of these signs, discard them — expired pouches are less effective and may taste unpleasant." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="How to Store Nicotine Pouches: Shelf Life, Freshness & Tips"
+  description="Learn how to store nicotine pouches to keep them fresh. Covers shelf life, temperature, refrigeration, travel storage, and signs of expired pouches."
+  canonical="/blog/how-to-store-nicotine-pouches"
+  ogType="article"
+>
+  <JsonLd items={[howToJsonLd, blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

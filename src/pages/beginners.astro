@@ -6,6 +6,7 @@ import ProductCard from '@/components/astro/ProductCard.astro';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
 import BeginnerModeToggle from '@/components/react/BeginnerModeToggle';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 
@@ -48,7 +49,7 @@ const jsonLd = {
   description="Your complete beginner's guide to nicotine pouches. Learn how they work, what strength to start with, and browse our curated starter picks."
   canonical="/beginners"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <JsonLd data={jsonLd} />
 
   <!-- Hero -->
   <section style={`background: hsl(var(--hero-bg)); color: hsl(var(--hero-text));`}>

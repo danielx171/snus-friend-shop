@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -21,15 +22,8 @@ const whiteFoxDoubleMint = findProduct('white-fox', 'double mint');
 const whiteFoxFullCharge = findProduct('white-fox', 'full charge');
 const whiteFoxPepperedMint = findProduct('white-fox', 'peppered mint');
 const whiteFoxAny = findProduct('white-fox');
----
 
-<Shop
-  title="White Fox Nicotine Pouches: Complete 2026 Guide"
-  description="White Fox nicotine pouches reviewed — GN Tobacco's mint-focused powerhouse. From 12 mg to Black Edition 24 mg, every product ranked and explained."
-  canonical="/blog/white-fox-nicotine-pouches-complete-guide"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "White Fox Nicotine Pouches: Complete Brand Guide",
@@ -40,9 +34,9 @@ const whiteFoxAny = findProduct('white-fox');
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/white-fox-nicotine-pouches-complete-guide" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -52,7 +46,16 @@ const whiteFoxAny = findProduct('white-fox');
       { "@type": "Question", "name": "Is White Fox good for beginners?", "acceptedAnswer": { "@type": "Answer", "text": "White Fox is not ideal for nicotine pouch beginners. The entry-level All White Portion starts at 12 mg — significantly higher than light alternatives like Skruf S2 (6 mg) or Loop (6–8 mg). If you're entirely new to pouches, start with a lighter brand first. White Fox suits users already comfortable with 9+ mg." } },
       { "@type": "Question", "name": "Where can I buy White Fox nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "SnusFriend stocks all five White Fox products with discreet EU-wide delivery. Visit /brands/white-fox to browse the range, compare strengths, and order online. We offer competitive pricing and fast shipping." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="White Fox Nicotine Pouches: Complete 2026 Guide"
+  description="White Fox nicotine pouches reviewed — GN Tobacco's mint-focused powerhouse. From 12 mg to Black Edition 24 mg, every product ranked and explained."
+  canonical="/blog/white-fox-nicotine-pouches-complete-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

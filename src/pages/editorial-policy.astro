@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const title = 'Editorial Policy — SnusFriend';
 const description = 'How SnusFriend writes, tests, fact-checks, and updates its nicotine pouch content. Our commitment to honest, evidence-based editorial standards.';
@@ -16,7 +17,7 @@ const jsonLd = {
 ---
 
 <Shop title={title} description={description}>
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <JsonLd data={jsonLd} />
 
   <article class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">

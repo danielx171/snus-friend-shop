@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -25,6 +26,24 @@ const veloFreeze = findProduct('velo', 'freeze');
 const publishDate = '2026-03-27';
 const title = 'VELO Nicotine Pouches: Complete Brand Guide';
 const description = 'Discover VELO by BAT — the global nicotine pouch leader. Explore 53 products across all strengths, from Mighty Peppermint to Tropical Mango.';
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SnusFriend",
+      "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-nicotine-pouches-complete-guide` },
+  };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Who makes VELO nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"VELO is manufactured by British American Tobacco (BAT), one of the world's largest tobacco companies. BAT launched VELO as their flagship tobacco-free nicotine pouch brand to compete with Swedish Match's ZYN."}},{"@type":"Question","name":"How many VELO flavours are there?","acceptedAnswer":{"@type":"Answer","text":"VELO offers 50+ SKUs across Europe, spanning mint, berry, citrus, fruit, and licorice categories. The exact range varies by country due to local regulations. Mighty Peppermint and Berry Frost are the best-selling variants."}},{"@type":"Question","name":"What is the strongest VELO pouch?","acceptedAnswer":{"@type":"Answer","text":"VELO Max (or Ultra) reaches up to 17 mg/pouch in some European markets. In countries with nicotine caps (e.g., certain Nordic markets), the strongest available option may be lower. Check your local product range."}},{"@type":"Question","name":"Is VELO better than ZYN?","acceptedAnswer":{"@type":"Answer","text":"Neither is objectively better — it depends on your preferences. VELO offers more flavour variety and slightly moister pouches with faster flavour release. ZYN is preferred for its cleaner, more subtle flavour profiles and consistent quality. Both are premium brands."}},{"@type":"Question","name":"Are VELO pouches discreet?","acceptedAnswer":{"@type":"Answer","text":"Yes. VELO slim and mini formats are designed to be nearly invisible under the lip. The brand specifically markets discretion as a key feature. There is no vapour, no smoke, and no visible pouch outline in most cases."}},{"@type":"Question","name":"How long does a VELO pouch last?","acceptedAnswer":{"@type":"Answer","text":"A typical VELO slim pouch lasts 25–35 minutes. Mini formats are slightly shorter at 20–30 minutes. VELO's moisture level is higher than some competitors, which gives a faster initial flavour burst but slightly shorter total duration."}},{"@type":"Question","name":"Can I buy VELO online?","acceptedAnswer":{"@type":"Answer","text":"Yes. VELO is available online across most European countries. SnusFriend stocks the full European VELO range with free shipping on qualifying orders."}}]};
 ---
 
 <Shop
@@ -404,20 +423,5 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
         </p>
 </article>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": publishDate,
-    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": {
-      "@type": "Organization",
-      "name": "SnusFriend",
-      "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-    },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-nicotine-pouches-complete-guide` },
-  })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Who makes VELO nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"VELO is manufactured by British American Tobacco (BAT), one of the world's largest tobacco companies. BAT launched VELO as their flagship tobacco-free nicotine pouch brand to compete with Swedish Match's ZYN."}},{"@type":"Question","name":"How many VELO flavours are there?","acceptedAnswer":{"@type":"Answer","text":"VELO offers 50+ SKUs across Europe, spanning mint, berry, citrus, fruit, and licorice categories. The exact range varies by country due to local regulations. Mighty Peppermint and Berry Frost are the best-selling variants."}},{"@type":"Question","name":"What is the strongest VELO pouch?","acceptedAnswer":{"@type":"Answer","text":"VELO Max (or Ultra) reaches up to 17 mg/pouch in some European markets. In countries with nicotine caps (e.g., certain Nordic markets), the strongest available option may be lower. Check your local product range."}},{"@type":"Question","name":"Is VELO better than ZYN?","acceptedAnswer":{"@type":"Answer","text":"Neither is objectively better — it depends on your preferences. VELO offers more flavour variety and slightly moister pouches with faster flavour release. ZYN is preferred for its cleaner, more subtle flavour profiles and consistent quality. Both are premium brands."}},{"@type":"Question","name":"Are VELO pouches discreet?","acceptedAnswer":{"@type":"Answer","text":"Yes. VELO slim and mini formats are designed to be nearly invisible under the lip. The brand specifically markets discretion as a key feature. There is no vapour, no smoke, and no visible pouch outline in most cases."}},{"@type":"Question","name":"How long does a VELO pouch last?","acceptedAnswer":{"@type":"Answer","text":"A typical VELO slim pouch lasts 25–35 minutes. Mini formats are slightly shorter at 20–30 minutes. VELO's moisture level is higher than some competitors, which gives a faster initial flavour burst but slightly shorter total duration."}},{"@type":"Question","name":"Can I buy VELO online?","acceptedAnswer":{"@type":"Answer","text":"Yes. VELO is available online across most European countries. SnusFriend stocks the full European VELO range with free shipping on qualifying orders."}}]})} />
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 </Shop>

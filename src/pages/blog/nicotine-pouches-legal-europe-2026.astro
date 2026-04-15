@@ -4,15 +4,9 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
----
+import JsonLd from '@/components/astro/JsonLd.astro';
 
-<Shop
-  title="Nicotine Pouches Legal Europe: 2026 Country Guide"
-  description="Are nicotine pouches legal where you live? Updated 2026 country-by-country guide covering 14 European countries, bans, age limits, and the TPD3 outlook."
-  canonical="/blog/nicotine-pouches-legal-europe-2026"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Nicotine Pouches Legal in Europe: 2026 Country-by-Country Guide",
@@ -22,9 +16,9 @@ import { tenant } from '@/config/tenant';
     "publisher": { "@type": "Organization", "name": "SnusFriend", "url": "https://snusfriends.com" },
     "datePublished": "2026-03-28",
     "dateModified": "2026-03-28"
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -34,7 +28,16 @@ import { tenant } from '@/config/tenant';
       { "@type": "Question", "name": "Are nicotine pouches age-restricted?", "acceptedAnswer": { "@type": "Answer", "text": "In all European countries where nicotine pouches are legal, they are restricted to 18+ only. This applies to Sweden, Germany, UK, Italy, Spain, Poland, Austria, Denmark, and the Netherlands. Finland allows in-store sales only (distance selling banned since August 2025). France, Belgium, and Norway have bans that supersede age restrictions." } },
       { "@type": "Question", "name": "Which European countries have banned nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Three countries have comprehensive bans: France (effective April 2026) bans manufacture, sale, and import for retail but allows personal import. Belgium has a full retail ban. Norway has fully banned nicotine pouches — manufacture, import, sale, and possession are all illegal, and Norwegian customs actively confiscates incoming parcels. The Netherlands is NOT banned — nicotine pouches are fully legal there." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title="Nicotine Pouches Legal Europe: 2026 Country Guide"
+  description="Are nicotine pouches legal where you live? Updated 2026 country-by-country guide covering 14 European countries, bans, age limits, and the TPD3 outlook."
+  canonical="/blog/nicotine-pouches-legal-europe-2026"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="mx-auto max-w-3xl px-4 py-12">
     <Breadcrumb items={[

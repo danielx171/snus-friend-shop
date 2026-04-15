@@ -6,6 +6,7 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -25,6 +26,24 @@ const loopAny = findProduct('loop');
 const publishDate = '2026-03-27';
 const title = 'LOOP Nicotine Pouches: The Flavour-First Brand';
 const description = 'LOOP nicotine pouches reviewed — Swedish-made with Instant Rush technology. 32 products, bold flavours, and eco-conscious design.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/loop-nicotine-pouches-complete-guide` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What makes LOOP different from other nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP's Instant Rush technology delivers nicotine faster than most competitors — users feel the effect within 30–60 seconds. Combined with bold, experimental flavours and eco-conscious packaging, LOOP positions itself as the innovation leader in the category."}},{"@type":"Question","name":"How strong are LOOP nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP covers a wide strength range from 6 mg (medium) to Hyper Strong at 15+ mg/pouch. Their standard range sits at 6–10 mg, suitable for regular users. The Hyper Strong line is strictly for experienced users."}},{"@type":"Question","name":"What are the most popular LOOP flavours?","acceptedAnswer":{"@type":"Answer","text":"LOOP Mint Mania and LOOP Jalapeño Lime are the top sellers. Mint Mania offers a classic spearmint experience; Jalapeño Lime is LOOP's signature experimental flavour that has gained a cult following."}},{"@type":"Question","name":"Is LOOP eco-friendly?","acceptedAnswer":{"@type":"Answer","text":"LOOP emphasises sustainability in its packaging and production. The cans use less plastic than competitors and are designed for recycling. The plant-fibre pouches are biodegradable, though they should still be disposed of responsibly."}},{"@type":"Question","name":"How does LOOP compare to ZYN?","acceptedAnswer":{"@type":"Answer","text":"LOOP delivers nicotine faster (Instant Rush vs ZYN's standard release) and offers bolder flavours. ZYN is better for users who prefer subtler, longer-lasting flavour profiles and a wider range of lower strengths. Both are premium Swedish brands."}},{"@type":"Question","name":"Where can I buy LOOP nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP is available across most European markets online and in select retail stores. SnusFriend stocks the full LOOP range with free EU shipping on qualifying orders."}}]};
 ---
 
 <Shop
@@ -330,22 +349,7 @@ const description = 'LOOP nicotine pouches reviewed — Swedish-made with Instan
   </div>
 </section>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/loop-nicotine-pouches-complete-guide` },
-        "description": description
-      })} />
-  <script type="application/ld+json" set:html={JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What makes LOOP different from other nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP's Instant Rush technology delivers nicotine faster than most competitors — users feel the effect within 30–60 seconds. Combined with bold, experimental flavours and eco-conscious packaging, LOOP positions itself as the innovation leader in the category."}},{"@type":"Question","name":"How strong are LOOP nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP covers a wide strength range from 6 mg (medium) to Hyper Strong at 15+ mg/pouch. Their standard range sits at 6–10 mg, suitable for regular users. The Hyper Strong line is strictly for experienced users."}},{"@type":"Question","name":"What are the most popular LOOP flavours?","acceptedAnswer":{"@type":"Answer","text":"LOOP Mint Mania and LOOP Jalapeño Lime are the top sellers. Mint Mania offers a classic spearmint experience; Jalapeño Lime is LOOP's signature experimental flavour that has gained a cult following."}},{"@type":"Question","name":"Is LOOP eco-friendly?","acceptedAnswer":{"@type":"Answer","text":"LOOP emphasises sustainability in its packaging and production. The cans use less plastic than competitors and are designed for recycling. The plant-fibre pouches are biodegradable, though they should still be disposed of responsibly."}},{"@type":"Question","name":"How does LOOP compare to ZYN?","acceptedAnswer":{"@type":"Answer","text":"LOOP delivers nicotine faster (Instant Rush vs ZYN's standard release) and offers bolder flavours. ZYN is better for users who prefer subtler, longer-lasting flavour profiles and a wider range of lower strengths. Both are premium Swedish brands."}},{"@type":"Question","name":"Where can I buy LOOP nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP is available across most European markets online and in select retail stores. SnusFriend stocks the full LOOP range with free EU shipping on qualifying orders."}}]})} />
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
           <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
           Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.

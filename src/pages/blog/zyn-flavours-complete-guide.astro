@@ -9,6 +9,7 @@ import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import BrandFactCallout from '@/components/astro/BrandFactCallout.astro';
 import { brandFacts } from '@/data/brand-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -29,15 +30,8 @@ const publishDate = '2026-03-28';
 const modifiedDate = '2026-04-11';
 const title = 'Every ZYN Flavor Explained: Taste & Strength Guide 2026';
 const description = 'Every ZYN flavour ranked by taste, strength, and popularity. Cool Mint, Citrus, Espressino, and more — with prices and where to buy in Europe.';
----
 
-<Shop
-  title={`${title} | ${tenant.name}`}
-  description={description}
-  canonical="/blog/zyn-flavours-complete-guide"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
@@ -48,9 +42,9 @@ const description = 'Every ZYN flavour ranked by taste, strength, and popularity
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/zyn-flavours-complete-guide" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -63,7 +57,16 @@ const description = 'Every ZYN flavour ranked by taste, strength, and popularity
       { "@type": "Question", "name": "What is the difference between ZYN Mini and Slim?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN Mini pouches are smaller, nearly invisible under the lip, and come in lower strengths (1.5–6 mg). ZYN Slim pouches are longer and thinner, available in higher strengths (6–16.5 mg), and deliver more nicotine over a longer session. Mini is best for beginners and discreet use; Slim is the standard for daily users." } },
       { "@type": "Question", "name": "What is the strongest ZYN?", "acceptedAnswer": { "@type": "Answer", "text": "The strongest ZYN pouch is Cool Mint Ice S6 at 16.5 mg per pouch. This is ZYN's maximum strength tier, followed by Menthol Ice and Blackcurrant Ice at S5 (13.5 mg). ZYN's S6 is strong by ZYN standards but moderate compared to brands like Siberia (49.5 mg) or Rabbit (50 mg)." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  canonical="/blog/zyn-flavours-complete-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <div class="bg-background text-foreground">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">

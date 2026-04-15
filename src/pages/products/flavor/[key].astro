@@ -6,6 +6,7 @@ import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getEditorialFacts } from '@/data/editorial-facts';
 import { getCollection } from 'astro:content';
 import { slimProductData, writeProductsJson } from '@/lib/product-json';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const facts = await getEditorialFacts();
 const brandCountText = `${facts.brandCountLabel} brands`;
@@ -138,7 +139,7 @@ const jsonLd = {
   title={`${meta.h1} | SnusFriend`}
   description={meta.desc}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <JsonLd data={jsonLd} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
     <Breadcrumb items={[

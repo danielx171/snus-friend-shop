@@ -5,19 +5,13 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import BlogHero from '@/components/astro/BlogHero.astro';
 import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
 import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
 const publishDate = '2026-03-31';
 const title = 'ZYN Strength Chart: Every Level Explained (2026)';
 const description = 'ZYN strength chart with every nicotine level from 1.5mg to 16.5mg. All 52 products ranked by tier (S1-S6) with flavours and dosing guidance.';
----
 
-<Shop
-  title={title}
-  description={description}
-  canonical="/blog/zyn-strength-chart-every-level-explained"
-  ogType="article"
->
-  <script type="application/ld+json" set:html={JSON.stringify({
+const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": title,
@@ -27,9 +21,9 @@ const description = 'ZYN strength chart with every nicotine level from 1.5mg to 
     "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
     "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/zyn-strength-chart-every-level-explained" }
-  })} />
+  };
 
-  <script type="application/ld+json" set:html={JSON.stringify({
+const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
@@ -38,7 +32,16 @@ const description = 'ZYN strength chart with every nicotine level from 1.5mg to 
       { "@type": "Question", "name": "Is ZYN S3 the same as ZYN 3 mg?", "acceptedAnswer": { "@type": "Answer", "text": "No. ZYN S3 (Strong) contains 9 mg/pouch in Slim format. ZYN '3 mg' refers to their Mini S2 products with 3 mg/pouch. The naming is confusing — always check the actual mg/pouch figure." } },
       { "@type": "Question", "name": "Can I use ZYN to quit smoking?", "acceptedAnswer": { "@type": "Answer", "text": "Many people use ZYN as a smoking replacement. Start at a strength that matches your cigarette consumption, maintain for 2-4 weeks, then consider gradually stepping down. ZYN's range from 1.5 mg to 16.5 mg allows for a controlled tapering journey." } }
     ]
-  })} />
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  canonical="/blog/zyn-strength-chart-every-level-explained"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 
   <article class="bg-background text-foreground">
     <div class="max-w-3xl mx-auto px-4 py-12">
