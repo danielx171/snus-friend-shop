@@ -26,6 +26,15 @@
 - Expanded `supabase/functions/nyehandel-proxy/index.ts` allowlist to include `orders` while keeping Bearer token auth against Nyehandel API.
 ## 2026-04-15
 
+- Added `supabase/migrations/20260415180000_baseline_live_seo_audit_tables.sql` to baseline the live SEO audit tables in-repo, matching the measured column defaults, index names/shapes, RLS flags, and existing policy names for `seo_config`, `seo_keywords`, `seo_rank_tracking`, `seo_pagespeed_audits`, and `seo_gsc_stats`.
+- Synced `src/integrations/supabase/types.ts` to the live SEO audit table shapes after confirming the repo-derived draft had drifted on nullability/default assumptions.
+- Fixed `supabase/functions/create-nyehandel-checkout/index.ts` so guest orders persist a server-computed `total_price` and server-priced `line_items_snapshot` values instead of trusting null or client-supplied display prices, and added `supabase/functions/_shared/order-total.ts` plus `src/test/order-total.test.ts` as a regression guard.
+- Deployed the `create-nyehandel-checkout` fix to the linked Supabase project and verified the last guest-account QA gap on production with a fresh guest order fixture: the order row now persists, `/order-confirmation` renders for the matching email, wrong-email access stays gated, and guest-account creation succeeds without creating duplicate auth users on repeat attempts.
+- Hardened the guest account conversion path after review: `src/pages/order-confirmation.astro` now submits the verified guest email, `src/actions/auth.ts` cross-checks `orderId + email` before sign-up and maps raw Supabase auth errors to product copy, and `src/pages/auth/confirm.astro` now links the verified guest order to the newly confirmed user before redirecting back.
+- Hardened the local audit-tool env flow with `scripts/script-env.ts` so `.env.local` now overrides stale inherited shell exports across the PageSpeed, DataForSEO, GA4, GSC, and Supabase admin helpers.
+- Slimmed the homepage personalization path by moving the lower-page recommendation/history rows onto `/data/products.json` and dialing back the mobile hero strip’s animation/filter work.
+- Verified the production homepage PSI baseline three times on `https://snusfriends.com`; the 2026-04-15 median cleared the current target at mobile 92 / LCP 2.4s and desktop 100 / LCP 0.6s.
+- Ran the default `bun run audit:rank` batch after the curated validation pass; the wider 20-keyword snapshot kept strictly sequential organic positions and preserved the confirmed `snusfriends.com` match path.
 - Verified the audit rollout end-to-end: `bun run audit:preflight`, `bun run audit:measurement:smoke`, `bun run audit:rank --limit=5`, and `bun run audit:gsc:sync --days=7` now all pass locally with live data.
 - Updated `ROADMAP.md`, `CURRENT_PRIORITIES.md`, and `DEPLOYMENT_CHECKLIST.md` so they reflect the real measurement status instead of the earlier PageSpeed/DataForSEO blockers.
 - Added `.playwright-cli/` to `.gitignore` so local browser automation scratch files stop polluting the worktree.

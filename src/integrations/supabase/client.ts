@@ -33,6 +33,9 @@ export const supabase = hasSupabaseEnv
         storage: typeof window !== 'undefined' ? localStorage : undefined,
         persistSession: typeof window !== 'undefined',
         autoRefreshToken: typeof window !== 'undefined',
+        // /auth/confirm handles token/code handoff explicitly so idle islands
+        // do not consume the URL fragment before the SSR bridge can claim orders.
+        detectSessionInUrl: false,
       },
     })
   : createMissingEnvClient();

@@ -5,17 +5,35 @@ import { createServerClient } from '@supabase/ssr';
 import Shop from '@/layouts/Shop.astro';
 import { tenant } from '@/config/tenant';
 import { finalizePendingReferral } from '@/lib/server-referrals';
+import { claimGuestOrderForUser, extractGuestOrderIdFromNext } from '@/lib/server-guest-orders';
 
 const url = Astro.url;
 const tokenHash = url.searchParams.get('token_hash');
 const type = url.searchParams.get('type') as 'signup' | 'email' | 'recovery' | 'invite' | 'email_change' | null;
 const code = url.searchParams.get('code');
 const next = url.searchParams.get('next') ?? '/account';
+const sessionReady = url.searchParams.get('session') === '1';
+const pendingHashSession = !tokenHash && !code && !sessionReady;
+const guestOrderId = extractGuestOrderIdFromNext(next);
 
 const supabaseUrl = import.meta.env.SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL ?? '';
 const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '';
 
 let errorMessage = '';
+
+async function linkGuestOrderIfNeeded(user: { id: string; email?: string | null }) {
+  if (!guestOrderId || !user.email) {
+    return;
+  }
+
+  const claimStatus = await claimGuestOrderForUser(guestOrderId, user.id, user.email);
+  if (claimStatus === 'unavailable') {
+    console.error('claimGuestOrderForUser unavailable', {
+      guestOrderId,
+      userId: user.id,
+    });
+  }
+}
 
 if (!supabaseUrl || !supabaseKey) {
   errorMessage = 'Authentication service unavailable. Please try again later.';
@@ -48,6 +66,7 @@ if (!supabaseUrl || !supabaseKey) {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         await finalizePendingReferral(supabase, user);
+        await linkGuestOrderIfNeeded(user);
       }
       // Recovery → password update page; all other types → account (auto-login)
       return Astro.redirect(type === 'recovery' ? '/update-password' : next, 303);
@@ -61,9 +80,21 @@ if (!supabaseUrl || !supabaseKey) {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         await finalizePendingReferral(supabase, user);
+        await linkGuestOrderIfNeeded(user);
       }
       return Astro.redirect(next, 303);
     }
+  } else if (sessionReady) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      errorMessage = 'Authentication session unavailable. Please try the link again.';
+    } else {
+      await finalizePendingReferral(supabase, user);
+      await linkGuestOrderIfNeeded(user);
+      return Astro.redirect(next, 303);
+    }
+  } else if (pendingHashSession) {
+    // Wait for the client-side hash handoff to sync the Supabase session into cookies.
   } else {
     errorMessage = 'Invalid confirmation link. The link may have already been used or is malformed.';
   }
@@ -121,11 +152,60 @@ if (!supabaseUrl || !supabaseKey) {
               </svg>
             </div>
             <h1 class="text-2xl font-bold tracking-tight mb-2">Confirming...</h1>
-            <p class="text-muted-foreground text-sm">Just a moment while we verify your link.</p>
+            <p id="auth-confirm-status" class="text-muted-foreground text-sm">Just a moment while we verify your link.</p>
           </>
         )}
 
       </div>
     </div>
   </section>
+
+  {pendingHashSession && !errorMessage && (
+    <script is:inline>
+      (function () {
+        const hash = window.location.hash.startsWith('#')
+          ? window.location.hash.slice(1)
+          : window.location.hash;
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+        const statusEl = document.getElementById('auth-confirm-status');
+
+        if (!accessToken || !refreshToken) {
+          if (statusEl) {
+            statusEl.textContent = 'Invalid confirmation link. The link may have already been used or is malformed.';
+          }
+          return;
+        }
+
+        fetch('/api/auth/session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            accessToken,
+            refreshToken,
+          }),
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              throw new Error('session_sync_failed');
+            }
+
+            const nextUrl = new URL(window.location.href);
+            nextUrl.hash = '';
+            nextUrl.searchParams.set('session', '1');
+            window.location.replace(nextUrl.toString());
+          })
+          .catch(() => {
+            if (statusEl) {
+              statusEl.textContent = 'We could not finish signing you in. Please request a fresh link.';
+            }
+          });
+      })();
+    </script>
+  )}
 </Shop>

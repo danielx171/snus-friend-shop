@@ -25,9 +25,11 @@
   The main sweep plus the standalone `src/pages/blog/index.astro` follow-up are now shipped.
 - [x] Extracted a shared waitlist/newsletter form handler for the footer, blog CTA, and deals signup.
 - [x] Replaced the remaining inline form handlers on contact, login, and order confirmation with shared Astro-first script helpers.
+- [x] Hardened the homepage’s low-priority personalization path.
+  `src/pages/index.astro` now points the personalized rows at `/data/products.json` instead of inlining a large product blob, and the mobile hero strip now uses the lighter animation/filter path.
 - [ ] Next Astro pass:
   - keep trimming clustered islands from high-traffic storefront chrome
-  - profile homepage LCP and remaining high-impact client-side scripts before the next polish sprint
+  - keep profiling remaining high-impact client-side scripts before the next polish sprint, even though the 2026-04-15 production homepage PSI median already clears the current target (mobile 92 / LCP 2.4s, desktop 100 / LCP 0.6s)
 
 ## Audit-Driven Growth + Trust Stabilization (2026-04-14)
 
@@ -47,7 +49,7 @@
   - `src/pages/blog/zyn-flavours-complete-guide.astro`
 - [x] Shipped the first CTR refresh on the six target pages by updating titles/descriptions and strengthening internal linking from the homepage/blog hub.
 - [x] Fix the PageSpeed CLI auth path.
-  `bun run audit:measurement:smoke` now passes locally with the server-safe PageSpeed key after rotating the stale inherited shell export and re-running the live CLI verification.
+  `bun run audit:measurement:smoke` now passes locally with the server-safe PageSpeed key, and the audit scripts now load `.env.local` explicitly so stale inherited shell exports do not override local audit keys.
 - [x] Ship the DataForSEO-based proactive rank-tracking backend in code.
   `scripts/rank-audit.ts` is now wired to DataForSEO live organic results for keyword snapshots while GSC remains the primary historical ranking source.
 - [x] Run the first live DataForSEO snapshots after credential setup.
@@ -56,13 +58,15 @@
   `bun run audit:preflight` now checks the env/dependency surface first, and `bun run audit:measurement:smoke` runs the first PageSpeed + rank smoke flow once keys are in place.
 - [x] Sync the first live Search Console history after the audit rollout.
   `bun run audit:gsc:sync --days=7` synced 672 rows into `seo_gsc_stats` for `2026-04-08` through `2026-04-14`.
-- [ ] Run the default full DataForSEO rank batch once the release polish lands.
-  The curated 5-keyword validation passed, so the remaining measurement follow-up is the wider default snapshot when we are ready to spend the extra credits.
+- [x] Run the default full DataForSEO rank batch after the curated validation pass.
+  `bun run audit:rank` now saves the wider 20-keyword snapshot locally, preserving strictly sequential organic positions and a confirmed `snusfriends.com` match-path row.
 - [ ] Remove the fully legacy Google CSE env/config after the transition window.
   `GOOGLE_CUSTOM_SEARCH_API_KEY` and `seo_config.google_cse_cx` are no longer needed by `audit:rank`; clean them up after the first successful DataForSEO runs.
 - [x] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.
-- [ ] Baseline the SEO audit tables in code.
-  `seo_config`, `seo_keywords`, `seo_rank_tracking`, `seo_pagespeed_audits`, and `seo_gsc_stats` are still missing from generated types and forward-only migrations.
+- [x] Baseline the SEO audit tables in code.
+  Added `supabase/migrations/20260415180000_baseline_live_seo_audit_tables.sql` and synced `src/integrations/supabase/types.ts` to the live table shapes, defaults, indexes, RLS state, and policy names for `seo_config`, `seo_keywords`, `seo_rank_tracking`, `seo_pagespeed_audits`, and `seo_gsc_stats`.
+- [x] Verify deployed guest-account creation on `/order-confirmation` with a real guest order fixture.
+  Fixed a production `create-nyehandel-checkout` persistence bug first so guest orders stop failing on `orders.total_price NOT NULL`, then verified on production that a fresh guest order row persists, `/order-confirmation?order=...&email=...` renders the happy path, wrong-email access falls back safely, and guest-account creation succeeds without creating duplicate auth users on repeat attempts.
 - [ ] Continue the second trust pass:
   - deeper ON! product-line cleanup
   - country/legal reconciliation with external review

@@ -5,6 +5,7 @@ import Shop from '@/layouts/Shop.astro';
 import JsonLd from '@/components/astro/JsonLd.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { writeProductsJson } from '@/lib/product-json';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import RecentlyViewedIsland from '@/components/react/RecentlyViewedIsland';
 import RecommendationsIsland from '@/components/react/RecommendationsIsland';
@@ -12,6 +13,7 @@ import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
 const allProducts = await getCollection('products');
 const allBrands = await getCollection('brands');
+writeProductsJson(allProducts);
 
 // Best sellers: products tagged "popular" by Nyehandel (real sales data),
 // with brand diversity (max 1 per brand) so the grid showcases variety.
@@ -99,7 +101,7 @@ if (heroProducts.length < 10) {
 
 const heroCenterProduct = heroProducts[0] ?? null;
 const heroOrbitProducts = heroProducts.slice(1, 5);
-const heroMobileProducts = heroProducts.slice(0, 4);
+const heroMobileProducts = heroProducts.slice(0, 3);
 const heroCenterImage = heroCenterProduct
   ? await getImage({
       src: heroCenterProduct.data.imageUrl,
@@ -132,6 +134,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
       fetchpriority="high"
     />
   )}
+  <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin />
   <!-- Hero — Immersive 3D product showcase -->
   <section class="relative overflow-hidden border-b border-border" style={`background: hsl(var(--hero-bg));`}>
 
@@ -267,10 +270,10 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
             sizes="112px"
             format="webp"
             quality={80}
-            loading={i === 0 ? 'eager' : 'lazy'}
+            loading="lazy"
+            decoding="async"
             class="flex-shrink-0 snap-center rounded-xl w-24 h-24 sm:w-28 sm:h-28 hero-can"
-            style={`animation: heroFloat${(i % 4) + 1} ${6 + i * 0.5}s ease-in-out infinite ${i * 0.3}s; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.3));`}
-            {...(i === 0 ? { fetchpriority: 'high' } : {})}
+            style={`--hero-float-name: heroFloat${(i % 4) + 1}; --hero-float-duration: ${6 + i * 0.5}s; --hero-float-delay: ${i * 0.3}s;`}
           />
         ))}
       </div>
@@ -597,27 +600,12 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
   <!-- Personalised rows — intentionally lower on the page so the homepage can prioritise generic content and LCP. -->
   <RecommendationsIsland
     client:visible
-    productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
-      slug: p.id,
-      name: p.data.name,
-      brand: p.data.brand,
-      brandSlug: p.data.brandSlug,
-      flavorKey: p.data.flavorKey,
-      imageUrl: p.data.imageUrl,
-      ratings: p.data.ratings,
-      prices: { pack1: p.data.prices.pack1 },
-    })))}
+    productsJsonUrl="/data/products.json"
   />
 
   <RecentlyViewedIsland
     client:visible
-    productsJson={JSON.stringify(allProducts.slice(0, 50).map((p) => ({
-      slug: p.id,
-      name: p.data.name,
-      brand: p.data.brand,
-      imageUrl: p.data.imageUrl,
-      prices: { pack1: p.data.prices.pack1 },
-    })))}
+    productsJsonUrl="/data/products.json"
   />
 
   <!-- Shop by Brand -->
@@ -878,7 +866,12 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
     .hero-orbit-ring { transform-style: preserve-3d; }
     .hero-orbit-item { will-change: transform; }
     .hero-center-can { will-change: transform; }
-    .hero-can { will-change: transform; transform-style: preserve-3d; }
+    .hero-can {
+      will-change: transform;
+      transform-style: preserve-3d;
+      animation: var(--hero-float-name) var(--hero-float-duration, 6s) ease-in-out infinite var(--hero-float-delay, 0s);
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.3));
+    }
 
     /* Accessibility + mobile perf: kill decorative animations on small viewports
        and when prefers-reduced-motion is on. Orbit ring + glow are inside a
@@ -890,6 +883,7 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
       .hero-glow-1, .hero-glow-2, .hero-marquee,
       .live-ticker, .live-ping,
       .hero-reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .hero-can { filter: none !important; will-change: auto !important; transform-style: flat !important; }
     }
   </style>
 </Shop>

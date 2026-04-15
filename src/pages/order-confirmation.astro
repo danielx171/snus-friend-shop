@@ -161,7 +161,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
           ) : needsGuestEmail ? (
             <div class="text-left max-w-md mx-auto">
               <p class="text-muted-foreground mb-4">
-                Enter the email address you used for this order to view details.
+                We need the email address you used at checkout to confirm this order belongs to you.
               </p>
               <form method="get" action="/order-confirmation" class="space-y-3">
                 <input type="hidden" name="order" value={orderId} />
@@ -187,8 +187,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
           ) : orderId && fetchError ? (
             <p class="text-muted-foreground mb-6">
               We couldn't find order <strong class="text-foreground font-semibold">#{orderId}</strong>
-              {guestEmail ? ' for that email address' : ''}.
-              It may still be processing. You'll receive a confirmation email shortly.
+              {guestEmail ? ' for that email address' : ''}. Please double-check the email you used at checkout.
             </p>
           ) : (
             <p class="text-muted-foreground mb-6">
@@ -297,6 +296,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
                 href={order.tracking_url}
                 target="_blank"
                 rel="noopener noreferrer"
+                referrerpolicy="no-referrer"
                 class="ml-auto inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
               >
                 Track Package
@@ -368,7 +368,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
               Create an account to track this order, earn SnusCoins on future purchases, and get exclusive deals.
             </p>
             <form id="guest-register-form" data-guest-register-form class="max-w-sm mx-auto space-y-3">
-              <input type="hidden" name="email" value={order.customer_email} />
+              <input type="hidden" name="email" value={guestEmail} />
               <input type="hidden" name="orderId" value={orderId} />
               <div>
                 <label for="guest-password" class="block text-sm font-medium mb-1">Choose a password</label>

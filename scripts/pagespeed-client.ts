@@ -1,4 +1,5 @@
 import process from 'node:process';
+import './script-env';
 
 export const categories = ['performance', 'accessibility', 'best-practices', 'seo'] as const;
 export const metricKeys = [

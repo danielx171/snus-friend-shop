@@ -91,7 +91,7 @@ Backend: Supabase (already hosted)
       Not required while the active Search Console property is the domain property `sc-domain:snusfriends.com`.
 - [x] Add `PAGESPEED_API_KEY` to Vercel so `bun run audit:pagespeed` can run without anonymous PSI quota limits when the key is exported locally.
 - [x] Replace the current `PAGESPEED_API_KEY` with a server-safe key for CLI usage.
-      The live CLI smoke now passes with the unrestricted PageSpeed key in local env plus Vercel `production` / `development`. If a shell still sees the old key, restart it or unset the inherited `PAGESPEED_API_KEY` before relying on `.env.local`.
+      The live CLI smoke now passes with the unrestricted PageSpeed key in local env plus Vercel `production` / `development`, and the repo audit scripts now load `.env.local` explicitly so local runs do not depend on stale inherited shell exports.
 - [x] Grant Google Search Console read access to the property used for `https://snusfriends.com`.
 - [x] Grant GA4 read access to the SnusFriend property and web stream.
 - [x] Add local read-only Google audit scripts: `bun run audit:ga4` and `bun run audit:gsc`.
@@ -108,6 +108,8 @@ Backend: Supabase (already hosted)
 - [x] Run the first live DataForSEO snapshot after the credentials are in place.
 - [x] Run a curated 5-keyword DataForSEO validation batch before the full default rank run.
       The batch now proves both the tracked-domain match path (`snusfriends` at organic position `1`) and the no-match path while keeping `search_results.position` strictly sequential.
+- [x] Run the default full `bun run audit:rank` batch after the curated validation pass.
+      The wider 20-keyword snapshot now completes locally and keeps the same organic-only sequential position semantics in `seo_rank_tracking`.
 - [ ] Optional: set `DATAFORSEO_LOCATION_CODE` + `DATAFORSEO_LANGUAGE_CODE` if the default Sweden/en SERP snapshot should be overridden.
 - [x] After the new PageSpeed key and DataForSEO creds are in place, run `bun run audit:preflight` and then `bun run audit:measurement:smoke`.
 - [x] Run `bun run audit:gsc:sync --days=7` once the smoke pass is green.

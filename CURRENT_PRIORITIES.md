@@ -13,13 +13,13 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - **Quick Answers:** 81/81 articles ✅
 - **PAA blocks:** 81/81 articles ✅
 - **BlogPosting + FAQPage schema:** 81/81 articles + brand pages + catalog + rewards
-- **Tests:** 54 passing (cart, email regex, checkout/NYE line items, auth schemas, components, hooks)
-- **Performance:** `/nicotine-pouches` 92, PDPs 94, homepage 82 (LCP ~4s — next optimization target)
+- **Tests:** 61 passing (cart, email regex, checkout/NYE line items, auth schemas, components, hooks)
+- **Performance:** `/nicotine-pouches` 92, PDPs 94, production homepage PSI median 92 mobile / 100 desktop on 2026-04-15 (median LCP 2.4s mobile / 0.6s desktop)
 - **OG images:** Satori pipeline generating per-page PNGs; blog posts auto-resolve to `/og/article-{slug}.png`
 - **Rewards:** Canonical config at `src/config/rewards.ts` — **10 SnusCoins per €1** (aligned with DB trigger)
 - **Gamification:** The Vault, SnusCoins, Circles, Missions, Badges, Daily Drop, The Board
 - **Version:** 1.6.1
-- **Audit tooling:** Search Console + GA4 read scripts live; `audit:preflight`, `audit:measurement:smoke`, and `audit:gsc:sync --days=7` now pass locally; DataForSEO rank tracking has a live 5-keyword validation batch with a confirmed `snusfriends` match-path hit at position `1`
+- **Audit tooling:** Search Console + GA4 read scripts live; `audit:preflight`, `audit:measurement:smoke`, `audit:gsc:sync --days=7`, and the default `audit:rank` batch now pass locally with deterministic `.env.local` loading; DataForSEO rank tracking has confirmed both the `snusfriends` match path (`position 1`) and the no-match path
 
 ## Today’s Setup Pass
 
@@ -30,7 +30,9 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [x] Shared `JsonLd` helper now covers the full long-tail page sweep including `src/pages/blog/index.astro`; `astro check` hints dropped from 252 to 124.
 - [x] `pagefind` removed entirely; search remains JSON-driven and the extra indexing scripts are gone.
 - [x] Shared waitlist/newsletter handling now powers the footer, blog CTA, and deals signup via `src/scripts/waitlist-form.ts`.
+- [x] Homepage personalization rows now hydrate from `/data/products.json` instead of inlining large product JSON blobs, and the mobile hero strip uses the lighter animation/filter path.
 - [x] Measurement rollout helpers added: `bun run audit:preflight` for env checks and `bun run audit:measurement:smoke` for the first PageSpeed + rank smoke pass.
+- [x] Audit scripts now load `.env.local` explicitly for local runs, so file-based audit keys beat stale inherited shell exports.
 - [x] Skills updated/created for future audits and Astro-first polish:
   - `snusfriend-design-system`
   - `web-quality-audit`
@@ -39,9 +41,12 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
   - `trust-sensitive-editorial`
 - [x] Measurement rollout verified end-to-end: `bun run audit:preflight`, `bun run audit:measurement:smoke`, and `bun run audit:gsc:sync --days=7` all passed locally after rotating the server-safe PageSpeed key and adding DataForSEO credentials.
 - [x] Curated DataForSEO validation cleared: `bun run audit:rank --limit=5` exercised both the no-match path and the tracked-domain match path (`snusfriends` at organic position `1`) with sequential organic result positions.
+- [x] Default DataForSEO rank batch cleared: `bun run audit:rank` saved 20 keyword snapshots with strictly sequential organic result positions and one confirmed `snusfriends.com` match-path row.
 - [x] Remaining inline form cleanup on contact/login/order-confirmation is now shipped via shared `src/scripts/*` helpers.
 - [x] Vercel preview QA completed on the deployed `astro-migration-clean` build.
       Authenticated preview fetches verified homepage, contact, login, a live PDP, a live blog page, plus the `/order-confirmation` empty, guest-email gate, and guarded fetch-error states.
+- [x] Deployed guest-account creation on `/order-confirmation` now works end-to-end with a real guest order fixture.
+      A production `create-nyehandel-checkout` persistence bug (`orders.total_price` was being inserted as `null`) was fixed first; after deploy, a fresh guest order persisted, the happy-path confirmation page rendered, wrong-email access stayed gated, the first guest-account action succeeded, and repeat attempts stayed single-user (first rate-limited, then a resend-style success with no duplicate `auth.users` row).
 
 ## Remaining
 
@@ -64,14 +69,11 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [ ] Trustpilot business profile + footer widget (20 min account creation)
 - [ ] Cart verification via Codex browser test (v4 BroadcastChannel sync deployed)
 - [x] Add local + Vercel DataForSEO credentials and run the first end-to-end `seo_rank_tracking` snapshot
-- [ ] Run the default full `bun run audit:rank` batch after the current release polish lands.
-
 ### MEDIUM
 
-- [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
-- [ ] Seed or capture a recent order fixture so deployed guest account creation on `/order-confirmation` can be verified end-to-end instead of only through the guarded empty/error states.
-- [ ] Restart local shells or the Codex desktop session after PageSpeed key rotations when needed.
-      This session inherited a stale `PAGESPEED_API_KEY` from `~/.zshrc`; future ad-hoc CLI runs should either start from a fresh shell or unset the inherited key before relying on `.env.local`.
+- [ ] Keep monitoring homepage production PSI after future hero/content changes.
+      The current 2026-04-15 production median already clears the target at mobile 92 / LCP 2.4s and desktop 100 / LCP 0.6s.
+- [ ] Optional follow-up: remove the legacy `GOOGLE_CUSTOM_SEARCH_API_KEY` from local envs after the DataForSEO transition window closes.
 - [ ] Monitor the refreshed CTR pages in Search Console for 14 days and iterate on snippets/internal links based on impressions + CTR.
 - [ ] Brand page real logos (still placeholder for brands without `logoUrl` — monogram tile is the fallback)
 - [ ] `products.json` aggressive slim (236KB → ≤150KB target; would need gzip or dropping more fields)
@@ -85,7 +87,8 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [ ] Ahrefs / Brand Radar MCP (AI citation + backlink tracking)
 - [ ] `alert-manager` + `rank-tracker` configuration
 - [ ] `memory-management` skill activation
-- [ ] Baseline SEO audit tables in `supabase/migrations/` and `src/integrations/supabase/types.ts`
+- [x] Baseline SEO audit tables in `supabase/migrations/` and `src/integrations/supabase/types.ts`
+      Repo/live parity is now recorded for the five existing SEO audit tables, including the live defaults, index names/shapes, and RLS/policy layout.
 
 ## Completed in Apr 8–12 Launch Polish Sprint
 

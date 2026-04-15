@@ -1,5 +1,6 @@
 import process from 'node:process';
 import { google } from 'googleapis';
+import './script-env';
 
 const standardCredentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS?.trim();
 const explicitKeyPath = process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH?.trim();

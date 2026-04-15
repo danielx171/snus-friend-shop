@@ -1,5 +1,6 @@
 import process from 'node:process';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import './script-env';
 
 let cachedClient: SupabaseClient | null = null;
 

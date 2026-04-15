@@ -1,10 +1,17 @@
 import { useState, useEffect, memo } from 'react';
 import { useStore } from '@nanostores/react';
+import {
+  fetchSlimProducts,
+  parseSlimProducts,
+  type SlimProductCardData,
+} from '@/lib/slim-products-client';
 import { $beginnerMode, BEGINNER_MAX_MG } from '@/stores/beginner-mode';
 
 interface RecentlyViewedProps {
-  /** All products as JSON string — parsed client-side to match browsing history */
-  productsJson: string;
+  /** Optional inline fallback for older callers. Prefer the shared slim JSON URL on large pages. */
+  productsJson?: string;
+  /** Shared slim catalog endpoint used by the homepage to avoid inlining large JSON blobs. */
+  productsJsonUrl?: string;
 }
 
 interface HistoryItem {
@@ -17,9 +24,10 @@ interface HistoryItem {
 
 const HISTORY_KEY = 'snusfriend_history';
 
-function RecentlyViewedInner({ productsJson }: RecentlyViewedProps) {
+function RecentlyViewedInner({ productsJson, productsJsonUrl }: RecentlyViewedProps) {
   const [mounted, setMounted] = useState(false);
-  const [products, setProducts] = useState<any[]>([]);
+  const [catalog, setCatalog] = useState<SlimProductCardData[]>([]);
+  const [products, setProducts] = useState<SlimProductCardData[]>([]);
   const isBeginner = useStore($beginnerMode);
 
   useEffect(() => {
@@ -27,7 +35,33 @@ function RecentlyViewedInner({ productsJson }: RecentlyViewedProps) {
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
+    let cancelled = false;
+
+    const loadCatalog = async () => {
+      try {
+        const nextCatalog = productsJsonUrl
+          ? await fetchSlimProducts(productsJsonUrl)
+          : productsJson
+            ? parseSlimProducts(productsJson)
+            : [];
+        if (!cancelled) {
+          setCatalog(nextCatalog);
+        }
+      } catch {
+        if (!cancelled) {
+          setCatalog([]);
+        }
+      }
+    };
+
+    void loadCatalog();
+    return () => {
+      cancelled = true;
+    };
+  }, [productsJson, productsJsonUrl]);
+
+  useEffect(() => {
+    if (!mounted || catalog.length === 0) return;
 
     try {
       const raw = localStorage.getItem(HISTORY_KEY);
@@ -35,19 +69,20 @@ function RecentlyViewedInner({ productsJson }: RecentlyViewedProps) {
       const history: HistoryItem[] = JSON.parse(raw);
       if (!history.length) return;
 
-      const allProducts = JSON.parse(productsJson);
       const slugs = history.slice(0, 6).map((h) => h.slug);
       let matched = slugs
-        .map((slug) => allProducts.find((p: any) => p.slug === slug))
+        .map((slug) => catalog.find((p) => p.slug === slug))
         .filter(Boolean);
 
       if (isBeginner) {
-        matched = matched.filter((p: any) => (p.nicotineContent ?? 99) <= BEGINNER_MAX_MG);
+        matched = matched.filter((p) => (p.nicotineContent ?? 99) <= BEGINNER_MAX_MG);
       }
 
       setProducts(matched);
-    } catch { /* ignore */ }
-  }, [mounted, productsJson, isBeginner]);
+    } catch {
+      setProducts([]);
+    }
+  }, [catalog, mounted, isBeginner]);
 
   if (!mounted || products.length < 2) return null;
 

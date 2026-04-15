@@ -34,6 +34,8 @@ interface LoginResponseBody {
 }
 
 interface MagicLinkResponseBody {
+  success?: boolean;
+  message?: string;
   data?: {
     success?: boolean;
     message?: string;
@@ -108,6 +110,22 @@ const initLoginForms = (options: LoginFormOptions): void => {
     const hideMagicMessage = (): void => {
       magicMessage.className = 'mt-3 hidden';
       magicMessage.textContent = '';
+    };
+
+    const getMagicLinkMessage = (body: MagicLinkResponseBody): string | null => {
+      if (typeof body.message === 'string' && body.message.length > 0) {
+        return body.message;
+      }
+
+      if (typeof body.data?.message === 'string' && body.data.message.length > 0) {
+        return body.data.message;
+      }
+
+      if (typeof body.error?.message === 'string' && body.error.message.length > 0) {
+        return body.error.message;
+      }
+
+      return null;
     };
 
     const setLoginLoading = (isLoading: boolean, text: string): void => {
@@ -192,16 +210,16 @@ const initLoginForms = (options: LoginFormOptions): void => {
         });
         const result = await parseJsonResponse<MagicLinkResponseBody>(response);
 
-        if (result.ok && result.body.data?.success) {
+        if (result.ok && (result.body.success || result.body.data?.success)) {
           showMagicMessage(
-            result.body.data.message || 'Check your inbox — link sent!',
+            getMagicLinkMessage(result.body) || 'Check your inbox — link sent!',
             false,
           );
           setMagicLoading(true, options.magicLink.successButtonText);
           return;
         }
 
-        const message = result.body.error?.message || options.magicLink.genericErrorMessage;
+        const message = getMagicLinkMessage(result.body) || options.magicLink.genericErrorMessage;
         showMagicMessage(message, true);
         setMagicLoading(false, options.magicLink.idleText);
       } catch {

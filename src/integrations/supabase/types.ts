@@ -392,6 +392,165 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_config: {
+        Row: {
+          key: string
+          updated_at: string | null
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string | null
+          value: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string | null
+          value?: string
+        }
+        Relationships: []
+      }
+      seo_gsc_stats: {
+        Row: {
+          clicks: number | null
+          created_at: string | null
+          ctr: number | null
+          date: string
+          id: string
+          impressions: number | null
+          page: string | null
+          position: number | null
+          query: string | null
+        }
+        Insert: {
+          clicks?: number | null
+          created_at?: string | null
+          ctr?: number | null
+          date: string
+          id?: string
+          impressions?: number | null
+          page?: string | null
+          position?: number | null
+          query?: string | null
+        }
+        Update: {
+          clicks?: number | null
+          created_at?: string | null
+          ctr?: number | null
+          date?: string
+          id?: string
+          impressions?: number | null
+          page?: string | null
+          position?: number | null
+          query?: string | null
+        }
+        Relationships: []
+      }
+      seo_keywords: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          keyword: string
+          priority: number | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          keyword: string
+          priority?: number | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          keyword?: string
+          priority?: number | null
+        }
+        Relationships: []
+      }
+      seo_pagespeed_audits: {
+        Row: {
+          accessibility_score: number | null
+          best_practices_score: number | null
+          cls: number | null
+          created_at: string | null
+          device: string
+          fid_ms: number | null
+          id: string
+          inp_ms: number | null
+          lcp_ms: number | null
+          performance_score: number | null
+          raw_data: Json | null
+          seo_score: number | null
+          ttfb_ms: number | null
+          url: string
+        }
+        Insert: {
+          accessibility_score?: number | null
+          best_practices_score?: number | null
+          cls?: number | null
+          created_at?: string | null
+          device: string
+          fid_ms?: number | null
+          id?: string
+          inp_ms?: number | null
+          lcp_ms?: number | null
+          performance_score?: number | null
+          raw_data?: Json | null
+          seo_score?: number | null
+          ttfb_ms?: number | null
+          url: string
+        }
+        Update: {
+          accessibility_score?: number | null
+          best_practices_score?: number | null
+          cls?: number | null
+          created_at?: string | null
+          device?: string
+          fid_ms?: number | null
+          id?: string
+          inp_ms?: number | null
+          lcp_ms?: number | null
+          performance_score?: number | null
+          raw_data?: Json | null
+          seo_score?: number | null
+          ttfb_ms?: number | null
+          url?: string
+        }
+        Relationships: []
+      }
+      seo_rank_tracking: {
+        Row: {
+          created_at: string | null
+          id: string
+          keyword: string
+          position: number | null
+          search_results: Json | null
+          url_found: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          keyword: string
+          position?: number | null
+          search_results?: Json | null
+          url_found?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          keyword?: string
+          position?: number | null
+          search_results?: Json | null
+          url_found?: string | null
+        }
+        Relationships: []
+      }
       sync_runs: {
         Row: {
           completed_at: string | null

@@ -11,6 +11,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getCorsHeaders } from "../_shared/cors.ts";
 // @ts-expect-error — Deno types: Deno file import
 import { distributeDiscount, percentageToAmount } from "../_shared/discount-distribution.ts";
+// @ts-expect-error — Deno types: Deno file import
+import { applyServerPricesToSnapshot, computeServerOrderTotal } from "../_shared/order-total.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
@@ -653,6 +655,10 @@ Deno.serve(async (req) => {
     }));
   }
 
+  const serverOrderTotal = computeServerOrderTotal(pricedItems);
+  const orderCurrency = display_currency ?? "EUR";
+  const persistedLineItems = applyServerPricesToSnapshot(items, pricedItems);
+
   /* ---------- build Nyehandel POST /orders payload ---------- */
 
   const deliveryCallbackUrl = `${supabaseUrl}/functions/v1/nyehandel-delivery-callback`;
@@ -811,9 +817,9 @@ Deno.serve(async (req) => {
     nyehandel_prefix: nyehandelPrefix,
     checkout_status: "pending",
     customer_email: customer.email,
-    currency: display_currency ?? "EUR",
-    total_price: null, // calculated server-side after Nyehandel confirms — never trust client-supplied price
-    line_items_snapshot: items, // includes display fields (product_name, pack_label, unit_price)
+    currency: orderCurrency,
+    total_price: serverOrderTotal,
+    line_items_snapshot: persistedLineItems, // display fields preserved, prices normalized to server values
     customer_metadata: {
       firstname: customer.firstname,
       lastname: customer.lastname,
@@ -895,8 +901,8 @@ Deno.serve(async (req) => {
     }));
 
     const totalDisplay = display_total != null
-      ? `${display_currency ?? "EUR"} ${Number(display_total).toFixed(2)}`
-      : "";
+      ? `${orderCurrency} ${Number(display_total).toFixed(2)}`
+      : `${orderCurrency} ${serverOrderTotal.toFixed(2)}`;
 
     fetch(`${supabaseFunctionsUrl}/send-email`, {
       method: "POST",

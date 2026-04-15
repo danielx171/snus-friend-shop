@@ -14,6 +14,8 @@ interface GuestRegisterOptions {
 }
 
 interface GuestRegisterResponseBody {
+  success?: boolean;
+  message?: string;
   data?: {
     success?: boolean;
     message?: string;
@@ -43,6 +45,22 @@ const initGuestRegisterForms = (options: GuestRegisterOptions): void => {
     }
 
     form.dataset.guestRegisterInitialized = 'true';
+
+    const getResponseMessage = (body: GuestRegisterResponseBody): string | null => {
+      if (typeof body.message === 'string' && body.message.length > 0) {
+        return body.message;
+      }
+
+      if (typeof body.data?.message === 'string' && body.data.message.length > 0) {
+        return body.data.message;
+      }
+
+      if (typeof body.error?.message === 'string' && body.error.message.length > 0) {
+        return body.error.message;
+      }
+
+      return null;
+    };
 
     const showError = (message: string): void => {
       errorElement.textContent = message;
@@ -87,15 +105,15 @@ const initGuestRegisterForms = (options: GuestRegisterOptions): void => {
         });
         const result = await parseJsonResponse<GuestRegisterResponseBody>(response);
 
-        if (result.ok && result.body.data?.success) {
+        if (result.ok && (result.body.success || result.body.data?.success)) {
           passwordInput.disabled = true;
           button.style.display = 'none';
-          successElement.textContent = result.body.data.message || options.successMessage;
+          successElement.textContent = getResponseMessage(result.body) || options.successMessage;
           successElement.classList.remove('hidden');
           return;
         }
 
-        showError(result.body.error?.message || options.genericErrorMessage);
+        showError(getResponseMessage(result.body) || options.genericErrorMessage);
       } catch {
         showError(options.networkErrorMessage);
       } finally {

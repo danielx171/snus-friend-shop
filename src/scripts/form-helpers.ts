@@ -1,3 +1,5 @@
+import { parse as parseDevalue } from 'devalue';
+
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export interface JsonResponse<T extends object> {
@@ -10,10 +12,17 @@ export const parseJsonResponse = async <T extends object>(
   response: Response,
 ): Promise<JsonResponse<T>> => {
   const text = await response.text();
+  const contentType = response.headers.get('content-type') ?? '';
   let body = {} as T;
 
   try {
-    body = text ? (JSON.parse(text) as T) : ({} as T);
+    if (!text) {
+      body = {} as T;
+    } else if (contentType.includes('application/json+devalue')) {
+      body = parseDevalue(text) as T;
+    } else {
+      body = JSON.parse(text) as T;
+    }
   } catch {
     body = {} as T;
   }

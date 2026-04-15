@@ -4,6 +4,7 @@ import {
   DEFAULT_DATAFORSEO_LANGUAGE_CODE,
   DEFAULT_DATAFORSEO_LOCATION_CODE,
 } from './seo-audit-config';
+import { SCRIPT_ENV_PRECEDENCE } from './script-env';
 
 type Status = 'ok' | 'warn' | 'missing';
 
@@ -145,6 +146,7 @@ export const runMeasurementPreflight = () => {
 
   console.log('Measurement preflight');
   console.log('---------------------');
+  console.log(`[INFO] Script env precedence: ${SCRIPT_ENV_PRECEDENCE}`);
   for (const result of results) {
     console.log(formatResult(result));
   }

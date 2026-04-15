@@ -1,4 +1,5 @@
 import process from 'node:process';
+import './script-env';
 import {
   DEFAULT_DATAFORSEO_LANGUAGE_CODE,
   DEFAULT_DATAFORSEO_LOCATION_CODE,

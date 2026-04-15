@@ -7,6 +7,12 @@ import {
   redeemReferralCodeForUser,
   validateReferralCode,
 } from '@/lib/server-referrals';
+import {
+  buildGuestOrderConfirmRedirect,
+  getGuestAccountErrorMessage,
+  normalizeGuestOrderEmail,
+  verifyGuestOrderEmail,
+} from '@/lib/server-guest-orders';
 
 /** Create a Supabase client bound to the request's cookies (anon key, respects RLS). */
 function createSupabaseFromContext(ctx: { cookies: any; request: Request }) {
@@ -246,29 +252,53 @@ export const auth = {
     }),
     handler: async (input, ctx) => {
       const supabase = createSupabaseFromContext(ctx);
+      const normalizedEmail = normalizeGuestOrderEmail(input.email);
       const siteUrl =
         import.meta.env.PUBLIC_SITE_URL ??
         import.meta.env.VITE_SITE_URL ??
         'https://snusfriends.com';
 
+      if (!normalizedEmail) {
+        throw new ActionError({
+          code: 'BAD_REQUEST',
+          message: 'Please use the same email address you entered at checkout.',
+        });
+      }
+
+      const orderStatus = await verifyGuestOrderEmail(input.orderId, normalizedEmail);
+
+      if (orderStatus === 'missing' || orderStatus === 'mismatch') {
+        throw new ActionError({
+          code: 'BAD_REQUEST',
+          message: "We couldn't verify that order for this email address. Please use the same email you entered at checkout.",
+        });
+      }
+
+      if (orderStatus === 'unavailable') {
+        throw new ActionError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: "We couldn't verify your order right now. Please try again.",
+        });
+      }
+
       const { error } = await supabase.auth.signUp({
-        email: input.email,
+        email: normalizedEmail,
         password: input.password,
         options: {
-          emailRedirectTo: `${siteUrl}/auth/confirm`,
+          emailRedirectTo: buildGuestOrderConfirmRedirect(siteUrl, input.orderId, normalizedEmail),
         },
       });
 
       if (error) {
         throw new ActionError({
           code: 'BAD_REQUEST',
-          message: error.message,
+          message: getGuestAccountErrorMessage(error),
         });
       }
 
       return {
         success: true,
-        message: 'Account created! Check your email to confirm, then your order will appear in your account.',
+        message: 'Account created! Check your email to confirm, then this order will appear in your account.',
       };
     },
   }),

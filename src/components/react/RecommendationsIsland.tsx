@@ -1,6 +1,11 @@
 import { useState, useEffect, useMemo, memo, useCallback } from 'react';
 import { useStore } from '@nanostores/react';
 import { $beginnerMode, BEGINNER_MAX_MG } from '@/stores/beginner-mode';
+import {
+  fetchSlimProducts,
+  parseSlimProducts,
+  type SlimProductCardData,
+} from '@/lib/slim-products-client';
 import QueryProvider from './QueryProvider';
 import { useOrders, getPurchasedSlugs } from '@/hooks/useOrders';
 import { useUserAttributes } from '@/hooks/useUserAttributes';
@@ -18,7 +23,8 @@ const QUIZ_STRENGTH_MAP: Record<string, readonly string[]> = {
 };
 
 interface RecommendationsIslandProps {
-  productsJson: string;
+  productsJson?: string;
+  productsJsonUrl?: string;
 }
 
 /**
@@ -113,9 +119,10 @@ function RecommendationRow({
   );
 }
 
-function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
+function RecommendationsContent({ productsJson, productsJsonUrl }: RecommendationsIslandProps) {
   const [userId, setUserId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [allProducts, setAllProducts] = useState<SlimProductCardData[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -124,18 +131,36 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
     });
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadProducts = async () => {
+      try {
+        const nextProducts = productsJsonUrl
+          ? await fetchSlimProducts(productsJsonUrl)
+          : productsJson
+            ? parseSlimProducts(productsJson)
+            : [];
+        if (!cancelled) {
+          setAllProducts(nextProducts);
+        }
+      } catch {
+        if (!cancelled) {
+          setAllProducts([]);
+        }
+      }
+    };
+
+    void loadProducts();
+    return () => {
+      cancelled = true;
+    };
+  }, [productsJson, productsJsonUrl]);
+
   const { data: orders, isLoading } = useOrders(userId);
-  const purchasedSlugs = orders ? getPurchasedSlugs(orders) : [];
+  const purchasedSlugs = useMemo(() => (orders ? getPurchasedSlugs(orders) : []), [orders]);
   const isBeginner = useStore($beginnerMode);
   const { attributes: userAttrs } = useUserAttributes(userId ?? undefined);
-
-  const allProducts = useMemo(() => {
-    try {
-      return JSON.parse(productsJson) as any[];
-    } catch {
-      return [];
-    }
-  }, [productsJson]);
 
   /** Quiz preferences read from user_attributes (if the user did the flavor quiz). */
   const { quizStrengths, quizFlavors } = useMemo(() => {
@@ -159,12 +184,12 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
     pickedForYou,
   } = useMemo(() => {
     const empty = {
-      buyAgain: [] as any[],
-      recommendations: [] as any[],
-      saveMoney: [] as any[],
-      newFormat: [] as any[],
-      trending: [] as any[],
-      pickedForYou: [] as any[],
+      buyAgain: [] as SlimProductCardData[],
+      recommendations: [] as SlimProductCardData[],
+      saveMoney: [] as (SlimProductCardData & { _savings: number })[],
+      newFormat: [] as (SlimProductCardData & { _formatLabel: string })[],
+      trending: [] as SlimProductCardData[],
+      pickedForYou: [] as SlimProductCardData[],
     };
     if (allProducts.length === 0) return empty;
 
@@ -177,12 +202,12 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
     // experienced users see 30/50 mg picks before they ever place an order.
     const pickedForYouList = purchasedSlugs.length === 0 && (quizStrengths.length > 0 || quizFlavors.length > 0)
       ? pool
-          .filter((p: any) =>
+          .filter((p) =>
             p.imageUrl && p.stock > 0 &&
             (quizStrengths.length === 0 || quizStrengths.includes(p.strengthKey)) &&
             (quizFlavors.length === 0 || quizFlavors.includes(p.flavorKey))
           )
-          .sort((a: any, b: any) => (b.ratings || 0) - (a.ratings || 0))
+          .sort((a, b) => (b.ratings || 0) - (a.ratings || 0))
           .slice(0, 8)
       : [];
 
@@ -192,36 +217,36 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
 
     // "Buy Again" — products the user has ordered before
     const buyAgainList = purchasedSlugs
-      .map((slug) => pool.find((p: any) => p.slug === slug))
+      .map((slug) => pool.find((p) => p.slug === slug))
       .filter(Boolean)
       .slice(0, 4);
 
     // "You Might Like" — same brand / flavour / strength tier as purchased,
     // but not purchased. Including strengthKey surfaces other super-strong /
     // extra-strong options for experienced buyers (was missing before).
-    const purchasedBrands = new Set(buyAgainList.map((p: any) => p.brandSlug));
-    const purchasedFlavours = new Set(buyAgainList.map((p: any) => p.flavorKey));
-    const purchasedStrengths = new Set(buyAgainList.map((p: any) => p.strengthKey));
+    const purchasedBrands = new Set(buyAgainList.map((p) => p.brandSlug));
+    const purchasedFlavours = new Set(buyAgainList.map((p) => p.flavorKey));
+    const purchasedStrengths = new Set(buyAgainList.map((p) => p.strengthKey));
     const recommendationsList = pool
-      .filter((p: any) =>
+      .filter((p) =>
         !purchasedSlugs.includes(p.slug) &&
         (purchasedBrands.has(p.brandSlug) ||
           purchasedFlavours.has(p.flavorKey) ||
           purchasedStrengths.has(p.strengthKey)) &&
         p.imageUrl
       )
-      .sort((a: any, b: any) => (b.ratings || 0) - (a.ratings || 0))
+      .sort((a, b) => (b.ratings || 0) - (a.ratings || 0))
       .slice(0, 4);
 
     // Slugs already shown in the first two sections (no duplicates)
     const shownSlugs = new Set([
-      ...buyAgainList.map((p: any) => p.slug),
-      ...recommendationsList.map((p: any) => p.slug),
+      ...buyAgainList.map((p) => p.slug),
+      ...recommendationsList.map((p) => p.slug),
     ]);
 
     // --- "Save Money" ---
     // For each purchased product, find cheaper alternatives with same flavor + similar strength
-    const saveMoneyList: (any & { _savings: number })[] = [];
+    const saveMoneyList: (SlimProductCardData & { _savings: number })[] = [];
     const saveMoneySeenSlugs = new Set<string>();
     for (const bought of buyAgainList) {
       if (!bought) continue;
@@ -288,14 +313,14 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
 
     // --- "Trending in Your Taste" ---
     const trendingList = pool
-      .filter((p: any) =>
+      .filter((p) =>
         !purchasedSlugs.includes(p.slug) &&
         !shownSlugs.has(p.slug) &&
         p.imageUrl &&
         purchasedFlavours.has(p.flavorKey) &&
         (p.ratings ?? 0) >= 4.0
       )
-      .sort((a: any, b: any) => (b.ratings || 0) - (a.ratings || 0))
+      .sort((a, b) => (b.ratings || 0) - (a.ratings || 0))
       .slice(0, 4);
 
     return {
@@ -304,7 +329,7 @@ function RecommendationsContent({ productsJson }: RecommendationsIslandProps) {
       saveMoney: saveMoneyFinal,
       newFormat: newFormatFinal,
       trending: trendingList,
-      pickedForYou: [] as any[],
+      pickedForYou: [] as SlimProductCardData[],
     };
   }, [allProducts, purchasedSlugs, isBeginner, quizStrengths, quizFlavors]);
 
