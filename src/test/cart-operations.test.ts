@@ -29,6 +29,7 @@ import {
   removeFromCart,
   updateCartQuantity,
   clearCart,
+  persistGuestCartSnapshot,
   setStoredGuestEmail,
 } from '@/stores/cart';
 import type { Product } from '@/data/products';
@@ -164,6 +165,23 @@ describe('cart operations', () => {
 
     addToCart(makeProduct('a'), 'pack1');
     await vi.advanceTimersByTimeAsync(30_000);
+
+    expect(apiFetchMock).toHaveBeenCalledWith(
+      'save-cart-snapshot',
+      expect.objectContaining({
+        method: 'POST',
+        body: expect.objectContaining({
+          guest_email: 'guest@example.com',
+          item_count: 1,
+        }),
+      }),
+    );
+  });
+
+  it('persists a guest snapshot immediately when checkout captures a valid email after items already exist', () => {
+    addToCart(makeProduct('a'), 'pack1');
+
+    persistGuestCartSnapshot('Guest@Example.com');
 
     expect(apiFetchMock).toHaveBeenCalledWith(
       'save-cart-snapshot',

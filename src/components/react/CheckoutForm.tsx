@@ -1,10 +1,11 @@
-import { useState, useMemo, useCallback, useEffect, type FormEvent } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef, type FormEvent } from 'react';
 import { useStore } from '@nanostores/react';
 import {
   $cartItems,
   $cartTotal,
   clearCart,
   $mixDiscount,
+  persistGuestCartSnapshot,
   setStoredGuestEmail,
   syncCartFromStorage,
   type CartItem,
@@ -114,14 +115,25 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
   const [discountError, setDiscountError] = useState('');
   const [discountLoading, setDiscountLoading] = useState(false);
   const [availableShippingNames, setAvailableShippingNames] = useState<string[] | null>(null);
+  const lastPersistedGuestEmail = useRef<string | null>(null);
+  const normalizedGuestEmail = useMemo(() => {
+    const normalized = email.trim().toLowerCase();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) ? normalized : null;
+  }, [email]);
 
   useEffect(() => {
     if (!isGuest) {
       setStoredGuestEmail(null);
+      lastPersistedGuestEmail.current = null;
       return;
     }
-    setStoredGuestEmail(email);
-  }, [email, isGuest]);
+    setStoredGuestEmail(normalizedGuestEmail);
+    if (!normalizedGuestEmail || lastPersistedGuestEmail.current === normalizedGuestEmail) {
+      return;
+    }
+    lastPersistedGuestEmail.current = normalizedGuestEmail;
+    persistGuestCartSnapshot(normalizedGuestEmail);
+  }, [isGuest, normalizedGuestEmail]);
 
   useEffect(() => {
     let cancelled = false;

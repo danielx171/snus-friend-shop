@@ -61,6 +61,39 @@ export function clearStoredGuestEmail() {
   }
 }
 
+function buildCartSnapshotPayload(items: CartItem[], guestEmail?: string | null) {
+  const total = items.reduce((sum, item) => {
+    const price = item.product.prices[item.packSize] ?? 0;
+    return sum + price * item.quantity;
+  }, 0);
+
+  const canCount = items.reduce((sum, item) => {
+    return sum + (packSizeMultipliers[item.packSize] ?? 1) * item.quantity;
+  }, 0);
+
+  return {
+    cart_data: items,
+    cart_total: total,
+    item_count: canCount,
+    ...(guestEmail ? { guest_email: guestEmail } : {}),
+  };
+}
+
+function sendCartSnapshot(items: CartItem[], guestEmail?: string | null) {
+  if (typeof window === 'undefined' || !hasSupabaseEnv || items.length === 0) return;
+  apiFetch('save-cart-snapshot', {
+    method: 'POST',
+    body: buildCartSnapshotPayload(items, guestEmail),
+  }).catch(() => {}); // Fire-and-forget; never surface errors to the user
+}
+
+export function persistGuestCartSnapshot(email?: string | null) {
+  const normalized = normalizeGuestEmail(email);
+  setStoredGuestEmail(normalized);
+  if (!normalized) return;
+  sendCartSnapshot($cartItems.get(), normalized);
+}
+
 /**
  * Re-read cart items from localStorage into the in-memory atom.
  * Called by CartDrawer before opening to sync cross-island state —
@@ -279,30 +312,11 @@ $cartItems.listen((items) => {
   if (items.length === 0) return; // Don't snapshot empty carts
 
   _snapshotTimer = setTimeout(() => {
-    if (!hasSupabaseEnv) return; // Explicit no-op when misconfigured locally
-
-    const total = items.reduce((sum, item) => {
-      const price = item.product.prices[item.packSize] ?? 0;
-      return sum + price * item.quantity;
-    }, 0);
-
-    const canCount = items.reduce((sum, item) => {
-      return sum + (packSizeMultipliers[item.packSize] ?? 1) * item.quantity;
-    }, 0);
-
     const guestEmail = getStoredGuestEmail();
 
     // apiFetch attaches the user's JWT from supabase.auth.getSession() (with
     // cookie fallback). Guests can still create recoverable abandoned-cart
     // snapshots once checkout captures a valid email address.
-    apiFetch('save-cart-snapshot', {
-      method: 'POST',
-      body: {
-        cart_data: items,
-        cart_total: total,
-        item_count: canCount,
-        ...(guestEmail ? { guest_email: guestEmail } : {}),
-      },
-    }).catch(() => {}); // Fire-and-forget; never surface errors to the user
+    sendCartSnapshot(items, guestEmail);
   }, SNAPSHOT_DEBOUNCE_MS);
 });
