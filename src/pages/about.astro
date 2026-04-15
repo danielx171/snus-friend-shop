@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 
@@ -197,28 +198,30 @@ const activeBrandCount = allBrands.filter((b) => brandSlugsWithProducts.has(b.id
     </div>
   </section>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'AboutPage',
-    name: `About ${tenant.name}`,
-    description: `Meet ${tenant.name}: Europe's curated nicotine pouch shop. ${allProducts.length}+ pouches, ${activeBrandCount} brands.`,
-    url: 'https://snusfriends.com/about',
-    mainEntity: {
-      '@type': 'Organization',
-      name: tenant.name,
-      url: 'https://snusfriends.com',
-      logo: { '@type': 'ImageObject', url: 'https://snusfriends.com/logo.svg' },
-      description: `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${activeBrandCount} brands.`,
-      foundingDate: '2025',
-      founder: { '@type': 'Person', name: 'Daniel' },
-      sameAs: ['https://snusfriends.com'],
-    },
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://snusfriends.com' },
-        { '@type': 'ListItem', position: 2, name: 'About Us', item: 'https://snusfriends.com/about' },
-      ],
-    },
-  })} />
+  <JsonLd
+    data={{
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: `About ${tenant.name}`,
+      description: `Meet ${tenant.name}: Europe's curated nicotine pouch shop. ${allProducts.length}+ pouches, ${activeBrandCount} brands.`,
+      url: 'https://snusfriends.com/about',
+      mainEntity: {
+        '@type': 'Organization',
+        name: tenant.name,
+        url: 'https://snusfriends.com',
+        logo: { '@type': 'ImageObject', url: 'https://snusfriends.com/logo.svg' },
+        description: `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${activeBrandCount} brands.`,
+        foundingDate: '2025',
+        founder: { '@type': 'Person', name: 'Daniel' },
+        sameAs: ['https://snusfriends.com'],
+      },
+      breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://snusfriends.com' },
+          { '@type': 'ListItem', position: 2, name: 'About Us', item: 'https://snusfriends.com/about' },
+        ],
+      },
+    }}
+  />
 </Shop>

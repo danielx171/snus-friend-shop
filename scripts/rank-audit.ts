@@ -14,6 +14,14 @@ interface GoogleSearchResponse {
   items?: GoogleSearchItem[];
 }
 
+interface GoogleApiErrorPayload {
+  error?: {
+    code?: number;
+    message?: string;
+    status?: string;
+  };
+}
+
 const args = process.argv.slice(2);
 const keywordFilter = getOption(args, 'keyword');
 const maxKeywords = Number.parseInt(getOption(args, 'limit') ?? '20', 10);
@@ -53,6 +61,29 @@ const fetchResults = async ({
 
   if (!response.ok) {
     const text = await response.text();
+    let parsedError: GoogleApiErrorPayload | null = null;
+
+    try {
+      parsedError = JSON.parse(text) as GoogleApiErrorPayload;
+    } catch {
+      parsedError = null;
+    }
+
+    const googleMessage = parsedError?.error?.message ?? text;
+
+    if (
+      response.status === 403 &&
+      googleMessage.includes('does not have the access to Custom Search JSON API')
+    ) {
+      throw new Error(
+        [
+          `Custom Search JSON API access is blocked for the current Google Cloud project while checking "${keyword}".`,
+          'Google closed Custom Search JSON API to new customers; only grandfathered projects can use it through January 1, 2027.',
+          'Use a grandfathered project or switch audit:rank to another SERP provider.',
+        ].join(' '),
+      );
+    }
+
     throw new Error(`Custom Search request failed for "${keyword}": ${response.status} ${text}`);
   }
 

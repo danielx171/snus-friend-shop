@@ -3,6 +3,7 @@ export const prerender = true;
 import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import AddToCartButton from '@/components/react/AddToCartButton';
 import StickyAddToCart from '@/components/react/StickyAddToCart';
@@ -141,13 +142,6 @@ const metaB = `Buy ${p.name} — ${p.nicotineContent}mg ${flavorLabel.toLowerCas
 const metaC = `${p.name} — ${p.nicotineContent}mg nicotine pouches.${priceStr} Free EU shipping.`;
 const metaDescription = metaA.length <= 155 ? metaA : metaB.length <= 155 ? metaB : metaC;
 
-const packTiers = [
-  { key: 'pack1', label: '1 can', qty: 1 },
-  { key: 'pack3', label: '3 cans', qty: 3 },
-  { key: 'pack5', label: '5 cans', qty: 5 },
-  { key: 'pack10', label: '10 cans', qty: 10 },
-];
-
 const inStock = p.stock > 0;
 
 const jsonLd = {
@@ -185,7 +179,7 @@ const jsonLd = {
   ogType="product"
   ogImage={p.imageUrl || undefined}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <JsonLd data={jsonLd} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
     <Breadcrumb items={[
@@ -710,7 +704,6 @@ const jsonLd = {
     var section = document.getElementById('subscribe-section');
     var monthlyPct = parseInt(section.dataset.monthlyPct || '10', 10);
     var sixPct = parseInt(section.dataset.sixPct || '15', 10);
-    var pointsMult = parseInt(section.dataset.pointsMult || '2', 10);
     var packSelect = document.getElementById('subscribe-pack');
     var qtyInput = document.getElementById('subscribe-qty');
 

@@ -1,4 +1,6 @@
 ---
+import JsonLd from '@/components/astro/JsonLd.astro';
+
 interface BreadcrumbItem {
   label: string;
   href?: string;
@@ -57,4 +59,4 @@ const breadcrumbSchema = {
     ))}
   </ol>
 </nav>
-<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+<JsonLd data={breadcrumbSchema} />

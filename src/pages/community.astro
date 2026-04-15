@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import QuestBoardIsland from '@/components/react/QuestBoardIsland';
 import LeaderboardIsland from '@/components/react/LeaderboardIsland';
 import AchievementGridIsland from '@/components/react/AchievementGridIsland';
@@ -34,8 +35,6 @@ function formatStat(n: number): string {
   return n.toLocaleString('en-GB');
 }
 
-// Only show stats section if we have meaningful community activity
-const showStats = memberCount >= 10;
 ---
 
 <Shop
@@ -385,9 +384,8 @@ const showStats = memberCount >= 10;
     </div>
   </section>
 
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-    {
+  <JsonLd
+    data={{
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "name": "The SnusFriend Community",
@@ -423,6 +421,6 @@ const showStats = memberCount >= 10;
           }
         ]
       }
-    }
-  </script>
+    }}
+  />
 </Shop>

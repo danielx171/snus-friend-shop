@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import SpinWheelIsland from '@/components/react/SpinWheelIsland';
 import PointsRedemptionIsland from '@/components/react/PointsRedemptionIsland';
 import { tenant } from '@/config/tenant';
@@ -383,80 +384,83 @@ const tiers = rewards.tiers.map((t, i) => ({
     </div>
   </section>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: `${tenant.loyaltyProgramName} — Earn SnusCoins & Perks`,
-    description: `Earn SnusCoins on every purchase and redeem them for discounts, free products, and exclusive perks with ${tenant.name} Rewards.`,
-    url: 'https://snusfriends.com/rewards',
-    mainEntity: {
-      '@type': 'Service',
-      name: tenant.loyaltyProgramName,
-      provider: {
-        '@type': 'Organization',
-        name: tenant.name,
-        url: 'https://snusfriends.com',
-      },
-      description: 'Free loyalty rewards program. Earn SnusCoins on purchases, reviews, and community activities. Redeem for discounts and exclusive perks.',
-      offers: tiers.map((t) => ({
-        '@type': 'Offer',
-        name: `${t.name} Tier`,
-        description: t.perks.join(', '),
-      })),
-    },
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://snusfriends.com' },
-        { '@type': 'ListItem', position: 2, name: 'Rewards', item: 'https://snusfriends.com/rewards' },
-      ],
-    },
-  })} />
-
-  <script type="application/ld+json" set:html={JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
+  <JsonLd
+    items={[
       {
-        '@type': 'Question',
-        name: 'How do I earn SnusCoins?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'SnusCoins are earned automatically on every order, by writing product reviews, spinning the Daily Drop wheel daily, completing Missions, and referring friends. No activation required — just shop, review, and engage.',
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: `${tenant.loyaltyProgramName} — Earn SnusCoins & Perks`,
+        description: `Earn SnusCoins on every purchase and redeem them for discounts, free products, and exclusive perks with ${tenant.name} Rewards.`,
+        url: 'https://snusfriends.com/rewards',
+        mainEntity: {
+          '@type': 'Service',
+          name: tenant.loyaltyProgramName,
+          provider: {
+            '@type': 'Organization',
+            name: tenant.name,
+            url: 'https://snusfriends.com',
+          },
+          description: 'Free loyalty rewards program. Earn SnusCoins on purchases, reviews, and community activities. Redeem for discounts and exclusive perks.',
+          offers: tiers.map((t) => ({
+            '@type': 'Offer',
+            name: `${t.name} Tier`,
+            description: t.perks.join(', '),
+          })),
+        },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://snusfriends.com' },
+            { '@type': 'ListItem', position: 2, name: 'Rewards', item: 'https://snusfriends.com/rewards' },
+          ],
         },
       },
       {
-        '@type': 'Question',
-        name: 'Do SnusCoins expire?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'No. Your SnusCoins never expire as long as your SnusFriend account remains active. If your account has been inactive for 24 months, we\'ll send a reminder email before any expiration takes effect.',
-        },
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'How do I earn SnusCoins?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'SnusCoins are earned automatically on every order, by writing product reviews, spinning the Daily Drop wheel daily, completing Missions, and referring friends. No activation required — just shop, review, and engage.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Do SnusCoins expire?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'No. Your SnusCoins never expire as long as your SnusFriend account remains active. If your account has been inactive for 24 months, we\'ll send a reminder email before any expiration takes effect.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What can I redeem SnusCoins for?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'You can redeem SnusCoins for store credit (applied at checkout), percentage discounts on individual orders, free shipping upgrades, and curated mystery boxes. Redemption rates and available options are shown in the Vault dashboard.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How do I check my balance?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Your SnusCoin balance is visible at the top of the Vault page when logged in. It\'s also shown in the header bar next to the cart icon, and in your account dashboard. You\'ll receive email notifications when coins are earned or when you\'re close to a Circle upgrade.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Can I earn coins on every order?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes, every order earns SnusCoins with no minimum purchase. Even a single can order earns coins. Subscribe & Save orders earn coins too — applied automatically to each delivery.',
+            },
+          },
+        ],
       },
-      {
-        '@type': 'Question',
-        name: 'What can I redeem SnusCoins for?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'You can redeem SnusCoins for store credit (applied at checkout), percentage discounts on individual orders, free shipping upgrades, and curated mystery boxes. Redemption rates and available options are shown in the Vault dashboard.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I check my balance?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Your SnusCoin balance is visible at the top of the Vault page when logged in. It\'s also shown in the header bar next to the cart icon, and in your account dashboard. You\'ll receive email notifications when coins are earned or when you\'re close to a Circle upgrade.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Can I earn coins on every order?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, every order earns SnusCoins with no minimum purchase. Even a single can order earns coins. Subscribe & Save orders earn coins too — applied automatically to each delivery.',
-        },
-      },
-    ],
-  })} />
+    ]}
+  />
 </Shop>

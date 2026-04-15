@@ -1,8 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import CardAddToCart from '@/components/react/CardAddToCart';
-import WishlistHeartButton from '@/components/react/WishlistHeartButton';
-import CompareToggleButton from '@/components/react/CompareToggleButton';
+import ProductCardControlsIsland from '@/components/react/ProductCardControlsIsland';
 import { brandColors, strengthColors, strengthLabels, defaultBrandColor, flavorColors, defaultFlavorColor } from '@/data/brand-colors';
 
 interface Props {
@@ -75,22 +73,17 @@ const hasDiscount = comparePrice != null && comparePrice > pack1Price && pack1Pr
 const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comparePrice!) * 100) : 0;
 ---
 
-<a
-  href={`/products/${slug}`}
-  data-astro-prefetch
-  aria-label={`${name} by ${brand} — view product details`}
+<article
   data-nicotine-mg={nicotineContent}
   class="product-card group relative flex min-h-[48px] flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1"
   style={`background: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%); box-shadow: 0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);`}
 >
-  {/* Wishlist heart — top-right, hydrates on scroll-in */}
-  <div class="absolute top-2.5 right-2.5 z-10">
-    <WishlistHeartButton
-      client:visible
-      slug={slug}
-      name={name}
-    />
-  </div>
+  <a
+    href={`/products/${slug}`}
+    data-astro-prefetch
+    aria-label={`${name} by ${brand} — view product details`}
+    class="absolute inset-0 z-[1] rounded-2xl focus:outline-2 focus:outline-offset-2 focus:outline-primary"
+  />
 
   {/* Badges — pill style with glow */}
   <div class="absolute top-2.5 left-2.5 z-10 flex flex-wrap gap-1">
@@ -110,7 +103,7 @@ const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comp
   </div>
 
   {/* Image area with radial flavor glow */}
-  <div class="product-card-image relative aspect-square w-full overflow-hidden">
+  <div class="product-card-image relative z-[2] aspect-square w-full overflow-hidden">
     {/* Radial glow behind product */}
     <div
       class="absolute inset-0 opacity-15 transition-opacity duration-300 group-hover:opacity-30"
@@ -144,16 +137,17 @@ const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comp
   </div>
 
   {/* Content */}
-  <div class="flex flex-1 flex-col gap-1.5 p-3">
+  <div class="relative z-[2] flex flex-1 flex-col gap-1.5 p-3">
     {/* Brand + strength dots row */}
     <div class="flex items-center justify-between">
-      <span
+      <a
+        href={`/brands/${brandSlug}`}
+        data-astro-prefetch
         class="text-xs font-semibold uppercase tracking-wider hover:brightness-125 cursor-pointer transition-all"
         style={`color: ${brandColor};`}
-        onclick={`event.preventDefault();event.stopPropagation();window.location.href='/brands/${brandSlug}'`}
       >
         {brand}
-      </span>
+      </a>
       {/* Strength dots */}
       <div class="flex items-center gap-0.5" role="img" aria-label={`${strengthLabels[strengthKey] ?? 'Normal'} strength, ${strengthDots} of 5`}>
         {Array.from({ length: 5 }, (_, i) => (
@@ -235,12 +229,7 @@ const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comp
       )}
     </div>
 
-    {/* Compare toggle — small text pill above Add-to-Cart, doesn't crowd the wishlist heart */}
-    <div class="pt-1">
-      <CompareToggleButton client:visible slug={slug} name={name} />
-    </div>
-
-    <CardAddToCart
+    <ProductCardControlsIsland
       client:visible
       slug={slug}
       name={name}
@@ -255,7 +244,7 @@ const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comp
       badgeKeys={badgeKeys}
     />
   </div>
-</a>
+</article>
 
 <style>
   .product-card {
@@ -272,59 +261,3 @@ const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comp
     transform: scale(1.05);
   }
 </style>
-
-<script>
-  // 3D mouse-tracking tilt — lazy init via IntersectionObserver for performance
-  function attachTilt(el: HTMLElement) {
-    if ((el as any).__tiltInit) return;
-    (el as any).__tiltInit = true;
-    if ('ontouchstart' in window) return;
-
-    // Wrap in perspective container
-    if (el.parentElement?.style.perspective !== '800px') {
-      const wrapper = document.createElement('div');
-      wrapper.style.perspective = '800px';
-      el.parentElement?.insertBefore(wrapper, el);
-      wrapper.appendChild(el);
-    }
-
-    el.addEventListener('mousemove', (e) => {
-      const r = el.getBoundingClientRect();
-      const x = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height/2)) / (r.height/2))) * 12;
-      const y = Math.max(-1, Math.min(1, -(e.clientX - (r.left + r.width/2)) / (r.width/2))) * 12;
-      // Drop scale() — the image has its own hover scale and compounding them
-      // knocks text off subpixel antialiasing (smudged text on hover).
-      el.style.transform = `rotateX(${x}deg) rotateY(${y}deg) translateY(-8px)`;
-      el.style.boxShadow = '0 35px 60px -15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)';
-      el.style.transition = 'box-shadow 0.2s, transform 0.08s ease-out';
-    });
-    el.addEventListener('mouseleave', () => {
-      el.style.transform = '';
-      el.style.boxShadow = '';
-      el.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
-    });
-  }
-
-  function initTilt() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          attachTilt(entry.target as HTMLElement);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '200px' });
-
-    document.querySelectorAll('.product-card').forEach((card) => {
-      if (!(card as any).__tiltInit) observer.observe(card);
-    });
-  }
-
-  document.addEventListener('astro:page-load', () => {
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(initTilt);
-    } else {
-      setTimeout(initTilt, 100);
-    }
-  });
-</script>

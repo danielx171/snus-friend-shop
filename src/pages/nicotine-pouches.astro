@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
@@ -116,8 +117,7 @@ const faqJsonLd = {
   description={`Shop ${totalProducts}+ nicotine pouches with free EU shipping over €29. ZYN, VELO, LOOP, Siberia, and more. Filter by strength, flavour, and brand.`}
   canonical="/nicotine-pouches"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <JsonLd items={[itemListJsonLd, faqJsonLd]} />
   <Breadcrumb items={[{ label: 'Nicotine Pouches' }]} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -219,21 +219,23 @@ const faqJsonLd = {
     </article>
   </div>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": `Buy Nicotine Pouches Online — ${totalProducts}+ Products`,
-    "description": `Shop ${totalProducts}+ tobacco-free nicotine pouches from ${brandCount} leading brands at ${tenant.name}.`,
-    "url": `https://${tenant.domain}/nicotine-pouches`,
-    "mainEntity": {
-      "@type": "ItemList",
-      "numberOfItems": totalProducts,
-      "itemListElement": products.slice(0, 10).map((p, i) => ({
-        "@type": "ListItem",
-        "position": i + 1,
-        "url": `https://${tenant.domain}/products/${p.id}`,
-        "name": p.data.name,
-      })),
-    },
-  })} />
+  <JsonLd
+    data={{
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `Buy Nicotine Pouches Online — ${totalProducts}+ Products`,
+      "description": `Shop ${totalProducts}+ tobacco-free nicotine pouches from ${brandCount} leading brands at ${tenant.name}.`,
+      "url": `https://${tenant.domain}/nicotine-pouches`,
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": totalProducts,
+        "itemListElement": products.slice(0, 10).map((p, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "url": `https://${tenant.domain}/products/${p.id}`,
+          "name": p.data.name,
+        })),
+      },
+    }}
+  />
 </Shop>

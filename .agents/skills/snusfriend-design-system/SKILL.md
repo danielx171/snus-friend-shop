@@ -32,6 +32,20 @@ Use this skill for SnusFriend-specific frontend work when the task touches:
 - Use contrast and hierarchy to guide attention before adding extra decoration.
 - Reuse existing semantic tokens and shadcn patterns before inventing one-off styles.
 
+## Astro and hydration rules
+
+- Default to Astro markup first. Reach for a React island only when client state, auth state, localStorage, or browser-only APIs make it necessary.
+- When an area needs interactivity, prefer one island per cluster over several tiny sibling islands.
+- Replace inline `onclick` navigation or one-off DOM handlers with native links, forms, or shared components whenever possible.
+- Avoid page-wide inline scripts when the behavior can live in an island, a shared store, or a reusable Astro component.
+
+## Performance guardrails
+
+- Preload only the font that is actually used above the fold on most pages.
+- Scope display-font preloads to pages that truly need them; do not preload decorative fonts globally.
+- Watch for storefront chrome that hydrates in pieces: header badges, card controls, carousels, and drawers are the usual pressure points.
+- Preserve strong mobile tap targets and quick scan-ability while trimming JS.
+
 ## Copy direction
 
 - Lead with what the shopper gets: range, shipping clarity, rewards, comparison help.
@@ -45,3 +59,4 @@ Use this skill for SnusFriend-specific frontend work when the task touches:
 - Preserve mobile usability and avoid adding above-the-fold heaviness without a clear gain.
 - If the task touches trust-sensitive copy, check whether `src/data/brand-facts.ts` should be used or updated.
 - If the task changes a high-visibility section, sanity-check the result against homepage/rewards/blog voice for consistency.
+- If the task adds an island or preload, justify why it belongs in the initial render path.

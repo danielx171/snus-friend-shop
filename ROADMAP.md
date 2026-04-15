@@ -4,6 +4,28 @@
 > Original checkout migrated Shopify → Nyehandel (Steps 25-40). Shopify fully removed.
 > Launch Polish Sprint (Apr 8-12) complete: all waves shipped. See `CURRENT_PRIORITIES.md` for the active punch list.
 
+## Astro Consolidation + Codex Workbench (2026-04-15)
+
+- [x] Consolidated shared storefront hydration clusters:
+  - `src/components/astro/ProductCard.astro` now hydrates a single controls island for wishlist + compare + add-to-cart.
+  - `src/components/astro/Header.astro` now hydrates a single utility island for compare, rewards, and cart state.
+- [x] Removed stale ProductCard mouse-tracking tilt JS and replaced inline brand navigation with a native brand link.
+- [x] Tightened global font preload behavior in `src/layouts/Base.astro` so the layout preloads the default sans font instead of unused global Inter/Space Grotesk preloads.
+- [x] Added repo-local Codex MCP config in `.codex/config.toml` for Context7, Sentry, and GitHub.
+- [x] Updated the skill layer:
+  - updated `snusfriend-design-system`
+  - updated `web-quality-audit`
+  - added `astro-island-budget`
+  - added `snusfriend-audit-runbook`
+  - added `trust-sensitive-editorial`
+- [x] Added a shared `src/components/astro/JsonLd.astro` helper and migrated key storefront/info pages away from repeated inline JSON-LD blocks.
+- [x] Moved Pagefind off the default build path.
+  `bun run build` is now Astro-only; use `bun run search:index` or `bun run build:with-pagefind` when a Pagefind index is explicitly needed.
+- [ ] Next Astro pass:
+  - extend the `JsonLd` helper across the remaining long-tail info/editorial pages still using inline schema scripts
+  - replace repeated inline form handlers with shared Astro-first patterns where possible
+  - keep trimming clustered islands from high-traffic storefront chrome
+
 ## Audit-Driven Growth + Trust Stabilization (2026-04-14)
 
 - [x] Added repo-owned SEO script surfaces in `scripts/`:
@@ -21,9 +43,12 @@
   - `src/pages/blog/zyn-vs-nordic-spirit.astro`
   - `src/pages/blog/zyn-flavours-complete-guide.astro`
 - [x] Shipped the first CTR refresh on the six target pages by updating titles/descriptions and strengthening internal linking from the homepage/blog hub.
-- [ ] Add a server-safe `PAGESPEED_API_KEY` for CLI usage.
-  Current key is still HTTP-referrer restricted and fails from the terminal.
-- [ ] Add `GOOGLE_CUSTOM_SEARCH_API_KEY` so `bun run audit:rank` can populate `seo_rank_tracking`.
+- [ ] Fix the PageSpeed CLI auth path.
+  `bun run audit:pagespeed` still fails locally with `API_KEY_HTTP_REFERRER_BLOCKED`, so the current key/restriction setup is not actually CLI-safe yet.
+- [x] Add `GOOGLE_CUSTOM_SEARCH_API_KEY` so `bun run audit:rank` can attempt to populate `seo_rank_tracking`.
+  Key is present locally + in Vercel, but Google still rejects the request because Custom Search JSON API access is blocked for these projects.
+- [ ] Replace Google Programmable Search as the rank-tracking backend.
+  Current `bun run audit:rank` surface is implemented, but Google Custom Search JSON API is closed to new customers and returns `403` even with a fresh project/key/CSE.
 - [x] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.
 - [ ] Continue the second trust pass:
   - deeper ON! product-line cleanup

@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
 import { getCollection } from 'astro:content';
 import { writeProductsJson } from '@/lib/product-json';
@@ -37,7 +38,7 @@ writeProductsJson(products);
   description={`Browse ${products.length}+ nicotine pouches from ZYN, VELO, LOOP, Siberia, and 30+ more brands. Free shipping on orders over €29. Same-day dispatch.`}
   canonical="/products"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
+  <JsonLd data={collectionJsonLd} />
   <Breadcrumb items={[{ label: 'Products' }]} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

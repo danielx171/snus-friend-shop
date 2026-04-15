@@ -2,6 +2,7 @@
 export const prerender = true;
 import { Image, getImage } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import ProductCard from '@/components/astro/ProductCard.astro';
@@ -729,55 +730,58 @@ const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
     </div>
   </section>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "SnusFriend",
-    "legalName": tenant.legalName,
-    "url": "https://snusfriends.com",
-    "logo": "https://snusfriends.com/favicon.png",
-    "description": `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${brands.length || 57} brands.`,
-    "foundingDate": tenant.trust.foundingDate ?? "2024",
-    "email": tenant.supportEmail,
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": tenant.address.streetAddress,
-      "addressLocality": tenant.address.addressLocality,
-      "postalCode": tenant.address.postalCode,
-      "addressCountry": tenant.address.addressCountry
-    },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "email": tenant.supportEmail,
-      "contactType": "customer service"
-    },
-    ...(tenant.trust.corporateRegistration ? { "identifier": tenant.trust.corporateRegistration } : {}),
-    ...(tenant.trust.vatId ? { "taxID": tenant.trust.vatId, "vatID": tenant.trust.vatId } : {}),
-    "sameAs": [
-      tenant.social.instagram,
-      tenant.social.tiktok,
-      tenant.social.x,
-      tenant.social.linkedin,
-      tenant.social.facebook,
-      tenant.social.youtube,
-      tenant.trust.trustpilotUrl,
-    ].filter(Boolean)
-  })} />
-
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "SnusFriend",
-    "url": "https://snusfriends.com",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": "https://snusfriends.com/search?q={search_term_string}"
+  <JsonLd
+    items={[
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "SnusFriend",
+        "legalName": tenant.legalName,
+        "url": "https://snusfriends.com",
+        "logo": "https://snusfriends.com/favicon.png",
+        "description": `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${brands.length || 57} brands.`,
+        "foundingDate": tenant.trust.foundingDate ?? "2024",
+        "email": tenant.supportEmail,
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": tenant.address.streetAddress,
+          "addressLocality": tenant.address.addressLocality,
+          "postalCode": tenant.address.postalCode,
+          "addressCountry": tenant.address.addressCountry
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": tenant.supportEmail,
+          "contactType": "customer service"
+        },
+        ...(tenant.trust.corporateRegistration ? { "identifier": tenant.trust.corporateRegistration } : {}),
+        ...(tenant.trust.vatId ? { "taxID": tenant.trust.vatId, "vatID": tenant.trust.vatId } : {}),
+        "sameAs": [
+          tenant.social.instagram,
+          tenant.social.tiktok,
+          tenant.social.x,
+          tenant.social.linkedin,
+          tenant.social.facebook,
+          tenant.social.youtube,
+          tenant.trust.trustpilotUrl,
+        ].filter(Boolean)
       },
-      "query-input": "required name=search_term_string"
-    }
-  })} />
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "SnusFriend",
+        "url": "https://snusfriends.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://snusfriends.com/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+    ]}
+  />
 
   <!-- Beginner mode: hide strong products from static sections -->
   <script is:inline>

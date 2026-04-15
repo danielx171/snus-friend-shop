@@ -24,3 +24,14 @@
 - Updated `DEPLOYMENT_CHECKLIST.md` and `ROADMAP.md` to reflect the new security requirements and Step 23 completion.
 - Updated Shopify/Nyehandel sync behavior so `shopify-webhook` now processes `orders/paid` strictly, writes Nyehandel order id to Shopify order metafield on success, and adds `NYE_SYNC_FAILED` tag on failed sync attempts via Shopify Admin GraphQL API.
 - Expanded `supabase/functions/nyehandel-proxy/index.ts` allowlist to include `orders` while keeping Bearer token auth against Nyehandel API.
+## 2026-04-15
+
+- Added clearer failure handling in `scripts/rank-audit.ts` for Google Custom Search JSON API `403` responses, including guidance to use a grandfathered project or another SERP provider.
+- Finished the remaining audit-tooling pass in code and docs: `GOOGLE_CUSTOM_SEARCH_API_KEY` is wired locally and in Vercel, rank tracking now reports the Google `403` blocker clearly, and the roadmap/current-priorities docs now reflect that PageSpeed CLI auth is still blocked locally while Google rank tracking remains externally blocked.
+- Consolidated storefront hydration by adding `src/components/react/ProductCardControlsIsland.tsx` and `src/components/react/HeaderUtilityBar.tsx`, then wiring them into `src/components/astro/ProductCard.astro` and `src/components/astro/Header.astro`.
+- Removed the stale ProductCard mouse-tracking tilt script, replaced inline brand navigation with a real brand link, and tightened the shared preload in `src/layouts/Base.astro` to the actual default sans font.
+- Added repo-local Codex MCP config in `.codex/config.toml` for Context7, Sentry, and GitHub, plus updated `ROADMAP.md` and `CURRENT_PRIORITIES.md` to reflect the current measurement blockers accurately.
+- Updated `.agents/skills/snusfriend-design-system/SKILL.md` and `.agents/skills/web-quality-audit/SKILL.md`, and added `.agents/skills/astro-island-budget/SKILL.md`, `.agents/skills/snusfriend-audit-runbook/SKILL.md`, and `.agents/skills/trust-sensitive-editorial/SKILL.md`.
+- Added `src/components/astro/JsonLd.astro` and migrated shared schema usage in `src/components/astro/Breadcrumb.astro`, `src/pages/index.astro`, `src/pages/products/index.astro`, `src/pages/products/[slug].astro`, `src/pages/brands/index.astro`, `src/pages/brands/[slug].astro`, `src/pages/nicotine-pouches.astro`, `src/pages/rewards.astro`, `src/pages/about.astro`, and `src/pages/community.astro`.
+- Updated `package.json` so `bun run build` is Astro-only by default, and added opt-in search indexing via `bun run search:index` and `bun run build:with-pagefind`.
+- Updated `ROADMAP.md` and `CURRENT_PRIORITIES.md` again to reflect the shipped JSON-LD helper pass, the new Pagefind workflow, and the next Astro cleanup targets.

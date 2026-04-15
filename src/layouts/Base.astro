@@ -28,9 +28,8 @@ const googleSiteVerification = (import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION 
   <meta name="generator" content={Astro.generator} />
   <link rel="icon" type="image/png" href={tenant.assets.favicon} />
   <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
-  <!-- Preload LCP fonts: Inter for body, Space Grotesk for hero H1 -->
-  <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin />
+  <!-- Preload the actual default sans family used across the storefront shell -->
+  <link rel="preload" href="/fonts/PlusJakartaSans-Variable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preconnect" href="https://bozdnoctcszbhemdjsek.supabase.co" crossorigin />
   <link rel="alternate" type="application/rss+xml" title="SnusFriend Blog" href="/rss.xml" />
   <link rel="preconnect" href="https://nycdn.nyehandel.se" crossorigin />

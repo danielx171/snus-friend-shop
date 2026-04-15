@@ -18,6 +18,24 @@ Comprehensive quality review based on Google Lighthouse audits. Covers Performan
 3. Provide specific, actionable recommendations
 4. Include code examples for fixes
 
+## SnusFriend repo workflow
+
+When the target is this repository, run the audit in this order:
+
+1. `git status`
+2. `bun run lint`
+3. `bun run check`
+4. `bun run build`
+5. browser verification on homepage, PLP, PDP, and community pages
+6. repo-owned audit scripts such as `bun run audit:pagespeed` and `bun run audit:rank`
+7. compare results against `ROADMAP.md` and `CURRENT_PRIORITIES.md`
+
+Use Codex helpers when available:
+- Context7 for current framework/library guidance
+- Sentry for live production errors
+- GitHub for PR or issue context
+- Playwright/browser tools for visual verification
+
 ## Audit categories
 
 ### Performance (40% of typical issues)
@@ -147,6 +165,7 @@ When performing an audit, structure findings as:
 - [ ] No console errors
 - [ ] HTTPS working
 - [ ] Meta tags present
+- [ ] Audit docs still match reality
 
 ### Weekly review
 - [ ] Check Search Console for issues

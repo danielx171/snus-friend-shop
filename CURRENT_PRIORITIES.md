@@ -1,6 +1,6 @@
 # Current Priorities
 
-Last updated: 2026-04-14
+Last updated: 2026-04-15
 
 ## Site Status: Live
 
@@ -19,7 +19,24 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - **Rewards:** Canonical config at `src/config/rewards.ts` — **10 SnusCoins per €1** (aligned with DB trigger)
 - **Gamification:** The Vault, SnusCoins, Circles, Missions, Badges, Daily Drop, The Board
 - **Version:** 1.6.1
-- **Audit tooling:** Search Console + GA4 read scripts live, new repo-owned sync commands added for GSC / PageSpeed / rank tracking
+- **Audit tooling:** Search Console + GA4 read scripts live; PageSpeed CLI is implemented but still blocked locally by `API_KEY_HTTP_REFERRER_BLOCKED`; rank tracking is implemented but blocked by Google Custom Search JSON API access
+
+## Today’s Setup Pass
+
+- [x] ProductCard controls consolidated into one `client:visible` island and stale tilt JS removed.
+- [x] Header compare/rewards/cart cluster consolidated into one `client:idle` island.
+- [x] Base layout font preload corrected to the actual default sans family.
+- [x] Repo-local Codex MCP config added for Context7, Sentry, and GitHub in `.codex/config.toml`.
+- [x] Shared `JsonLd` helper added and wired into key storefront/info pages; `astro check` hints dropped from 252 to 235.
+- [x] Pagefind moved off the default build; use `bun run search:index` or `bun run build:with-pagefind` only when static search artifacts are needed.
+- [x] Skills updated/created for future audits and Astro-first polish:
+  - `snusfriend-design-system`
+  - `web-quality-audit`
+  - `astro-island-budget`
+  - `snusfriend-audit-runbook`
+  - `trust-sensitive-editorial`
+- [ ] Still blocked: PageSpeed CLI auth and Google rank backend.
+- [ ] Next implementation targets: extend `JsonLd` across remaining long-tail pages, replace repeated inline form handlers, further storefront island consolidation.
 
 ## Remaining
 
@@ -41,11 +58,13 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 - [ ] Klaviyo wiring (5 template IDs exist; needs Klaviyo UI setup + events from `create-nyehandel-checkout`)
 - [ ] Trustpilot business profile + footer widget (20 min account creation)
 - [ ] Cart verification via Codex browser test (v4 BroadcastChannel sync deployed)
-- [ ] Full-tool audit follow-up: replace the referrer-restricted `PAGESPEED_API_KEY` and add `GOOGLE_CUSTOM_SEARCH_API_KEY` so PageSpeed sync + rank tracking can run end-to-end
+- [ ] Full-tool audit follow-up: switch rank tracking away from Google Custom Search JSON API (or use a grandfathered project) so `seo_rank_tracking` can run end-to-end
 
 ### MEDIUM
 
 - [ ] Homepage LCP optimization (82 → 90+, LCP ~4s → <2.5s). Profile element, defer non-critical islands.
+- [ ] Extend the shared JSON-LD helper across remaining long-tail pages and blog/info templates
+- [ ] Decide whether the `pagefind` dependency should stay at all now that indexing is opt-in and search remains JSON-driven
 - [ ] Monitor the refreshed CTR pages in Search Console for 14 days and iterate on snippets/internal links based on impressions + CTR.
 - [ ] Brand page real logos (still placeholder for brands without `logoUrl` — monogram tile is the fallback)
 - [ ] `products.json` aggressive slim (236KB → ≤150KB target; would need gzip or dropping more fields)

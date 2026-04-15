@@ -3,6 +3,7 @@ export const prerender = true;
 import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import { getCollection } from 'astro:content';
 import { brandColors, defaultBrandColor } from '@/data/brand-colors';
@@ -84,7 +85,7 @@ const faqs = brandFaqs[brand.id];
   canonical={`/brands/${brand.id}`}
 >
   {faqs && faqs.length > 0 && (
-    <script type="application/ld+json" set:html={JSON.stringify({
+    <JsonLd data={{
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": faqs.map(f => ({
@@ -92,9 +93,9 @@ const faqs = brandFaqs[brand.id];
         "name": f.question,
         "acceptedAnswer": { "@type": "Answer", "text": f.answer },
       })),
-    })} />
+    }} />
   )}
-  <script type="application/ld+json" set:html={JSON.stringify({
+  <JsonLd data={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": `${b.name} Nicotine Pouches`,
@@ -106,8 +107,8 @@ const faqs = brandFaqs[brand.id];
       "name": "SnusFriend",
       "url": "https://snusfriends.com"
     }
-  })} />
-  <script type="application/ld+json" set:html={JSON.stringify({
+  }} />
+  <JsonLd data={{
     "@context": "https://schema.org",
     "@type": "Brand",
     "name": b.name,
@@ -115,7 +116,7 @@ const faqs = brandFaqs[brand.id];
     "description": metaDescription,
     "url": `https://snusfriends.com/brands/${brand.id}`,
     ...(b.manufacturer && { "manufacturer": { "@type": "Organization", "name": b.manufacturer } })
-  })} />
+  }} />
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
     <Breadcrumb items={[
