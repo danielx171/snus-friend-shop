@@ -7,6 +7,7 @@ import JsonLd from '@/components/astro/JsonLd.astro';
 
 const title = 'Discount Codes & Deals';
 const description = 'Find active SnusFriend discount codes, learn how to use them, and sign up for exclusive deals on nicotine pouches. New subscriber codes available.';
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
 
 const faqJsonLd = {
     "@context": "https://schema.org",
@@ -100,7 +101,15 @@ const faqJsonLd = {
           <p class="text-muted-foreground mb-6">
             Sign up for the SnusFriend newsletter and we'll send you an exclusive welcome code. No spam — just deals, new arrivals, and the occasional flavour recommendation.
           </p>
-          <form class="mx-auto flex max-w-md flex-col gap-3 sm:flex-row" data-newsletter-form>
+          <form
+            class="mx-auto flex max-w-md flex-col gap-3 sm:flex-row"
+            data-waitlist-form
+            data-function-base={supabaseUrl}
+            data-waitlist-source="deals-newsletter"
+            data-success-message="You're in! Check your inbox for your welcome code."
+            data-message-class="mt-3 text-sm"
+            data-submitting-text="Sending..."
+          >
             <input
               type="email"
               name="email"
@@ -115,6 +124,7 @@ const faqJsonLd = {
               Get My Code
             </button>
           </form>
+          <p data-waitlist-message class="mt-3 hidden text-sm" aria-live="polite" aria-atomic="true"></p>
           <p class="mt-3 text-xs text-muted-foreground">
             We send 1–2 emails per month. Unsubscribe anytime. See our <a href="/privacy" class="underline hover:text-foreground">privacy policy</a>.
           </p>
