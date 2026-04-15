@@ -10,7 +10,7 @@ declare const Deno: {
 /* ------------------------------------------------------------------ */
 
 // @ts-expect-error — Deno types: Deno file import
-import { corsHeaders } from "../_shared/cors.ts";
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 /** In-memory cache — avoids hitting Nyehandel on every page load */
 let cachedMethods: string[] = [];
@@ -21,7 +21,11 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function jsonResponse(body: unknown, status = 200): Response {
+function jsonResponse(
+  body: unknown,
+  corsHeaders: Record<string, string>,
+  status = 200,
+): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -33,11 +37,13 @@ function jsonResponse(body: unknown, status = 200): Response {
 /* ------------------------------------------------------------------ */
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req.headers.get("origin"));
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
   if (req.method !== "GET") {
-    return jsonResponse({ error: "method_not_allowed" }, 405);
+    return jsonResponse({ error: "method_not_allowed" }, corsHeaders, 405);
   }
 
   /* ---------- env ---------- */
@@ -47,13 +53,13 @@ Deno.serve(async (req) => {
     Deno.env.get("NYEHANDEL_API_URL") || "https://api.nyehandel.se/api/v2";
 
   if (!nyehandelToken) {
-    return jsonResponse({ error: "missing_nyehandel_token" }, 500);
+    return jsonResponse({ error: "missing_nyehandel_token" }, corsHeaders, 500);
   }
 
   /* ---------- cache check ---------- */
   const now = Date.now();
   if (cachedMethods.length > 0 && now - cachedAt < CACHE_TTL_MS) {
-    return jsonResponse({ methods: cachedMethods });
+    return jsonResponse({ methods: cachedMethods }, corsHeaders);
   }
 
   /* ---------- fetch from Nyehandel ---------- */
@@ -70,6 +76,7 @@ Deno.serve(async (req) => {
     if (!response.ok) {
       return jsonResponse(
         { error: "nyehandel_shipping_methods_failed", status: response.status },
+        corsHeaders,
         502,
       );
     }
@@ -82,10 +89,11 @@ Deno.serve(async (req) => {
     cachedMethods = names;
     cachedAt = Date.now();
 
-    return jsonResponse({ methods: names });
+    return jsonResponse({ methods: names }, corsHeaders);
   } catch (err) {
     return jsonResponse(
       { error: "nyehandel_network_error", details: String(err) },
+      corsHeaders,
       502,
     );
   }

@@ -1,9 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // @ts-expect-error — Deno types: Deno file import
-import { corsHeaders } from "../_shared/cors.ts";
-
-const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 const PRIZE_DISPLAY: Record<string, { icon: string; title: string; description: string; type: string }> = {
   points_5:      { icon: '\u{1FA99}', title: '5 SnusPoints',       description: 'Added to your balance!',                          type: 'points' },
@@ -36,6 +34,9 @@ function weightedRandomPick(weights: Record<string, number>): string {
 }
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req.headers.get('origin'));
+  const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
+
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }

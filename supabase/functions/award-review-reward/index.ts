@@ -6,9 +6,7 @@ declare const Deno: {
 // @ts-expect-error — Deno URL import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // @ts-expect-error — Deno relative .ts import
-import { corsHeaders } from "../_shared/cors.ts";
-
-const JSON_HEADERS = { ...corsHeaders, "Content-Type": "application/json" };
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 /**
  * Award the 50-SnusCoin one-time-per-product review reward.
@@ -29,6 +27,9 @@ const JSON_HEADERS = { ...corsHeaders, "Content-Type": "application/json" };
  *   worse: the ledger's whole point is to block duplicate awards.
  */
 Deno.serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req.headers.get("origin"));
+  const JSON_HEADERS = { ...corsHeaders, "Content-Type": "application/json" };
+
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "method_not_allowed" }), {

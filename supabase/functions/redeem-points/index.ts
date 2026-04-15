@@ -1,9 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // @ts-expect-error — Deno types: Deno file import
-import { corsHeaders } from "../_shared/cors.ts";
-
-const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 const REWARDS: Record<string, { points: number; value: number; label: string; maxRedemptions?: number }> = {
   discount_5:            { points: 200, value: 5,  label: '€5 off' },
@@ -14,6 +12,9 @@ const REWARDS: Record<string, { points: number; value: number; label: string; ma
 };
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req.headers.get('origin'));
+  const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
+
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }

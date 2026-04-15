@@ -13,13 +13,17 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 /* ------------------------------------------------------------------ */
 
 // @ts-expect-error — Deno types: Deno file import
-import { corsHeaders } from "../_shared/cors.ts";
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function jsonResponse(body: unknown, status = 200): Response {
+function jsonResponse(
+  body: unknown,
+  corsHeaders: Record<string, string>,
+  status = 200,
+): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -34,11 +38,13 @@ function jsonResponse(body: unknown, status = 200): Response {
 /* ------------------------------------------------------------------ */
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req.headers.get("origin"));
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
   if (req.method !== "POST") {
-    return jsonResponse({ error: "method_not_allowed" }, 405);
+    return jsonResponse({ error: "method_not_allowed" }, corsHeaders, 405);
   }
 
   /* ---------- env ---------- */
@@ -46,7 +52,7 @@ Deno.serve(async (req) => {
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
   if (!supabaseUrl || !serviceRoleKey) {
-    return jsonResponse({ error: "missing_supabase_env" }, 500);
+    return jsonResponse({ error: "missing_supabase_env" }, corsHeaders, 500);
   }
 
   /* ---------- parse body ---------- */
@@ -54,17 +60,17 @@ Deno.serve(async (req) => {
   try {
     body = (await req.json()) as { orderId?: string; email?: string };
   } catch {
-    return jsonResponse({ error: "invalid_json" }, 400);
+    return jsonResponse({ error: "invalid_json" }, corsHeaders, 400);
   }
 
   const orderId = typeof body.orderId === "string" ? body.orderId.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
 
   if (!orderId) {
-    return jsonResponse({ error: "orderId_required" }, 400);
+    return jsonResponse({ error: "orderId_required" }, corsHeaders, 400);
   }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return jsonResponse({ error: "email_required" }, 400);
+    return jsonResponse({ error: "email_required" }, corsHeaders, 400);
   }
 
   /* ---------- fetch order (service role — bypasses RLS) ---------- */
@@ -79,11 +85,11 @@ Deno.serve(async (req) => {
     .maybeSingle();
 
   if (fetchError) {
-    return jsonResponse({ error: "order_lookup_failed" }, 500);
+    return jsonResponse({ error: "order_lookup_failed" }, corsHeaders, 500);
   }
 
   if (!order) {
-    return jsonResponse({ error: "order_not_found" }, 404);
+    return jsonResponse({ error: "order_not_found" }, corsHeaders, 404);
   }
 
   /* ---------- ownership check — email must match ---------- */
@@ -93,7 +99,7 @@ Deno.serve(async (req) => {
 
   if (orderEmail !== email) {
     // Return same 404 as "not found" — don't leak that the order exists
-    return jsonResponse({ error: "order_not_found" }, 404);
+    return jsonResponse({ error: "order_not_found" }, corsHeaders, 404);
   }
 
   /* ---------- return display-safe fields only ---------- */
@@ -111,5 +117,5 @@ Deno.serve(async (req) => {
       tracking_url: order.tracking_url ?? null,
       shipping_method: order.shipping_method ?? null,
     },
-  });
+  }, corsHeaders);
 });
