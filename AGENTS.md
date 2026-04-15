@@ -195,5 +195,7 @@ Operating guide for agentic coding tools in `snus-friend-shop`.
 
 ## MCP Safety Stance
 - Read-only MCP tools (file readers, doc fetchers) are acceptable.
-- Do not authorize MCP servers with write access to Supabase, the filesystem, or any production endpoint.
+- Do not authorize MCP servers with write access to Supabase, production endpoints, or broad filesystem paths by default.
+- Write-capable filesystem MCP servers may be enabled only with explicit approval for narrow, non-production directories with clear ownership and no secrets (for example an Obsidian vault, docs-only folder, or scratch workspace).
+- Never grant write-capable filesystem MCP access to the entire home directory, secret/config locations, or mixed repo + personal-note surfaces unless explicitly approved for a specific task.
 - Do not use MCP to execute secrets, run migrations, or deploy edge functions — those actions go through the established CLI workflow.
