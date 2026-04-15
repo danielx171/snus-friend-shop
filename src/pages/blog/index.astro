@@ -2,6 +2,7 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
 import { blogArticles, getReadTime } from '@/data/blog-registry';
@@ -93,6 +94,18 @@ const blogJsonLd = {
     })),
   },
 };
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What are the side effects of nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Common side effects include a tingling or burning sensation under the lip, hiccups, and mild nausea — especially for new users or when using a higher strength than your tolerance allows. These effects are typically temporary and subside as you adjust." } },
+    { "@type": "Question", "name": "Are nicotine pouches legal in Europe?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches are legal to buy and use in most European countries, including Sweden, Germany, the UK, Spain, Italy, and Poland. However, France banned commercial sales in February 2025, the Netherlands introduced a retail ban the same month. The EU's Tobacco Products Directive 3 (TPD3), expected in draft form by mid-2026, will introduce harmonised regulation across member states." } },
+    { "@type": "Question", "name": "How do I switch from cigarettes to nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Start by matching your cigarette intake to an appropriate pouch strength: light smokers (under 10 per day) should try 4-6 mg pouches, moderate smokers (10-20 per day) should start at 6-10 mg. Use a pouch whenever you feel a craving. Most people adjust within one to two weeks." } },
+    { "@type": "Question", "name": "Which nicotine pouch flavour is best for beginners?", "acceptedAnswer": { "@type": "Answer", "text": "Mint is the most popular starting flavour — it accounts for an estimated 45-60% of all nicotine pouch sales and offers a familiar, refreshing taste. Spearmint and peppermint are milder options, while menthol provides more cooling. If you dislike mint, citrus flavours are the next most popular choice for newcomers." } },
+    { "@type": "Question", "name": "How should I store nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Store nicotine pouches in a cool, dry place away from direct sunlight. An unopened can typically stays fresh for 12 to 14 months from the production date. Once opened, the pouches are best used within a week or two, as they will gradually dry out and lose flavour intensity." } }
+  ]
+};
 ---
 
 <Shop
@@ -100,7 +113,7 @@ const blogJsonLd = {
   description={`Guides, reviews, and news about nicotine pouches from ${tenant.name}. Learn about strengths, flavours, brands, and more.`}
   canonical="/blog"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(blogJsonLd)} />
+  <JsonLd data={blogJsonLd} />
   <section class="bg-background text-foreground">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Breadcrumb items={[{ label: 'Blog' }]} />
@@ -225,15 +238,5 @@ const blogJsonLd = {
       </div>
     </div>
   </section>
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "What are the side effects of nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Common side effects include a tingling or burning sensation under the lip, hiccups, and mild nausea — especially for new users or when using a higher strength than your tolerance allows. These effects are typically temporary and subside as you adjust." } },
-      { "@type": "Question", "name": "Are nicotine pouches legal in Europe?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches are legal to buy and use in most European countries, including Sweden, Germany, the UK, Spain, Italy, and Poland. However, France banned commercial sales in February 2025, the Netherlands introduced a retail ban the same month. The EU's Tobacco Products Directive 3 (TPD3), expected in draft form by mid-2026, will introduce harmonised regulation across member states." } },
-      { "@type": "Question", "name": "How do I switch from cigarettes to nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Start by matching your cigarette intake to an appropriate pouch strength: light smokers (under 10 per day) should try 4-6 mg pouches, moderate smokers (10-20 per day) should start at 6-10 mg. Use a pouch whenever you feel a craving. Most people adjust within one to two weeks." } },
-      { "@type": "Question", "name": "Which nicotine pouch flavour is best for beginners?", "acceptedAnswer": { "@type": "Answer", "text": "Mint is the most popular starting flavour — it accounts for an estimated 45-60% of all nicotine pouch sales and offers a familiar, refreshing taste. Spearmint and peppermint are milder options, while menthol provides more cooling. If you dislike mint, citrus flavours are the next most popular choice for newcomers." } },
-      { "@type": "Question", "name": "How should I store nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "Store nicotine pouches in a cool, dry place away from direct sunlight. An unopened can typically stays fresh for 12 to 14 months from the production date. Once opened, the pouches are best used within a week or two, as they will gradually dry out and lose flavour intensity." } }
-    ]
-  })} />
+  <JsonLd data={faqJsonLd} />
 </Shop>
