@@ -2,13 +2,15 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // @ts-expect-error — Deno types: Deno file import
 import { getCorsHeaders } from "../_shared/cors.ts";
+// @ts-expect-error — Deno types: Deno file import
+import { loyaltyCurrencyName } from "../_shared/site-config.ts";
 
 const PRIZE_DISPLAY: Record<string, { icon: string; title: string; description: string; type: string }> = {
-  points_5:      { icon: '\u{1FA99}', title: '5 SnusPoints',       description: 'Added to your balance!',                          type: 'points' },
-  points_10:     { icon: '\u{1FA99}', title: '10 SnusPoints',      description: 'Nice! Points added.',                              type: 'points' },
-  points_25:     { icon: '\u{1F48E}', title: '25 SnusPoints',      description: 'Great spin! Points added.',                        type: 'points' },
-  points_5b:     { icon: '\u{1FA99}', title: '5 SnusPoints',       description: 'Added to your balance!',                          type: 'points' },
-  points_50:     { icon: '\u{1F4B0}', title: '50 SnusPoints!',     description: 'Big win!',                                        type: 'points' },
+  points_5:      { icon: '\u{1FA99}', title: `5 ${loyaltyCurrencyName}`,  description: 'Added to your balance!',                          type: 'points' },
+  points_10:     { icon: '\u{1FA99}', title: `10 ${loyaltyCurrencyName}`, description: 'Nice! Points added.',                              type: 'points' },
+  points_25:     { icon: '\u{1F48E}', title: `25 ${loyaltyCurrencyName}`, description: 'Great spin! Points added.',                        type: 'points' },
+  points_5b:     { icon: '\u{1FA99}', title: `5 ${loyaltyCurrencyName}`,  description: 'Added to your balance!',                          type: 'points' },
+  points_50:     { icon: '\u{1F4B0}', title: `50 ${loyaltyCurrencyName}!`, description: 'Big win!',                                       type: 'points' },
   voucher_15pct: { icon: '\u{1F3F7}\uFE0F', title: '15% Off Voucher',    description: 'Valid 30 days on any order.',                      type: 'voucher' },
   free_can:      { icon: '\u{1F381}', title: 'Free Can!',          description: 'A free STNG Berry Seltzer added to your rewards.', type: 'voucher' },
   free_month:    { icon: '\u{1F451}', title: 'FREE MONTH!',        description: 'Contact us to redeem your free month.',            type: 'jackpot' },

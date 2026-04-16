@@ -12,9 +12,11 @@ import {
 } from '@/stores/cart';
 import { packSizeMultipliers, type PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
+import { storefrontHosts } from '@/config/site';
 import { actions } from 'astro:actions';
 import { trackCheckoutStarted } from '@/lib/analytics';
 import { apiFetch } from '@/lib/api';
+import { getStorageKey } from '@/lib/tenant-storage';
 import { getShippingMethodsForCountry } from '@/lib/shipping';
 import ReductionAlert from './ReductionAlert';
 
@@ -54,6 +56,8 @@ const SHIPPING_COUNTRIES = [
   { code: 'GB', name: 'United Kingdom' },
 ] as const;
 
+const BUY_NOW_KEY = getStorageKey('buyNowKey');
+
 function packLabel(packSize: PackSize): string {
   const qty = packSizeMultipliers[packSize];
   return qty === 1 ? '1 can' : `${qty} cans`;
@@ -74,7 +78,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
     const params = new URLSearchParams(window.location.search);
     if (params.get('buyNow') !== '1') return false;
     try {
-      const raw = sessionStorage.getItem('snusfriend_buynow');
+      const raw = sessionStorage.getItem(BUY_NOW_KEY);
       if (!raw) return false;
       const item = JSON.parse(raw) as CartItem;
       setBuyNowItem(item);
@@ -238,7 +242,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
     setError('');
 
     // PostHog: track checkout_started
-    trackCheckoutStarted({ cartTotal: cartTotal, itemCount: cartItems.length });
+    trackCheckoutStarted({ cartTotal, itemCount: cartItems.length, currency: tenant.currencyCode });
 
     try {
       const items = cartItems.map((item) => ({
@@ -280,7 +284,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
 
       if (data?.redirect_url) {
         // Validate redirect URL to prevent open redirect attacks
-        const allowedHosts = ['nyehandel.se', 'www.nyehandel.se', 'snusfriends.com', 'www.snusfriends.com'];
+        const allowedHosts = ['nyehandel.se', 'www.nyehandel.se', ...storefrontHosts];
         try {
           const redirectUrl = new URL(data.redirect_url);
           if (!allowedHosts.some(host => redirectUrl.hostname === host || redirectUrl.hostname.endsWith('.' + host))) {
@@ -294,7 +298,7 @@ export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }
           return;
         }
         clearCart();
-        try { sessionStorage.removeItem('snusfriend_buynow'); } catch {
+        try { sessionStorage.removeItem(BUY_NOW_KEY); } catch {
           // Silently ignore if sessionStorage is unavailable
         }
         window.location.href = data.redirect_url;

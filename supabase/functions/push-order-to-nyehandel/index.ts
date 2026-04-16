@@ -7,6 +7,8 @@ declare const Deno: {
 
 // @ts-expect-error — Deno types: Deno URL import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// @ts-expect-error — Deno types: Deno file import
+import { currencyCode, locale, orderPrefix, siteName } from "../_shared/site-config.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -142,9 +144,9 @@ Deno.serve(async (req) => {
     : [];
 
   const nyehandelPayload = {
-    prefix: "NB",
-    currency_iso: "EUR",
-    locale: "en-gb",
+    prefix: orderPrefix,
+    currency_iso: typeof order.currency === "string" && order.currency.trim().length > 0 ? order.currency : currencyCode,
+    locale,
     delivery_callback_url: deliveryCallbackUrl,
     customer: {
       type: "person",
@@ -162,7 +164,7 @@ Deno.serve(async (req) => {
       name: String(meta.shipping_method ?? "UPS Standard (J229F1)"),
     },
     payment: {
-      name: "NFC Group Payment",
+      name: Deno.env.get("PAYMENT_METHOD_NAME")?.trim() || `${siteName} Payment`,
     },
     items,
   };

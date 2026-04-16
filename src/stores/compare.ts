@@ -1,13 +1,14 @@
 import { persistentAtom } from '@nanostores/persistent';
+import { getStorageKey } from '@/lib/tenant-storage';
 
 const MAX_COMPARE = 4;
 
 /**
- * Persistent compare list — stored in localStorage under `snusfriend_compare`.
+ * Persistent compare list — stored in tenant-scoped localStorage.
  * Caps at 4 products to keep the /compare table readable on mobile.
  */
 export const $compareIds = persistentAtom<string[]>(
-  'snusfriend_compare',
+  getStorageKey('compareKey'),
   [],
   { encode: JSON.stringify, decode: JSON.parse },
 );

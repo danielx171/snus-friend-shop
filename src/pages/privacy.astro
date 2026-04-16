@@ -3,6 +3,10 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+
+const dpaUrlLabel = tenant.dpaUrl
+  .replace(/^https?:\/\//, '')
+  .replace(/\/$/, '');
 ---
 
 <Shop
@@ -24,8 +28,8 @@ import { tenant } from '@/config/tenant';
 
         <h2>1. Data Controller</h2>
         <p>
-          {tenant.name} ("SnusFriend", "we", "us", or "our"), registered in Sweden, is the
-          data controller for personal data collected through the website at {tenant.domain}.
+          {tenant.legalName}, trading as {tenant.name} ("we", "us", or "our"), registered in {tenant.jurisdiction},
+          is the data controller for personal data collected through the website at {tenant.domain}.
           For any questions about this policy, contact us at
           <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.
         </p>
@@ -146,9 +150,9 @@ import { tenant } from '@/config/tenant';
         </p>
         <p>
           If you are not satisfied with our response, you have the right to lodge a complaint
-          with your local Data Protection Authority. In Sweden, this is the
-          Swedish Authority for Privacy Protection (IMY) at
-          <a href="https://www.imy.se" target="_blank" rel="noopener noreferrer">www.imy.se</a>.
+          with your local Data Protection Authority. For the current storefront, the relevant
+          supervisory authority is the {tenant.dpaName} at{' '}
+          <a href={tenant.dpaUrl} target="_blank" rel="noopener noreferrer">{dpaUrlLabel}</a>.
         </p>
       </div>
     </div>

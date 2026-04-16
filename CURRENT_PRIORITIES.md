@@ -50,6 +50,9 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
 
 ## Approved Next Execution Order (2026-04-15)
 
+- [ ] **Preflight 0 — Ship the current stabilization branch**
+      Deploy the cart/analytics cleanup branch first, then smoke production for the live observability state.
+      Success criteria: no live `/_vercel/insights/*` requests, `/_vercel/speed-insights/script.js` still serves, and PostHog records one pageview per real navigation.
 - [ ] **Batch 1 — Cart runtime crash repair**
       Fix the dominant Sentry cart error family first (`SNUSFRIENDS-5/6/7/8` around `cart.BjQjs2P5`) before any broader growth work.
       Scope the fix to `src/stores/cart.ts` and direct cart consumers only, add a regression test, and ship it on its own so the before/after Sentry drop is attributable.
@@ -58,14 +61,31 @@ Live at snusfriends.com. Launch Polish Sprint (Apr 8–12) shipped in full.
       If `$pageview`, `product_viewed`, `add_to_cart`, and `checkout_started` still look implausible, then fix PostHog init/emission and only after that wire the Klaviyo/cart-snapshot identity follow-up.
 - [ ] **Batch 3 — GSC-informed SEO/content follow-through**
       Use a fresh-thread GSC pass to choose the next CTR/indexation opportunities, queue the title/meta/indexing work, and evaluate post-click ROI only after Batch 2 restores trustworthy product analytics.
+- [ ] **Batch 4 — White-label foundation (WL-1 / WL-2)**
+      Start the multi-store platform work only after the stabilization deploy and cart/runtime repair are closed.
+      This batch covers central site/host/origin config, removal of hardcoded SnusFriend domain assumptions in core paths, and edge-function/frontend allowlist handling that can support multiple branded storefront domains.
 
 ### Batch Guardrails
 
+- Do not start white-label cloning until the current stabilization branch has been deployed and smoked in production.
 - Do not touch `src/lib/cart-utils.ts` without explicit permission.
 - Do not mix the cart fix, analytics rewiring, Klaviyo work, and SEO execution into one deploy. Keep the next batches isolated.
 - Do not guess at Nyehandel payment-contract changes; only change `create-nyehandel-checkout` / `nyehandel-webhook` with confirmed vendor behavior or explicit scope.
 - Do not pull William-owned automation or Cowork-owned legal/editorial work into these batches.
 - Do not mix local repo noise (`AGENTS.md`, `.claude/settings.local.json`, screenshots) into product commits.
+
+### White-label Program Outline
+
+- [ ] **WL-1 — Tenant/site foundation**
+      Make `src/config/site.ts` and tenant config the only source of truth for site URL, storefront hosts, and absolute URL generation.
+- [ ] **WL-2 — Core path domain decoupling**
+      Remove hardcoded `snusfriends.com` assumptions from auth redirects, checkout host validation, breadcrumb/share links, and CORS/origin handling.
+- [ ] **WL-3 — Tenant-aware backend + transactional URLs**
+      Add tenant-aware storefront links and brand identity to cart recovery, review request, contact, and order emails before onboarding a second storefront.
+- [ ] **WL-4 — Tenant-aware SEO/canonical/schema**
+      Sweep remaining hardcoded absolute URLs, sitemap/robots behavior, and structured-data origins so each deployment can stand alone on its own domain.
+- [ ] **WL-5 — Two-store proof before self-serve**
+      Prove the architecture with one second branded storefront connected to the same 3PL system before building the dropshipper-facing site creator.
 
 ## Remaining
 

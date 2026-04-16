@@ -7,6 +7,8 @@ declare const Deno: {
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // @ts-expect-error — Deno types: Deno file import
 import { corsHeaders } from "../_shared/cors.ts";
+// @ts-expect-error — Deno types: Deno file import
+import { currencyCode } from "../_shared/site-config.ts";
 
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -122,7 +124,7 @@ Deno.serve(async (req) => {
         shipping_method: "UPS Standard (J229F1)",
         idempotency_key: `sub-${sub.id}-${new Date().toISOString().slice(0, 10)}`,
         display_total: discountedPrice * sub.quantity,
-        display_currency: "EUR",
+        display_currency: currencyCode,
       };
 
       // Send email notification about the upcoming charge instead of auto-ordering
@@ -153,7 +155,7 @@ Deno.serve(async (req) => {
       //   (b) non-idempotent — cron retries or concurrent runs would double-credit
       // The 2× subscription multiplier will be wired into the order trigger
       // when auto-order-from-subscription lands. Until then the PDP Subscribe
-      // block phrases SnusCoin reward as "on each delivery" (see [slug].astro).
+      // block phrases the loyalty reward as "on each delivery" (see [slug].astro).
 
       // Advance next_order_at
       const nextOrder = new Date();

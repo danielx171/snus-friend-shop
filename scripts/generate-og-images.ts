@@ -22,6 +22,7 @@ import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import { createClient } from '@supabase/supabase-js';
 import { brandColors, defaultBrandColor } from '../src/data/brand-colors';
+import { resolveTenantRuntime } from '../src/config/tenant';
 
 const OUT_DIR = resolve(process.cwd(), 'public/og');
 const FONTS_DIR = resolve(process.cwd(), 'public/fonts');
@@ -32,9 +33,13 @@ const FONTS = [
   { name: 'Inter', data: interRegular, weight: 400, style: 'normal' } as const,
 ];
 
-const SITE_NAME = 'SnusFriend';
-const SITE_TAG = 'Europe\u2019s #1 Nicotine Pouch Shop';
-const FOREST = '#0F6E56';
+const runtime = resolveTenantRuntime(process.env);
+const SITE_NAME = runtime.tenant.name;
+const SITE_TAG = runtime.tenant.tagline;
+const SITE_MARK = SITE_NAME.trim().charAt(0).toUpperCase() || 'S';
+const LOYALTY_CURRENCY_NAME = runtime.tenant.loyaltyCurrencyName;
+const PRIMARY = `hsl(${runtime.tenant.theme.primary})`;
+const PRIMARY_GLOW = `hsl(${runtime.tenant.theme.primary} / 0.25)`;
 const DARK = '#0B1F16';
 
 function typeFilter() {
@@ -76,7 +81,7 @@ function e(type: string, props: Record<string, unknown>, ...children: unknown[])
   return { type, props: { ...props, children: children.length === 1 ? children[0] : children } } as SatoriEl;
 }
 
-/** Common frame: dark forest background, ambient glow, SnusFriend wordmark top-right. */
+/** Common frame: dark background, ambient glow, and tenant wordmark top-right. */
 function frame(accent: string, body: SatoriEl) {
   return e('div', {
     style: {
@@ -99,7 +104,7 @@ function frame(accent: string, body: SatoriEl) {
       style: {
         position: 'absolute', top: -80, right: -80, width: 400, height: 400,
         borderRadius: '50%',
-        background: `radial-gradient(circle, ${FOREST}40 0%, transparent 60%)`,
+        background: `radial-gradient(circle, ${PRIMARY_GLOW} 0%, transparent 60%)`,
         display: 'flex',
       },
     }),
@@ -111,24 +116,24 @@ function frame(accent: string, body: SatoriEl) {
     },
       e('div', {
         style: {
-          width: 36, height: 36, borderRadius: 10, background: FOREST,
+          width: 36, height: 36, borderRadius: 10, background: PRIMARY,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: 'white', fontWeight: 800, fontSize: 20,
         },
-      }, 'S'),
+      }, SITE_MARK),
       e('div', { style: { fontWeight: 800, fontSize: 22, letterSpacing: -0.5 } }, SITE_NAME),
     ),
     // Body
     e('div', {
       style: {
-        position: 'relative', zIndex: 10, flex: 1, padding: 72,
+        position: 'relative', flex: 1, padding: 72,
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
       },
     }, body),
     // Bottom accent bar
     e('div', {
       style: {
-        height: 8, background: `linear-gradient(90deg, ${FOREST} 0%, ${accent} 100%)`,
+        height: 8, background: `linear-gradient(90deg, ${PRIMARY} 0%, ${accent} 100%)`,
         display: 'flex',
       },
     }),
@@ -204,12 +209,12 @@ function gamificationTemplate(opts: { title: string; stat: string; accent: strin
 }
 
 function infoTemplate(opts: { title: string; subtitle?: string }) {
-  return frame(FOREST,
+  return frame(PRIMARY,
     e('div', { style: { display: 'flex', flexDirection: 'column', gap: 16 } },
       e('div', {
         style: {
           fontSize: 16, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 3,
-          color: FOREST,
+          color: PRIMARY,
         },
       }, 'Info'),
       e('div', { style: { fontSize: 78, fontWeight: 800, lineHeight: 1.1, letterSpacing: -1.5 } }, opts.title),
@@ -287,7 +292,7 @@ async function main() {
   // GAMIFICATION
   if (!filter || filter === 'gamification') {
     const pages: { slug: string; title: string; stat: string; accent: string }[] = [
-      { slug: 'rewards', title: 'The Vault', stat: 'Earn SnusCoins on every order', accent: '#fbbf24' },
+      { slug: 'rewards', title: 'The Vault', stat: `Earn ${LOYALTY_CURRENCY_NAME} on every order`, accent: '#fbbf24' },
       { slug: 'community', title: 'The Circle', stat: 'Real reviews. Real flavor notes.', accent: '#10b981' },
       { slug: 'membership', title: 'Membership', stat: 'Climb tiers. Unlock perks.', accent: '#a855f7' },
       { slug: 'daily-drop', title: 'Daily Drop', stat: 'New rewards every 24 hours', accent: '#ec4899' },
@@ -339,7 +344,7 @@ async function main() {
       const titleMatch = src.match(/(?:^const\s+title\s*=\s*|title=)['"`]([^'"`\n]+)['"`]/m);
       const categoryMatch = src.match(/category=['"]([^'"]+)['"]/);
       const title = titleMatch?.[1]?.replace(/ \| SnusFriend.*/, '') ?? slug.replace(/-/g, ' ');
-      const cat = categoryMap[categoryMatch?.[1] ?? 'Guide'] ?? { accent: FOREST, label: 'Guide' };
+      const cat = categoryMap[categoryMatch?.[1] ?? 'Guide'] ?? { accent: PRIMARY, label: 'Guide' };
       const out = resolve(OUT_DIR, `article-${slug}.png`);
       await render(articleTemplate({ title, category: cat.label, accent: cat.accent }), out);
       ok++;

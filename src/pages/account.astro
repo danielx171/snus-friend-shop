@@ -8,6 +8,7 @@ import AvatarSelectorIsland from '@/components/react/AvatarSelectorIsland';
 import AchievementGridIsland from '@/components/react/AchievementGridIsland';
 import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
+import { buildAbsoluteUrl } from '@/config/site';
 import { rewards } from '@/config/rewards';
 
 // Auth check
@@ -57,6 +58,8 @@ if (tab === 'orders') {
     .eq('referral_code_id', referralCodeRow?.id ?? '00000000-0000-0000-0000-000000000000');
   referralCount = count ?? 0;
 }
+
+const referralUrl = referralCode ? buildAbsoluteUrl(`/register?ref=${referralCode}`) : null;
 
 // User metadata + nickname
 import { generateNickname } from '@/lib/nickname';
@@ -440,7 +443,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
             <div class="rounded-xl border border-primary/20 bg-primary/5 p-6">
               <h3 class="text-sm font-semibold mb-3">Refer a Friend</h3>
               <p class="text-sm text-muted-foreground mb-4">
-                Share your code with friends. They get {rewards.referralFriend} SnusCoins, you get {rewards.referralSelf} — everyone wins.
+                Share your code with friends. They get {rewards.referralFriend} {tenant.loyaltyCurrencyName}, you get {rewards.referralSelf} — everyone wins.
               </p>
               <div class="flex items-center gap-2 mb-4">
                 <div class="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 font-mono text-sm text-foreground select-all">
@@ -461,7 +464,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
               </div>
               <div class="flex gap-2 mt-4">
                 <a
-                  href={`https://wa.me/?text=${encodeURIComponent(`Join SnusFriend and get ${rewards.referralFriend} bonus points! Use my code: ${referralCode} — https://snusfriends.com/register?ref=${referralCode}`)}`}
+                  href={`https://wa.me/?text=${encodeURIComponent(`Join ${tenant.name} and get ${rewards.referralFriend} bonus points! Use my code: ${referralCode} — ${referralUrl}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-center text-xs font-medium text-foreground hover:bg-muted transition"
@@ -469,7 +472,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
                   WhatsApp
                 </a>
                 <a
-                  href={`mailto:?subject=Join SnusFriend&body=${encodeURIComponent(`Hey! Join SnusFriend and get ${rewards.referralFriend} bonus points. Use my referral code: ${referralCode}\n\nhttps://snusfriends.com/register?ref=${referralCode}`)}`}
+                  href={`mailto:?subject=Join ${tenant.name}&body=${encodeURIComponent(`Hey! Join ${tenant.name} and get ${rewards.referralFriend} bonus points. Use my referral code: ${referralCode}\n\n${referralUrl}`)}`}
                   class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-center text-xs font-medium text-foreground hover:bg-muted transition"
                 >
                   Email
@@ -575,7 +578,13 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
 </dialog>
 
 <!-- Progressive enhancement: client-side interactions -->
-<script>
+<script
+  is:inline
+  define:vars={{
+    cartKey: tenant.storage.cartKey,
+    publicSupabaseUrl: import.meta.env.PUBLIC_SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL ?? '',
+  }}
+>
   // Copy referral code
   const copyBtn = document.getElementById('copy-referral-btn');
   if (copyBtn) {
@@ -596,8 +605,10 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
   const form = document.getElementById('change-password-form');
   if (form) {
     form.addEventListener('submit', (e) => {
-      const pw = (document.getElementById('newPassword') as HTMLInputElement)?.value;
-      const cpw = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
+      const pwInput = document.getElementById('newPassword');
+      const confirmInput = document.getElementById('confirmPassword');
+      const pw = pwInput && 'value' in pwInput ? pwInput.value : '';
+      const cpw = confirmInput && 'value' in confirmInput ? confirmInput.value : '';
       const msg = document.getElementById('pw-mismatch');
       if (pw !== cpw) {
         e.preventDefault();
@@ -609,46 +620,48 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
   }
 
   // Cancel order dialog
-  const dialog = document.getElementById('cancel-dialog') as HTMLDialogElement | null;
+  const dialog = document.getElementById('cancel-dialog');
   const closeBtn = document.getElementById('cancel-dialog-close');
   const confirmBtn = document.getElementById('cancel-dialog-confirm');
   const titleEl = document.getElementById('cancel-dialog-title');
   const errorEl = document.getElementById('cancel-error');
   const successEl = document.getElementById('cancel-success');
   const actionsEl = document.getElementById('cancel-dialog-actions');
-  const reasonInput = document.getElementById('cancel-reason') as HTMLInputElement | null;
+  const reasonInput = document.getElementById('cancel-reason');
   let currentOrderId = '';
 
   document.querySelectorAll('[data-cancel-order]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const orderId = (btn as HTMLElement).dataset.cancelOrder ?? '';
-      const orderDisplay = (btn as HTMLElement).dataset.orderDisplay ?? '';
-      const orderAmount = (btn as HTMLElement).dataset.orderAmount ?? '';
+      const orderId = btn.dataset.cancelOrder ?? '';
+      const orderDisplay = btn.dataset.orderDisplay ?? '';
       currentOrderId = orderId;
       if (titleEl) titleEl.textContent = `Cancel Order #${orderDisplay}?`;
       if (errorEl) { errorEl.classList.add('hidden'); errorEl.textContent = ''; }
       if (successEl) successEl.classList.add('hidden');
       if (actionsEl) actionsEl.classList.remove('hidden');
-      if (reasonInput) reasonInput.value = '';
-      if (confirmBtn) { confirmBtn.textContent = 'Yes, Cancel My Order'; (confirmBtn as HTMLButtonElement).disabled = false; }
-      dialog?.showModal();
+      if (reasonInput && 'value' in reasonInput) reasonInput.value = '';
+      if (confirmBtn) {
+        confirmBtn.textContent = 'Yes, Cancel My Order';
+        confirmBtn.disabled = false;
+      }
+      dialog?.showModal?.();
     });
   });
 
-  closeBtn?.addEventListener('click', () => dialog?.close());
-  dialog?.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+  closeBtn?.addEventListener('click', () => dialog?.close?.());
+  dialog?.addEventListener('click', (e) => { if (e.target === dialog) dialog.close?.(); });
 
   confirmBtn?.addEventListener('click', async () => {
     if (!currentOrderId) return;
-    const btn = confirmBtn as HTMLButtonElement;
+    const btn = confirmBtn;
     btn.disabled = true;
     btn.textContent = 'Cancelling…';
     if (errorEl) { errorEl.classList.add('hidden'); errorEl.textContent = ''; }
 
     try {
-      const supabaseUrl = (document.querySelector('meta[name="supabase-url"]') as HTMLMetaElement)?.content
-        || import.meta.env.PUBLIC_SUPABASE_URL;
-      const token = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith('sb-access-token='))?.split('=')[1] ?? '';
+      const supabaseMeta = document.querySelector('meta[name="supabase-url"]');
+      const supabaseUrl = supabaseMeta?.content || publicSupabaseUrl;
+      const token = document.cookie.split(';').map((c) => c.trim()).find((c) => c.startsWith('sb-access-token='))?.split('=')[1] ?? '';
 
       const res = await fetch(`${supabaseUrl}/functions/v1/cancel-nyehandel-order`, {
         method: 'POST',
@@ -658,7 +671,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
         },
         body: JSON.stringify({
           order_id: currentOrderId,
-          reason: reasonInput?.value || undefined,
+          reason: reasonInput && 'value' in reasonInput ? reasonInput.value || undefined : undefined,
         }),
       });
 
@@ -687,13 +700,12 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
   document.querySelectorAll('[data-reorder]').forEach((btn) => {
     btn.addEventListener('click', () => {
       try {
-        const raw = (btn as HTMLElement).dataset.reorder;
+        const raw = btn.dataset.reorder;
         if (!raw) return;
         const snapshot = typeof raw === 'string' ? JSON.parse(raw) : raw;
         if (!Array.isArray(snapshot) || snapshot.length === 0) return;
 
         // Read existing cart from localStorage
-        const cartKey = 'snusfriend_cart';
         const existing = JSON.parse(localStorage.getItem(cartKey) || '[]');
 
         for (const item of snapshot) {
@@ -724,7 +736,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
               descriptionKey: '',
               image: '',
               ratings: 0,
-              badgeKeys: [] as string[],
+              badgeKeys: [],
               prices: { [packSize]: price, pack1: price, pack3: 0, pack5: 0, pack10: 0, pack30: 0 },
               manufacturer: '',
               stock: 99,
@@ -735,7 +747,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
 
           // Check if already in cart
           const existingIdx = existing.findIndex(
-            (c: any) => c.product?.id === slug && c.packSize === packSize
+            (c) => c.product?.id === slug && c.packSize === packSize
           );
           if (existingIdx >= 0) {
             existing[existingIdx].quantity += qty;
@@ -755,8 +767,8 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
   // Subscription management buttons
   document.querySelectorAll('[data-sub-action]').forEach((btn) => {
     btn.addEventListener('click', async () => {
-      const action = (btn as HTMLElement).dataset.subAction;
-      const subId = (btn as HTMLElement).dataset.subId;
+      const action = btn.dataset.subAction;
+      const subId = btn.dataset.subId;
       if (!action || !subId) return;
 
       const confirmed = action === 'cancel'
@@ -764,11 +776,11 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
         : true;
       if (!confirmed) return;
 
-      (btn as HTMLButtonElement).disabled = true;
-      (btn as HTMLButtonElement).textContent = action === 'pause' ? 'Pausing...' : action === 'resume' ? 'Resuming...' : 'Cancelling...';
+      btn.disabled = true;
+      btn.textContent = action === 'pause' ? 'Pausing...' : action === 'resume' ? 'Resuming...' : 'Cancelling...';
 
       try {
-        const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+        const supabaseUrl = publicSupabaseUrl;
         const cookies = document.cookie.split(';');
         const authCookies = cookies.filter(c => c.trim().match(/^sb-.*-auth-token/));
         const token = authCookies.length > 0 ? authCookies[0].split('=').slice(1).join('=').trim() : '';
@@ -783,12 +795,12 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
           window.location.reload();
         } else {
           alert('Something went wrong. Please try again.');
-          (btn as HTMLButtonElement).disabled = false;
-          (btn as HTMLButtonElement).textContent = action.charAt(0).toUpperCase() + action.slice(1);
+          btn.disabled = false;
+          btn.textContent = action.charAt(0).toUpperCase() + action.slice(1);
         }
       } catch {
         alert('Network error. Please try again.');
-        (btn as HTMLButtonElement).disabled = false;
+        btn.disabled = false;
       }
     });
   });

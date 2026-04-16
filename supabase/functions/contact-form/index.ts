@@ -1,5 +1,11 @@
 import { getCorsHeaders } from "../_shared/cors.ts";
 import { escapeHtml } from "../_shared/escape-html.ts";
+import {
+  emailFromAddress,
+  emailFromName,
+  siteName,
+  supportEmail,
+} from "../_shared/site-config.ts";
 
 declare const Deno: {
   env: { get: (key: string) => string | undefined };
@@ -89,7 +95,7 @@ function buildContactEmailHtml(payload: ContactPayload): string {
         <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;max-width:560px;width:100%;">
           <tr>
             <td style="background-color:#0f172a;padding:24px 32px;text-align:center;">
-              <span style="font-size:24px;font-weight:700;color:#a3e635;letter-spacing:0.5px;">SnusFriend</span>
+              <span style="font-size:24px;font-weight:700;color:#a3e635;letter-spacing:0.5px;">${escapeHtml(siteName)}</span>
             </td>
           </tr>
           <tr>
@@ -230,8 +236,6 @@ Deno.serve(async (req) => {
     );
   }
 
-  const supportEmail = Deno.env.get("SUPPORT_EMAIL") ?? "support@snusfriends.com";
-
   /* ---------- build & send ---------- */
   const subjectLabel = SUBJECT_LABELS[subject] ?? subject;
   const emailSubjectLine = `[Contact Form] ${subjectLabel} — ${name.trim()}`;
@@ -259,7 +263,7 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "SnusFriend Contact <noreply@snusfriends.com>",
+        from: `${emailFromName} Contact <${emailFromAddress}>`,
         to: [supportEmail],
         reply_to: email.trim(),
         subject: emailSubjectLine,

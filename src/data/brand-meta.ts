@@ -3,7 +3,9 @@
  * Replaces the truncated description fallback on brand pages.
  * Source: cowork/content/brand-seo-support-pack.md
  */
-export const brandMeta: Record<string, { title: string; description: string }> = {
+import { replaceSiteIdentity } from '@/lib/site-identity';
+
+const rawBrandMeta: Record<string, { title: string; description: string }> = {
   zyn: {
     title: 'ZYN Nicotine Pouches \u2014 Consistent Quality | SnusFriend',
     description: 'Browse ZYN nicotine pouches on SnusFriend. Pharmaceutical-grade consistency across 10+ flavours from 3mg to 11mg. EU-wide delivery in 1-2 days.',
@@ -85,3 +87,14 @@ export const brandMeta: Record<string, { title: string; description: string }> =
     description: 'Browse Dosh nicotine pouches on SnusFriend. Check our Dosh brand page for current availability and product range.',
   },
 };
+
+export const brandMeta: Record<string, { title: string; description: string }> =
+  Object.fromEntries(
+    Object.entries(rawBrandMeta).map(([slug, meta]) => [
+      slug,
+      {
+        title: replaceSiteIdentity(meta.title) ?? meta.title,
+        description: replaceSiteIdentity(meta.description) ?? meta.description,
+      },
+    ]),
+  );

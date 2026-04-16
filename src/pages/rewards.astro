@@ -5,8 +5,10 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import JsonLd from '@/components/astro/JsonLd.astro';
 import SpinWheelIsland from '@/components/react/SpinWheelIsland';
 import PointsRedemptionIsland from '@/components/react/PointsRedemptionIsland';
+import { buildAbsoluteUrl } from '@/config/site';
 import { tenant } from '@/config/tenant';
 import { rewards } from '@/config/rewards';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
 
 const tierColors = [
   'from-zinc-500/20 to-zinc-600/10',
@@ -23,7 +25,7 @@ const tierBorders = [
   'border-l-amber-400',
 ];
 const tierPerks: Record<string, string[]> = {
-  Explorer: [`${rewards.earnRatePerEur} SnusCoins per EUR spent`, 'Welcome spin bonus', 'Member-only newsletter'],
+  Explorer: [`${rewards.earnRatePerEur} ${loyaltyCurrencyName} per EUR spent`, 'Welcome spin bonus', 'Member-only newsletter'],
   Member: ['Community posting', 'Review reactions', 'Birthday bonus'],
   Connoisseur: ['Custom avatar border', 'Early sale access'],
   Specialist: ['Double mission rewards', 'Exclusive polls', 'Priority customer support'],
@@ -39,8 +41,8 @@ const tiers = rewards.tiers.map((t, i) => ({
 ---
 
 <Shop
-  title={`The Vault — Earn SnusCoins & Perks | ${tenant.name}`}
-  description={`Earn SnusCoins on every purchase and redeem them for discounts, free products, and exclusive perks. Level up from Explorer to Founder with ${tenant.name} Rewards.`}
+  title={`The Vault — Earn ${loyaltyCurrencyName} & Perks | ${tenant.name}`}
+  description={`Earn ${loyaltyCurrencyName} on every purchase and redeem them for discounts, free products, and exclusive perks. Level up from Explorer to Founder with ${tenant.name} Rewards.`}
 >
   <section class="bg-background text-foreground">
     <div class="max-w-4xl mx-auto px-4 py-12">
@@ -65,7 +67,7 @@ const tiers = rewards.tiers.map((t, i) => ({
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
               </svg>
             </span>
-            <span class="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">The Vault &middot; SnusFriend Rewards</span>
+            <span class="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">The Vault &middot; {tenant.loyaltyProgramName}</span>
           </div>
 
           <!-- Headline -->
@@ -73,7 +75,7 @@ const tiers = rewards.tiers.map((t, i) => ({
             Every pouch. <span class="text-primary">More back.</span>
           </h1>
           <p class="text-center text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Every order, review, and daily spin drops SnusCoins into your Vault. Spend them on real products, not dusty punch cards.
+            Every order, review, and daily spin drops {loyaltyCurrencyName} into your Vault. Spend them on real products, not dusty punch cards.
           </p>
 
           <!-- Logged-in balance slot (populated by client script, hidden by default) -->
@@ -81,7 +83,7 @@ const tiers = rewards.tiers.map((t, i) => ({
             <p class="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Your Vault</p>
             <p class="text-3xl font-black text-primary tabular-nums">
               <span id="rewards-balance-value">0</span>
-              <span class="ml-1 text-base font-medium text-muted-foreground">SnusCoins</span>
+              <span class="ml-1 text-base font-medium text-muted-foreground">{loyaltyCurrencyName}</span>
             </p>
             <p id="rewards-next-tier" class="mt-1 text-xs text-muted-foreground"></p>
           </div>
@@ -107,7 +109,7 @@ const tiers = rewards.tiers.map((t, i) => ({
           <div class="grid grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto mb-8">
             <div class="rounded-xl border border-border/60 bg-card/40 backdrop-blur p-3 sm:p-4 text-center">
               <p class="text-2xl sm:text-3xl font-black text-foreground tabular-nums">{rewards.earnRatePerEur}<span class="text-base font-medium text-muted-foreground">/\u20AC</span></p>
-              <p class="text-[10px] sm:text-xs uppercase tracking-wider text-muted-foreground mt-1">SnusCoin per euro</p>
+              <p class="text-[10px] sm:text-xs uppercase tracking-wider text-muted-foreground mt-1">{loyaltyCurrencyName} per euro</p>
             </div>
             <div class="rounded-xl border border-border/60 bg-card/40 backdrop-blur p-3 sm:p-4 text-center">
               <p class="text-2xl sm:text-3xl font-black text-foreground tabular-nums">{rewards.tiers.length}</p>
@@ -123,7 +125,7 @@ const tiers = rewards.tiers.map((t, i) => ({
           <div class="max-w-3xl mx-auto">
             <div class="flex items-center justify-between text-[10px] sm:text-xs font-semibold text-muted-foreground mb-2">
               {rewards.tiers.map((t) => (
-                <span class="truncate px-1" title={`${t.threshold.toLocaleString()} SnusCoins`}>{t.name}</span>
+                <span class="truncate px-1" title={`${t.threshold.toLocaleString()} ${loyaltyCurrencyName}`}>{t.name}</span>
               ))}
             </div>
             <div class="relative h-2 rounded-full bg-muted/40 overflow-hidden">
@@ -169,7 +171,7 @@ const tiers = rewards.tiers.map((t, i) => ({
               var t = TIER_THRESHOLDS[i];
               if (balance < t.threshold) {
                 return (t.threshold - balance).toLocaleString() +
-                  ' coins to ' + t.name + '.';
+                  ` ${loyaltyCurrencyName} to ` + t.name + '.';
               }
             }
             return 'You\u2019ve hit the top tier. Legend.';
@@ -192,7 +194,7 @@ const tiers = rewards.tiers.map((t, i) => ({
 
             cta.innerHTML =
               '<a href="#redemption" class="inline-flex items-center justify-center rounded-xl bg-primary px-8 h-12 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition hover:bg-primary/90">' +
-              'Redeem SnusCoins' +
+              `Redeem ${loyaltyCurrencyName}` +
               '<svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>' +
               '</a>' +
               '<a href="#daily-drop" class="inline-flex items-center justify-center rounded-xl border border-border bg-card/50 px-6 h-12 text-base font-medium text-foreground transition hover:bg-muted">' +
@@ -211,7 +213,7 @@ const tiers = rewards.tiers.map((t, i) => ({
 
       <h2 class="text-4xl font-bold tracking-tight mb-3">{tenant.loyaltyProgramName}</h2>
       <p class="text-lg text-muted-foreground mb-10">
-        Every purchase earns you SnusCoins. Redeem them for discounts, free products, and exclusive perks.
+        Every purchase earns you {loyaltyCurrencyName}. Redeem them for discounts, free products, and exclusive perks.
       </p>
 
       <!-- How it works — inline numbered list -->
@@ -220,15 +222,15 @@ const tiers = rewards.tiers.map((t, i) => ({
         <li class="flex items-start gap-4">
           <span class="flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">1</span>
           <div>
-            <p class="font-semibold text-foreground">Earn SnusCoins</p>
-            <p class="text-muted-foreground">Get coins on every order. Bonus coins for reviews, referrals, and missions.</p>
+            <p class="font-semibold text-foreground">Earn {loyaltyCurrencyName}</p>
+            <p class="text-muted-foreground">Get {loyaltyCurrencyName} on every order. Bonus rewards from reviews, referrals, and missions.</p>
           </div>
         </li>
         <li class="flex items-start gap-4">
           <span class="flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">2</span>
           <div>
             <p class="font-semibold text-foreground">Redeem Rewards</p>
-            <p class="text-muted-foreground">Spend your SnusCoins on discounts, free products, or limited-edition drops.</p>
+            <p class="text-muted-foreground">Spend your {loyaltyCurrencyName} on discounts, free products, or limited-edition drops.</p>
           </div>
         </li>
         <li class="flex items-start gap-4">
@@ -241,7 +243,7 @@ const tiers = rewards.tiers.map((t, i) => ({
       </ol>
 
       <p class="text-sm text-muted-foreground mb-8">
-        Create a free account and you're automatically enrolled. Coins accumulate from your first order — no minimums, no activation required. Earn extra through reviews, daily spins, missions, and referrals. Coins never expire.
+        Create a free account and you're automatically enrolled. {loyaltyCurrencyName} accumulate from your first order — no minimums, no activation required. Earn extra through reviews, daily spins, missions, and referrals. {loyaltyCurrencyName} never expire.
       </p>
 
       <!-- Earning rates table -->
@@ -250,20 +252,20 @@ const tiers = rewards.tiers.map((t, i) => ({
           <thead class="bg-muted/30">
             <tr>
               <th class="text-left px-4 py-3 text-foreground font-semibold">Action</th>
-              <th class="text-left px-4 py-3 text-foreground font-semibold">SnusCoins Earned</th>
+              <th class="text-left px-4 py-3 text-foreground font-semibold">{loyaltyCurrencyName} Earned</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-border">
-            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Per €1 spent on orders</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.earnRatePerEur} SnusCoins</td></tr>
-            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Write a product review</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.verifiedReview} SnusCoins</td></tr>
-            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Daily Drop spin</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.dailyDropMin}–{rewards.dailyDropMax} SnusCoins</td></tr>
-            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Complete a Mission</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.missionMin}–{rewards.missionMax} SnusCoins</td></tr>
-            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (you receive)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.referralSelf} SnusCoins</td></tr>
-            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (friend receives)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.referralFriend} SnusCoins</td></tr>
-            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Welcome bonus (first order)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.welcomeBonus} SnusCoins</td></tr>
+            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Per €1 spent on orders</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.earnRatePerEur} {loyaltyCurrencyName}</td></tr>
+            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Write a product review</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.verifiedReview} {loyaltyCurrencyName}</td></tr>
+            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Daily Drop spin</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.dailyDropMin}–{rewards.dailyDropMax} {loyaltyCurrencyName}</td></tr>
+            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Complete a Mission</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.missionMin}–{rewards.missionMax} {loyaltyCurrencyName}</td></tr>
+            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (you receive)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.referralSelf} {loyaltyCurrencyName}</td></tr>
+            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Refer a friend (friend receives)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.referralFriend} {loyaltyCurrencyName}</td></tr>
+            <tr class="odd:bg-muted/20"><td class="px-4 py-2.5 text-muted-foreground">Welcome bonus (first order)</td><td class="px-4 py-2.5 text-foreground font-medium">{rewards.welcomeBonus} {loyaltyCurrencyName}</td></tr>
           </tbody>
         </table>
-        <p class="mt-3 text-sm text-muted-foreground">All earning is automatic — coins appear in your Vault within minutes of the qualifying action. There's no need to activate offers or clip coupons.</p>
+        <p class="mt-3 text-sm text-muted-foreground">All earning is automatic — {loyaltyCurrencyName} appear in your Vault within minutes of the qualifying action. There's no need to activate offers or clip coupons.</p>
       </div>
 
       <!-- Tier cards -->
@@ -273,7 +275,7 @@ const tiers = rewards.tiers.map((t, i) => ({
           <div class={`rounded-xl border border-border ${i === tiers.length - 1 ? 'border-l-[4px] sm:col-span-2' : 'border-l-[3px]'} ${tier.border} bg-card/80 overflow-hidden`}>
             <div class={`bg-gradient-to-r ${tier.color} px-6 py-4`}>
               <h3 class="text-lg font-bold text-foreground">{i === tiers.length - 1 ? '🏆 ' : ''}{tier.name}</h3>
-              <p class="text-sm text-foreground/80">{tier.points === '0' ? 'Starting tier — everyone begins here' : `${tier.points} SnusCoins to unlock`}</p>
+              <p class="text-sm text-foreground/80">{tier.points === '0' ? 'Starting tier — everyone begins here' : `${tier.points} ${loyaltyCurrencyName} to unlock`}</p>
             </div>
             <ul class="p-6 space-y-2">
               {tier.perks.map((perk) => (
@@ -289,7 +291,7 @@ const tiers = rewards.tiers.map((t, i) => ({
 
       <!-- Tier summary — full details on /membership -->
       <p class="text-sm text-muted-foreground mb-2">
-        Tiers are based on lifetime coins earned — spending coins doesn't lower your tier.
+        Tiers are based on lifetime {loyaltyCurrencyName} earned — spending them doesn't lower your tier.
       </p>
       <p class="mb-12">
         <a href="/membership" class="text-sm font-medium text-primary hover:underline">
@@ -305,7 +307,7 @@ const tiers = rewards.tiers.map((t, i) => ({
 
       <!-- Redeem Points -->
       <section id="redemption" class="mb-12 scroll-mt-24">
-        <h2 class="text-2xl font-bold tracking-tight mb-6">Redeem Your SnusCoins</h2>
+        <h2 class="text-2xl font-bold tracking-tight mb-6">Redeem Your {loyaltyCurrencyName}</h2>
         <PointsRedemptionIsland client:idle />
       </section>
 
@@ -315,29 +317,29 @@ const tiers = rewards.tiers.map((t, i) => ({
         <div class="space-y-3">
           <details class="group rounded-xl border border-border bg-card/80 overflow-hidden">
             <summary class="flex cursor-pointer items-center justify-between px-6 py-4 text-foreground font-medium">
-              How do I earn SnusCoins?
+              How do I earn {loyaltyCurrencyName}?
               <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="px-6 pb-4 text-sm text-muted-foreground">
-              SnusCoins are earned automatically on every order, by writing product reviews, spinning the Daily Drop wheel daily, completing Missions, and referring friends. No activation required — just shop, review, and engage.
+              {loyaltyCurrencyName} are earned automatically on every order, by writing product reviews, spinning the Daily Drop wheel daily, completing Missions, and referring friends. No activation required — just shop, review, and engage.
             </div>
           </details>
           <details class="group rounded-xl border border-border bg-card/80 overflow-hidden">
             <summary class="flex cursor-pointer items-center justify-between px-6 py-4 text-foreground font-medium">
-              Do SnusCoins expire?
+              Do {loyaltyCurrencyName} expire?
               <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="px-6 pb-4 text-sm text-muted-foreground">
-              No. Your SnusCoins never expire as long as your SnusFriend account remains active. If your account has been inactive for 24 months, we'll send a reminder email before any expiration takes effect.
+              No. Your {loyaltyCurrencyName} never expire as long as your {tenant.name} account remains active. If your account has been inactive for 24 months, we'll send a reminder email before any expiration takes effect.
             </div>
           </details>
           <details class="group rounded-xl border border-border bg-card/80 overflow-hidden">
             <summary class="flex cursor-pointer items-center justify-between px-6 py-4 text-foreground font-medium">
-              What can I redeem SnusCoins for?
+              What can I redeem {loyaltyCurrencyName} for?
               <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="px-6 pb-4 text-sm text-muted-foreground">
-              You can redeem SnusCoins for store credit (applied at checkout), percentage discounts on individual orders, free shipping upgrades, and curated mystery boxes. Redemption rates and available options are shown in the Vault dashboard.
+              You can redeem {loyaltyCurrencyName} for store credit (applied at checkout), percentage discounts on individual orders, free shipping upgrades, and curated mystery boxes. Redemption rates and available options are shown in the Vault dashboard.
             </div>
           </details>
           <details class="group rounded-xl border border-border bg-card/80 overflow-hidden">
@@ -346,7 +348,7 @@ const tiers = rewards.tiers.map((t, i) => ({
               <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="px-6 pb-4 text-sm text-muted-foreground">
-              Your SnusCoin balance is visible at the top of the Vault page when logged in. It's also shown in the header bar next to the cart icon, and in your account dashboard. You'll receive email notifications when coins are earned or when you're close to a Circle upgrade.
+              Your {loyaltyCurrencyName} balance is visible at the top of the Vault page when logged in. It's also shown in the header bar next to the cart icon, and in your account dashboard. You'll receive email notifications when {loyaltyCurrencyName} are earned or when you're close to a Circle upgrade.
             </div>
           </details>
           <details class="group rounded-xl border border-border bg-card/80 overflow-hidden">
@@ -355,7 +357,7 @@ const tiers = rewards.tiers.map((t, i) => ({
               <svg class="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
             <div class="px-6 pb-4 text-sm text-muted-foreground">
-              Yes, every order earns SnusCoins with no minimum purchase. Even a single can order earns coins. Subscribe & Save orders earn coins too — applied automatically to each delivery.
+              Yes, every order earns {loyaltyCurrencyName} with no minimum purchase. Even a single can order earns coins. Subscribe & Save orders earn coins too — applied automatically to each delivery.
             </div>
           </details>
         </div>
@@ -364,7 +366,7 @@ const tiers = rewards.tiers.map((t, i) => ({
       <!-- Terms summary -->
       <div class="mb-12">
         <p class="text-xs text-muted-foreground leading-relaxed">
-          SnusCoins are a non-transferable reward currency issued by SnusFriend (Nordic Express AB). They have no cash value and cannot be exchanged for money. SnusFriend reserves the right to modify the earning rates, redemption options, and Circle thresholds with 30 days' notice to members. Circle status is determined by lifetime earned SnusCoins — spending or redeeming coins does not affect your Circle tier. Full terms are available in our <a href="/terms" class="underline hover:text-foreground">Terms of Service</a>.
+          {loyaltyCurrencyName} are a non-transferable reward currency issued by {tenant.legalName}. They have no cash value and cannot be exchanged for money. {tenant.name} reserves the right to modify the earning rates, redemption options, and Circle thresholds with 30 days' notice to members. Circle status is determined by lifetime earned {loyaltyCurrencyName} — spending or redeeming coins does not affect your Circle tier. Full terms are available in our <a href="/terms" class="underline hover:text-foreground">Terms of Service</a>.
         </p>
       </div>
 
@@ -372,7 +374,7 @@ const tiers = rewards.tiers.map((t, i) => ({
       <div class="rounded-xl border border-border bg-card/80 p-8 text-center">
         <h2 class="text-xl font-semibold mb-2">Start Earning Today</h2>
         <p class="text-muted-foreground text-sm max-w-md mx-auto mb-6">
-          Every purchase earns SnusCoins. Write reviews, spin the wheel, and complete missions for bonus rewards.
+          Every purchase earns {loyaltyCurrencyName}. Write reviews, spin the wheel, and complete missions for bonus rewards.
         </p>
         <a
           href="/products"
@@ -389,18 +391,18 @@ const tiers = rewards.tiers.map((t, i) => ({
       {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        name: `${tenant.loyaltyProgramName} — Earn SnusCoins & Perks`,
-        description: `Earn SnusCoins on every purchase and redeem them for discounts, free products, and exclusive perks with ${tenant.name} Rewards.`,
-        url: 'https://snusfriends.com/rewards',
+        name: `${tenant.loyaltyProgramName} — Earn ${loyaltyCurrencyName} & Perks`,
+        description: `Earn ${loyaltyCurrencyName} on every purchase and redeem them for discounts, free products, and exclusive perks with ${tenant.name} Rewards.`,
+        url: buildAbsoluteUrl('/rewards'),
         mainEntity: {
           '@type': 'Service',
           name: tenant.loyaltyProgramName,
           provider: {
             '@type': 'Organization',
             name: tenant.name,
-            url: 'https://snusfriends.com',
+            url: buildAbsoluteUrl('/'),
           },
-          description: 'Free loyalty rewards program. Earn SnusCoins on purchases, reviews, and community activities. Redeem for discounts and exclusive perks.',
+          description: `Free loyalty rewards program. Earn ${loyaltyCurrencyName} on purchases, reviews, and community activities. Redeem for discounts and exclusive perks.`,
           offers: tiers.map((t) => ({
             '@type': 'Offer',
             name: `${t.name} Tier`,
@@ -410,8 +412,8 @@ const tiers = rewards.tiers.map((t, i) => ({
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://snusfriends.com' },
-            { '@type': 'ListItem', position: 2, name: 'Rewards', item: 'https://snusfriends.com/rewards' },
+            { '@type': 'ListItem', position: 1, name: 'Home', item: buildAbsoluteUrl('/') },
+            { '@type': 'ListItem', position: 2, name: 'Rewards', item: buildAbsoluteUrl('/rewards') },
           ],
         },
       },
@@ -421,26 +423,26 @@ const tiers = rewards.tiers.map((t, i) => ({
         mainEntity: [
           {
             '@type': 'Question',
-            name: 'How do I earn SnusCoins?',
+            name: `How do I earn ${loyaltyCurrencyName}?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'SnusCoins are earned automatically on every order, by writing product reviews, spinning the Daily Drop wheel daily, completing Missions, and referring friends. No activation required — just shop, review, and engage.',
+              text: `${loyaltyCurrencyName} are earned automatically on every order, by writing product reviews, spinning the Daily Drop wheel daily, completing Missions, and referring friends. No activation required — just shop, review, and engage.`,
             },
           },
           {
             '@type': 'Question',
-            name: 'Do SnusCoins expire?',
+            name: `Do ${loyaltyCurrencyName} expire?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'No. Your SnusCoins never expire as long as your SnusFriend account remains active. If your account has been inactive for 24 months, we\'ll send a reminder email before any expiration takes effect.',
+              text: `No. Your ${loyaltyCurrencyName} never expire as long as your ${tenant.name} account remains active. If your account has been inactive for 24 months, we'll send a reminder email before any expiration takes effect.`,
             },
           },
           {
             '@type': 'Question',
-            name: 'What can I redeem SnusCoins for?',
+            name: `What can I redeem ${loyaltyCurrencyName} for?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'You can redeem SnusCoins for store credit (applied at checkout), percentage discounts on individual orders, free shipping upgrades, and curated mystery boxes. Redemption rates and available options are shown in the Vault dashboard.',
+              text: `You can redeem ${loyaltyCurrencyName} for store credit (applied at checkout), percentage discounts on individual orders, free shipping upgrades, and curated mystery boxes. Redemption rates and available options are shown in the Vault dashboard.`,
             },
           },
           {
@@ -448,7 +450,7 @@ const tiers = rewards.tiers.map((t, i) => ({
             name: 'How do I check my balance?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Your SnusCoin balance is visible at the top of the Vault page when logged in. It\'s also shown in the header bar next to the cart icon, and in your account dashboard. You\'ll receive email notifications when coins are earned or when you\'re close to a Circle upgrade.',
+              text: `Your ${loyaltyCurrencyName} balance is visible at the top of the Vault page when logged in. It's also shown in the header bar next to the cart icon, and in your account dashboard. You'll receive email notifications when ${loyaltyCurrencyName} are earned or when you're close to a Circle upgrade.`,
             },
           },
           {
@@ -456,7 +458,7 @@ const tiers = rewards.tiers.map((t, i) => ({
             name: 'Can I earn coins on every order?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Yes, every order earns SnusCoins with no minimum purchase. Even a single can order earns coins. Subscribe & Save orders earn coins too — applied automatically to each delivery.',
+              text: `Yes, every order earns ${loyaltyCurrencyName} with no minimum purchase. Even a single can order earns ${loyaltyCurrencyName}. Subscribe & Save orders earn ${loyaltyCurrencyName} too — applied automatically to each delivery.`,
             },
           },
         ],

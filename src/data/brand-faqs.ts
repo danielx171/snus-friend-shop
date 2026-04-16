@@ -3,7 +3,9 @@
  * Used on brand pages for visible FAQ section + FAQPage JSON-LD schema.
  * Source: cowork/content/brand-page-expansions-v2.md
  */
-export const brandFaqs: Record<string, Array<{ question: string; answer: string }>> = {
+import { replaceSiteIdentity } from '@/lib/site-identity';
+
+const rawBrandFaqs: Record<string, Array<{ question: string; answer: string }>> = {
   zyn: [
     {
       question: 'Where can I buy ZYN nicotine pouches online?',
@@ -277,3 +279,14 @@ export const brandFaqs: Record<string, Array<{ question: string; answer: string 
     },
   ],
 };
+
+export const brandFaqs: Record<string, Array<{ question: string; answer: string }>> =
+  Object.fromEntries(
+    Object.entries(rawBrandFaqs).map(([slug, faqs]) => [
+      slug,
+      faqs.map((faq) => ({
+        question: replaceSiteIdentity(faq.question) ?? faq.question,
+        answer: replaceSiteIdentity(faq.answer) ?? faq.answer,
+      })),
+    ]),
+  );

@@ -5,6 +5,7 @@ import Shop from '@/layouts/Shop.astro';
 import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
 import { rewards } from '@/config/rewards';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
 
 const result = Astro.getActionResult(actions.auth.register);
 
@@ -38,7 +39,7 @@ const refCode = Astro.url.searchParams.get('ref') ?? '';
           {tenant.name}
         </a>
         <h1 class="mt-5 text-2xl font-bold tracking-tight text-foreground">Create your account</h1>
-        <p class="mt-1 text-sm text-muted-foreground">Join and start earning SnusCoins on every order</p>
+        <p class="mt-1 text-sm text-muted-foreground">Join and start earning {loyaltyCurrencyName} on every order</p>
       </div>
 
       <div class="rounded-2xl border border-border bg-card/80 p-7 shadow-sm">
@@ -211,7 +212,7 @@ const refCode = Astro.url.searchParams.get('ref') ?? '';
                   placeholder="e.g. SF-A1B2C3D4"
                   class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
                 />
-                <p class="text-xs text-muted-foreground mt-1">Have a friend's code? Enter it for {rewards.referralFriend} bonus SnusCoins.</p>
+                <p class="text-xs text-muted-foreground mt-1">Have a friend's code? Enter it for {rewards.referralFriend} bonus {loyaltyCurrencyName}.</p>
               </div>
             )}
 

@@ -6,6 +6,8 @@ import CompareIsland from '@/components/react/CompareIsland';
 import { getCollection } from 'astro:content';
 import { writeProductsJson } from '@/lib/product-json';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildAbsoluteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
 
 const products = await getCollection('products');
 writeProductsJson(products);
@@ -15,12 +17,12 @@ const webPageJsonLd = {
     "@type": "WebPage",
     "name": "Compare Nicotine Pouches",
     "description": "Compare nicotine pouches side by side — strength, flavour, price, format, and brand.",
-    "url": "https://snusfriends.com/compare",
+    "url": buildAbsoluteUrl('/compare'),
   };
 ---
 
 <Shop
-  title="Compare Nicotine Pouches Side by Side | SnusFriend"
+  title={`Compare Nicotine Pouches Side by Side | ${tenant.name}`}
   description="Compare nicotine pouches side by side — strength, flavour, price, format, and brand. Select 2-4 products and see how they stack up."
   canonical="/compare"
 >

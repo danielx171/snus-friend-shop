@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import ProductCard from '@/components/astro/ProductCard.astro';
 import { getCollection } from 'astro:content';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildAbsoluteUrl } from '@/config/site';
 
 export async function getStaticPaths() {
   const brands = await getCollection('brands');
@@ -45,14 +46,14 @@ const jsonLd = {
   '@type': 'CollectionPage',
   name: `${b.name} Flavours`,
   description,
-  url: `https://snusfriends.com/brands/${brand.id}/flavours`,
+  url: buildAbsoluteUrl(`/brands/${brand.id}/flavours`),
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: products.length,
     itemListElement: products.slice(0, 20).map((p: any, i: number) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `https://snusfriends.com/products/${p.id}`,
+      url: buildAbsoluteUrl(`/products/${p.id}`),
       name: p.data.name,
     })),
   },

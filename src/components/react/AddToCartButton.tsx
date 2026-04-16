@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { addToCart } from '@/stores/cart';
 import type { Product, PackSize } from '@/data/products';
 import { rewards } from '@/config/rewards';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
+import { getStorageKey } from '@/lib/tenant-storage';
 
 interface AddToCartButtonProps {
   product: {
@@ -25,6 +27,8 @@ const packOptions: { key: PackSize; label: string; qty: number }[] = [
   { key: 'pack5', label: '5 cans', qty: 5 },
   { key: 'pack10', label: '10 cans', qty: 10 },
 ];
+
+const BUY_NOW_KEY = getStorageKey('buyNowKey');
 
 const AddToCartButton = React.memo<AddToCartButtonProps>(
   function AddToCartButton({ product }) {
@@ -67,7 +71,7 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
         packSize: selectedPack,
         quantity,
       };
-      sessionStorage.setItem('snusfriend_buynow', JSON.stringify(item));
+      sessionStorage.setItem(BUY_NOW_KEY, JSON.stringify(item));
       window.location.href = '/checkout?buyNow=1';
     }, [buildCartProduct, selectedPack, quantity, isOutOfStock]);
 
@@ -178,7 +182,7 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
           )}
         </div>
 
-        {/* Live total + SnusCoin earn — scales with pack + quantity */}
+        {/* Live total + loyalty earn — scales with pack + quantity */}
         {selectedPrice != null && (
           <div className="rounded-lg border border-border/60 bg-card/40 px-4 py-3 text-sm">
             <p className="flex items-baseline justify-between">
@@ -190,7 +194,7 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
             <p className="mt-1 flex items-baseline justify-between text-xs">
               <span className="text-muted-foreground">You'll earn</span>
               <span className="font-semibold text-primary">
-                {Math.floor(selectedPrice * quantity * rewards.earnRatePerEur).toLocaleString()} SnusCoins
+                {Math.floor(selectedPrice * quantity * rewards.earnRatePerEur).toLocaleString()} {loyaltyCurrencyName}
               </span>
             </p>
           </div>

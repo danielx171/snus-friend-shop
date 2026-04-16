@@ -16,7 +16,6 @@ const isProd = import.meta.env.PROD;
     </script>
 
     <script>
-      import { inject as injectWebAnalytics, pageview as sendWebAnalyticsPageview } from '@vercel/analytics';
       import { injectSpeedInsights } from '@vercel/speed-insights';
 
       function getConfig() {
@@ -40,14 +39,8 @@ const isProd = import.meta.env.PROD;
         return Boolean(consent && consent.analytics === true);
       }
 
-      function ensureVercelObservability() {
-        if (window.__VERCEL_OBSERVABILITY_ENABLED__) return;
-
-        injectWebAnalytics({
-          disableAutoTrack: true,
-          mode: 'production',
-          debug: false,
-        });
+      function ensureSpeedInsights() {
+        if (window.__VERCEL_SPEED_INSIGHTS_ENABLED__) return;
 
         var speedHandle = injectSpeedInsights({
           debug: false,
@@ -55,7 +48,7 @@ const isProd = import.meta.env.PROD;
         });
 
         window.__VERCEL_SPEED_INSIGHTS_SET_ROUTE__ = speedHandle?.setRoute ?? null;
-        window.__VERCEL_OBSERVABILITY_ENABLED__ = true;
+        window.__VERCEL_SPEED_INSIGHTS_ENABLED__ = true;
       }
 
       function ensureGa() {
@@ -84,14 +77,9 @@ const isProd = import.meta.env.PROD;
         window.__GA4_ENABLED__ = true;
       }
 
-      function trackPageviews() {
+      function trackGaPageview() {
         var currentPath = window.location.pathname + window.location.search;
-        if (window.__LAST_OBSERVABILITY_PATH__ === currentPath) return;
-
-        if (window.__VERCEL_OBSERVABILITY_ENABLED__) {
-          sendWebAnalyticsPageview({ path: currentPath });
-          window.__VERCEL_SPEED_INSIGHTS_SET_ROUTE__?.(window.location.pathname);
-        }
+        if (window.__LAST_GA_PATH__ === currentPath) return;
 
         if (window.__GA4_ENABLED__ && window.gtag) {
           window.gtag('event', 'page_view', {
@@ -101,14 +89,15 @@ const isProd = import.meta.env.PROD;
           });
         }
 
-        window.__LAST_OBSERVABILITY_PATH__ = currentPath;
+        window.__LAST_GA_PATH__ = currentPath;
       }
 
       function syncObservability() {
         if (!hasAnalyticsConsent()) return;
-        ensureVercelObservability();
+        ensureSpeedInsights();
         ensureGa();
-        trackPageviews();
+        window.__VERCEL_SPEED_INSIGHTS_SET_ROUTE__?.(window.location.pathname);
+        trackGaPageview();
       }
 
       if (!window.__OBSERVABILITY_BOOTSTRAPPED__) {
@@ -127,7 +116,8 @@ const isProd = import.meta.env.PROD;
 
         document.addEventListener('astro:page-load', function () {
           if (hasAnalyticsConsent()) {
-            trackPageviews();
+            window.__VERCEL_SPEED_INSIGHTS_SET_ROUTE__?.(window.location.pathname);
+            trackGaPageview();
           }
         });
       }

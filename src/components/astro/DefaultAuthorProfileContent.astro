@@ -1,0 +1,131 @@
+---
+import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
+
+const facts = await getEditorialFacts();
+const author = tenant.defaultAuthor;
+
+const socialLabel = (value: string): string => {
+  if (value.includes('linkedin.com')) return 'LinkedIn';
+  if (value.includes('x.com') || value.includes('twitter.com')) return 'X / Twitter';
+
+  try {
+    return new URL(value).hostname.replace(/^www\./, '');
+  } catch {
+    return value;
+  }
+};
+---
+
+<header class="mb-10">
+  <h1 class="text-4xl font-bold text-foreground mb-2">{author.name}</h1>
+  <p class="text-lg font-medium text-primary mb-3">{author.jobTitle}, {tenant.name}</p>
+  {author.credentials && author.credentials.length > 0 && (
+    <p class="text-base italic text-muted-foreground">{author.credentials.join(' · ')}</p>
+  )}
+  <div class="mt-4 flex gap-4">
+    {author.sameAs.map((link) => (
+      <a href={link} rel="noopener noreferrer" target="_blank" class="text-sm text-muted-foreground hover:text-foreground underline">{socialLabel(link)}</a>
+    ))}
+  </div>
+</header>
+
+<div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1 [&_li]:leading-relaxed">
+  <p>
+    {author.name} is the {author.jobTitle.toLowerCase()} at {tenant.name}, specializing in the European nicotine pouch market. {author.bio}
+  </p>
+
+  <p>
+    Since launching our current review practice, {author.name.split(' ')[0]} has helped shape coverage across {facts.brandCountLabel}+ brands, combining blind taste testing with rigorous cross-referencing of manufacturer specifications and independent lab data. The editorial approach emphasizes transparency and evidence-based assessment in an industry where traditional advertising restrictions mean consumers depend heavily on independent reviewers to make informed choices.
+  </p>
+
+  <p>
+    {author.name.split(' ')[0]}'s work bridges product journalism and consumer advocacy. We follow EU TPD regulatory developments, maintain strict editorial standards, and publish corrections openly whenever factual updates are required.
+  </p>
+
+  <h2>How {author.name.split(' ')[0]} Got Into Nicotine Pouch Reviewing</h2>
+
+  <p>
+    {author.name.split(' ')[0]} didn't set out to become a nicotine pouch expert. The work began in consumer health communication, when the Nordic nicotine pouch market started its global expansion. It became obvious that enthusiasts and newcomers alike were making purchasing decisions based on hearsay, forum rumours, and marketing speak — not actual product data.
+  </p>
+
+  <p>
+    The category was exploding, but independent, trustworthy reviews barely existed. Traditional consumer media ignored it. Manufacturer websites were predictably biased. Harm reduction researchers published sparse, outdated comparisons. There was a real gap.
+  </p>
+
+  <p>
+    That early review work evolved into a systematic practice built around repeatable scoring, clear sourcing, and transparent updates. It eventually became the editorial review program that powers {tenant.name}'s long-form guides, comparisons, and product coverage today.
+  </p>
+
+  <h2>Testing Methodology</h2>
+
+  <p>Every {tenant.name} review follows a documented protocol:</p>
+
+  <p>
+    <strong>1. Blind testing</strong> — Products are evaluated without seeing packaging or marketing claims.
+  </p>
+  <p>
+    <strong>2. Multi-day windows</strong> — Each product is tested across 3–7 days to capture consistency and subjective variation.
+  </p>
+  <p>
+    <strong>3. Cross-referencing</strong> — Manufacturer specs are verified against independent lab data where publicly available; discrepancies are flagged.
+  </p>
+  <p>
+    <strong>4. Comparative context</strong> — Products are assessed relative to similar offerings, not in isolation.
+  </p>
+  <p>
+    <strong>5. Revision cycles</strong> — Reviews are updated when new formulations launch or additional testing reveals relevant information.
+  </p>
+
+  <p>
+    This approach trades speed for depth. We publish fewer reviews than clickbait competitors, but each one is designed to remain useful for years.
+  </p>
+
+  <h2>Credentials</h2>
+
+  <ul>
+    {(author.credentials ?? []).map((credential) => <li>{credential}</li>)}
+    <li>Coverage spans {facts.brandCountLabel}+ brands with consistent review methodology.</li>
+    <li>Health content is fact-checked against peer-reviewed PubMed research, NHS guidance, and WHO reports.</li>
+    <li>Editorial independence: no brand pays for product placement or favourable reviews.</li>
+  </ul>
+
+  <h2>Editorial Standards</h2>
+
+  <ul>
+    <li><strong>No paid reviews.</strong> Manufacturers cannot pay for favorable coverage. Affiliate links are disclosed.</li>
+    <li><strong>Transparent corrections.</strong> Errors are acknowledged publicly with publication dates.</li>
+    <li><strong>Conflict of interest disclosure.</strong> {tenant.name} is a retailer — we sell the products we review. We acknowledge this openly.</li>
+    <li><strong>Reader feedback loop.</strong> We actively solicit corrections from readers with direct product experience.</li>
+  </ul>
+
+  <h2>Why Independent Reviews Matter</h2>
+
+  <p>
+    In most consumer goods categories, advertising is abundant. Nicotine products face severe restrictions. In the EU, manufacturers cannot run traditional ads. Consumers can't rely on the usual sources of product information.
+  </p>
+
+  <p>
+    That shifts responsibility to independent reviewers. We're not just sharing opinions — we're functioning as a trusted information infrastructure in a category where it barely exists. That's why our standards are strict and our methodology is transparent.
+  </p>
+
+  <h2>The {tenant.name} Team</h2>
+
+  <p>
+    {author.name.split(' ')[0]} leads editorial but doesn’t work alone. {tenant.name}'s review system includes cross-checking, multiple perspectives, and community feedback. Our goal is a reference resource that reflects genuine consumer experience, not individual taste.
+  </p>
+
+  <p>
+    When you read a review under {author.name}'s byline, you're reading one person's methodology applied consistently — but informed by a team that cares about getting it right.
+  </p>
+
+  <h2>Articles by {author.name}</h2>
+
+  <p>
+    {author.name} authors and edits long-form health, harm reduction, and product review content on {tenant.name}. The articles cover nicotine pharmacology, product comparisons, strength guides, and regulatory updates — all grounded in peer-reviewed research and independent testing.
+  </p>
+
+  <p>
+    <a href="/blog">Browse all articles on the {tenant.name} blog</a>
+  </p>
+</div>

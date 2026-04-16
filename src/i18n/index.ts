@@ -1,5 +1,6 @@
 import sv from './sv.json';
 import de from './de.json';
+import { replaceSiteIdentity } from '@/lib/site-identity';
 
 export type Locale = 'en' | 'sv' | 'de';
 
@@ -11,6 +12,24 @@ const translations: Record<string, Record<string, unknown>> = {
   de: de as Record<string, unknown>,
 };
 
+function applySiteIdentity<T>(value: T): T {
+  if (typeof value === 'string') {
+    return replaceSiteIdentity(value) as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => applySiteIdentity(entry)) as T;
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, applySiteIdentity(entry)]),
+    ) as T;
+  }
+
+  return value;
+}
+
 /**
  * Get a translation string by dot-notation path.
  * Falls back to the key itself if not found (English is the default — keys ARE the English strings).
@@ -21,7 +40,7 @@ const translations: Record<string, Record<string, unknown>> = {
  *   t('sv', 'product_page.add_to_cart') → "Lägg i varukorg"
  */
 export function t(locale: Locale, key: string): string {
-  if (locale === 'en') return key; // English is the default — components use raw English text
+  if (locale === 'en') return replaceSiteIdentity(key); // English is the default — components use raw English text
 
   const dict = translations[locale];
   if (!dict) return key;
@@ -33,7 +52,7 @@ export function t(locale: Locale, key: string): string {
     current = (current as Record<string, unknown>)[part];
   }
 
-  return typeof current === 'string' ? current : key;
+  return typeof current === 'string' ? replaceSiteIdentity(current) : replaceSiteIdentity(key);
 }
 
 /**
@@ -49,7 +68,7 @@ export function getSection(locale: Locale, section: string): Record<string, stri
   if (!dict) return {};
   const sectionData = dict[section];
   if (!sectionData || typeof sectionData !== 'object') return {};
-  return sectionData as Record<string, string>;
+  return applySiteIdentity(sectionData as Record<string, string>);
 }
 
 /**

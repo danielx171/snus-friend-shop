@@ -17,6 +17,7 @@ import {
   syncCartFromStorage,
 } from '@/stores/cart';
 import type { CartItem } from '@/stores/cart';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 const packSizeLabels: Record<string, string> = {
   pack1: '1 can',
@@ -356,7 +357,7 @@ export default function CartDrawer() {
                       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
                     <span className="text-xs font-medium text-primary">
-                      You&apos;ll earn {Math.floor(total * 1).toLocaleString()} SnusCoins with this order {/* matches rewards.earnRatePerEur */}
+                      You&apos;ll earn {Math.floor(total * 1).toLocaleString()} {loyaltyCurrencyName} with this order {/* matches rewards.earnRatePerEur */}
                     </span>
                   </div>
                 )}

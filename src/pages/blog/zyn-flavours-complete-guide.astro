@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 import BrandFactCallout from '@/components/astro/BrandFactCallout.astro';
 import { brandFacts } from '@/data/brand-facts';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildBlogPostingSchema } from '@/lib/blog-schema';
 
 const allProducts = await getCollection('products');
 function findProduct(brandSlug: string, nameFragment?: string) {
@@ -31,24 +32,20 @@ const modifiedDate = '2026-04-11';
 const title = 'Every ZYN Flavor Explained: Taste & Strength Guide 2026';
 const description = 'Every ZYN flavour ranked by taste, strength, and popularity. Cool Mint, Citrus, Espressino, and more — with prices and where to buy in Europe.';
 
-const blogPostingJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": modifiedDate,
-    "url": "https://snusfriends.com/blog/zyn-flavours-complete-guide",
-    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/zyn-flavours-complete-guide" }
-  };
+const blogPostingJsonLd = buildBlogPostingSchema({
+  headline: title,
+  description,
+  slug: 'zyn-flavours-complete-guide',
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  imagePath: '/og/article-zyn-flavours-complete-guide.png',
+});
 
 const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "How many ZYN flavours are available in 2026?", "acceptedAnswer": { "@type": "Answer", "text": `The global ZYN assortment is larger than the European shelf lineup. On SnusFriend we currently list ${zynCatalogCount} ZYN product pages, while most European retailers stock a smaller market-specific flavour range.` } },
+      { "@type": "Question", "name": "How many ZYN flavours are available in 2026?", "acceptedAnswer": { "@type": "Answer", "text": `The global ZYN assortment is larger than the European shelf lineup. At ${tenant.name} we currently list ${zynCatalogCount} ZYN product pages, while most European retailers stock a smaller market-specific flavour range.` } },
       { "@type": "Question", "name": "What is the best ZYN flavour?", "acceptedAnswer": { "@type": "Answer", "text": "Apple Mint is the top-ranked ZYN flavour for its crisp Granny Smith apple character with a cool mint finish. Flavour holds for 35+ minutes. Cool Mint 6 mg takes second place as the most consistent ZYN across every metric." } },
       { "@type": "Question", "name": "Which ZYN strength is closest to a cigarette?", "acceptedAnswer": { "@type": "Answer", "text": "A standard cigarette delivers 0.9–1.2 mg of absorbed nicotine per stick. ZYN's nicotine absorbs differently via oral mucosa. Most ex-smokers find S3–S4 (6–11 mg) satisfies the craving. Start at S3 for a pack-a-day equivalent." } },
       { "@type": "Question", "name": "Are ZYN pouches FDA-approved?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. In January 2025, the FDA authorised 20 ZYN nicotine pouch products across mint, citrus, and coffee categories following extensive scientific review." } },
@@ -90,7 +87,7 @@ const faqJsonLd = {
 
         <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 12px; padding: 24px; margin: 24px 0;">
           <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Quick Answer</p>
-          <p style="font-size: 16px; line-height: 1.6; margin: 0;">ZYN has a broad market-specific flavour lineup in Europe, while the wider global range is larger than what most retailers stock. On SnusFriend we currently list {zynCatalogCount} ZYN products, with mint, citrus, coffee, and fruit profiles making up the most common starting points.</p>
+          <p style="font-size: 16px; line-height: 1.6; margin: 0;">ZYN has a broad market-specific flavour lineup in Europe, while the wider global range is larger than what most retailers stock. At {tenant.name} we currently list {zynCatalogCount} ZYN products, with mint, citrus, coffee, and fruit profiles making up the most common starting points.</p>
         </div>
 
         <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
@@ -113,12 +110,12 @@ const faqJsonLd = {
           <a href="/brands/zyn">ZYN</a> became a mainstream reference point by sticking to a clear formula: consistent nicotine delivery, clean flavour profiles, and formats that feel easy to recommend to new users. Swedish Match (now part of <a href="https://www.pmi.com/investor-relations/news-and-events" target="_blank" rel="noopener noreferrer">Philip Morris International</a>) built the brand around reliability first, which is why ZYN still shows up in so many comparison pieces and retail shelves.
         </p>
         <p>
-          The exact flavour count depends on where you shop. On SnusFriend we currently list {zynCatalogCount} ZYN products, while most European storefronts stock a smaller, market-specific subset of the wider global catalogue. This guide focuses on the flavours you are most likely to encounter and actually compare. For expert comparisons, see our <a href="/blog/all-velo-flavors-ranked-2026">VELO flavours guide</a>.
+          The exact flavour count depends on where you shop. At {tenant.name} we currently list {zynCatalogCount} ZYN products, while most European storefronts stock a smaller, market-specific subset of the wider global catalogue. This guide focuses on the flavours you are most likely to encounter and actually compare. For expert comparisons, see our <a href="/blog/all-velo-flavors-ranked-2026">VELO flavours guide</a>.
         </p>
 
         <h2>How We Ranked</h2>
         <p>
-          SnusFriend's editorial team evaluated every flavour on three criteria. <strong>Flavour accuracy</strong>: does it taste like what it claims to be? A citrus pouch should deliver actual citrus, not a vague sweetness. <strong>Longevity</strong>: how long does the flavour hold before it fades? Anything under 20 minutes is a problem. <strong>Nicotine delivery</strong>: is the hit smooth and predictable, or does it spike and crash? We also factored in community feedback from reviews on SnusFriend.
+          {tenant.name}'s editorial team evaluated every flavour on three criteria. <strong>Flavour accuracy</strong>: does it taste like what it claims to be? A citrus pouch should deliver actual citrus, not a vague sweetness. <strong>Longevity</strong>: how long does the flavour hold before it fades? Anything under 20 minutes is a problem. <strong>Nicotine delivery</strong>: is the hit smooth and predictable, or does it spike and crash? We also factored in community feedback from reviews on {tenant.name}.
         </p>
 
         <h2>The Top 10 ZYN Flavours</h2>
@@ -379,7 +376,7 @@ const faqJsonLd = {
         <h2>FAQ: ZYN Flavours</h2>
 
         <h3>How many ZYN flavours are available in 2026?</h3>
-        <p>The global ZYN assortment is larger than the average European shelf range. On SnusFriend we currently list {zynCatalogCount} ZYN products, while most retailers stock a smaller market-specific flavour mix.</p>
+        <p>The global ZYN assortment is larger than the average European shelf range. At {tenant.name} we currently list {zynCatalogCount} ZYN products, while most retailers stock a smaller market-specific flavour mix.</p>
 
         <h3>What is the best ZYN flavour?</h3>
         <p>Apple Mint is the top-ranked ZYN flavour for its crisp Granny Smith apple character with a cool mint finish. Flavour holds for 35+ minutes. Cool Mint 6 mg takes second place as the most consistent ZYN across every metric.</p>

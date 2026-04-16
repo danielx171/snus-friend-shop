@@ -4,6 +4,8 @@ import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildAbsoluteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
@@ -38,14 +40,14 @@ const collectionJsonLd = {
   '@type': 'CollectionPage',
   name: 'Nicotine Pouch Brands',
   description: `Browse all ${brands.length} nicotine pouch brands. VELO, ZYN, LOOP, Siberia, PABLO and many more.`,
-  url: 'https://snusfriends.com/brands',
+  url: buildAbsoluteUrl('/brands'),
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: brands.length,
     itemListElement: brands.map((b, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `https://snusfriends.com/brands/${b.id}`,
+      url: buildAbsoluteUrl(`/brands/${b.id}`),
       name: b.data.name,
     })),
   },
@@ -53,7 +55,7 @@ const collectionJsonLd = {
 ---
 
 <Shop
-  title="Nicotine Pouch Brands | SnusFriend"
+  title={`Nicotine Pouch Brands | ${tenant.name}`}
   description={`Browse all ${brands.length} nicotine pouch brands we carry. VELO, ZYN, LOOP, Siberia, PABLO and many more. Find your favourite brand and shop the full range.`}
   canonical="/brands"
 >
@@ -282,8 +284,8 @@ const collectionJsonLd = {
         { "@type": "Question", "name": "What is the most popular nicotine pouch brand?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN by Swedish Match (now part of Philip Morris International) is the world's best-selling nicotine pouch brand, with approximately 61% volume share in the United States. In Europe, VELO by British American Tobacco is the volume leader in most markets, followed by brands like LOOP, Nordic Spirit, and Skruf." } },
         { "@type": "Question", "name": "What is the difference between ZYN and VELO?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN and VELO are both tobacco-free nicotine pouches but differ in format, flavour range, and nicotine delivery. ZYN uses a drier pouch with a slower nicotine release, while VELO tends to be slightly moister with faster onset. ZYN offers fewer flavours but dominates in the US market; VELO has a wider flavour range and leads in most European markets." } },
         { "@type": "Question", "name": "Which nicotine pouch brand is the strongest?", "acceptedAnswer": { "@type": "Answer", "text": "The strongest nicotine pouches come from brands like NOiS (up to 50 mg), Rabbit (up to 40 mg), CUBA (up to 43 mg), and Siberia (33 mg per gram). Most mainstream brands like ZYN and VELO max out around 10-17 mg per pouch." } },
-        { "@type": "Question", "name": "Are all nicotine pouch brands tobacco-free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, all brands sold at SnusFriend are 100% tobacco-free. Nicotine pouches use pharmaceutical-grade or synthetic nicotine combined with plant-based fibres, flavourings, and pH adjusters — there is no tobacco leaf in any product." } },
-        { "@type": "Question", "name": "How many nicotine pouch brands does SnusFriend carry?", "acceptedAnswer": { "@type": "Answer", "text": "SnusFriend currently stocks products from over 50 nicotine pouch brands, ranging from global manufacturers like ZYN, VELO, and ON! to independent Scandinavian labels like LOOP, Skruf, FUMI, and Kelly White. Our catalogue is updated regularly as new brands launch." } }
+        { "@type": "Question", "name": "Are all nicotine pouch brands tobacco-free?", "acceptedAnswer": { "@type": "Answer", "text": `Yes, all brands sold at ${tenant.name} are 100% tobacco-free. Nicotine pouches use pharmaceutical-grade or synthetic nicotine combined with plant-based fibres, flavourings, and pH adjusters — there is no tobacco leaf in any product.` } },
+        { "@type": "Question", "name": `How many nicotine pouch brands does ${tenant.name} carry?`, "acceptedAnswer": { "@type": "Answer", "text": `${tenant.name} currently stocks products from ${brands.length}+ nicotine pouch brands, ranging from global manufacturers like ZYN, VELO, and ON! to independent Scandinavian labels like LOOP, Skruf, FUMI, and Kelly White. Our catalogue is updated regularly as new brands launch.` } }
       ]
     }}
   />

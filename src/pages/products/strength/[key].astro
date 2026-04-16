@@ -3,6 +3,8 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
+import { buildAbsoluteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
 import { getCollection } from 'astro:content';
 import { slimProductData, writeProductsJson } from '@/lib/product-json';
@@ -81,14 +83,14 @@ const jsonLd = {
   '@type': 'CollectionPage',
   name: meta.h1,
   description: meta.desc,
-  url: `https://snusfriends.com/products/strength/${key}`,
+  url: buildAbsoluteUrl(`/products/strength/${key}`),
   numberOfItems: products.length,
   mainEntity: {
     '@type': 'ItemList',
     itemListElement: products.slice(0, 20).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `https://snusfriends.com/products/${p.id}`,
+      url: buildAbsoluteUrl(`/products/${p.id}`),
       name: p.data.name,
     })),
   },
@@ -96,7 +98,7 @@ const jsonLd = {
 ---
 
 <Shop
-  title={`${meta.h1} | SnusFriend`}
+  title={`${meta.h1} | ${tenant.name}`}
   description={meta.desc}
 >
   <JsonLd data={jsonLd} />

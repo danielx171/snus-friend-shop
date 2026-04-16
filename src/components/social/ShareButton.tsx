@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 /* ── Platform config ── */
 const PLATFORMS: { key: SharePlatform; label: string; icon: React.FC<{ className?: string }> }[] = [
@@ -88,8 +89,8 @@ const ShareButton = React.memo(function ShareButton({
             }
             if (!result?.alreadyShared && userId) {
               toast({
-                title: '+10 SnusCoins!',
-                description: `Thanks for sharing! You earned 10 SnusCoins.`,
+                title: `+10 ${loyaltyCurrencyName}!`,
+                description: `Thanks for sharing! You earned 10 ${loyaltyCurrencyName}.`,
               });
             }
           },

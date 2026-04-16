@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useSnusPointsLite } from '@/hooks/useSnusPointsLite';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 export default function HeaderPointsBadge() {
   const [userId, setUserId] = useState<string | null>(null);
@@ -37,7 +38,7 @@ export default function HeaderPointsBadge() {
         >
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
-        Earn SnusCoins
+        Earn {loyaltyCurrencyName}
       </a>
     );
   }
@@ -46,7 +47,7 @@ export default function HeaderPointsBadge() {
     <a
       href="/rewards"
       className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
-      aria-label={`${balance} SnusCoins — view rewards`}
+      aria-label={`${balance} ${loyaltyCurrencyName} — view rewards`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +59,7 @@ export default function HeaderPointsBadge() {
       >
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
       </svg>
-      {balance.toLocaleString()} coins
+      {balance.toLocaleString()} {loyaltyCurrencyName}
     </a>
   );
 }

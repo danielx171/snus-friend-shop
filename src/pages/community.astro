@@ -8,7 +8,9 @@ import LeaderboardIsland from '@/components/react/LeaderboardIsland';
 import AchievementGridIsland from '@/components/react/AchievementGridIsland';
 import { tenant } from '@/config/tenant';
 import { rewards } from '@/config/rewards';
+import { buildAbsoluteUrl } from '@/config/site';
 import { supabase, hasSupabaseEnv } from '@/integrations/supabase/client';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
 
 // Query real community stats at build time
 let memberCount = 0;
@@ -52,7 +54,7 @@ function formatStat(n: number): string {
             Not just a store. A club for people who know what they like.
           </h1>
           <p class="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
-            SnusFriend Community is where pouch enthusiasts share reviews, vote on new products, and earn recognition for their taste. Your opinions shape what we stock.
+            {tenant.name} Community is where pouch enthusiasts share reviews, vote on new products, and earn recognition for their taste. Your opinions shape what we stock.
           </p>
         </div>
 
@@ -111,7 +113,7 @@ function formatStat(n: number): string {
           </div>
           <div class="rounded-lg bg-card/80 border border-border/30 p-4 sm:p-6 text-center">
             <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">{pointsEarned > 0 ? formatStat(pointsEarned) : 'Join in'}</div>
-            <p class="text-xs sm:text-sm text-muted-foreground">SnusCoins Earned</p>
+            <p class="text-xs sm:text-sm text-muted-foreground">{loyaltyCurrencyName} Earned</p>
           </div>
         </div>
       </div>
@@ -124,7 +126,7 @@ function formatStat(n: number): string {
         <div class="mb-6">
           <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2">The Board</h2>
           <p class="text-muted-foreground">
-            Earn SnusCoins with every review, purchase, and mission completion. Climb The Board and unlock exclusive tier-based rewards.
+            Earn {loyaltyCurrencyName} with every review, purchase, and mission completion. Climb The Board and unlock exclusive tier-based rewards.
           </p>
         </div>
         <LeaderboardIsland client:visible />
@@ -137,7 +139,7 @@ function formatStat(n: number): string {
           <div class="mb-6">
             <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Active Missions</h2>
             <p class="text-muted-foreground">
-              Complete daily and weekly challenges to earn bonus SnusCoins, unlock badges, and progress through the mission tiers.
+              Complete daily and weekly challenges to earn bonus {loyaltyCurrencyName}, unlock badges, and progress through the mission tiers.
             </p>
           </div>
           <QuestBoardIsland client:idle />
@@ -246,34 +248,34 @@ function formatStat(n: number): string {
 
         <!-- How to Earn Section -->
         <div class="rounded-xl border border-border bg-card/80 p-6 sm:p-8">
-          <h3 class="text-xl font-bold mb-6">Ways to Earn SnusCoins</h3>
+          <h3 class="text-xl font-bold mb-6">Ways to Earn {loyaltyCurrencyName}</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="flex gap-4">
               <span class="flex-shrink-0 text-2xl">⭐</span>
               <div>
                 <h4 class="font-semibold mb-1">Write a Review</h4>
-                <p class="text-sm text-muted-foreground">Post a product review and earn up to {rewards.verifiedReviewFirst} SnusCoins.</p>
+                <p class="text-sm text-muted-foreground">Post a product review and earn up to {rewards.verifiedReviewFirst} {loyaltyCurrencyName}.</p>
               </div>
             </div>
             <div class="flex gap-4">
               <span class="flex-shrink-0 text-2xl">🛍️</span>
               <div>
                 <h4 class="font-semibold mb-1">Make a Purchase</h4>
-                <p class="text-sm text-muted-foreground">Earn {rewards.earnRatePerEur} SnusCoin per EUR spent on products.</p>
+                <p class="text-sm text-muted-foreground">Earn {rewards.earnRatePerEur} {loyaltyCurrencyName} per EUR spent on products.</p>
               </div>
             </div>
             <div class="flex gap-4">
               <span class="flex-shrink-0 text-2xl">✅</span>
               <div>
                 <h4 class="font-semibold mb-1">Complete Missions</h4>
-                <p class="text-sm text-muted-foreground">Daily and weekly missions award {rewards.missionMin}–{rewards.missionMax} SnusCoins.</p>
+                <p class="text-sm text-muted-foreground">Daily and weekly missions award {rewards.missionMin}–{rewards.missionMax} {loyaltyCurrencyName}.</p>
               </div>
             </div>
             <div class="flex gap-4">
               <span class="flex-shrink-0 text-2xl">🎯</span>
               <div>
                 <h4 class="font-semibold mb-1">Earn Badges</h4>
-                <p class="text-sm text-muted-foreground">Unlock special badges for 5–25 bonus SnusCoins.</p>
+                <p class="text-sm text-muted-foreground">Unlock special badges for 5–25 bonus {loyaltyCurrencyName}.</p>
               </div>
             </div>
           </div>
@@ -293,7 +295,7 @@ function formatStat(n: number): string {
 
         <div class="rounded-xl border border-border bg-card/80 p-6 sm:p-8">
           <p class="text-muted-foreground mb-6">
-            Every review helps fellow pouch enthusiasts make better choices. Share your honest experience with any product you've tried — you'll earn {rewards.verifiedReview} SnusCoins for each review.
+            Every review helps fellow pouch enthusiasts make better choices. Share your honest experience with any product you've tried — you'll earn {rewards.verifiedReview} {loyaltyCurrencyName} for each review.
           </p>
 
           <div class="flex gap-3">
@@ -372,7 +374,7 @@ function formatStat(n: number): string {
       <div class="rounded-xl border border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10 p-8 sm:p-10 text-center">
         <h2 class="text-2xl sm:text-3xl font-bold mb-3">Ready to Join?</h2>
         <p class="text-muted-foreground mb-6 max-w-2xl mx-auto">
-          Create your free SnusFriend account to start earning SnusCoins, unlocking badges, and competing on The Board.
+          Create your free {tenant.name} account to start earning {loyaltyCurrencyName}, unlocking badges, and competing on The Board.
         </p>
         <a
           href="/login?redirect=/community"
@@ -388,21 +390,21 @@ function formatStat(n: number): string {
     data={{
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": "The SnusFriend Community",
-      "description": "Join the SnusFriend community. Share reviews, earn SnusCoins, complete missions, and unlock exclusive rewards.",
-      "url": "https://snusfriends.com/community",
+      "name": `The ${tenant.name} Community`,
+      "description": `Join the ${tenant.name} community. Share reviews, earn ${loyaltyCurrencyName}, complete missions, and unlock exclusive rewards.`,
+      "url": buildAbsoluteUrl("/community"),
       "publisher": {
         "@type": "Organization",
-        "name": "SnusFriend",
+        "name": tenant.name,
         "logo": {
           "@type": "ImageObject",
-          "url": "https://snusfriends.com/logo.svg"
+          "url": buildAbsoluteUrl("/logo.svg")
         }
       },
       "isPartOf": {
         "@type": "WebSite",
-        "name": "SnusFriend",
-        "url": "https://snusfriends.com"
+        "name": tenant.name,
+        "url": buildAbsoluteUrl("/")
       },
       "mainEntity": {
         "@type": "BreadcrumbList",
@@ -411,13 +413,13 @@ function formatStat(n: number): string {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://snusfriends.com"
+            "item": buildAbsoluteUrl("/")
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Community",
-            "item": "https://snusfriends.com/community"
+            "item": buildAbsoluteUrl("/community")
           }
         ]
       }

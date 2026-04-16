@@ -5,6 +5,7 @@ import {
   parseSlimProducts,
   type SlimProductCardData,
 } from '@/lib/slim-products-client';
+import { getStorageKey } from '@/lib/tenant-storage';
 import { $beginnerMode, BEGINNER_MAX_MG } from '@/stores/beginner-mode';
 
 interface RecentlyViewedProps {
@@ -22,7 +23,7 @@ interface HistoryItem {
   viewedAt: string;
 }
 
-const HISTORY_KEY = 'snusfriend_history';
+const HISTORY_KEY = getStorageKey('historyKey');
 
 function RecentlyViewedInner({ productsJson, productsJsonUrl }: RecentlyViewedProps) {
   const [mounted, setMounted] = useState(false);

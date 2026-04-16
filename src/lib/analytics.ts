@@ -5,6 +5,8 @@
 // no-op when `window.posthog` is unavailable (e.g. SSR, bot, consent denied).
 // ---------------------------------------------------------------------------
 
+import { tenant } from '@/config/tenant';
+
 declare global {
   interface Window {
     posthog?: {
@@ -37,7 +39,7 @@ export function trackAddToCart(props: {
     pack_size: props.packSize,
     quantity: props.quantity,
     price: props.price,
-    currency: props.currency ?? 'EUR',
+    currency: props.currency ?? tenant.currencyCode,
   });
 }
 
@@ -68,7 +70,7 @@ export function trackProductViewed(props: {
     price: props.price,
     strength: props.strengthKey,
     flavor: props.flavorKey,
-    currency: 'EUR',
+    currency: tenant.currencyCode,
   });
 }
 
@@ -80,7 +82,7 @@ export function trackCheckoutStarted(props: {
   ph()?.capture('checkout_started', {
     cart_total: props.cartTotal,
     item_count: props.itemCount,
-    currency: props.currency ?? 'EUR',
+    currency: props.currency ?? tenant.currencyCode,
   });
 }
 

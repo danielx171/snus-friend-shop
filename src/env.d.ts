@@ -48,14 +48,39 @@ declare global {
     __pwaInstallPromptEvent: BeforeInstallPromptEvent | null;
     __AUTH_STATE__: { id: string; email: string } | null;
     __validThemes: string[];
+    __ANALYTICS_CONFIG__?: {
+      consentKey: string;
+      posthogKey: string;
+      posthogHost: string;
+      posthogEnabled: boolean;
+    };
+    __ANALYTICS_BOOTSTRAPPED__?: boolean;
     __OBSERVABILITY_CONFIG__?: { consentKey: string; gaMeasurementId: string };
     __OBSERVABILITY_BOOTSTRAPPED__?: boolean;
-    __VERCEL_OBSERVABILITY_ENABLED__?: boolean;
+    __VERCEL_SPEED_INSIGHTS_ENABLED__?: boolean;
     __VERCEL_SPEED_INSIGHTS_SET_ROUTE__?: ((route: string | null) => void) | null;
     __GA4_ENABLED__?: boolean;
-    __LAST_OBSERVABILITY_PATH__?: string;
+    __LAST_GA_PATH__?: string;
     __refreshObservability__?: () => void;
     __POSTHOG_LOADED__?: boolean;
+    __LAST_POSTHOG_PATH__?: string;
+    __POSTHOG_CAPTURE_COUNT__?: number;
+    __POSTHOG_LAST_CAPTURE__?: {
+      event: string;
+      count: number;
+      path: string;
+      timestamp: string;
+      currentUrl?: string;
+      reason?: string;
+    };
+    __POSTHOG_WARNED__?: boolean;
+    __POSTHOG_STATUS__?: {
+      configured: boolean;
+      consentGranted: boolean;
+      booted: boolean;
+      disabledReason: string | null;
+      posthogHost: string;
+    };
     dataLayer: unknown[];
     gtag?: (...args: unknown[]) => void;
   }

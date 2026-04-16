@@ -8,6 +8,8 @@ import ProductCard from '@/components/astro/ProductCard.astro';
 import AddToCartButton from '@/components/react/AddToCartButton';
 import StickyAddToCart from '@/components/react/StickyAddToCart';
 import ProductReviewsIsland from '@/components/react/ProductReviewsIsland';
+import { buildAbsoluteUrl, siteHost } from '@/config/site';
+import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 import { rewards } from '@/config/rewards';
@@ -119,6 +121,8 @@ const flavorLabel = flavorLabels[p.flavorKey] ?? p.flavorKey;
 
 // Theme-aware flavor colors — no hardcoded Tailwind palette colors
 const flavorColor = 'bg-primary/10 text-primary border-primary/20';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
+const currencyCode = tenant.currencyCode;
 
 // Generate an accurate fallback description from real product attributes
 const generatedDescription = `${p.name} — ${p.nicotineContent}mg ${flavorLabel.toLowerCase()} nicotine pouches, ${strengthLabel.toLowerCase()} strength. ${p.portionsPerCan} portions. Free EU shipping.`;
@@ -131,7 +135,7 @@ const isBadDescription = !p.description
   || (storedDesc.includes('cool mint') && !nameLower.includes('cool mint'))
   || (storedDesc.includes('slim format') && p.formatKey !== 'slim')
   || (storedDesc.includes('mini format') && p.formatKey !== 'mini')
-  || storedDesc.includes('shop snusfriends.com');
+  || storedDesc.includes(`shop ${siteHost}`);
 
 const description = isBadDescription ? generatedDescription : p.description;
 
@@ -165,7 +169,7 @@ const jsonLd = {
     offerCount: Object.keys(p.prices).length,
     availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
   },
-  url: `https://snusfriends.com/products/${p.slug}`,
+  url: buildAbsoluteUrl(`/products/${p.slug}`),
   // aggregateRating intentionally omitted — `p.ratings` is a denormalized average on the
   // product row, not a count of reviews. Emitting aggregateRating with a fabricated
   // ratingCount/reviewCount would be misleading per Google's structured-data policy.
@@ -174,7 +178,7 @@ const jsonLd = {
 ---
 
 <Shop
-  title={`${p.name} | SnusFriend`}
+  title={`${p.name} | ${tenant.name}`}
   description={metaDescription}
   ogType="product"
   ogImage={p.imageUrl || undefined}
@@ -277,7 +281,7 @@ const jsonLd = {
           <div class="mb-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-center">
             <p class="text-sm font-semibold text-foreground">Be the first to review this product</p>
             <p class="mt-1 text-xs text-muted-foreground">
-              Share your experience and earn <strong class="text-primary">50 SnusCoins</strong>.
+              Share your experience and earn <strong class="text-primary">50 {loyaltyCurrencyName}</strong>.
             </p>
             <button
               type="button"
@@ -392,8 +396,8 @@ const jsonLd = {
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="text-primary" aria-hidden="true">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
-            Earn <strong class="text-primary">{Math.floor(singlePrice * rewards.earnRatePerEur)}</strong> SnusCoins per can
-            <a href="/rewards" class="underline hover:text-foreground ml-1">See how SnusCoins work</a>
+            Earn <strong class="text-primary">{Math.floor(singlePrice * rewards.earnRatePerEur)}</strong> {loyaltyCurrencyName} per can
+            <a href="/rewards" class="underline hover:text-foreground ml-1">See how {loyaltyCurrencyName} work</a>
           </p>
         )}
 
@@ -487,7 +491,7 @@ const jsonLd = {
                 <p class="font-semibold text-foreground mb-1">What you get</p>
                 <ul class="space-y-0.5 text-muted-foreground">
                   <li>&bull; <span id="sb-discount">{subMonthly.discountPct}</span>% off every delivery</li>
-                  <li>&bull; SnusCoins on every delivery (<span id="sb-coins" class="font-semibold text-primary">{Math.floor(monthlyPerCan * rewards.earnRatePerEur)}</span> per delivery at current pick)</li>
+                  <li>&bull; {loyaltyCurrencyName} on every delivery (<span id="sb-coins" class="font-semibold text-primary">{Math.floor(monthlyPerCan * rewards.earnRatePerEur)}</span> per delivery at current pick)</li>
                   <li>&bull; Free shipping, skip/pause/cancel anytime</li>
                 </ul>
               </div>
@@ -639,15 +643,14 @@ const jsonLd = {
   </div>
 
   <!-- Record product view for browsing history -->
-  <script is:inline define:vars={{ viewData: { slug: product.id, brand: p.brand, flavorKey: p.flavorKey, strengthKey: p.strengthKey } }}>
+  <script is:inline define:vars={{ historyKey: tenant.storage.historyKey, viewData: { slug: product.id, brand: p.brand, flavorKey: p.flavorKey, strengthKey: p.strengthKey } }}>
     document.addEventListener('astro:page-load', () => {
       try {
-        const key = 'snusfriend_history';
-        const raw = localStorage.getItem(key);
+        const raw = localStorage.getItem(historyKey);
         const history = raw ? JSON.parse(raw) : [];
         const filtered = history.filter(h => h.slug !== viewData.slug);
         const updated = [{ ...viewData, viewedAt: new Date().toISOString() }, ...filtered].slice(0, 30);
-        localStorage.setItem(key, JSON.stringify(updated));
+        localStorage.setItem(historyKey, JSON.stringify(updated));
       } catch { /* ignore */ }
     }, { once: true });
   </script>
@@ -885,7 +888,7 @@ const jsonLd = {
   </script>
 
   <!-- PostHog: product_viewed -->
-  <script is:inline define:vars={{ productId: p.slug, productName: p.name, brand: p.brand, price: p.prices.pack1, strengthKey: p.strengthKey, flavorKey: p.flavorKey }}>
+  <script is:inline define:vars={{ productId: p.slug, productName: p.name, brand: p.brand, price: p.prices.pack1, strengthKey: p.strengthKey, flavorKey: p.flavorKey, currencyCode }}>
     if (typeof window !== 'undefined' && window.posthog) {
       window.posthog.capture('product_viewed', {
         product_id: productId,
@@ -894,7 +897,7 @@ const jsonLd = {
         price: price,
         strength: strengthKey,
         flavor: flavorKey,
-        currency: 'EUR',
+        currency: currencyCode,
       });
     }
   </script>

@@ -24,7 +24,7 @@ import { tenant } from '@/config/tenant';
 
         <h2>1. About Us</h2>
         <p>
-          {tenant.name} is operated by SnusFriend ("we", "us", or "our"), registered in Sweden.
+          {tenant.name} is operated by {tenant.legalName} ("we", "us", or "our"), registered in {tenant.jurisdiction}.
           Our website is located at {tenant.domain} ("Site"). For questions about these Terms,
           contact us at <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>.
         </p>
@@ -183,9 +183,9 @@ import { tenant } from '@/config/tenant';
 
         <h2>13. Governing Law and Disputes</h2>
         <p>
-          These Terms are governed by and construed in accordance with the laws of Sweden.
+          These Terms are governed by and construed in accordance with the laws of {tenant.jurisdiction}.
           Any disputes arising from these Terms or your use of the Site shall be resolved
-          through the courts of Sweden, without prejudice to any mandatory consumer protection
+          through the courts of {tenant.jurisdiction}, without prejudice to any mandatory consumer protection
           provisions in your country of residence that may apply.
         </p>
         <p>

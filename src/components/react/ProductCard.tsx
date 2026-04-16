@@ -5,6 +5,7 @@ import type { Product } from '@/data/products';
 import { brandColors, strengthColors, strengthLabels, defaultBrandColor, flavorColors, defaultFlavorColor } from '@/data/brand-colors';
 import { strengthDotMap, flavorLabels, formatBadge } from '@/data/product-labels';
 import { rewards } from '@/config/rewards';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 interface ProductCardProps {
   slug: string;
@@ -256,7 +257,7 @@ const ProductCard = React.memo<ProductCardProps>(function ProductCard({
             )}
             {displayPrice > 0 && (
               <span className="text-[10px] font-medium text-primary">
-                +{Math.floor(displayPrice * rewards.earnRatePerEur).toLocaleString()} SnusCoins
+                +{Math.floor(displayPrice * rewards.earnRatePerEur).toLocaleString()} {loyaltyCurrencyName}
               </span>
             )}
           </div>

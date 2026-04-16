@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
 import { supabase } from '@/integrations/supabase/client';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 interface LeaderboardEntry {
   user_id: string;
@@ -90,7 +91,7 @@ const LeaderboardRow = React.memo(function LeaderboardRow({
       {/* Points */}
       <span className="shrink-0 text-sm font-semibold tabular-nums text-foreground">
         {entry.total_points.toLocaleString()}
-        <span className="ml-0.5 text-xs font-normal text-muted-foreground">coins</span>
+        <span className="ml-0.5 text-xs font-normal text-muted-foreground">{loyaltyCurrencyName}</span>
       </span>
     </div>
   );
@@ -253,7 +254,7 @@ function LeaderboardInner() {
       {!loading && !error && entries.length === 0 && (
         <div className="rounded-lg bg-muted/40 p-8 text-center">
           <p className="text-muted-foreground text-sm">
-            No rankings yet. Be the first to earn SnusCoins!
+            No rankings yet. Be the first to earn {loyaltyCurrencyName}!
           </p>
           <a
             href="/products"
@@ -280,7 +281,7 @@ function LeaderboardInner() {
           {currentUserId && !currentUserInList && (
             <div className="mt-4 rounded-lg border border-dashed border-primary/30 bg-primary/5 p-3 text-center">
               <p className="text-sm text-muted-foreground">
-                Keep earning SnusCoins to make The Board!
+                Keep earning {loyaltyCurrencyName} to make The Board!
               </p>
             </div>
           )}

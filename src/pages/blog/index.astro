@@ -6,6 +6,7 @@ import JsonLd from '@/components/astro/JsonLd.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
 import { blogArticles, getReadTime } from '@/data/blog-registry';
+import { buildCollectionPageSchema, editorialTeamLabel } from '@/lib/blog-schema';
 import { formatDisplayDate } from '@/lib/dates';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -77,23 +78,16 @@ const grouped = categoryOrder.map(cat => ({
   items: articles.filter(a => a.tag === cat && !featuredSlugs.includes(a.slug)),
 })).filter(g => g.items.length > 0);
 
-const blogJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
+const blogJsonLd = buildCollectionPageSchema({
   name: 'Nicotine Pouch Guides & Reviews',
   description: `Guides, reviews, and news about nicotine pouches from ${tenant.name}.`,
-  url: 'https://snusfriends.com/blog',
-  mainEntity: {
-    '@type': 'ItemList',
-    numberOfItems: articles.length,
-    itemListElement: articles.map((a, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      url: `https://snusfriends.com/blog/${a.slug}`,
-      name: a.title,
-    })),
-  },
-};
+  path: '/blog',
+  items: articles.map((article, index) => ({
+    position: index + 1,
+    path: `/blog/${article.slug}`,
+    name: article.title,
+  })),
+});
 
 const faqJsonLd = {
   "@context": "https://schema.org",
@@ -113,7 +107,7 @@ const faqJsonLd = {
   description={`Guides, reviews, and news about nicotine pouches from ${tenant.name}. Learn about strengths, flavours, brands, and more.`}
   canonical="/blog"
 >
-  <JsonLd data={blogJsonLd} />
+  <JsonLd items={[blogJsonLd, faqJsonLd]} />
   <section class="bg-background text-foreground">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Breadcrumb items={[{ label: 'Blog' }]} />
@@ -160,7 +154,7 @@ const faqJsonLd = {
                   <div class="flex items-center justify-between pt-4 border-t border-border/60 text-xs text-muted-foreground">
                     <div class="flex items-center gap-2">
                       <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary">SF</span>
-                      <span>SnusFriend Editorial</span>
+                      <span>{editorialTeamLabel}</span>
                     </div>
                     {article.date && (
                       <time datetime={article.date} class="tabular-nums">
@@ -216,7 +210,7 @@ const faqJsonLd = {
                           {formatDisplayDate(article.date)}
                         </time>
                         <span class="mx-1.5">&middot;</span>
-                        SnusFriend Editorial
+                        {editorialTeamLabel}
                       </p>
                     )}
                   </div>

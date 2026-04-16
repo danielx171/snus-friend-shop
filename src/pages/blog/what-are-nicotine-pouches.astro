@@ -6,23 +6,21 @@ import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
 import { getEditorialFacts } from '@/data/editorial-facts';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildBlogPostingSchema } from '@/lib/blog-schema';
 
 const facts = await getEditorialFacts();
 const publishDate = '2026-03-26';
 const title = 'What Are Nicotine Pouches? Beginner Guide (2026)';
 const description = 'What are nicotine pouches? How they work, how to use them, available strengths and flavours, and why millions are switching from tobacco.';
 
-const blogPostingJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": "2026-04-10",
-    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/what-are-nicotine-pouches` },
-  };
+const blogPostingJsonLd = buildBlogPostingSchema({
+  headline: title,
+  description,
+  slug: 'what-are-nicotine-pouches',
+  datePublished: publishDate,
+  dateModified: '2026-04-10',
+  imagePath: '/og/article-what-are-nicotine-pouches.png',
+});
 
 const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What exactly is inside a nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"A nicotine pouch contains pharmaceutical-grade nicotine, plant-based fibres (usually cellulose), flavouring, sweeteners, and a pH adjuster. There is no tobacco leaf, no smoke, and no vapour involved."}},{"@type":"Question","name":"Are nicotine pouches the same as snus?","acceptedAnswer":{"@type":"Answer","text":"No. Traditional snus contains ground tobacco leaf and is banned in the EU (except Sweden). Nicotine pouches are tobacco-free, using synthetic or extracted nicotine instead. They look similar but are regulated differently."}},{"@type":"Question","name":"How long does the effect of a nicotine pouch last?","acceptedAnswer":{"@type":"Answer","text":"Most pouches deliver noticeable nicotine within 1–2 minutes and last 20–40 minutes depending on the format, strength, and how much saliva you produce. Slim pouches tend to last longer than mini formats."}},{"@type":"Question","name":"Can you swallow a nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"You should not swallow pouches intentionally. If accidentally swallowed, the materials are non-toxic in small quantities, but you may experience mild nausea. The pouch is designed to sit between your lip and gum."}},{"@type":"Question","name":"Do nicotine pouches stain your teeth?","acceptedAnswer":{"@type":"Answer","text":"No. Because they contain no tobacco, nicotine pouches do not cause the brown or yellow staining associated with cigarettes, chewing tobacco, or traditional snus."}},{"@type":"Question","name":"Are nicotine pouches legal in Europe?","acceptedAnswer":{"@type":"Answer","text":"Yes, nicotine pouches are legal in most European countries. They are not classified as tobacco products under EU law. Some countries (e.g., the Netherlands, Belgium) have introduced restrictions, so check your local regulations."}},{"@type":"Question","name":"What strength should a beginner choose?","acceptedAnswer":{"@type":"Answer","text":"Beginners should start with 2–4 mg pouches (light strength). Non-smokers and first-time users may experience dizziness or nausea with stronger options. Work up gradually if needed."}}]};
 ---
@@ -71,7 +69,7 @@ const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity
 
         <h2>What Are Nicotine Pouches?</h2>
         <p>
-          As the SnusFriend team explains in this guide, nicotine pouches are small, pre-portioned sachets that deliver nicotine through
+          As the {tenant.name} team explains in this guide, nicotine pouches are small, pre-portioned sachets that deliver nicotine through
           the lining of your mouth. Unlike traditional <a href="/blog/nicotine-pouches-vs-snus">snus or chewing tobacco</a>, nicotine
           pouches contain <strong>no tobacco leaf whatsoever</strong>. They are white, discreet, and produce
           no smoke, no vapour, and no spit.
@@ -160,7 +158,7 @@ const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity
 
         <h2>Ready to Try?</h2>
         <p>
-          SnusFriend's database of {facts.productCountLabel} tobacco-free nicotine pouches — covering {facts.brandCountLabel} brands and 7 flavour categories — is one of Europe's most comprehensive independent product references for understanding what nicotine pouches are and how they compare. The category has seen significant growth since its mainstream introduction in 2018, driven by demand for smoke-free alternatives (<a href="https://www.grandviewresearch.com/industry-analysis/nicotine-pouch-market" target="_blank" rel="noopener noreferrer">Grand View Research (2025)</a>).
+          {tenant.name}'s database of {facts.productCountLabel} tobacco-free nicotine pouches — covering {facts.brandCountLabel} brands and 7 flavour categories — is one of Europe's most comprehensive independent product references for understanding what nicotine pouches are and how they compare. The category has seen significant growth since its mainstream introduction in 2018, driven by demand for smoke-free alternatives (<a href="https://www.grandviewresearch.com/industry-analysis/nicotine-pouch-market" target="_blank" rel="noopener noreferrer">Grand View Research (2025)</a>).
         </p>
         <p>
           With <a href="/nicotine-pouches">over {facts.productCountLabel} products from {facts.brandCountLabel} brands</a>, {tenant.name}

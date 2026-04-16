@@ -7,6 +7,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildBlogPostingSchema } from '@/lib/blog-schema';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -15,21 +16,13 @@ const publishDate = '2026-04-09';
 const title = 'Best Nicotine Pouches in Germany (2026): 10 EU-Shipped Picks';
 const description = 'Looking for nicotine pouches in Germany? Compare 10 editor-selected picks with pricing, beginner options, and practical EU shipping notes for 2026.';
 
-const blogPostingJsonLd = {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-germany-2026` },
-        "description": description
-      };
+const blogPostingJsonLd = buildBlogPostingSchema({
+  headline: title,
+  description,
+  slug: 'best-nicotine-pouches-germany-2026',
+  datePublished: publishDate,
+  imagePath: '/og/article-best-nicotine-pouches-germany-2026.png',
+});
 
 const faqJsonLd = {
         "@context": "https://schema.org",
@@ -48,7 +41,7 @@ const faqJsonLd = {
             "name": "How much do nicotine pouches cost in Germany?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Prices vary by retailer. Gas stations charge €4–5 per can, supermarkets €3.50–4.50, and online retailers (including SnusFriend) €2.50–3.50. When you order 50-can rolls from SnusFriend, the per-can cost drops to €2.20–2.80. Bulk orders deliver the best value."
+              "text": `Prices vary by retailer. Gas stations charge €4–5 per can, supermarkets €3.50–4.50, and online retailers (including ${tenant.name}) €2.50–3.50. When you order 50-can rolls from ${tenant.name}, the per-can cost drops to €2.20–2.80. Bulk orders deliver the best value.`
             }
           },
           {
@@ -64,7 +57,7 @@ const faqJsonLd = {
             "name": "Can you buy nicotine pouches at German supermarkets?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes, major supermarkets including Rewe, Kaufland, Edeka, and Aldi now stock nicotine pouches. Selection is limited compared to online retailers, and prices are higher (€3.50–4.50 per can). For the widest choice and best prices, online ordering from SnusFriend is faster and cheaper."
+              "text": `Yes, major supermarkets including Rewe, Kaufland, Edeka, and Aldi now stock nicotine pouches. Selection is limited compared to online retailers, and prices are higher (€3.50–4.50 per can). For the widest choice and best prices, online ordering from ${tenant.name} is faster and cheaper.`
             }
           },
           {
@@ -80,7 +73,7 @@ const faqJsonLd = {
             "name": "Are nicotine pouches taxed in Germany?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Nicotine pouches are not subject to tobacco tax (Tabaksteuer) because they contain no tobacco. However, standard VAT (19% in Germany) applies and is included in all SnusFriend prices. There are no additional customs or import duties when ordering from an EU warehouse."
+              "text": `Nicotine pouches are not subject to tobacco tax (Tabaksteuer) because they contain no tobacco. However, standard VAT (19% in Germany) applies and is included in all ${tenant.name} prices. There are no additional customs or import duties when ordering from an EU warehouse.`
             }
           }
         ]
@@ -107,7 +100,7 @@ const faqJsonLd = {
 
         <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
           <summary style="font-weight: 600; cursor: pointer;">Quick Answer: Best Pouches in Germany 2026</summary>
-          <p style="margin-top: 12px;">Nicotine pouches are legal to buy and use in Germany, and online ordering with delivery in 2&ndash;3 business days via DHL is the most common route. The top picks for the German market in 2026 are ZYN Cool Mint Slim 6mg (most popular overall), VELO Freeze Max 17mg (for experienced users), and Klar Mint 4mg (best value under &euro;2). Germany has no nicotine pouch-specific tax yet, though EU-level regulation is under discussion. All products on SnusFriend ship from within the EU &mdash; no customs delays or import duties apply.</p>
+          <p style="margin-top: 12px;">Nicotine pouches are legal to buy and use in Germany, and online ordering with delivery in 2&ndash;3 business days via DHL is the most common route. The top picks for the German market in 2026 are ZYN Cool Mint Slim 6mg (most popular overall), VELO Freeze Max 17mg (for experienced users), and Klar Mint 4mg (best value under &euro;2). Germany has no nicotine pouch-specific tax yet, though EU-level regulation is under discussion. All products on {tenant.name} ship from within the EU &mdash; no customs delays or import duties apply.</p>
         </details>
 
         <div style="background: hsl(var(--muted)); border-left: 4px solid hsl(var(--primary)); padding: 1.5rem; margin-bottom: 2rem; border-radius: 4px;">
@@ -115,13 +108,13 @@ const faqJsonLd = {
         </div>
 
         <div style="margin: 16px 0 24px; padding: 14px 18px; background: hsl(var(--muted)); border-left: 3px solid hsl(var(--primary) / 0.4); border-radius: 6px; font-size: 13px; color: hsl(var(--muted-foreground));">
-          <strong style="color: hsl(var(--foreground));">Regulatory notice:</strong> Nicotine pouch regulations vary by country and change frequently. This article reflects our understanding as of the publication date. Always verify current local regulations before ordering. SnusFriend does not ship to countries where nicotine pouches are prohibited.
+          <strong style="color: hsl(var(--foreground));">Regulatory notice:</strong> Nicotine pouch regulations vary by country and change frequently. This article reflects our understanding as of the publication date. Always verify current local regulations before ordering. {tenant.name} does not ship to countries where nicotine pouches are prohibited.
         </div>
 
         <h2>Are Nicotine Pouches Legal in Germany?</h2>
         <p>Yes, nicotine pouches are completely legal in Germany. Unlike tobacco products, nicotine pouches contain no tobacco leaf and are classified as consumer products under German law. This distinction is crucial—it means they fall outside the strict tobacco regulation framework (TPD2) that applies to cigarettes, snus, and other tobacco-containing products.</p>
         <p>Germany has no federal age restriction on nicotine pouches, though major retailers voluntarily enforce an 18+ policy for consumer responsibility. The German market has seen explosive growth over the past two years, with nicotine pouches now stocked in thousands of convenience stores, supermarkets, and online retailers across the country.</p>
-        <p>While the EU Tobacco Products Directive (TPD) does not currently regulate tobacco-free nicotine pouches, Germany may introduce national regulations in the coming years. For now, the category remains one of the most accessible and affordable ways to enjoy nicotine products in continental Europe. This is why SnusFriend operates an EU warehouse—so German customers can order with zero customs concerns and expect delivery in under 3 days.</p>
+        <p>While the EU Tobacco Products Directive (TPD) does not currently regulate tobacco-free nicotine pouches, Germany may introduce national regulations in the coming years. For now, the category remains one of the most accessible and affordable ways to enjoy nicotine products in continental Europe. This is why {tenant.name} operates an EU warehouse—so German customers can order with zero customs concerns and expect delivery in under 3 days.</p>
 
         <h2>Top 10 Nicotine Pouches Available in Germany</h2>
 
@@ -135,7 +128,7 @@ const faqJsonLd = {
         <p><a href="/blog/best-nicotine-pouches-for-beginners-2026">Nordic Spirit Spearmint</a> is our top recommendation for first-time users in Germany. The spearmint flavor is natural and approachable (not artificial menthol), the portions are comfortable in the mouth, and the strength (2 mg) is gentle enough to avoid nicotine sensitivity. Nordic Spirit also has excellent gum safety—portions dissolve cleanly without irritation, even on extended sessions.</p>
 
         <h3>4. Skruf Super White Fresh Mint S2 — Best Value</h3>
-        <p>Skruf is Scandinavian excellence at an affordable price point. Super White Fresh Mint delivers a bright, herbal mint flavor with a matte white pouch that doesn't stain. At 2.7 mg nicotine, it's a balanced choice, and the per-can cost is among the lowest in Germany when ordered from SnusFriend. German bargain hunters consistently report satisfaction with Skruf's quality-to-price ratio.</p>
+        <p>Skruf is Scandinavian excellence at an affordable price point. Super White Fresh Mint delivers a bright, herbal mint flavor with a matte white pouch that doesn't stain. At 2.7 mg nicotine, it's a balanced choice, and the per-can cost is among the lowest in Germany when ordered from {tenant.name}. German bargain hunters consistently report satisfaction with Skruf's quality-to-price ratio.</p>
 
         <h3>5. LOOP Mint Mania — Best Mint Flavor</h3>
         <p>If pure mint perfection is your goal, LOOP Mint Mania is the answer. The flavor profile is complex—neither artificial nor too subtle—and the portions are extremely soft on gums. LOOP is often chosen by users who've tried dozens of other brands and are tired of mediocre mint execution. With 2 mg nicotine, it's a lighter choice suited for daytime or office use.</p>
@@ -161,17 +154,17 @@ const faqJsonLd = {
           <ul>
             <li><strong>Gas stations / Kiosks:</strong> €4.00–€5.50 per can (highest markup)</li>
             <li><strong>Supermarkets (e.g., Rewe, Kaufland):</strong> €3.50–€4.50 per can</li>
-            <li><strong>Online retailers (including SnusFriend):</strong> €2.50–€3.50 per can</li>
-            <li><strong>SnusFriend EU warehouse (bulk rolls):</strong> €2.20–€2.80 per can (50-can rolls)</li>
+            <li><strong>Online retailers (including {tenant.name}):</strong> €2.50–€3.50 per can</li>
+            <li><strong>{tenant.name} EU warehouse (bulk rolls):</strong> €2.20–€2.80 per can (50-can rolls)</li>
           </ul>
         </div>
-        <p>By ordering from SnusFriend's EU warehouse, German customers save 30–60% compared to gas station prices. A single can at a local Kiosk (€4.50) costs nearly double what you'd pay online (€2.50). Over a month of daily use, the savings are substantial—€135 saved at kiosk prices versus €75 from SnusFriend, a €60 difference. Most German customers order monthly roll packs (50 cans) to maximize savings and ensure consistent supply.</p>
-        <p>All SnusFriend prices are displayed in EUR, include intra-EU VAT, and involve zero hidden customs or import fees. Delivery from our warehouse to Germany typically costs €3.99 (standard) or is free for orders over €40.</p>
+        <p>By ordering from {tenant.name}'s EU warehouse, German customers save 30–60% compared to gas station prices. A single can at a local Kiosk (€4.50) costs nearly double what you'd pay online (€2.50). Over a month of daily use, the savings are substantial—€135 saved at kiosk prices versus €75 from {tenant.name}, a €60 difference. Most German customers order monthly roll packs (50 cans) to maximize savings and ensure consistent supply.</p>
+        <p>All {tenant.name} prices are displayed in {tenant.currencyCode}, include intra-EU VAT, and involve zero hidden customs or import fees. Delivery from our warehouse to Germany typically costs €3.99 (standard) or is free for orders over €40.</p>
 
         <h2>How to Order Nicotine Pouches in Germany</h2>
-        <p>Ordering from SnusFriend is simple and takes under 3 minutes:</p>
+        <p>Ordering from {tenant.name} is simple and takes under 3 minutes:</p>
         <ul>
-          <li>Visit <a href="/nicotine-pouches">snusfriends.com/nicotine-pouches</a> and select your products (singles or roll packs)</li>
+          <li>Visit <a href="/nicotine-pouches">{tenant.domain}/nicotine-pouches</a> and select your products (singles or roll packs)</li>
           <li>Add to cart and proceed to checkout</li>
           <li>Shipping from our EU warehouse (DHL or DPD) arrives in 2–3 business days across Germany</li>
           <li>No customs, no import duty, no surprise fees—you pay exactly what's listed</li>
@@ -190,7 +183,7 @@ const faqJsonLd = {
         </div>
 
         <h2>Popular Nicotine Pouch Brands Available in Germany</h2>
-        <p>Germany has access to nearly all premium global brands. Explore <a href="/brands/zyn">ZYN</a>, <a href="/brands/velo">VELO</a>, Nordic Spirit, Skruf, White Fox, LOOP, Helwit, ON!, Klar, and Fumi through SnusFriend's full catalog. Each brand offers unique strengths and flavor profiles—many users collect favorites across multiple brands rather than sticking to a single product.</p>
+        <p>Germany has access to nearly all premium global brands. Explore <a href="/brands/zyn">ZYN</a>, <a href="/brands/velo">VELO</a>, Nordic Spirit, Skruf, White Fox, LOOP, Helwit, ON!, Klar, and Fumi through {tenant.name}'s full catalog. Each brand offers unique strengths and flavor profiles—many users collect favorites across multiple brands rather than sticking to a single product.</p>
 
         <h2>Related Reading</h2>
         <ul>
@@ -209,19 +202,19 @@ const faqJsonLd = {
           <p>Ja, Nikotinbeutel sind in Deutschland vollständig legal. Sie enthalten kein Tabakblatt und fallen daher nicht unter die Tabakproduktrichtlinie (TPD2). Sie werden als Konsumprodukt klassifiziert und können frei gekauft und verkauft werden. Es gibt keine bundesweite Altersgrenze, aber Einzelhandelsketten wenden freiwillig eine 18+-Regel an.</p>
 
           <h3 class="text-foreground font-semibold mt-4">How much do nicotine pouches cost in Germany?</h3>
-          <p>Prices vary by retailer. Gas stations charge €4–5 per can, supermarkets €3.50–4.50, and online retailers (including SnusFriend) €2.50–3.50. When you order 50-can rolls from SnusFriend, the per-can cost drops to €2.20–2.80. Bulk orders deliver the best value—a 30-day supply from SnusFriend costs roughly €75–90, while the same from a local Kiosk would exceed €135.</p>
+          <p>Prices vary by retailer. Gas stations charge €4–5 per can, supermarkets €3.50–4.50, and online retailers (including {tenant.name}) €2.50–3.50. When you order 50-can rolls from {tenant.name}, the per-can cost drops to €2.20–2.80. Bulk orders deliver the best value—a 30-day supply from {tenant.name} costs roughly €75–90, while the same from a local Kiosk would exceed €135.</p>
 
           <h3 class="text-foreground font-semibold mt-4">What strength should a German beginner start with?</h3>
           <p>Start with light-strength pouches (2–2.5 mg nicotine). <a href="/blog/best-nicotine-pouches-for-beginners-2026">Nordic Spirit Spearmint</a>, LOOP Mint Mania, and ON! Mint are excellent entry points. If you're a heavy smoker or tobacco user switching to pouches, try medium strength (3 mg) such as ZYN Cool Mint or Skruf Fresh Mint. Avoid very strong options (4+ mg) until you've built tolerance.</p>
 
           <h3 class="text-foreground font-semibold mt-4">Can you buy nicotine pouches at German supermarkets?</h3>
-          <p>Yes, major supermarkets including Rewe, Kaufland, Edeka, and Aldi now stock nicotine pouches. Selection is limited compared to online retailers, and prices are higher (€3.50–4.50 per can). For the widest choice and best prices, online ordering from <a href="/nicotine-pouches">SnusFriend</a> is faster and cheaper.</p>
+          <p>Yes, major supermarkets including Rewe, Kaufland, Edeka, and Aldi now stock nicotine pouches. Selection is limited compared to online retailers, and prices are higher (€3.50–4.50 per can). For the widest choice and best prices, online ordering from <a href="/nicotine-pouches">{tenant.name}</a> is faster and cheaper.</p>
 
           <h3 class="text-foreground font-semibold mt-4">How long does delivery to Germany take?</h3>
           <p>Standard delivery via DHL or DPD is 2–3 business days to any address in Germany. If you order by 1 PM on a weekday, your shipment usually arrives by Friday. We also offer express 1-day delivery for urgent orders. All shipments include tracking, so you can monitor your package in real-time.</p>
 
           <h3 class="text-foreground font-semibold mt-4">Are nicotine pouches taxed in Germany?</h3>
-          <p>Nicotine pouches are not subject to tobacco tax (Tabaksteuer) because they contain no tobacco. However, standard VAT (19% in Germany) applies and is included in all SnusFriend prices. There are no additional customs or import duties when ordering from an EU warehouse—you pay the listed price, nothing more.</p>
+          <p>Nicotine pouches are not subject to tobacco tax (Tabaksteuer) because they contain no tobacco. However, standard VAT (19% in Germany) applies and is included in all {tenant.name} prices. There are no additional customs or import duties when ordering from an EU warehouse—you pay the listed price, nothing more.</p>
         </div>
       </details>
 

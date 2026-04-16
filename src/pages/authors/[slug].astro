@@ -1,0 +1,63 @@
+---
+export const prerender = true;
+
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
+import DefaultAuthorProfileContent from '@/components/astro/DefaultAuthorProfileContent.astro';
+import { tenant } from '@/config/tenant';
+import { buildAbsoluteUrl } from '@/config/site';
+import { buildAuthorPersonSchema, getDefaultAuthorPath } from '@/lib/blog-schema';
+
+const legacySlug = 'erik-lindqvist';
+
+export function getStaticPaths() {
+  const defaultSlug = tenant.defaultAuthor.slug ?? 'erik-lindqvist';
+  const legacySlug = 'erik-lindqvist';
+  const slugs = Array.from(new Set([defaultSlug, legacySlug]));
+
+  return slugs.map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const defaultSlug = tenant.defaultAuthor.slug ?? legacySlug;
+const { slug } = Astro.params;
+const canonicalPath = slug === defaultSlug ? getDefaultAuthorPath() : `/authors/${slug}`;
+const title = `${tenant.defaultAuthor.name} — ${tenant.defaultAuthor.jobTitle}, ${tenant.name}`;
+const description = `${tenant.defaultAuthor.name} is the ${tenant.defaultAuthor.jobTitle.toLowerCase()} at ${tenant.name}, specializing in independent nicotine pouch coverage with a transparent, evidence-led review process.`;
+const personSchema = {
+  '@context': 'https://schema.org',
+  ...buildAuthorPersonSchema(canonicalPath),
+  worksFor: {
+    '@type': 'Organization',
+    name: tenant.name,
+    url: buildAbsoluteUrl('/'),
+  },
+  knowsAbout: [
+    'nicotine pouches',
+    'tobacco harm reduction',
+    'smokeless tobacco',
+    'nicotine pharmacology',
+    'product testing methodology',
+    'European nicotine regulation',
+  ],
+};
+---
+
+<Shop title={title} description={description} canonical={canonicalPath}>
+  <JsonLd data={personSchema} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb
+        items={[
+          { label: 'Blog', href: '/blog' },
+          { label: tenant.defaultAuthor.name },
+        ]}
+      />
+
+      <DefaultAuthorProfileContent />
+    </div>
+  </article>
+</Shop>

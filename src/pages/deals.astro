@@ -2,11 +2,13 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { buildAbsoluteUrl } from '@/config/site';
 import { tenant } from '@/config/tenant';
 import JsonLd from '@/components/astro/JsonLd.astro';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
 
 const title = 'Discount Codes & Deals';
-const description = 'Find active SnusFriend discount codes, learn how to use them, and sign up for exclusive deals on nicotine pouches. New subscriber codes available.';
+const description = `Find active ${tenant.name} discount codes, learn how to use them, and sign up for exclusive deals on nicotine pouches. New subscriber codes available.`;
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
 
 const faqJsonLd = {
@@ -14,9 +16,9 @@ const faqJsonLd = {
     "@type": "FAQPage",
     "mainEntity": [
       { "@type": "Question", "name": "Can I use more than one discount code per order?", "acceptedAnswer": { "@type": "Answer", "text": "No, only one code per order. Use the one with the biggest discount and save the others for next time." } },
-      { "@type": "Question", "name": "How do I use a discount code at SnusFriend?", "acceptedAnswer": { "@type": "Answer", "text": "During checkout, click 'Have a discount code?' in the order summary. Enter your code, press Apply, and the discount is deducted from your total." } },
+      { "@type": "Question", "name": `How do I use a discount code at ${tenant.name}?`, "acceptedAnswer": { "@type": "Answer", "text": "During checkout, click 'Have a discount code?' in the order summary. Enter your code, press Apply, and the discount is deducted from your total." } },
       { "@type": "Question", "name": "Do discount codes work on all products?", "acceptedAnswer": { "@type": "Answer", "text": "Most codes apply to the full catalogue, but some are brand-specific or exclude limited-edition items. The terms are shown when you receive the code." } },
-      { "@type": "Question", "name": "How often does SnusFriend release new codes?", "acceptedAnswer": { "@type": "Answer", "text": "It varies — newsletter subscribers are always the first to know. We share codes regularly through the newsletter and seasonal promotions." } }
+      { "@type": "Question", "name": `How often does ${tenant.name} release new codes?`, "acceptedAnswer": { "@type": "Answer", "text": "It varies — newsletter subscribers are always the first to know. We share codes regularly through the newsletter and seasonal promotions." } }
     ]
   };
 ---
@@ -27,6 +29,13 @@ const faqJsonLd = {
   canonical="/deals"
 >
   <JsonLd data={faqJsonLd} />
+  <JsonLd data={{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": `${title} | ${tenant.name}`,
+    "description": description,
+    "url": buildAbsoluteUrl('/deals')
+  }} />
 
   <div class="bg-background text-foreground">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">
@@ -81,7 +90,7 @@ const faqJsonLd = {
             <div class="rounded-lg border border-border bg-card p-5">
               <h3 class="text-lg font-semibold text-foreground mb-2">Loyalty rewards</h3>
               <p class="text-sm text-muted-foreground">
-                Earn SnusCoins as you shop and engage. Higher tiers unlock exclusive vouchers. Check your <a href="/rewards" class="text-primary underline hover:text-foreground">rewards progress</a>.
+                Earn {loyaltyCurrencyName} as you shop and engage. Higher tiers unlock exclusive vouchers. Check your <a href="/rewards" class="text-primary underline hover:text-foreground">rewards progress</a>.
               </p>
             </div>
             <div class="rounded-lg border border-border bg-card p-5">
@@ -99,7 +108,7 @@ const faqJsonLd = {
         <section class="rounded-xl border border-primary/20 bg-primary/5 p-6 sm:p-8 text-center">
           <h2 class="text-2xl font-bold text-foreground mb-2">Get your first discount code</h2>
           <p class="text-muted-foreground mb-6">
-            Sign up for the SnusFriend newsletter and we'll send you an exclusive welcome code. No spam — just deals, new arrivals, and the occasional flavour recommendation.
+            Sign up for the {tenant.name} newsletter and we'll send you an exclusive welcome code. No spam — just deals, new arrivals, and the occasional flavour recommendation.
           </p>
           <form
             class="mx-auto flex max-w-md flex-col gap-3 sm:flex-row"

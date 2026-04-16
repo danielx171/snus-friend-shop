@@ -1,27 +1,18 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { percentageToAmount } from '../_shared/discount-distribution.ts';
-
-const allowedOrigins = ['https://snusfriends.com', 'https://www.snusfriends.com'];
-
-function getCorsHeaders(req: Request) {
-  const origin = req.headers.get('Origin') ?? '';
-  const allowed = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
-  return {
-    'Access-Control-Allow-Origin': allowed,
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  };
-}
+import { getCorsHeaders } from '../_shared/cors.ts';
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req.headers.get('Origin'));
+
   if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: getCorsHeaders(req) });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'METHOD_NOT_ALLOWED' }), {
       status: 405,
-      headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 
@@ -31,7 +22,7 @@ Deno.serve(async (req) => {
     if (!code || typeof code !== 'string') {
       return new Response(JSON.stringify({ error: 'INVALID_CODE' }), {
         status: 400,
-        headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -50,7 +41,7 @@ Deno.serve(async (req) => {
     if (dbError || !discount) {
       return new Response(JSON.stringify({ error: 'INVALID_CODE' }), {
         status: 400,
-        headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -58,7 +49,7 @@ Deno.serve(async (req) => {
     if (discount.valid_until && new Date(discount.valid_until) < new Date()) {
       return new Response(JSON.stringify({ error: 'EXPIRED' }), {
         status: 400,
-        headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -66,7 +57,7 @@ Deno.serve(async (req) => {
     if (discount.valid_from && new Date(discount.valid_from) > new Date()) {
       return new Response(JSON.stringify({ error: 'INVALID_CODE' }), {
         status: 400,
-        headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -74,7 +65,7 @@ Deno.serve(async (req) => {
     if (discount.max_uses !== null && discount.used_count >= discount.max_uses) {
       return new Response(JSON.stringify({ error: 'MAX_USES_REACHED' }), {
         status: 400,
-        headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -88,7 +79,7 @@ Deno.serve(async (req) => {
         }),
         {
           status: 400,
-          headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -117,7 +108,7 @@ Deno.serve(async (req) => {
       }),
       {
         status: 200,
-        headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   } catch {
@@ -125,7 +116,7 @@ Deno.serve(async (req) => {
       JSON.stringify({ error: 'INTERNAL_ERROR', message: 'Failed to validate discount code' }),
       {
         status: 500,
-        headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   }

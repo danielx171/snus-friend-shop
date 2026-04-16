@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { expandImageUrl } from '@/lib/image-cdn';
 import { strengthLabels } from '@/data/brand-colors';
 import { flavorLabels } from '@/data/product-labels';
+import { siteHost } from '@/config/site';
 import { tenant } from '@/config/tenant';
 
 type SlimProduct = {
@@ -350,7 +351,7 @@ export default function CompareIsland() {
               href={`/compare?products=${encodeURIComponent(selected.join(','))}`}
               className="text-primary hover:underline"
             >
-              snusfriends.com/compare?products={selected.join(',')}
+              {siteHost}/compare?products={selected.join(',')}
             </a>
           </p>
 

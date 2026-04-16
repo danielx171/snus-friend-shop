@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
 import { brandFacts } from '@/data/brand-facts';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildBlogPostingSchema } from '@/lib/blog-schema';
 
 const facts = await getEditorialFacts();
 
@@ -35,18 +36,14 @@ const veloFact = brandFacts.velo;
 const zynCatalogCount = allProducts.filter((product) => product.data.brandSlug === 'zyn').length;
 const veloCatalogCount = allProducts.filter((product) => product.data.brandSlug === 'velo').length;
 
-const blogPostingJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "10 Best Nicotine Pouches 2026: Top Picks Ranked",
-    "description": "Our expert picks for the best nicotine pouches of 2026. Winners in 7 categories — best overall, beginner, mint, strong, value, variety, and premium.",
-    "image": "https://snusfriends.com/og-blog-best-pouches-2026.jpg",
-    "datePublished": "2026-03-28",
-    "dateModified": "2026-04-10",
-    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/best-nicotine-pouches-2026" }
-  };
+const blogPostingJsonLd = buildBlogPostingSchema({
+  headline: '10 Best Nicotine Pouches 2026: Top Picks Ranked',
+  description: 'Our expert picks for the best nicotine pouches of 2026. Winners in 7 categories — best overall, beginner, mint, strong, value, variety, and premium.',
+  slug: 'best-nicotine-pouches-2026',
+  datePublished: '2026-03-28',
+  dateModified: '2026-04-10',
+  imagePath: '/og/article-best-nicotine-pouches-2026.png',
+});
 
 const faqJsonLd = {
     "@context": "https://schema.org",
@@ -55,7 +52,7 @@ const faqJsonLd = {
       { "@type": "Question", "name": "What strength nicotine pouch should I start with?", "acceptedAnswer": { "@type": "Answer", "text": "If you're new to nicotine pouches, start with 3–6 mg/pouch. This delivers a light buzz without overwhelming effects. VELO Simply Spearmint Mini at 4 mg is specifically designed for beginners — the small format makes it easy to control duration and intensity." } },
       { "@type": "Question", "name": "Are stronger nicotine pouches safer than smoking?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine pouches are fundamentally different from smoking because they don't involve combustion. Even high-strength pouches like Siberia (33 mg/g) pose no smoke-related risks. However, very high strength is habit-forming and not recommended for casual users. Start with moderate strength and increase only if you're a regular user." } },
       { "@type": "Question", "name": "How long does a nicotine pouch last?", "acceptedAnswer": { "@type": "Answer", "text": "Most nicotine pouches release their nicotine over 30–60 minutes. Slim formats tend to last slightly shorter. You can control duration by removing the pouch early. For all-day use, one pouch every 1–2 hours is typical among regular users." } },
-      { "@type": "Question", "name": "What's the difference between ZYN and VELO?", "acceptedAnswer": { "@type": "Answer", "text": `ZYN (${zynFact.owner}) is the safer all-round pick with a cleaner, more standardized range. VELO (${veloFact.owner}) currently shows broader flavour experimentation on SnusFriend, with ${veloCatalogCount} live VELO products versus ${zynCatalogCount} ZYN products in our catalog.` } },
+      { "@type": "Question", "name": "What's the difference between ZYN and VELO?", "acceptedAnswer": { "@type": "Answer", "text": `ZYN (${zynFact.owner}) is the safer all-round pick with a cleaner, more standardized range. VELO (${veloFact.owner}) currently shows broader flavour experimentation at ${tenant.name}, with ${veloCatalogCount} live VELO products versus ${zynCatalogCount} ZYN products in our catalog.` } },
       { "@type": "Question", "name": "Can I use nicotine pouches if I'm pregnant?", "acceptedAnswer": { "@type": "Answer", "text": "Nicotine is harmful to foetal development. You should not use any nicotine product — pouches, cigarettes, or vaping — during pregnancy. If you're trying to quit nicotine, speak with a healthcare provider about evidence-based cessation support." } }
     ]
   };
@@ -203,7 +200,7 @@ const faqJsonLd = {
 
     <h2>Best Flavour Variety: VELO</h2>
 
-    <p><strong>Range:</strong> {veloCatalogCount}+ live VELO products on SnusFriend across multiple flavour families and strengths.</p>
+    <p><strong>Range:</strong> {veloCatalogCount}+ live VELO products at {tenant.name} across multiple flavour families and strengths.</p>
 
     <p>VELO is the assortment play. {veloFact.owner} has built the brand around breadth, so you see more experimentation in mint, fruit, spice, and nicotine-free adjacent formats than you get from a tighter brand like ZYN.</p>
 
@@ -303,7 +300,7 @@ const faqJsonLd = {
     <p>Most nicotine pouches release their nicotine over 30–60 minutes. Slim formats tend to last slightly shorter. You can control duration by removing the pouch early. For all-day use, one pouch every 1–2 hours is typical among regular users.</p>
 
     <h3>What's the difference between ZYN and VELO?</h3>
-    <p>ZYN is the simpler all-round pick with a more standardized lineup, while VELO offers more flavour experimentation and a broader live assortment on SnusFriend. Both are high-quality; the choice comes down to whether you prefer consistency (ZYN) or a wider menu of formats and flavours (VELO).</p>
+    <p>ZYN is the simpler all-round pick with a more standardized lineup, while VELO offers more flavour experimentation and a broader live assortment at {tenant.name}. Both are high-quality; the choice comes down to whether you prefer consistency (ZYN) or a wider menu of formats and flavours (VELO).</p>
 
     <h3>Can I use nicotine pouches if I'm pregnant?</h3>
     <p>Nicotine is harmful to foetal development. You should not use any nicotine product — pouches, cigarettes, or vaping — during pregnancy. If you're trying to quit nicotine, speak with a healthcare provider about evidence-based cessation support.</p>

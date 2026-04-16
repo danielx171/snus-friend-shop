@@ -1,7 +1,8 @@
 import { persistentAtom } from '@nanostores/persistent';
+import { getStorageKey } from '@/lib/tenant-storage';
 
 export const $beginnerMode = persistentAtom<boolean>(
-  'snusfriend_beginner',
+  getStorageKey('beginnerKey'),
   false,
   {
     encode: JSON.stringify,

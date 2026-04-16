@@ -1,9 +1,9 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 /**
  * IndexNow ping script — run after `astro build` to notify Bing/Yandex of changed URLs.
  *
  * Usage:
- *   node scripts/indexnow-ping.mjs [--dry-run]
+ *   bun run scripts/indexnow-ping.ts [--dry-run]
  *
  * Reads the built sitemap.xml, extracts URLs with lastmod >= 7 days ago,
  * and submits them to the IndexNow API.
@@ -19,12 +19,11 @@ const KEY = process.env.INDEXNOW_KEY ?? '29107f159f82547861eeda66dea41127';
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/IndexNow';
 const DRY_RUN = process.argv.includes('--dry-run');
 
-// Parse sitemap XML (simple regex — no dependency needed)
-function extractRecentUrls(sitemapXml, daysBack = 7) {
+function extractRecentUrls(sitemapXml: string, daysBack = 7): string[] {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - daysBack);
 
-  const urls = [];
+  const urls: string[] = [];
   const entries = sitemapXml.match(/<url>[\s\S]*?<\/url>/g) || [];
 
   for (const entry of entries) {
@@ -44,13 +43,12 @@ function extractRecentUrls(sitemapXml, daysBack = 7) {
   return urls;
 }
 
-async function submitToIndexNow(urls) {
+async function submitToIndexNow(urls: string[]) {
   if (urls.length === 0) {
     console.log('[IndexNow] No recently modified URLs to submit.');
     return;
   }
 
-  // IndexNow batch limit is 10,000
   const batch = urls.slice(0, 10000);
   const payload = {
     host: 'snusfriends.com',
@@ -63,7 +61,7 @@ async function submitToIndexNow(urls) {
 
   if (DRY_RUN) {
     console.log('[IndexNow] DRY RUN — would submit:');
-    batch.slice(0, 10).forEach((u) => console.log(`  ${u}`));
+    batch.slice(0, 10).forEach((url) => console.log(`  ${url}`));
     if (batch.length > 10) console.log(`  ... and ${batch.length - 10} more`);
     return;
   }
@@ -82,20 +80,17 @@ async function submitToIndexNow(urls) {
       console.error(`[IndexNow] Failed (${res.status}): ${body}`);
     }
   } catch (err) {
-    console.error(`[IndexNow] Network error: ${err.message}`);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`[IndexNow] Network error: ${message}`);
   }
 }
 
-// Main
-// Astro + Vercel adapter writes the sitemap to dist/client/sitemap-0.xml.
-// Older Astro build layouts wrote dist/sitemap-0.xml; keep that as a fallback only.
-// Do NOT fall back to public/sitemap.xml — that's legacy output with stale URL shapes.
 const sitemapCandidates = [
   '../dist/client/sitemap-0.xml',
   '../dist/sitemap-0.xml',
 ];
-let sitemapXml;
-let sitemapFoundAt;
+let sitemapXml: string | undefined;
+let sitemapFoundAt: string | undefined;
 for (const rel of sitemapCandidates) {
   try {
     const abs = resolve(import.meta.dirname, rel);
@@ -103,13 +98,15 @@ for (const rel of sitemapCandidates) {
     sitemapFoundAt = rel;
     break;
   } catch {
-    // try next candidate
+    // Try the next candidate.
   }
 }
+
 if (!sitemapXml) {
   console.log('[IndexNow] No build sitemap found — run `astro build` first. Skipping.');
   process.exit(0);
 }
+
 console.log(`[IndexNow] Loaded sitemap from ${sitemapFoundAt}`);
 
 const recentUrls = extractRecentUrls(sitemapXml, 7);

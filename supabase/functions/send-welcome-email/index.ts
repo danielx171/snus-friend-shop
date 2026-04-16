@@ -5,6 +5,9 @@ declare const Deno: {
   serve: (handler: (req: Request) => Response | Promise<Response>) => void;
 };
 
+// @ts-expect-error — Deno relative .ts import
+import { siteName } from "../_shared/site-config.ts";
+
 /* ------------------------------------------------------------------ */
 /*  send-welcome-email                                                 */
 /*  Called by a Supabase database webhook (pg_net) when a new user     */
@@ -116,7 +119,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         to: email.trim(),
-        subject: `Welcome to SnusFriend, ${customerName}!`,
+        subject: `Welcome to ${siteName}, ${customerName}!`,
         template: "welcome",
         data: {
           customerName,

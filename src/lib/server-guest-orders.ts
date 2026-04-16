@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { siteUrl } from '@/config/site';
 
 type GuestOrderRow = {
   id: string;
@@ -156,7 +157,7 @@ export function extractGuestOrderIdFromNext(next: string | null | undefined): st
   }
 
   try {
-    const target = new URL(next, 'https://snusfriends.com');
+    const target = new URL(next, siteUrl);
     if (target.pathname !== '/order-confirmation') {
       return null;
     }

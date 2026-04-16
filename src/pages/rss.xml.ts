@@ -1,12 +1,13 @@
 import rss from '@astrojs/rss';
-import type { APIContext } from 'astro';
 import { blogArticles } from '../data/blog-registry';
+import { tenant } from '@/config/tenant';
+import { siteUrl } from '@/config/site';
 
-export async function GET(context: APIContext) {
+export async function GET() {
   return rss({
-    title: 'SnusFriend Blog',
-    description: 'Guides, reviews, and tips about nicotine pouches from SnusFriend.',
-    site: context.site!.toString(),
+    title: `${tenant.name} Blog`,
+    description: `Guides, reviews, and tips about nicotine pouches from ${tenant.name}.`,
+    site: siteUrl,
     items: blogArticles
       .filter((a) => a.date) // only include articles with dates
       .map((a) => ({

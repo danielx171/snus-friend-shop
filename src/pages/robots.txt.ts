@@ -1,4 +1,7 @@
-User-agent: *
+import type { APIRoute } from "astro";
+import { siteUrl } from "@/config/site";
+
+const body = `User-agent: *
 Allow: /
 Disallow: /account
 Disallow: /checkout
@@ -13,13 +16,13 @@ User-agent: Google-Extended
 Allow: /
 
 # Sitemap
-Sitemap: https://snusfriends.com/sitemap-index.xml
+Sitemap: ${siteUrl}/sitemap-index.xml
 
 # LLM context file
 # See https://llmstxt.org/
 # Provides structured site information for AI systems
 
-# AI / LLM crawlers — allow full access
+# AI / LLM crawlers - allow full access
 User-agent: GPTBot
 Allow: /
 
@@ -40,3 +43,11 @@ Allow: /
 
 User-agent: Bingbot
 Allow: /
+`;
+
+export const GET: APIRoute = () =>
+  new Response(body, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });

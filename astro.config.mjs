@@ -4,10 +4,17 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import path from 'path';
+import { readFileSync } from 'node:fs';
 import { getBlogLastmod } from './src/data/blog-registry.ts';
+import { resolveTenantRuntime } from './src/config/tenant.ts';
+
+const runtime = resolveTenantRuntime(process.env);
+const { version: appVersion } = JSON.parse(
+  readFileSync(new URL('./package.json', import.meta.url), 'utf-8'),
+);
 
 export default defineConfig({
-  site: 'https://snusfriends.com',
+  site: runtime.siteUrl,
   output: 'server',
   trailingSlash: 'never',
   image: {
@@ -69,7 +76,7 @@ export default defineConfig({
       noExternal: [/^@radix-ui/],
     },
     define: {
-      __APP_VERSION__: JSON.stringify('1.5.0'),
+      __APP_VERSION__: JSON.stringify(appVersion),
       __BUILD_DATE__: JSON.stringify(new Date().toISOString().split('T')[0]),
     },
   },

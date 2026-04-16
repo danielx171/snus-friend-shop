@@ -4,6 +4,8 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { getCollection } from 'astro:content';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { tenant } from '@/config/tenant';
+import { siteUrl } from '@/config/site';
 
 export async function getStaticPaths() {
   const brands = await getCollection('brands');
@@ -57,9 +59,9 @@ const jsonLd = {
     name: b.name,
     ...(b.logoUrl && { logo: b.logoUrl }),
   },
-  author: { '@type': 'Organization', name: 'SnusFriend Editorial' },
+  author: { '@type': 'Organization', name: `${tenant.name} Editorial` },
   reviewBody: description,
-  publisher: { '@type': 'Organization', name: 'SnusFriend', url: 'https://snusfriends.com' },
+  publisher: { '@type': 'Organization', name: tenant.name, url: siteUrl },
 };
 ---
 

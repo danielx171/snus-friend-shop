@@ -9,6 +9,7 @@ import type { AvatarRarity } from './UserAvatar';
 import type { Avatar, UserProfile, UpdateProfilePayload } from '@/hooks/useUserProfile';
 import { ReputationBadge } from '@/components/gamification/ReputationBadge';
 import { useReputation } from '@/hooks/useReputation';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 const BIO_MAX = 160;
 
@@ -143,7 +144,7 @@ const ProfileCard = React.memo(function ProfileCard({
             <span className="text-lg font-semibold text-primary tabular-nums">
               {stats?.snusPoints ?? 0}
             </span>
-            <span className="text-xs text-muted-foreground">SnusCoins</span>
+            <span className="text-xs text-muted-foreground">{loyaltyCurrencyName}</span>
           </div>
         </div>
 

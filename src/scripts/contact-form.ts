@@ -1,4 +1,5 @@
 import { EMAIL_RE, parseJsonResponse } from '@/scripts/form-helpers';
+import { tenant } from '@/config/tenant';
 
 const CONTACT_FORM_SELECTOR = '[data-contact-form]';
 
@@ -51,7 +52,7 @@ const initContactForms = (options: ContactFormOptions): void => {
 
     const functionUrl = form.dataset.fnUrl || '';
     const apiKey = form.dataset.apiKey || '';
-    const supportEmail = form.dataset.supportEmail || 'support@snusfriends.com';
+    const supportEmail = form.dataset.supportEmail || tenant.supportEmail;
     form.dataset.contactInitialized = 'true';
 
     form.addEventListener('input', () => {

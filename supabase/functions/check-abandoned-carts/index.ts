@@ -7,6 +7,8 @@ declare const Deno: {
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // @ts-expect-error — Deno types: Deno file import
 import { corsHeaders } from "../_shared/cors.ts";
+// @ts-expect-error — Deno relative .ts import
+import { buildSiteUrl, currencyCode } from "../_shared/site-config.ts";
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -126,9 +128,9 @@ Deno.serve(async (req) => {
             template: "cart_abandoned",
             data: {
               items,
-              cart_total: `EUR ${Number(cart.cart_total).toFixed(2)}`,
+              cart_total: `${currencyCode} ${Number(cart.cart_total).toFixed(2)}`,
               item_count: cart.item_count,
-              recovery_url: "https://snusfriends.com/cart",
+              recovery_url: buildSiteUrl("/cart"),
             },
           }),
         });

@@ -4,6 +4,7 @@
  * Replaces the plain white header area on blog posts.
  */
 import { formatDisplayDate } from '@/lib/dates';
+import { tenant } from '@/config/tenant';
 
 interface Props {
   category: string;
@@ -60,7 +61,7 @@ const displayDate = formatDisplayDate(date);
       {description}
     </p>
     <div class="mt-4 flex items-center gap-3 text-sm text-white/60">
-      <span>By Erik Lindqvist</span>
+      <span>By {tenant.defaultAuthor.name}</span>
       <span>&middot;</span>
       <time>{displayDate}</time>
       <span>&middot;</span>

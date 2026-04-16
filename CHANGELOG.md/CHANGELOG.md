@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-04-16
+
+- Stabilized the local toolchain contract by adding `.bun-version`, pinning `packageManager` in `package.json`, renaming the scaffold-era package metadata to `snus-friend-shop`, and aligning the `init`/`indexnow` scripts with the Bun-first workflow.
+- Replaced the stale hardcoded `__APP_VERSION__` define in `astro.config.mjs` with the live `package.json` version so runtime/build metadata stays in sync.
+- Added an explicit "Required Local Tool Versions" section to `DEPLOYMENT_CHECKLIST.md` covering Node 24, Bun 1.3.9, and the minimum Vercel/Supabase CLI expectations, plus the `node -v` / `bun --version` preflight check.
+- Added a lightweight GitHub Actions CI workflow for `lint`, `test`, `build`, and `check`, plus a controlled Dependabot policy that keeps weekly low-risk toolchain updates flowing without auto-queuing the bigger React/Tailwind/TypeScript migration work.
+- Upgraded the storefront baseline to React 19.2.0 (`react`, `react-dom`, and matching `@types/*` packages) and re-ran the full local verification stack so the repo now sits on the current React major without changing checkout/order behavior.
+
+- Restored the storefront analytics bootstrap in `src/components/astro/Analytics.astro` so production always exposes `window.__ANALYTICS_CONFIG__`, PostHog now fails loudly when `PUBLIC_POSTHOG_KEY` is missing, and deploy smoke can inspect `window.__POSTHOG_STATUS__` to tell “configured vs consent-gated vs booted” without guessing from `window.posthog`.
+- Added `window.__POSTHOG_LAST_CAPTURE__` / `window.__POSTHOG_CAPTURE_COUNT__` markers in `src/components/astro/Analytics.astro` for deterministic deploy smoke, and widened the production CSP in `vercel.json` so the Sentry browser CDN no longer trips the stray sourcemap `connect-src` warning.
+- Extended `src/config/tenant.ts` and `src/env.d.ts` with tenant-driven legal/editorial identity fields (`jurisdiction`, `dpaName`, `dpaUrl`, `founderName`, `defaultAuthor`) so policy pages, the about page, and the default-author surface can all read from one storefront config.
+- Normalized the legal/editorial surfaces in `src/pages/privacy.astro`, `src/pages/terms.astro`, `src/pages/editorial-policy.astro`, `src/pages/about.astro`, `src/pages/authors/erik-lindqvist.astro`, and `src/components/astro/BlogHero.astro` so brand/legal identity, founder data, and default-author copy are now config-driven instead of hardcoded to SnusFriend/Erik literals.
+- Added `src/lib/site-identity.ts` and wired `src/data/countries.ts`, `src/pages/countries/[slug].astro`, `src/data/brand-meta.ts`, and `src/data/brand-faqs.ts` to resolve storefront identity at runtime, including renaming the country dataset field from `whySnusFriend` to `whyChooseUs`.
+- Expanded `.env.example`, `DEPLOYMENT_CHECKLIST.md`, and `ROADMAP.md` with the per-store PostHog requirements, legal/editorial override envs, a reference second-store env profile, and a dedicated PostHog deploy-smoke checklist.
+- Extended the shared tenant runtime with the remaining Tenant B launch controls (`loyaltyCurrencyName`, `orderPrefix`, `locale`, and the missing browser storage keys), then aligned the edge-function site runtime so checkout, email, and storefront code resolve the same values.
+- Removed the last hardcoded storage-key bypasses and loyalty-label stragglers from the active shared surfaces, including tenant-aware translated string replacement in `src/i18n/index.ts`, updated rewards/community/whats-new copy, and a project-local currency fix in `supabase/functions/process-subscriptions/index.ts`.
+- Replaced the dedicated `src/pages/authors/erik-lindqvist.astro` page with a config-backed `src/pages/authors/[slug].astro` route, then updated `src/pages/editorial-policy.astro` and `src/pages/blog/index.astro` to use the shared author/blog schema helpers instead of fixed SnusFriend paths.
+- Migrated the first high-risk blog pages to `src/lib/blog-schema.ts` and tenant-aware copy substitution so those pages stop hardcoding `snusfriends.com`, `Erik Lindqvist`, and inline SnusFriend branding in their structured data and visible comparison copy.
+- Added `TENANT_LAUNCH_RUNBOOK.md` plus supporting env/deployment documentation for separate-project storefront rollout, including the explicit rule that every tenant must get its own Supabase project because shared-backend tenant isolation is intentionally deferred in v1.
+
+- Shipped WL-1 by replacing the single-store fallback config with a shared tenant/runtime resolver in `src/config/tenant.ts`, `src/config/site.ts`, `astro.config.mjs`, `supabase/functions/_shared/site-config.ts`, and `supabase/functions/_shared/cors.ts`, so Astro, the storefront, and shared edge helpers now agree on site identity, canonical URLs, and allowed storefront hosts.
+- Shipped WL-2 by moving deployment identity assets onto tenant-aware outputs: `src/pages/llms.txt.ts`, `src/pages/llms-full.txt.ts`, the shared `src/lib/llms.ts`, the new `src/lib/og-svg.ts` SVG route surface under `src/pages/images/og/`, plus `scripts/generate-og-images.ts` and `scripts/generate-sitemap.ts`.
+- Updated adjacent runtime consumers so they no longer rely on hardcoded `snusfriends.com`, including `src/lib/server-guest-orders.ts`, `src/pages/rss.xml.ts`, `src/pages/nicotine-free-pouches.astro`, and `src/scripts/contact-form.ts`.
+- Shipped the first WL-3 messaging pass across `supabase/functions/_shared/site-config.ts`, `supabase/functions/_shared/email-templates.ts`, `supabase/functions/send-email/index.ts`, and `supabase/functions/check-abandoned-carts/index.ts`, so shared mail/footer/support/rewards/free-shipping copy now reads from the active tenant runtime instead of carrying SnusFriend-era assumptions.
+- Fixed the shared review-request footer links in `supabase/functions/send-email/index.ts` so tenant mail now points at `/privacy` and `/terms` instead of the stale `/legal/*` paths.
+
 ## 2026-04-14
 
 - Added repo-owned SEO sync tooling in `scripts/google-search-console-sync.ts`, `scripts/pagespeed-sync.ts`, `scripts/rank-audit.ts`, plus shared helpers in `scripts/supabase-admin.ts`, `scripts/seo-audit-config.ts`, and `scripts/pagespeed-client.ts`.

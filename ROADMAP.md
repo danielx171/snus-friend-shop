@@ -4,6 +4,58 @@
 > Original checkout migrated Shopify → Nyehandel (Steps 25-40). Shopify fully removed.
 > Launch Polish Sprint (Apr 8-12) complete: all waves shipped. See `CURRENT_PRIORITIES.md` for the active punch list.
 
+## White-Label Tenant B Readiness (2026-04-16)
+
+- [x] Extended tenant runtime/config for Tenant B launch blockers:
+  - `loyaltyCurrencyName`
+  - `orderPrefix`
+  - `locale`
+  - `storage.compareKey`
+  - `storage.beginnerKey`
+  - `storage.historyKey`
+  - `storage.buyNowKey`
+- [x] Removed the remaining storage-key bypasses so compare/history/beginner mode/buy-now flows now read tenant storage config instead of hardcoded `snusfriend_*` keys.
+- [x] Finished tenant-safe checkout/runtime values in the Nyehandel surfaces and storefront analytics currency flow.
+- [x] Added a shared loyalty identity layer so storefront copy and translated strings can resolve tenant-specific loyalty labels without duplicating brand literals.
+- [x] Added the shared blog/schema helper layer (`src/lib/blog-schema.ts`) and migrated the default-author route model to `/authors/[slug]` while keeping the legacy default route working.
+- [x] Migrated the highest-risk shared blog/editorial surfaces onto the tenant-aware helper path (`/blog`, the default author route, and the first key blog posts touched in this batch).
+- [x] Added the Tenant B rollout package docs (`TENANT_LAUNCH_RUNBOOK.md`) and aligned `.env.example` / deployment docs with the current runtime keys.
+- [ ] Post-launch hardening queue:
+  - full blog JSON-LD migration onto the shared helper
+  - OG/build script domain cleanup
+  - script defaults (`smoke-check`, `indexnow`, SEO audit config)
+  - optional tenant overrides for feature flags/reward config
+  - managed-service onboarding docs/automation
+
+## Toolchain Stabilization (2026-04-16)
+
+- [x] Standardized the repo runtime on Node 24 via `.nvmrc`, `.node-version`, and `package.json#engines`.
+- [x] Added repo-level Bun pinning with `.bun-version` and `package.json#packageManager`.
+- [x] Replaced the stale hardcoded `__APP_VERSION__` define in `astro.config.mjs` with the live `package.json` version.
+- [x] Renamed the scaffold-era package metadata to `snus-friend-shop`.
+- [x] Standardized the IndexNow script path to Bun + TypeScript and aligned the `init` workflow to `bunx vercel`.
+- [x] Added explicit local-tool version requirements and verification steps to `DEPLOYMENT_CHECKLIST.md`.
+- [x] Finished the low-risk dependency maintenance pass:
+  - `jsdom` upgrade
+  - current-major Astro/Supabase package refresh
+  - full lint/check/build/test verification
+- [x] Completed the React 19 maintenance pass and confirmed the storefront baseline still clears local verification:
+  - `react` / `react-dom` upgraded to 19.2.0
+  - React type packages aligned to 19.x
+  - `bun run lint`, `bun run test`, `bun run build`, and `bun run check` all pass on the upgraded baseline
+- [ ] Deferred until after Tenant B:
+  - React ecosystem follow-up only if a concrete compatibility issue appears in production or preview smoke
+  - broader Astro/Vite major-platform work
+  - TypeScript strictness expansion
+  - larger lint-rule expansion
+
+## Repo Maintenance Automation (2026-04-16)
+
+- [x] Added a lightweight GitHub Actions CI workflow for `lint`, `test`, `build`, and `check` on pull requests plus pushes to `main`.
+- [x] Added a controlled Dependabot policy for weekly low-risk npm and GitHub Actions updates.
+- [x] Documented the CI/dependency-update expectations in `DEPLOYMENT_CHECKLIST.md`.
+- [ ] After Tenant B is stable, review whether the next maintenance pass should expand CI (preview smoke, deployment checks) or keep the current lightweight gate.
+
 ## Astro Consolidation + Codex Workbench (2026-04-15)
 
 - [x] Consolidated shared storefront hydration clusters:
@@ -30,6 +82,25 @@
 - [ ] Next Astro pass:
   - keep trimming clustered islands from high-traffic storefront chrome
   - keep profiling remaining high-impact client-side scripts before the next polish sprint, even though the 2026-04-15 production homepage PSI median already clears the current target (mobile 92 / LCP 2.4s, desktop 100 / LCP 0.6s)
+
+## White-label Foundation + Multi-Store Platform (planned)
+
+- [ ] WL-0: Deploy the current stabilization branch and smoke production before layering on multi-store work.
+  Confirm the cart/analytics cleanup is live, Speed Insights is healthy, and PostHog pageviews are trustworthy again.
+- [ ] WL-0b: Restore production PostHog bootstrap and finish the legal/editorial tenant-identity pass.
+  Code-side recovery now guarantees a production `window.__ANALYTICS_CONFIG__` payload, exposes `window.__POSTHOG_STATUS__` for deploy smoke, and moves `/privacy`, `/terms`, `/editorial-policy`, `/about`, the default author surface, and the high-visibility country/brand datasets onto tenant-driven identity.
+  Pending: redeploy and confirm production PostHog boot + pageview flow after consent.
+- [x] WL-1: Centralize site identity and storefront hosts.
+  Shared tenant/runtime resolution now drives Astro config, frontend site helpers, storefront host allowlists, redirect parsing, Supabase shared site config, and edge-function CORS fallbacks.
+- [x] WL-2: Remove core-path hardcoded SnusFriend domains from shared identity outputs.
+  Auth/redirect parsing, checkout-adjacent URL handling, RSS, llms outputs, shared OG SVG routes, and sitemap/OG generation now derive from the active storefront runtime instead of hardcoded `snusfriends.com`.
+- [ ] WL-3: Make transactional/storefront messaging tenant-aware.
+  Cart recovery, review request, support/contact, and order emails must stop hardcoding `snusfriends.com` before a second domain can ship safely.
+  First batch shipped the shared tenant-aware sender/support/tagline/loyalty/free-shipping copy layer across the mail helpers, plus cart recovery totals now follow the active storefront currency instead of a fixed `EUR` fallback.
+- [ ] WL-4: Make SEO output deployment-aware.
+  Sweep sitemap/canonical/schema/robots generation so each branded deployment emits its own correct absolute URLs.
+- [ ] WL-5: Prove the architecture with one second storefront before building self-serve dropshipper tooling.
+  The cut line is: the second storefront can load, check out, send correct branded emails, and reach the shared 3PL flow without leaking SnusFriend identity.
 
 ## Audit-Driven Growth + Trust Stabilization (2026-04-14)
 

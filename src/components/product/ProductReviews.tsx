@@ -33,6 +33,7 @@ import { useReviewSummary } from '@/hooks/useReviewSummary';
 import ReviewSummaryCard from '@/components/product/ReviewSummaryCard';
 import { useReviewPhotoUpload } from '@/hooks/useReviewPhotoUpload';
 import { useToast } from '@/hooks/use-toast';
+import { tenant } from '@/config/tenant';
 type ReviewSortOption = 'relevant' | 'newest' | 'highest' | 'helpful';
 
 function sortReviews(reviews: ProductReview[], sort: ReviewSortOption): ProductReview[] {
@@ -472,7 +473,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
 
       toast({
         title: 'Review submitted',
-        description: `Thank you! You earned ${earnedPoints} SnusCoins for this review.`,
+        description: `Thank you! You earned ${earnedPoints} ${tenant.loyaltyCurrencyName} for this review.`,
       });
       // Fire-and-forget quest progress + avatar unlock checks
       apiFetch('update-quest-progress', {
@@ -792,7 +793,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
       {!isLoading && totalCount === 0 && (
         <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border bg-muted/30 py-12 px-6 text-center">
           <p className="text-base text-muted-foreground">
-            No reviews yet — be the first and earn 25 SnusCoins
+            No reviews yet — be the first and earn 25 {tenant.loyaltyCurrencyName}
           </p>
           <Button size="sm" onClick={() => setDialogOpen(true)}>
             <MessageSquare className="mr-2 h-4 w-4" />

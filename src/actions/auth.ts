@@ -1,6 +1,7 @@
 import { defineAction, ActionError } from 'astro:actions';
 import { z } from 'astro/zod';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { siteUrl } from '@/config/site';
 import {
   clearPendingReferralCode,
   normalizeReferralCode,
@@ -87,11 +88,6 @@ export const auth = {
     handler: async (input, ctx) => {
       const supabase = createSupabaseFromContext(ctx);
       const referralCode = normalizeReferralCode(input.referralCode);
-      const siteUrl =
-        import.meta.env.PUBLIC_SITE_URL ??
-        import.meta.env.VITE_SITE_URL ??
-        'https://snusfriends.com';
-
       if (referralCode) {
         const referralValidation = await validateReferralCode(referralCode);
         if (referralValidation === 'invalid') {
@@ -154,11 +150,6 @@ export const auth = {
     }),
     handler: async (input, ctx) => {
       const supabase = createSupabaseFromContext(ctx);
-      const siteUrl =
-        import.meta.env.PUBLIC_SITE_URL ??
-        import.meta.env.VITE_SITE_URL ??
-        'https://snusfriends.com';
-
       // Always return success to avoid leaking whether the email exists
       await supabase.auth.signInWithOtp({
         email: input.email,
@@ -181,11 +172,6 @@ export const auth = {
     }),
     handler: async (input, ctx) => {
       const supabase = createSupabaseFromContext(ctx);
-      const siteUrl =
-        import.meta.env.PUBLIC_SITE_URL ??
-        import.meta.env.VITE_SITE_URL ??
-        'https://snusfriends.com';
-
       // Always return success to avoid leaking whether the email exists.
       // Route through /auth/confirm so the server-side session is set before
       // the user reaches the update-password form (PKCE flow).
@@ -253,11 +239,6 @@ export const auth = {
     handler: async (input, ctx) => {
       const supabase = createSupabaseFromContext(ctx);
       const normalizedEmail = normalizeGuestOrderEmail(input.email);
-      const siteUrl =
-        import.meta.env.PUBLIC_SITE_URL ??
-        import.meta.env.VITE_SITE_URL ??
-        'https://snusfriends.com';
-
       if (!normalizedEmail) {
         throw new ActionError({
           code: 'BAD_REQUEST',

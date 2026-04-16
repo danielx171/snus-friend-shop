@@ -7,6 +7,7 @@ import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildBlogPostingSchema } from '@/lib/blog-schema';
 
 const allProducts = await getCollection('products');
 const find = (slug: string) => allProducts.find(p => p.id === slug);
@@ -15,21 +16,13 @@ const publishDate = '2026-04-09';
 const title = 'Best Nicotine Pouches in the Netherlands (2026): 10 EU-Shipped Picks';
 const description = 'Shopping for nicotine pouches in the Netherlands? Compare 10 editor-selected picks with Dutch-friendly shipping, pricing, and practical buying notes for 2026.';
 
-const blogPostingJsonLd = {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-netherlands-2026` },
-        "description": description
-      };
+const blogPostingJsonLd = buildBlogPostingSchema({
+  headline: title,
+  description,
+  slug: 'best-nicotine-pouches-netherlands-2026',
+  datePublished: publishDate,
+  imagePath: '/og/article-best-nicotine-pouches-netherlands-2026.png',
+});
 
 const faqJsonLd = {
         "@context": "https://schema.org",
@@ -48,7 +41,7 @@ const faqJsonLd = {
             "name": "Where can you buy nicotine pouches in the Netherlands?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Nicotine pouches are sold in tobacco shops, convenience stores like Albert Heijn and Jumbo, petrol stations, and online retailers. SnusFriend ships direct from an EU warehouse with 1-2 day delivery and competitive EUR pricing."
+              "text": `Nicotine pouches are sold in tobacco shops, convenience stores like Albert Heijn and Jumbo, petrol stations, and online retailers. ${tenant.name} ships direct from an EU warehouse with 1-2 day delivery and competitive EUR pricing.`
             }
           },
           {
@@ -72,7 +65,7 @@ const faqJsonLd = {
             "name": "How fast is delivery to the Netherlands?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "SnusFriend delivers in 1-2 days to major cities via PostNord and DHL from an EU warehouse. No customs delays. Tracking is provided with your order confirmation."
+              "text": `${tenant.name} delivers in 1-2 days to major cities via PostNord and DHL from an EU warehouse. No customs delays. Tracking is provided with your order confirmation.`
             }
           },
           {
@@ -110,7 +103,7 @@ const faqJsonLd = {
         </div>
 
         <div style="margin: 16px 0 24px; padding: 14px 18px; background: hsl(var(--muted)); border-left: 3px solid hsl(var(--primary) / 0.4); border-radius: 6px; font-size: 13px; color: hsl(var(--muted-foreground));">
-          <strong style="color: hsl(var(--foreground));">Regulatory notice:</strong> Nicotine pouch regulations vary by country and change frequently. This article reflects our understanding as of the publication date. Always verify current local regulations before ordering. SnusFriend does not ship to countries where nicotine pouches are prohibited.
+          <strong style="color: hsl(var(--foreground));">Regulatory notice:</strong> Nicotine pouch regulations vary by country and change frequently. This article reflects our understanding as of the publication date. Always verify current local regulations before ordering. {tenant.name} does not ship to countries where nicotine pouches are prohibited.
         </div>
 
         <h2>Nicotine Pouches: Legal Status in the Netherlands</h2>
@@ -177,7 +170,7 @@ const faqJsonLd = {
                 <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Variable stock, limited selection</td>
               </tr>
               <tr>
-                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Online EU warehouse (SnusFriend)</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Online EU warehouse ({tenant.name})</td>
                 <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">€2.50–€3.50</td>
                 <td style="border: 1px solid hsl(var(--border)); padding: 0.75rem;">Direct EU, 1–2 day delivery, no customs</td>
               </tr>
@@ -190,14 +183,14 @@ const faqJsonLd = {
           </table>
         </div>
 
-        <p><strong>SnusFriend advantage:</strong> We stock from a Benelux EU warehouse. No customs delays, no VAT surprises, and orders arrive in 24–48 hours to Amsterdam, Rotterdam, Utrecht, and throughout the Netherlands. Free shipping on orders over €25.</p>
+        <p><strong>{tenant.name} advantage:</strong> We stock from a Benelux EU warehouse. No customs delays, no VAT surprises, and orders arrive in 24–48 hours to Amsterdam, Rotterdam, Utrecht, and throughout the Netherlands. Free shipping on orders over €{tenant.freeShippingThreshold}.</p>
 
         <h2>Shipping &amp; Delivery to the Netherlands</h2>
         <p>We ship nicotine pouches via PostNord and DHL from our EU warehouse to all Dutch provinces. Standard delivery:</p>
         <ul>
           <li><strong>1–2 days</strong> to major cities (Amsterdam, Rotterdam, Utrecht, Groningen)</li>
           <li><strong>2–3 days</strong> to rural areas</li>
-          <li><strong>Free shipping</strong> on orders over €25</li>
+          <li><strong>Free shipping</strong> on orders over €{tenant.freeShippingThreshold}</li>
           <li><strong>No customs</strong> — EU warehouse means no border delays or VAT recalculations</li>
           <li><strong>No age verification delays</strong> — 18+ check at checkout, shipment proceeds immediately</li>
         </ul>
@@ -224,16 +217,16 @@ const faqJsonLd = {
           <p>Yes. Tobacco-free nicotine pouches are legal in the Netherlands. They fall outside the Tobacco and Smoking Products Act because they contain no tobacco. The NVWA monitors the category but has not restricted sales. They are widely available in shops, convenience stores, and online.</p>
 
           <h3 class="text-foreground font-semibold mt-4">Where can you buy nicotine pouches in the Netherlands?</h3>
-          <p>Nicotine pouches are sold in tobacco shops, convenience stores (Albert Heijn, Jumbo), petrol stations, and major online retailers. SnusFriend ships direct from our EU warehouse with 1–2 day delivery and competitive EUR pricing. You can also order from Swedish retailers, but expect 5–7 day transit and potential VAT complications.</p>
+          <p>Nicotine pouches are sold in tobacco shops, convenience stores (Albert Heijn, Jumbo), petrol stations, and major online retailers. {tenant.name} ships direct from our EU warehouse with 1–2 day delivery and competitive {tenant.currencyCode} pricing. You can also order from Swedish retailers, but expect 5–7 day transit and potential VAT complications.</p>
 
           <h3 class="text-foreground font-semibold mt-4">What's the most popular nicotine pouch brand in the Netherlands?</h3>
           <p>ZYN is the market leader globally and in the Netherlands. It's the most stocked brand in Dutch tobacco shops and has the highest repeat-purchase rate. VELO and Nordic Spirit are close second and third. For niche preferences (spicy, fruity, unique flavours), LOOP and Helwit have growing cult followings.</p>
 
           <h3 class="text-foreground font-semibold mt-4">How much do nicotine pouches cost in the Netherlands?</h3>
-          <p>Retail price range is €2.50–€4.50 per can, depending on brand, strength, and where you shop. Tobacco shops typically charge €3.50–€4.50. Online EU retailers (including SnusFriend) offer €2.50–€3.50 due to lower overhead. Swedish online retailers sometimes undercut at €2.00–€3.00 before shipping.</p>
+          <p>Retail price range is €2.50–€4.50 per can, depending on brand, strength, and where you shop. Tobacco shops typically charge €3.50–€4.50. Online EU retailers (including {tenant.name}) offer €2.50–€3.50 due to lower overhead. Swedish online retailers sometimes undercut at €2.00–€3.00 before shipping.</p>
 
           <h3 class="text-foreground font-semibold mt-4">How fast is delivery to the Netherlands?</h3>
-          <p>SnusFriend delivers in 1–2 days to major cities via PostNord and DHL. We ship from an EU warehouse, so there are no customs delays or border re-processing. Rural areas may take 2–3 days. Tracking is provided in your order confirmation email.</p>
+          <p>{tenant.name} delivers in 1–2 days to major cities via PostNord and DHL. We ship from an EU warehouse, so there are no customs delays or border re-processing. Rural areas may take 2–3 days. Tracking is provided in your order confirmation email.</p>
 
           <h3 class="text-foreground font-semibold mt-4">Is there an age limit for nicotine pouches in the Netherlands?</h3>
           <p>Yes. Nicotine pouches are restricted to 18+, just like cigarettes and snus. Our age verification at checkout ensures compliance. No ID checks are performed at delivery—the 18+ verification happens during online purchase.</p>

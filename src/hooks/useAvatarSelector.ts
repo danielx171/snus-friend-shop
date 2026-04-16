@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -43,7 +44,7 @@ function buildUnlockHint(
     case 'quest':
       return 'Complete a special quest';
     case 'points':
-      return `Earn ${avatar.unlock_threshold.toLocaleString()} SnusCoins`;
+      return `Earn ${avatar.unlock_threshold.toLocaleString()} ${loyaltyCurrencyName}`;
     case 'orders':
       return `Place ${avatar.unlock_threshold} order${avatar.unlock_threshold !== 1 ? 's' : ''}`;
     case 'reviews':

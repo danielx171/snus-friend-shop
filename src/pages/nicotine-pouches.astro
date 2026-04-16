@@ -4,6 +4,7 @@ import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import JsonLd from '@/components/astro/JsonLd.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
+import { buildAbsoluteUrl } from '@/config/site';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
 import { writeProductsJson } from '@/lib/product-json';
@@ -27,7 +28,7 @@ const itemListJsonLd = {
   itemListElement: topProducts.map((p, i) => ({
     '@type': 'ListItem',
     position: i + 1,
-    url: `https://${tenant.domain}/products/${p.id}`,
+    url: buildAbsoluteUrl(`/products/${p.id}`),
     name: p.data.name,
   })),
 };
@@ -54,10 +55,10 @@ const faqJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'How many brands does SnusFriend carry?',
+      name: `How many brands does ${tenant.name} carry?`,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: `SnusFriend carries ${totalProducts}+ products from ${brandCount} brands including ZYN, VELO, LOOP, Siberia, Pablo, KILLA, and many more. All ship from our EU warehouse with tracking.`,
+        text: `${tenant.name} carries ${totalProducts}+ products from ${brandCount} brands including ZYN, VELO, LOOP, Siberia, Pablo, KILLA, and many more. All ship from our EU warehouse with tracking.`,
       },
     },
     {
@@ -70,10 +71,10 @@ const faqJsonLd = {
     },
     {
       '@type': 'Question',
-      name: 'Does SnusFriend offer free shipping?',
+      name: `Does ${tenant.name} offer free shipping?`,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes, SnusFriend offers free EU-wide shipping on orders over €29. Most orders arrive within 2-5 business days with full tracking.',
+        text: `Yes, ${tenant.name} offers free EU-wide shipping on orders over €${tenant.freeShippingThreshold}. Most orders arrive within 2-5 business days with full tracking.`,
       },
     },
     {
@@ -113,7 +114,7 @@ const faqJsonLd = {
 ---
 
 <Shop
-  title={`Buy Nicotine Pouches Online — ${brandCount}+ Brands | SnusFriend`}
+  title={`Buy Nicotine Pouches Online — ${brandCount}+ Brands | ${tenant.name}`}
   description={`Shop ${totalProducts}+ nicotine pouches with free EU shipping over €29. ZYN, VELO, LOOP, Siberia, and more. Filter by strength, flavour, and brand.`}
   canonical="/nicotine-pouches"
 >
@@ -212,7 +213,7 @@ const faqJsonLd = {
         France banned commercial sales in February 2025, and the Netherlands followed with
         a retail ban the same month. The EU's upcoming Tobacco Products Directive 3 (TPD3),
         expected in draft form by mid-2026, will bring pouches under harmonised regulation for
-        the first time. SnusFriend ships from within the EU with full compliance and tracking
+        the first time. {tenant.name} ships from within the EU with full compliance and tracking
         on every order. For a country-by-country breakdown, read our
         <a href="/blog/nicotine-pouch-buying-guide-europe" class="underline hover:text-foreground">European buying guide</a>.
       </p>
@@ -225,14 +226,14 @@ const faqJsonLd = {
       "@type": "CollectionPage",
       "name": `Buy Nicotine Pouches Online — ${totalProducts}+ Products`,
       "description": `Shop ${totalProducts}+ tobacco-free nicotine pouches from ${brandCount} leading brands at ${tenant.name}.`,
-      "url": `https://${tenant.domain}/nicotine-pouches`,
+      "url": buildAbsoluteUrl('/nicotine-pouches'),
       "mainEntity": {
         "@type": "ItemList",
         "numberOfItems": totalProducts,
         "itemListElement": products.slice(0, 10).map((p, i) => ({
           "@type": "ListItem",
           "position": i + 1,
-          "url": `https://${tenant.domain}/products/${p.id}`,
+          "url": buildAbsoluteUrl(`/products/${p.id}`),
           "name": p.data.name,
         })),
       },

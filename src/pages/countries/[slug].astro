@@ -6,6 +6,8 @@ import { countries } from '@/data/countries';
 import { getCollection } from 'astro:content';
 import { getEditorialFacts } from '@/data/editorial-facts';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildAbsoluteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
 
 export async function getStaticPaths() {
   return countries.map((c) => ({ params: { slug: c.slug }, props: { country: c } }));
@@ -35,7 +37,7 @@ const jsonLd = {
   '@type': 'WebPage',
   name: country.h1,
   description: country.metaDescription,
-  url: `https://snusfriends.com/countries/${country.slug}`,
+  url: buildAbsoluteUrl(`/countries/${country.slug}`),
   ...(country.faq ? {
     mainEntity: {
       '@type': 'FAQPage',
@@ -49,7 +51,7 @@ const jsonLd = {
 };
 ---
 
-<Shop title={`${country.h1} | SnusFriend`} description={country.metaDescription} canonical={`/countries/${country.slug}`}>
+<Shop title={`${country.h1} | ${tenant.name}`} description={country.metaDescription} canonical={`/countries/${country.slug}`}>
   <JsonLd data={jsonLd} />
 
   <div class="mx-auto max-w-4xl px-4 py-8">
@@ -106,11 +108,11 @@ const jsonLd = {
         </div>
       </div>
 
-      <!-- Why SnusFriend (enriched only) -->
-      {country.whySnusFriend && (
+      <!-- Why this storefront (enriched only) -->
+      {country.whyChooseUs && (
         <div class="rounded-xl border border-primary/20 bg-primary/5 p-6">
-          <h2 class="text-xl font-semibold text-foreground mb-3">Why Order from SnusFriend?</h2>
-          <p>{withFacts(country.whySnusFriend)}</p>
+          <h2 class="text-xl font-semibold text-foreground mb-3">Why Order from {tenant.name}?</h2>
+          <p>{withFacts(country.whyChooseUs)}</p>
         </div>
       )}
 

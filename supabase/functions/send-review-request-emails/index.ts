@@ -4,6 +4,8 @@ declare const Deno: {
 };
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+// @ts-expect-error — Deno relative .ts import
+import { buildSiteUrl } from "../_shared/site-config.ts";
 
 Deno.serve(async (req) => {
   // Auth: x-cron-secret
@@ -53,7 +55,9 @@ Deno.serve(async (req) => {
       const productName = firstItem.product_name || "your recent purchase";
       const productSlug = firstItem.slug || "";
       const productImageUrl = firstItem.image_url || "";
-      const reviewUrl = `https://snusfriends.com/products/${productSlug}#reviews`;
+      const reviewUrl = productSlug
+        ? buildSiteUrl(`/products/${productSlug}#reviews`)
+        : buildSiteUrl("/products");
       const orderDate = new Date(order.created_at).toLocaleDateString("en-GB", {
         day: "numeric", month: "long", year: "numeric",
       });

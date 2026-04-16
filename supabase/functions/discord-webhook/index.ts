@@ -1,4 +1,5 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import { loyaltyCurrencyName, siteName } from "../_shared/site-config.ts";
 
 const JSON_HEADERS = { ...corsHeaders, "Content-Type": "application/json" };
 
@@ -29,7 +30,7 @@ function buildEmbed(
     case "review":
       return {
         title: "\u2b50 New Review!",
-        description: `**${data.username ?? "A snuser"}** just reviewed **${data.product_name ?? "a product"}**! (${data.stars ?? "??"}/5 stars)${data.points ? ` \u2014 Earned ${data.points} SnusPoints` : ""}`,
+        description: `**${data.username ?? "A snuser"}** just reviewed **${data.product_name ?? "a product"}**! (${data.stars ?? "??"}/5 stars)${data.points ? ` \u2014 Earned ${data.points} ${loyaltyCurrencyName}` : ""}`,
         color: 0xffd700,
         ...(data.product_image
           ? { thumbnail: { url: data.product_image } }
@@ -40,7 +41,7 @@ function buildEmbed(
     case "quest_complete":
       return {
         title: "\ud83c\udfc6 Quest Completed!",
-        description: `**${data.username ?? "A snuser"}** completed the **${data.quest_name ?? "??"}** quest!${data.points ? ` Earned ${data.points} SnusPoints` : ""}`,
+        description: `**${data.username ?? "A snuser"}** completed the **${data.quest_name ?? "??"}** quest!${data.points ? ` Earned ${data.points} ${loyaltyCurrencyName}` : ""}`,
         color: 0x22c55e,
         timestamp: new Date().toISOString(),
       };
@@ -74,7 +75,7 @@ function buildEmbed(
 
     default:
       return {
-        title: "SnusFriends Activity",
+        title: `${siteName} Activity`,
         description: JSON.stringify(data),
         color: 0x6366f1,
         timestamp: new Date().toISOString(),
@@ -91,7 +92,7 @@ async function postToDiscord(
   embed: Record<string, unknown>,
 ): Promise<{ ok: boolean; status: number }> {
   const body = JSON.stringify({
-    username: "SnusFriends",
+    username: siteName,
     embeds: [embed],
   });
 

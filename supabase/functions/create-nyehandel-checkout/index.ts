@@ -13,6 +13,8 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 import { distributeDiscount, percentageToAmount } from "../_shared/discount-distribution.ts";
 // @ts-expect-error — Deno types: Deno file import
 import { applyServerPricesToSnapshot, computeServerOrderTotal } from "../_shared/order-total.ts";
+// @ts-expect-error — Deno types: Deno file import
+import { currencyCode, locale, orderPrefix, siteName } from "../_shared/site-config.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
@@ -390,7 +392,7 @@ Deno.serve(async (req) => {
   if (!validation.ok) return validation.response;
   const { items, customer, billing_address, shipping_method, idempotency_key, display_total, display_currency } = validation.data;
 
-  /* ---------- resolve optional user_id (for SnusPoints) ---------- */
+  /* ---------- resolve optional user_id (for loyalty rewards) ---------- */
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
 
@@ -656,18 +658,18 @@ Deno.serve(async (req) => {
   }
 
   const serverOrderTotal = computeServerOrderTotal(pricedItems);
-  const orderCurrency = display_currency ?? "EUR";
+  const orderCurrency = display_currency ?? currencyCode;
   const persistedLineItems = applyServerPricesToSnapshot(items, pricedItems);
 
   /* ---------- build Nyehandel POST /orders payload ---------- */
 
   const deliveryCallbackUrl = `${supabaseUrl}/functions/v1/nyehandel-delivery-callback`;
-  const orderRef = `NB${Date.now()}`;
+  const orderRef = `${orderPrefix}${Date.now()}`;
 
   const nyehandelPayload = {
-    prefix: "NB",
-    currency_iso: "EUR",
-    locale: "en-gb",
+    prefix: orderPrefix,
+    currency_iso: orderCurrency,
+    locale,
     reference: orderRef,
     marking: orderRef,
     delivery_callback_url: deliveryCallbackUrl,
@@ -697,7 +699,7 @@ Deno.serve(async (req) => {
       price_inc_vat: 0,
     },
     payment: {
-      name: "NFC Group Payment",
+      name: Deno.env.get("PAYMENT_METHOD_NAME")?.trim() || `${siteName} Payment`,
       price_ex_vat: 0,
       price_inc_vat: 0,
     },
@@ -896,7 +898,7 @@ Deno.serve(async (req) => {
       name: i.product_name ?? i.sku,
       qty: i.quantity,
       price: i.unit_price != null
-        ? `${display_currency ?? "EUR"} ${Number(i.unit_price).toFixed(2)}`
+        ? `${orderCurrency} ${Number(i.unit_price).toFixed(2)}`
         : "",
     }));
 
@@ -918,7 +920,7 @@ Deno.serve(async (req) => {
           orderId: String(nyehandelOrderId),
           customerName: `${customer.firstname} ${customer.lastname}`.trim(),
           total: totalDisplay,
-          currency: display_currency ?? "EUR",
+          currency: orderCurrency,
           items: emailItems,
           shippingMethod: shipping_method,
         },

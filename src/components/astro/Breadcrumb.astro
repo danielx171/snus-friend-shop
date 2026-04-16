@@ -1,5 +1,6 @@
 ---
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { siteUrl } from '@/config/site';
 
 interface BreadcrumbItem {
   label: string;
@@ -11,8 +12,6 @@ interface Props {
 }
 
 const { items } = Astro.props;
-
-const siteUrl = 'https://snusfriends.com';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',

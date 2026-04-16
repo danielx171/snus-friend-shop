@@ -9,6 +9,8 @@ declare const Deno: {
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // @ts-expect-error — Deno types: Deno file import
 import { corsHeaders } from "../_shared/cors.ts";
+// @ts-expect-error — Deno relative .ts import
+import { siteName } from "../_shared/site-config.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -255,7 +257,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         to: customerEmail,
-        subject: `Your SnusFriend order #${nyehandelOrderId} has shipped!`,
+        subject: `Your ${siteName} order #${nyehandelOrderId} has shipped!`,
         template: "order_shipped",
         data: {
           orderId: nyehandelOrderId,

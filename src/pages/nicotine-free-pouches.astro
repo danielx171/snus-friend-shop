@@ -6,6 +6,7 @@ import ProductCard from '@/components/astro/ProductCard.astro';
 import { getCollection } from 'astro:content';
 import { tenant } from '@/config/tenant';
 import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildAbsoluteUrl } from '@/config/site';
 
 const allProducts = await getCollection('products');
 const nicotineFreeProducts = allProducts.filter(
@@ -55,11 +56,11 @@ const webPageJsonLd = {
   '@type': 'WebPage',
   name: 'Nicotine-Free Pouches',
   description: `Browse ${nicotineFreeProducts.length} nicotine-free pouches at ${tenant.name}. Enjoy the pouch experience without nicotine.`,
-  url: `https://${tenant.domain}/nicotine-free-pouches`,
+  url: buildAbsoluteUrl('/nicotine-free-pouches'),
   isPartOf: {
     '@type': 'WebSite',
     name: tenant.name,
-    url: `https://${tenant.domain}`
+    url: buildAbsoluteUrl('/')
   }
 };
 ---

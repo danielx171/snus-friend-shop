@@ -1,5 +1,7 @@
 ---
+import { tenant } from '@/config/tenant';
 const user = Astro.locals.user;
+const cartKey = tenant.storage.cartKey;
 ---
 
 <nav class="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-lg sm:hidden" aria-label="Mobile navigation">
@@ -25,11 +27,11 @@ const user = Astro.locals.user;
 </nav>
 
 <!-- Cart badge sync + cart open handler -->
-<script is:inline>
+<script is:inline define:vars={{ cartKey }}>
 (function() {
   function updateBadge() {
     try {
-      var raw = localStorage.getItem('snusfriend_cart');
+      var raw = localStorage.getItem(cartKey);
       if (!raw) { hideBadge(); return; }
       var items = JSON.parse(raw);
       var count = 0;

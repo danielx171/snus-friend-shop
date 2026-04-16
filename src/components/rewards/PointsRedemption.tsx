@@ -3,6 +3,8 @@ import { Coins, Loader2, Gift, Truck, Package, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useRedeemPoints } from '@/hooks/useRedeemPoints';
+import { tenant } from '@/config/tenant';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 /* ------------------------------------------------------------------ */
 /*  Rewards catalog (mirrors edge-function REWARDS config)             */
@@ -40,7 +42,7 @@ const REWARDS = [
   {
     type: 'mystery_box_founders',
     name: "Founder's Edition Box",
-    description: 'DOUBLE loot: 10 curated pouches + exclusive SnusFriend merch. Limited to first 10 redeemers!',
+    description: `DOUBLE loot: 10 curated pouches + exclusive ${tenant.name} merch. Limited to first 10 redeemers!`,
     cost: 500,
     icon: Gift,
     limited: true,
@@ -121,14 +123,14 @@ const PointsRedemption = React.memo(function PointsRedemption({ balance }: Props
               disabled={!canAfford || isRedeeming}
               onClick={() => handleRedeem(reward.type, reward.name)}
               className="w-full"
-              aria-label={`Redeem ${reward.name} for ${reward.cost} SnusCoins`}
+              aria-label={`Redeem ${reward.name} for ${reward.cost} ${loyaltyCurrencyName}`}
             >
               {isRedeeming ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : canAfford ? (
                 'Redeem'
               ) : (
-                'Not enough SnusCoins'
+                `Not enough ${loyaltyCurrencyName}`
               )}
             </Button>
           </div>

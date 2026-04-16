@@ -61,7 +61,7 @@ export function clearStoredGuestEmail() {
   }
 }
 
-function buildCartSnapshotPayload(items: CartItem[], guestEmail?: string | null) {
+function buildCartSnapshotPayload(items: readonly CartItem[], guestEmail?: string | null) {
   const total = items.reduce((sum, item) => {
     const price = item.product.prices[item.packSize] ?? 0;
     return sum + price * item.quantity;
@@ -79,7 +79,7 @@ function buildCartSnapshotPayload(items: CartItem[], guestEmail?: string | null)
   };
 }
 
-function sendCartSnapshot(items: CartItem[], guestEmail?: string | null) {
+function sendCartSnapshot(items: readonly CartItem[], guestEmail?: string | null) {
   if (typeof window === 'undefined' || !hasSupabaseEnv || items.length === 0) return;
   apiFetch('save-cart-snapshot', {
     method: 'POST',
