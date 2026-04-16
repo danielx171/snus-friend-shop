@@ -2,6 +2,7 @@ import { useStore } from '@nanostores/react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { $mobileMenuOpen, closeMobileMenu } from '@/stores/ui';
 import { tenant } from '@/config/tenant';
+import ThemePicker from '@/components/react/ThemePicker';
 
 const navSections = [
   {
@@ -29,8 +30,7 @@ const navSections = [
       { href: '/products/flavor/berry', label: 'Berry' },
       { href: '/products/flavor/coffee', label: 'Coffee' },
       { href: '/products/flavor/tobacco', label: 'Tobacco' },
-      { href: '/products/flavor/exotic', label: 'Exotic' },
-      { href: '/products/flavor/unflavored', label: 'Unflavored' },
+      { href: '/products/flavor/tropical', label: 'Tropical' },
     ],
   },
   {
@@ -38,7 +38,10 @@ const navSections = [
     links: [
       { href: '/community', label: 'Community' },
       { href: '/rewards', label: 'Rewards' },
+      { href: '/membership', label: 'Membership' },
       { href: '/blog', label: 'Blog' },
+      { href: '/compare', label: 'Compare Products' },
+      { href: '/whats-new', label: "What's New" },
     ],
   },
   {
@@ -46,6 +49,7 @@ const navSections = [
     links: [
       { href: '/login', label: 'Login' },
       { href: '/register', label: 'Register' },
+      { href: '/wishlist', label: 'Wishlist' },
     ],
   },
 ];
@@ -96,6 +100,14 @@ export default function MobileMenu() {
                 </ul>
               </div>
             ))}
+
+            {/* Theme switcher */}
+            <div>
+              <h3 className="text-xs uppercase text-muted-foreground font-semibold tracking-wider mb-2">
+                Theme
+              </h3>
+              <ThemePicker />
+            </div>
           </nav>
         </Dialog.Content>
       </Dialog.Portal>

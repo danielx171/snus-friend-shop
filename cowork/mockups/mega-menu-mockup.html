@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mega Menu Mockup — SnusFriend</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: { DEFAULT: '#2E7D32', foreground: '#faf8f5' },
+        background: '#faf8f5',
+        foreground: '#1a2e1a',
+        card: '#ffffff',
+        muted: { DEFAULT: '#f0ece5', foreground: '#6b7a5e' },
+        border: '#d4cfc5',
+      },
+    },
+  },
+};
+</script>
+</head>
+<body class="bg-background text-foreground font-sans">
+
+<div class="max-w-6xl mx-auto px-4 py-12">
+  <h1 class="text-3xl font-bold mb-2">Desktop Mega Menu Mockup</h1>
+  <p class="text-muted-foreground mb-10">Hover-activated mega menu for desktop navigation. Shows on screens ≥1024px. Mobile keeps the existing hamburger menu.</p>
+
+  <!-- Header with mega menu -->
+  <div class="relative">
+    <!-- Header bar -->
+    <nav class="flex items-center justify-between px-6 py-3 bg-card border border-border rounded-t-xl">
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded bg-primary flex items-center justify-center text-white text-xs font-bold">SF</div>
+          <span class="font-bold text-lg">SnusFriend</span>
+        </div>
+        <div class="flex items-center gap-1 text-sm">
+          <a href="#" class="px-3 py-2 rounded-lg font-medium text-primary bg-primary/5">Shop ▾</a>
+          <a href="#" class="px-3 py-2 rounded-lg font-medium text-foreground hover:bg-muted/50 transition-colors">Brands ▾</a>
+          <a href="#" class="px-3 py-2 rounded-lg font-medium text-foreground hover:bg-muted/50 transition-colors">Guides ▾</a>
+          <a href="#" class="px-3 py-2 rounded-lg font-medium text-foreground hover:bg-muted/50 transition-colors">Rewards</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1.5 text-xs font-medium text-amber-800">
+          ⭐ 1,240 pts
+        </div>
+        <div class="relative p-2">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
+      </div>
+    </nav>
+
+    <!-- SHOP Mega Menu Panel -->
+    <div class="bg-card border border-t-0 border-border rounded-b-xl shadow-xl">
+      <div class="grid grid-cols-4 gap-0 divide-x divide-border">
+
+        <!-- Column 1: By Strength -->
+        <div class="p-6">
+          <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3">By Strength</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors flex items-center gap-2">
+              <span class="h-2 w-2 rounded-full bg-green-200"></span> Light (1–6 mg)
+            </a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors flex items-center gap-2">
+              <span class="h-2 w-2 rounded-full bg-yellow-400"></span> Regular (7–10 mg)
+            </a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors flex items-center gap-2">
+              <span class="h-2 w-2 rounded-full bg-orange-500"></span> Strong (11–14 mg)
+            </a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors flex items-center gap-2">
+              <span class="h-2 w-2 rounded-full bg-red-500"></span> Extra Strong (15–20 mg)
+            </a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors flex items-center gap-2">
+              <span class="h-2 w-2 rounded-full bg-red-800"></span> Super Strong (21+ mg)
+            </a></li>
+          </ul>
+          <a href="#" class="mt-4 inline-block text-xs text-primary font-medium hover:underline">
+            Strength chart →
+          </a>
+        </div>
+
+        <!-- Column 2: By Flavour -->
+        <div class="p-6">
+          <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3">By Flavour</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">🌿 Mint</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">❄️ Cool Mint</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">🍋 Citrus</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">🫐 Berry</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">🥭 Tropical</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">☕ Coffee</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">🖤 Liquorice</a></li>
+          </ul>
+          <a href="#" class="mt-4 inline-block text-xs text-primary font-medium hover:underline">
+            All flavours →
+          </a>
+        </div>
+
+        <!-- Column 3: Popular Brands -->
+        <div class="p-6">
+          <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3">Popular Brands</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors font-medium">ZYN</a> <span class="text-xs text-muted-foreground">52 products</span></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors font-medium">VELO</a> <span class="text-xs text-muted-foreground">53 products</span></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors font-medium">LOOP</a> <span class="text-xs text-muted-foreground">32 products</span></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors font-medium">Skruf</a> <span class="text-xs text-muted-foreground">28 products</span></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors font-medium">Pablo</a> <span class="text-xs text-muted-foreground">21 products</span></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors font-medium">White Fox</a> <span class="text-xs text-muted-foreground">18 products</span></li>
+          </ul>
+          <a href="#" class="mt-4 inline-block text-xs text-primary font-medium hover:underline">
+            All 57 brands →
+          </a>
+        </div>
+
+        <!-- Column 4: Featured / CTA -->
+        <div class="p-6 bg-primary/5">
+          <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3">Quick Links</h3>
+          <div class="space-y-3">
+            <a href="#" class="block rounded-lg border border-border bg-card p-3 hover:border-primary/30 transition-colors">
+              <span class="text-sm font-medium">🔥 Best Sellers</span>
+              <p class="text-xs text-muted-foreground mt-0.5">Top-selling pouches right now</p>
+            </a>
+            <a href="#" class="block rounded-lg border border-border bg-card p-3 hover:border-primary/30 transition-colors">
+              <span class="text-sm font-medium">🆕 New Arrivals</span>
+              <p class="text-xs text-muted-foreground mt-0.5">Latest products added this week</p>
+            </a>
+            <a href="#" class="block rounded-lg border border-border bg-card p-3 hover:border-primary/30 transition-colors">
+              <span class="text-sm font-medium">🎯 Flavour Quiz</span>
+              <p class="text-xs text-muted-foreground mt-0.5">Find your perfect pouch in 60 seconds</p>
+            </a>
+            <a href="#" class="block rounded-lg border border-primary bg-primary text-white p-3 hover:bg-primary/90 transition-colors">
+              <span class="text-sm font-semibold">Browse All Products →</span>
+              <p class="text-xs text-white/80 mt-0.5">2,200+ pouches from 57 brands</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRANDS Mega Menu Panel -->
+  <div class="mt-12">
+    <h2 class="text-xl font-semibold mb-4">Brands Menu (hover on "Brands")</h2>
+    <div class="bg-card border border-border rounded-xl shadow-xl">
+      <div class="p-6">
+        <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mb-4">All Brands A–Z</h3>
+        <div class="grid grid-cols-6 gap-x-6 gap-y-2">
+          <a href="#" class="text-sm hover:text-primary transition-colors">ACE</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">Cuba</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">FUMI</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">Helwit</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">ICEBERG</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">KLAR</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors font-semibold">LOOP ⭐</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">Lundgrens</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">Nordic Spirit</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors font-semibold">Pablo ⭐</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">Rabbit</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors font-semibold">Siberia ⭐</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors font-semibold">Skruf ⭐</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors font-semibold">VELO ⭐</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors font-semibold">White Fox ⭐</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors font-semibold">ZYN ⭐</a>
+          <a href="#" class="text-sm hover:text-primary transition-colors">+ 41 more...</a>
+        </div>
+      </div>
+      <div class="border-t border-border px-6 py-3 bg-muted/30 rounded-b-xl flex justify-between items-center">
+        <span class="text-xs text-muted-foreground">⭐ = Top sellers. 57 brands, 2,200+ products.</span>
+        <a href="#" class="text-xs text-primary font-medium hover:underline">View brand comparison →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUIDES Mega Menu Panel -->
+  <div class="mt-12">
+    <h2 class="text-xl font-semibold mb-4">Guides Menu (hover on "Guides")</h2>
+    <div class="bg-card border border-border rounded-xl shadow-xl">
+      <div class="grid grid-cols-3 gap-0 divide-x divide-border">
+        <div class="p-6">
+          <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3">Data Reports</h3>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">Brand Comparison Chart</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">Nicotine Strength Chart</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">Flavour Guide</a></li>
+          </ul>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3">Getting Started</h3>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">What Are Nicotine Pouches?</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">How to Use Them</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">Choosing Your Strength</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">Beginner Buying Guide</a></li>
+          </ul>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xs font-semibold text-primary uppercase tracking-wider mb-3">Popular Comparisons</h3>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">ZYN vs VELO</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">Pouches vs Snus</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">Pouches vs Vaping</a></li>
+            <li><a href="#" class="text-sm text-foreground hover:text-primary transition-colors">Pouches vs Gum</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-border px-6 py-3 bg-muted/30 rounded-b-xl">
+        <a href="#" class="text-xs text-primary font-medium hover:underline">View all 44 guides →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Implementation notes -->
+  <section class="mt-12 rounded-xl border border-border bg-muted/20 p-6">
+    <h2 class="text-lg font-semibold mb-2">Implementation Notes</h2>
+    <ul class="text-sm text-muted-foreground space-y-1.5">
+      <li>• Desktop only (≥1024px). Mobile keeps existing hamburger/sheet menu.</li>
+      <li>• Opens on hover with ~100ms delay, closes on mouse leave with ~300ms grace period.</li>
+      <li>• Brand counts and product counts are pulled from getCollection at build time.</li>
+      <li>• The "Popular Brands" list can be sorted by product count to auto-feature biggest brands.</li>
+      <li>• Keyboard accessible: Tab focuses menu trigger, Enter/Space opens, Escape closes.</li>
+      <li>• The mega menu is a React island (client:idle) that wraps the desktop nav items.</li>
+    </ul>
+  </section>
+</div>
+
+</body>
+</html>

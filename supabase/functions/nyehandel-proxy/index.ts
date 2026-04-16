@@ -1,6 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// @ts-ignore: Deno file import
+// @ts-expect-error — Deno types: Deno file import
 import { corsHeaders } from "../_shared/cors.ts";
 
 const ALLOWED_RESOURCES = ['products', 'inventory', 'orders', 'webhooks', 'sync-runs', 'sku-mappings'];
@@ -92,6 +92,7 @@ Deno.serve(async (req) => {
       headers: {
         'Authorization': `Bearer ${nyehandelToken}`,
         'Accept': 'application/json',
+        'X-Language': 'en',
         'X-identifier': Deno.env.get('NYEHANDEL_X_IDENTIFIER') ?? '',
       },
     });
@@ -109,6 +110,15 @@ Deno.serve(async (req) => {
     } else {
       const textBody = await resp.text();
       parsed = textBody;
+    }
+
+    // For upstream errors, log details server-side but return a generic message to the client
+    if (!resp.ok) {
+      console.error('Nyehandel upstream error:', JSON.stringify({ status: resp.status, resource, body: parsed }));
+      return new Response(
+        JSON.stringify({ error: 'upstream_error', status: resp.status }),
+        { status: resp.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      );
     }
 
     return new Response(

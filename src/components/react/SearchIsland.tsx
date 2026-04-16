@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import ProductCard from './ProductCard';
 import { scoreProduct, type SearchableProduct } from '@/lib/search';
+import { trackSearchPerformed } from '@/lib/analytics';
+import { expandImageUrl } from '@/lib/image-cdn';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -42,10 +44,10 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
   }, [productsJsonUrl, productsJson]);
 
   const allProducts = useMemo<SearchableProduct[]>(() => {
-    if (productsJson) {
-      try { return JSON.parse(productsJson); } catch { return []; }
-    }
-    return fetchedProducts ?? [];
+    const raw: SearchableProduct[] = productsJson
+      ? (() => { try { return JSON.parse(productsJson); } catch { return []; } })()
+      : (fetchedProducts ?? []);
+    return raw.map((p) => ({ ...p, imageUrl: expandImageUrl(p.imageUrl) }));
   }, [productsJson, fetchedProducts]);
 
   const [query, setQuery] = useState(initialQuery ?? '');
@@ -93,6 +95,16 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
     return scored.map((r) => r.product);
   }, [allProducts, debouncedQuery]);
 
+  // PostHog: track search after results are computed
+  const prevQueryRef = useRef('');
+  useEffect(() => {
+    const trimmed = debouncedQuery.trim();
+    if (trimmed && trimmed !== prevQueryRef.current) {
+      prevQueryRef.current = trimmed;
+      trackSearchPerformed({ query: trimmed, resultCount: results.length });
+    }
+  }, [debouncedQuery, results.length]);
+
   const trimmedQuery = debouncedQuery.trim();
 
   return (
@@ -118,6 +130,7 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
           value={query}
           onChange={handleChange}
           placeholder="Search pouches, brands, flavours..."
+          aria-label="Search products"
           autoComplete="off"
           className="w-full rounded-xl border border-border bg-card/60 py-4 pl-12 pr-5 text-lg text-foreground placeholder:text-muted-foreground backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         />
@@ -183,6 +196,9 @@ function SearchIsland({ productsJson, productsJsonUrl, initialQuery }: SearchIsl
                 strengthKey={product.strengthKey}
                 flavorKey={product.flavorKey}
                 ratings={product.ratings}
+                reviewCount={product.reviewCount}
+                comparePrice={product.comparePrice}
+                portionsPerCan={product.portionsPerCan}
                 badgeKeys={product.badgeKeys}
               />
             ))}

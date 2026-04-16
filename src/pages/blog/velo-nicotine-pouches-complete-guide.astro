@@ -2,15 +2,52 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const veloCrispyPeppermint = findProduct('velo', 'crispy peppermint');
+const veloIceCool = findProduct('velo', 'ice cool');
+const veloRubyBerry = findProduct('velo', 'ruby berry');
+const veloFreeze = findProduct('velo', 'freeze');
 
 const publishDate = '2026-03-27';
 const title = 'VELO Nicotine Pouches: Complete Brand Guide';
 const description = 'Discover VELO by BAT — the global nicotine pouch leader. Explore 53 products across all strengths, from Mighty Peppermint to Tropical Mango.';
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SnusFriend",
+      "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-nicotine-pouches-complete-guide` },
+  };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Who makes VELO nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"VELO is manufactured by British American Tobacco (BAT), one of the world's largest tobacco companies. BAT launched VELO as their flagship tobacco-free nicotine pouch brand to compete with Swedish Match's ZYN."}},{"@type":"Question","name":"How many VELO flavours are there?","acceptedAnswer":{"@type":"Answer","text":"VELO offers 50+ SKUs across Europe, spanning mint, berry, citrus, fruit, and licorice categories. The exact range varies by country due to local regulations. Mighty Peppermint and Berry Frost are the best-selling variants."}},{"@type":"Question","name":"What is the strongest VELO pouch?","acceptedAnswer":{"@type":"Answer","text":"VELO Max (or Ultra) reaches up to 17 mg/pouch in some European markets. In countries with nicotine caps (e.g., certain Nordic markets), the strongest available option may be lower. Check your local product range."}},{"@type":"Question","name":"Is VELO better than ZYN?","acceptedAnswer":{"@type":"Answer","text":"Neither is objectively better — it depends on your preferences. VELO offers more flavour variety and slightly moister pouches with faster flavour release. ZYN is preferred for its cleaner, more subtle flavour profiles and consistent quality. Both are premium brands."}},{"@type":"Question","name":"Are VELO pouches discreet?","acceptedAnswer":{"@type":"Answer","text":"Yes. VELO slim and mini formats are designed to be nearly invisible under the lip. The brand specifically markets discretion as a key feature. There is no vapour, no smoke, and no visible pouch outline in most cases."}},{"@type":"Question","name":"How long does a VELO pouch last?","acceptedAnswer":{"@type":"Answer","text":"A typical VELO slim pouch lasts 25–35 minutes. Mini formats are slightly shorter at 20–30 minutes. VELO's moisture level is higher than some competitors, which gives a faster initial flavour burst but slightly shorter total duration."}},{"@type":"Question","name":"Can I buy VELO online?","acceptedAnswer":{"@type":"Answer","text":"Yes. VELO is available online across most European countries. SnusFriend stocks the full European VELO range with free shipping on qualifying orders."}}]};
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
 >
@@ -21,29 +58,64 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
         { label: 'VELO Guide' },
       ]} />
 
-      <header class="mb-10">
-        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Brand Spotlight</p>
-        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
-        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
-        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <time datetime={publishDate}>March 27, 2026</time>
-          <span>&middot;</span>
-          <span>9 min read</span>
-        </div>
-      </header>
+      <BlogHero
+        category="Brand Spotlight"
+        title={title}
+        description={description}
+        date="March 27, 2026"
+        readTime="9 min read"
+      />
+
+      <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+        <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+        <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+          VELO is BAT's flagship nicotine pouch brand offering 15+ flavours from 4mg to 10mg. Known for the widest flavour variety in the category, VELO is available on SnusFriend with options from Ice Cool Mint to Berry Frost.
+        </p>
+      </div>
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">Is VELO better than ZYN?</summary>
+        <p style="margin-top: 12px;">VELO and ZYN are both premium brands but excel in different areas. VELO offers more flavour variety and softer, more moist pouches that deliver nicotine faster — ideal for ex-smokers wanting a quick hit. ZYN uses drier pouches for a longer, steadier nicotine release and has a slight edge in distribution across Europe. The best choice depends on whether you prefer rapid intensity (VELO) or slow-burn consistency (ZYN).</p>
+      </details>
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">How many VELO flavours are there?</summary>
+        <p style="margin-top: 12px;">VELO offers more than 15 core flavours across European markets, including Crispy Peppermint, Ice Cool Mint, Ruby Berry, Tropical Mango, Citrus Burst, Dark Mellow, and Vanilla Cream. Availability varies by country, and VELO regularly rotates limited-edition flavours. SnusFriend stocks over 50 VELO product variants covering every strength tier.</p>
+      </details>
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">What is the strongest VELO pouch?</summary>
+        <p style="margin-top: 12px;">The strongest VELO pouches reach around 14&ndash;16 mg per pouch in select markets, positioning VELO as a mid-to-premium strength brand rather than an ultra-strong competitor. If you need higher concentrations than VELO's ceiling, brands like Pablo or Iceberg go significantly higher. For most daily users, VELO's 10&ndash;12 mg tier delivers more than enough nicotine.</p>
+      </details>
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
 
         <h2>About VELO</h2>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Who owns VELO?</summary>
+          <p style="margin-top: 12px;">VELO is owned by R.J. Reynolds Tobacco Company, a major global tobacco corporation headquartered in North Carolina, USA. RJ Reynolds invests heavily in nicotine innovation and brought VELO to market to compete with Swedish snus and newer nicotine pouch brands.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Is VELO the same as Lyft?</summary>
+          <p style="margin-top: 12px;">VELO and Lyft are distinct brands; both are owned by RJ Reynolds, but they target different markets—VELO dominates in Europe and prestige segments, while Lyft focuses on the USA and emerging markets. <a href="/blog/velo-nicotine-pouches-complete-guide" style="color: hsl(var(--primary));">VELO and Lyft</a> share similar formulations but differ in positioning and regional availability.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the strongest VELO pouch?</summary>
+          <p style="margin-top: 12px;">VELO's strongest offering is typically 14 mg/g in select markets, positioning VELO as a mid-to-premium strength brand rather than an extreme-strength competitor. <a href="/blog/pablo-nicotine-pouches-complete-guide" style="color: hsl(var(--primary));">For maximum nicotine</a>, users seeking ultra-strong pouches move to brands like Pablo or Iceberg instead.</p>
+        </details>
+
         <p>
           <a href="/brands/velo">VELO</a> is the flagship nicotine pouch brand from British American Tobacco (BAT),
           one of the world's largest tobacco companies. Originally launched in Scandinavia under the names EPOK and
-          LYFT, the brand was consolidated under the VELO name in 2019 as part of BAT's global strategy to build a
-          single, recognisable identity for their tobacco-free nicotine pouch range.
+          LYFT, the global rebrand to VELO was announced in 2019 and completed in 2022, giving BAT a single, recognisable
+          identity for their tobacco-free nicotine pouch range (BAT, 2022).
         </p>
         <p>
           Today, VELO is manufactured at BAT's dedicated production facility in Pecs, Hungary, and is sold in over
-          50 markets worldwide. It is the second-best-selling nicotine pouch brand globally, behind only ZYN by
+          50 markets worldwide. <strong>VELO is the second-best-selling nicotine pouch brand globally</strong>, behind only <a href="/blog/zyn-nicotine-pouches-complete-guide">ZYN</a> by
           Swedish Match. In several European and African markets, VELO holds the number one position.
         </p>
         <p>
@@ -52,6 +124,47 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
           grown to <strong>53 products</strong> across multiple formats, strengths, and flavour families — making
           them one of the most diverse brands on the market.
         </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+          {find('velo-blue-raspberry') && <BlogProductCard product={find('velo-blue-raspberry')} />}
+          {find('velo-lime-flame') && <BlogProductCard product={find('velo-lime-flame')} />}
+          {find('velo-bright-spearmint-mini-es') && <BlogProductCard product={find('velo-bright-spearmint-mini-es')} />}
+        </div>
+
+        <h2>VELO Product Overview</h2>
+        <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>
+        <div style="overflow-x: auto; margin: 32px 0;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <thead>
+              <tr style="border-bottom: 2px solid hsl(var(--border));">
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Product</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Format</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Strength (mg/pouch)</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Flavour</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Pouches/Can</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Mighty Peppermint</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.8</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Mighty Peppermint Max</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">17</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Crispy Peppermint</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.8</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Bright Spearmint</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">4</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Berry Frost</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.8</td><td style="padding: 10px 16px;">Berry</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Berry Frost Max</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">17</td><td style="padding: 10px 16px;">Berry</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Tropical Mango</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Fruit</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Orange Spark</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Lime Flame</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.8</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Arctic Grapefruit</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Ruby Berry</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Berry</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Elderflower Spritz</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Fruit</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Royal Purple</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.8</td><td style="padding: 10px 16px;">Berry</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Ice Cool</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.8</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Easy Mint</td><td style="padding: 10px 16px;">Mini</td><td style="padding: 10px 16px;">4</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">VELO Freeze</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">11</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+            </tbody>
+          </table>
+        </div>
 
         <h2>VELO Formats: Mini vs Slim</h2>
         <p>
@@ -121,7 +234,7 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
         </div>
 
         <p>
-          If you are new to nicotine pouches, start with <strong>Normal</strong> (4 mg) and work upward only
+          If you are <a href="/blog/what-are-nicotine-pouches">new to nicotine pouches</a>, start with <strong>Normal</strong> (4 mg) and work upward only
           if you feel you need more. Most daily users settle comfortably in the <strong>Strong</strong> range.
           Read our <a href="/blog/how-to-choose-your-strength">strength guide</a> for a deeper breakdown of
           how to find your ideal level.
@@ -129,8 +242,9 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
 
         <h2>VELO Flavour Guide</h2>
         <p>
-          VELO's flavour range is one of the broadest in the industry, spanning five major flavour families.
-          Here is what to expect from each:
+          <strong>VELO's flavour range is one of the broadest in the industry</strong>, spanning five major flavour families.
+          For a complete flavour comparison across all brands, see our <a href="/blog/nicotine-pouch-flavour-guide">complete flavour guide</a>.
+          Here is what to expect from each VELO flavour family:
         </p>
 
         <h3>Mint</h3>
@@ -187,6 +301,16 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
           day. If you want to understand what VELO does best, start here.
         </p>
 
+        <div class="my-8">
+          <h3 class="text-lg font-semibold text-foreground mb-4">Featured VELO Products</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {veloCrispyPeppermint && <BlogProductCard {...veloCrispyPeppermint.data} />}
+            {veloIceCool && <BlogProductCard {...veloIceCool.data} />}
+            {veloRubyBerry && <BlogProductCard {...veloRubyBerry.data} />}
+            {veloFreeze && <BlogProductCard {...veloFreeze.data} />}
+          </div>
+        </div>
+
         <h2>Who Should Choose VELO?</h2>
         <p>
           VELO is built for the mainstream market. It is not trying to be the most extreme brand or the most
@@ -194,13 +318,13 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
           positioning makes it an excellent choice for several types of users:
         </p>
         <ul class="list-disc pl-6 space-y-2">
-          <li><strong>Smokers looking to switch:</strong> VELO's wide strength range means you can match your current nicotine intake and step down gradually if desired. The familiar mint and tobacco-adjacent flavours ease the transition.</li>
-          <li><strong>New nicotine pouch users:</strong> The Normal (4 mg) strength is genuinely gentle, and the slim format is comfortable even if you have never used a pouch before. VELO is forgiving for beginners.</li>
+          <li><strong>Smokers looking to switch:</strong> <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">VELO's wide strength range means you can match your current nicotine intake</a> and step down gradually if desired. The familiar mint and tobacco-adjacent flavours ease the transition.</li>
+          <li><strong>New nicotine pouch users:</strong> See our <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginner's guide</a> for VELO's ranking. The Normal (4 mg) strength is genuinely gentle, and the slim format is comfortable even if you have never used a pouch before. VELO is forgiving for beginners.</li>
           <li><strong>Daily users who value consistency:</strong> Because VELO is manufactured at industrial scale with strict quality control, every can tastes the same. No batch variation, no surprises — just the same product every time.</li>
           <li><strong>Users who want variety:</strong> With 53 products spanning five flavour families and five strength levels, you can explore extensively without ever leaving the brand. Many users rotate between three or four VELO flavours throughout the week.</li>
         </ul>
         <p>
-          If you prefer extreme nicotine strength (above 17 mg), niche artisanal brands, or unusual flavour
+          If you prefer extreme nicotine strength (above 17 mg), niche artisanal brands like <a href="/blog/siberia-nicotine-pouches-complete-guide">Siberia</a>, or unusual flavour
           experiments, VELO may feel too safe. But for most users, that reliability and breadth of choice is
           exactly what they want.
         </p>
@@ -211,6 +335,27 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
           products with detailed descriptions, pricing, and strength indicators. You can filter by format,
           strength, and flavour to find exactly what you are looking for.
         </p>
+
+        <h2>How Does VELO Compare?</h2>
+        <p>See how VELO compares to other top brands:</p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO: The Definitive 2026 Comparison</a></li>
+          <li><a href="/blog/velo-vs-loop-2026">VELO vs LOOP: Which Is Better in 2026?</a></li>
+          <li><a href="/blog/velo-vs-nordic-spirit">VELO vs Nordic Spirit</a></li>
+          <li><a href="/blog/velo-vs-on-nicotine-pouches">VELO vs ON!</a></li>
+        </ul>
+
+        <hr class="my-10" />
+
+        <h2>Further Reading</h2>
+        <p>Want to learn more about VELO and how it compares? Check these guides:</p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO 2026</a> — comprehensive comparison of the two market leaders</li>
+          <li><a href="/blog/best-nicotine-pouches-2026">Best nicotine pouches overall</a> — see where VELO ranks across all brands</li>
+          <li><a href="/blog/velo-flavours-complete-guide">VELO flavours guide</a> — deep dive into all 5 flavour families</li>
+          <li><a href="/blog/best-mint-nicotine-pouches-2026">Best mint nicotine pouches</a> — VELO Mighty Peppermint vs the competition</li>
+          <li><a href="/blog/nicotine-pouch-side-effects">Nicotine pouch side effects</a> — safety and health information</li>
+        </ul>
       </div>
 
       <div class="mt-12 space-y-8">
@@ -235,22 +380,48 @@ const description = 'Discover VELO by BAT — the global nicotine pouch leader. 
           </div>
         </div>
       </div>
-    </div>
-  </article>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": publishDate,
-    "author": { "@type": "Person", "name": "SnusFriends Editorial" },
-    "publisher": {
-      "@type": "Organization",
-      "name": "SnusFriends",
-      "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
-    },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/velo-nicotine-pouches-complete-guide` },
-  })} />
+      <div class="mt-10 pt-8 border-t border-border">
+        <h2 class="text-xl font-bold text-foreground mb-4">Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/velo-vs-nordic-spirit">VELO vs Nordic Spirit</a> — Head-to-head comparison of two BAT brands</li>
+          <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO 2026</a> — How the two market leaders stack up</li>
+          <li><a href="/blog/velo-flavours-complete-guide">VELO Flavours Complete Guide</a> — Every VELO taste option reviewed</li>
+          <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest Pouches Ranked</a> — Looking for something stronger than VELO's max?</li>
+        </ul>
+      
+
+        <section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+          <h2>Frequently Asked Questions</h2>
+          <div style="margin-top: 16px;">
+            <h3>Who makes VELO nicotine pouches?</h3>
+            <p>VELO is manufactured by British American Tobacco (BAT), one of the world's largest tobacco companies. BAT launched VELO as their flagship tobacco-free nicotine pouch brand to compete with Swedish Match's ZYN.</p>
+        
+            <h3>How many VELO flavours are there?</h3>
+            <p>VELO offers 50+ SKUs across Europe, spanning mint, berry, citrus, fruit, and licorice categories. The exact range varies by country due to local regulations. Mighty Peppermint and Berry Frost are the best-selling variants.</p>
+        
+            <h3>What is the strongest VELO pouch?</h3>
+            <p>VELO Max (or Ultra) reaches up to 17 mg/pouch in some European markets. In countries with nicotine caps (e.g., certain Nordic markets), the strongest available option may be lower. Check your local product range.</p>
+        
+            <h3>Is VELO better than ZYN?</h3>
+            <p>Neither is objectively better — it depends on your preferences. VELO offers more flavour variety and slightly moister pouches with faster flavour release. ZYN is preferred for its cleaner, more subtle flavour profiles and consistent quality. Both are premium brands.</p>
+        
+            <h3>Are VELO pouches discreet?</h3>
+            <p>Yes. VELO slim and mini formats are designed to be nearly invisible under the lip. The brand specifically markets discretion as a key feature. There is no vapour, no smoke, and no visible pouch outline in most cases.</p>
+        
+            <h3>How long does a VELO pouch last?</h3>
+            <p>A typical VELO slim pouch lasts 25–35 minutes. Mini formats are slightly shorter at 20–30 minutes. VELO's moisture level is higher than some competitors, which gives a faster initial flavour burst but slightly shorter total duration.</p>
+        
+            <h3>Can I buy VELO online?</h3>
+            <p>Yes. VELO is available online across most European countries. SnusFriend stocks the full European VELO range with free shipping on qualifying orders.</p>
+          </div>
+        </section>
+</div>
+    </div>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 </Shop>

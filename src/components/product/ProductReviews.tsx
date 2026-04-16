@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -20,9 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Star, Heart, MessageSquare, Flag, ArrowUpDown, Check, X, Plus, Camera, ImageIcon } from 'lucide-react';
+import { Star, Heart, MessageSquare, Flag, ArrowUpDown, Check, X, Plus, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useProductReviews, type ProductReview } from '@/hooks/useProductReviews';
+import { useProductReviews, type ProductReview, type DimensionAverages } from '@/hooks/useProductReviews';
 import { useReviewLikes } from '@/hooks/useReviewLikes';
 import { useUsersAttributes, type UserAttribute } from '@/hooks/useUserAttributes';
 import UserAvatar from '@/components/profile/UserAvatar';
@@ -33,25 +33,31 @@ import { useReviewSummary } from '@/hooks/useReviewSummary';
 import ReviewSummaryCard from '@/components/product/ReviewSummaryCard';
 import { useReviewPhotoUpload } from '@/hooks/useReviewPhotoUpload';
 import { useToast } from '@/hooks/use-toast';
-import ShareButton from '@/components/social/ShareButton';
-
+import { tenant } from '@/config/tenant';
 type ReviewSortOption = 'relevant' | 'newest' | 'highest' | 'helpful';
 
 function sortReviews(reviews: ProductReview[], sort: ReviewSortOption): ProductReview[] {
   const sorted = [...reviews];
+
+  /** Verified-first tiebreaker applied to every sort mode */
+  const verifiedFirst = (a: ProductReview, b: ProductReview) =>
+    (b.verified_buyer ? 1 : 0) - (a.verified_buyer ? 1 : 0);
+
   switch (sort) {
     case 'newest':
-      return sorted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      return sorted.sort((a, b) => verifiedFirst(a, b) || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     case 'highest':
-      return sorted.sort((a, b) => b.rating - a.rating || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      return sorted.sort((a, b) => verifiedFirst(a, b) || b.rating - a.rating || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     case 'helpful':
-      return sorted.sort((a, b) => b.helpful_count - a.helpful_count || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      return sorted.sort((a, b) => verifiedFirst(a, b) || b.helpful_count - a.helpful_count || new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     case 'relevant':
     default: {
       // Weighted combo: helpful votes + recency bonus (reviews from last 30 days get a boost)
       const now = Date.now();
       const thirtyDays = 30 * 24 * 60 * 60 * 1000;
       return sorted.sort((a, b) => {
+        const vf = verifiedFirst(a, b);
+        if (vf !== 0) return vf;
         const recencyA = Math.max(0, 1 - (now - new Date(a.created_at).getTime()) / thirtyDays);
         const recencyB = Math.max(0, 1 - (now - new Date(b.created_at).getTime()) / thirtyDays);
         const scoreA = a.helpful_count * 2 + recencyA * 3 + a.rating * 0.5;
@@ -120,8 +126,124 @@ function StarPicker({
   );
 }
 
+/* ── Dimension config ── */
+const DIMENSIONS = [
+  { key: 'flavor_intensity' as const, label: 'Flavor Intensity', abbr: 'FI', emoji: '\ud83d\udc45' },
+  { key: 'sweetness' as const, label: 'Sweetness', abbr: 'SW', emoji: '\ud83c\udf6f' },
+  { key: 'burn' as const, label: 'Burn / Tingle', abbr: 'BU', emoji: '\ud83d\udd25' },
+  { key: 'moisture' as const, label: 'Moisture', abbr: 'MO', emoji: '\ud83d\udca7' },
+  { key: 'longevity' as const, label: 'Longevity', abbr: 'LO', emoji: '\u23f0' },
+] as const;
+
+type DimensionKey = typeof DIMENSIONS[number]['key'];
+
+/* ── Dimension slider for form ── */
+function DimensionSlider({
+  label,
+  emoji,
+  value,
+  onChange,
+}: {
+  label: string;
+  emoji: string;
+  value: number | null;
+  onChange: (v: number | null) => void;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="w-5 text-center text-sm" aria-hidden="true">{emoji}</span>
+      <span className="w-28 text-xs text-muted-foreground">{label}</span>
+      <input
+        type="range"
+        min={1}
+        max={5}
+        step={1}
+        value={value ?? 3}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="h-2 flex-1 cursor-pointer appearance-none rounded-full bg-muted accent-[hsl(var(--primary))]"
+        aria-label={`${label} rating`}
+        style={{ colorScheme: 'dark' }}
+      />
+      <span className="w-5 text-center text-xs font-medium text-foreground">
+        {value ?? '\u2014'}
+      </span>
+      {value != null && (
+        <button
+          type="button"
+          onClick={() => onChange(null)}
+          className="text-xs text-muted-foreground hover:text-destructive"
+          aria-label={`Clear ${label} rating`}
+        >
+          <X className="h-3 w-3" />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ── Compact dimension bars for review cards ── */
+function DimensionMiniBar({ abbr, value }: { abbr: string; value: number }) {
+  const pct = (value / 5) * 100;
+  return (
+    <div className="flex items-center gap-1" title={`${abbr}: ${value}/5`}>
+      <span className="text-[10px] font-medium text-muted-foreground w-5">{abbr}</span>
+      <div className="h-1.5 w-12 rounded-full bg-muted overflow-hidden">
+        <div
+          className="h-full rounded-full bg-primary transition-all"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ReviewDimensionBars({ review }: { review: ProductReview }) {
+  const hasDimensions = DIMENSIONS.some((d) => review[d.key] != null);
+  if (!hasDimensions) return null;
+  return (
+    <div className="flex flex-wrap gap-x-3 gap-y-1 pt-1">
+      {DIMENSIONS.map((d) =>
+        review[d.key] != null ? (
+          <DimensionMiniBar key={d.key} abbr={d.abbr} value={review[d.key]!} />
+        ) : null,
+      )}
+    </div>
+  );
+}
+
+/* ── Aggregate dimension bars for product summary ── */
+function AggregateDimensionBars({ averages }: { averages: DimensionAverages }) {
+  const hasAny = DIMENSIONS.some((d) => averages[d.key] != null);
+  if (!hasAny) return null;
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Flavor Profile</p>
+      {DIMENSIONS.map((d) => {
+        const val = averages[d.key];
+        if (val == null) return null;
+        const pct = (val / 5) * 100;
+        return (
+          <div key={d.key} className="flex items-center gap-2">
+            <span className="w-4 text-center text-xs" aria-hidden="true">{d.emoji}</span>
+            <span className="w-24 text-xs text-muted-foreground">{d.label}</span>
+            <div className="h-2 flex-1 rounded-full bg-muted overflow-hidden">
+              <div
+                className="h-full rounded-full bg-primary transition-all"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+            <span className="w-8 text-right text-xs font-medium text-foreground">
+              {val.toFixed(1)}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ── Single review card ── */
-const ReviewCard = React.memo(function ReviewCard({
+const ReviewCard = memo(function ReviewCard({
   review,
   onFlag,
   liked,
@@ -161,14 +283,20 @@ const ReviewCard = React.memo(function ReviewCard({
               <div>
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-semibold text-foreground">{displayName}</p>
-                  {review.verified_buyer && (
-                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  {review.verified_buyer ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/15 px-2.5 py-0.5 text-xs font-medium text-green-400">
+                      <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
                       Verified Buyer
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                      Community Review
                     </span>
                   )}
                 </div>
                 <AttributePills attributes={userAttributes} maxVisible={3} />
                 <Stars rating={review.rating} />
+                <ReviewDimensionBars review={review} />
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">{dateStr}</span>
@@ -176,7 +304,7 @@ const ReviewCard = React.memo(function ReviewCard({
                   type="button"
                   onClick={() => onFlag(review.id)}
                   aria-label={`Report review by ${displayName}`}
-                  className="inline-flex items-center gap-1 text-xs text-muted-foreground/50 transition-colors hover:text-destructive"
+                  className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-destructive"
                   title="Report this review"
                 >
                   <Flag className="h-3 w-3" />
@@ -272,7 +400,15 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
   const [sortBy, setSortBy] = useState<ReviewSortOption>('relevant');
   const { toast } = useToast();
 
-  const { reviews, avgRating, totalCount, distribution, isLoading, submitReview, flagReview } =
+  const [dimValues, setDimValues] = useState<Record<DimensionKey, number | null>>({
+    flavor_intensity: null,
+    sweetness: null,
+    burn: null,
+    moisture: null,
+    longevity: null,
+  });
+
+  const { reviews, avgRating, totalCount, distribution, dimensionAverages, isLoading, submitReview, flagReview } =
     useProductReviews(productId);
   const { likedIds, toggleLike } = useReviewLikes(productId);
   const { data: reviewSummary, isLoading: summaryLoading } = useReviewSummary(productId, totalCount);
@@ -320,6 +456,11 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
         ...(prosFiltered.length ? { pros: prosFiltered } : {}),
         ...(consFiltered.length ? { cons: consFiltered } : {}),
         ...(photoUrls.length ? { photo_urls: photoUrls } : {}),
+        flavor_intensity: dimValues.flavor_intensity,
+        sweetness: dimValues.sweetness,
+        burn: dimValues.burn,
+        moisture: dimValues.moisture,
+        longevity: dimValues.longevity,
       });
 
       // Calculate scaled points earned (mirrors DB trigger logic)
@@ -332,10 +473,13 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
 
       toast({
         title: 'Review submitted',
-        description: `Thank you! You earned ${earnedPoints} SnusPoints for this review.`,
+        description: `Thank you! You earned ${earnedPoints} ${tenant.loyaltyCurrencyName} for this review.`,
       });
       // Fire-and-forget quest progress + avatar unlock checks
-      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review_submitted' } }).catch(() => {});
+      apiFetch('update-quest-progress', {
+        method: 'POST',
+        body: { action: 'review_submitted', externalRef: productId },
+      }).catch(() => {});
       apiFetch('check-avatar-unlocks', { method: 'POST' }).catch(() => {});
       setDialogOpen(false);
       setNewRating(0);
@@ -343,6 +487,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
       setNewBody('');
       setNewPros([]);
       setNewCons([]);
+      setDimValues({ flavor_intensity: null, sweetness: null, burn: null, moisture: null, longevity: null });
       clearPhotos();
     } catch {
       // Clean up orphaned photos if upload succeeded but DB write failed
@@ -498,6 +643,22 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                 </div>
               </div>
 
+              {/* Dimension sliders */}
+              <div className="space-y-2">
+                <Label>Rate Dimensions (optional)</Label>
+                <div className="space-y-2 rounded-lg border border-border bg-muted/30 p-3">
+                  {DIMENSIONS.map((d) => (
+                    <DimensionSlider
+                      key={d.key}
+                      label={d.label}
+                      emoji={d.emoji}
+                      value={dimValues[d.key]}
+                      onChange={(v) => setDimValues((prev) => ({ ...prev, [d.key]: v }))}
+                    />
+                  ))}
+                </div>
+              </div>
+
               {/* Photos */}
               <div className="space-y-2">
                 <Label>Photos (optional, max 3)</Label>
@@ -604,6 +765,17 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                 );
               })}
             </div>
+
+            {/* Aggregate dimension bars */}
+            {DIMENSIONS.some((d) => dimensionAverages[d.key] != null) && (
+              <>
+                <Separator orientation="vertical" className="hidden h-24 sm:block" />
+                <Separator className="sm:hidden" />
+                <div className="flex-1">
+                  <AggregateDimensionBars averages={dimensionAverages} />
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       )}
@@ -619,9 +791,15 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
 
       {/* ── Empty state ── */}
       {!isLoading && totalCount === 0 && (
-        <p className="text-sm text-muted-foreground">
-          No reviews yet. Be the first to share your thoughts!
-        </p>
+        <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border bg-muted/30 py-12 px-6 text-center">
+          <p className="text-base text-muted-foreground">
+            No reviews yet — be the first and earn 25 {tenant.loyaltyCurrencyName}
+          </p>
+          <Button size="sm" onClick={() => setDialogOpen(true)}>
+            <MessageSquare className="mr-2 h-4 w-4" />
+            Write a Review
+          </Button>
+        </div>
       )}
 
       {/* ── Sort dropdown + Review list ── */}

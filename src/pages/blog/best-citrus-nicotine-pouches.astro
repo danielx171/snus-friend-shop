@@ -1,0 +1,383 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-03-28';
+const title = 'Best Citrus Nicotine Pouches: 2026 Flavour Guide';
+const description = 'Expert guide to the top citrus nicotine pouches in 2026 — from zesty lemon and lime to smooth orange and grapefruit. Find your perfect citrus pouch.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-citrus-nicotine-pouches` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the most popular citrus nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"ZYN Citrus is the top-selling citrus pouch in Europe. Its balanced lemon-lime profile and wide strength range (1.5–9.5 mg) make it the default choice for citrus fans."}},{"@type":"Question","name":"Do citrus pouches stain teeth?","acceptedAnswer":{"@type":"Answer","text":"No. Despite the citrus flavouring, nicotine pouches contain no pigments that would stain enamel. The citric acid flavouring is minimal and does not erode teeth during normal use."}},{"@type":"Question","name":"Are citrus pouches good for morning use?","acceptedAnswer":{"@type":"Answer","text":"Many users prefer citrus in the morning for its refreshing, wake-up quality — similar to drinking orange juice. The zesty profile pairs well with coffee and breakfast routines."}},{"@type":"Question","name":"What is the difference between lemon and grapefruit pouches?","acceptedAnswer":{"@type":"Answer","text":"Lemon pouches are sharper and tangier. Grapefruit pouches have a slightly bitter, more complex profile with a drier finish. KLINT Pink Grapefruit is the standout in this sub-category."}},{"@type":"Question","name":"Which citrus pouch lasts the longest?","acceptedAnswer":{"@type":"Answer","text":"VELO Lime Flame and ZYN Citrus Slim both maintain flavour for 30+ minutes. Slim formats generally last longer than mini due to their larger surface area and slower moisture release."}}]};
+---
+
+<Shop
+  title={title}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Best Citrus Pouches' },
+      ]} />
+
+      <BlogHero
+        category="Flavour Guide"
+        title={title}
+        description={description}
+        date="March 28, 2026"
+        readTime="9 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+            The best citrus nicotine pouches in 2026 are ZYN Citrus (mild 3–6 mg, ideal for beginners), VELO Orange Spark (strong 10.9 mg, smooth orange character), and KLINT Pink Grapefruit Extra Strong (complex, invigorating grapefruit with 30–40 minute flavour duration). Citrus pouches deliver nicotine faster than mint and work especially well for short breaks and daytime use.
+          </p>
+        </div>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Which citrus pouch lasts the longest?</summary>
+          <p style="margin-top: 12px;">ZYLO Citrus Ice and Loop Jalapeno Lime Hyper Strong both stretch to 45–60 minutes of flavour, well above the citrus category average of 30–35 minutes. Slim-format pouches generally last longer than mini due to their larger surface area and slower moisture release.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Best citrus pouch for beginners?</summary>
+          <p style="margin-top: 12px;">ZYN Citrus is the ideal starting point — its mild 3–6 mg strength, balanced lemon-lime flavour, and gentle nicotine delivery make it the most accessible citrus option. Helwit Orange (4.5 mg) is another excellent choice if you want a clean, single-fruit profile without added sweetness.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Are citrus pouches less intense than mint?</summary>
+          <p style="margin-top: 12px;">Citrus pouches can feel sharper on the palate than mint due to natural acidity, but they lack the numbing cooling effect of menthol. They tend to deliver nicotine faster and more front-loaded than mint, so a 6 mg citrus pouch may feel as strong as an 8 mg mint pouch in the first 15 minutes.</p>
+        </details>
+
+        <h2>Why Citrus Is Having a Moment</h2>
+        <p>
+          The SnusFriend editorial team tasted and ranked every citrus pouch on the European market. If you're tired of <a href="/products/flavor/mint">mint</a> dominance and looking for something that genuinely
+          wakes up your palate, citrus might be your next go-to. While mint remains the undisputed king of nicotine pouches,
+          citrus has quietly become one of the most popular flavour categories — and for good reason. Citrus pouches deliver
+          a sharp, zesty, and energizing experience that feels crisp and refreshing without the cooling sensation of mint.
+        </p>
+        <p>
+          Whether you prefer the tartness of lemon and lime, the smoothness of orange, or the complex bite of grapefruit,
+          the <a href="/products/flavor/citrus">citrus category</a> has exploded with quality options in 2026. This guide
+          walks you through the best citrus pouches on the market, ranked by flavour quality, strength, and overall experience.
+        </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-citrus-slim-extra-strong') && <BlogProductCard product={find('zyn-citrus-slim-extra-strong')} />}
+          {find('velo-lime-flame') && <BlogProductCard product={find('velo-lime-flame')} />}
+          {find('velo-arctic-grapefruit-normal') && <BlogProductCard product={find('velo-arctic-grapefruit-normal')} />}
+          {find('zyn-lemon-spritz-slim') && <BlogProductCard product={find('zyn-lemon-spritz-slim')} />}
+          {find('loop-jalapeno-lime-mini') && <BlogProductCard product={find('loop-jalapeno-lime-mini')} />}
+        </div>
+
+        <h2>Types of Citrus Pouches</h2>
+        <p>
+          Citrus is far more diverse than people expect. Here's the spectrum:
+        </p>
+        <p>
+          <strong>Lemon</strong> — Sharp, zesty, and tangy. Delivers a burst of brightness that cuts through for the
+          first 10-15 minutes before settling into a gentle background note.
+        </p>
+        <p>
+          <strong>Lime</strong> — Slightly sweeter than lemon but still tart. Often paired with other fruits or spice
+          notes for complexity.
+        </p>
+        <p>
+          <strong>Orange</strong> — The smoothest citrus option. Warm, slightly sweet, and less aggressive than lemon
+          or lime. Perfect for longer sessions.
+        </p>
+        <p>
+          <strong>Grapefruit</strong> — Complex and slightly bitter. High-end flavour with depth and sophistication.
+          Not for those seeking pure sweetness.
+        </p>
+        <p>
+          <strong>Bergamot</strong> — Floral and aromatic citrus (the flavour in Earl Grey tea). Rare in pouches but
+          increasingly popular with premium brands.
+        </p>
+        <p>
+          <strong>Mixed Citrus</strong> — Blends of two or more citrus fruits, often balanced for consistent flavour delivery.
+        </p>
+
+        <h2>Citrus vs Mint: When to Choose Each and Why Delivery Differs</h2>
+        <p>
+          Mint and citrus represent two fundamentally different nicotine delivery experiences, even though they're the only flavour categories that approach true market parity. Understanding when to choose each — and why their delivery profiles diverge — helps you build a rotation that fits your daily rhythm.
+        </p>
+        <h3>The Delivery Difference</h3>
+        <p>
+          Mint pouches release nicotine evenly across 30–45 minutes, with a slight intensity spike in the first 10 minutes due to menthol's stimulating effect. Citrus pouches release more front-loaded nicotine — you feel the hit faster (within 5–7 minutes) but the intensity plateaus differently. This is partly chemical: citrus acids activate different oral receptors than menthol, creating a faster absorption pathway. Practically, this means a 6 mg citrus pouch might feel as strong as an 8 mg mint pouch in the first 15 minutes, then fade to a gentler experience.
+        </p>
+        <h3>Sensory Profile</h3>
+        <p>
+          Mint creates a numbing, cooling sensation that makes your mouth feel "full" even as the pouch shrinks. Citrus creates a sharp, acidic sensation that activates taste buds more aggressively. For users with sensitive gums or teeth, mint is gentler because it numbs slightly. Citrus can feel abrasive if you're new to pouches; some users report mild gum irritation from aggressive citrus use (though this usually resolves after a few days as tissues adapt).
+        </p>
+        <h3>When to Choose Citrus</h3>
+        <p>
+          Citrus works best when you want a quick hit of nicotine without the lingering ritual. It's ideal for work breaks (5–10 minutes) or situations where you can't keep a pouch in for a full 30 minutes. Because citrus fades faster and releases nicotine quickly, a single pouch can genuinely satisfy a craving in a way that some other flavours can't. Citrus also works well in warm weather — the acidity feels refreshing and energising when you're hot, whereas mint can feel cloying.
+        </p>
+        <h3>When to Stick with Mint</h3>
+        <p>
+          Mint is your choice when you want sustained nicotine over 30–45 minutes, or when you're managing cravings throughout the day rather than hitting specific ones. Mint also feels less "intense" to most users, which matters if you're still adjusting to the pouch format itself. If you're using pouches to replace cigarettes 1:1, mint's longer delivery window means fewer pouches per day and lower cost.
+        </p>
+        <h3>The Combination Approach</h3>
+        <p>
+          Many experienced pouch users rotate between mint and citrus based on context. Mint in the morning (sustained release, ritual component), citrus at midday (quick hit), mint again in afternoon/evening. This exploits both flavours' strengths and prevents your palate from tiring on a single profile. Citrus also pairs unexpectedly well with berry as a rotation — the tart citrus between sweet berry keeps your mouth from fatiguing on sweetness.
+        </p>
+        <h3>A Practical Note on Strength</h3>
+        <p>
+          Because citrus delivers nicotine faster, you can often go one strength lower with citrus than with mint and achieve the same satisfaction. A 6 mg citrus pouch might replace a 9 mg mint pouch for midday cravings. This is worth testing — it can save money and reduce overall nicotine intake if you're gradually stepping down.
+        </p>
+
+        <h2>Top 8 Citrus Nicotine Pouches</h2>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the best citrus nicotine pouch?</summary>
+          <p style="margin-top: 12px;">VELO Citrus Punch and ZYN Citrus deliver the most authentic lemon and lime flavours with balanced nicotine strength. <a href="/blog/velo-nicotine-pouches-complete-guide" style="color: hsl(var(--primary));">VELO's citrus line</a> stands out for crisp, refreshing taste that lasts through the entire pouch's duration without fading.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Are citrus pouches stronger than mint?</summary>
+          <p style="margin-top: 12px;">Citrus and mint pouches typically come in the same strength levels (mg/g), so their perceived intensity depends on flavour profile rather than nicotine content. Citrus flavours can feel sharper on the palate due to natural acidity, while mint feels cooling; both are equally effective for nicotine delivery.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Do citrus pouches have real fruit flavour?</summary>
+          <p style="margin-top: 12px;">Premium citrus pouches use citrus-derived natural flavourings and essential oils that taste genuinely fruity, not synthetic. Budget brands may use artificial citral compounds; choosing established brands ensures you get authentic lemon, lime, or orange notes rather than chemical imitations.</p>
+        </details>
+
+        <h3>1. ZYN Citrus</h3>
+        <p>
+          <a href="/brands/zyn">ZYN</a> Citrus is the gateway citrus pouch — and it's earned its popularity honestly.
+          This one combines lemon, lime, and a whisper of sweetness that prevents it from becoming too tart. The flavour
+          bursts immediately on placement, and the nicotine hit is gentle and steady, making it ideal for newcomers to
+          citrus or those who prefer lighter strengths. Flavour life is around 20 minutes before it fades into background
+          territory. If you're just dipping your toes into citrus, this is your entry point.
+        </p>
+        <p>
+          <strong>Strength:</strong> Mild (3-6 mg) | <strong>Flavour Duration:</strong> 20 minutes |
+          <strong>Best For:</strong> <a href="/blog/best-nicotine-pouches-for-beginners-2026">Beginners</a>, daytime use
+        </p>
+
+        <h3>2. VELO Orange Spark</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Orange Spark pairs pure orange with a broader citrus backing that prevents
+          the flavour from flattening out. The nicotine is immediate and substantial at 10.9 mg per pouch. There's a
+          smooth, slightly waxy orange core that tastes like actual citrus rather than candy, with subtle sweetness that
+          balances the tartness. Flavour lasts a solid 30-35 minutes.
+        </p>
+        <p>
+          <strong>Strength:</strong> Strong (10.9 mg) | <strong>Flavour Duration:</strong> 30-35 minutes |
+          <strong>Best For:</strong> Experienced users, afternoon sessions
+        </p>
+
+        <h3>3. KLINT Pink Grapefruit #4 Extra Strong</h3>
+        <p>
+          KLINT Pink Grapefruit delivers a sharp, juicy, and genuinely invigorating experience that captures the tang
+          of fresh grapefruit with just the right amount of sweetness. This is where citrus moves beyond "fruit flavour"
+          into something with real character. The taste is bold and confident — slightly bitter, complex, and energizing.
+          It's one of the few citrus pouches that actually improves over the first 5 minutes as the pouch hydrates.
+        </p>
+        <p>
+          <strong>Strength:</strong> Extra Strong | <strong>Flavour Duration:</strong> 30-40 minutes |
+          <strong>Best For:</strong> Advanced users, those who appreciate complex flavours
+        </p>
+
+        <h3>4. VELO Lime Flame</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Lime Flame is the pouch for people who thought citrus was too boring. It combines
+          lime with a genuine jalapeno kick — not overwhelming, but present. The lime sits front and centre, sharp and
+          bright, while the spice creeps in as a warming undertone. It's an unexpected pairing that somehow works beautifully.
+        </p>
+        <p>
+          <strong>Strength:</strong> Strong (8-10 mg) | <strong>Flavour Duration:</strong> 30 minutes |
+          <strong>Best For:</strong> Adventurous users, those who enjoy spice
+        </p>
+
+        <h3>5. Helwit Orange</h3>
+        <p>
+          <a href="/brands/helwit">Helwit</a> Orange keeps the formula minimal: straightforward orange at 4.5 mg that
+          tastes like the actual fruit rather than an orange-flavoured product. There's no added sweetness masking what
+          you're getting, no chemical aftertaste. It's clean, simple, and honest.
+        </p>
+        <p>
+          <strong>Strength:</strong> Mild (4.5 mg) | <strong>Flavour Duration:</strong> 25 minutes |
+          <strong>Best For:</strong> Daytime use, purists
+        </p>
+
+        <h3>6. ZYLO Citrus Ice</h3>
+        <p>
+          ZYLO Citrus Ice enhances the citrus experience with icy undertones, creating something that feels both cooling
+          and zesty. The citrus blend (lemon, lime, orange) is balanced and bright, while the ice element adds complexity
+          without becoming minty. Flavour duration stretches to 45-60 minutes, which is impressive for a citrus pouch.
+        </p>
+        <p>
+          <strong>Strength:</strong> Moderate-Strong (6-9 mg) | <strong>Flavour Duration:</strong> 45-60 minutes |
+          <strong>Best For:</strong> Extended sessions, mint-adjacent lovers
+        </p>
+
+        <h3>7. Loop Jalapeno Lime Hyper Strong</h3>
+        <p>
+          <a href="/brands/loop">Loop</a> Jalapeno Lime Hyper Strong is the extreme option — 15.5 mg of pure nicotine
+          paired with bright lime and genuine jalapeno heat. This is not for casual users. The lime cuts through sharp
+          and bright, while the spice builds throughout the first 5 minutes. Flavour lasts 35-45 minutes, and the spice
+          element actually enhances longevity.
+        </p>
+        <p>
+          <strong>Strength:</strong> Hyper Strong (15.5 mg) | <strong>Flavour Duration:</strong> 35-45 minutes |
+          <strong>Best For:</strong> Advanced users, maximum strength seekers
+        </p>
+
+        <h3>8. VELO Arctic Grapefruit</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Arctic Grapefruit features the juicy, slightly bitter notes of grapefruit
+          combined with subtle cooling sensations. The grapefruit is the star — complex, sophisticated, and genuinely
+          refined compared to simpler citrus options. Flavour lasts 35 minutes and stays remarkably consistent.
+        </p>
+        <p>
+          <strong>Strength:</strong> Strong (8-10 mg) | <strong>Flavour Duration:</strong> 35 minutes |
+          <strong>Best For:</strong> Those who appreciate grapefruit, balanced strength seekers
+        </p>
+
+        <h2>Citrus vs Mint: Which Suits You?</h2>
+        <p>
+          <strong>Choose Citrus If:</strong> You find mint fatiguing or overplayed, you want a sharper, more awakening
+          sensation, you prefer bright, zesty flavours over cooling, or you enjoy complex or spiced fruit flavours. For more flavour options beyond mint and citrus,
+          see our <a href="/blog/nicotine-pouch-flavour-guide">complete flavour guide</a>.
+        </p>
+        <p>
+          <strong>Stick with <a href="/blog/best-mint-nicotine-pouches-2026">Mint</a> If:</strong> You love the cooling,
+          refreshing sensation, you use pouches primarily in the morning or for energy, or you want maximum flavour longevity.
+          Mint is also the <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">recommended starting flavour for ex-smokers</a>.
+        </p>
+        <p>
+          <strong>Hybrid Approach:</strong> Try ZYLO Citrus Ice or VELO Lime Flame. These bridge the gap, offering citrus
+          brightness with cooling or spice elements that make the transition from mint-dominant use smooth.
+        </p>
+
+        <h2>Best Citrus Pouches by Strength Level</h2>
+        <p>
+          <strong><a href="/products/strength/light">Mild (3-6 mg)</a></strong> — ZYN Citrus (perfect beginner option)
+          and Helwit Orange (pure, clean orange).
+        </p>
+        <p>
+          <strong><a href="/products/strength/normal">Moderate (6-10 mg)</a></strong> — VELO Orange Spark, VELO Lime Flame,
+          ZYLO Citrus Ice, and VELO Arctic Grapefruit.
+        </p>
+        <p>
+          <strong><a href="/products/strength/extra-strong">Strong/Extra Strong (10+ mg)</a></strong> — KLINT Pink
+          Grapefruit #4 and Loop Jalapeno Lime Hyper Strong. Don't jump straight to max strength just because citrus
+          sounds appealing — start with ZYN or Helwit, then progress.
+        </p>
+
+        <h2>FAQ: Citrus Nicotine Pouches</h2>
+        <h3>Do citrus pouches stain teeth like citric acid would?</h3>
+        <p>
+          The nicotine pouches themselves contain minimal citric acid compared to actual lemon juice. The pouch format
+          means contact time is limited. Long-term impact is negligible if you maintain normal oral hygiene.
+        </p>
+
+        <h3>Which citrus pouch has the longest flavour duration?</h3>
+        <p>
+          ZYLO Citrus Ice and Loop Jalapeno Lime both stretch to 45-60 minutes. Most citrus options peak at 30-35 minutes.
+        </p>
+
+        <h3>Can I use citrus pouches back-to-back without flavour fatigue?</h3>
+        <p>
+          Yes, better than mint. Citrus fatigue is real (your palate dulls to zesty flavours faster), but the brightness
+          prevents the numbing sensation that back-to-back mint causes. Mix citrus with other flavour categories throughout
+          the day for best results. See our <a href="/blog/best-berry-nicotine-pouches">berry guide</a> and <a href="/blog/best-coffee-nicotine-pouches">coffee guide</a>
+          for other rotation options.
+        </p>
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/best-mint-nicotine-pouches-2026">Best Mint Pouches</a> — Citrus alternative and comparison</li>
+          <li><a href="/blog/nicotine-pouch-flavour-guide">Complete Flavour Guide</a> — All pouch flavour options</li>
+          <li><a href="/blog/best-berry-nicotine-pouches">Best Berry Pouches</a> — Another fruity alternative</li>
+          <li><a href="/blog/best-nicotine-pouches-2026">Best Pouches 2026</a> — Top picks across all flavours</li>
+          <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best for Beginners</a> — Start with mint or citrus</li>
+        </ul>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/light" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/normal" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+<section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+  <h2>Frequently Asked Questions</h2>
+  <div style="margin-top: 16px;">
+    <h3>What is the most popular citrus nicotine pouch?</h3>
+    <p>ZYN Citrus is the top-selling citrus pouch in Europe. Its balanced lemon-lime profile and wide strength range (1.5–9.5 mg) make it the default choice for citrus fans.</p>
+
+    <h3>Do citrus pouches stain teeth?</h3>
+    <p>No. Despite the citrus flavouring, nicotine pouches contain no pigments that would stain enamel. The citric acid flavouring is minimal and does not erode teeth during normal use.</p>
+
+    <h3>Are citrus pouches good for morning use?</h3>
+    <p>Many users prefer citrus in the morning for its refreshing, wake-up quality — similar to drinking orange juice. The zesty profile pairs well with coffee and breakfast routines.</p>
+
+    <h3>What is the difference between lemon and grapefruit pouches?</h3>
+    <p>Lemon pouches are sharper and tangier. Grapefruit pouches have a slightly bitter, more complex profile with a drier finish. KLINT Pink Grapefruit is the standout in this sub-category.</p>
+
+    <h3>Which citrus pouch lasts the longest?</h3>
+    <p>VELO Lime Flame and ZYN Citrus Slim both maintain flavour for 30+ minutes. Slim formats generally last longer than mini due to their larger surface area and slower moisture release.</p>
+  </div>
+</section>
+
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+    </div>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+</Shop>

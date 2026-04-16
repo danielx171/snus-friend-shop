@@ -5,10 +5,10 @@ declare const Deno: {
   serve: (handler: (req: Request) => Response | Promise<Response>) => void;
 };
 
-// @ts-ignore: Deno URL import
+// @ts-expect-error — Deno types: Deno URL import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// @ts-ignore: Deno file import
+// @ts-expect-error — Deno types: Deno file import
 import { corsHeaders } from "../_shared/cors.ts";
 
 function jsonResponse(body: unknown, status = 200): Response {

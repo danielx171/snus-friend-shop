@@ -1,0 +1,43 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import CompareIsland from '@/components/react/CompareIsland';
+import { getCollection } from 'astro:content';
+import { writeProductsJson } from '@/lib/product-json';
+import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildAbsoluteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
+
+const products = await getCollection('products');
+writeProductsJson(products);
+
+const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Compare Nicotine Pouches",
+    "description": "Compare nicotine pouches side by side — strength, flavour, price, format, and brand.",
+    "url": buildAbsoluteUrl('/compare'),
+  };
+---
+
+<Shop
+  title={`Compare Nicotine Pouches Side by Side | ${tenant.name}`}
+  description="Compare nicotine pouches side by side — strength, flavour, price, format, and brand. Select 2-4 products and see how they stack up."
+  canonical="/compare"
+>
+  <JsonLd data={webPageJsonLd} />
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumb items={[{ label: 'Compare' }]} />
+
+    <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-3">
+      Compare Nicotine Pouches
+    </h1>
+    <p class="text-base text-muted-foreground mb-8 max-w-2xl">
+      Select 2-4 products to compare side by side. See how they stack up on strength, flavour, price per can, and format.
+    </p>
+
+    <CompareIsland client:load />
+  </div>
+</Shop>

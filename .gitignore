@@ -40,5 +40,23 @@ stats.html
 
 .vercel
 Snus/
+.playwright-cli/
 
 .env*.local
+
+# Generated during build
+public/data/products.json
+
+# Audit artifacts (large, findings already integrated)
+cowork/content/final-audit/
+cowork/content/overnight-audit/
+cowork/content/visual-audit/
+cowork/content/crawls/
+cowork/content/pagespeed/
+.superpowers/brainstorm/
+
+# Converted HTML drafts (all now .astro pages)
+blog-drafts/
+
+# OG images generated at build time by scripts/generate-og-images.ts
+public/og/*.png

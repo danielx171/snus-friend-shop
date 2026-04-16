@@ -9,14 +9,32 @@ export interface ConsentState {
 
 const defaultConsent: ConsentState = { analytics: false, marketing: false, answered: false };
 
+function broadcastConsent(next: ConsentState) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('cookie-consent-updated', { detail: next }));
+  }
+}
+
 export const $cookieConsent = persistentAtom<ConsentState>(
   tenant.storage.consentKey,
   defaultConsent,
   { encode: JSON.stringify, decode: JSON.parse },
 );
 
-export function acceptAll() { $cookieConsent.set({ analytics: true, marketing: true, answered: true }); }
-export function rejectAll() { $cookieConsent.set({ analytics: false, marketing: false, answered: true }); }
+export function acceptAll() {
+  const next = { analytics: true, marketing: true, answered: true };
+  $cookieConsent.set(next);
+  broadcastConsent(next);
+}
+
+export function rejectAll() {
+  const next = { analytics: false, marketing: false, answered: true };
+  $cookieConsent.set(next);
+  broadcastConsent(next);
+}
+
 export function setConsent(analytics: boolean, marketing: boolean) {
-  $cookieConsent.set({ analytics, marketing, answered: true });
+  const next = { analytics, marketing, answered: true };
+  $cookieConsent.set(next);
+  broadcastConsent(next);
 }

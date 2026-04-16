@@ -3,10 +3,11 @@ export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import WishlistIsland from '@/components/react/WishlistIsland';
+import { tenant } from '@/config/tenant';
 ---
 
 <Shop
-  title="Wishlist | SnusFriend"
+  title={`Wishlist | ${tenant.name}`}
   noindex={true}
 >
   <section class="bg-background text-foreground">
@@ -16,7 +17,7 @@ import WishlistIsland from '@/components/react/WishlistIsland';
       <h1 class="text-4xl font-bold tracking-tight mb-8">Wishlist</h1>
 
       <div id="wishlist-root">
-        <WishlistIsland client:load />
+        <WishlistIsland client:idle />
       </div>
     </div>
   </section>

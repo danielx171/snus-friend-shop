@@ -5,10 +5,12 @@ declare const Deno: {
   serve: (handler: (req: Request) => Response | Promise<Response>) => void;
 };
 
-// @ts-ignore: Deno URL import
+// @ts-expect-error — Deno types: Deno URL import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-// @ts-ignore: Deno file import
+// @ts-expect-error — Deno types: Deno file import
 import { corsHeaders } from "../_shared/cors.ts";
+// @ts-expect-error — Deno relative .ts import
+import { siteName } from "../_shared/site-config.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -179,7 +181,7 @@ Deno.serve(async (req) => {
   /* ---------- look up order ---------- */
   const { data: order, error: lookupError } = await adminClient
     .from("orders")
-    .select("id, checkout_status, customer_email, customer_name")
+    .select("id, checkout_status, customer_email, customer_metadata")
     .eq("nyehandel_order_id", nyehandelOrderId)
     .maybeSingle();
 
@@ -200,7 +202,14 @@ Deno.serve(async (req) => {
   };
 
   if (trackingId) updatePayload.tracking_id = trackingId;
-  if (trackingUrl) updatePayload.tracking_url = trackingUrl;
+  if (trackingUrl) {
+    try {
+      new URL(trackingUrl);
+      updatePayload.tracking_url = trackingUrl;
+    } catch {
+      console.warn(JSON.stringify({ requestId, event: "delivery_callback_invalid_tracking_url", trackingUrl }));
+    }
+  }
 
   const { error: updateError } = await adminClient
     .from("orders")
@@ -224,7 +233,18 @@ Deno.serve(async (req) => {
 
   /* ---------- fire-and-forget: send shipped email ---------- */
   const customerEmail = order.customer_email;
-  const customerName = order.customer_name;
+  const meta = order.customer_metadata as Record<string, unknown> | null;
+  const customerName = meta
+    ? [meta.firstname, meta.lastname].filter(Boolean).join(" ") || "Customer"
+    : "Customer";
+
+  // Try to extract carrier from the delivery callback payload
+  const carrier =
+    extractString(parcels[0] ?? {}, "carrier") ??
+    extractString(body, "carrier") ??
+    extractString(body, "shipment", "carrier") ??
+    (meta?.shipping_method ? String(meta.shipping_method) : "");
+
   const internalSecret = Deno.env.get("INTERNAL_FUNCTIONS_SECRET");
   const supabaseFunctionsUrl = supabaseUrl?.replace(".supabase.co", ".supabase.co/functions/v1");
 
@@ -237,14 +257,14 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         to: customerEmail,
-        subject: `Your SnusFriend order #${nyehandelOrderId} has shipped!`,
+        subject: `Your ${siteName} order #${nyehandelOrderId} has shipped!`,
         template: "order_shipped",
         data: {
           orderId: nyehandelOrderId,
-          customerName: customerName ?? "Customer",
+          customerName,
           trackingUrl: trackingUrl ?? "",
           trackingId: trackingId ?? "",
-          carrier: "",
+          carrier,
         },
       }),
     }).catch((err) => {

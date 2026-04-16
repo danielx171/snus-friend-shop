@@ -47,11 +47,15 @@ export function useReputation(userId: string | null) {
     queryFn: async (): Promise<ReputationLevel> => {
       if (!userId) return DEFAULT_REPUTATION;
 
-      const { data, error } = await supabase
-        .from('user_reputation')
-        .select('*')
-        .eq('user_id', userId)
-        .maybeSingle();
+      // Fetch user reputation and all reputation levels in parallel
+      // (reputation_levels is a tiny static table — fetching all rows avoids a second sequential query)
+      const [
+        { data, error },
+        { data: levelRows },
+      ] = await Promise.all([
+        supabase.from('user_reputation').select('*').eq('user_id', userId).maybeSingle(),
+        supabase.from('reputation_levels').select('level, min_points').order('level'),
+      ]);
 
       if (error) {
         console.error('user_reputation query failed', error);
@@ -64,14 +68,7 @@ export function useReputation(userId: string | null) {
       const lifetimeEarned: number = row.lifetime_earned ?? 0;
       const nextMin: number | null = row.next_level_min_points ?? null;
 
-      // Compute the min_points for the current level to get range
-      const { data: currentLevelData } = await supabase
-        .from('reputation_levels')
-        .select('min_points')
-        .eq('level', row.level)
-        .single();
-
-      const currentMin = currentLevelData?.min_points ?? 0;
+      const currentMin = levelRows?.find(r => r.level === row.level)?.min_points ?? 0;
 
       let progress = 1;
       let pointsToNext = 0;
@@ -87,7 +84,7 @@ export function useReputation(userId: string | null) {
         level: row.level,
         levelName: row.level_name,
         badgeColor: row.badge_color,
-        perks: Array.isArray(row.perks) ? row.perks : [],
+        perks: (Array.isArray(row.perks) ? row.perks : []) as string[],
         lifetimeEarned,
         nextLevel: row.next_level ?? null,
         nextLevelName: row.next_level_name ?? null,

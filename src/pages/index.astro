@@ -1,60 +1,398 @@
 ---
 export const prerender = true;
+import { Image, getImage } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildAbsoluteUrl } from '@/config/site';
 import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
-import ProductCard from '@/components/react/ProductCard';
+import { writeProductsJson } from '@/lib/product-json';
+import ProductCard from '@/components/astro/ProductCard.astro';
+import RecentlyViewedIsland from '@/components/react/RecentlyViewedIsland';
+import RecommendationsIsland from '@/components/react/RecommendationsIsland';
+import { brandColors, defaultBrandColor } from '@/data/brand-colors';
 
 const allProducts = await getCollection('products');
 const allBrands = await getCollection('brands');
+writeProductsJson(allProducts);
 
-// Best sellers: sort by ratings descending, take top 8
-const bestSellers = [...allProducts]
-  .sort((a, b) => (b.data.ratings ?? 0) - (a.data.ratings ?? 0))
+// Best sellers: products tagged "popular" by Nyehandel (real sales data),
+// with brand diversity (max 1 per brand) so the grid showcases variety.
+// Secondary sort by name for stable ordering when badges are equal.
+const sortedByPopularity = [...allProducts]
+  .filter((p) => p.data.imageUrl)
+  .sort((a, b) => {
+    const aPopular = a.data.badgeKeys.includes('popular') ? 1 : 0;
+    const bPopular = b.data.badgeKeys.includes('popular') ? 1 : 0;
+    if (bPopular !== aPopular) return bPopular - aPopular;
+    return a.data.name.localeCompare(b.data.name);
+  });
+const bestSellers: typeof sortedByPopularity = [];
+const brandCount: Record<string, number> = {};
+for (const p of sortedByPopularity) {
+  if (bestSellers.length >= 8) break;
+  const b = p.data.brand;
+  if ((brandCount[b] ?? 0) >= 1) continue;
+  brandCount[b] = (brandCount[b] ?? 0) + 1;
+  bestSellers.push(p);
+}
+
+// Brands sorted alphabetically — only those with at least one product
+const brandSlugsWithProducts = new Set(allProducts.map((p) => p.data.brandSlug));
+const activeBrands = allBrands.filter((b) => brandSlugsWithProducts.has(b.id));
+const brands = [...activeBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
+const heroDescription = `Shop ${allProducts.length}+ nicotine pouches from ${brands.length} brands. EU warehouse, next-day shipping, secure checkout, and rewards on every order.`;
+
+// New Arrivals: products with 'new' badge or NewPrice badge (must have images), max 1 per brand
+const newArrivalCandidates = allProducts
+  .filter((p) => p.data.imageUrl && (p.data.badgeKeys.includes('new') || p.data.badgeKeys.includes('NewPrice')))
+  .sort((a, b) => (b.data.updatedAt ?? '').localeCompare(a.data.updatedAt ?? ''));
+const newArrivals: typeof newArrivalCandidates = [];
+const newArrivalBrandCount: Record<string, number> = {};
+for (const p of newArrivalCandidates) {
+  if (newArrivals.length >= 4) break;
+  const b = p.data.brand;
+  if ((newArrivalBrandCount[b] ?? 0) >= 1) continue;
+  newArrivalBrandCount[b] = (newArrivalBrandCount[b] ?? 0) + 1;
+  newArrivals.push(p);
+}
+
+// Staff Picks: curated top-rated products across diverse brands (1 per brand)
+const staffPickBrands = ['zyn', 'velo', 'loop', 'skruf'];
+const staffPicks = staffPickBrands
+  .map((slug) => {
+    const brandProducts = sortedByPopularity.filter((p) => p.data.brandSlug === slug && p.data.imageUrl);
+    return brandProducts[0];
+  })
+  .filter(Boolean);
+
+// Popular Brands: top brands by product count (GSC internal linking signal)
+const brandProductCounts = new Map<string, number>();
+for (const p of allProducts) {
+  brandProductCounts.set(p.data.brandSlug, (brandProductCounts.get(p.data.brandSlug) ?? 0) + 1);
+}
+const popularBrands = [...activeBrands]
+  .sort((a, b) => (brandProductCounts.get(b.id) ?? 0) - (brandProductCounts.get(a.id) ?? 0))
   .slice(0, 8);
 
-// Brands sorted alphabetically
-const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.name));
+// For each popular brand, pick the top-rated product with an image as the showcase
+const popularBrandShowcase = popularBrands.map((brand) => {
+  const topProduct = allProducts
+    .filter((p) => p.data.brandSlug === brand.id && p.data.imageUrl)
+    .sort((a, b) => (b.data.ratings || 0) - (a.data.ratings || 0))[0];
+  return { brand, productCount: brandProductCounts.get(brand.id) ?? 0, topProduct };
+});
+
+// Pick 10 hero products with diverse brands for the 3D showcase
+const heroBrandTargets = ['zyn', 'velo', 'siberia', 'loop', 'skruf', 'nordic-spirit', 'pablo', 'iceberg', 'white-fox', 'killa'];
+const heroProducts = heroBrandTargets
+  .map((slug) => allProducts.find((p) => p.data.brandSlug === slug && p.data.imageUrl && p.data.stock > 0))
+  .filter(Boolean)
+  .slice(0, 10);
+
+// Fallback: fill up to 10 with popular products from other brands
+if (heroProducts.length < 10) {
+  for (const p of sortedByPopularity) {
+    if (heroProducts.length >= 10) break;
+    if (p.data.imageUrl && !heroProducts.some((h) => h!.data.brandSlug === p.data.brandSlug)) {
+      heroProducts.push(p);
+    }
+  }
+}
+
+const heroCenterProduct = heroProducts[0] ?? null;
+const heroOrbitProducts = heroProducts.slice(1, 5);
+const heroMobileProducts = heroProducts.slice(0, 3);
+const heroCenterImage = heroCenterProduct
+  ? await getImage({
+      src: heroCenterProduct.data.imageUrl,
+      alt: heroCenterProduct.data.name,
+      width: 360,
+      height: 360,
+      widths: [180, 360],
+      sizes: '180px',
+      format: 'webp',
+      quality: 80,
+    })
+  : null;
+
+const liveBrandNames = brands.slice(0, 20).map(b => b.data.name.toUpperCase());
 ---
 
 <Shop
   title={tenant.seo.defaultTitle}
-  description={tenant.seo.defaultDescription}
+  description={heroDescription}
   ogImage={tenant.seo.ogImage}
 >
-  <!-- Hero -->
-  <section class="relative overflow-hidden border-b border-border bg-background">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_70%)]" />
-    <div class="relative mx-auto max-w-6xl px-4 py-24 text-center sm:py-32 lg:py-40">
-      <p class="mb-4 text-sm font-medium uppercase tracking-widest text-primary">
-        Europe's Nicotine Pouch Shop
-      </p>
-      <h1 class="mx-auto max-w-3xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-        {tenant.tagline}
-      </h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-        {tenant.seo.defaultDescription}
-      </p>
-      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <a
-          href="/products"
-          class="inline-flex h-12 items-center rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90"
-        >
-          Shop All Pouches
+  {/* Preload the transformed LCP asset so the browser fetches the exact hero image variant we render. */}
+  {heroCenterImage && (
+    <link
+      rel="preload"
+      as="image"
+      href={heroCenterImage.src}
+      imagesrcset={heroCenterImage.srcSet.attribute}
+      imagesizes="180px"
+      fetchpriority="high"
+    />
+  )}
+  <link rel="preload" href="/fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin />
+  <!-- Hero — Immersive 3D product showcase -->
+  <section class="relative overflow-hidden border-b border-border" style={`background: hsl(var(--hero-bg));`}>
+
+    <!-- Background gradient -->
+    <div class="absolute inset-0" style={`background: linear-gradient(to bottom right, hsl(var(--hero-gradient-from)), hsl(var(--hero-gradient-via)), hsl(var(--hero-gradient-to)));`} />
+
+    <!-- Ambient glow orbs -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="hero-glow-1 absolute w-96 h-96 rounded-full opacity-20" style="background: radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%); top: -10%; right: 10%;" />
+      <div class="hero-glow-2 absolute w-80 h-80 rounded-full opacity-15" style="background: radial-gradient(circle, hsl(153 55% 30% / 0.3) 0%, transparent 70%); bottom: -5%; left: 15%;" />
+    </div>
+
+    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 py-16 sm:py-20 lg:py-28 lg:flex-row lg:gap-16 lg:px-8">
+
+      <!-- Left: text with staggered reveal -->
+      <div class="flex-1 text-center lg:text-left z-10">
+        <p class="hero-reveal mb-3 text-sm font-medium uppercase tracking-widest" style={`color: hsl(var(--hero-muted)); animation: heroSlideUp 0.6s ease-out both;`}>
+          EU Warehouse • Fast Dispatch • Rewards On Every Order
+        </p>
+        <h1 class="hero-reveal text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]" style={`color: hsl(var(--hero-text)); font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; animation: heroSlideUp 0.6s ease-out 0.1s both;`}>
+          Shop {allProducts.length}+ Nicotine<br class="hidden sm:block" /> Pouches From {brands.length} Brands
+        </h1>
+        <p class="hero-reveal mx-auto mt-4 max-w-xl text-lg lg:mx-0" style={`color: hsl(var(--hero-muted)); animation: heroSlideUp 0.6s ease-out 0.2s both;`}>
+          {heroDescription}
+        </p>
+
+        <!-- Animated stats row -->
+        <div class="hero-reveal mt-8 flex justify-center gap-8 lg:justify-start" style="animation: heroSlideUp 0.6s ease-out 0.3s both;">
+          <div>
+            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`}>{allProducts.length}</div>
+            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Products</div>
+          </div>
+          <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
+          <div>
+            <div class="text-3xl font-bold tabular-nums" style={`color: hsl(var(--hero-text));`}>{brands.length}</div>
+            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Brands</div>
+          </div>
+          <div class="h-10 w-px" style={`background: hsl(var(--hero-divider) / 0.15);`} />
+          <div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--hero-text));`}>Rewards</div>
+            <div class="text-xs" style={`color: hsl(var(--hero-muted));`}>Every order</div>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="hero-reveal mt-8 flex flex-col items-center gap-3 sm:flex-row lg:justify-start" style="animation: heroSlideUp 0.6s ease-out 0.4s both;">
+          <a
+            href="/nicotine-pouches"
+            class="inline-flex h-12 items-center rounded-lg px-8 text-base font-semibold shadow-lg shadow-primary/20 transition hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02]"
+            style={`background: hsl(var(--hero-cta-bg)); color: hsl(var(--hero-cta-text));`}
+          >
+            Shop All Pouches
+          </a>
+          <a
+            href="/flavor-quiz"
+            class="inline-flex h-12 items-center rounded-lg border px-8 text-base font-semibold transition hover:bg-white/5"
+            style={`border-color: hsl(var(--hero-text) / 0.2); color: hsl(var(--hero-text));`}
+          >
+            Take the Flavour Quiz
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: 3D orbital product showcase (desktop) -->
+      <div class="hidden flex-1 items-center justify-center lg:flex">
+        <div class="hero-orbit relative" style="width: 420px; height: 420px; perspective: 800px;">
+          <!-- Orbital ring of products -->
+          <div class="hero-orbit-ring absolute inset-0" style="transform-style: preserve-3d; animation: heroOrbit 30s linear infinite;">
+            {heroOrbitProducts.map((p, i) => {
+              if (!p) return null;
+              const angle = (i / heroOrbitProducts.length) * 360;
+              const radius = 148;
+              return (
+                <Image
+                  src={p.data.imageUrl}
+                  alt=""
+                  width="100"
+                  height="100"
+                  widths={[100, 200]}
+                  sizes="100px"
+                  format="webp"
+                  quality={60}
+                  class="hero-orbit-item absolute rounded-xl"
+                  style={`
+                    left: 50%; top: 50%;
+                    width: 100px; height: 100px;
+                    margin: -50px 0 0 -50px;
+                    transform: rotateY(${angle}deg) translateZ(${radius}px);
+                    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+                    backface-visibility: hidden;
+                  `}
+                  loading="lazy"
+                  decoding="async"
+                  aria-hidden="true"
+                />
+              );
+            })}
+          </div>
+
+          <!-- Center featured product (larger, floating) — LCP element -->
+          {heroCenterProduct && heroCenterImage && (
+            <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+              <img
+                src={heroCenterImage.src}
+                srcset={heroCenterImage.srcSet.attribute}
+                sizes="180px"
+                alt={heroCenterProduct.data.name}
+                width="180"
+                height="180"
+                loading="eager"
+                decoding="sync"
+                fetchpriority="high"
+                class="hero-center-can rounded-2xl"
+                style="width: 180px; height: 180px; animation: heroCenterFloat 4s ease-in-out infinite; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) drop-shadow(0 0 20px hsl(var(--primary) / 0.15));"
+              />
+            </div>
+          )}
+
+          <!-- Glow ring behind orbit -->
+          <div class="hero-orbit-glow absolute inset-8 rounded-full opacity-20" style="background: conic-gradient(from 0deg, hsl(var(--primary) / 0.3), transparent 30%, hsl(153 55% 30% / 0.2) 50%, transparent 70%, hsl(var(--primary) / 0.3)); animation: heroOrbit 20s linear infinite reverse; filter: blur(20px);" />
+        </div>
+      </div>
+
+      <!-- Mobile: scrolling product strip with 3D -->
+      <div class="flex gap-4 overflow-x-auto pb-2 lg:hidden snap-x snap-mandatory px-1" style="perspective: 400px;">
+        {heroMobileProducts.map((p, i) => p && (
+          <Image
+            src={p.data.imageUrl}
+            alt={p.data.name}
+            width={224}
+            height={224}
+            widths={[112, 224]}
+            sizes="112px"
+            format="webp"
+            quality={80}
+            loading="lazy"
+            decoding="async"
+            class="flex-shrink-0 snap-center rounded-xl w-24 h-24 sm:w-28 sm:h-28 hero-can"
+            style={`--hero-float-name: heroFloat${(i % 4) + 1}; --hero-float-duration: ${6 + i * 0.5}s; --hero-float-delay: ${i * 0.3}s;`}
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- Live brand ticker (bottom) -->
+    <div class="relative z-20 overflow-hidden" style="background: rgba(0,0,0,0.52); border-top: 1px solid rgba(255,255,255,0.05);">
+      <div class="flex items-stretch" style="height: 30px;">
+        <div class="flex-shrink-0 flex items-center gap-2 px-3 border-r" style="background: hsl(var(--primary) / 0.82); border-color: rgba(255,255,255,0.1); min-width: max-content;">
+          <span class="relative flex h-1.5 w-1.5 flex-shrink-0">
+            <span class="live-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background: #86efac;"></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full" style="background: white;"></span>
+          </span>
+          <span class="text-white text-[9px] font-black tracking-[0.22em] uppercase whitespace-nowrap">Live</span>
+        </div>
+        <div class="overflow-hidden flex-1">
+          <div class="live-ticker flex items-center h-full whitespace-nowrap" style="animation: liveTicker 28s linear infinite;">
+            {[...liveBrandNames, ...liveBrandNames].map((name) => (
+              <span class="inline-flex items-center flex-shrink-0">
+                <span class="text-[10px] font-bold tracking-[0.14em] px-5" style="color: rgba(255,255,255,0.28);">{name}</span>
+                <span class="flex-shrink-0" style="color: hsl(var(--primary) / 0.38); font-size: 7px;">◆</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beginner CTA strip -->
+  <section class="border-b border-primary/20 bg-primary/5">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-lg">
+            🌱
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-foreground">New to nicotine pouches?</p>
+            <p class="text-xs text-muted-foreground">We'll help you pick a safe, gentle starting point. No pressure.</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <a href="/flavor-quiz" class="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition">
+            Take the Quiz
+          </a>
+          <a href="/beginners" class="rounded-lg border border-primary/30 px-4 py-2 text-xs font-medium text-foreground hover:bg-primary/10 transition">
+            Beginner Guide
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rewards strip — above the fold gamification visibility -->
+  <section class="border-b border-border bg-card/30">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between gap-4 py-3 overflow-x-auto">
+        <a href="/rewards" class="group flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-colors" data-astro-prefetch>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/15 text-primary transition-transform group-hover:scale-110" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+          </span>
+          Earn {tenant.loyaltyCurrencyName}
         </a>
-        <a
-          href="/brands"
-          class="inline-flex h-12 items-center rounded-lg border border-border bg-card/60 px-8 text-base font-semibold text-foreground backdrop-blur transition hover:bg-card"
-        >
-          Browse Brands
+        <span class="hidden sm:block h-4 w-px bg-border" aria-hidden="true" />
+        <a href="/rewards#spin" class="group flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-colors" data-astro-prefetch>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-amber-500/15 text-amber-500 transition-transform group-hover:scale-110" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 16V8"/></svg>
+          </span>
+          Daily Drop
+        </a>
+        <span class="hidden sm:block h-4 w-px bg-border" aria-hidden="true" />
+        <a href="/rewards#missions" class="group flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-colors" data-astro-prefetch>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-500 transition-transform group-hover:scale-110" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+          </span>
+          Missions
+        </a>
+        <span class="hidden sm:block h-4 w-px bg-border" aria-hidden="true" />
+        <a href="/community" class="group flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-colors" data-astro-prefetch>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-purple-500/15 text-purple-500 transition-transform group-hover:scale-110" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          The Board
+        </a>
+        <span class="hidden sm:block h-4 w-px bg-border" aria-hidden="true" />
+        <a href="/rewards" class="hidden md:inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90 whitespace-nowrap ring-pulse" data-astro-prefetch>
+          Free to join. {tenant.loyaltyCurrencyName} on every order &rarr;
         </a>
       </div>
     </div>
   </section>
 
+  <!-- Trust bar -->
+  <section class="border-b border-border bg-background py-4">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 sm:px-6 lg:px-8 text-muted-foreground">
+      <div class="flex items-center gap-1.5">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span class="text-xs font-medium">Free shipping &euro;{tenant.freeShippingThreshold}+</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        <span class="text-xs font-medium">Ships from EU warehouse</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span class="text-xs font-medium">Secure checkout</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span class="text-xs font-medium">Same-day dispatch</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Best Sellers -->
-  <section class="border-b border-border bg-background py-16 sm:py-20">
-    <div class="mx-auto max-w-6xl px-4">
+  <section id="best-sellers" class="home-deferred-section border-b border-border bg-background py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mb-10 flex items-end justify-between">
         <div>
           <h2 class="text-2xl font-bold text-foreground sm:text-3xl">Best Sellers</h2>
@@ -64,11 +402,10 @@ const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.na
           View all &rarr;
         </a>
       </div>
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:gap-6">
         {bestSellers.length > 0 ? (
           bestSellers.map((product) => (
             <ProductCard
-              client:visible
               slug={product.id}
               name={product.data.name}
               brand={product.data.brand}
@@ -81,12 +418,13 @@ const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.na
               flavorKey={product.data.flavorKey}
               ratings={product.data.ratings}
               badgeKeys={product.data.badgeKeys}
+              portionsPerCan={product.data.portionsPerCan}
             />
           ))
         ) : (
-          <div role="status" aria-label="Loading products" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+          <div role="status" aria-label="Loading products" class="col-span-full grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:gap-6">
             {Array.from({ length: 8 }).map(() => (
-              <div class="group rounded-xl border border-border bg-card/50 p-4 backdrop-blur">
+              <div class="group rounded-xl border border-border bg-card/80 p-4">
                 <div class="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
                 <div class="mb-2 h-4 w-3/4 rounded bg-muted/30 animate-pulse" />
                 <div class="h-3 w-1/2 rounded bg-muted/30 animate-pulse" />
@@ -95,155 +433,458 @@ const brands = [...allBrands].sort((a, b) => a.data.name.localeCompare(b.data.na
           </div>
         )}
       </div>
+
+      {staffPicks.length > 0 && (
+        <>
+          <div class="mt-10 mb-4 rounded-lg bg-card/30 px-4 py-3 border-l-2 border-primary/40">
+            <h3 class="text-lg font-semibold text-foreground">Staff Picks</h3>
+            <p class="text-xs text-muted-foreground mt-0.5">Curated by our team — one standout from each top brand</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
+            {staffPicks.map((product) => product && (
+              <ProductCard
+                slug={product.id}
+                name={product.data.name}
+                brand={product.data.brand}
+                brandSlug={product.data.brandSlug}
+                imageUrl={product.data.imageUrl}
+                prices={product.data.prices}
+                stock={product.data.stock}
+                nicotineContent={product.data.nicotineContent}
+                strengthKey={product.data.strengthKey}
+                flavorKey={product.data.flavorKey}
+                ratings={product.data.ratings}
+                badgeKeys={product.data.badgeKeys}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   </section>
 
-  <!-- Trust Signals -->
-  <section class="border-b border-border bg-card/30 py-16 sm:py-20">
-    <div class="mx-auto max-w-6xl px-4">
-      <h2 class="mb-12 text-center text-2xl font-bold text-foreground sm:text-3xl">
-        Why Shop With Us
+  <!-- New Arrivals -->
+  {newArrivals.length > 0 && (
+    <section id="new-arrivals" class="home-deferred-section border-b border-border bg-background py-16 sm:py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-10 flex items-end justify-between">
+          <div>
+            <h2 class="text-2xl font-bold text-foreground sm:text-3xl">New Arrivals</h2>
+            <p class="mt-2 text-muted-foreground">Latest additions and updated products</p>
+          </div>
+          <a href="/products" class="hidden text-sm font-medium text-primary hover:underline sm:block">
+            View all &rarr;
+          </a>
+        </div>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
+          {newArrivals.map((product) => (
+            <ProductCard
+              slug={product.id}
+              name={product.data.name}
+              brand={product.data.brand}
+              brandSlug={product.data.brandSlug}
+              imageUrl={product.data.imageUrl}
+              prices={product.data.prices}
+              stock={product.data.stock}
+              nicotineContent={product.data.nicotineContent}
+              strengthKey={product.data.strengthKey}
+              flavorKey={product.data.flavorKey}
+              ratings={product.data.ratings}
+              badgeKeys={product.data.badgeKeys}
+              portionsPerCan={product.data.portionsPerCan}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Popular Brands — top brands by product count for GSC internal linking -->
+  <section class="home-deferred-section border-b border-border bg-card/30 py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="mb-3 text-center text-2xl font-bold text-foreground sm:text-3xl">
+        Popular Brands
       </h2>
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
-          <h3 class="mb-2 font-semibold text-foreground">Free Shipping</h3>
-          <p class="text-sm text-muted-foreground">
-            Free delivery on orders over &euro;{tenant.freeShippingThreshold}. No hidden fees, ever.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-          </div>
-          <h3 class="mb-2 font-semibold text-foreground">700+ Products</h3>
-          <p class="text-sm text-muted-foreground">
-            The largest selection of nicotine pouches from {brands.length > 0 ? brands.length : 91} leading brands in Europe.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <h3 class="mb-2 font-semibold text-foreground">Fast EU Delivery</h3>
-          <p class="text-sm text-muted-foreground">
-            Dispatched within 24 hours. Delivered across the EU in 2-5 business days.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-border bg-card/60 p-6 text-center backdrop-blur">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h3 class="mb-2 font-semibold text-foreground">Verified Reviews</h3>
-          <p class="text-sm text-muted-foreground">
-            Real ratings from real customers. Every review is verified by our community.
-          </p>
-        </div>
+      <p class="mb-10 text-center text-muted-foreground">
+        The most-stocked brands in our catalogue — trusted by thousands of pouch users across Europe
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-6">
+        {popularBrandShowcase.map(({ brand, productCount, topProduct }) => {
+          const bColor = brandColors[brand.id] ?? defaultBrandColor;
+          return (
+            <a
+              href={`/brands/${brand.id}`}
+              class="group relative flex flex-col items-center rounded-2xl border border-border bg-background p-5 transition hover:border-primary/30 hover:shadow-lg"
+              data-astro-prefetch
+            >
+              {topProduct?.data.imageUrl ? (
+                <img
+                  src={topProduct.data.imageUrl}
+                  alt={`${brand.data.name} — ${topProduct.data.name}`}
+                  width="100"
+                  height="100"
+                  loading="lazy"
+                  class="mb-3 h-20 w-20 object-contain rounded-xl transition-transform duration-300 group-hover:scale-110"
+                  style={`filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));`}
+                />
+              ) : (
+                <div
+                  class="mb-3 flex h-20 w-20 items-center justify-center rounded-xl"
+                  style={`background: linear-gradient(135deg, ${bColor}30, ${bColor}15);`}
+                >
+                  <span class="text-xl font-extrabold" style={`color: ${bColor};`}>
+                    {brand.data.name.substring(0, 3).toUpperCase()}
+                  </span>
+                </div>
+              )}
+              <h3 class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                {brand.data.name}
+              </h3>
+              <p class="text-xs text-muted-foreground">{productCount} products</p>
+            </a>
+          );
+        })}
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/brands" class="text-sm font-medium text-primary hover:underline" data-astro-prefetch>
+          Browse all {brands.length} brands &rarr;
+        </a>
       </div>
     </div>
   </section>
 
+  <!-- Popular Guides — internal linking to top blog content -->
+  <section class="home-deferred-section border-b border-border bg-card/30 py-12 sm:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="mb-3 text-center text-2xl font-bold text-foreground sm:text-3xl">
+        Expert Guides & Reviews
+      </h2>
+      <p class="mb-10 text-center text-muted-foreground">
+        Fresh guides for real buying questions, brand comparisons, and country-specific shopping advice
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <a href="/blog/strongest-nicotine-pouches-ranked-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-600">Ranking</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Strongest Nicotine Pouches 2026</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Every high-strength pouch ranked by mg — from 50 mg ultra-extreme to 25 mg strong.</p>
+        </a>
+        <a href="/blog/best-nicotine-pouches-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600">Expert Picks</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Best Nicotine Pouches 2026</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Winners in 7 categories — best overall, beginner, mint, strong, value, variety, and premium.</p>
+        </a>
+        <a href="/blog/zyn-flavours-complete-guide" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-600">Flavour Guide</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">ZYN Flavours: Complete Guide</h3>
+          <p class="mt-2 text-sm text-muted-foreground">How the European ZYN lineup compares with the wider global range, plus the flavours worth starting with.</p>
+        </a>
+        <a href="/blog/best-nicotine-pouches-germany-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-600">Germany</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Best Nicotine Pouches in Germany</h3>
+          <p class="mt-2 text-sm text-muted-foreground">EU-shipped picks, price ranges, and the short list worth starting with if you are buying from Germany.</p>
+        </a>
+        <a href="/blog/best-nicotine-pouches-netherlands-2026" class="group rounded-xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <span class="mb-2 inline-block rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-600">Netherlands</span>
+          <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">Best Nicotine Pouches in the Netherlands</h3>
+          <p class="mt-2 text-sm text-muted-foreground">Dutch-friendly picks with practical shipping, pricing, and legality context for 2026 shoppers.</p>
+        </a>
+        <a href="/blog" class="group flex items-center justify-center rounded-xl border border-dashed border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-md" data-astro-prefetch>
+          <div class="text-center">
+            <h3 class="text-lg font-semibold text-primary group-hover:underline">View All Guides &rarr;</h3>
+            <p class="mt-2 text-sm text-muted-foreground">Rankings, comparisons, brand deep-dives, and more</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Personalised rows — intentionally lower on the page so the homepage can prioritise generic content and LCP. -->
+  <RecommendationsIsland
+    client:visible
+    productsJsonUrl="/data/products.json"
+  />
+
+  <RecentlyViewedIsland
+    client:visible
+    productsJsonUrl="/data/products.json"
+  />
+
   <!-- Shop by Brand -->
-  <section class="border-b border-border bg-background py-16 sm:py-20">
-    <div class="mx-auto max-w-6xl px-4">
+  <section class="home-deferred-section border-b border-border bg-background py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="mb-10 text-center text-2xl font-bold text-foreground sm:text-3xl">
         Shop by Brand
       </h2>
       <p class="mb-10 text-center text-muted-foreground">
         We carry all the brands you know and love &mdash; plus new favourites waiting to be discovered.
       </p>
-      <div class="flex flex-wrap items-center justify-center gap-4">
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6">
         {brands.length > 0 ? (
-          brands.slice(0, 16).map((brand) => (
-            <a
-              href={`/brands/${brand.id}`}
-              class="flex h-14 items-center rounded-lg border border-border bg-card/40 px-6 text-sm font-medium text-muted-foreground backdrop-blur transition hover:border-primary/30 hover:text-foreground hover:bg-card/60"
-            >
-              {brand.data.name}
-            </a>
-          ))
+          brands.map((brand) => {
+            const bColor = brandColors[brand.id] ?? defaultBrandColor;
+            const tinAbbr = { 'white-fox': 'WF', 'nordic-spirit': 'NS', 'chainpop': 'CHAIN' } as any;
+            const tLabel = tinAbbr[brand.id] ?? brand.data.name.toUpperCase();
+            const tLen = tLabel.length;
+            const tSize = tLen <= 2 ? '11px' : tLen <= 3 ? '10px' : tLen <= 4 ? '9px' : tLen <= 5 ? '8px' : '7px';
+            const hexStr = bColor.replace(/^#/, '');
+            const rVal = parseInt(hexStr.substring(0, 2), 16);
+            const gVal = parseInt(hexStr.substring(2, 4), 16);
+            const bVal = parseInt(hexStr.substring(4, 6), 16);
+            const lum = (0.299 * rVal + 0.587 * gVal + 0.114 * bVal) / 255;
+            const tColor = lum > 0.55 ? 'rgba(0,0,0,0.75)' : 'white';
+            const dR = Math.max(0, rVal - 40);
+            const dG = Math.max(0, gVal - 40);
+            const dB = Math.max(0, bVal - 40);
+            return (
+              <a
+                href={`/brands/${brand.id}`}
+                class="group flex items-center gap-3 rounded-xl border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-md"
+              >
+                <div
+                  class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full relative overflow-hidden"
+                  style={`background: linear-gradient(135deg, ${bColor}, rgb(${dR},${dG},${dB}));`}
+                >
+                  <div class="absolute inset-[2px] rounded-full border border-white/25 pointer-events-none"></div>
+                  <span class="relative z-[1] font-extrabold uppercase leading-none" style={`font-size: ${tSize}; color: ${tColor}; letter-spacing: 0.3px;`}>{tLabel}</span>
+                </div>
+                <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{brand.data.name}</span>
+              </a>
+            );
+          })
         ) : (
-          ['VELO', 'ZYN', 'LOOP', 'Siberia', 'PABLO', 'KILLA', 'Kurwa', 'ACE'].map((name) => (
-            <div class="flex h-14 items-center rounded-lg border border-border bg-card/40 px-6 text-sm font-medium text-muted-foreground backdrop-blur transition hover:border-primary/30 hover:text-foreground">
-              {name}
+          ['VELO', 'ZYN', 'LOOP', 'Siberia', 'PABLO'].map((name) => (
+            <div class="flex items-center gap-3 rounded-xl border border-border bg-card/60 p-3">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/20 relative overflow-hidden">
+                <div class="absolute inset-[2px] rounded-full border border-white/25 pointer-events-none"></div>
+                <span class="relative z-[1] text-sm font-extrabold text-white">{name.substring(0, 3).toUpperCase()}</span>
+              </div>
+              <span class="text-sm font-medium text-foreground">{name}</span>
             </div>
           ))
         )}
       </div>
       <div class="mt-8 text-center">
         <a href="/brands" class="text-sm font-medium text-primary hover:underline">
-          View all {brands.length > 0 ? brands.length : 91} brands &rarr;
+          View all {brands.length > 0 ? brands.length : 57} brands &rarr;
         </a>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="bg-background py-16 sm:py-20">
-    <div class="mx-auto max-w-3xl px-4 text-center">
-      <h2 class="text-2xl font-bold text-foreground sm:text-3xl">
-        Ready to find your perfect pouch?
-      </h2>
-      <p class="mt-4 text-lg text-muted-foreground">
-        Take our flavour quiz and get personalised recommendations in under a minute.
-      </p>
-      <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <a
-          href="/flavor-quiz"
-          class="inline-flex h-12 items-center rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90"
-        >
-          Take the Quiz
-        </a>
-        <a
-          href="/products"
-          class="inline-flex h-12 items-center rounded-lg border border-border bg-card/60 px-8 text-base font-semibold text-foreground backdrop-blur transition hover:bg-card"
-        >
-          Browse All Products
-        </a>
+  <!-- Rewards & Gamification CTA -->
+  <section class="home-deferred-section border-b border-border py-16 sm:py-20 lg:py-24" style={`background: hsl(var(--hero-bg));`}>
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col items-center gap-8 text-center sm:flex-row sm:text-left">
+        <div class="flex-1">
+          <h2 class="text-2xl font-bold sm:text-3xl" style={`color: hsl(var(--hero-text)); font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;`}>
+            Every order earns you something back.
+          </h2>
+          <p class="mt-3 text-base leading-relaxed" style={`color: hsl(var(--hero-muted));`}>
+            Earn {tenant.loyaltyCurrencyName} on every order. Write reviews, complete missions, and spin the Daily Drop for bonus rewards. The more you explore, the more you earn.
+          </p>
+          <p class="mt-2 text-sm font-medium" style={`color: hsl(var(--hero-muted));`}>
+            Earning starts at your first order. <a href="/rewards" class="underline transition" style={`color: hsl(var(--hero-text));`}>See how it works &rarr;</a>
+          </p>
+          <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <a href="/rewards" class="inline-flex h-11 items-center justify-center rounded-lg px-6 text-sm font-semibold transition" style={`background: hsl(var(--hero-cta-bg)); color: hsl(var(--hero-cta-text));`}>
+              Start Earning {tenant.loyaltyCurrencyName}
+            </a>
+            <a href="/community" class="inline-flex h-11 items-center justify-center rounded-lg border px-6 text-sm font-semibold transition" style={`border-color: hsl(var(--hero-text) / 0.2); color: hsl(var(--hero-text));`}>
+              View The Board
+            </a>
+            <a href="/flavor-quiz" class="inline-flex h-11 items-center justify-center rounded-lg border border-foreground/20 px-6 text-sm font-semibold text-foreground transition hover:bg-white/5">
+              Take the Flavour Quiz
+            </a>
+          </div>
+        </div>
+        <div class="flex gap-6 text-center">
+          <div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--hero-text));`}>🪙</div>
+            <div class="mt-1 text-xs font-medium" style={`color: hsl(var(--hero-muted));`}>{tenant.loyaltyCurrencyName}</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--hero-text));`}>🎡</div>
+            <div class="mt-1 text-xs font-medium" style={`color: hsl(var(--hero-muted));`}>Daily Drop</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--hero-text));`}>⚡</div>
+            <div class="mt-1 text-xs font-medium" style={`color: hsl(var(--hero-muted));`}>Missions</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold" style={`color: hsl(var(--hero-text));`}>🏆</div>
+            <div class="mt-1 text-xs font-medium" style={`color: hsl(var(--hero-muted));`}>The Board</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "SnusFriend",
-    "url": "https://snusfriends.com",
-    "logo": "https://snusfriends.com/favicon.png",
-    "description": "Europe's leading online shop for premium nicotine pouches. 700+ products from 91 brands.",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "email": "support@snusfriends.com",
-      "contactType": "customer service"
-    },
-    "sameAs": []
-  })} />
-
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "SnusFriend",
-    "url": "https://snusfriends.com",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": "https://snusfriends.com/search?q={search_term_string}"
+  <JsonLd
+    items={[
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": tenant.name,
+        "legalName": tenant.legalName,
+        "url": buildAbsoluteUrl('/'),
+        "logo": buildAbsoluteUrl('/favicon.png'),
+        "description": `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${brands.length || 57} brands.`,
+        "foundingDate": tenant.trust.foundingDate ?? "2024",
+        "email": tenant.supportEmail,
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": tenant.address.streetAddress,
+          "addressLocality": tenant.address.addressLocality,
+          "postalCode": tenant.address.postalCode,
+          "addressCountry": tenant.address.addressCountry
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": tenant.supportEmail,
+          "contactType": "customer service"
+        },
+        ...(tenant.trust.corporateRegistration ? { "identifier": tenant.trust.corporateRegistration } : {}),
+        ...(tenant.trust.vatId ? { "taxID": tenant.trust.vatId, "vatID": tenant.trust.vatId } : {}),
+        "sameAs": [
+          tenant.social.instagram,
+          tenant.social.tiktok,
+          tenant.social.x,
+          tenant.social.linkedin,
+          tenant.social.facebook,
+          tenant.social.youtube,
+          tenant.trust.trustpilotUrl,
+        ].filter(Boolean)
       },
-      "query-input": "required name=search_term_string"
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": tenant.name,
+        "url": buildAbsoluteUrl('/'),
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": `${buildAbsoluteUrl('/search')}?q={search_term_string}`
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+    ]}
+  />
+
+  <!-- Beginner mode: hide strong products from static sections -->
+  <script is:inline define:vars={{ beginnerModeKey: tenant.storage.beginnerKey }}>
+  (function() {
+    // Beginner mode filter
+    try {
+      var raw = localStorage.getItem(beginnerModeKey);
+      if (raw === 'true') {
+        var cards = document.querySelectorAll('[data-nicotine-mg]');
+        for (var i = 0; i < cards.length; i++) {
+          var mg = parseFloat(cards[i].getAttribute('data-nicotine-mg'));
+          if (mg > 6) cards[i].style.display = 'none';
+        }
+      }
+    } catch(e) {}
+  })();
+  </script>
+
+  <style>
+    .home-deferred-section {
+      content-visibility: auto;
+      contain-intrinsic-size: 1px 960px;
     }
-  })} />
+
+    /* ═══ 3D Hero Animations ═══ */
+
+    /* Text reveal — slide up with fade */
+    @keyframes heroSlideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Orbital rotation for product ring */
+    @keyframes heroOrbit {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    /* Center product float */
+    @keyframes heroCenterFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-16px) scale(1.05); }
+    }
+
+    /* Mobile floating cans */
+    @keyframes heroFloat1 {
+      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateY(-14px) rotateY(8deg) scale(1.03); }
+    }
+    @keyframes heroFloat2 {
+      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateY(-18px) rotateY(-6deg) scale(1.02); }
+    }
+    @keyframes heroFloat3 {
+      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateY(-12px) rotateY(7deg) scale(1.04); }
+    }
+    @keyframes heroFloat4 {
+      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateY(-20px) rotateY(-5deg) scale(1.03); }
+    }
+
+    /* Brand marquee scroll */
+    @keyframes heroMarquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* Live brand ticker */
+    @keyframes liveTicker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* Pulsing dot for LIVE badge */
+    @keyframes tickerPing {
+      75%, 100% { transform: scale(2); opacity: 0; }
+    }
+    .live-ping { animation: tickerPing 1.5s cubic-bezier(0,0,0.2,1) infinite; }
+
+    /* Ambient glow drift */
+    .hero-glow-1 { animation: heroDrift1 12s ease-in-out infinite; }
+    .hero-glow-2 { animation: heroDrift2 15s ease-in-out infinite 3s; }
+    @keyframes heroDrift1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-30px, 20px); }
+    }
+    @keyframes heroDrift2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20px, -30px); }
+    }
+
+    /* Orbit items preserve 3D */
+    .hero-orbit-ring { transform-style: preserve-3d; }
+    .hero-orbit-item { will-change: transform; }
+    .hero-center-can { will-change: transform; }
+    .hero-can {
+      will-change: transform;
+      transform-style: preserve-3d;
+      animation: var(--hero-float-name) var(--hero-float-duration, 6s) ease-in-out infinite var(--hero-float-delay, 0s);
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.3));
+    }
+
+    /* Accessibility + mobile perf: kill decorative animations on small viewports
+       and when prefers-reduced-motion is on. Orbit ring + glow are inside a
+       `hidden lg:flex` parent so they're display:none on mobile anyway; this
+       also no-ops them semantically. `hero-can` + ambient glows are the real
+       mobile GPU drain. */
+    @media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+      .hero-can, .hero-orbit-ring, .hero-orbit-glow, .hero-center-can,
+      .hero-glow-1, .hero-glow-2, .hero-marquee,
+      .live-ticker, .live-ping,
+      .hero-reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .hero-can { filter: none !important; will-change: auto !important; transform-style: flat !important; }
+    }
+  </style>
 </Shop>

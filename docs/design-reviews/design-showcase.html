@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnusFriend Design Showcase — Pick Your Favorite</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; }
+
+  /* Navigation */
+  .showcase-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.9); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 32px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .showcase-nav h1 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; }
+  .showcase-nav .tabs { display: flex; gap: 8px; }
+  .showcase-nav .tab {
+    padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12);
+    background: transparent; color: #aaa; cursor: pointer; font-size: 13px; font-weight: 500;
+    transition: all 0.2s;
+  }
+  .showcase-nav .tab:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+  .showcase-nav .tab.active { background: #fff; color: #000; border-color: #fff; }
+
+  /* Section */
+  .section { padding: 48px 32px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-subtitle { color: #888; font-size: 14px; margin-bottom: 32px; }
+  .score-badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 13px; font-weight: 600; margin-left: 12px;
+  }
+  .score-high { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .score-mid { background: rgba(234,179,8,0.15); color: #eab308; }
+
+  /* Grid */
+  .design-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+
+  /* Design Frame */
+  .design-frame {
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: border-color 0.3s;
+  }
+  .design-frame:hover { border-color: rgba(255,255,255,0.2); }
+  .design-label {
+    padding: 16px 20px; background: rgba(255,255,255,0.03);
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .design-label h3 { font-size: 15px; font-weight: 600; }
+  .design-label .theme-tag {
+    font-size: 11px; padding: 4px 10px; border-radius: 12px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .tag-light { background: rgba(250,250,248,0.15); color: #fafaf8; }
+  .tag-dark { background: rgba(15,110,86,0.2); color: #0f6e56; }
+  .tag-copper { background: rgba(184,115,51,0.2); color: #b87333; }
+  .tag-green { background: rgba(27,67,50,0.2); color: #4ade80; }
+  .tag-bold { background: rgba(0,229,160,0.15); color: #00e5a0; }
+
+  /* ===== DESIGN A: Scandinavian Forest Green Homepage ===== */
+  .design-a {
+    background: #FFFFFF; color: #1a1a2e; min-height: 600px;
+  }
+  .design-a .top-bar {
+    background: #1B4332; color: #fff; text-align: center;
+    padding: 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.03em;
+  }
+  .design-a .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px; border-bottom: 1px solid #e5e5e0;
+  }
+  .design-a .nav .logo { font-family: 'Space Grotesk'; font-weight: 700; font-size: 22px; color: #1B4332; }
+  .design-a .nav .links { display: flex; gap: 28px; }
+  .design-a .nav .links a { color: #4a4a5a; text-decoration: none; font-size: 14px; font-weight: 500; }
+  .design-a .nav .links a:hover { color: #1B4332; }
+  .design-a .nav .icons { display: flex; gap: 16px; color: #1a1a2e; }
+  .design-a .hero {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+    padding: 64px 40px; align-items: center;
+  }
+  .design-a .hero h1 {
+    font-family: 'Space Grotesk'; font-size: 48px; font-weight: 700;
+    color: #1B4332; line-height: 1.1; margin-bottom: 16px;
+  }
+  .design-a .hero p { color: #4a4a5a; font-size: 16px; line-height: 1.6; margin-bottom: 24px; }
+  .design-a .hero .btns { display: flex; gap: 12px; }
+  .design-a .hero .btn-primary {
+    background: #1B4332; color: #fff; padding: 14px 28px; border-radius: 8px;
+    font-weight: 600; font-size: 14px; border: none; cursor: pointer;
+  }
+  .design-a .hero .btn-outline {
+    background: transparent; color: #1B4332; padding: 14px 28px; border-radius: 8px;
+    font-weight: 600; font-size: 14px; border: 2px solid #1B4332; cursor: pointer;
+  }
+  .design-a .hero-img {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-radius: 16px; height: 320px; display: flex; align-items: center;
+    justify-content: center; font-size: 80px;
+  }
+  .design-a .categories {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    padding: 0 40px 48px;
+  }
+  .design-a .cat-card {
+    background: #f8f8f5; border-radius: 12px; padding: 24px; text-align: center;
+    border: 1px solid #e5e5e0; transition: all 0.2s; cursor: pointer;
+  }
+  .design-a .cat-card:hover { border-color: #1B4332; box-shadow: 0 4px 20px rgba(27,67,50,0.1); }
+  .design-a .cat-card .icon { font-size: 32px; margin-bottom: 8px; }
+  .design-a .cat-card .name { font-weight: 600; font-size: 14px; color: #1a1a2e; }
+
+  /* Products grid for Design A */
+  .design-a .products-section { padding: 0 40px 48px; }
+  .design-a .products-section h2 {
+    font-family: 'Space Grotesk'; font-size: 24px; font-weight: 700;
+    color: #1a1a2e; margin-bottom: 24px;
+  }
+  .design-a .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .product-card-light {
+    background: #fff; border-radius: 12px; border: 1px solid #e5e5e0;
+    overflow: hidden; transition: all 0.2s; cursor: pointer;
+  }
+  .product-card-light:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); transform: translateY(-2px); }
+  .product-card-light .img {
+    height: 180px; display: flex; align-items: center; justify-content: center;
+    font-size: 64px; background: #f8f8f5;
+  }
+  .product-card-light .info { padding: 16px; }
+  .product-card-light .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #1B4332; font-weight: 600; margin-bottom: 4px; }
+  .product-card-light .name { font-weight: 600; font-size: 15px; color: #1a1a2e; margin-bottom: 8px; }
+  .strength-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .strength-mild { background: rgba(34,197,94,0.12); color: #16a34a; }
+  .strength-regular { background: rgba(234,179,8,0.12); color: #ca8a04; }
+  .strength-strong { background: rgba(249,115,22,0.12); color: #ea580c; }
+  .strength-xstrong { background: rgba(239,68,68,0.12); color: #dc2626; }
+  .strength-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .dot-mild { background: #22c55e; }
+  .dot-regular { background: #eab308; }
+  .dot-strong { background: #f97316; }
+  .dot-xstrong { background: #ef4444; }
+  .pack-pills { display: flex; gap: 6px; margin-bottom: 10px; }
+  .pack-pill {
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500;
+    border: 1px solid #e5e5e0; color: #4a4a5a; cursor: pointer; transition: all 0.15s;
+  }
+  .pack-pill.active-green { background: #1B4332; color: #fff; border-color: #1B4332; }
+  .pack-pill.active-teal { background: #0F6E56; color: #fff; border-color: #0F6E56; }
+  .pack-pill.active-copper { background: #B87333; color: #fff; border-color: #B87333; }
+  .pack-pill .save { font-size: 9px; color: #16a34a; display: block; }
+  .product-card-light .price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+  .product-card-light .price { font-weight: 700; font-size: 18px; color: #1a1a2e; }
+  .product-card-light .price-old { font-size: 13px; color: #aaa; text-decoration: line-through; }
+  .product-card-light .per-unit { font-size: 11px; color: #888; }
+  .btn-add-green {
+    width: 100%; padding: 10px; border-radius: 8px; border: none;
+    background: #1B4332; color: #fff; font-weight: 600; font-size: 13px; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-add-green:hover { background: #143528; }
+  .btn-add-teal {
+    width: 100%; padding: 10px; border-radius: 8px; border: none;
+    background: #0F6E56; color: #fff; font-weight: 600; font-size: 13px; cursor: pointer;
+  }
+  .btn-add-teal:hover { background: #0D5C48; }
+  .btn-add-copper {
+    width: 100%; padding: 10px; border-radius: 8px; border: none;
+    background: #B87333; color: #fff; font-weight: 600; font-size: 13px; cursor: pointer;
+  }
+  .btn-add-copper:hover { background: #a06429; }
+
+  /* ===== DESIGN B: Clean Ritual Light Homepage ===== */
+  .design-b {
+    background: #FAFAF8; color: #1a1a2e; min-height: 600px;
+  }
+  .design-b .top-bar {
+    background: #0F6E56; color: #fff; text-align: center;
+    padding: 8px; font-size: 12px; font-weight: 500;
+  }
+  .design-b .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px; background: #fff;
+  }
+  .design-b .nav .logo { font-family: 'Space Grotesk'; font-weight: 700; font-size: 24px; color: #1a1a2e; }
+  .design-b .nav .links { display: flex; gap: 32px; }
+  .design-b .nav .links a { color: #4a4a5a; text-decoration: none; font-size: 14px; font-weight: 500; }
+  .design-b .hero {
+    text-align: center; padding: 80px 48px 60px; max-width: 720px; margin: 0 auto;
+  }
+  .design-b .hero .eyebrow {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em;
+    color: #0F6E56; font-weight: 600; margin-bottom: 16px;
+  }
+  .design-b .hero h1 {
+    font-family: 'Space Grotesk'; font-size: 52px; font-weight: 700;
+    color: #1a1a2e; line-height: 1.08; margin-bottom: 16px;
+  }
+  .design-b .hero p { color: #4a4a5a; font-size: 17px; line-height: 1.6; margin-bottom: 32px; }
+  .design-b .hero .btns { display: flex; gap: 12px; justify-content: center; }
+  .design-b .hero .btn-primary {
+    background: #0F6E56; color: #fff; padding: 14px 32px; border-radius: 8px;
+    font-weight: 600; font-size: 15px; border: none; cursor: pointer;
+  }
+  .design-b .hero .btn-outline {
+    background: transparent; color: #0F6E56; padding: 14px 32px; border-radius: 8px;
+    font-weight: 600; font-size: 15px; border: 2px solid #0F6E56; cursor: pointer;
+  }
+  .design-b .trust-bar {
+    display: flex; justify-content: center; gap: 48px; padding: 32px 48px;
+    border-top: 1px solid #e5e5e0; border-bottom: 1px solid #e5e5e0;
+  }
+  .design-b .trust-item { text-align: center; }
+  .design-b .trust-item .num { font-weight: 700; font-size: 20px; color: #0F6E56; }
+  .design-b .trust-item .label { font-size: 12px; color: #888; margin-top: 2px; }
+  .design-b .products-section { padding: 48px; }
+  .design-b .products-section h2 {
+    font-family: 'Space Grotesk'; font-size: 24px; font-weight: 700; margin-bottom: 24px;
+  }
+  .design-b .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  /* ===== DESIGN C: Copper Glass Dark PDP ===== */
+  .design-c {
+    background: #1C1C2E; color: #f5f5f5; min-height: 600px; padding: 32px;
+  }
+  .design-c .breadcrumbs { font-size: 12px; color: #6b6b80; margin-bottom: 24px; }
+  .design-c .breadcrumbs a { color: #B87333; text-decoration: none; }
+  .design-c .pdp-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; }
+  .design-c .gallery {
+    background: rgba(255,255,255,0.04); border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    height: 420px; display: flex; align-items: center; justify-content: center;
+    font-size: 100px; backdrop-filter: blur(8px);
+  }
+  .design-c .thumbs { display: flex; gap: 8px; margin-top: 12px; }
+  .design-c .thumb {
+    width: 64px; height: 64px; border-radius: 8px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center; font-size: 28px;
+    cursor: pointer;
+  }
+  .design-c .thumb.active { border-color: #B87333; }
+  .design-c .product-info h1 {
+    font-family: 'Space Grotesk'; font-size: 32px; font-weight: 700; margin-bottom: 8px;
+  }
+  .design-c .product-info .brand-name { color: #B87333; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 8px; }
+  .design-c .rating { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .design-c .stars { color: #B87333; font-size: 14px; }
+  .design-c .review-count { color: #6b6b80; font-size: 13px; }
+  .design-c .description { color: #a0a0b8; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+  .design-c .selector-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b6b80; font-weight: 600; margin-bottom: 8px; }
+  .design-c .strength-toggles { display: flex; gap: 8px; margin-bottom: 20px; }
+  .strength-toggle {
+    padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);
+    color: #a0a0b8; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+  }
+  .strength-toggle.active-strong {
+    border-color: #f97316; background: rgba(249,115,22,0.1); color: #f97316;
+  }
+  .design-c .pack-pills-dark { display: flex; gap: 8px; margin-bottom: 20px; }
+  .pack-pill-dark {
+    padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);
+    color: #a0a0b8; cursor: pointer; text-align: center; transition: all 0.2s;
+  }
+  .pack-pill-dark.active { border-color: #B87333; background: rgba(184,115,51,0.15); color: #B87333; }
+  .pack-pill-dark .save-text { font-size: 10px; color: #22c55e; display: block; margin-top: 2px; }
+  .design-c .price-block { margin-bottom: 20px; }
+  .design-c .price-old { font-size: 16px; color: #6b6b80; text-decoration: line-through; }
+  .design-c .price-new { font-size: 32px; font-weight: 700; color: #B87333; margin-left: 8px; }
+  .design-c .price-save { font-size: 13px; color: #22c55e; margin-top: 4px; }
+  .design-c .subscribe-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .toggle-switch {
+    width: 44px; height: 24px; border-radius: 12px; background: rgba(255,255,255,0.15);
+    position: relative; cursor: pointer;
+  }
+  .toggle-switch::after {
+    content: ''; width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; position: absolute; top: 3px; left: 3px; transition: 0.2s;
+  }
+  .toggle-switch.on { background: #B87333; }
+  .toggle-switch.on::after { left: 23px; }
+  .design-c .btn-add-cart {
+    width: 100%; padding: 16px; border-radius: 10px; border: none;
+    background: #B87333; color: #fff; font-weight: 700; font-size: 16px;
+    cursor: pointer; margin-bottom: 16px; transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .design-c .btn-add-cart:hover { background: #a06429; }
+  .design-c .trust-row {
+    display: flex; gap: 20px; font-size: 12px; color: #6b6b80;
+  }
+  .design-c .trust-row span { display: flex; align-items: center; gap: 4px; }
+
+  /* ===== DESIGN D: Midnight Teal Dark Homepage ===== */
+  .design-d {
+    background: #1A1A2E; color: #f5f5f5; min-height: 600px;
+  }
+  .design-d .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .design-d .nav .logo { font-family: 'Space Grotesk'; font-weight: 700; font-size: 22px; color: #0F6E56; }
+  .design-d .hero {
+    padding: 72px 40px; text-align: center;
+    background: linear-gradient(180deg, #1A1A2E 0%, #0F6E56 200%);
+    position: relative; overflow: hidden;
+  }
+  .design-d .hero::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 50% 100%, rgba(15,110,86,0.15) 0%, transparent 60%);
+  }
+  .design-d .hero h1 {
+    font-family: 'Space Grotesk'; font-size: 52px; font-weight: 700;
+    line-height: 1.1; margin-bottom: 16px; position: relative;
+  }
+  .design-d .hero h1 span { color: #0F6E56; }
+  .design-d .hero p { color: #a0a0b8; font-size: 17px; max-width: 560px; margin: 0 auto 32px; position: relative; }
+  .design-d .hero .btns { display: flex; gap: 12px; justify-content: center; position: relative; }
+  .design-d .hero .btn-primary {
+    background: #0F6E56; color: #fff; padding: 14px 32px; border-radius: 8px;
+    font-weight: 600; font-size: 15px; border: none; cursor: pointer;
+  }
+  .design-d .brands-bar {
+    display: flex; justify-content: center; gap: 40px; padding: 24px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.06); color: #6b6b80; font-size: 14px; font-weight: 600;
+  }
+  .design-d .products-section { padding: 48px 40px; }
+  .design-d .products-section h2 {
+    font-family: 'Space Grotesk'; font-size: 24px; font-weight: 700; margin-bottom: 24px;
+  }
+  .design-d .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .product-card-dark {
+    background: #252538; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden; transition: all 0.2s; cursor: pointer;
+  }
+  .product-card-dark:hover { border-color: rgba(15,110,86,0.4); box-shadow: 0 0 30px rgba(15,110,86,0.1); transform: translateY(-2px); }
+  .product-card-dark .img {
+    height: 180px; display: flex; align-items: center; justify-content: center;
+    font-size: 64px; background: #2D2D44;
+  }
+  .product-card-dark .info { padding: 16px; }
+  .product-card-dark .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #0F6E56; font-weight: 600; margin-bottom: 4px; }
+  .product-card-dark .name { font-weight: 600; font-size: 15px; color: #f5f5f5; margin-bottom: 8px; }
+  .product-card-dark .price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+  .product-card-dark .price { font-weight: 700; font-size: 18px; color: #f5f5f5; }
+  .product-card-dark .price-old { font-size: 13px; color: #6b6b80; text-decoration: line-through; }
+
+  /* ===== DESIGN E: Neon Bold Homepage ===== */
+  .design-e {
+    background: #0A0A0A; color: #fff; min-height: 600px;
+  }
+  .design-e .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .design-e .nav .logo { font-family: 'Space Grotesk'; font-weight: 800; font-size: 24px; color: #00E5A0; }
+  .design-e .hero {
+    padding: 80px 40px; text-align: center;
+    background: radial-gradient(ellipse at 50% 120%, rgba(0,229,160,0.08) 0%, transparent 60%);
+  }
+  .design-e .hero h1 {
+    font-family: 'Space Grotesk'; font-size: 56px; font-weight: 800;
+    line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.03em;
+  }
+  .design-e .hero h1 .highlight { color: #00E5A0; }
+  .design-e .hero p { color: #b0b0b0; font-size: 17px; max-width: 520px; margin: 0 auto 32px; }
+  .design-e .hero .btn-neon {
+    background: #00E5A0; color: #0A0A0A; padding: 16px 36px; border-radius: 12px;
+    font-weight: 700; font-size: 16px; border: none; cursor: pointer;
+    box-shadow: 0 0 30px rgba(0,229,160,0.3);
+  }
+  .design-e .products-section { padding: 48px 40px; }
+  .design-e .products-section h2 {
+    font-family: 'Space Grotesk'; font-size: 24px; font-weight: 700; margin-bottom: 24px;
+  }
+  .design-e .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .product-card-neon {
+    background: #141414; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden; transition: all 0.3s; cursor: pointer; position: relative;
+  }
+  .product-card-neon:hover { border-color: #00E5A0; box-shadow: 0 0 40px rgba(0,229,160,0.1); }
+  .product-card-neon .img {
+    height: 180px; display: flex; align-items: center; justify-content: center;
+    font-size: 64px; background: #1E1E1E;
+  }
+  .product-card-neon .info { padding: 16px; }
+  .product-card-neon .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #00E5A0; font-weight: 600; margin-bottom: 4px; }
+  .product-card-neon .name { font-weight: 600; font-size: 15px; margin-bottom: 8px; }
+  .product-card-neon .price { font-weight: 700; font-size: 18px; margin-bottom: 12px; }
+  .btn-add-neon {
+    width: 100%; padding: 10px; border-radius: 8px; border: none;
+    background: #00E5A0; color: #0A0A0A; font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+  .btn-add-neon:hover { box-shadow: 0 0 20px rgba(0,229,160,0.3); }
+
+  /* Cart Drawer Designs */
+  .cart-wrapper { display: grid; grid-template-columns: 1fr 380px; min-height: 500px; }
+  .cart-bg { background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 14px; }
+  .cart-drawer-dark {
+    background: #1A1A2E; color: #f5f5f5; padding: 24px; border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  .cart-drawer-dark h2 { font-family: 'Space Grotesk'; font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+  .cart-drawer-dark .shipping-bar {
+    background: #252538; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;
+  }
+  .shipping-bar .text { font-size: 12px; color: #a0a0b8; margin-bottom: 8px; }
+  .shipping-bar .bar { height: 4px; background: #252538; border-radius: 2px; overflow: hidden; }
+  .shipping-bar .bar .fill { height: 100%; border-radius: 2px; }
+  .fill-teal { background: #0F6E56; width: 65%; }
+  .fill-copper { background: #B87333; width: 65%; }
+  .cart-item {
+    display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .cart-item .item-img {
+    width: 64px; height: 64px; border-radius: 8px; background: #252538;
+    display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0;
+  }
+  .cart-item .item-info { flex: 1; }
+  .cart-item .item-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .cart-item .item-variant { font-size: 12px; color: #6b6b80; }
+  .cart-item .item-price { font-size: 14px; font-weight: 600; text-align: right; }
+  .cart-item .item-qty {
+    display: flex; align-items: center; gap: 8px; margin-top: 4px;
+  }
+  .qty-btn {
+    width: 24px; height: 24px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+    background: transparent; color: #f5f5f5; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cart-summary { margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+  .summary-row.total { font-weight: 700; font-size: 18px; margin-top: 8px; }
+  .btn-checkout-teal {
+    width: 100%; padding: 16px; border-radius: 10px; border: none;
+    background: #0F6E56; color: #fff; font-weight: 700; font-size: 16px;
+    cursor: pointer; margin-top: 16px;
+  }
+  .btn-checkout-copper {
+    width: 100%; padding: 16px; border-radius: 10px; border: none;
+    background: #B87333; color: #fff; font-weight: 700; font-size: 16px;
+    cursor: pointer; margin-top: 16px;
+  }
+  .upsell-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .upsell-section h3 { font-size: 13px; color: #6b6b80; margin-bottom: 12px; font-weight: 600; }
+  .upsell-item {
+    display: flex; gap: 10px; align-items: center; padding: 10px;
+    background: #252538; border-radius: 8px; margin-bottom: 8px;
+  }
+  .upsell-item .u-img { width: 40px; height: 40px; border-radius: 6px; background: #2D2D44; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .upsell-item .u-name { font-size: 12px; font-weight: 600; flex: 1; }
+  .upsell-item .u-price { font-size: 12px; color: #0F6E56; font-weight: 600; }
+  .upsell-item .u-add { font-size: 18px; cursor: pointer; color: #0F6E56; }
+
+  /* Copper Cart Drawer */
+  .cart-drawer-copper {
+    background: #1C1C2E; color: #f5f5f5; padding: 24px; border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  .cart-drawer-copper h2 { font-family: 'Space Grotesk'; font-size: 20px; font-weight: 700; margin-bottom: 16px; color: #B87333; }
+</style>
+</head>
+<body>
+
+<div class="showcase-nav">
+  <h1>SnusFriend Design Showcase</h1>
+  <div style="font-size: 13px; color: #888;">5 designs across 4 themes — pick your favorite</div>
+</div>
+
+<!-- ===== DESIGN A: Scandinavian Forest Green ===== -->
+<div class="section">
+  <div class="section-title">
+    Design A: Scandinavian Forest Green
+    <span class="score-badge score-high">NEW</span>
+  </div>
+  <div class="section-subtitle">Pure white + deep forest green (#1B4332). Clean, nature-inspired, Scandinavian minimal.</div>
+  <div class="design-grid">
+    <div class="design-frame">
+      <div class="design-label">
+        <h3>Homepage</h3>
+        <span class="design-label theme-tag tag-green">Forest Green</span>
+      </div>
+      <div class="design-a">
+        <div class="top-bar">Free EU-Wide Shipping on Orders Over €50</div>
+        <div class="nav">
+          <div class="logo">SnusFriend</div>
+          <div class="links">
+            <a href="#">Products</a>
+            <a href="#">Brands</a>
+            <a href="#">Strength Guide</a>
+            <a href="#">About</a>
+          </div>
+          <div class="icons">🔍 🛒</div>
+        </div>
+        <div class="hero">
+          <div>
+            <h1>Discover Your<br>Perfect Pouch</h1>
+            <p>2,200+ premium nicotine pouches from 139 leading brands. Lab-tested quality. Fast EU-wide delivery. Loyalty rewards on every order.</p>
+            <div class="btns">
+              <button class="btn-primary">Shop All Pouches</button>
+              <button class="btn-outline">Take the Quiz</button>
+            </div>
+          </div>
+          <div class="hero-img">🌿</div>
+        </div>
+        <div class="categories">
+          <div class="cat-card"><div class="icon">❄️</div><div class="name">Mint & Cool</div></div>
+          <div class="cat-card"><div class="icon">🍓</div><div class="name">Fruity & Sweet</div></div>
+          <div class="cat-card"><div class="icon">☕</div><div class="name">Coffee & Tobacco</div></div>
+          <div class="cat-card"><div class="icon">⚡</div><div class="name">Strong & Bold</div></div>
+        </div>
+        <div class="products-section">
+          <h2>Best Sellers</h2>
+          <div class="products-grid">
+            <div class="product-card-light">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">ZYN</div>
+                <div class="name">Cool Mint Slim Strong</div>
+                <div class="strength-badge strength-strong"><span class="strength-dot dot-strong"></span> STRONG</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-green">1 can</span>
+                  <span class="pack-pill">3 cans<span class="save">-8%</span></span>
+                  <span class="pack-pill">5 cans<span class="save">-12%</span></span>
+                  <span class="pack-pill">10 cans<span class="save">-18%</span></span>
+                </div>
+                <div class="price-row">
+                  <span class="price">€4.84</span>
+                  <span class="price-old">€5.90</span>
+                  <span class="per-unit">€0.24/pouch</span>
+                </div>
+                <button class="btn-add-green">Add to Cart</button>
+              </div>
+            </div>
+            <div class="product-card-light">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">VELO</div>
+                <div class="name">Berry Frost Medium</div>
+                <div class="strength-badge strength-regular"><span class="strength-dot dot-regular"></span> REGULAR</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-green">1 can</span>
+                  <span class="pack-pill">3 cans<span class="save">-8%</span></span>
+                  <span class="pack-pill">5 cans<span class="save">-12%</span></span>
+                  <span class="pack-pill">10 cans<span class="save">-18%</span></span>
+                </div>
+                <div class="price-row">
+                  <span class="price">€3.95</span>
+                  <span class="per-unit">€0.20/pouch</span>
+                </div>
+                <button class="btn-add-green">Add to Cart</button>
+              </div>
+            </div>
+            <div class="product-card-light">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">LOOP</div>
+                <div class="name">Jalapeno Lime Mini</div>
+                <div class="strength-badge strength-mild"><span class="strength-dot dot-mild"></span> MILD</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-green">1 can</span>
+                  <span class="pack-pill">3 cans<span class="save">-8%</span></span>
+                  <span class="pack-pill">5 cans<span class="save">-12%</span></span>
+                  <span class="pack-pill">10 cans<span class="save">-18%</span></span>
+                </div>
+                <div class="price-row">
+                  <span class="price">€4.20</span>
+                  <span class="per-unit">€0.21/pouch</span>
+                </div>
+                <button class="btn-add-green">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DESIGN B: Clean Ritual Light ===== -->
+<div class="section">
+  <div class="section-title">
+    Design B: Clean Ritual
+    <span class="score-badge score-high">7.6</span>
+  </div>
+  <div class="section-subtitle">Warm cream (#FAFAF8) + teal (#0F6E56). Ritual.com-inspired editorial clean. Top 3 from Round 1.</div>
+  <div class="design-grid">
+    <div class="design-frame">
+      <div class="design-label">
+        <h3>Homepage</h3>
+        <span class="design-label theme-tag tag-light">Clean Ritual</span>
+      </div>
+      <div class="design-b">
+        <div class="top-bar">Free Shipping on EU Orders Over €50 | Same-Day Dispatch Before 2PM</div>
+        <div class="nav">
+          <div class="logo">SnusFriend</div>
+          <div class="links">
+            <a href="#">Products</a>
+            <a href="#">Brands</a>
+            <a href="#">Guide</a>
+            <a href="#">About</a>
+          </div>
+          <div class="icons" style="color: #1a1a2e;">🔍 🛒</div>
+        </div>
+        <div class="hero">
+          <div class="eyebrow">Europe's Nicotine Pouch Shop</div>
+          <h1>Premium Nicotine<br>Pouches, Curated</h1>
+          <p>Shop 2,200+ products from 139 leading brands. Fast EU-wide delivery, loyalty rewards, and the best prices online.</p>
+          <div class="btns">
+            <button class="btn-primary">Shop All Pouches</button>
+            <button class="btn-outline">Browse Brands</button>
+          </div>
+        </div>
+        <div class="trust-bar">
+          <div class="trust-item"><div class="num">139</div><div class="label">Brands</div></div>
+          <div class="trust-item"><div class="num">2,200+</div><div class="label">Products</div></div>
+          <div class="trust-item"><div class="num">Same-Day</div><div class="label">Shipping</div></div>
+          <div class="trust-item"><div class="num">4.8★</div><div class="label">12,400 Reviews</div></div>
+        </div>
+        <div class="products-section">
+          <h2>Best Sellers This Week</h2>
+          <div class="products-grid">
+            <div class="product-card-light">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand" style="color: #0F6E56;">ZYN</div>
+                <div class="name">Cool Mint Slim Strong</div>
+                <div class="strength-badge strength-strong"><span class="strength-dot dot-strong"></span> STRONG</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-teal">1 can</span>
+                  <span class="pack-pill">3 cans<span class="save">-8%</span></span>
+                  <span class="pack-pill">5 cans<span class="save">-12%</span></span>
+                </div>
+                <div class="price-row">
+                  <span class="price">€4.84</span>
+                  <span class="price-old">€5.90</span>
+                </div>
+                <button class="btn-add-teal">Add to Cart</button>
+              </div>
+            </div>
+            <div class="product-card-light">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand" style="color: #0F6E56;">VELO</div>
+                <div class="name">Berry Frost Medium</div>
+                <div class="strength-badge strength-regular"><span class="strength-dot dot-regular"></span> REGULAR</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-teal">1 can</span>
+                  <span class="pack-pill">3 cans<span class="save">-8%</span></span>
+                  <span class="pack-pill">5 cans<span class="save">-12%</span></span>
+                </div>
+                <div class="price-row">
+                  <span class="price">€3.95</span>
+                </div>
+                <button class="btn-add-teal">Add to Cart</button>
+              </div>
+            </div>
+            <div class="product-card-light">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand" style="color: #0F6E56;">LOOP</div>
+                <div class="name">Jalapeno Lime Mini</div>
+                <div class="strength-badge strength-mild"><span class="strength-dot dot-mild"></span> MILD</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-teal">1 can</span>
+                  <span class="pack-pill">3 cans<span class="save">-8%</span></span>
+                  <span class="pack-pill">5 cans<span class="save">-12%</span></span>
+                </div>
+                <div class="price-row">
+                  <span class="price">€4.20</span>
+                </div>
+                <button class="btn-add-teal">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DESIGN C: Copper Glass PDP ===== -->
+<div class="section">
+  <div class="section-title">
+    Design C: Copper Glass PDP
+    <span class="score-badge score-high">~8.5</span>
+  </div>
+  <div class="section-subtitle">Charcoal (#1C1C2E) + warm copper (#B87333). Glass-morphism panels. Our newest and potentially highest-scoring design.</div>
+  <div class="design-grid">
+    <div class="design-frame">
+      <div class="design-label">
+        <h3>Product Detail Page</h3>
+        <span class="design-label theme-tag tag-copper">Copper Glass</span>
+      </div>
+      <div class="design-c">
+        <div class="breadcrumbs"><a href="#">Home</a> / <a href="#">ZYN</a> / Cool Mint Slim Strong</div>
+        <div class="pdp-grid">
+          <div>
+            <div class="gallery">🥫</div>
+            <div class="thumbs">
+              <div class="thumb active">🥫</div>
+              <div class="thumb">📦</div>
+              <div class="thumb">📋</div>
+              <div class="thumb">⭐</div>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="brand-name">ZYN</div>
+            <h1>Cool Mint Slim Strong</h1>
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span class="review-count">4.7 (234 reviews)</span>
+            </div>
+            <div class="description">Refreshing peppermint with a cooling sensation. Slim format fits discreetly under the lip. 9mg nicotine per pouch.</div>
+            <div class="selector-label">Strength</div>
+            <div class="strength-toggles">
+              <div class="strength-toggle"><span class="strength-dot dot-mild"></span> Mild</div>
+              <div class="strength-toggle"><span class="strength-dot dot-regular"></span> Regular</div>
+              <div class="strength-toggle active-strong"><span class="strength-dot dot-strong"></span> Strong</div>
+              <div class="strength-toggle"><span class="strength-dot dot-xstrong"></span> X-Strong</div>
+            </div>
+            <div class="selector-label">Pack Size</div>
+            <div class="pack-pills-dark">
+              <div class="pack-pill-dark active">1 can</div>
+              <div class="pack-pill-dark">3 cans<span class="save-text">Save 8%</span></div>
+              <div class="pack-pill-dark">5 cans<span class="save-text">Save 12%</span></div>
+              <div class="pack-pill-dark">10 cans<span class="save-text">Save 18%</span></div>
+            </div>
+            <div class="price-block">
+              <span class="price-old">€5.90</span>
+              <span class="price-new">€4.84</span>
+              <div class="price-save">You save €1.06 (18% off)</div>
+            </div>
+            <div class="subscribe-row">
+              <div class="toggle-switch on"></div>
+              <div>
+                <div style="font-size: 14px; font-weight: 600;">Subscribe & Save 15%</div>
+                <div style="font-size: 12px; color: #6b6b80;">Delivered every 2 weeks. Cancel anytime.</div>
+              </div>
+            </div>
+            <button class="btn-add-cart">🛒 Add to Cart — €4.84</button>
+            <div class="trust-row">
+              <span>🚚 Free shipping €50+</span>
+              <span>↩️ Easy 30-day returns</span>
+              <span>🔬 Lab tested</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DESIGN D: Midnight Teal Dark ===== -->
+<div class="section">
+  <div class="section-title">
+    Design D: Midnight Teal
+    <span class="score-badge score-mid">7.0</span>
+  </div>
+  <div class="section-subtitle">Deep navy (#1A1A2E) + teal (#0F6E56). Aurora glow hero. Premium spirits vibe.</div>
+  <div class="design-grid">
+    <div class="design-frame">
+      <div class="design-label">
+        <h3>Homepage</h3>
+        <span class="design-label theme-tag tag-dark">Midnight Teal</span>
+      </div>
+      <div class="design-d">
+        <div class="nav">
+          <div class="logo">SnusFriend</div>
+          <div style="display: flex; gap: 28px;">
+            <a href="#" style="color: #a0a0b8; text-decoration: none; font-size: 14px;">Products</a>
+            <a href="#" style="color: #a0a0b8; text-decoration: none; font-size: 14px;">Brands</a>
+            <a href="#" style="color: #a0a0b8; text-decoration: none; font-size: 14px;">Guide</a>
+          </div>
+          <div style="color: #f5f5f5;">🔍 🛒</div>
+        </div>
+        <div class="hero">
+          <h1>The <span>Modern</span><br>Pouch Experience</h1>
+          <p>Premium nicotine pouches from the world's finest brands. Curated, tested, delivered.</p>
+          <div class="btns">
+            <button class="btn-primary">Explore Collection</button>
+          </div>
+        </div>
+        <div class="brands-bar">
+          <span>ZYN</span><span>VELO</span><span>LOOP</span><span>ON!</span><span>KILLA</span><span>PABLO</span>
+        </div>
+        <div class="products-section">
+          <h2>Trending Now</h2>
+          <div class="products-grid">
+            <div class="product-card-dark">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">ZYN</div>
+                <div class="name">Cool Mint Slim Strong</div>
+                <div class="strength-badge strength-strong"><span class="strength-dot dot-strong"></span> STRONG</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-teal">1 can</span>
+                  <span class="pack-pill" style="border-color: rgba(255,255,255,0.1); color: #a0a0b8;">3 cans</span>
+                  <span class="pack-pill" style="border-color: rgba(255,255,255,0.1); color: #a0a0b8;">5 cans</span>
+                </div>
+                <div class="price-row">
+                  <span class="price">€4.84</span>
+                  <span class="price-old">€5.90</span>
+                </div>
+                <button class="btn-add-teal">Add to Cart</button>
+              </div>
+            </div>
+            <div class="product-card-dark">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">VELO</div>
+                <div class="name">Berry Frost Medium</div>
+                <div class="strength-badge strength-regular"><span class="strength-dot dot-regular"></span> REGULAR</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-teal">1 can</span>
+                  <span class="pack-pill" style="border-color: rgba(255,255,255,0.1); color: #a0a0b8;">3 cans</span>
+                </div>
+                <div class="price-row"><span class="price">€3.95</span></div>
+                <button class="btn-add-teal">Add to Cart</button>
+              </div>
+            </div>
+            <div class="product-card-dark">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">LOOP</div>
+                <div class="name">Jalapeno Lime Mini</div>
+                <div class="strength-badge strength-mild"><span class="strength-dot dot-mild"></span> MILD</div>
+                <div class="pack-pills">
+                  <span class="pack-pill active-teal">1 can</span>
+                  <span class="pack-pill" style="border-color: rgba(255,255,255,0.1); color: #a0a0b8;">3 cans</span>
+                </div>
+                <div class="price-row"><span class="price">€4.20</span></div>
+                <button class="btn-add-teal">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DESIGN E: Neon Bold ===== -->
+<div class="section">
+  <div class="section-title">
+    Design E: Neon Bold
+    <span class="score-badge score-mid">7.5</span>
+  </div>
+  <div class="section-subtitle">Pure black (#0A0A0A) + neon green (#00E5A0). Electric energy, sneaker-store vibes. Best for brand pages.</div>
+  <div class="design-grid">
+    <div class="design-frame">
+      <div class="design-label">
+        <h3>Homepage</h3>
+        <span class="design-label theme-tag tag-bold">Neon Bold</span>
+      </div>
+      <div class="design-e">
+        <div class="nav">
+          <div class="logo">SNUSFRIEND</div>
+          <div style="display: flex; gap: 28px;">
+            <a href="#" style="color: #b0b0b0; text-decoration: none; font-size: 14px; font-weight: 500;">Products</a>
+            <a href="#" style="color: #b0b0b0; text-decoration: none; font-size: 14px; font-weight: 500;">Brands</a>
+            <a href="#" style="color: #b0b0b0; text-decoration: none; font-size: 14px; font-weight: 500;">Guide</a>
+          </div>
+          <div>🔍 🛒</div>
+        </div>
+        <div class="hero">
+          <h1>Find Your<br><span class="highlight">Perfect Hit</span></h1>
+          <p>2,200+ nicotine pouches. 139 brands. Zero compromise.</p>
+          <button class="btn-neon">Shop Now</button>
+        </div>
+        <div class="products-section">
+          <h2>🔥 Hot Right Now</h2>
+          <div class="products-grid">
+            <div class="product-card-neon">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">ZYN</div>
+                <div class="name">Cool Mint Slim Strong</div>
+                <div class="strength-badge strength-strong"><span class="strength-dot dot-strong"></span> STRONG</div>
+                <div class="price">€4.84</div>
+                <button class="btn-add-neon">Add to Cart</button>
+              </div>
+            </div>
+            <div class="product-card-neon">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">VELO</div>
+                <div class="name">Berry Frost Medium</div>
+                <div class="strength-badge strength-regular"><span class="strength-dot dot-regular"></span> REGULAR</div>
+                <div class="price">€3.95</div>
+                <button class="btn-add-neon">Add to Cart</button>
+              </div>
+            </div>
+            <div class="product-card-neon">
+              <div class="img">🥫</div>
+              <div class="info">
+                <div class="brand">LOOP</div>
+                <div class="name">Jalapeno Lime Mini</div>
+                <div class="strength-badge strength-mild"><span class="strength-dot dot-mild"></span> MILD</div>
+                <div class="price">€4.20</div>
+                <button class="btn-add-neon">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CART DRAWER COMPARISON ===== -->
+<div class="section">
+  <div class="section-title">
+    Cart Drawer: Teal vs Copper
+    <span class="score-badge score-high">8.45</span>
+  </div>
+  <div class="section-subtitle">Side-by-side cart drawer comparison. Teal (Round 1 winner) vs Copper (Round 2 new).</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+    <!-- Teal Cart -->
+    <div class="design-frame">
+      <div class="design-label">
+        <h3>Cart — Midnight Teal</h3>
+        <span class="design-label theme-tag tag-dark">Original Winner 8.45</span>
+      </div>
+      <div class="cart-drawer-dark">
+        <h2 style="color: #f5f5f5;">Your Cart (3)</h2>
+        <div class="shipping-bar">
+          <div class="text">🚚 You're €15.20 away from free shipping!</div>
+          <div class="bar"><div class="fill fill-teal"></div></div>
+        </div>
+        <div class="cart-item">
+          <div class="item-img">🥫</div>
+          <div class="item-info">
+            <div class="item-name">ZYN Cool Mint Strong</div>
+            <div class="item-variant"><span class="strength-badge strength-strong" style="margin: 0;"><span class="strength-dot dot-strong"></span> STRONG</span> · 3 cans</div>
+            <div class="item-qty"><button class="qty-btn">-</button> 3 <button class="qty-btn">+</button></div>
+          </div>
+          <div class="item-price">€14.52</div>
+        </div>
+        <div class="cart-item">
+          <div class="item-img">🥫</div>
+          <div class="item-info">
+            <div class="item-name">VELO Berry Frost</div>
+            <div class="item-variant"><span class="strength-badge strength-regular" style="margin: 0;"><span class="strength-dot dot-regular"></span> REG</span> · 1 can</div>
+            <div class="item-qty"><button class="qty-btn">-</button> 1 <button class="qty-btn">+</button></div>
+          </div>
+          <div class="item-price">€3.95</div>
+        </div>
+        <div class="upsell-section">
+          <h3>Complete Your Routine</h3>
+          <div class="upsell-item">
+            <div class="u-img">🥫</div>
+            <div class="u-name">LOOP Jalapeno Lime</div>
+            <div class="u-price">€4.20</div>
+            <div class="u-add">+</div>
+          </div>
+        </div>
+        <div class="cart-summary">
+          <div class="summary-row"><span>Subtotal</span><span>€18.47</span></div>
+          <div class="summary-row"><span style="color: #22c55e;">You're saving</span><span style="color: #22c55e;">€3.18</span></div>
+          <div class="summary-row total"><span>Total</span><span>€18.47</span></div>
+        </div>
+        <button class="btn-checkout-teal">Checkout — €18.47</button>
+      </div>
+    </div>
+    <!-- Copper Cart -->
+    <div class="design-frame">
+      <div class="design-label">
+        <h3>Cart — Copper Glass</h3>
+        <span class="design-label theme-tag tag-copper">Round 2 New</span>
+      </div>
+      <div class="cart-drawer-copper" style="background: #1C1C2E; padding: 24px;">
+        <h2>Your Cart (3)</h2>
+        <div class="shipping-bar" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);">
+          <div class="text">🚚 €15.20 more for free shipping</div>
+          <div class="bar" style="background: rgba(255,255,255,0.06);"><div class="fill fill-copper"></div></div>
+        </div>
+        <div class="cart-item" style="border-color: rgba(255,255,255,0.06);">
+          <div class="item-img" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);">🥫</div>
+          <div class="item-info">
+            <div class="item-name" style="color: #f5f5f5;">ZYN Cool Mint Strong</div>
+            <div class="item-variant"><span class="strength-badge strength-strong" style="margin: 0;"><span class="strength-dot dot-strong"></span> STRONG</span> · 3 cans</div>
+            <div class="item-qty"><button class="qty-btn">-</button> 3 <button class="qty-btn">+</button></div>
+          </div>
+          <div class="item-price" style="color: #B87333;">€14.52</div>
+        </div>
+        <div class="cart-item" style="border-color: rgba(255,255,255,0.06);">
+          <div class="item-img" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);">🥫</div>
+          <div class="item-info">
+            <div class="item-name" style="color: #f5f5f5;">VELO Berry Frost</div>
+            <div class="item-variant"><span class="strength-badge strength-regular" style="margin: 0;"><span class="strength-dot dot-regular"></span> REG</span> · 1 can</div>
+            <div class="item-qty"><button class="qty-btn">-</button> 1 <button class="qty-btn">+</button></div>
+          </div>
+          <div class="item-price" style="color: #B87333;">€3.95</div>
+        </div>
+        <div class="upsell-section" style="border-color: rgba(255,255,255,0.06);">
+          <h3 style="color: #B87333;">Pairs Well With</h3>
+          <div class="upsell-item" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);">
+            <div class="u-img" style="background: rgba(255,255,255,0.04);">🥫</div>
+            <div class="u-name" style="color: #f5f5f5;">LOOP Jalapeno Lime</div>
+            <div class="u-price" style="color: #B87333;">€4.20</div>
+            <div class="u-add" style="color: #B87333;">+</div>
+          </div>
+        </div>
+        <div class="cart-summary" style="border-color: rgba(255,255,255,0.06);">
+          <div class="summary-row" style="color: #a0a0b8;"><span>Subtotal</span><span style="color: #f5f5f5;">€18.47</span></div>
+          <div class="summary-row"><span style="color: #22c55e;">Savings</span><span style="color: #22c55e;">-€3.18</span></div>
+          <div class="summary-row total" style="color: #f5f5f5;"><span>Total</span><span style="color: #B87333;">€18.47</span></div>
+        </div>
+        <button class="btn-checkout-copper">Checkout — €18.47</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; padding: 48px 32px; color: #555; font-size: 14px;">
+  SnusFriend Design Showcase — Generated March 27, 2026<br>
+  5 homepage variants + 1 PDP + 2 cart drawers = 8 total designs to choose from
+</div>
+
+</body>
+</html>

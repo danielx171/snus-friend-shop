@@ -1,0 +1,328 @@
+---
+export const prerender = false;
+
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
+
+// Fetch reputation levels from DB
+const supabase = Astro.locals.supabase;
+
+const { data: tiers } = await supabase
+  .from('reputation_levels')
+  .select('level, name, min_points, badge_color, perks')
+  .order('level', { ascending: true });
+
+// Check if user is logged in and fetch their reputation
+const user = Astro.locals.user;
+let userReputation: { level: number; lifetime_earned: number; next_level_min_points: number | null; next_level_name: string | null } | null = null;
+
+if (user) {
+  const { data } = await supabase
+    .from('user_reputation')
+    .select('level, lifetime_earned, next_level_min_points, next_level_name')
+    .eq('user_id', user.id)
+    .single();
+  userReputation = data;
+}
+
+// Badge color to CSS class mapping
+const badgeColorMap: Record<string, { bg: string; text: string; ring: string; gradient: string }> = {
+  gray:   { bg: 'bg-zinc-500/15', text: 'text-zinc-400', ring: 'ring-zinc-500/30', gradient: 'from-zinc-500/20 to-zinc-600/10' },
+  blue:   { bg: 'bg-blue-500/15', text: 'text-blue-400', ring: 'ring-blue-500/30', gradient: 'from-blue-500/20 to-blue-600/10' },
+  green:  { bg: 'bg-emerald-500/15', text: 'text-emerald-400', ring: 'ring-emerald-500/30', gradient: 'from-emerald-500/20 to-emerald-600/10' },
+  purple: { bg: 'bg-purple-500/15', text: 'text-purple-400', ring: 'ring-purple-500/30', gradient: 'from-purple-500/20 to-purple-600/10' },
+  gold:   { bg: 'bg-amber-500/15', text: 'text-amber-400', ring: 'ring-amber-500/30', gradient: 'from-amber-500/20 to-amber-600/10' },
+};
+
+// Hex colors for tier glow effects
+const badgeGlowMap: Record<string, string> = {
+  gray: '#71717a', blue: '#3b82f6', green: '#10b981', purple: '#a855f7', gold: '#f59e0b',
+};
+
+const tierList = tiers ?? [];
+---
+
+<Shop
+  title={`Membership Tiers | ${tenant.name}`}
+  description={`Discover ${tenant.name} membership tiers — from Explorer to Founder. Earn ${loyaltyCurrencyName}, unlock perks, and level up your nicotine pouch experience.`}
+>
+  <section class="bg-background text-foreground">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Rewards', href: '/rewards' }, { label: 'Membership' }]} />
+
+      {!user ? (
+        <div class="rounded-2xl border border-border bg-gradient-to-br from-primary/5 via-card/60 to-background p-8 sm:p-10 mb-12">
+          <div class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-foreground">Your taste deserves a tier.</h1>
+            <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {tenant.name} Membership is a five-circle progression system. The more you explore, review, and contribute, the higher you rise — and the better your rewards get. No subscription fee. No catch. Just show up and be yourself.
+            </p>
+          </div>
+
+          <ol class="space-y-6 mb-8 max-w-lg mx-auto sm:max-w-none text-left">
+            <li class="flex items-start gap-4">
+              <span class="flex-shrink-0 text-3xl font-bold text-primary/30 leading-none">01</span>
+              <div>
+                <p class="font-semibold text-foreground mb-1">Five tiers, one path.</p>
+                <p class="text-sm text-muted-foreground">Explorer → Member → Connoisseur → Specialist → Founder. Each tier unlocks better perks, multipliers, and exclusive access.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4">
+              <span class="flex-shrink-0 text-3xl font-bold text-primary/30 leading-none">02</span>
+              <div>
+                <p class="font-semibold text-foreground mb-1">Your flavour passport.</p>
+                <p class="text-sm text-muted-foreground">Track every brand you've tried. Unlock stamps, complete collections, build a taste profile that's uniquely yours.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4">
+              <span class="flex-shrink-0 text-3xl font-bold text-primary/30 leading-none">03</span>
+              <div>
+                <p class="font-semibold text-foreground mb-1">The step-down.</p>
+                <p class="text-sm text-muted-foreground">An optional, private journey for members who want to gradually reduce nicotine strength. Set your baseline, track progress, earn badges.</p>
+              </div>
+            </li>
+          </ol>
+
+          <div class="text-center">
+            <a
+              href="/register?redirect=/membership"
+              class="inline-flex items-center justify-center rounded-lg bg-primary px-8 h-12 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Create your free membership
+              <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <p class="mt-3 text-xs text-muted-foreground">Free forever. No credit card. No subscription.</p>
+          </div>
+        </div>
+      ) : (
+        <Fragment>
+          <div class="text-center mb-10">
+            <p class="text-sm font-medium uppercase tracking-widest text-primary mb-2">Your Journey</p>
+            <h1 class="text-3xl font-bold text-foreground sm:text-4xl">The Circles</h1>
+            <p class="mt-3 text-base text-muted-foreground max-w-xl mx-auto">
+              Every purchase, review, and mission advances you through five membership Circles.
+              Each Circle unlocks better perks and deeper community access.
+            </p>
+          </div>
+
+          <!-- User progress banner -->
+          {userReputation && (
+            <div class="rounded-xl border border-primary/30 bg-primary/5 p-6 mb-10">
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <p class="text-sm text-muted-foreground">Your current tier</p>
+                  <p class="text-2xl font-bold text-primary">
+                    {tierList.find(t => t.level === userReputation!.level)?.name ?? 'Explorer'}
+                  </p>
+                  <p class="text-sm text-muted-foreground mt-1">
+                    {userReputation.lifetime_earned.toLocaleString()} lifetime {loyaltyCurrencyName} earned
+                  </p>
+                </div>
+                {userReputation.next_level_name && userReputation.next_level_min_points && (
+                  <div class="w-full sm:w-64">
+                    <div class="flex justify-between text-xs text-muted-foreground mb-1.5">
+                      <span>Progress</span>
+                      <span>{userReputation.next_level_name} ({userReputation.next_level_min_points.toLocaleString()} coins)</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-background/50 rounded-full overflow-hidden border border-border/50">
+                      <div
+                        class:list={[
+                          'h-full bg-primary rounded-full transition-all',
+                          Math.round((userReputation.lifetime_earned / userReputation.next_level_min_points!) * 100) > 60 && 'cart-progress-pulse',
+                        ]}
+                        style={`width: ${Math.min(100, Math.round((userReputation.lifetime_earned / userReputation.next_level_min_points) * 100))}%`}
+                      />
+                    </div>
+                    <p class="text-xs text-muted-foreground mt-1.5">
+                      {(userReputation.next_level_min_points - userReputation.lifetime_earned).toLocaleString()} {loyaltyCurrencyName} to go
+                    </p>
+                  </div>
+                )}
+                {!userReputation.next_level_name && (
+                  <div class="text-sm text-primary font-medium">
+                    You have reached the highest tier!
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </Fragment>
+      )}
+
+      <!-- Visual tier progression -->
+      <div class="relative mb-12">
+        <!-- Connecting gradient line (hidden on mobile, visible on desktop) -->
+        <div class="hidden sm:block absolute top-8 left-8 right-8 h-[3px] rounded-full tier-line-gradient z-0 opacity-40" aria-hidden="true"></div>
+        <div class="flex flex-col sm:flex-row justify-between gap-4 sm:gap-0 relative z-10">
+          {tierList.map((tier) => {
+            const colors = badgeColorMap[tier.badge_color] ?? badgeColorMap.gray;
+            const glowHex = badgeGlowMap[tier.badge_color] ?? badgeGlowMap.gray;
+            const isCurrent = userReputation?.level === tier.level;
+            return (
+              <div class="flex sm:flex-col items-center gap-3 sm:gap-2 sm:text-center">
+                <div
+                  class:list={[
+                    'flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 text-xl font-bold transition',
+                    isCurrent ? 'border-primary bg-primary/20 ring-4 ring-primary/20 scale-110 glow-breathe' : `border-border/50 ${colors.bg}`,
+                  ]}
+                  style={isCurrent ? `--glow-color: ${glowHex}40;` : ''}
+                >
+                  <span class:list={[isCurrent ? 'text-primary' : colors.text, 'text-lg font-bold']}>
+                    {tier.level}
+                  </span>
+                </div>
+                <div class="sm:mt-1">
+                  <p class:list={['text-sm font-semibold', isCurrent ? 'text-primary' : 'text-foreground']}>
+                    {tier.name}
+                  </p>
+                  <p class="text-xs text-muted-foreground">
+                    {tier.min_points === 0 ? 'Start here' : `${tier.min_points.toLocaleString()} coins`}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- Tier detail cards -->
+      <h2 class="text-2xl font-bold tracking-tight mb-6">What You Unlock</h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+        {tierList.map((tier) => {
+          const colors = badgeColorMap[tier.badge_color] ?? badgeColorMap.gray;
+          const isCurrent = userReputation?.level === tier.level;
+          const isUnlocked = userReputation ? userReputation.level >= tier.level : false;
+          const perks = Array.isArray(tier.perks) ? tier.perks as string[] : [];
+
+          return (
+            <div class:list={[
+              'rounded-xl border overflow-hidden transition-all',
+              isCurrent
+                ? 'border-primary/50 ring-2 ring-primary/20 shadow-lg shadow-primary/5'
+                : isUnlocked
+                  ? 'border-border bg-card/80'
+                  : 'border-border bg-card/80 opacity-70',
+            ]}>
+              {/* Header */}
+              <div class:list={[
+                `bg-gradient-to-r ${colors.gradient} px-5 py-4 border-b border-border/30`,
+                isUnlocked && 'shimmer-sweep',
+              ]}>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-lg font-bold text-foreground">{tier.name}</h3>
+                    <p class="text-xs text-muted-foreground mt-0.5">
+                      {tier.min_points === 0 ? 'Starting tier' : `${tier.min_points.toLocaleString()} ${loyaltyCurrencyName}`}
+                    </p>
+                  </div>
+                  <div class:list={[
+                    'flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold',
+                    colors.bg, colors.text,
+                  ]}>
+                    L{tier.level}
+                  </div>
+                </div>
+                {isCurrent && (
+                  <span class="inline-block mt-2 px-2 py-0.5 rounded-full bg-primary/20 text-primary text-xs font-medium">
+                    Your tier
+                  </span>
+                )}
+                {isUnlocked && !isCurrent && (
+                  <span class="inline-block mt-2 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-medium">
+                    Unlocked
+                  </span>
+                )}
+              </div>
+
+              {/* Perks list */}
+              <ul class="p-5 space-y-2.5">
+                {perks.map((perk) => (
+                  <li class="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <span class:list={['mt-0.5 shrink-0', isUnlocked ? 'text-primary' : 'text-muted-foreground/50']}>
+                      {isUnlocked ? '\u2713' : '\u25CB'}
+                    </span>
+                    <span>{perk}</span>
+                  </li>
+                ))}
+                {perks.length === 0 && (
+                  <li class="text-sm text-muted-foreground italic">Perks coming soon</li>
+                )}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+
+      <!-- How to earn points -->
+      <div class="rounded-xl border border-border bg-card/80 p-6 mb-12">
+        <h2 class="text-xl font-bold mb-4">How to Earn {loyaltyCurrencyName}</h2>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {[
+            { action: 'Place orders', detail: `${rewards.earnRatePerEur} ${loyaltyCurrencyName} per EUR spent`, icon: '\uD83D\uDED2' },
+            { action: 'Write reviews', detail: `${rewards.verifiedReview} ${loyaltyCurrencyName} per review`, icon: '\u2B50' },
+            { action: 'Daily Drop', detail: `Up to ${rewards.dailyDropMax} ${loyaltyCurrencyName} per day`, icon: '\uD83C\uDFA1' },
+            { action: 'Complete missions', detail: `Bonus ${loyaltyCurrencyName} for challenges`, icon: '\uD83C\uDFAF' },
+            { action: 'Refer a friend', detail: `You earn ${rewards.referralSelf}, your friend earns ${rewards.referralFriend} ${loyaltyCurrencyName}`, icon: '\uD83E\uDD1D' },
+            { action: 'Birthday bonus', detail: `Double ${loyaltyCurrencyName} on your birthday`, icon: '\uD83C\uDF82' },
+          ].map((item) => (
+            <div class="flex items-start gap-3">
+              <span class="text-xl shrink-0" aria-hidden="true">{item.icon}</span>
+              <div>
+                <p class="text-sm font-medium text-foreground">{item.action}</p>
+                <p class="text-xs text-muted-foreground">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- CTA -->
+      {!user ? (
+        <div class="rounded-xl border border-primary/30 bg-primary/5 p-8 text-center">
+          <h2 class="text-xl font-bold mb-2">Start Your Journey</h2>
+          <p class="text-muted-foreground text-sm max-w-md mx-auto mb-6">
+            Create a free account and start earning {loyaltyCurrencyName} on every purchase. Your first spin is waiting!
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href="/register"
+              class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Create Free Account
+            </a>
+            <a
+              href="/rewards"
+              class="inline-flex items-center justify-center rounded-lg border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/50"
+            >
+              View Rewards
+            </a>
+          </div>
+        </div>
+      ) : (
+        <div class="rounded-xl border border-border bg-card/80 p-8 text-center">
+          <h2 class="text-xl font-bold mb-2">Keep Earning</h2>
+          <p class="text-muted-foreground text-sm max-w-md mx-auto mb-6">
+            Every purchase gets you closer to the next tier. Check your rewards or start shopping.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href="/products"
+              class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Start Shopping
+            </a>
+            <a
+              href="/rewards"
+              class="inline-flex items-center justify-center rounded-lg border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/50"
+            >
+              View Rewards
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</Shop>

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Coins, Percent, Package, Trophy, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                             */
@@ -12,6 +13,7 @@ import type { SpinResult } from '@/hooks/useSpinWheel';
 interface PrizeRevealProps {
   prize: SpinResult | null;
   onClose: () => void;
+  guestMode?: boolean;
 }
 
 /* ------------------------------------------------------------------ */
@@ -19,7 +21,7 @@ interface PrizeRevealProps {
 /* ------------------------------------------------------------------ */
 
 const TYPE_CONFIG: Record<string, { Icon: React.ElementType; glowColor: string; ringColor: string; subtitle: string }> = {
-  points: { Icon: Coins, glowColor: '#22d3ee', ringColor: 'rgba(34,211,238,0.3)', subtitle: 'SnusPoints earned!' },
+  points: { Icon: Coins, glowColor: '#22d3ee', ringColor: 'rgba(34,211,238,0.3)', subtitle: `${loyaltyCurrencyName} earned!` },
   voucher: { Icon: Percent, glowColor: '#a855f7', ringColor: 'rgba(168,85,247,0.3)', subtitle: 'Voucher won!' },
   jackpot: { Icon: Trophy, glowColor: '#fbbf24', ringColor: 'rgba(251,191,36,0.3)', subtitle: 'JACKPOT!' },
 };
@@ -127,7 +129,7 @@ function Confetti() {
 /*  Main component                                                    */
 /* ------------------------------------------------------------------ */
 
-function PrizeRevealInner({ prize, onClose }: PrizeRevealProps) {
+function PrizeRevealInner({ prize, onClose, guestMode }: PrizeRevealProps) {
   if (!prize) return null;
 
   const prizeType = prize.prize_display?.type ?? 'points';
@@ -226,18 +228,25 @@ function PrizeRevealInner({ prize, onClose }: PrizeRevealProps) {
               {prize.prize_display?.title ?? prize.prize_key}
             </motion.h2>
 
-            {prizeType === 'points' && (
+            {guestMode ? (
               <motion.p
                 className="text-muted-foreground text-sm mb-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.9 }}
               >
-                Added to your SnusPoints balance
+                Create a free account to claim your reward and spin every day!
               </motion.p>
-            )}
-
-            {(prizeType === 'voucher' || prizeType === 'jackpot') && (
+            ) : prizeType === 'points' ? (
+              <motion.p
+                className="text-muted-foreground text-sm mb-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9 }}
+              >
+                Added to your {loyaltyCurrencyName} balance
+              </motion.p>
+            ) : (prizeType === 'voucher' || prizeType === 'jackpot') ? (
               <motion.p
                 className="text-muted-foreground text-sm mb-6"
                 initial={{ opacity: 0 }}
@@ -246,17 +255,26 @@ function PrizeRevealInner({ prize, onClose }: PrizeRevealProps) {
               >
                 {prize.prize_display?.description ?? 'Voucher added to your rewards'}
               </motion.p>
-            )}
+            ) : null}
 
-            {/* Collect button */}
+            {/* CTA button — sign up for guests, collect for logged-in */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.05 }}
             >
-              <Button onClick={onClose} className="w-full rounded-xl" size="lg">
-                Collect
-              </Button>
+              {guestMode ? (
+                <a
+                  href="/register?redirect=/rewards"
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition"
+                >
+                  Create Free Account
+                </a>
+              ) : (
+                <Button onClick={onClose} className="w-full rounded-xl" size="lg">
+                  Collect
+                </Button>
+              )}
             </motion.div>
           </motion.div>
         </motion.div>

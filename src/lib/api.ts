@@ -1,7 +1,13 @@
 import { supabase } from '@/integrations/supabase/client';
 
-const FUNCTIONS_BASE = import.meta.env.VITE_SUPABASE_URL
-  ? new URL('functions/v1', import.meta.env.VITE_SUPABASE_URL).href
+// Astro 6 only exposes PUBLIC_-prefixed envs to client bundles, so any
+// fallback to VITE_* here would resolve to undefined at runtime. Keep it
+// PUBLIC_-only. Vercel prod has both PUBLIC_SUPABASE_URL + ANON_KEY set.
+const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+
+const FUNCTIONS_BASE = SUPABASE_URL
+  ? new URL('functions/v1', SUPABASE_URL).href
   : '';
 
 interface ApiOptions {
@@ -15,12 +21,43 @@ interface ApiOptions {
  * Call a backend function with auth header attached.
  * Returns parsed JSON or throws.
  */
+/**
+ * Extract Supabase access token from cookies (fallback when localStorage has no session).
+ * Server-side login sets cookies but not localStorage, so we need both channels.
+ */
+function getTokenFromCookies(): string | null {
+  if (typeof document === 'undefined') return null;
+  // Supabase stores session as sb-{ref}-auth-token in cookies
+  const cookies = document.cookie.split(';');
+  for (const c of cookies) {
+    const trimmed = c.trim();
+    if (trimmed.match(/^sb-.*-auth-token=/)) {
+      const value = trimmed.split('=').slice(1).join('=');
+      // The cookie might be a JSON object with access_token, or just the token
+      try {
+        const parsed = JSON.parse(decodeURIComponent(value));
+        if (parsed?.access_token) return parsed.access_token;
+        // Supabase chunked cookies: sb-{ref}-auth-token.0, .1, etc.
+      } catch {
+        // Not JSON — might be a raw token or chunked
+      }
+      return value || null;
+    }
+  }
+  return null;
+}
+
 export async function apiFetch<T = unknown>(
   fnName: string,
   opts?: ApiOptions,
 ): Promise<T> {
   const { data } = await supabase.auth.getSession();
-  const accessToken = data.session?.access_token;
+  let accessToken = data.session?.access_token;
+
+  // Fallback: try to get token from cookies if localStorage session is empty
+  if (!accessToken) {
+    accessToken = getTokenFromCookies() ?? undefined;
+  }
 
   const url = new URL(`${FUNCTIONS_BASE}/${fnName}`);
   if (opts?.params) {
@@ -28,7 +65,7 @@ export async function apiFetch<T = unknown>(
   }
 
   const headers: Record<string, string> = {
-    apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+    apikey: SUPABASE_ANON_KEY,
     'Content-Type': 'application/json',
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     ...(opts?.headers ?? {}),

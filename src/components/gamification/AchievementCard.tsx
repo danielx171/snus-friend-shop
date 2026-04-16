@@ -1,6 +1,5 @@
 import React from 'react';
-import { CheckCircle, Lock } from 'lucide-react';
-import * as LucideIcons from 'lucide-react';
+import { CheckCircle, Lock, Award, Pencil, Package, MessageCircle, Users, Disc, ClipboardCheck, UserCheck, Flame, Globe, Snowflake, MapPin, Trophy, TrendingDown, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TIER_COLORS } from '@/hooks/useAchievements';
 import type { AchievementWithProgress } from '@/hooks/useAchievements';
@@ -9,19 +8,27 @@ import type { AchievementWithProgress } from '@/hooks/useAchievements';
 /*  Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
-/**
- * Convert a kebab-case icon name (e.g. "star-half") to a PascalCase Lucide
- * component name (e.g. "StarHalf"), then look it up in lucide-react.
- * Falls back to a generic Award icon if the name is not found.
- */
-function resolveIcon(iconName: string): React.ElementType {
-  const pascalCase = iconName
-    .split('-')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('');
+/** Static icon map — all achievement icons used in the DB. Avoids `import *`. */
+const ICON_MAP: Record<string, React.ElementType> = {
+  pencil: Pencil,
+  package: Package,
+  'message-circle': MessageCircle,
+  users: Users,
+  disc: Disc,
+  'clipboard-check': ClipboardCheck,
+  'user-check': UserCheck,
+  flame: Flame,
+  globe: Globe,
+  snowflake: Snowflake,
+  award: Award,
+  'map-pin': MapPin,
+  trophy: Trophy,
+  'trending-down': TrendingDown,
+  lightbulb: Lightbulb,
+};
 
-  const icon = (LucideIcons as unknown as Record<string, React.ElementType>)[pascalCase];
-  return icon ?? LucideIcons.Award;
+function resolveIcon(iconName: string): React.ElementType {
+  return ICON_MAP[iconName] ?? Award;
 }
 
 /* ------------------------------------------------------------------ */
@@ -98,6 +105,7 @@ export const AchievementCard = React.memo(function AchievementCard({
             aria-valuenow={progress}
             aria-valuemin={0}
             aria-valuemax={threshold}
+            aria-label={`Achievement progress: ${progress} of ${threshold}`}
           />
         </div>
       )}

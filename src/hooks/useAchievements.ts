@@ -130,7 +130,7 @@ export function useAchievements(userId: string | null) {
           ...a,
           progress: 0,
           unlocked: false,
-          unlocked_at: null,
+          unlocked_at: null as string | null,
         }));
         return {
           achievements,

@@ -1,0 +1,347 @@
+---
+/**
+ * MegaMenu.astro — Desktop mega menu for SnusFriend
+ *
+ * A hover-activated mega menu component with four columns:
+ * 1. Shop by Brand — top 12 brands with coloured dots
+ * 2. Shop by Strength — strength categories with visual indicators
+ * 3. Shop by Flavour — flavour categories with emojis
+ * 4. Popular — Staff Picks, New Arrivals, Best Sellers, Quick Links
+ *
+ * Desktop only (≥1024px). Mobile uses the existing hamburger menu.
+ * Smooth CSS-based animations, fully keyboard accessible.
+ *
+ * INTEGRATION NOTES:
+ * ─────────────────
+ * 1. Replace the "Shop" link in Header.astro with this component wrapped in a group:
+ *
+ *    <div class="relative group">
+ *      <button>Shop ▾</button>
+ *      <MegaMenu />
+ *    </div>
+ *
+ * 2. Update Header.astro imports:
+ *    import MegaMenu from '@/components/astro/MegaMenu.astro';
+ *
+ * 3. The mega menu uses Astro getCollection() to fetch brands and products
+ *    at build time. No client-side JS required for basic hover functionality.
+ *
+ * 4. To make the mega menu keyboard-accessible, add this script to Header.astro:
+ *    import { setupMegaMenuAccessibility } from '@/lib/mega-menu-a11y';
+ *    setupMegaMenuAccessibility();
+ *
+ * 5. If you need to make this a React island (client:idle), convert to .tsx
+ *    and wrap with Suspense + useEffect for accessibility.
+ */
+
+import { getCollection } from 'astro:content';
+import { brandColors } from '@/data/brand-colors';
+
+// Fetch brands and products at build time
+const allBrands = await getCollection('brands');
+const allProducts = await getCollection('products');
+
+// Group products by brand to count them
+const brandProductCounts = new Map<string, number>();
+allProducts.forEach((product) => {
+  const brandSlug = product.data.brandSlug || '';
+  brandProductCounts.set(
+    brandSlug,
+    (brandProductCounts.get(brandSlug) || 0) + 1
+  );
+});
+
+// Sort brands by product count (descending) and take top 12
+const topBrands = allBrands
+  .sort((a, b) => {
+    const countA = brandProductCounts.get(a.id) || 0;
+    const countB = brandProductCounts.get(b.id) || 0;
+    return countB - countA;
+  })
+  .slice(0, 12);
+
+// Strength categories with colour indicators
+const strengthCategories = [
+  { key: 'light', label: 'Light', range: '1–6 mg', colour: '#22c55e' },
+  { key: 'normal', label: 'Normal', range: '7–10 mg', colour: '#3b82f6' },
+  { key: 'strong', label: 'Strong', range: '11–14 mg', colour: '#f97316' },
+  { key: 'extra-strong', label: 'Extra Strong', range: '15–20 mg', colour: '#ef4444' },
+  { key: 'super-strong', label: 'Super Strong', range: '21+ mg', colour: '#a855f7' },
+];
+
+// Flavour categories with emojis
+const flavourCategories = [
+  { key: 'mint', label: 'Mint', emoji: '🌿' },
+  { key: 'cool-mint', label: 'Cool Mint', emoji: '❄️' },
+  { key: 'citrus', label: 'Citrus', emoji: '🍋' },
+  { key: 'berry', label: 'Berry', emoji: '🫐' },
+  { key: 'tropical', label: 'Tropical', emoji: '🥭' },
+  { key: 'coffee', label: 'Coffee', emoji: '☕' },
+  { key: 'liquorice', label: 'Liquorice', emoji: '🖤' },
+];
+
+// Get brand colour or default
+const getBrandColour = (brandSlug: string): string => {
+  return brandColors[brandSlug as keyof typeof brandColors] || '#e8f0e8';
+};
+---
+
+<style>
+  /* Mega menu container — hidden by default, shown on group hover */
+  .mega-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 150ms ease-out;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  /* Show on parent group hover or focus-within */
+  .group:hover .mega-menu,
+  .group:focus-within .mega-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Subtle delay for enter animation */
+  .group:hover .mega-menu {
+    animation: slideDown 200ms ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Brand colour dot */
+  .brand-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
+  /* Strength indicator circle */
+  .strength-indicator {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
+  /* Link hover effect */
+  .mega-menu a:hover {
+    color: var(--primary, #2E7D32);
+  }
+
+  /* Column divider */
+  .column-divider {
+    border-right: 1px solid var(--border, #d4cfc5);
+  }
+
+  /* Last column should not have divider */
+  .column-divider:last-child {
+    border-right: none;
+  }
+
+  /* Featured section background */
+  .featured-column {
+    background-color: rgba(46, 125, 50, 0.05);
+  }
+</style>
+
+<!-- Mega menu container — positioned absolutely below the nav bar -->
+<div
+  class="mega-menu absolute left-0 right-0 top-full pt-2 w-screen max-w-none"
+  role="navigation"
+  aria-label="Shop categories"
+>
+  <!-- Inner wrapper for styling -->
+  <div class="mx-auto max-w-7xl px-4">
+    <!-- Rounded shadow container -->
+    <div
+      class="rounded-lg border border-border bg-card shadow-xl overflow-hidden"
+    >
+      <!-- Four-column grid -->
+      <div class="grid grid-cols-4 divide-x divide-border">
+        <!-- Column 1: Shop by Brand -->
+        <div class="p-6">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-primary mb-4">
+            Shop by Brand
+          </h3>
+          <ul class="space-y-2">
+            {topBrands.map((brand) => {
+              const productCount = brandProductCounts.get(brand.id) || 0;
+              const brandColour = getBrandColour(brand.id);
+              return (
+                <li>
+                  <a
+                    href={`/brands/${brand.data.slug}`}
+                    class="text-sm text-foreground hover:text-primary transition-colors flex items-center group/item"
+                  >
+                    <span
+                      class="brand-dot"
+                      style={`background-color: ${brandColour}`}
+                      aria-hidden="true"
+                    ></span>
+                    <span class="font-medium">{brand.data.name}</span>
+                    <span class="text-xs text-muted-foreground ml-auto group-hover/item:text-primary transition-colors">
+                      {productCount}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          <a
+            href="/brands"
+            class="mt-4 inline-block text-xs text-primary font-medium hover:underline"
+          >
+            All {allBrands.length} brands →
+          </a>
+        </div>
+
+        <!-- Column 2: Shop by Strength -->
+        <div class="p-6">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-primary mb-4">
+            By Strength
+          </h3>
+          <ul class="space-y-2">
+            {strengthCategories.map(({ key, label, range, colour }) => (
+              <li>
+                <a
+                  href={`/nicotine-pouches?strength=${key}`}
+                  class="text-sm text-foreground hover:text-primary transition-colors flex items-center"
+                >
+                  <span
+                    class="strength-indicator"
+                    style={`background-color: ${colour}`}
+                    aria-hidden="true"
+                  ></span>
+                  <span class="font-medium">{label}</span>
+                  <span class="text-xs text-muted-foreground ml-auto">
+                    {range}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a
+            href="/strength-guide"
+            class="mt-4 inline-block text-xs text-primary font-medium hover:underline"
+          >
+            Strength chart →
+          </a>
+        </div>
+
+        <!-- Column 3: Shop by Flavour -->
+        <div class="p-6">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-primary mb-4">
+            By Flavour
+          </h3>
+          <ul class="space-y-2">
+            {flavourCategories.map(({ key, label, emoji }) => (
+              <li>
+                <a
+                  href={`/nicotine-pouches?flavour=${key}`}
+                  class="text-sm text-foreground hover:text-primary transition-colors"
+                >
+                  <span aria-hidden="true" class="mr-2">{emoji}</span>
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a
+            href="/flavour-guide"
+            class="mt-4 inline-block text-xs text-primary font-medium hover:underline"
+          >
+            All flavours →
+          </a>
+        </div>
+
+        <!-- Column 4: Popular & CTA -->
+        <div class="p-6 featured-column">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-primary mb-4">
+            Popular
+          </h3>
+          <div class="space-y-2.5">
+            <a
+              href="/best-sellers"
+              class="block text-sm text-foreground hover:text-primary transition-colors font-medium"
+            >
+              🔥 Best Sellers
+            </a>
+            <a
+              href="/new-arrivals"
+              class="block text-sm text-foreground hover:text-primary transition-colors font-medium"
+            >
+              🆕 New Arrivals
+            </a>
+            <a
+              href="/staff-picks"
+              class="block text-sm text-foreground hover:text-primary transition-colors font-medium"
+            >
+              ⭐ Staff Picks
+            </a>
+            <a
+              href="/on-sale"
+              class="block text-sm text-foreground hover:text-primary transition-colors font-medium"
+            >
+              💰 On Sale
+            </a>
+            <a
+              href="/flavor-quiz"
+              class="block text-sm text-foreground hover:text-primary transition-colors font-medium mt-3 pt-3 border-t border-border"
+            >
+              🎯 Flavour Quiz
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /**
+   * Optional: Enhanced keyboard accessibility for mega menu
+   * Uncomment the setupMegaMenuAccessibility() function in Header.astro
+   * to enable keyboard navigation (Tab, Enter, Escape)
+   */
+
+  export function setupMegaMenuA11y() {
+    const menuTriggers = document.querySelectorAll(
+      '[data-mega-menu-trigger]'
+    );
+
+    menuTriggers.forEach((trigger) => {
+      trigger.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          trigger.parentElement?.classList.toggle('active');
+        } else if (e.key === 'Escape') {
+          trigger.parentElement?.classList.remove('active');
+        }
+      });
+    });
+  }
+
+  // Auto-init if script is loaded
+  if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', setupMegaMenuA11y);
+  }
+</script>

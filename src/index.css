@@ -51,7 +51,7 @@
    ═══════════════════════════════════════════════════════ */
 @theme {
   /* Container */
-  --container-2xl: 1400px;
+  --container-2xl: 1440px;
 
   /* Border radius */
   --radius-lg: var(--radius);
@@ -86,15 +86,6 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-  --color-sidebar: hsl(var(--sidebar-background));
-  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
-  --color-sidebar-primary: hsl(var(--sidebar-primary));
-  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-  --color-sidebar-accent: hsl(var(--sidebar-accent));
-  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
-  --color-sidebar-border: hsl(var(--sidebar-border));
-  --color-sidebar-ring: hsl(var(--sidebar-ring));
-
   /* Status colors */
   --color-success: hsl(var(--color-success));
   --color-warning: hsl(var(--color-warning));
@@ -116,11 +107,11 @@
   --color-rarity-legendary: hsl(var(--color-rarity-legendary));
 
   /* Font families */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
   --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
-  /* Box shadows — use initial values, overridden per-theme in :root/.light/.velo/.editorial */
+  /* Box shadows — use initial values, overridden per-theme in :root/.forest/.copper */
   --shadow-2xs: 0 1px 2px 0px hsl(0 0% 0% / 0.3);
   --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.4);
   --shadow-sm: 0 2px 6px 0px hsl(0 0% 0% / 0.4), 0 1px 2px -1px hsl(0 0% 0% / 0.3);
@@ -129,50 +120,6 @@
   --shadow-xl: 0 16px 40px 0px hsl(0 0% 0% / 0.5), 0 8px 16px -1px hsl(0 0% 0% / 0.3);
   --shadow-2xl: 0 24px 50px 0px hsl(0 0% 0% / 0.6);
 
-  /* Keyframe animations */
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-  --animate-cart-item-in: cart-item-in 0.2s ease-out both;
-  --animate-cart-item-out: cart-item-out 0.2s ease-in both;
-  --animate-btn-spring: btn-spring 0.2s ease-out;
-  --animate-number-flip: number-flip 0.2s ease-out;
-  --animate-hero-sway: hero-sway 6s ease-in-out infinite;
-  --animate-hero-fade-in: hero-fade-in 0.8s ease-out 0.3s both;
-
-  @keyframes accordion-down {
-    from { height: 0; }
-    to { height: var(--radix-accordion-content-height); }
-  }
-  @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height); }
-    to { height: 0; }
-  }
-  @keyframes hero-sway {
-    0%, 100% { transform: rotate(-3deg); }
-    50% { transform: rotate(3deg); }
-  }
-  @keyframes cart-item-in {
-    0% { opacity: 0; transform: translateY(8px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes cart-item-out {
-    0% { opacity: 1; transform: translateX(0); }
-    100% { opacity: 0; transform: translateX(100%); }
-  }
-  @keyframes btn-spring {
-    0% { transform: scale(1); }
-    40% { transform: scale(0.85); }
-    70% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
-  @keyframes number-flip {
-    0% { opacity: 0; transform: translateY(-6px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes hero-fade-in {
-    0% { opacity: 0; transform: translateY(8px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -220,24 +167,7 @@
     --success-foreground: 0 0% 100%;
     --info: 200 55% 45%;
 
-    --sidebar-background: 140 15% 95%;
-    --sidebar-foreground: 150 20% 10%;
-    --sidebar-primary: 153 55% 18%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 140 15% 93%;
-    --sidebar-accent-foreground: 153 55% 15%;
-    --sidebar-border: 140 10% 86%;
-    --sidebar-ring: 153 55% 18%;
-
-    --chart-1: 153 55% 18%;
-    --chart-2: 120 40% 35%;
-    --chart-3: 160 50% 40%;
-    --chart-4: 35 75% 50%;
-    --chart-5: 280 40% 50%;
-
-    --sidebar: 140 15% 95%;
-
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
     --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
     --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
@@ -261,12 +191,12 @@
     --color-error: 0 72% 51%;
     --color-info: 200 65% 45%;
 
-    /* Tier system */
-    --color-tier-bronze: 25 60% 40%;
-    --color-tier-silver: 210 10% 60%;
-    --color-tier-gold: 43 85% 50%;
-    --color-tier-diamond: 185 70% 50%;
-    --color-tier-epic: 270 55% 55%;
+    /* Tier system — forest green progression */
+    --color-tier-bronze: 140 25% 55%;
+    --color-tier-silver: 150 30% 40%;
+    --color-tier-gold: 153 45% 28%;
+    --color-tier-diamond: 153 55% 18%;
+    --color-tier-epic: 45 80% 50%;
 
     /* Rarity system */
     --color-rarity-common: 210 10% 55%;
@@ -274,256 +204,25 @@
     --color-rarity-rare: 210 65% 50%;
     --color-rarity-epic: 270 55% 55%;
     --color-rarity-legendary: 43 85% 50%;
+
+    /* Hero section — theme-aware tokens */
+    --hero-bg: 153 40% 10%;
+    --hero-gradient-from: 153 40% 10%;
+    --hero-gradient-via: 153 45% 6%;
+    --hero-gradient-to: 153 40% 10%;
+    --hero-text: 40 20% 97%;
+    --hero-muted: 140 20% 72%;
+    --hero-cta-bg: 40 20% 97%;
+    --hero-cta-text: 153 40% 10%;
+    --hero-cta-hover-bg: 40 10% 88%;
+    --hero-divider: 40 20% 97%;
   }
 
-  .dark {
-    --background: 220 16% 8%;
-    --foreground: 210 20% 95%;
+  /* Themes removed: Dark (A), see git history */
 
-    --card: 220 14% 13%;
-    --card-foreground: 210 20% 96%;
+  /* Themes removed: Light (B), see git history */
 
-    --popover: 220 14% 14%;
-    --popover-foreground: 210 20% 95%;
-
-    --primary: 174 90% 50%;
-    --primary-foreground: 220 16% 6%;
-
-    --secondary: 220 14% 18%;
-    --secondary-foreground: 210 20% 90%;
-
-    --muted: 220 10% 22%;
-    --muted-foreground: 215 15% 70%;
-
-    --accent: 220 14% 15%;
-    --accent-foreground: 210 20% 90%;
-
-    --destructive: 0 85% 55%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 12% 22%;
-    --input: 220 12% 22%;
-    --ring: 174 90% 50%;
-
-    --success: 160 70% 42%;
-    --success-foreground: 0 0% 100%;
-    --info: 200 85% 55%;
-
-    --sidebar-background: 220 16% 6%;
-    --sidebar-foreground: 210 20% 95%;
-    --sidebar-primary: 174 90% 50%;
-    --sidebar-primary-foreground: 220 16% 6%;
-    --sidebar-accent: 220 14% 18%;
-    --sidebar-accent-foreground: 210 20% 90%;
-    --sidebar-border: 220 12% 20%;
-    --sidebar-ring: 174 90% 50%;
-
-    --chart-1: 174 90% 50%;
-    --chart-2: 260 80% 65%;
-    --chart-3: 330 80% 60%;
-    --chart-4: 65 80% 62%;
-    --chart-5: 200 85% 55%;
-
-    --shadow-2xs: 0 1px 2px 0px hsl(0 0% 0% / 0.3);
-    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.4);
-    --shadow-sm: 0 2px 6px 0px hsl(0 0% 0% / 0.4), 0 1px 2px -1px hsl(0 0% 0% / 0.3);
-    --shadow: 0 4px 12px 0px hsl(0 0% 0% / 0.4), 0 2px 4px -1px hsl(0 0% 0% / 0.3);
-    --shadow-md: 0 6px 16px 0px hsl(0 0% 0% / 0.4), 0 3px 6px -1px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 10px 24px 0px hsl(0 0% 0% / 0.5), 0 4px 8px -1px hsl(0 0% 0% / 0.3);
-    --shadow-xl: 0 16px 40px 0px hsl(0 0% 0% / 0.5), 0 8px 16px -1px hsl(0 0% 0% / 0.3);
-    --shadow-2xl: 0 24px 50px 0px hsl(0 0% 0% / 0.6);
-
-    --glow-primary: 0 0 20px hsl(174 90% 50% / 0.25), 0 0 40px hsl(174 90% 50% / 0.1);
-
-    /* Status colors */
-    --color-success: 160 84% 39%;
-    --color-warning: 38 92% 50%;
-    --color-error: 0 84% 60%;
-    --color-info: 199 89% 48%;
-
-    /* Tier system */
-    --color-tier-bronze: 25 70% 45%;
-    --color-tier-silver: 215 15% 55%;
-    --color-tier-gold: 43 96% 56%;
-    --color-tier-diamond: 185 80% 55%;
-    --color-tier-epic: 270 60% 60%;
-
-    /* Rarity system */
-    --color-rarity-common: 215 15% 50%;
-    --color-rarity-uncommon: 142 71% 45%;
-    --color-rarity-rare: 217 91% 60%;
-    --color-rarity-epic: 270 60% 60%;
-    --color-rarity-legendary: 43 96% 56%;
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     THEME B — Scandinavian Premium (Light Glacier)
-     Bright, airy, clean. Glacier navy + ice blue.
-     ═══════════════════════════════════════════════════════ */
-  .light {
-    --background: 210 25% 97%;
-    --foreground: 220 30% 10%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 220 30% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 30% 10%;
-
-    --primary: 213 65% 32%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 30% 94%;
-    --secondary-foreground: 213 65% 22%;
-
-    --muted: 210 18% 93%;
-    --muted-foreground: 220 12% 46%;
-
-    --accent: 210 25% 90%;
-    --accent-foreground: 213 65% 22%;
-
-    --destructive: 0 72% 48%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 160 65% 38%;
-    --success-foreground: 0 0% 100%;
-    --info: 205 60% 45%;
-
-    --border: 210 18% 87%;
-    --input: 210 18% 87%;
-    --ring: 213 65% 32%;
-
-    --sidebar-background: 210 25% 95%;
-    --sidebar-foreground: 220 30% 10%;
-    --sidebar-primary: 213 65% 32%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 30% 94%;
-    --sidebar-accent-foreground: 213 65% 22%;
-    --sidebar-border: 210 18% 87%;
-    --sidebar-ring: 213 65% 32%;
-
-    --chart-1: 213 65% 32%;
-    --chart-2: 205 55% 45%;
-    --chart-3: 160 50% 40%;
-    --chart-4: 35 80% 55%;
-    --chart-5: 280 45% 50%;
-
-    --shadow-2xs: 0 1px 2px 0px hsl(220 20% 60% / 0.06);
-    --shadow-xs: 0 1px 3px 0px hsl(220 20% 60% / 0.08);
-    --shadow-sm: 0 2px 8px 0px hsl(220 20% 60% / 0.08), 0 1px 2px -1px hsl(220 20% 60% / 0.06);
-    --shadow: 0 4px 12px 0px hsl(220 20% 60% / 0.08), 0 2px 4px -1px hsl(220 20% 60% / 0.06);
-    --shadow-md: 0 6px 16px 0px hsl(220 20% 60% / 0.08), 0 3px 6px -1px hsl(220 20% 60% / 0.06);
-    --shadow-lg: 0 10px 24px 0px hsl(220 20% 60% / 0.10), 0 4px 8px -1px hsl(220 20% 60% / 0.06);
-    --shadow-xl: 0 16px 40px 0px hsl(220 20% 60% / 0.12), 0 8px 16px -1px hsl(220 20% 60% / 0.06);
-    --shadow-2xl: 0 24px 50px 0px hsl(220 20% 60% / 0.14);
-
-    --glow-primary: 0 0 20px hsl(213 65% 32% / 0.12), 0 0 40px hsl(213 65% 32% / 0.06);
-
-    /* Status colors */
-    --color-success: 152 55% 38%;
-    --color-warning: 38 88% 48%;
-    --color-error: 0 70% 50%;
-    --color-info: 213 65% 45%;
-
-    /* Tier system */
-    --color-tier-bronze: 25 55% 42%;
-    --color-tier-silver: 210 12% 58%;
-    --color-tier-gold: 43 80% 48%;
-    --color-tier-diamond: 190 65% 45%;
-    --color-tier-epic: 268 50% 52%;
-
-    /* Rarity system */
-    --color-rarity-common: 210 12% 55%;
-    --color-rarity-uncommon: 152 50% 38%;
-    --color-rarity-rare: 213 65% 45%;
-    --color-rarity-epic: 268 50% 52%;
-    --color-rarity-legendary: 43 80% 48%;
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     THEME C — Editorial Luxury
-     Magazine meets boutique. Warm cream, rich type, amber accents.
-     ═══════════════════════════════════════════════════════ */
-  .editorial {
-    --background: 40 30% 96%;
-    --foreground: 30 15% 12%;
-
-    --card: 40 25% 99%;
-    --card-foreground: 30 15% 12%;
-
-    --popover: 40 25% 99%;
-    --popover-foreground: 30 15% 12%;
-
-    /* Warm amber/cognac accent */
-    --primary: 28 80% 44%;
-    --primary-foreground: 40 30% 98%;
-
-    --secondary: 35 20% 91%;
-    --secondary-foreground: 30 30% 25%;
-
-    --muted: 35 15% 90%;
-    --muted-foreground: 30 10% 48%;
-
-    --accent: 35 20% 88%;
-    --accent-foreground: 30 30% 20%;
-
-    --destructive: 0 65% 48%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 155 55% 38%;
-    --success-foreground: 0 0% 100%;
-    --info: 210 50% 48%;
-
-    --border: 35 15% 84%;
-    --input: 35 15% 84%;
-    --ring: 28 80% 44%;
-
-    --sidebar-background: 40 25% 94%;
-    --sidebar-foreground: 30 15% 12%;
-    --sidebar-primary: 28 80% 44%;
-    --sidebar-primary-foreground: 40 30% 98%;
-    --sidebar-accent: 35 20% 91%;
-    --sidebar-accent-foreground: 30 30% 25%;
-    --sidebar-border: 35 15% 84%;
-    --sidebar-ring: 28 80% 44%;
-
-    --chart-1: 28 80% 44%;
-    --chart-2: 340 50% 50%;
-    --chart-3: 155 55% 38%;
-    --chart-4: 210 50% 48%;
-    --chart-5: 270 40% 55%;
-
-    --shadow-2xs: 0 1px 2px 0px hsl(30 20% 40% / 0.05);
-    --shadow-xs: 0 1px 3px 0px hsl(30 20% 40% / 0.07);
-    --shadow-sm: 0 2px 8px 0px hsl(30 20% 40% / 0.07), 0 1px 2px -1px hsl(30 20% 40% / 0.05);
-    --shadow: 0 4px 14px 0px hsl(30 20% 40% / 0.08), 0 2px 4px -1px hsl(30 20% 40% / 0.05);
-    --shadow-md: 0 6px 18px 0px hsl(30 20% 40% / 0.08), 0 3px 6px -1px hsl(30 20% 40% / 0.05);
-    --shadow-lg: 0 12px 28px 0px hsl(30 20% 40% / 0.10), 0 4px 8px -1px hsl(30 20% 40% / 0.05);
-    --shadow-xl: 0 18px 44px 0px hsl(30 20% 40% / 0.12), 0 8px 16px -1px hsl(30 20% 40% / 0.05);
-    --shadow-2xl: 0 24px 50px 0px hsl(30 20% 40% / 0.14);
-
-    --glow-primary: 0 0 20px hsl(28 80% 44% / 0.15), 0 0 40px hsl(28 80% 44% / 0.07);
-
-    /* Status colors */
-    --color-success: 145 50% 38%;
-    --color-warning: 35 85% 50%;
-    --color-error: 0 65% 50%;
-    --color-info: 210 55% 48%;
-
-    /* Tier system */
-    --color-tier-bronze: 28 60% 42%;
-    --color-tier-silver: 220 8% 58%;
-    --color-tier-gold: 40 80% 50%;
-    --color-tier-diamond: 188 60% 48%;
-    --color-tier-epic: 265 50% 55%;
-
-    /* Rarity system */
-    --color-rarity-common: 220 8% 55%;
-    --color-rarity-uncommon: 145 45% 38%;
-    --color-rarity-rare: 210 55% 48%;
-    --color-rarity-epic: 265 50% 55%;
-    --color-rarity-legendary: 40 80% 50%;
-  }
+  /* Themes removed: Editorial (C), see git history */
 
   /* ═══════════════════════════════════════════════════════
      THEME D — Scandinavian Forest
@@ -562,21 +261,6 @@
     --input: 140 10% 86%;
     --ring: 153 55% 18%;
 
-    --sidebar-background: 140 15% 95%;
-    --sidebar-foreground: 150 20% 10%;
-    --sidebar-primary: 153 55% 18%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 140 15% 93%;
-    --sidebar-accent-foreground: 153 55% 15%;
-    --sidebar-border: 140 10% 86%;
-    --sidebar-ring: 153 55% 18%;
-
-    --chart-1: 153 55% 18%;
-    --chart-2: 120 40% 35%;
-    --chart-3: 160 50% 40%;
-    --chart-4: 35 75% 50%;
-    --chart-5: 280 40% 50%;
-
     --shadow-2xs: 0 1px 2px 0px hsl(150 15% 40% / 0.05);
     --shadow-xs: 0 1px 3px 0px hsl(150 15% 40% / 0.07);
     --shadow-sm: 0 2px 8px 0px hsl(150 15% 40% / 0.07), 0 1px 2px -1px hsl(150 15% 40% / 0.05);
@@ -594,12 +278,12 @@
     --color-error: 0 72% 51%;
     --color-info: 200 65% 45%;
 
-    /* Tier system */
-    --color-tier-bronze: 25 60% 40%;
-    --color-tier-silver: 210 10% 60%;
-    --color-tier-gold: 43 85% 50%;
-    --color-tier-diamond: 185 70% 50%;
-    --color-tier-epic: 270 55% 55%;
+    /* Tier system — forest green progression */
+    --color-tier-bronze: 140 25% 55%;
+    --color-tier-silver: 150 30% 40%;
+    --color-tier-gold: 153 45% 28%;
+    --color-tier-diamond: 153 55% 18%;
+    --color-tier-epic: 45 80% 50%;
 
     /* Rarity system */
     --color-rarity-common: 210 10% 55%;
@@ -607,6 +291,18 @@
     --color-rarity-rare: 210 65% 50%;
     --color-rarity-epic: 270 55% 55%;
     --color-rarity-legendary: 43 85% 50%;
+
+    /* Hero section — same as :root for Forest */
+    --hero-bg: 153 40% 10%;
+    --hero-gradient-from: 153 40% 10%;
+    --hero-gradient-via: 153 45% 6%;
+    --hero-gradient-to: 153 40% 10%;
+    --hero-text: 40 20% 97%;
+    --hero-muted: 140 20% 72%;
+    --hero-cta-bg: 40 20% 97%;
+    --hero-cta-text: 153 40% 10%;
+    --hero-cta-hover-bg: 40 10% 88%;
+    --hero-divider: 40 20% 97%;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -617,7 +313,7 @@
     --background: 240 15% 9%;
     --foreground: 30 15% 90%;
 
-    --card: 240 12% 14%;
+    --card: 240 12% 15%;
     --card-foreground: 30 15% 92%;
 
     --popover: 240 12% 15%;
@@ -630,7 +326,7 @@
     --secondary-foreground: 30 15% 85%;
 
     --muted: 240 8% 22%;
-    --muted-foreground: 30 8% 62%;
+    --muted-foreground: 30 12% 72%;
 
     --accent: 240 12% 16%;
     --accent-foreground: 30 15% 85%;
@@ -645,21 +341,6 @@
     --border: 240 10% 20%;
     --input: 240 10% 20%;
     --ring: 28 55% 46%;
-
-    --sidebar-background: 240 15% 7%;
-    --sidebar-foreground: 30 15% 90%;
-    --sidebar-primary: 28 55% 46%;
-    --sidebar-primary-foreground: 240 15% 6%;
-    --sidebar-accent: 240 12% 18%;
-    --sidebar-accent-foreground: 30 15% 85%;
-    --sidebar-border: 240 10% 18%;
-    --sidebar-ring: 28 55% 46%;
-
-    --chart-1: 28 55% 46%;
-    --chart-2: 15 65% 55%;
-    --chart-3: 155 55% 38%;
-    --chart-4: 45 75% 55%;
-    --chart-5: 200 70% 50%;
 
     --shadow-2xs: 0 1px 2px 0px hsl(0 0% 0% / 0.30);
     --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.35);
@@ -691,99 +372,21 @@
     --color-rarity-rare: 200 60% 50%;
     --color-rarity-epic: 268 55% 58%;
     --color-rarity-legendary: 40 82% 52%;
+
+    /* Hero section — warm copper/bronze tones (richer, more saturated) */
+    --hero-bg: 20 45% 12%;
+    --hero-gradient-from: 20 45% 12%;
+    --hero-gradient-via: 15 40% 8%;
+    --hero-gradient-to: 25 45% 12%;
+    --hero-text: 35 25% 95%;
+    --hero-muted: 28 30% 65%;
+    --hero-cta-bg: 28 55% 46%;
+    --hero-cta-text: 35 25% 95%;
+    --hero-cta-hover-bg: 28 60% 40%;
+    --hero-divider: 35 25% 95%;
   }
 
-  /* ═══════════════════════════════════════════════════════
-     THEME F — Velo
-     Deep navy, electric blue, clinical sharp edges.
-     Space Grotesk headlines, Plus Jakarta Sans body.
-     ═══════════════════════════════════════════════════════ */
-  .velo {
-    --background: 220 100% 12%;
-    --foreground: 210 30% 95%;
-
-    --card: 220 80% 16%;
-    --card-foreground: 210 30% 95%;
-
-    --popover: 220 80% 18%;
-    --popover-foreground: 210 30% 95%;
-
-    --primary: 218 100% 55%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 60% 20%;
-    --secondary-foreground: 210 30% 90%;
-
-    --muted: 220 50% 22%;
-    --muted-foreground: 215 25% 58%;
-
-    --accent: 65 80% 62%;
-    --accent-foreground: 220 100% 12%;
-
-    --destructive: 0 80% 55%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 74 78% 66%;
-    --success-foreground: 220 100% 12%;
-    --info: 218 100% 55%;
-
-    --border: 220 60% 18%;
-    --input: 220 60% 30%;
-    --ring: 65 80% 62%;
-
-    --radius: 0.25rem;
-
-    --sidebar-background: 220 100% 10%;
-    --sidebar-foreground: 210 30% 95%;
-    --sidebar-primary: 218 100% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 60% 20%;
-    --sidebar-accent-foreground: 210 30% 90%;
-    --sidebar-border: 220 60% 30%;
-    --sidebar-ring: 65 80% 62%;
-
-    --chart-1: 218 100% 55%;
-    --chart-2: 74 78% 66%;
-    --chart-3: 65 80% 62%;
-    --chart-4: 65 80% 62%;
-    --chart-5: 200 80% 55%;
-
-    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-serif: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-    --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-    /* Blue-tinted ambient shadows */
-    --shadow-2xs: 0 1px 2px 0px hsl(220 80% 20% / 0.25);
-    --shadow-xs: 0 1px 3px 0px hsl(220 80% 20% / 0.30);
-    --shadow-sm: 0 2px 6px 0px hsl(220 80% 20% / 0.30), 0 1px 2px -1px hsl(220 80% 20% / 0.25);
-    --shadow: 0 4px 12px 0px hsl(220 80% 20% / 0.30), 0 2px 4px -1px hsl(220 80% 20% / 0.25);
-    --shadow-md: 0 6px 16px 0px hsl(220 80% 20% / 0.30), 0 3px 6px -1px hsl(220 80% 20% / 0.25);
-    --shadow-lg: 0 10px 24px 0px hsl(220 80% 20% / 0.40), 0 4px 8px -1px hsl(220 80% 20% / 0.25);
-    --shadow-xl: 0 16px 40px 0px hsl(220 80% 20% / 0.40), 0 8px 16px -1px hsl(220 80% 20% / 0.25);
-    --shadow-2xl: 0 24px 50px 0px hsl(220 80% 20% / 0.50);
-
-    --glow-primary: 0 0 20px hsl(218 100% 55% / 0.30), 0 0 40px hsl(218 100% 55% / 0.15);
-
-    /* Status colors */
-    --color-success: 160 84% 39%;
-    --color-warning: 38 92% 50%;
-    --color-error: 0 84% 60%;
-    --color-info: 217 91% 60%;
-
-    /* Tier system */
-    --color-tier-bronze: 25 70% 45%;
-    --color-tier-silver: 218 15% 55%;
-    --color-tier-gold: 43 96% 56%;
-    --color-tier-diamond: 188 80% 55%;
-    --color-tier-epic: 271 60% 60%;
-
-    /* Rarity system */
-    --color-rarity-common: 218 15% 50%;
-    --color-rarity-uncommon: 142 71% 45%;
-    --color-rarity-rare: 218 100% 55%;
-    --color-rarity-epic: 271 60% 60%;
-    --color-rarity-legendary: 43 96% 56%;
-  }
+  /* Themes removed: Velo (F), see git history */
 }
 
 @layer base {
@@ -795,59 +398,28 @@
     @apply bg-background text-foreground;
   }
 
-  /* Editorial theme uses serif for headings */
-  .editorial h1,
-  .editorial h2,
-  .editorial h3 {
-    font-family: var(--font-serif);
-    letter-spacing: -0.02em;
-  }
-
-  /* Forest theme — clean Inter headings with tight tracking */
+  /* Heading typography — both themes use Space Grotesk */
+  :root h1,
+  :root h2,
+  :root h3,
   .forest h1,
   .forest h2,
-  .forest h3 {
-    letter-spacing: -0.02em;
-    font-weight: 700;
-  }
-
-  /* Copper theme — Space Grotesk headings with warm character */
+  .forest h3,
   .copper h1,
   .copper h2,
   .copper h3 {
-    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-family: 'Space Grotesk', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
   }
 
-  /* Velo theme — Space Grotesk 800 headings, Plus Jakarta Sans body */
-  .velo {
-    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
-
-  .velo h1,
-  .velo h2,
-  .velo h3 {
-    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
+  /* Removed: Velo theme heading overrides — see git history */
 }
 
 /* ═══════════════════════════════════════════════════════
    UTILITY CLASSES — Glass panels + glow
    ═══════════════════════════════════════════════════════ */
 @layer utilities {
-  @keyframes easter-float {
-    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-    10% { opacity: 0.2; }
-    90% { opacity: 0.15; }
-    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-  }
-  .animate-easter-float {
-    animation: easter-float linear infinite;
-  }
-
   .glow-primary {
     box-shadow: var(--glow-primary);
   }
@@ -865,36 +437,6 @@
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid hsl(220 12% 20% / 0.6);
-  }
-
-  /* === Light / Glacier glass === */
-  .light .glass-panel {
-    background: hsl(0 0% 100% / 0.72);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(210 18% 87% / 0.7);
-  }
-
-  .light .glass-panel-strong {
-    background: hsl(0 0% 100% / 0.88);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid hsl(210 18% 87% / 0.8);
-  }
-
-  /* === Editorial glass — warmer, more opaque, elegant === */
-  .editorial .glass-panel {
-    background: hsl(40 25% 99% / 0.80);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid hsl(35 15% 84% / 0.6);
-  }
-
-  .editorial .glass-panel-strong {
-    background: hsl(40 25% 99% / 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(35 15% 84% / 0.7);
   }
 
   /* === Forest glass — bright, nature-tinted blur === */
@@ -927,31 +469,7 @@
     border: 1px solid hsl(28 30% 30% / 0.25);
   }
 
-  /* === Velo glass — solid deep navy, ghost borders 15% === */
-  .velo .glass-panel {
-    background: hsl(220 80% 14% / 0.88);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(220 60% 40% / 0.15);
-  }
-
-  .velo .glass-panel-strong {
-    background: hsl(220 80% 14% / 0.94);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid hsl(220 60% 40% / 0.15);
-  }
-
   /* Theme overrides moved outside @layer — see below */
-
-  /* Scrollbar hide */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
 
   /* Grain texture overlay */
   .grain {
@@ -976,6 +494,25 @@
   .animate-shimmer {
     animation: shimmer 2s ease-in-out infinite;
   }
+
+  /* === Shimmer sweep — unlocked tier card headers === */
+  @keyframes shimmer-sweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .shimmer-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer-sweep::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.08) 50%, transparent 100%);
+    transform: translateX(-100%);
+    animation: shimmer-sweep 3s ease-in-out infinite;
+    pointer-events: none;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -983,92 +520,6 @@
    Unlayered CSS always wins over layered CSS in the cascade,
    so !important is not needed here.
    ═══════════════════════════════════════════════════════ */
-
-/* === Velo overrides — solid surfaces, consistent navy === */
-
-/* Header: solid navy, no glass */
-.velo header.sticky {
-  background: hsl(220 100% 8%);
-  border-color: hsl(220 60% 30% / 0.15);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-/* Sub-nav: solid dark navy */
-.velo header.sticky + nav,
-.velo nav.border-b {
-  background: hsl(220 100% 10%);
-  border-color: hsl(220 60% 30% / 0.15);
-}
-
-/* Hero: override warm cream slide backgrounds.
-   Uses !important because it must beat inline style="" attributes
-   which outrank any selector specificity. */
-.velo .grain[style] {
-  background-color: hsl(220 100% 10%) !important;
-}
-
-/* Hero text: override hardcoded warm/dark colors for navy bg */
-.velo .grain .font-serif {
-  color: hsl(210 30% 95%);
-}
-.velo .grain p {
-  color: hsl(215 25% 70%);
-}
-/* Trust pill: navy-tinted instead of warm beige */
-.velo .grain .rounded-full[class*="border-[hsl(30"] {
-  background: hsl(220 60% 20% / 0.5);
-  border-color: hsl(220 60% 40% / 0.2);
-  color: hsl(210 30% 90%);
-}
-/* Secondary CTA on hero */
-.velo .grain .border-\[hsl\(220_15\%_30\%\/0\.2\)\] {
-  border-color: hsl(220 60% 40% / 0.3);
-  color: hsl(210 30% 90%);
-}
-.velo .grain .text-\[hsl\(220_10\%_45\%\)\] {
-  color: hsl(215 25% 70%);
-}
-.velo .grain .text-\[hsl\(220_20\%_15\%\)\] {
-  color: hsl(210 30% 95%);
-}
-/* Trust signals below hero text */
-.velo .grain .text-\[hsl\(220_10\%_45\%\)\] span {
-  color: hsl(215 25% 75%);
-}
-/* Arrow buttons */
-.velo .grain button[class*="bg-white"] {
-  background: hsl(220 60% 20% / 0.5);
-  border-color: hsl(220 60% 40% / 0.2);
-  color: hsl(210 30% 90%);
-}
-
-.velo .bg-card\/20 {
-  background: hsl(220 80% 10% / 0.3);
-}
-.velo .bg-card\/30 {
-  background: hsl(220 80% 10% / 0.4);
-}
-
-/* Product card: solid dark surface */
-.velo .product-card {
-  background: hsl(220 60% 14%);
-  border-color: hsl(220 60% 30% / 0.15);
-  backdrop-filter: none;
-}
-.velo .product-card:hover {
-  border-color: hsl(218 100% 55% / 0.4);
-  box-shadow: 0 8px 30px hsl(220 80% 15% / 0.4);
-}
-
-/* Light theme: product card hover — visible border + shadow lift */
-.light .product-card {
-  border-color: hsl(210 18% 90%);
-}
-.light .product-card:hover {
-  border-color: hsl(213 65% 32% / 0.25);
-  box-shadow: 0 8px 24px hsl(220 20% 60% / 0.12), 0 2px 6px hsl(220 20% 60% / 0.06);
-}
 
 /* Forest theme: product card hover — earthy green glow */
 .forest .product-card:hover {
@@ -1080,16 +531,6 @@
 .copper .product-card:hover {
   border-color: hsl(28 55% 46% / 0.25);
   box-shadow: 0 8px 24px hsl(28 40% 20% / 0.25), 0 2px 6px hsl(28 40% 20% / 0.1);
-}
-
-/* Product image area: dark with subtle light center for product visibility */
-.velo .product-card-image {
-  background: radial-gradient(circle at 50% 40%, hsl(220 60% 18%), hsl(220 80% 10%));
-}
-
-/* Featured section: navy tint instead of warm */
-.velo .featured-section {
-  background: hsl(220 80% 10% / 0.3);
 }
 
 /* Cart progress bar pulse glow at 80-99% */
@@ -1210,6 +651,53 @@
   50% { background-position: 100% 50%; }
 }
 
+/* ═══════════════════════════════════════════════════════
+   Design Polish — glow, pulse, gradient text utilities
+   ═══════════════════════════════════════════════════════ */
+
+/* Tier glow breathing — subtle box-shadow pulse */
+@keyframes glow-breathe {
+  0%, 100% { box-shadow: 0 0 12px var(--glow-color, hsl(var(--primary) / 0.25)), 0 0 24px var(--glow-color, hsl(var(--primary) / 0.1)); }
+  50% { box-shadow: 0 0 20px var(--glow-color, hsl(var(--primary) / 0.4)), 0 0 40px var(--glow-color, hsl(var(--primary) / 0.15)); }
+}
+.glow-breathe {
+  animation: glow-breathe 3s ease-in-out infinite;
+}
+
+/* Ring pulse — expanding ring for CTAs */
+@keyframes ring-pulse {
+  0% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
+  70% { box-shadow: 0 0 0 6px hsl(var(--primary) / 0); }
+  100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+}
+.ring-pulse {
+  animation: ring-pulse 2.5s ease-out infinite;
+}
+
+/* FAQ details/summary — smooth expand */
+details > div,
+details > section {
+  overflow: hidden;
+}
+details summary {
+  cursor: pointer;
+  list-style: none;
+}
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Tier progression gradient line */
+.tier-line-gradient {
+  background: linear-gradient(90deg,
+    hsl(0 0% 63%) 0%,
+    hsl(217 91% 60%) 25%,
+    hsl(160 84% 39%) 50%,
+    hsl(271 81% 56%) 75%,
+    hsl(43 96% 56%) 100%
+  );
+}
+
 /* Respect reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1235,86 +723,3 @@
   }
 }
 
-/* Blog prose styles */
-.prose-container {
-  @apply text-foreground leading-relaxed;
-}
-.prose-container h1,
-.prose-container h2,
-.prose-container h3 {
-  @apply text-foreground font-bold;
-}
-.prose-container p {
-  @apply text-muted-foreground leading-relaxed mb-4;
-}
-.prose-container ul {
-  @apply my-4 space-y-1 pl-6;
-}
-.prose-container li {
-  @apply text-muted-foreground list-disc;
-}
-.prose-container strong {
-  @apply text-foreground font-semibold;
-}
-.prose-container a {
-  @apply text-primary underline underline-offset-2 hover:opacity-80;
-}
-
-/* ═══════════════════════════════════════════════════════
-   Easter Theme — wiggle animation
-   ═══════════════════════════════════════════════════════ */
-@keyframes easter-wiggle {
-  0%   { transform: rotate(0deg) scale(1); }
-  10%  { transform: rotate(-14deg) scale(1.05); }
-  25%  { transform: rotate(12deg) scale(1.03); }
-  40%  { transform: rotate(-10deg) scale(1.04); }
-  55%  { transform: rotate(8deg) scale(1.02); }
-  70%  { transform: rotate(-5deg) scale(1.01); }
-  85%  { transform: rotate(3deg) scale(1); }
-  100% { transform: rotate(0deg) scale(1); }
-}
-
-.easter-wiggle-active {
-  animation: easter-wiggle 2.5s ease-in-out 2 forwards;
-}
-
-/* ─── Side bunny wander — left bunny walks up from bottom, collecting eggs ─── */
-/* Positioned at top:0 left:0; animation drives the full transform              */
-@keyframes bunny-wander-left {
-  0%   { transform: translateX(-24px) translateY(72vh) rotate(0deg); }
-  /* near bottom egg — lean in to grab */
-  8%   { transform: translateX(-2px)  translateY(68vh) rotate(-11deg); }
-  14%  { transform: translateX(-24px) translateY(64vh) rotate(0deg); }
-  /* walk up to mid-page egg */
-  32%  { transform: translateX(-24px) translateY(38vh) rotate(0deg); }
-  40%  { transform: translateX(-3px)  translateY(35vh) rotate(-9deg); }
-  46%  { transform: translateX(-24px) translateY(31vh) rotate(0deg); }
-  /* walk up to top egg */
-  65%  { transform: translateX(-24px) translateY(7vh)  rotate(0deg); }
-  72%  { transform: translateX(-4px)  translateY(4vh)  rotate(-12deg); }
-  78%  { transform: translateX(-24px) translateY(7vh)  rotate(0deg); }
-  /* wander back down */
-  100% { transform: translateX(-24px) translateY(72vh) rotate(0deg); }
-}
-
-/* ─── Right bunny starts near top, walks down ─── */
-@keyframes bunny-wander-right {
-  0%   { transform: translateX(24px) translateY(7vh)  rotate(0deg); }
-  8%   { transform: translateX(3px)  translateY(4vh)  rotate(11deg); }
-  14%  { transform: translateX(24px) translateY(8vh)  rotate(0deg); }
-  32%  { transform: translateX(24px) translateY(34vh) rotate(0deg); }
-  40%  { transform: translateX(2px)  translateY(37vh) rotate(9deg); }
-  46%  { transform: translateX(24px) translateY(40vh) rotate(0deg); }
-  65%  { transform: translateX(24px) translateY(66vh) rotate(0deg); }
-  72%  { transform: translateX(4px)  translateY(69vh) rotate(12deg); }
-  78%  { transform: translateX(24px) translateY(66vh) rotate(0deg); }
-  100% { transform: translateX(24px) translateY(7vh)  rotate(0deg); }
-}
-
-.bunny-wander-left {
-  animation: bunny-wander-left 18s ease-in-out infinite;
-}
-.bunny-wander-right {
-  animation: bunny-wander-right 18s ease-in-out infinite;
-  animation-delay: -9s; /* opposite phase so they don't move together */
-}

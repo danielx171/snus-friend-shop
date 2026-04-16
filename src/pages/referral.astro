@@ -1,0 +1,113 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
+import JsonLd from '@/components/astro/JsonLd.astro';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": `How does the ${tenant.name} referral program work?`, "acceptedAnswer": { "@type": "Answer", "text": `Share your unique referral code with friends. When they create an account using your code, they receive ${rewards.referralFriend} ${loyaltyCurrencyName} and you receive ${rewards.referralSelf} ${loyaltyCurrencyName}. There's no limit to how many friends you can refer.` } },
+      { "@type": "Question", "name": "Where do I find my referral code?", "acceptedAnswer": { "@type": "Answer", "text": "Log in to your account, go to the Membership tab, and scroll down to the Refer a Friend section. Your unique code will be displayed there with a copy button and sharing options." } },
+      { "@type": "Question", "name": `Can I use ${loyaltyCurrencyName} for discounts?`, "acceptedAnswer": { "@type": "Answer", "text": `Yes. ${loyaltyCurrencyName} can be redeemed for discounts on future orders. Check the Rewards page for current redemption rates and available rewards.` } }
+    ]
+  };
+---
+
+<Shop
+  title={`Refer a Friend — Earn ${loyaltyCurrencyName} Together | ${tenant.name}`}
+  description={`Share your ${tenant.name} referral code with friends. They get ${rewards.referralFriend} ${loyaltyCurrencyName}, you get ${rewards.referralSelf}. Earn rewards for every friend who joins.`}
+  canonical="/referral"
+>
+  <JsonLd data={faqJsonLd} />
+
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[{ label: 'Referral Program' }]} />
+
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold tracking-tight mb-4">Refer a Friend, Earn Rewards</h1>
+        <p class="text-lg text-muted-foreground">
+          Share your code with friends who love nicotine pouches. When they join, you both earn {loyaltyCurrencyName}.
+        </p>
+      </div>
+
+      <!-- How it works -->
+      <div class="grid gap-6 md:grid-cols-3 mb-12">
+        <div class="rounded-xl border border-border bg-card/80 p-6 text-center">
+          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+            <span class="text-xl font-bold text-primary">1</span>
+          </div>
+          <h3 class="font-semibold mb-2">Get Your Code</h3>
+          <p class="text-sm text-muted-foreground">Log in, go to your account's Membership tab, and find your unique referral code.</p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card/80 p-6 text-center">
+          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+            <span class="text-xl font-bold text-primary">2</span>
+          </div>
+          <h3 class="font-semibold mb-2">Share It</h3>
+          <p class="text-sm text-muted-foreground">Send your code to friends via WhatsApp, email, or just tell them. No limit on referrals.</p>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card/80 p-6 text-center">
+          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+            <span class="text-xl font-bold text-primary">3</span>
+          </div>
+          <h3 class="font-semibold mb-2">Both Earn {loyaltyCurrencyName}</h3>
+          <p class="text-sm text-muted-foreground">They get {rewards.referralFriend} {loyaltyCurrencyName}, you get {rewards.referralSelf}. Use {loyaltyCurrencyName} for discounts on your next order.</p>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="rounded-xl border border-primary/20 bg-primary/5 p-8 text-center mb-12">
+        <h2 class="text-2xl font-bold mb-3">Ready to start referring?</h2>
+        <p class="text-muted-foreground mb-6">Create an account or log in to get your unique referral code.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href="/account?tab=membership"
+            class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+          >
+            Get My Referral Code
+          </a>
+          <a
+            href="/register"
+            class="inline-flex items-center justify-center rounded-lg border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-muted/50 transition"
+          >
+            Create Account
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+          <details class="rounded-xl border border-border bg-card/80 p-5 group">
+            <summary class="font-medium cursor-pointer text-foreground">How does the referral program work?</summary>
+            <p class="mt-3 text-sm text-muted-foreground">Share your unique referral code (found in your account's Membership tab). When a friend creates an account and enters your code during registration, they receive {rewards.referralFriend} {loyaltyCurrencyName} and you receive {rewards.referralSelf} {loyaltyCurrencyName}. There's no limit to how many friends you can refer.</p>
+          </details>
+
+          <details class="rounded-xl border border-border bg-card/80 p-5 group">
+            <summary class="font-medium cursor-pointer text-foreground">Where do I find my referral code?</summary>
+            <p class="mt-3 text-sm text-muted-foreground">Log in, go to your Account page, click the Membership tab, and scroll down to "Refer a Friend". Your code looks like SF-XXXXXXXX. You can copy it or share it directly via WhatsApp or email.</p>
+          </details>
+
+          <details class="rounded-xl border border-border bg-card/80 p-5 group">
+            <summary class="font-medium cursor-pointer text-foreground">What can I do with {loyaltyCurrencyName}?</summary>
+            <p class="mt-3 text-sm text-muted-foreground">{loyaltyCurrencyName} can be redeemed for discounts on future orders. You also earn {loyaltyCurrencyName} by placing orders ({rewards.earnRatePerEur} {loyaltyCurrencyName} per EUR), writing reviews ({rewards.verifiedReview} {loyaltyCurrencyName} each), completing missions, and spinning the Daily Drop.</p>
+          </details>
+
+          <details class="rounded-xl border border-border bg-card/80 p-5 group">
+            <summary class="font-medium cursor-pointer text-foreground">Is there a limit to how many friends I can refer?</summary>
+            <p class="mt-3 text-sm text-muted-foreground">No limit. Refer as many friends as you like — you earn {rewards.referralSelf} {loyaltyCurrencyName} for each one who joins. Your friends can also start referring once they have an account.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+</Shop>

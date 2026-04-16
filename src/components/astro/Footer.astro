@@ -1,11 +1,15 @@
 ---
 import { tenant } from '@/config/tenant';
 import ThemePicker from '@/components/react/ThemePicker';
+import Logo from '@/components/astro/Logo.astro';
+import TrustpilotWidget from '@/components/astro/TrustpilotWidget.astro';
 
 const currentYear = new Date().getFullYear();
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
 
 const footerLinks = {
   shop: [
+    { href: '/nicotine-pouches', label: 'Buy Nicotine Pouches' },
     { href: '/products', label: 'All Products' },
     { href: '/brands', label: 'Brands' },
     { href: '/shipping', label: 'Shipping' },
@@ -13,9 +17,20 @@ const footerLinks = {
   ],
   company: [
     { href: '/about', label: 'About Us' },
+    { href: '/blog', label: 'Blog' },
     { href: '/contact', label: 'Contact' },
     { href: '/faq', label: 'FAQ' },
+    { href: '/rewards', label: 'Rewards' },
+    { href: '/membership', label: 'Membership' },
     { href: '/whats-new', label: "What's New" },
+  ],
+  guides: [
+    { href: '/beginners', label: 'Beginner Guide' },
+    { href: '/nicotine-pouch-brands-compared', label: 'Brand Comparison' },
+    { href: '/nicotine-strength-chart', label: 'Strength Chart' },
+    { href: '/nicotine-pouch-flavours', label: 'Flavour Guide' },
+    { href: '/blog/nicotine-pouch-buying-guide-europe', label: 'Buying Guide' },
+    { href: '/compare', label: 'Compare Products' },
   ],
   legal: [
     { href: '/terms', label: 'Terms of Service' },
@@ -25,15 +40,48 @@ const footerLinks = {
 };
 ---
 
-<footer class="border-t border-border/40 bg-card/50 py-12">
-  <div class="container">
-    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
-      <div class="col-span-2 md:col-span-1">
-        <p class="font-bold text-lg text-primary">{tenant.name}</p>
+<footer class="border-t border-border/40 bg-card/50 py-12 lg:py-16">
+  <div class="container px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-3 lg:grid-cols-5">
+      <div class="col-span-2 md:col-span-3 lg:col-span-1">
+        <Logo variant="full" color="dark" />
         <p class="mt-2 text-sm text-muted-foreground">{tenant.tagline}</p>
         <p class="mt-4 text-xs text-muted-foreground">
           <a href={`mailto:${tenant.supportEmail}`} class="hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary">{tenant.supportEmail}</a>
         </p>
+
+        {/* Newsletter signup */}
+        <div class="mt-4" id="newsletter-form-wrapper">
+          <p class="text-sm font-semibold text-foreground">Be first to the new drops</p>
+          <p class="mt-1 text-xs text-muted-foreground">New releases, guides & the odd cheeky deal — no spam.</p>
+          <form
+            class="mt-2 flex gap-2"
+            data-waitlist-form
+            data-function-base={supabaseUrl}
+            data-waitlist-source="newsletter"
+            data-success-message="You're in! Welcome aboard."
+            data-message-class="mt-1.5 text-xs"
+            data-submitting-text="Submitting..."
+          >
+            <label for="newsletter-email" class="sr-only">Email address</label>
+            <input
+              id="newsletter-email"
+              type="email"
+              required
+              placeholder="you@email.com"
+              autocomplete="email"
+              aria-describedby="newsletter-msg"
+              class="flex-1 min-w-0 rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-2 focus:outline-offset-1 focus:outline-primary"
+            />
+            <button
+              type="submit"
+              class="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Stay in the know
+            </button>
+          </form>
+          <p data-waitlist-message class="mt-1.5 hidden text-xs" aria-live="polite" aria-atomic="true"></p>
+        </div>
       </div>
 
       <div>
@@ -55,6 +103,15 @@ const footerLinks = {
       </div>
 
       <div>
+        <h3 class="text-sm font-semibold text-foreground">Guides</h3>
+        <ul class="mt-3 space-y-2">
+          {footerLinks.guides.map(({ href, label }) => (
+            <li><a href={href} class="text-sm text-muted-foreground hover:text-foreground focus:outline-2 focus:outline-offset-2 focus:outline-primary">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
         <h3 class="text-sm font-semibold text-foreground">Legal</h3>
         <ul class="mt-3 space-y-2">
           {footerLinks.legal.map(({ href, label }) => (
@@ -64,14 +121,118 @@ const footerLinks = {
       </div>
     </div>
 
-    <div class="mt-8 border-t border-border/40 pt-6 flex flex-col items-center gap-3">
+    {/* ── Trust & Payment Strip ── */}
+    <div class="mt-8 border-t border-border/40 pt-6 flex flex-col items-center gap-6">
+
+      {/* Trustpilot — auto-hides until Business Unit ID is configured */}
+      <TrustpilotWidget variant="footer" />
+
+      {/* Payment methods */}
+      <div class="flex flex-col items-center gap-2">
+        <span class="text-xs font-medium text-muted-foreground">Secure Payment</span>
+        <div class="flex items-center gap-3">
+          {/* Visa */}
+          <svg class="h-8 w-auto text-muted-foreground/70" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Visa">
+            <rect width="48" height="32" rx="4" fill="white" stroke="currentColor" stroke-width="1"/>
+            <path d="M19.5 21h-3l1.9-11.5h3L19.5 21zm12.4-11.2c-.6-.2-1.5-.5-2.7-.5-3 0-5.1 1.5-5.1 3.7 0 1.6 1.5 2.5 2.7 3 1.2.6 1.6.9 1.6 1.4 0 .8-.9 1.1-1.8 1.1-1.2 0-1.9-.2-2.9-.6l-.4-.2-.4 2.5c.7.3 2 .6 3.4.6 3.2 0 5.2-1.5 5.2-3.8 0-1.3-.8-2.2-2.5-3-.7-.4-1.6-.9-1.6-1.4 0-.5.5-1 1.6-1 .9 0 1.6.2 2.1.4l.3.1.5-2.3zM36.3 9.5h-2.3c-.7 0-1.3.2-1.6 1l-4.5 10.5h3.2l.6-1.7h3.9l.4 1.7H39L36.3 9.5zm-3.7 8.3l1.2-3.2.4-1.1.3 1 .7 3.3h-2.6zm-18-8.3L12 17.7l-.3-1.5c-.5-1.7-2.1-3.5-3.9-4.4l2.7 9.2h3.2l4.8-11.5h-3.2l.3.3z" fill="currentColor"/>
+            <path d="M10.5 9.5H5.6l-.1.3c3.8.9 6.3 3.2 7.3 5.9l-1.1-5.2c-.1-.7-.7-1-1.2-1z" fill="currentColor" opacity="0.7"/>
+          </svg>
+          {/* Mastercard */}
+          <svg class="h-8 w-auto" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard">
+            <rect width="48" height="32" rx="4" fill="white" stroke="currentColor" stroke-width="1" class="text-muted-foreground/70"/>
+            <circle cx="19" cy="16" r="8" fill="#EB001B" opacity="0.8"/>
+            <circle cx="29" cy="16" r="8" fill="#F79E1B" opacity="0.8"/>
+            <path d="M24 10.3a8 8 0 0 1 0 11.4 8 8 0 0 1 0-11.4z" fill="#FF5F00" opacity="0.9"/>
+          </svg>
+          {/* Klarna */}
+          <div class="flex h-8 items-center rounded border border-muted-foreground/20 bg-white px-2">
+            <span class="text-[11px] font-bold tracking-tight text-[#FFB3C7]" style="color:#17120F;font-family:system-ui">Klarna.</span>
+          </div>
+          {/* Bank Transfer / iDEAL-style */}
+          <div class="flex h-8 items-center rounded border border-muted-foreground/20 bg-white px-2">
+            <span class="text-[10px] font-semibold text-muted-foreground" style="font-family:system-ui">Bank</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Trust badges row */}
+      <div class="flex flex-wrap items-center justify-center gap-4 text-muted-foreground">
+        {/* SSL Secure */}
+        <div class="flex items-center gap-1.5">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+          <span class="text-xs">SSL Secure</span>
+        </div>
+        {/* EU Warehouse */}
+        <div class="flex items-center gap-1.5">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+          </svg>
+          <span class="text-xs">EU Warehouse</span>
+        </div>
+        {/* Free Shipping */}
+        <div class="flex items-center gap-1.5">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <span class="text-xs">Free shipping &euro;{tenant.freeShippingThreshold}+</span>
+        </div>
+        {/* Fast Shipping */}
+        <div class="flex items-center gap-1.5">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          <span class="text-xs">Same-Day Dispatch</span>
+        </div>
+        {/* 18+ */}
+        <div class="flex items-center gap-1.5">
+          <div class="flex h-5 w-5 items-center justify-center rounded-full border-2 border-current">
+            <span class="text-[9px] font-bold leading-none">18+</span>
+          </div>
+          <span class="text-xs">Adults Only</span>
+        </div>
+      </div>
+
+      {/* Company info */}
+      <div class="mt-6 text-center text-xs text-muted-foreground">
+        <p>{tenant.legalName} · {tenant.address.streetAddress}, {tenant.address.postalCode} {tenant.address.addressLocality}, Sweden</p>
+      </div>
+
+      {/* Social links */}
+      <div class="flex items-center justify-center gap-4">
+        {tenant.social.instagram && (
+          <a href={tenant.social.instagram} target="_blank" rel="noopener noreferrer" class="p-2 text-muted-foreground hover:text-foreground transition-colors" aria-label={`${tenant.name} on Instagram`}>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        )}
+        {tenant.social.tiktok && (
+          <a href={tenant.social.tiktok} target="_blank" rel="noopener noreferrer" class="p-2 text-muted-foreground hover:text-foreground transition-colors" aria-label={`${tenant.name} on TikTok`}>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.17V11.7a4.83 4.83 0 01-3.77-1.24V6.69z"/></svg>
+          </a>
+        )}
+        {tenant.social.x && (
+          <a href={tenant.social.x} target="_blank" rel="noopener noreferrer" class="p-2 text-muted-foreground hover:text-foreground transition-colors" aria-label={`${tenant.name} on X`}>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        )}
+      </div>
+
+      {/* Theme picker + copyright */}
       <div class="flex flex-col items-center gap-1.5">
         <span class="text-xs text-muted-foreground">Choose your vibe</span>
         <ThemePicker client:idle />
       </div>
       <p class="text-center text-xs text-muted-foreground">
-        © {currentYear} {tenant.name}. All rights reserved. 18+ only.
+        © {currentYear} {tenant.name}. All rights reserved. Must be 18+ to purchase. Products contain nicotine.
       </p>
     </div>
   </div>
 </footer>
+
+<script>
+  const { bootWaitlistForms } = await import('@/scripts/waitlist-form');
+  bootWaitlistForms();
+</script>

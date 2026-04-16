@@ -1,8 +1,17 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
+import ProductCard from '@/components/astro/ProductCard.astro';
 import { getCollection } from 'astro:content';
+import { brandColors, defaultBrandColor } from '@/data/brand-colors';
+import { brandDescriptions } from '@/data/brand-descriptions';
+import { brandFaqs } from '@/data/brand-faqs';
+import { brandMeta } from '@/data/brand-meta';
+import { buildAbsoluteUrl, siteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
 
 export async function getStaticPaths() {
   const brands = await getCollection('brands');
@@ -41,95 +50,281 @@ const countryNames: Record<string, string> = {
 };
 
 const countryLabel = b.countryCode ? (countryNames[b.countryCode] ?? b.countryCode) : '';
+const bColor = brandColors[brand.id] ?? defaultBrandColor;
 
-const metaDescription = b.description
-  ? (b.description.length > 160 ? b.description.slice(0, 157) + '...' : b.description)
-  : `Shop ${b.name} nicotine pouches at SnusFriend. Browse the full range of ${b.name} products with free EU shipping on qualifying orders.`;
+const nicotineValues = products.map((p) => p.data.nicotineContent).filter(Boolean);
+const minMg = nicotineValues.length ? Math.min(...nicotineValues) : 0;
+const maxMg = nicotineValues.length ? Math.max(...nicotineValues) : 0;
+
+// New arrivals: updated in last 60 days or has 'new' badge
+const sixtyDaysAgo = new Date(Date.now() - 60 * 86400000).toISOString();
+const newProducts = products
+  .filter(p => (p.data.updatedAt && p.data.updatedAt > sixtyDaysAgo) || p.data.badgeKeys?.includes('new'))
+  .sort((a, b) => (b.data.updatedAt || '').localeCompare(a.data.updatedAt || ''))
+  .slice(0, 6);
+
+// Mosaic: first 5 products with images
+const mosaicProducts = products.filter((p) => p.data.imageUrl).slice(0, 5);
+
+// Mosaic grid positions: first cell spans 2 rows (hero), then 4 small cells
+const mosaicPositions = [
+  { gridColumn: '1 / 2', gridRow: '1 / 3', size: 'lg' },
+  { gridColumn: '2 / 3', gridRow: '1 / 2', size: 'sm' },
+  { gridColumn: '3 / 4', gridRow: '1 / 2', size: 'sm' },
+  { gridColumn: '2 / 3', gridRow: '2 / 3', size: 'sm' },
+  { gridColumn: '3 / 4', gridRow: '2 / 3', size: 'sm' },
+];
+
+const meta = brandMeta[brand.id];
+const metaTitle = meta?.title || `${b.name} Nicotine Pouches | ${tenant.name}`;
+const metaDescription = meta?.description || `Shop ${b.name} nicotine pouches at ${tenant.name}. Browse the full range with free EU shipping.`;
+const faqs = brandFaqs[brand.id];
 ---
 
 <Shop
-  title={`${b.name} Nicotine Pouches | SnusFriend`}
+  title={metaTitle}
   description={metaDescription}
   canonical={`/brands/${brand.id}`}
 >
-  <script type="application/ld+json" set:html={JSON.stringify({
+  {faqs && faqs.length > 0 && (
+    <JsonLd data={{
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(f => ({
+        "@type": "Question",
+        "name": f.question,
+        "acceptedAnswer": { "@type": "Answer", "text": f.answer },
+      })),
+    }} />
+  )}
+  <JsonLd data={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": `${b.name} Nicotine Pouches`,
     "description": metaDescription,
-    "url": `https://snusfriends.com/brands/${brand.id}`,
+    "url": buildAbsoluteUrl(`/brands/${brand.id}`),
     "numberOfItems": products.length,
     "provider": {
       "@type": "Organization",
-      "name": "SnusFriend",
-      "url": "https://snusfriends.com"
+      "name": tenant.name,
+      "url": siteUrl
     }
-  })} />
-  <script type="application/ld+json" set:html={JSON.stringify({
+  }} />
+  <JsonLd data={{
     "@context": "https://schema.org",
     "@type": "Brand",
     "name": b.name,
     ...(b.logoUrl && { "logo": b.logoUrl }),
     "description": metaDescription,
-    "url": `https://snusfriends.com/brands/${brand.id}`,
+    "url": buildAbsoluteUrl(`/brands/${brand.id}`),
     ...(b.manufacturer && { "manufacturer": { "@type": "Organization", "name": b.manufacturer } })
-  })} />
+  }} />
 
-  <div class="mx-auto max-w-7xl px-4 py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
     <Breadcrumb items={[
       { label: 'Brands', href: '/brands' },
       { label: b.name },
     ]} />
 
-    <!-- Brand hero -->
-    <div class="mb-10 rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-sm sm:p-8">
-      <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-        {/* Brand logo or initials */}
-        {b.logoUrl ? (
-          <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted/20">
+    <!-- Brand Mosaic Header -->
+    <div class="relative mb-8 overflow-hidden rounded-2xl" style="background: #0c1018; min-height: 220px;">
+
+      <!-- Brand color ambient glow — subtle, anchored to top-left -->
+      <div class="absolute inset-0" style={`background: radial-gradient(ellipse at 10% 30%, ${bColor}25 0%, transparent 50%), radial-gradient(ellipse at 90% 80%, ${bColor}10 0%, transparent 40%);`}></div>
+
+      <!-- Brand-colored radial glow behind mosaic -->
+      <div class="absolute right-0 top-0 bottom-0 w-2/3 pointer-events-none" style={`background: radial-gradient(ellipse at 70% 50%, ${bColor}15 0%, transparent 70%);`} />
+
+      <!-- Product mosaic grid — right side, fades in from right -->
+      {mosaicProducts.length > 0 && (
+        <div
+          class="absolute top-0 right-0 bottom-0 hidden sm:grid"
+          style="width: 65%; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; mask-image: linear-gradient(to right, transparent 0%, black 30%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%);"
+        >
+          {mosaicProducts.map((p, i) => {
+            const pos = mosaicPositions[i];
+            const imgSize = pos.size === 'lg' ? 200 : 120;
+            return (
+              <div
+                class="relative overflow-hidden flex items-center justify-center"
+                style={`grid-column: ${pos.gridColumn}; grid-row: ${pos.gridRow}; background: radial-gradient(circle at 50% 50%, ${bColor}15 0%, transparent 70%);`}
+              >
+                <img
+                  src={p.data.imageUrl}
+                  alt={`${b.name} product ${i + 1}`}
+                  width={imgSize}
+                  height={imgSize}
+                  loading="lazy"
+                  class="object-contain rounded-full"
+                  style={`width: ${imgSize}px; height: ${imgSize}px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); opacity: 0.75;`}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <!-- Mobile product strip — visible only on small screens -->
+      {mosaicProducts.length > 0 && (
+        <div class="absolute bottom-0 right-0 left-0 flex items-end justify-end gap-1 p-3 sm:hidden" style="mask-image: linear-gradient(to right, transparent 0%, black 40%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);">
+          {mosaicProducts.slice(0, 3).map((p, i) => (
             <img
+              src={p.data.imageUrl}
+              alt={`${b.name} product`}
+              width="60"
+              height="60"
+              loading="lazy"
+              class="rounded-lg object-contain"
+              style={`width: 52px; height: 52px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); opacity: ${0.9 - i * 0.15};`}
+            />
+          ))}
+        </div>
+      )}
+
+      <!-- Dark overlay gradient: full opacity left → semi-transparent right (text readability) -->
+      <div class="absolute inset-0" style="background: linear-gradient(90deg, #0c1018 0%, #0c1018dd 40%, #0c101888 70%, #0c101866 100%);"></div>
+
+      <!-- Top accent line — brand color -->
+      <div class="absolute top-0 left-0 right-0 h-[3px] z-10" style={`background: linear-gradient(90deg, ${bColor}, ${bColor}88, transparent 80%);`}></div>
+
+      <!-- Content -->
+      <div class="relative z-10 flex flex-col items-start gap-5 p-6 sm:flex-row sm:items-center sm:p-8">
+
+        <!-- Logo or initials badge -->
+        {b.logoUrl ? (
+          <div
+            class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl"
+            style={`background: linear-gradient(135deg, ${bColor}30, ${bColor}15); border: 1px solid ${bColor}25; backdrop-filter: blur(12px);`}
+          >
+            <Image
               src={b.logoUrl}
               alt={`${b.name} logo`}
+              width={80}
+              height={80}
               loading="eager"
-              decoding="async"
+              format="webp"
               class="h-full w-full object-contain"
             />
           </div>
         ) : (
-          <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
-            <span class="text-3xl font-bold text-primary">
+          <div
+            class="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl"
+            style={`background: linear-gradient(135deg, ${bColor}, ${bColor}cc); box-shadow: 0 8px 24px ${bColor}40, inset 0 1px 0 rgba(255,255,255,0.15); border: 1px solid ${bColor}66;`}
+            aria-hidden="true"
+          >
+            <span
+              class="text-2xl font-extrabold tracking-tight"
+              style="color: #ffffff; font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; text-shadow: 0 1px 2px rgba(0,0,0,0.25);"
+            >
               {b.name.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
             </span>
           </div>
         )}
 
-        <div class="flex-1">
-          <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <!-- Brand info -->
+        <div class="flex-1 min-w-0">
+          <h1
+            class="text-3xl font-extrabold tracking-tight sm:text-4xl"
+            style="color: #f1f5f9; font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;"
+          >
             {b.name}
           </h1>
 
-          {/* Manufacturer and country */}
-          <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-            {b.manufacturer && (
-              <span>by {b.manufacturer}</span>
-            )}
-            {b.manufacturer && countryLabel && (
-              <span class="text-muted-foreground/40">&middot;</span>
-            )}
+          <!-- Metadata chips -->
+          <div class="mt-3 flex flex-wrap items-center gap-2">
             {countryLabel && (
-              <span>{countryLabel}</span>
+              <span
+                class="rounded-full px-3 py-1 text-xs font-medium"
+                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.08);"
+              >
+                {countryLabel}
+              </span>
+            )}
+            {b.manufacturer && (
+              <span
+                class="rounded-full px-3 py-1 text-xs font-medium"
+                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.08);"
+              >
+                by {b.manufacturer}
+              </span>
+            )}
+            <span
+              class="rounded-full px-3 py-1 text-xs font-medium"
+              style={`background: ${bColor}15; color: ${bColor}; border: 1px solid ${bColor}25;`}
+            >
+              {products.length} cans
+            </span>
+            {minMg > 0 && (
+              <span
+                class="rounded-full px-3 py-1 text-xs font-medium"
+                style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.08);"
+              >
+                {minMg}–{maxMg} mg
+              </span>
             )}
           </div>
-
-          {/* Description */}
-          {b.description && (
-            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-              {b.description}
-            </p>
-          )}
         </div>
       </div>
     </div>
+
+    {/* Sub-page navigation */}
+    <div class="mb-6 flex flex-wrap gap-2">
+      <a href={`/brands/${brand.id}`} class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">All Products</a>
+      <a href={`/brands/${brand.id}/flavours`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Flavours</a>
+      <a href={`/brands/${brand.id}/strengths`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Strengths</a>
+      <a href={`/brands/${brand.id}/review`} class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/30 transition">Review</a>
+    </div>
+
+    {/* Brand description — always visible */}
+    <div class="mb-8 max-w-3xl">
+      <h2 class="text-lg font-semibold text-foreground mb-3">About {b.name}</h2>
+      <p class="text-sm leading-relaxed text-muted-foreground">
+        {brandDescriptions[brand.id] || b.description || `${b.name} nicotine pouches are available on ${tenant.name} with fast EU-wide delivery.`}
+      </p>
+    </div>
+
+    <!-- New on Brand section -->
+    {newProducts.length > 0 && (
+      <section class="mb-8">
+        <div class="mb-4 flex items-center gap-2">
+          <h2 class="text-xl font-semibold text-foreground">New on {b.name}</h2>
+          <span
+            class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+            style={`background: ${bColor}15; color: ${bColor}; border: 1px solid ${bColor}25;`}
+          >
+            <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            Fresh
+          </span>
+        </div>
+        <div
+          class="flex gap-4 overflow-x-auto pb-4 scrollbar-thin sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 lg:grid-cols-4 xl:grid-cols-6"
+          style="-webkit-overflow-scrolling: touch;"
+        >
+          {newProducts.map((product) => (
+            <div class="min-w-[200px] shrink-0 sm:min-w-0" style={`border-radius: 1rem; box-shadow: 0 0 0 1px ${bColor}20, 0 2px 12px ${bColor}08;`}>
+              <ProductCard
+                slug={product.id}
+                name={product.data.name}
+                brand={product.data.brand}
+                brandSlug={product.data.brandSlug}
+                imageUrl={product.data.imageUrl}
+                prices={product.data.prices}
+                stock={product.data.stock}
+                nicotineContent={product.data.nicotineContent}
+                strengthKey={product.data.strengthKey}
+                flavorKey={product.data.flavorKey}
+                ratings={product.data.ratings}
+                comparePrice={product.data.comparePrice}
+                portionsPerCan={product.data.portionsPerCan}
+                badgeKeys={product.data.badgeKeys}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- Products section -->
     <div class="mb-6 flex items-center justify-between">
@@ -137,28 +332,31 @@ const metaDescription = b.description
         {products.length > 0 ? `${b.name} Products` : 'Products'}
       </h2>
       <p class="text-sm text-muted-foreground">
-        {products.length} {products.length === 1 ? 'product' : 'products'}
+        {products.length} {products.length === 1 ? 'can' : 'cans'}
       </p>
     </div>
 
     <!-- Product grid (matches products/index.astro style) -->
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 xl:gap-6">
       {products.map((product) => {
         const dots = strengthDots[product.data.strengthKey] ?? 2;
         const price = product.data.prices?.pack1;
         return (
           <a
             href={`/products/${product.id}`}
-            class="group rounded-xl border border-border bg-card/50 p-3 backdrop-blur transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 sm:p-4"
+            class="group rounded-xl border border-border bg-card/70 p-3 transition hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 sm:p-4"
           >
             {/* Product image */}
             {product.data.imageUrl ? (
               <div class="mb-3 aspect-square overflow-hidden rounded-lg bg-muted/20">
-                <img
+                <Image
                   src={product.data.imageUrl}
                   alt={product.data.name}
+                  width={300}
+                  height={300}
                   loading="lazy"
-                  decoding="async"
+                  format="webp"
+                  quality={80}
                   class="h-full w-full object-contain transition group-hover:scale-105"
                 />
               </div>
@@ -188,7 +386,7 @@ const metaDescription = b.description
             </h3>
 
             {/* Strength dots */}
-            <div class="mb-2 flex items-center gap-1" aria-label={`Strength: ${product.data.strengthKey}`}>
+            <div class="mb-2 flex items-center gap-1" role="img" aria-label={`Strength: ${product.data.strengthKey}`}>
               {Array.from({ length: 5 }).map((_, i) => (
                 <span
                   class={`inline-block h-1.5 w-1.5 rounded-full ${
@@ -227,5 +425,18 @@ const metaDescription = b.description
         </div>
       )}
     </div>
+
+    {/* Brand FAQ section */}
+    {faqs && faqs.length > 0 && (
+      <section class="mt-12 max-w-3xl">
+        <h2 class="text-xl font-bold text-foreground mb-6">{b.name} FAQ</h2>
+        {faqs.map(faq => (
+          <details class="mb-3 rounded-lg border border-border bg-card/40 px-4 py-3">
+            <summary class="cursor-pointer font-medium text-foreground">{faq.question}</summary>
+            <p class="mt-2 text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+          </details>
+        ))}
+      </section>
+    )}
   </div>
 </Shop>

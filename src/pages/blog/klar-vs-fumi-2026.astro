@@ -1,0 +1,378 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import { getBlogLastmod } from '@/data/blog-registry';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+const findProduct = (brandSlug: string, nameFragment?: string) => {
+  return allProducts.find(
+    (p) =>
+      p.data.brandSlug === brandSlug &&
+      (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+};
+
+// Product variables
+const klarBlankSlim = find('klar-blank-slim-9mg');
+const klarMintSlim = find('klar-mint-slim-9mg');
+const klarMintMini = find('klar-mint-mini-3mg');
+const fumiVioletSlim = find('fumi-violet-slim-11mg');
+const fumiGingerSlim = find('fumi-ginger-slim-11mg');
+const fumiStrawberrySlim = find('fumi-strawberry-slim-8mg');
+
+const publishDate = '2026-04-08';
+const dateModified = getBlogLastmod('klar-vs-fumi-2026') ?? publishDate;
+const title = 'KLAR vs FUMI: Scandinavian Pouches Compared (2026)';
+const description = 'KLAR vs FUMI compared head-to-head. Flavor, strength, SERATEK technology, price, and format — which Scandinavian craft pouch brand wins?';
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": dateModified,
+    "author": {
+      "@type": "Person",
+      "name": "Erik Lindqvist",
+      "url": "https://snusfriends.com/authors/erik-lindqvist",
+      "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"]
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": tenant.name,
+      "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/klar-vs-fumi-2026` }
+  };
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Which brand has faster nicotine absorption?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "KLAR's SERATEK bioceramic technology is designed for faster absorption. Users report effects within 5–10 minutes, versus 10–15 for standard pouches. FUMI uses conventional materials, so absorption is standard. If speed matters to you, KLAR has a genuine edge."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use FUMI if I'm new to pouches?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "FUMI's minimum strength is 8mg, which is moderate-to-strong. If you're brand new to nicotine pouches, KLAR's 3mg Mini is a better starting point. Once you've acclimated, FUMI becomes an option."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are these brands available internationally?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Both are Scandinavian-rooted and widely available in EU markets, including the Nordic countries and Germany. Availability outside Europe varies by distributor. Check your local retailer or online shops."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the shelf life of KLAR and FUMI pouches?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most nicotine pouches maintain potency for 12–18 months if stored in cool, dry conditions. Both KLAR and FUMI should be stored in the original can or an airtight container to preserve freshness."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I mix KLAR and FUMI in a session?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Technically yes, but it's not recommended. Mixing brands means unpredictable nicotine strength and flavor combinations. Stick to one brand per session for a consistent experience."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which brand is more sustainable?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Both use plant-based cellulose pouches (no plastic). KLAR's SERATEK bioceramics are food-grade and biodegradable. Neither brand publishes comprehensive sustainability reports, so claims are limited. Both are better than traditional snus in terms of environmental footprint."
+        }
+      }
+    ]
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'KLAR vs FUMI 2026' },
+      ]} />
+
+      <BlogHero
+        category="Comparison"
+        title={title}
+        description={description}
+        date="April 8, 2026"
+        readTime="9 min read"
+      />
+
+      <div class="prose prose-lg max-w-3xl [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-8 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-6 [&_h3]:mb-3 [&_strong]:font-semibold [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a]:hover:text-primary/80 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:space-y-2 [&_table]:w-full [&_table]:my-6 [&_table]:border-collapse [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold [&_th]:border [&_th]:border-border [&_td]:px-3 [&_td]:py-2 [&_td]:border [&_td]:border-border">
+
+        <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+            KLAR suits users who want minimalism and technology: two flavours (Mint and Blank), SERATEK bioceramic delivery for faster onset, a beginner-friendly 3 mg option, and transparent pricing at €3.94/can. FUMI suits users who want flavour variety and stronger nicotine: nine bold Nordic flavours including Violet, Pear, and Ginger, strengths of 8–11 mg only, and a slightly lower price at €3.78/can. Neither is universally better — it depends on whether you value flavour range or delivery innovation.
+          </p>
+        </div>
+
+        <p>When you're searching for a nicotine pouch brand that goes beyond the mainstream, two Scandinavian players stand out: <strong>KLAR</strong> and <strong>FUMI</strong>. Both are tiny, specialized brands built on conviction—but they couldn't be more philosophically different.</p>
+
+        <p>KLAR believes in minimalism. Two flavors. SERATEK bioceramic technology. Done.</p>
+
+        <p>FUMI believes in experimentation. Nine flavors—including Violet, Ginger, and Pear. Affordable strength. Full throttle.</p>
+
+        <p>This guide cuts through the noise and helps you pick the right craft pouch brand for your palate and priorities.</p>
+
+        <h2>The Brands Behind the Pouches</h2>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Is Klar better than Fumi?</summary>
+  <p style="margin-top: 12px;">"Better" depends on personal preference—Klar excels with a wider range of flavours and gentler nicotine delivery, while Fumi focuses on bold, long-lasting flavours and higher nicotine strengths. Both are premium Swedish brands with excellent quality; choosing between them comes down to whether you prefer variety and subtlety (Klar) or intensity and boldness (Fumi).</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Which has more flavours, Klar or Fumi?</summary>
+  <p style="margin-top: 12px;">Klar typically offers more flavour variety—including minty, fruity, and botanical blends—while Fumi maintains a more curated selection focused on distinctive, complex flavour profiles. Both brands release seasonal and limited-edition options, so the exact count changes, but Klar is generally recognized for breadth.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Are Klar and Fumi the same company?</summary>
+  <p style="margin-top: 12px;">No, Klar and Fumi are separate brands owned by different parent companies, though both operate within the Scandinavian nicotine pouch market. Each maintains its own product development, sourcing, and brand identity; they compete directly but independently. <a href="/brands/klar-nicotine-pouches" style="color: hsl(var(--primary));">Learn more about Klar</a> and <a href="/brands/fumi-nicotine-pouches" style="color: hsl(var(--primary));">discover Fumi's lineup</a>.</p>
+</details>
+
+
+        <h3>KLAR: Bioceramic Minimalism</h3>
+
+        <p>KLAR Brands entered the market with a single, elegant vision: <strong>make nicotine absorption faster and smoother through materials science</strong>. Their signature SERATEK bioceramic technology (a porous ceramic layer in the pouch) claims to accelerate nicotine delivery and provide a more refined experience overall.</p>
+
+        <p>The brand philosophy extends to flavor: KLAR strips away the noise. You get Mint (crisp, classic) and Blank (genuinely unflavored—a rarity in the pouch world). Their product range is lean: Mini and Slim formats, strengths from 3–9mg nicotine, all priced at €3.94/can.</p>
+
+        <p>KLAR appeals to users who value <strong>transparency, technology, and restraint</strong>. If you've ever felt overwhelmed by flavor choice, KLAR is a breath of fresh air.</p>
+
+        <h3>FUMI: Nordic Flavor Maximalism</h3>
+
+        <p>FUMI (Helix Sweden AB) takes the opposite philosophical stance. This brand is built on <strong>bold, unconventional Nordic fruit and spice combinations</strong>. While most brands offer 3–5 flavors, FUMI has launched nine: Mango, Mint, Blueberry, Pear, Raspberry, Violet, Apple, Strawberry, and Ginger.</p>
+
+        <p>Violet pouches. Let that sink in. No other mainstream brand dares to explore floral territory.</p>
+
+        <p>FUMI's strengths run 8–11mg (stronger overall than KLAR), all pouches are Slim format, and prices hit €3.78/can—a smidge cheaper than KLAR. The brand ethos is playful experimentation. FUMI wants you to discover your next favorite flavor.</p>
+
+        <p>FUMI appeals to adventurous users, flavor chasers, and anyone tired of the same Mint/Citrus duopoly in the nicotine pouch market.</p>
+
+        <h2>Head-to-Head: The Five Key Differences</h2>
+
+        <h3>1. Flavor Philosophy: Minimalism vs. Maximalism</h3>
+
+        <p><strong>KLAR:</strong> Two flavors (Mint, Blank). The Blank pouches are genuinely unique—a completely unflavored nicotine pouch experience that lets you taste the bioceramic material and natural oils. For users who dislike artificial flavoring or want a neutral base, this is revolutionary.</p>
+
+        <p><strong>FUMI:</strong> Nine flavors spanning fruit, spice, and floral categories. This is the Nordic creative playbook: why stop at strawberry when you can add ginger, violet, and pear? Flavor diversity means higher odds of finding your personal favorite.</p>
+
+        <p><em>Winner for flavor choice:</em> FUMI (9 vs. 2). Winner for unique innovation: KLAR (Blank is unmatched).</p>
+
+        <h3>2. Nicotine Strength Range</h3>
+
+        <p><strong>KLAR:</strong> 3mg, 6mg, 9mg options. A conservative, beginner-friendly range. Strong options exist but the brand skews toward moderate-strength users.</p>
+
+        <p><strong>FUMI:</strong> 8mg and 11mg only. Squarely in the "regular to strong" camp. If you're coming off cigarettes or prefer a pronounced nicotine hit, FUMI is built for you. No gentle 3mg intro option here.</p>
+
+        <p><em>Winner for beginners:</em> KLAR. Winner for strength-focused users: FUMI.</p>
+
+        <h3>3. Technology & Materials: SERATEK vs. Standard</h3>
+
+        <p><strong>KLAR:</strong> The proprietary SERATEK bioceramic layer is the headline. Bioceramics are porous, which theoretically accelerates nicotine release and provides more consistent delivery across the pouch's lifecycle. The material is food-safe and inert—no flavor contamination.</p>
+
+        <p>In practice: users report faster kick-in (5–10 minutes vs. 10–15 for traditional pouches) and smoother, longer-lasting effects. Skeptics note that SERATEK is still a young technology and claims lack independent lab verification in published literature.</p>
+
+        <p><strong>FUMI:</strong> No proprietary technology disclosed. Standard nicotine pouch materials (cellulose, water, flavorings, nicotine). The bet is entirely on flavor formulation, not material science.</p>
+
+        <p><em>Winner for innovation:</em> KLAR. Winner for established reliability: FUMI (fewer unknowns).</p>
+
+        <h3>4. Price & Value</h3>
+
+        <p><strong>KLAR:</strong> €3.94/can across all formats and strengths. Consistent, transparent pricing. For a brand investing in proprietary technology, this is fair.</p>
+
+        <p><strong>FUMI:</strong> €3.78/can (€0.16 cheaper per can). Across a year of daily use, that's ~€58 saved. A modest but real advantage for price-conscious users.</p>
+
+        <p><em>Winner:</em> FUMI by a slim margin. Both are competitive against premium brands like ZYN (€4.50+/can) and VELO (€4.20+/can).</p>
+
+        <h3>5. Format & Convenience</h3>
+
+        <p><strong>KLAR:</strong> Two formats. Mini (smaller, for light use or first-time users) and Slim (standard size, all-day comfort). The Mini option is a thoughtful touch for those who don't want a full-strength experience every time.</p>
+
+        <p><strong>FUMI:</strong> Slim format only. No flexibility. If you want lightweight pouches, FUMI doesn't accommodate.</p>
+
+        <p><em>Winner:</em> KLAR. Format flexibility matters for personalization.</p>
+
+        <h2>Comparison Table</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Criteria</th>
+              <th>KLAR</th>
+              <th>FUMI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Flavors Available</strong></td>
+              <td>2 (Mint, Blank)</td>
+              <td>9 (Mango, Mint, Blueberry, Pear, Raspberry, Violet, Apple, Strawberry, Ginger)</td>
+            </tr>
+            <tr>
+              <td><strong>Strength Range</strong></td>
+              <td>3, 6, 9mg</td>
+              <td>8, 11mg</td>
+            </tr>
+            <tr>
+              <td><strong>Formats</strong></td>
+              <td>Mini, Slim</td>
+              <td>Slim only</td>
+            </tr>
+            <tr>
+              <td><strong>Price per Can</strong></td>
+              <td>€3.94</td>
+              <td>€3.78</td>
+            </tr>
+            <tr>
+              <td><strong>Proprietary Tech</strong></td>
+              <td>SERATEK Bioceramic</td>
+              <td>Standard materials</td>
+            </tr>
+            <tr>
+              <td><strong>Best For</strong></td>
+              <td>Beginners, minimalists, tech enthusiasts</td>
+              <td>Flavor adventurers, strong pouch users</td>
+            </tr>
+            <tr>
+              <td><strong>Total Products</strong></td>
+              <td>6</td>
+              <td>9</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Who Should Choose Which?</h2>
+
+        <h3>Choose KLAR If You:</h3>
+
+        <ul>
+          <li><strong>Value minimalism.</strong> Overwhelmed by choice? KLAR's two-flavor lineup (including the unique unflavored Blank) cuts through noise.</li>
+          <li><strong>Are new to pouches.</strong> The 3mg Mini option is ideal for testing the category before committing to stronger strengths.</li>
+          <li><strong>Are interested in materials science.</strong> SERATEK bioceramics represent genuine innovation, and faster nicotine absorption appeals to users seeking a refined delivery experience.</li>
+          <li><strong>Prefer restrained flavoring.</strong> If you've had bad experiences with artificial-tasting nicotine pouches, Blank and Mint offer a more natural-feeling experience.</li>
+          <li><strong>Want format flexibility.</strong> Mini and Slim options suit different occasions and preferences.</li>
+        </ul>
+
+        <h3>Choose FUMI If You:</h3>
+
+        <ul>
+          <li><strong>Love flavor experimentation.</strong> Nine flavors mean endless combinations. Violet? Ginger? Pear? FUMI is your playground.</li>
+          <li><strong>Prefer stronger nicotine.</strong> 8–11mg delivers a pronounced hit. Perfect for heavy users or anyone transitioning from cigarettes.</li>
+          <li><strong>Like value pricing.</strong> €3.78/can undercuts premium brands without compromising quality.</li>
+          <li><strong>Appreciate Nordic quirkiness.</strong> FUMI's bold flavor philosophy—combining fruits, spices, and florals—reflects Scandinavian creativity.</li>
+          <li><strong>Have found your strength.</strong> FUMI doesn't waste shelf space on low-strength options; it optimizes for regular-to-strong users.</li>
+        </ul>
+
+        <h2>The Verdict: Both Are Winners</h2>
+
+        <p>KLAR and FUMI aren't competitors in the traditional sense. They're philosophical opposites serving different user needs.</p>
+
+        <p><strong>KLAR wins on innovation and flexibility.</strong> SERATEK technology is real, the Blank pouch is genuinely unique, and the Mini format opens the category to new users. If you care about materials science and prefer clarity, KLAR is your brand.</p>
+
+        <p><strong>FUMI wins on adventure and value.</strong> Nine flavors, strong nicotine, and a lower price point make FUMI the choice for flavor-first users who want to explore. The Nordic approach to flavor (yes, Violet) is distinctive and fun.</p>
+
+        <p>Ideally, try both. Buy a can of KLAR Blank (unflavored) and a can of FUMI Violet (Nordic boldness). Spend a week with each. You'll quickly discover which philosophy aligns with your palate.</p>
+
+        <p>In 2026, the nicotine pouch market is fragmenting into niches. KLAR and FUMI represent two pure expressions of those niches. That's healthy. That's exciting.</p>
+
+        <h2>Featured Products</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+          {klarBlankSlim && <BlogProductCard product={klarBlankSlim} />}
+          {klarMintSlim && <BlogProductCard product={klarMintSlim} />}
+          {fumiVioletSlim && <BlogProductCard product={fumiVioletSlim} />}
+          {fumiGingerSlim && <BlogProductCard product={fumiGingerSlim} />}
+        </div>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <h3>Which brand has faster nicotine absorption?</h3>
+
+        <p>KLAR's SERATEK bioceramic technology is designed for faster absorption. Users report effects within 5–10 minutes, versus 10–15 for standard pouches. FUMI uses conventional materials, so absorption is standard. If speed matters to you, KLAR has a genuine edge.</p>
+
+        <h3>Can I use FUMI if I'm new to pouches?</h3>
+
+        <p>FUMI's minimum strength is 8mg, which is moderate-to-strong. If you're brand new to nicotine pouches, KLAR's 3mg Mini is a better starting point. Once you've acclimated, FUMI becomes an option.</p>
+
+        <h3>Are these brands available internationally?</h3>
+
+        <p>Both are Scandinavian-rooted and widely available in EU markets, including the Nordic countries and Germany. Availability outside Europe varies by distributor. Check your local retailer or online shops.</p>
+
+        <h3>What's the shelf life of KLAR and FUMI pouches?</h3>
+
+        <p>Most nicotine pouches maintain potency for 12–18 months if stored in cool, dry conditions. Both KLAR and FUMI should be stored in the original can or an airtight container to preserve freshness.</p>
+
+        <h3>Can I mix KLAR and FUMI in a session?</h3>
+
+        <p>Technically yes, but it's not recommended. Mixing brands means unpredictable nicotine strength and flavor combinations. Stick to one brand per session for a consistent experience.</p>
+
+        <h3>Which brand is more sustainable?</h3>
+
+        <p>Both use plant-based cellulose pouches (no plastic). KLAR's SERATEK bioceramics are food-grade and biodegradable. Neither brand publishes comprehensive sustainability reports, so claims are limited. Both are better than traditional snus in terms of environmental footprint.</p>
+
+        <h2>Top KLAR & FUMI Recommendations</h2>
+
+        <p>Ready to try these brands? Here are our top picks for first-time buyers:</p>
+
+        <ul>
+          <li><strong>KLAR Blank Slim:</strong> The signature KLAR experience. Unflavored, bioceramic, pure. 9mg of clarity.</li>
+          <li><strong>KLAR Mint Slim:</strong> KLAR's classic flavor. Clean, crisp, unadorned. Pairs beautifully with coffee.</li>
+          <li><strong>FUMI Violet Slim:</strong> The flavor everyone asks about. Floral, slightly sweet, unforgettable. 11mg.</li>
+          <li><strong>FUMI Ginger Slim:</strong> Nordic spice meets nicotine. Warming, complex, bold. 11mg.</li>
+          <li><strong>FUMI Strawberry Slim:</strong> The accessible FUMI entry point. Fruity, familiar, addictive. 8mg.</li>
+        </ul>
+
+        <h2>Learn More</h2>
+
+        <p>Interested in diving deeper? Check out our complete KLAR and FUMI brand profiles, and explore more comparisons in our blog.</p>
+
+      </div>
+
+      <p class="text-sm italic text-muted-foreground mt-8">
+        This article is for informational purposes only and does not constitute medical advice. Nicotine products are addictive and intended for use by adults who are already users of nicotine products. Always follow local regulations and guidelines regarding nicotine pouch purchase and use.
+      </p>
+
+      <div style="margin-top: 48px; padding: 20px; border-radius: 12px; background: hsl(var(--muted)); border: 1px solid hsl(var(--border));">
+        <p style="margin: 0; font-size: 0.85rem; color: hsl(var(--muted-foreground));">
+          <strong>Disclaimer:</strong> This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+</Shop>

@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-// @ts-ignore: Deno file import
+// @ts-expect-error — Deno types: Deno file import
 import { corsHeaders as baseCors } from "../_shared/cors.ts";
 const corsHeaders = {
   ...baseCors,

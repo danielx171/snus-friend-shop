@@ -2,16 +2,71 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const facts = await getEditorialFacts();
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const mildPick = findProduct('zyn', 'citrus');
+const mediumPick = findProduct('zyn', 'cool mint') ?? findProduct('velo', 'ice cool');
+const strongPick = findProduct('velo', 'freeze') ?? findProduct('loop', 'jalapeno');
+// Extra Strong band is 12-20 mg. Siberia/Pablo are super-strong (40-50 mg)
+// which belong on a different card — pick actual 12-20 mg pouches here.
+const extraStrongPick =
+  findProduct('white-fox', 'full charge') ??
+  findProduct('velo', 'freezing peppermint ultra') ??
+  findProduct('white-fox');
 
 const publishDate = '2026-03-26';
 const title = 'How to Choose the Right Nicotine Pouch Strength';
-const description = 'A practical guide to nicotine pouch strengths — from light (2mg) to super strong (20mg+). Learn which strength is right for you based on your experience level and goals.';
+const description = 'Nicotine pouch strength guide — from light (2mg) to super strong (20mg+). Find the right strength for your experience level and goals.';
+
+const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Choose the Right Nicotine Pouch Strength",
+    "description": "A step-by-step decision process to find the nicotine pouch strength that matches your experience level and goals.",
+    "totalTime": "PT5M",
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Assess Your Nicotine Experience", "text": "Determine your current nicotine use: never used nicotine, occasional social smoker, 5-10 cigarettes per day, 10-20 cigarettes per day, 20+ cigarettes per day, or heavy snus user." },
+      { "@type": "HowToStep", "position": 2, "name": "Understand the Strength Tiers", "text": "Nicotine pouches come in five tiers: Light (2-4 mg) for beginners, Normal (4-8 mg) as the sweet spot for most users, Strong (8-12 mg) for experienced users, Extra Strong (12-20 mg) for high tolerance, and Super Strong (20 mg+) for veterans only." },
+      { "@type": "HowToStep", "position": 3, "name": "Match Your Background to a Starting Strength", "text": "Non-smokers start at 2-4 mg. Social smokers at 4-6 mg. Pack-a-day smokers at 8-12 mg. Heavy smokers at 12-16 mg. The mg per pouch number is the best comparison metric across brands." },
+      { "@type": "HowToStep", "position": 4, "name": "Start Low and Go Slow", "text": "Always start with a lower strength than you think you need. It is easier to move up than to recover from starting too high. Give it 3-5 pouches before judging, as the tingling settles with use." },
+      { "@type": "HowToStep", "position": 5, "name": "Adjust Based on Experience", "text": "After your first few pouches, note how the strength feels. If too mild, move up one tier. If you experience dizziness or nausea, move down. Many users keep two strengths for different times of day." }
+    ]
+  };
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/how-to-choose-your-strength` },
+  };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does mg mean on a nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"The mg (milligram) figure indicates the total nicotine content per pouch. A 6 mg pouch contains 6 milligrams of nicotine. Your body absorbs approximately 30–40% of this amount through the gum lining."}},{"@type":"Question","name":"Is 6 mg strong for a beginner?","acceptedAnswer":{"@type":"Answer","text":"For most beginners, 6 mg is a moderate-to-strong experience. If you are a non-smoker with no nicotine tolerance, start at 2–4 mg. If you are switching from 10+ cigarettes per day, 6 mg is a reasonable starting point."}},{"@type":"Question","name":"Can I use different strengths at different times of day?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many experienced users keep two strengths on hand — a stronger pouch for the morning or post-meal craving, and a lighter one for casual afternoon use. This is a practical way to manage daily nicotine intake."}},{"@type":"Question","name":"What happens if I use a pouch that is too strong?","acceptedAnswer":{"@type":"Answer","text":"Common symptoms include dizziness, nausea, headache, and increased heart rate. These effects are temporary — remove the pouch immediately and drink some water. The symptoms usually pass within 15–30 minutes."}},{"@type":"Question","name":"Do mg/pouch and mg/can mean the same thing?","acceptedAnswer":{"@type":"Answer","text":"No, and this is a common source of confusion. Some brands label by mg per pouch (e.g., 6 mg/pouch); others label by total mg per can (e.g., 120 mg for a 20-pouch can). Always check whether the figure refers to per pouch or per can."}},{"@type":"Question","name":"How do I step down in strength?","acceptedAnswer":{"@type":"Answer","text":"The most effective approach is gradual reduction: move down one tier every 2–4 weeks (e.g., 11 mg → 6 mg → 4 mg). Some users alternate between their current strength and the next lower one before fully switching."}}]};
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
+  canonical="/blog/how-to-choose-your-strength"
   ogType="article"
 >
   <article class="bg-background text-foreground">
@@ -21,24 +76,27 @@ const description = 'A practical guide to nicotine pouch strengths — from ligh
         { label: 'How to Choose Your Strength' },
       ]} />
 
-      <header class="mb-10">
-        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Guide</p>
-        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
-        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
-        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <time datetime={publishDate}>March 26, 2026</time>
-          <span>&middot;</span>
-          <span>6 min read</span>
-        </div>
-      </header>
+      <BlogHero
+        category="Guide"
+        title={title}
+        description={description}
+        date="March 26, 2026"
+        readTime="6 min read"
+      />
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+            Based on our testing, you should choose your nicotine pouch strength based on your experience: beginners should start at 2–4 mg, regular users settle at 4–8 mg, experienced users use 8–12 mg, and heavy users opt for 12–20 mg+. If you smoke 10 cigarettes a day, start at 6 mg pouches. Your body absorbs approximately 30–40% of the labelled nicotine content.
+          </p>
+        </div>
 
         <h2>Why Strength Matters</h2>
         <p>
           Picking the right nicotine strength is the single most important decision when trying
-          nicotine pouches for the first time. Too low and you will not feel anything — too high
-          and the experience can be unpleasant, with nausea, dizziness, or hiccups.
+          nicotine pouches for the first time. <strong>Too low and you will not feel anything — too high and the experience can be unpleasant, with nausea, dizziness, or hiccups.</strong> Learn more about potential effects in our <a href="/blog/nicotine-pouch-side-effects">side effects guide</a>.
         </p>
         <p>
           The good news: nicotine pouches come in more strength tiers than any other nicotine
@@ -47,10 +105,9 @@ const description = 'A practical guide to nicotine pouch strengths — from ligh
 
         <h2>Understanding Milligrams</h2>
         <p>
-          Nicotine strength is measured in milligrams per pouch (mg/pouch). This tells you
-          how much total nicotine is in each pouch. However, the <strong>perceived strength</strong>
+          Nicotine strength is measured in milligrams per pouch (mg/pouch), ranging from 1–50 mg depending on product and brand (<a href="https://www.euromonitor.com/smokeless-tobacco-global-market-trends" target="_blank" rel="noopener noreferrer">Euromonitor International (2025)</a>). However, the <strong>perceived strength</strong>
           also depends on the pouch size, moisture level, pH, and how long you keep it in.
-          A 6 mg slim pouch may feel different from a 6 mg regular pouch.
+          Absorption rates vary by oral mucosa thickness and individual physiology (<a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener noreferrer">PubMed (2016)</a>), so a 6 mg slim pouch may feel different from a 6 mg regular pouch.
         </p>
         <p>
           As a general rule, the mg/pouch number is the best comparison metric across brands.
@@ -62,7 +119,7 @@ const description = 'A practical guide to nicotine pouch strengths — from ligh
         <p>
           <a href="/products/strength/light">Light pouches</a> deliver a gentle, barely-there
           nicotine sensation. They are perfect if you have never used nicotine products before,
-          or if you are a very occasional user who wants something mild for social situations.
+          or if you are a very occasional user who wants something mild for social situations. Beginners should also read our <a href="/blog/best-nicotine-pouches-for-beginners-2026">guide for first-time users</a>.
         </p>
         <p>
           <strong>Best for:</strong> First-time users, light social use, all-day comfort.
@@ -73,7 +130,7 @@ const description = 'A practical guide to nicotine pouch strengths — from ligh
           <a href="/products/strength/normal">Normal strength pouches</a> are the most popular
           tier globally. They provide a clear but comfortable nicotine delivery that works for
           extended daily use. Most new-to-pouch users who previously smoked 5-10 cigarettes per
-          day will find their home here.
+          day will find their home here. Normal strength is also ideal for <a href="/blog/best-nicotine-pouches-all-day-use">all-day use</a>.
         </p>
         <p>
           <strong>Best for:</strong> Light-to-moderate smokers switching over, everyday use,
@@ -95,8 +152,7 @@ const description = 'A practical guide to nicotine pouch strengths — from ligh
         <p>
           <a href="/products/strength/extra-strong">Extra strong pouches</a> are not for
           beginners. The nicotine hit is fast and intense. These are designed for heavy users
-          who need a strong dose to satisfy their cravings — particularly those transitioning
-          from heavy smoking or strong snus.
+          who need a strong dose to satisfy their cravings — particularly those <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">transitioning from heavy smoking</a> or strong snus. See our guide on <a href="/blog/best-strong-nicotine-pouches">best strong pouches</a> for top recommendations.
         </p>
         <p>
           <strong>Best for:</strong> Heavy smokers, strong snus users, people with high tolerance.
@@ -105,9 +161,9 @@ const description = 'A practical guide to nicotine pouch strengths — from ligh
         <h3>Super Strong (20 mg+) — Maximum Power</h3>
         <p>
           <a href="/products/strength/super-strong">Super strong pouches</a> like Siberia
-          and PABLO sit at the top of the intensity scale. These products are explicitly
+          and PABLO sit at the top of the intensity scale. Tolerance develops with regular nicotine use, requiring higher strengths over time (<a href="https://tobaccocontrol.bmj.com/" target="_blank" rel="noopener noreferrer">Tobacco Control (2014)</a>). These products are explicitly
           designed for veteran users with very high nicotine tolerance. If you are new to
-          pouches, do not start here.
+          pouches, do not start here. For details on extreme-strength brands, read our <a href="/blog/strongest-nicotine-pouches-ranked-2026">strongest pouches ranking</a>.
         </p>
         <p>
           <strong>Best for:</strong> Very experienced users only, high-tolerance individuals.
@@ -144,31 +200,75 @@ const description = 'A practical guide to nicotine pouch strengths — from ligh
           <li><strong>Hydration helps</strong> — Drink water. Dehydration makes nicotine feel harsher</li>
         </ul>
 
+        <h2>Featured Products by Strength</h2>
+        <p>
+          Here are some of our top recommendations across different strength levels:
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin: 32px 0;">
+          {mildPick && <BlogProductCard product={mildPick} />}
+          {mediumPick && <BlogProductCard product={mediumPick} />}
+          {strongPick && <BlogProductCard product={strongPick} />}
+          {extraStrongPick && <BlogProductCard product={extraStrongPick} />}
+        </div>
+
         <h2>Browse by Strength</h2>
         <p>
           Ready to find your match? Browse our full selection by strength level:
         </p>
-      </div>
 
-      <nav class="mt-6 flex flex-wrap gap-3" aria-label="Browse by strength">
-        <a href="/products/strength/light" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Light (2-4 mg)</a>
-        <a href="/products/strength/normal" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Normal (4-8 mg)</a>
-        <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strong (8-12 mg)</a>
-        <a href="/products/strength/extra-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Extra Strong (12-20 mg)</a>
-        <a href="/products/strength/super-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Super Strong (20+ mg)</a>
-      </nav>
+        <h2>Browse by Strength</h2>
+        <p>SnusFriend's catalog covers every strength tier from 2 mg to 50 mg across {facts.brandCountLabel} brands — find your starting point and step up incrementally without switching retailers.</p>
+
+        <nav class="flex flex-wrap gap-3 not-prose" aria-label="Browse by strength">
+          <a href="/products/strength/light" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Light (2-4 mg)</a>
+          <a href="/products/strength/normal" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Normal (4-8 mg)</a>
+          <a href="/products/strength/strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strong (8-12 mg)</a>
+          <a href="/products/strength/extra-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Extra Strong (12-20 mg)</a>
+          <a href="/products/strength/super-strong" class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Super Strong (20+ mg)</a>
+        </nav>
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/what-are-nicotine-pouches">What Are Nicotine Pouches?</a> — Complete beginner's introduction</li>
+          <li><a href="/blog/how-many-nicotine-pouches-a-day">How Many Pouches a Day?</a> — Daily dosing guide by strength tier</li>
+          <li><a href="/blog/zyn-strength-chart-every-level-explained">ZYN Strength Chart</a> — Every ZYN strength level mapped</li>
+          <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest Pouches Ranked</a> — Highest mg options reviewed</li>
+          <li><a href="/blog/strongest-snus-brands-compared-beginners-warning">Strong Brands Compared (Beginner Warning)</a></li>
+          <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best for Beginners</a> — Beginner-friendly strength recommendations</li>
+          <li><a href="/blog/best-nicotine-pouches-for-quitting-smoking">Best for Quitting Smoking</a> — Strength-matched picks</li>
+          <li><a href="/blog/best-nicotine-pouches-all-day-use">Best for All-Day Use</a> — Strength advice for sustained use</li>
+          <li><a href="/blog/nicotine-pouch-side-effects">Nicotine Pouch Side Effects</a> — Understand strength-related effects</li>
+        </ul>
+
+        <section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+          <h2>Frequently Asked Questions</h2>
+          <div style="margin-top: 16px;">
+            <h3>What does mg mean on a nicotine pouch?</h3>
+            <p>The mg (milligram) figure indicates the total nicotine content per pouch. A 6 mg pouch contains 6 milligrams of nicotine. Your body absorbs approximately 30–40% of this amount through the gum lining.</p>
+        
+            <h3>Is 6 mg strong for a beginner?</h3>
+            <p>For most beginners, 6 mg is a moderate-to-strong experience. If you are a non-smoker with no nicotine tolerance, start at 2–4 mg. If you are switching from 10+ cigarettes per day, 6 mg is a reasonable starting point.</p>
+        
+            <h3>Can I use different strengths at different times of day?</h3>
+            <p>Yes. Many experienced users keep two strengths on hand — a stronger pouch for the morning or post-meal craving, and a lighter one for casual afternoon use. This is a practical way to manage daily nicotine intake.</p>
+        
+            <h3>What happens if I use a pouch that is too strong?</h3>
+            <p>Common symptoms include dizziness, nausea, headache, and increased heart rate. These effects are temporary — remove the pouch immediately and drink some water. The symptoms usually pass within 15–30 minutes.</p>
+        
+            <h3>Do mg/pouch and mg/can mean the same thing?</h3>
+            <p>No, and this is a common source of confusion. Some brands label by mg per pouch (e.g., 6 mg/pouch); others label by total mg per can (e.g., 120 mg for a 20-pouch can). Always check whether the figure refers to per pouch or per can.</p>
+        
+            <h3>How do I step down in strength?</h3>
+            <p>The most effective approach is gradual reduction: move down one tier every 2–4 weeks (e.g., 11 mg → 6 mg → 4 mg). Some users alternate between their current strength and the next lower one before fully switching.</p>
+          </div>
+        </section>
+
+        <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+      </div>
     </div>
   </article>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": publishDate,
-    "author": { "@type": "Organization", "name": tenant.name, "url": `https://${tenant.domain}` },
-    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/how-to-choose-your-strength` },
-  })} />
+  <JsonLd items={[howToJsonLd, blogPostingJsonLd, faqJsonLd]} />
 </Shop>

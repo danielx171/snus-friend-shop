@@ -9,6 +9,22 @@ interface ReviewsQueryData extends ReviewStats {
 }
 
 /**
+ * Read the current user's id without an async network call when possible.
+ * Shop.astro:30 sets window.__AUTH_STATE__ from Astro.locals.user on every
+ * SSR page load; falling back to supabase.auth.getUser() handles SSG pages
+ * that don't pre-populate the window global.
+ */
+async function getCurrentUserId(): Promise<string | null> {
+  if (typeof window !== 'undefined') {
+    const w = window as unknown as { __AUTH_STATE__?: { id?: string } | null };
+    const id = w.__AUTH_STATE__?.id;
+    if (id) return id;
+  }
+  const { data: authData } = await supabase.auth.getUser();
+  return authData?.user?.id ?? null;
+}
+
+/**
  * Fetches the set of review IDs the current user has liked for a given product.
  * Returns a toggle function with optimistic updates.
  */
@@ -20,8 +36,7 @@ export function useReviewLikes(productId: string | undefined) {
   const { data: likedIds = new Set<string>() } = useQuery({
     queryKey,
     queryFn: async () => {
-      const { data: authData } = await supabase.auth.getUser();
-      const userId = authData?.user?.id;
+      const userId = await getCurrentUserId();
       if (!userId || !productId) return new Set<string>();
 
       // Only fetch likes for reviews belonging to this product
@@ -39,9 +54,9 @@ export function useReviewLikes(productId: string | undefined) {
 
   const toggleMutation = useMutation({
     mutationFn: async (reviewId: string) => {
-      // Check auth before calling RPC
-      const { data: authData } = await supabase.auth.getUser();
-      if (!authData?.user?.id) {
+      // Check auth before calling RPC (avoid round-trip when window has the user)
+      const userId = await getCurrentUserId();
+      if (!userId) {
         throw new Error('NOT_AUTHENTICATED');
       }
 

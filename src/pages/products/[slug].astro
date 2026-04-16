@@ -1,39 +1,106 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
+import ProductCard from '@/components/astro/ProductCard.astro';
 import AddToCartButton from '@/components/react/AddToCartButton';
+import StickyAddToCart from '@/components/react/StickyAddToCart';
 import ProductReviewsIsland from '@/components/react/ProductReviewsIsland';
+import { buildAbsoluteUrl, siteHost } from '@/config/site';
+import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
+import { brandColors, defaultBrandColor } from '@/data/brand-colors';
+import { rewards } from '@/config/rewards';
 
 export async function getStaticPaths() {
-  const products = await getCollection('products');
-  return products.map((product) => ({
-    params: { slug: product.id },
-    props: { product },
-  }));
+  const allProducts = await getCollection('products');
+  return allProducts.map((product) => {
+    const relatedProducts = allProducts
+      .filter((rp) => rp.data.brandSlug === product.data.brandSlug && rp.id !== product.id)
+      .slice(0, 4);
+
+    // Same flavour, different brand
+    const sameFlavour = allProducts
+      .filter((rp) => rp.data.flavorKey === product.data.flavorKey
+        && rp.data.brandSlug !== product.data.brandSlug
+        && rp.id !== product.id
+        && rp.data.imageUrl
+        && rp.data.stock > 0)
+      .sort((a, b) => (b.data.ratings || 0) - (a.data.ratings || 0))
+      .slice(0, 4);
+
+    // Similar strength, better value (sorted by price ascending)
+    const similarStrength = allProducts
+      .filter((rp) => rp.data.strengthKey === product.data.strengthKey
+        && rp.id !== product.id
+        && rp.data.imageUrl
+        && rp.data.stock > 0
+        && rp.data.brandSlug !== product.data.brandSlug)
+      .sort((a, b) => (a.data.prices?.pack1 || 99) - (b.data.prices?.pack1 || 99))
+      .slice(0, 4);
+
+    // Step-down suggestion: same brand + same flavor, one strength level lower
+    const strengthOrder = ['light', 'normal', 'strong', 'extra-strong', 'super-strong'];
+    const currentStrengthIdx = strengthOrder.indexOf(product.data.strengthKey);
+    const lowerStrengths = currentStrengthIdx > 0 ? strengthOrder.slice(0, currentStrengthIdx) : [];
+
+    const stepDownProduct = lowerStrengths.length > 0
+      ? allProducts.find((rp) =>
+          rp.data.brandSlug === product.data.brandSlug
+          && rp.data.flavorKey === product.data.flavorKey
+          && lowerStrengths.includes(rp.data.strengthKey)
+          && rp.data.stock > 0
+          && rp.id !== product.id
+        ) ?? null
+      : null;
+
+    return {
+      params: { slug: product.id },
+      props: {
+        product,
+        relatedProducts,
+        sameFlavour,
+        similarStrength,
+        stepDownProduct,
+      },
+    };
+  });
 }
 
-const { product } = Astro.props;
+const { product, relatedProducts, sameFlavour, similarStrength, stepDownProduct } = Astro.props;
 const p = product.data;
+const bColor = brandColors[p.brandSlug] ?? defaultBrandColor;
+
+// Calculate savings for pack pricing
+const singlePrice = p.prices.pack1;
+const packSavings: Record<string, number> = {};
+for (const [key, price] of Object.entries(p.prices)) {
+  if (key === 'pack1' || typeof price !== 'number' || price <= 0) continue;
+  const qty = parseInt(key.replace('pack', ''));
+  if (!qty || qty <= 1) continue;
+  const perCan = price / qty;
+  const saving = Math.round((1 - perCan / singlePrice) * 100);
+  if (saving > 0) packSavings[key] = saving;
+}
 
 const strengthMap: Record<string, number> = {
   normal: 2,
   strong: 3,
   'extra-strong': 4,
-  extraStrong: 4,
   'super-strong': 5,
-  ultraStrong: 5,
 };
 const strengthLevel = strengthMap[p.strengthKey] ?? 2;
+
+const stepDownStrengthOrder = ['light', 'normal', 'strong', 'extra-strong', 'super-strong'];
+const currentStrengthIdx = stepDownStrengthOrder.indexOf(p.strengthKey);
 
 const strengthLabels: Record<string, string> = {
   normal: 'Normal',
   strong: 'Strong',
   'extra-strong': 'Extra Strong',
-  extraStrong: 'Extra Strong',
   'super-strong': 'Super Strong',
-  ultraStrong: 'Ultra Strong',
 };
 const strengthLabel = strengthLabels[p.strengthKey] ?? 'Normal';
 
@@ -54,16 +121,30 @@ const flavorLabel = flavorLabels[p.flavorKey] ?? p.flavorKey;
 
 // Theme-aware flavor colors — no hardcoded Tailwind palette colors
 const flavorColor = 'bg-primary/10 text-primary border-primary/20';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
+const currencyCode = tenant.currencyCode;
 
-const description = p.description || `${p.name} by ${p.brand}. ${p.nicotineContent}mg nicotine pouches with ${flavorLabel.toLowerCase()} flavour. ${p.portionsPerCan} portions per can.`;
-const metaDescription = description.length > 160 ? description.slice(0, 157) + '...' : description;
+// Generate an accurate fallback description from real product attributes
+const generatedDescription = `${p.name} — ${p.nicotineContent}mg ${flavorLabel.toLowerCase()} nicotine pouches, ${strengthLabel.toLowerCase()} strength. ${p.portionsPerCan} portions. Free EU shipping.`;
 
-const packTiers = [
-  { key: 'pack1', label: '1 can', qty: 1 },
-  { key: 'pack3', label: '3 cans', qty: 3 },
-  { key: 'pack5', label: '5 cans', qty: 5 },
-  { key: 'pack10', label: '10 cans', qty: 10 },
-];
+// Detect bad template descriptions: if the stored description mentions a different
+// format or contains "cool mint" for a non-cool-mint product, use the generated one instead
+const storedDesc = (p.description || '').toLowerCase();
+const nameLower = p.name.toLowerCase();
+const isBadDescription = !p.description
+  || (storedDesc.includes('cool mint') && !nameLower.includes('cool mint'))
+  || (storedDesc.includes('slim format') && p.formatKey !== 'slim')
+  || (storedDesc.includes('mini format') && p.formatKey !== 'mini')
+  || storedDesc.includes(`shop ${siteHost}`);
+
+const description = isBadDescription ? generatedDescription : p.description;
+
+// Tiered meta description — stays under 155 chars naturally, never truncates with "..."
+const priceStr = singlePrice > 0 ? ` From €${singlePrice.toFixed(2)}.` : '';
+const metaA = `Buy ${p.name} — ${p.nicotineContent}mg ${flavorLabel.toLowerCase()} pouches, ${strengthLabel.toLowerCase()} strength.${priceStr} Free EU shipping.`;
+const metaB = `Buy ${p.name} — ${p.nicotineContent}mg ${flavorLabel.toLowerCase()} nicotine pouches.${priceStr} Free EU shipping.`;
+const metaC = `${p.name} — ${p.nicotineContent}mg nicotine pouches.${priceStr} Free EU shipping.`;
+const metaDescription = metaA.length <= 155 ? metaA : metaB.length <= 155 ? metaB : metaC;
 
 const inStock = p.stock > 0;
 
@@ -72,12 +153,13 @@ const jsonLd = {
   '@type': 'Product',
   name: p.name,
   image: p.imageUrl || undefined,
-  description: description,
+  description: metaDescription,
   brand: {
     '@type': 'Brand',
     name: p.brand,
   },
   sku: p.slug,
+  mpn: product.id,
   ...(p.updatedAt && { dateModified: new Date(p.updatedAt).toISOString() }),
   offers: {
     '@type': 'AggregateOffer',
@@ -87,25 +169,23 @@ const jsonLd = {
     offerCount: Object.keys(p.prices).length,
     availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
   },
-  ...(p.ratings > 0 && {
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: p.ratings.toFixed(1),
-      bestRating: '5',
-      reviewCount: '1',
-    },
-  }),
+  url: buildAbsoluteUrl(`/products/${p.slug}`),
+  // aggregateRating intentionally omitted — `p.ratings` is a denormalized average on the
+  // product row, not a count of reviews. Emitting aggregateRating with a fabricated
+  // ratingCount/reviewCount would be misleading per Google's structured-data policy.
+  // Re-enable when Supabase `reviews` counts are joined at build time (planned Wave C).
 };
 ---
 
 <Shop
-  title={`${p.name} | SnusFriend`}
+  title={`${p.name} | ${tenant.name}`}
   description={metaDescription}
   ogType="product"
+  ogImage={p.imageUrl || undefined}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <JsonLd data={jsonLd} />
 
-  <div class="mx-auto max-w-6xl px-4 py-8 sm:py-12">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
     <Breadcrumb items={[
       { label: 'Products', href: '/products' },
       { label: p.name },
@@ -116,17 +196,19 @@ const jsonLd = {
 
       <!-- Left: Product Image -->
       <div class="group/img relative">
-        <div class="product-card-image-bg overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur">
-          <div class="pdp-image-entrance relative aspect-square w-full">
+        <div class="overflow-hidden rounded-2xl border border-border cursor-zoom-in" style={`background: linear-gradient(135deg, ${bColor}15, ${bColor}08);`} id="pdp-image-container">
+          <div class="relative aspect-square w-full">
             {p.imageUrl ? (
-              <img
+              <Image
                 src={p.imageUrl}
                 alt={p.name}
-                width="600"
-                height="600"
+                width={600}
+                height={600}
                 loading="eager"
-                decoding="async"
-                class="pdp-image-hover h-full w-full object-contain p-8"
+                format="webp"
+                quality={85}
+                class="h-full w-full object-contain p-8 transition-transform duration-200"
+                id="pdp-image"
               />
             ) : (
               <div class="flex h-full w-full items-center justify-center text-muted-foreground/40">
@@ -193,6 +275,24 @@ const jsonLd = {
           </div>
         )}
 
+        {/* "Be the first to review" CTA — shown only when we have no ratings on the product row.
+            ratings === 0 is a build-time proxy for reviewCount === 0 (we don't fetch live counts at build). */}
+        {p.ratings === 0 && (
+          <div class="mb-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-center">
+            <p class="text-sm font-semibold text-foreground">Be the first to review this product</p>
+            <p class="mt-1 text-xs text-muted-foreground">
+              Share your experience and earn <strong class="text-primary">50 {loyaltyCurrencyName}</strong>.
+            </p>
+            <button
+              type="button"
+              data-open-review=""
+              class="mt-3 inline-flex h-9 items-center rounded-lg bg-primary px-4 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90"
+            >
+              Write a review
+            </button>
+          </div>
+        )}
+
         {/* Flavor Badge + Strength Indicator */}
         <div class="mb-6 flex flex-wrap items-center gap-3">
           <span class={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${flavorColor}`}>
@@ -200,7 +300,7 @@ const jsonLd = {
           </span>
 
           <div class="flex items-center gap-2">
-            <div class="flex items-center gap-0.5" aria-label={`Strength ${strengthLevel} of 5`}>
+            <div class="flex items-center gap-0.5" role="img" aria-label={`Strength ${strengthLevel} of 5`}>
               {Array.from({ length: 5 }, (_, i) => (
                 <span
                   class={`inline-block h-2 w-2 rounded-full ${i < strengthLevel ? 'bg-primary' : 'bg-muted-foreground/25'}`}
@@ -212,40 +312,22 @@ const jsonLd = {
         </div>
 
         {/* Quick Specs */}
-        <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+        <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div class="rounded-lg border border-border bg-card/60 p-3 text-center">
             <p class="text-xs text-muted-foreground">Nicotine</p>
-            <p class="text-sm font-semibold text-foreground">{p.nicotineContent}mg</p>
+            <p class="text-sm font-semibold text-foreground">{p.nicotineContent} mg/pouch</p>
           </div>
-          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+          <div class="rounded-lg border border-border bg-card/60 p-3 text-center">
             <p class="text-xs text-muted-foreground">Portions</p>
             <p class="text-sm font-semibold text-foreground">{p.portionsPerCan}/can</p>
           </div>
-          <div class="rounded-lg border border-border bg-card/40 p-3 text-center backdrop-blur">
+          <div class="rounded-lg border border-border bg-card/60 p-3 text-center">
             <p class="text-xs text-muted-foreground">Format</p>
             <p class="text-sm font-semibold text-foreground capitalize">{p.formatKey}</p>
           </div>
-        </div>
-
-        {/* Price Tiers */}
-        <div class="mb-6 rounded-xl border border-border bg-card/50 p-4 backdrop-blur">
-          <h2 class="mb-3 text-sm font-semibold text-foreground">Pack Pricing</h2>
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {packTiers.map(({ key, label, qty }) => {
-              const price = p.prices[key];
-              if (!price) return null;
-              const perCan = (price / qty).toFixed(2);
-              const isBase = key === 'pack1';
-              return (
-                <div class={`rounded-lg border p-3 text-center transition ${isBase ? 'border-primary/40 bg-primary/5' : 'border-border bg-card/30 hover:border-primary/20'}`}>
-                  <p class="text-xs text-muted-foreground">{label}</p>
-                  <p class="text-lg font-bold text-foreground">&euro;{price.toFixed(2)}</p>
-                  {!isBase && (
-                    <p class="text-xs text-primary">&euro;{perCan}/can</p>
-                  )}
-                </div>
-              );
-            })}
+          <div class="rounded-lg border border-primary/20 bg-primary/5 p-3 text-center">
+            <p class="text-xs text-muted-foreground">Price/Pouch</p>
+            <p class="text-sm font-semibold text-primary">&euro;{(singlePrice / (p.portionsPerCan || 20)).toFixed(2)}</p>
           </div>
         </div>
 
@@ -264,29 +346,180 @@ const jsonLd = {
           )}
         </div>
 
-        {/* Add to Cart — React island */}
-        <div class="mb-8">
-          <AddToCartButton
-            client:visible
-            product={{
-              slug: p.slug,
-              name: p.name,
-              brand: p.brand,
-              imageUrl: p.imageUrl,
-              prices: p.prices,
-              stock: p.stock ?? 0,
-              flavorKey: p.flavorKey,
-              strengthKey: p.strengthKey,
-              formatKey: p.formatKey,
-              nicotineContent: p.nicotineContent,
-              portionsPerCan: p.portionsPerCan,
-            }}
-          />
+        {/* Add to Cart or Notify Me */}
+        <div class="mb-8" data-add-to-cart-main>
+          {inStock ? (
+            <AddToCartButton
+              client:visible
+              product={{
+                slug: p.slug,
+                name: p.name,
+                brand: p.brand,
+                imageUrl: p.imageUrl,
+                prices: p.prices,
+                stock: p.stock ?? 0,
+                flavorKey: p.flavorKey,
+                strengthKey: p.strengthKey,
+                formatKey: p.formatKey,
+                nicotineContent: p.nicotineContent,
+                portionsPerCan: p.portionsPerCan,
+              }}
+            />
+          ) : (
+            <div class="rounded-xl border border-border bg-card/50 p-5">
+              <p class="text-sm font-semibold text-foreground mb-1">Get notified when it's back</p>
+              <p class="text-xs text-muted-foreground mb-3">We'll email you as soon as this product is restocked.</p>
+              <form class="flex gap-2" data-notify-form data-product-slug={p.slug}>
+                <label for="notify-email" class="sr-only">Email address</label>
+                <input
+                  type="email"
+                  id="notify-email"
+                  required
+                  placeholder="you@email.com"
+                  class="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+                <button
+                  type="submit"
+                  class="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Notify Me
+                </button>
+              </form>
+              <p class="notify-msg mt-2 text-xs hidden"></p>
+            </div>
+          )}
         </div>
+
+        {/* SnusCoin teaser — per-can rate; live total shown in AddToCartButton */}
+        {inStock && (
+          <p class="text-sm text-muted-foreground -mt-6 mb-8 flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="text-primary" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            Earn <strong class="text-primary">{Math.floor(singlePrice * rewards.earnRatePerEur)}</strong> {loyaltyCurrencyName} per can
+            <a href="/rewards" class="underline hover:text-foreground ml-1">See how {loyaltyCurrencyName} work</a>
+          </p>
+        )}
+
+        {/* Step-down suggestion for extra-strong and super-strong products */}
+        {stepDownProduct && (currentStrengthIdx >= 3) && (
+          <div class="mb-6 rounded-lg border border-border/50 bg-muted/20 p-4 flex items-center gap-3">
+            <span class="text-lg" aria-hidden="true">💡</span>
+            <p class="text-sm text-muted-foreground">
+              Thinking about stepping down? Try
+              <a href={`/products/${stepDownProduct.id}`} class="text-primary underline font-medium">
+                {stepDownProduct.data.name}
+              </a>
+              at {stepDownProduct.data.nicotineContent}mg — same brand, same flavour, gentler strength.
+            </p>
+          </div>
+        )}
+
+        {/* Subscribe & Save — gated by rewards.subscriptions.enabled.
+            Currently disabled: NYE is hosted-checkout only, no card-on-file
+            means auto-orders can't fire. DB/edge scaffolding stays deployed
+            for revival once a payment rail is chosen. */}
+        {inStock && rewards.subscriptions.enabled && (() => {
+          const subMonthly = rewards.subscriptions.monthly;
+          const subSix = rewards.subscriptions.sixMonthly;
+          const monthlyPerCan = singlePrice * (1 - subMonthly.discountPct / 100);
+          const sixPerCan = singlePrice * (1 - subSix.discountPct / 100);
+          const availableSubPacks = [
+            { key: 'pack1', label: '1 can', qty: 1 },
+            { key: 'pack3', label: '3 cans', qty: 3 },
+            { key: 'pack5', label: '5 cans', qty: 5 },
+            { key: 'pack10', label: '10 cans', qty: 10 },
+          ].filter((pk) => p.prices[pk.key] != null && p.prices[pk.key] > 0);
+          return (
+          <div class="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-5" id="subscribe-section" data-monthly-pct={subMonthly.discountPct} data-six-pct={subSix.discountPct} data-points-mult={subMonthly.pointsMultiplier}>
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-sm font-semibold text-foreground">Subscribe & Save</h2>
+              <span class="text-xs font-bold text-primary">Up to {subSix.discountPct}% off</span>
+            </div>
+            <p class="text-xs text-muted-foreground mb-4">
+              Never run out. Get your favourite pouches delivered on your schedule — and save every time.
+            </p>
+            <div class="grid grid-cols-2 gap-2 mb-3">
+              <label class="subscribe-option flex flex-col items-center rounded-lg border border-primary/30 bg-primary/10 p-3 cursor-pointer transition hover:border-primary/50" data-interval="monthly">
+                <input type="radio" name="sub-interval" value="monthly" class="sr-only" checked />
+                <span class="text-xs text-muted-foreground">Every month</span>
+                <span class="text-sm font-bold text-primary">Save {subMonthly.discountPct}%</span>
+                <span class="text-xs text-muted-foreground line-through">&euro;{singlePrice.toFixed(2)}</span>
+                <span class="text-xs font-semibold text-foreground">&euro;{monthlyPerCan.toFixed(2)}/can</span>
+              </label>
+              <label class="subscribe-option flex flex-col items-center rounded-lg border border-border bg-card/30 p-3 cursor-pointer transition hover:border-primary/30" data-interval="6monthly">
+                <input type="radio" name="sub-interval" value="6monthly" class="sr-only" />
+                <span class="text-xs text-muted-foreground">Every 6 months</span>
+                <span class="text-sm font-bold text-primary">Save {subSix.discountPct}%</span>
+                <span class="text-xs text-muted-foreground line-through">&euro;{singlePrice.toFixed(2)}</span>
+                <span class="text-xs font-semibold text-foreground">&euro;{sixPerCan.toFixed(2)}/can</span>
+              </label>
+            </div>
+
+            {/* Pack-size + quantity selector — drives the subscribe create payload */}
+            <div class="grid grid-cols-2 gap-2 mb-3">
+              <label class="flex flex-col gap-1">
+                <span class="text-[10px] uppercase tracking-wider text-muted-foreground">Pack size</span>
+                <select id="subscribe-pack" class="rounded-md border border-border bg-card/50 px-2 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none">
+                  {availableSubPacks.map((pk) => (
+                    <option value={pk.key} data-qty={pk.qty} data-price={p.prices[pk.key]}>{pk.label}</option>
+                  ))}
+                </select>
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-[10px] uppercase tracking-wider text-muted-foreground">Quantity</span>
+                <input id="subscribe-qty" type="number" min="1" max="12" value="1" inputmode="numeric" class="rounded-md border border-border bg-card/50 px-2 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none" />
+              </label>
+            </div>
+
+            {/* What you pay / What you get — live, driven by pack+qty+interval */}
+            <div id="subscribe-breakdown" class="mb-4 rounded-lg bg-card/40 border border-border/40 p-3 text-xs space-y-2">
+              <div>
+                <p class="font-semibold text-foreground mb-1">What you pay</p>
+                <p class="text-muted-foreground">
+                  <span id="sb-per-can">&euro;{monthlyPerCan.toFixed(2)}</span> per can &times;
+                  <span id="sb-qty-display">1</span> can(s) every
+                  <span id="sb-interval-display">month</span>
+                </p>
+                <p class="text-muted-foreground">
+                  &asymp; <span id="sb-total" class="font-semibold text-foreground">&euro;{monthlyPerCan.toFixed(2)}</span>
+                  per delivery
+                  <span class="line-through ml-1">&euro;<span id="sb-regular-total">{singlePrice.toFixed(2)}</span></span>
+                </p>
+              </div>
+              <div>
+                <p class="font-semibold text-foreground mb-1">What you get</p>
+                <ul class="space-y-0.5 text-muted-foreground">
+                  <li>&bull; <span id="sb-discount">{subMonthly.discountPct}</span>% off every delivery</li>
+                  <li>&bull; {loyaltyCurrencyName} on every delivery (<span id="sb-coins" class="font-semibold text-primary">{Math.floor(monthlyPerCan * rewards.earnRatePerEur)}</span> per delivery at current pick)</li>
+                  <li>&bull; Free shipping, skip/pause/cancel anytime</li>
+                </ul>
+              </div>
+              <p class="text-[10px] text-muted-foreground pt-1 border-t border-border/40">
+                First delivery ships immediately. Next delivery: <span id="sb-next-date">{new Date(Date.now() + 30 * 86400000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              id="subscribe-btn"
+              data-slug={p.slug}
+              data-name={p.name}
+              class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Subscribe — save {subMonthly.discountPct}%
+            </button>
+            <p id="subscribe-msg" class="mt-2 text-xs text-center hidden"></p>
+            <p class="text-[10px] text-muted-foreground text-center mt-2">
+              We'll remind you 3 days before each renewal. Cancel anytime from your account.
+            </p>
+          </div>
+          );
+        })()}
 
         {/* Description */}
         {description && (
-          <div class="rounded-xl border border-border bg-card/30 p-5 backdrop-blur">
+          <div class="rounded-xl border border-border bg-card/50 p-5">
             <h2 class="mb-2 text-sm font-semibold text-foreground">Description</h2>
             <p class="text-sm leading-relaxed text-muted-foreground">
               {description}
@@ -320,11 +553,352 @@ const jsonLd = {
       >
         All {p.brand} Products
       </a>
+      <a
+        href={`/compare?products=${product.id}`}
+        class="rounded-lg border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition hover:bg-primary/10"
+      >
+        Compare {p.name}
+      </a>
     </nav>
 
     <!-- Customer Reviews -->
-    <section class="mt-12">
+    <section id="reviews" class="mt-12 scroll-mt-24">
       <ProductReviewsIsland client:visible productId={product.id} />
     </section>
+
+    <!-- Same flavour, different brand -->
+    {sameFlavour.length > 0 && (
+      <section class="mt-12">
+        <h2 class="mb-4 text-lg font-bold text-foreground">Same flavour, different brand</h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {sameFlavour.map((rp: any) => (
+            <ProductCard
+              slug={rp.id}
+              name={rp.data.name}
+              brand={rp.data.brand}
+              brandSlug={rp.data.brandSlug}
+              imageUrl={rp.data.imageUrl}
+              prices={rp.data.prices}
+              stock={rp.data.stock}
+              nicotineContent={rp.data.nicotineContent}
+              strengthKey={rp.data.strengthKey}
+              flavorKey={rp.data.flavorKey}
+              ratings={rp.data.ratings}
+              badgeKeys={rp.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Similar strength, great value -->
+    {similarStrength.length > 0 && (
+      <section class="mt-12">
+        <h2 class="mb-4 text-lg font-bold text-foreground">Similar strength, great value</h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {similarStrength.map((rp: any) => (
+            <ProductCard
+              slug={rp.id}
+              name={rp.data.name}
+              brand={rp.data.brand}
+              brandSlug={rp.data.brandSlug}
+              imageUrl={rp.data.imageUrl}
+              prices={rp.data.prices}
+              stock={rp.data.stock}
+              nicotineContent={rp.data.nicotineContent}
+              strengthKey={rp.data.strengthKey}
+              flavorKey={rp.data.flavorKey}
+              ratings={rp.data.ratings}
+              badgeKeys={rp.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Related Products -->
+    {relatedProducts.length > 0 && (
+      <section class="mt-16">
+        <h2 class="mb-6 text-xl font-bold text-foreground">More from {p.brand}</h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {relatedProducts.map((rp: any) => (
+            <ProductCard
+              slug={rp.id}
+              name={rp.data.name}
+              brand={rp.data.brand}
+              brandSlug={rp.data.brandSlug}
+              imageUrl={rp.data.imageUrl}
+              prices={rp.data.prices}
+              stock={rp.data.stock}
+              nicotineContent={rp.data.nicotineContent}
+              strengthKey={rp.data.strengthKey}
+              flavorKey={rp.data.flavorKey}
+              ratings={rp.data.ratings}
+              badgeKeys={rp.data.badgeKeys}
+            />
+          ))}
+        </div>
+      </section>
+    )}
   </div>
+
+  <!-- Record product view for browsing history -->
+  <script is:inline define:vars={{ historyKey: tenant.storage.historyKey, viewData: { slug: product.id, brand: p.brand, flavorKey: p.flavorKey, strengthKey: p.strengthKey } }}>
+    document.addEventListener('astro:page-load', () => {
+      try {
+        const raw = localStorage.getItem(historyKey);
+        const history = raw ? JSON.parse(raw) : [];
+        const filtered = history.filter(h => h.slug !== viewData.slug);
+        const updated = [{ ...viewData, viewedAt: new Date().toISOString() }, ...filtered].slice(0, 30);
+        localStorage.setItem(historyKey, JSON.stringify(updated));
+      } catch { /* ignore */ }
+    }, { once: true });
+  </script>
+
+  <!-- Sticky Add to Cart bar (mobile only) -->
+  <StickyAddToCart
+    client:idle
+    productId={product.id}
+    name={p.name}
+    brand={p.brand}
+    price={p.prices.pack1}
+    imageUrl={p.imageUrl}
+    flavorKey={p.flavorKey}
+    strengthKey={p.strengthKey}
+    nicotineContent={p.nicotineContent}
+    ratings={p.ratings}
+    badgeKeys={p.badgeKeys}
+    prices={p.prices}
+    stock={p.stock}
+  />
+
+  <!-- Image zoom script -->
+  <script is:inline>
+    document.addEventListener('astro:page-load', () => {
+      const container = document.getElementById('pdp-image-container');
+      const img = document.getElementById('pdp-image');
+      if (!container || !img) return;
+
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        img.style.transformOrigin = x + '% ' + y + '%';
+        img.style.transform = 'scale(2)';
+      });
+
+      container.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+
+  <!-- Subscribe & Save handler -->
+  <script is:inline define:vars={{ supabaseUrl: import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '' }}>
+  document.addEventListener('astro:page-load', function() {
+    var section = document.getElementById('subscribe-section');
+    if (!section) return;
+    var btn = document.getElementById('subscribe-btn');
+    var msg = document.getElementById('subscribe-msg');
+    var options = section.querySelectorAll('.subscribe-option');
+    var selectedInterval = 'monthly';
+
+    // Read config from the data attributes set on #subscribe-section
+    var section = document.getElementById('subscribe-section');
+    var monthlyPct = parseInt(section.dataset.monthlyPct || '10', 10);
+    var sixPct = parseInt(section.dataset.sixPct || '15', 10);
+    var packSelect = document.getElementById('subscribe-pack');
+    var qtyInput = document.getElementById('subscribe-qty');
+
+    function currentDiscountPct() {
+      return selectedInterval === 'monthly' ? monthlyPct : sixPct;
+    }
+
+    function nextDeliveryDate() {
+      var days = selectedInterval === 'monthly' ? 30 : 180;
+      return new Date(Date.now() + days * 86400000).toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+    }
+
+    function updateBreakdown() {
+      var pct = currentDiscountPct();
+      var packOpt = packSelect.options[packSelect.selectedIndex];
+      var basePrice = parseFloat(packOpt.dataset.price || '0');
+      var cansPerPack = parseInt(packOpt.dataset.qty || '1', 10);
+      // Clamp to the same bounds manage-subscription enforces server-side (1–12)
+      var rawQty = parseInt(qtyInput.value || '1', 10);
+      if (!Number.isFinite(rawQty)) rawQty = 1;
+      var qty = Math.max(1, Math.min(12, rawQty));
+      if (qty !== rawQty && qtyInput.value !== String(qty)) qtyInput.value = String(qty);
+      var perCan = (basePrice / cansPerPack) * (1 - pct / 100);
+      var total = basePrice * qty * (1 - pct / 100);
+      var regularTotal = basePrice * qty;
+      // Coins awarded by the existing order-trigger path (1 per €) when a
+      // subscription actually produces an order. The 2× multiplier promised
+      // by the marketing copy is aspirational until subs place real NYE orders.
+      var coins = Math.floor(total * 1);
+
+      var $ = function(id) { return document.getElementById(id); };
+      if ($('sb-per-can')) $('sb-per-can').textContent = '\u20AC' + perCan.toFixed(2);
+      if ($('sb-qty-display')) $('sb-qty-display').textContent = String(qty * cansPerPack);
+      if ($('sb-interval-display')) $('sb-interval-display').textContent = selectedInterval === 'monthly' ? 'month' : '6 months';
+      if ($('sb-total')) $('sb-total').textContent = '\u20AC' + total.toFixed(2);
+      if ($('sb-regular-total')) $('sb-regular-total').textContent = regularTotal.toFixed(2);
+      if ($('sb-discount')) $('sb-discount').textContent = String(pct);
+      if ($('sb-coins')) $('sb-coins').textContent = coins.toLocaleString();
+      if ($('sb-next-date')) $('sb-next-date').textContent = nextDeliveryDate();
+      btn.textContent = 'Subscribe \u2014 save ' + pct + '%';
+    }
+
+    options.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        selectedInterval = opt.dataset.interval;
+        options.forEach(function(o) {
+          if (o.dataset.interval === selectedInterval) {
+            o.classList.add('border-primary/30', 'bg-primary/10');
+            o.classList.remove('border-border', 'bg-card/30');
+          } else {
+            o.classList.remove('border-primary/30', 'bg-primary/10');
+            o.classList.add('border-border', 'bg-card/30');
+          }
+        });
+        updateBreakdown();
+      });
+    });
+    packSelect.addEventListener('change', updateBreakdown);
+    qtyInput.addEventListener('input', updateBreakdown);
+    updateBreakdown();
+
+    btn.addEventListener('click', function() {
+      var auth = window.__AUTH_STATE__;
+      if (!auth || !auth.id) {
+        window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Setting up\u2026';
+      if (msg) { msg.classList.add('hidden'); }
+
+      // Get session token from cookie
+      var cookies = document.cookie.split(';');
+      var tokenCookie = cookies.find(function(c) { return c.trim().startsWith('sb-'); });
+      var token = '';
+      if (tokenCookie) {
+        // Find the access token cookie (format: sb-{ref}-auth-token)
+        var authCookies = cookies.filter(function(c) { return c.trim().match(/^sb-.*-auth-token/); });
+        if (authCookies.length > 0) {
+          token = authCookies[0].split('=').slice(1).join('=').trim();
+        }
+      }
+
+      var selectedPack = packSelect.value;
+      var selectedQty = Math.max(1, Math.min(12, parseInt(qtyInput.value || '1', 10)));
+
+      fetch(supabaseUrl + '/functions/v1/manage-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          'apikey': (document.querySelector('meta[name=\"supabase-anon-key\"]') || {}).content || ''
+        },
+        body: JSON.stringify({
+          action: 'create',
+          product_slug: btn.dataset.slug,
+          product_name: btn.dataset.name,
+          pack_size: selectedPack,
+          quantity: selectedQty,
+          interval: selectedInterval
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.ok) {
+          msg.textContent = 'Subscribed! You\u2019ll save ' + currentDiscountPct() + '% on every delivery.';
+          msg.className = 'mt-2 text-xs text-center text-primary';
+          btn.textContent = 'Subscribed';
+        } else {
+          msg.textContent = data.error === 'unauthorized' ? 'Please log in first.' : 'Something went wrong. Try again.';
+          msg.className = 'mt-2 text-xs text-center text-destructive';
+          btn.disabled = false;
+          btn.textContent = 'Subscribe \u2014 save ' + currentDiscountPct() + '%';
+        }
+      })
+      .catch(function() {
+        msg.textContent = 'Network error. Try again.';
+        msg.className = 'mt-2 text-xs text-center text-destructive';
+        btn.disabled = false;
+        btn.textContent = 'Subscribe \u2014 save ' + currentDiscountPct() + '%';
+      });
+    });
+  });
+  </script>
+
+  <!-- Back-in-stock notify form handler -->
+  <script is:inline define:vars={{ supabaseUrl: import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '' }}>
+  document.addEventListener('astro:page-load', function() {
+    var form = document.querySelector('[data-notify-form]');
+    if (!form) return;
+    var slug = form.dataset.productSlug;
+    var btn = form.querySelector('button');
+    var msg = form.parentElement.querySelector('.notify-msg');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = form.querySelector('#notify-email').value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+      btn.disabled = true;
+      btn.textContent = 'Saving\u2026';
+
+      fetch(supabaseUrl + '/functions/v1/save-waitlist-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, source: 'back-in-stock-' + slug })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.ok) {
+          msg.textContent = "You're on the list! We'll email you when it's back.";
+          msg.className = 'notify-msg mt-2 text-xs text-primary';
+          btn.textContent = 'Subscribed';
+        } else {
+          msg.textContent = 'Something went wrong. Try again.';
+          msg.className = 'notify-msg mt-2 text-xs text-destructive';
+          btn.disabled = false;
+          btn.textContent = 'Notify Me';
+        }
+      })
+      .catch(function() {
+        msg.textContent = 'Network error.';
+        msg.className = 'notify-msg mt-2 text-xs text-destructive';
+        btn.disabled = false;
+        btn.textContent = 'Notify Me';
+      });
+    });
+  });
+  </script>
+
+  <!-- "Be the first to review" → scroll to #reviews -->
+  <script>
+    document.querySelectorAll('[data-open-review]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+  <!-- PostHog: product_viewed -->
+  <script is:inline define:vars={{ productId: p.slug, productName: p.name, brand: p.brand, price: p.prices.pack1, strengthKey: p.strengthKey, flavorKey: p.flavorKey, currencyCode }}>
+    if (typeof window !== 'undefined' && window.posthog) {
+      window.posthog.capture('product_viewed', {
+        product_id: productId,
+        product_name: productName,
+        brand: brand,
+        price: price,
+        strength: strengthKey,
+        flavor: flavorKey,
+        currency: currencyCode,
+      });
+    }
+  </script>
 </Shop>

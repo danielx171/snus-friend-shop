@@ -2,91 +2,231 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import { tenant } from '@/config/tenant';
+import { buildAbsoluteUrl, siteUrl } from '@/config/site';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+const allBrands = await getCollection('brands');
+const brandSlugsWithProducts = new Set(allProducts.map((p) => p.data.brandSlug));
+const activeBrandCount = allBrands.filter((b) => brandSlugsWithProducts.has(b.id)).length || 57;
 ---
 
 <Shop
-  title={`About Us | ${tenant.name}`}
-  description={`Learn about ${tenant.name} — Europe's premium nicotine pouch shop with 700+ products from 91 brands. Fast EU-wide delivery and unbeatable prices.`}
+  title={`About Us — Nicotine Pouches Done Right | ${tenant.name}`}
+  description={`Meet ${tenant.name}: Europe's curated nicotine pouch shop. ${allProducts.length}+ pouches, ${activeBrandCount} brands, rewards programme, honest prices, next-day dispatch. Run by a founder who actually cares.`}
 >
-  <section class="bg-background text-foreground">
-    <div class="max-w-3xl mx-auto px-4 py-12">
+  <!-- Hero banner -->
+  <section style={`background: hsl(var(--hero-bg)); color: hsl(var(--hero-text));`}>
+    <div class="max-w-4xl mx-auto px-4 py-16 sm:py-20 text-center">
       <Breadcrumb items={[{ label: 'About Us' }]} />
-
-      <h1 class="text-4xl font-bold tracking-tight mb-6">About {tenant.name}</h1>
-      <p class="text-lg text-muted-foreground mb-10 leading-relaxed">
-        We started {tenant.name} with a simple belief: buying nicotine pouches online should
-        be easy, affordable, and enjoyable. No confusing checkout flows, no mystery shipping
-        times, no overpriced products.
+      <h1 class="text-4xl font-bold tracking-tight sm:text-5xl mt-4" style="font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;">
+        Nicotine Pouches Done Right
+      </h1>
+      <p class="mt-4 text-lg max-w-2xl mx-auto leading-relaxed" style={`color: hsl(var(--hero-muted));`}>
+        We stock {allProducts.length}+ pouches from {activeBrandCount}+ brands. Fair prices. Next-day dispatch.
+        Actually good customer support. None of the corporate nonsense.
       </p>
+    </div>
+  </section>
 
-      <!-- Mission -->
-      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-3">Our Mission</h2>
-        <p class="text-muted-foreground leading-relaxed">
-          To be the most trusted nicotine pouch shop in Europe. We curate the widest
-          selection — over <strong class="text-foreground">700 products</strong> from
-          <strong class="text-foreground">91 brands</strong> — so you always find the
-          right strength, flavour, and format for you.
-        </p>
-      </div>
-
-      <!-- Values -->
-      <div class="grid gap-6 sm:grid-cols-2 mb-10">
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
-          <h3 class="text-lg font-semibold mb-2">Honest Pricing</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            No hidden fees. The price you see is the price you pay. Orders over
-            &euro;{tenant.freeShippingThreshold} ship free across the EU.
-          </p>
+  <!-- Stats row -->
+  <section class="border-b border-border bg-card/50">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-foreground">{allProducts.length}+</div>
+          <div class="text-sm text-muted-foreground">Pouches</div>
         </div>
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
-          <h3 class="text-lg font-semibold mb-2">Fast Delivery</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            We dispatch orders the same or next business day from our EU warehouse.
-            Most deliveries arrive within 2-5 business days.
-          </p>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-foreground">{activeBrandCount}+</div>
+          <div class="text-sm text-muted-foreground">Brands</div>
         </div>
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
-          <h3 class="text-lg font-semibold mb-2">Real Selection</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            From bestsellers like VELO and ZYN to niche Swedish brands, we stock what
-            matters. New arrivals are added every week.
-          </p>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-foreground">64+</div>
+          <div class="text-sm text-muted-foreground">Expert Guides</div>
         </div>
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
-          <h3 class="text-lg font-semibold mb-2">Community First</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            Our loyalty programme, product reviews, and community hub let you share
-            recommendations and earn rewards along the way.
-          </p>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-foreground">EU-Wide</div>
+          <div class="text-sm text-muted-foreground">Free Shipping</div>
         </div>
-      </div>
-
-      <!-- Who we are -->
-      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-3">Who We Are</h2>
-        <p class="text-muted-foreground leading-relaxed mb-4">
-          {tenant.name} is an EU-based e-commerce company specialising exclusively in
-          tobacco-free nicotine pouches. We work directly with manufacturers and authorised
-          distributors to guarantee product authenticity and freshness.
-        </p>
-        <p class="text-muted-foreground leading-relaxed">
-          Our team is small and focused: every support ticket, every product listing, and
-          every quality check gets personal attention. When you email us, a real person
-          replies — usually within a few hours.
-        </p>
-      </div>
-
-      <!-- Responsible use -->
-      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
-        <h2 class="text-2xl font-semibold mb-3">Responsible Use</h2>
-        <p class="text-muted-foreground leading-relaxed">
-          Nicotine pouches are intended for adults only. We verify age at checkout and
-          comply with all applicable EU regulations. If you have questions about nicotine
-          strength or choosing the right product, our support team is happy to help.
-        </p>
       </div>
     </div>
   </section>
+
+  <section class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+
+      <!-- Mission — Founder voice -->
+      <div class="rounded-xl border border-border bg-card/80 p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-3">Our Mission</h2>
+        <div class="text-muted-foreground leading-relaxed space-y-4">
+          <p>
+            Here's the thing: when I started {tenant.name}, I was tired of massive generic
+            shops that treated customers like transaction numbers. I wanted to build something
+            smaller, more thoughtful — a place where you could find exactly what you wanted
+            without wading through bloat.
+          </p>
+          <p>
+            Now, we stock <strong class="text-foreground">{allProducts.length}+ pouches</strong> from
+            <strong class="text-foreground">{activeBrandCount}+ brands</strong>. Every single one
+            hand-picked. We curate, we don't just list. New flavours drop every week. We've
+            written 64+ in-depth guides so you can pick the right strength and flavour without
+            guessing. And we've built a rewards programme that actually rewards loyalty — spin
+            wheel, avatars, quests, a leaderboard — because buying pouches should be fun,
+            not a chore.
+          </p>
+          <p>
+            Our mission is simple: be the most trusted, most fun nicotine pouch shop in Europe.
+            Honest prices. Fast dispatch. Real selection. A real person answers your emails.
+          </p>
+        </div>
+      </div>
+
+      <!-- Values — divider grid, no card wrappers -->
+      <div class="grid sm:grid-cols-2 mb-10">
+        <div class="border-b border-border sm:border-r py-6 sm:pr-8">
+          <h3 class="text-lg font-semibold mb-2">No Surprises</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            The price on the tin is the price you pay. No mystery fees. No gotchas at
+            checkout. Free shipping on orders over &euro;{tenant.freeShippingThreshold}
+            to anywhere in the EU. If you find the same pouch cheaper elsewhere, we'll sort it.
+          </p>
+        </div>
+        <div class="border-b border-border py-6 sm:pl-8">
+          <h3 class="text-lg font-semibold mb-2">Next-Day Dispatch</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            We pack orders the same or next business day from our EU warehouse. Most
+            deliveries hit your door within 2-5 days. Track everything in real time.
+            No "order placed — silence for a week" nonsense.
+          </p>
+        </div>
+        <div class="border-b border-border sm:border-b-0 sm:border-r py-6 sm:pr-8">
+          <h3 class="text-lg font-semibold mb-2">{allProducts.length}+ Pouches (Not Clutter)</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            We don't list the same pouch five times in different colours. From VELO and
+            ZYN to rare Swedish brands, from 4mg to 24mg, from arctic mint to mango lassi — if
+            it's worth having, it's here. New arrivals every week.
+          </p>
+        </div>
+        <div class="py-6 sm:pl-8">
+          <h3 class="text-lg font-semibold mb-2">Rewards Worth Having</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Earn points on every order. Spin the wheel, complete quests, climb the
+            leaderboard, unlock avatar gear. Redeem rewards without jumping through hoops.
+            Leave honest reviews. Shopping here is actually fun.
+          </p>
+        </div>
+      </div>
+
+      <!-- Who We Are — 3 paragraphs, founder voice -->
+      <div class="rounded-xl border border-border bg-card/80 p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-3">Who We Are</h2>
+        <div class="text-muted-foreground leading-relaxed space-y-4">
+          <p>
+            I'm {tenant.founderName}, and I run {tenant.name}. We're based in the EU, we work directly with
+            manufacturers and authorised distributors, and we only stock nicotine pouches — full
+            stop. No tobacco, no marketing fluff. Just the good stuff.
+          </p>
+          <p>
+            We're small. That's intentional. It means every customer email gets genuine
+            attention — no tier-2 support walls, no canned responses. I handle a lot of
+            the product curation and customer stuff myself. You'll notice our product pages
+            have honest reviews, our guides dig into flavour profiles and nicotine levels
+            properly, and our loyalty programme is built around actual fun.
+          </p>
+          <p>
+            We're not trying to be every giant generic nicotine shop at once. Those stores are
+            built for breadth and volume. We’re built for curation and trust. We talk to our
+            community about what’s worth stocking and what isn’t, and we’ve built something
+            people actually enjoy using.
+          </p>
+        </div>
+      </div>
+
+      <!-- Why this storefront — competitive positioning -->
+      <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-3">Why Choose {tenant.name}?</h2>
+        <p class="text-muted-foreground mb-4">
+          The big shops are convenient. They're clean. They have everything. But they're built
+          for volume, not you. Here's what's different:
+        </p>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-sm font-semibold text-foreground mb-1">Curation, Not Catalogue</h3>
+            <p class="text-sm text-muted-foreground">
+              Every brand, every flavour on our site is actively stocked and someone's tested it.
+              We drop dead weight monthly and add new stuff weekly. It's not bigger — it's better.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-foreground mb-1">Community, Not Just Checkout</h3>
+            <p class="text-sm text-muted-foreground">
+              You can't earn points on a leaderboard at other shops. You can't customise an avatar
+              or spin a wheel for discounts. We built a loyalty programme that's actually fun.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-foreground mb-1">You Talk to a Human</h3>
+            <p class="text-sm text-muted-foreground">
+              Email the big shops and you'll get a form response in 48 hours. Email us and
+              you're likely talking to me or someone on my small team within a few hours.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Responsible use -->
+      <div class="rounded-xl border border-border bg-card/80 p-6 mb-10">
+        <h2 class="text-2xl font-semibold mb-3">Responsible Use</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Nicotine pouches are intended for adults only. We verify age at checkout and comply
+          with all applicable EU regulations. If you have questions about nicotine strength or
+          choosing the right product, our support team is happy to help.
+        </p>
+      </div>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/nicotine-pouches" class="inline-flex h-12 items-center justify-center rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground transition hover:bg-primary/90">
+          Browse {allProducts.length}+ Pouches
+        </a>
+        <a href="/blog" class="inline-flex h-12 items-center justify-center rounded-lg border border-border px-8 text-base font-semibold text-foreground transition hover:bg-muted">
+          Read Our Guides
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <JsonLd
+    data={{
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: `About ${tenant.name}`,
+      description: `Meet ${tenant.name}: Europe's curated nicotine pouch shop. ${allProducts.length}+ pouches, ${activeBrandCount} brands.`,
+      url: buildAbsoluteUrl('/about'),
+      mainEntity: {
+        '@type': 'Organization',
+        name: tenant.name,
+        url: siteUrl,
+        logo: { '@type': 'ImageObject', url: buildAbsoluteUrl('/logo.svg') },
+        description: `EU-based online shop for premium nicotine pouches. ${allProducts.length}+ products from ${activeBrandCount} brands.`,
+        foundingDate: tenant.trust.foundingDate ?? '2025',
+        founder: { '@type': 'Person', name: tenant.founderName },
+        sameAs: [
+          siteUrl,
+          ...Object.values(tenant.social).filter(Boolean),
+          ...(tenant.trust.trustpilotUrl ? [tenant.trust.trustpilotUrl] : []),
+        ],
+      },
+      breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: buildAbsoluteUrl('/') },
+          { '@type': 'ListItem', position: 2, name: 'About Us', item: buildAbsoluteUrl('/about') },
+        ],
+      },
+    }}
+  />
 </Shop>

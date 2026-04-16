@@ -5,8 +5,10 @@ declare const Deno: {
   serve: (handler: (req: Request) => Response | Promise<Response>) => void;
 };
 
-// @ts-ignore: Deno URL import
+// @ts-expect-error — Deno types: Deno URL import
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// @ts-expect-error — Deno types: Deno file import
+import { currencyCode, locale, orderPrefix, siteName } from "../_shared/site-config.ts";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -142,9 +144,9 @@ Deno.serve(async (req) => {
     : [];
 
   const nyehandelPayload = {
-    prefix: "NB",
-    currency_iso: "EUR",
-    locale: "en-gb",
+    prefix: orderPrefix,
+    currency_iso: typeof order.currency === "string" && order.currency.trim().length > 0 ? order.currency : currencyCode,
+    locale,
     delivery_callback_url: deliveryCallbackUrl,
     customer: {
       type: "person",
@@ -162,7 +164,7 @@ Deno.serve(async (req) => {
       name: String(meta.shipping_method ?? "UPS Standard (J229F1)"),
     },
     payment: {
-      name: "NFC Group Payment",
+      name: Deno.env.get("PAYMENT_METHOD_NAME")?.trim() || `${siteName} Payment`,
     },
     items,
   };
@@ -254,9 +256,9 @@ Deno.serve(async (req) => {
     const customerEmail = (order.customer_metadata as Record<string, unknown>)?.email as string ?? order.customer_email;
     if (customerEmail && supabaseUrl) {
       const lineItems = (Array.isArray(order.line_items_snapshot) ? order.line_items_snapshot as LineItem[] : []).map((item: LineItem) => ({
-        name: item.sku ?? "Product",
+        name: (item as Record<string, unknown>).product_name as string ?? "Product",
         qty: item.quantity ?? 1,
-        price: `€${(typeof (item as Record<string, unknown>).price === 'number' ? ((item as Record<string, unknown>).price as number) : 0).toFixed(2)}`,
+        price: `€${((item as Record<string, unknown>).unit_price as number ?? 0).toFixed(2)}`,
       }));
 
       fetch(`${supabaseUrl}/functions/v1/send-email`, {

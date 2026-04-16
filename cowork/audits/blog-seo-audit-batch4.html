@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog SEO Audit — Batch 4: Brand Flavour Guides</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #0c1018;
+      color: #f1f5f9;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      border-bottom: 2px solid #a3e635;
+      padding-bottom: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #a3e635;
+    }
+
+    .header .meta {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .summary-box {
+      background: rgba(163, 230, 53, 0.1);
+      border-left: 4px solid #a3e635;
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+      border-radius: 4px;
+    }
+
+    .summary-box h2 {
+      color: #a3e635;
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .summary-box p {
+      margin-bottom: 0.5rem;
+      color: #e2e8f0;
+    }
+
+    .article-card {
+      background: #1a202c;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: border-color 0.2s;
+    }
+
+    .article-card:hover {
+      border-color: #a3e635;
+    }
+
+    .article-card h3 {
+      font-size: 1.5rem;
+      color: #a3e635;
+      margin-bottom: 0.5rem;
+    }
+
+    .article-card .slug {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+      font-family: "Courier New", monospace;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .score-item {
+      background: rgba(15, 23, 42, 0.8);
+      padding: 1rem;
+      border-radius: 4px;
+      border-left: 3px solid #a3e635;
+    }
+
+    .score-item .label {
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.3rem;
+    }
+
+    .score-item .value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #a3e635;
+    }
+
+    .score-item.perfect .value {
+      color: #10b981;
+    }
+
+    .improvements {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      border-radius: 4px;
+    }
+
+    .improvements h4 {
+      color: #fca5a5;
+      margin-bottom: 1rem;
+    }
+
+    .improvements code,
+    .improvements pre {
+      background: #0c1018;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 0.25rem 0.5rem;
+      font-family: "Courier New", monospace;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      display: block;
+      overflow-x: auto;
+      padding: 1rem;
+      margin: 0.8rem 0;
+    }
+
+    .note {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid #3b82f6;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 4px;
+      color: #bfdbfe;
+      font-size: 0.95rem;
+    }
+
+    .star {
+      color: #fbbf24;
+      margin-left: 0.5rem;
+    }
+
+    .batch-summary {
+      background: rgba(163, 230, 53, 0.15);
+      border: 2px solid #a3e635;
+      padding: 2rem;
+      margin-top: 4rem;
+      border-radius: 6px;
+    }
+
+    .batch-summary h2 {
+      color: #a3e635;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .batch-summary ul {
+      list-style: none;
+      margin-left: 0;
+    }
+
+    .batch-summary li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .batch-summary li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: #a3e635;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #0c1018;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    table thead {
+      background: #1a202c;
+      border-bottom: 2px solid #a3e635;
+    }
+
+    table th {
+      padding: 0.75rem;
+      text-align: left;
+      color: #a3e635;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid #334155;
+      color: #e2e8f0;
+    }
+
+    table tr:hover td {
+      background: rgba(163, 230, 53, 0.05);
+    }
+
+    .faq-item {
+      margin-top: 1.2rem;
+    }
+
+    .faq-item strong {
+      color: #a3e635;
+    }
+
+    .footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Blog SEO Audit — Batch 4</h1>
+      <p class="meta">Brand Flavour Guides, Comparison Articles & Remaining Brand Guides</p>
+      <p class="meta" style="margin-top: 0.5rem;">Date: April 7, 2026 | Articles: 10 | Average Score: 24.2/25</p>
+    </div>
+
+    <div class="summary-box">
+      <h2>Batch 4 Overview</h2>
+      <p><strong>10 articles audited.</strong> Covers brand-specific flavour guides (ZYN, VELO, FUMI, ICEBERG, RAVE) and high-value comparison articles (ZYN vs VELO, VELO vs Nordic Spirit, LOOP vs Skruf).</p>
+      <p><strong>Average Score: 24.2 / 25</strong> — Strong batch with 6 perfect scores.</p>
+      <p><strong>Action Items:</strong> Improve loop-vs-skruf visual structure (add comparison table + FAQ). All other articles approved for publication.</p>
+    </div>
+
+    <!-- ARTICLE 1 -->
+    <div class="article-card">
+      <h3>ZYN Flavours Complete Guide</h3>
+      <p class="slug">zyn-flavours-complete-guide</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Visual Structure</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">TOTAL</div>
+          <div class="value">25 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "All ZYN Flavours Ranked: The Complete Guide for 2026" is excellent. 56+ products with specific mg values. Meta description 154 chars. 25+ internal links. Top 10 ranking format, strength chart (S1–S6), After Dark series section, FAQ included.</p>
+        <p style="margin-top: 0.5rem;"><strong>Examples:</strong> Apple Mint 6–9mg, Cool Mint 6mg, Menthol Ice Super Strong 16.5mg, named with precision.</p>
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- ARTICLE 2 -->
+    <div class="article-card">
+      <h3>VELO Flavours Complete Guide</h3>
+      <p class="slug">velo-flavours-complete-guide</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Visual Structure</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">TOTAL</div>
+          <div class="value">25 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "VELO Flavours: Complete 2026 Guide & Rankings" is strong. Top 10 ranking, strength table, Shift collection section. 15+ internal links. Meta 140 chars. Clear category structure.</p>
+        <p style="margin-top: 0.5rem;"><strong>Examples:</strong> Crispy Peppermint 10mg, Freezing Peppermint Ultra 14mg, MAX 17mg — all specific mg values included.</p>
+      </div>
+
+      <div class="note">
+        <strong>Note:</strong> Article #2 (velo-flavours-complete-guide) and Article #3 (all-velo-flavors-ranked-2026) are similar. Consider whether both should exist or consolidate into one master VELO guide to avoid duplicate content penalty.
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- ARTICLE 3 -->
+    <div class="article-card">
+      <h3>All VELO Flavours Ranked 2026</h3>
+      <p class="slug">all-velo-flavors-ranked-2026</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Visual Structure</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">TOTAL</div>
+          <div class="value">25 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "Every VELO Flavour Ranked: The Complete 2026 Guide" is excellent. Top 10 format with individual reviews. 40+ internal links. Strength guide, ZYN comparison, FAQ. 30+ flavours ranked.</p>
+        <p style="margin-top: 0.5rem;"><strong>Examples:</strong> Freezing Peppermint 10mg, Ruby Berry 6mg, Mighty Peppermint Max 17mg — precise product references.</p>
+      </div>
+
+      <div class="note">
+        <strong>Duplicate Risk:</strong> This article and "VELO Flavours Complete Guide" (#2) overlap significantly. Recommend consolidating or differentiating one as a "quick reference" and the other as "in-depth review."
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- ARTICLE 4 -->
+    <div class="article-card">
+      <h3>ZYN Strength Chart: Every Level Explained</h3>
+      <p class="slug">zyn-strength-chart-every-level-explained</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Visual Structure</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">TOTAL</div>
+          <div class="value">25 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "ZYN Strength Chart 2026: Every Nicotine Level Explained (S1 to S6)" is excellent — includes primary keyword phrase. Reference-style format with clear tables (6 comparison tables). 35+ internal links. All 52 ZYN products by strength with mg values. Dosing guide included.</p>
+        <p style="margin-top: 0.5rem;"><strong>SEO Value:</strong> High intent keyword phrase with "chart" and "strength" — targets users comparing ZYN strength levels. S1–S6 system explanation is unique.</p>
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- ARTICLE 5 -->
+    <div class="article-card">
+      <h3>ZYN vs VELO 2026</h3>
+      <p class="slug">zyn-vs-velo-2026</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">Visual Structure</div>
+          <div class="value">4 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">TOTAL</div>
+          <div class="value">24 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "ZYN vs VELO in 2026: The Definitive Comparison" is strong. Clean head-to-head format. Easy to scan. 18+ internal links. Covers flavour, strength, format, moisture, price, availability, switching guidance. Market share data included.</p>
+        <p style="margin-top: 0.5rem;"><strong>Minor Gap:</strong> Uses narrative format instead of formal comparison table. No FAQ section (3 highest-ranked comparison articles all have FAQ). Adding these would raise score to 25.</p>
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- ARTICLE 6 -->
+    <div class="article-card">
+      <h3>VELO vs Nordic Spirit</h3>
+      <p class="slug">velo-vs-nordic-spirit</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Visual Structure</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">TOTAL</div>
+          <div class="value">25 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "VELO vs Nordic Spirit: Complete Brand Comparison 2026" is strong. Direct comparison table (9 rows covering ownership, strength, flavour, design, availability, pricing). 12+ links. FAQ with 5 Q&As. Meta 155 chars.</p>
+        <p style="margin-top: 0.5rem;"><strong>Examples:</strong> VELO 2–20mg, Nordic Spirit 2–16mg, pricing data, beginner vs experienced guidance.</p>
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- ARTICLE 7 -->
+    <div class="article-card">
+      <h3>LOOP vs Skruf</h3>
+      <p class="slug">loop-vs-skruf</p>
+
+      <div class="score-grid">
+        <div class="score-item">
+          <div class="label">SEO</div>
+          <div class="value">4 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">Visual Structure</div>
+          <div class="value">3 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">Content Depth</div>
+          <div class="value">4 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">Brand Specificity</div>
+          <div class="value">4 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">TOTAL</div>
+          <div class="value">20 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Summary:</strong> H1 "LOOP vs Skruf: Which Swedish Brand Is Right for You?" is good but keyword could be stronger. 18+ links. Clear, accessible comparison. However, ~1,400 words (thinnest comparison article). No formal comparison table despite being a comparison article — relies on narrative only. No FAQ section. Uses strength ranges instead of specific SKUs.</p>
+      </div>
+
+      <div class="improvements">
+        <h4>⚠ IMPROVEMENTS REQUIRED (Visual Structure = 3/5)</h4>
+
+        <p><strong>1. Add Comparison Table:</strong></p>
+        <pre>| Feature | LOOP | Skruf |
+|---------|------|-------|
+| Manufacturer | Another Snus Factory (Sweden) | Imperial Brands (Sweden) |
+| Products at SnusFriend | 32 | 15 |
+| Strength range | 0-15.6 mg | 6-12 mg |
+| Flavour philosophy | Bold, experimental (jalapeño, habanero) | Refined, traditional (mint, berry, licorice) |
+| Signature flavour | Jalapeño Lime | Fresh Mint / Purple Cassice |
+| Special tech | Instant Rush (faster release) | S2/S3/S4 tiered system |
+| Format | Slim + Mini | Slim + Superslim |
+| Best for | Adventurous flavour seekers | Heritage/tradition seekers |
+| Price range | Mid-range | Mid-range |</pre>
+
+        <p style="margin-top: 1.5rem;"><strong>2. Add FAQ Section:</strong></p>
+
+        <div class="faq-item">
+          <strong>Q: Is LOOP or Skruf better for beginners?</strong><br>
+          A: Skruf S2 (6 mg) is gentler and more traditional. LOOP's Normal strength (6.3 mg) is similar in mg but the Instant Rush technology makes it feel slightly stronger. For absolute beginners, Skruf's gradual release is more forgiving.
+        </div>
+
+        <div class="faq-item">
+          <strong>Q: Which brand has more flavour variety?</strong><br>
+          A: LOOP wins on variety with 32 products including unique options like Jalapeño Lime and Habanero Mint. Skruf offers 15 products focused on refined classics — mint, berry, licorice, and apple.
+        </div>
+
+        <div class="faq-item">
+          <strong>Q: Can I get the same flavours from both brands?</strong><br>
+          A: Both offer mint and berry, but they taste different. LOOP's mint is paired with Instant Rush for a sharp hit. Skruf's mint is smoother and more traditional. For unique flavours, LOOP offers spicy options (jalapeño, habanero) that Skruf doesn't match.
+        </div>
+      </div>
+
+      <p style="color: #f87171; font-weight: 600; margin-top: 1.5rem;">⚠ HOLD FOR REVISION — Add table + FAQ, then resubmit</p>
+    </div>
+
+    <!-- ARTICLE 8 -->
+    <div class="article-card">
+      <h3>FUMI Nicotine Pouches Complete Guide</h3>
+      <p class="slug">fumi-nicotine-pouches-complete-guide</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">Visual Structure</div>
+          <div class="value">4 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">TOTAL</div>
+          <div class="value">24 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "FUMI Nicotine Pouches: Complete Brand Guide" is strong. Good editorial voice balancing adventurous positioning with accessibility. All 9 products named with mg values. 35+ internal links. FAQ present (5 Q&As). Transparent about limitations.</p>
+        <p style="margin-top: 0.5rem;"><strong>Examples:</strong> Salty Raspberry Strong 8mg, Freezy Mint Extra Strong 11mg — all products listed with precision.</p>
+        <p style="margin-top: 0.5rem;"><strong>Minor Gap:</strong> No product comparison table, but product listings compensate. Score lowered from 5 to 4 on visual structure due to lack of formal table (though not a hard requirement for brand guides).</p>
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- ARTICLE 9 -->
+    <div class="article-card">
+      <h3>ICEBERG Nicotine Pouches Complete Guide</h3>
+      <p class="slug">iceberg-nicotine-pouches-complete-guide</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Visual Structure</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">TOTAL</div>
+          <div class="value">25 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "ICEBERG Nicotine Pouches: Complete Brand Guide" is strong. Safety-conscious tone appropriate for extreme brand. Product range table, strength tiers, 3-way comparison (vs Pablo vs Siberia). 20+ links. FAQ (5 Q&As). 13 products covered.</p>
+        <p style="margin-top: 0.5rem;"><strong>Examples:</strong> Mint Explosion 6mg, Bubblegum EU 40mg, Emerald Ultra EU 40mg — all products named with mg values.</p>
+        <p style="margin-top: 0.5rem;"><strong>Competitive Angle:</strong> 3-way comparison adds unique value — ICEBERG stands out against Pablo and Siberia competitors.</p>
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- ARTICLE 10 -->
+    <div class="article-card">
+      <h3>RAVE Nicotine Pouches Review</h3>
+      <p class="slug">rave-nicotine-pouches-review</p>
+
+      <div class="score-grid">
+        <div class="score-item perfect">
+          <div class="label">SEO</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Readability</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">Visual Structure</div>
+          <div class="value">4 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Content Depth</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item perfect">
+          <div class="label">Brand Specificity</div>
+          <div class="value">5 <span class="star">★</span></div>
+        </div>
+        <div class="score-item">
+          <div class="label">TOTAL</div>
+          <div class="value">24 <span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div style="background: #0f1729; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <p><strong>Strengths:</strong> H1 "RAVE Nicotine Pouches Review 2026: Every Flavour & Strength Tested" is excellent — includes "tested" for credibility. Review format works well. Individual taste notes are engaging. Covers all 26 products (18 nicotine + 8 energy). Comparison table (vs ZYN, VELO, CUBA). 15+ links.</p>
+        <p style="margin-top: 0.5rem;"><strong>Examples:</strong> Frozen Citrus, Lemoncello, Mango Django, etc., all flavours rated. Both tiers (9.6mg, 19.5mg) covered.</p>
+        <p style="margin-top: 0.5rem;"><strong>Minor Gap:</strong> No FAQ section (like other high-scoring guides). Comparison table present but FAQ would add 1 point. Score remains 24/25.</p>
+      </div>
+
+      <p style="color: #10b981; font-weight: 600;">✓ APPROVED FOR PUBLICATION</p>
+    </div>
+
+    <!-- BATCH SUMMARY -->
+    <div class="batch-summary">
+      <h2>Batch 4 Summary & Recommendations</h2>
+      <ul>
+        <li><strong>Total articles:</strong> 10</li>
+        <li><strong>Average score:</strong> 24.2 / 25 (exceptionally strong)</li>
+        <li><strong>Perfect scores (25/25):</strong> 6 articles (ZYN Flavours, VELO Flavours, ZYN Strength Chart, VELO vs Nordic Spirit, ICEBERG, VELO duplicate)</li>
+        <li><strong>Good scores (24/25):</strong> 3 articles (ZYN vs VELO, FUMI, RAVE)</li>
+        <li><strong>Needs revision (20/25):</strong> 1 article (LOOP vs Skruf — add comparison table + FAQ)</li>
+      </ul>
+
+      <h3 style="color: #a3e635; margin-top: 2rem; margin-bottom: 1rem;">Action Items</h3>
+      <ul>
+        <li><strong style="color: #10b981;">✓ PUBLISH IMMEDIATELY:</strong> All 9 articles except loop-vs-skruf. These are ready for go-live.</li>
+        <li><strong style="color: #f87171;">⚠ HOLD & REVISE:</strong> loop-vs-skruf. Add comparison table (9 rows) and FAQ section (3 Q&As) as specified in improvements section above. Resubmit for final review.</li>
+        <li><strong style="color: #3b82f6;">ℹ CONSIDER:</strong> Consolidate VELO Flavours (#2) and All VELO Flavours Ranked (#3) to avoid duplicate content penalty. One article as "quick reference," the other as "in-depth review" with distinct angle.</li>
+        <li><strong style="color: #3b82f6;">ℹ ILLUSTRATIONS:</strong> 5 brand illustrations requested (FUMI, ICEBERG, RAVE, ZYN Flavour Map, VELO Flavours). See companion file: blog-illustrations-batch4-brands.jsx</li>
+      </ul>
+
+      <h3 style="color: #a3e635; margin-top: 2rem; margin-bottom: 1rem;">SEO & Editorial Notes</h3>
+      <ul>
+        <li><strong>Keyword Coverage:</strong> Batch 4 covers 10 high-intent keyword phrases (brand comparisons, brand guides, strength charts). All have strong SEO fundamentals (H1 optimization, 15+ internal links, meta descriptions).</li>
+        <li><strong>Content Depth:</strong> 6 articles with 20+ product references or comparison data. ZYN Strength Chart (52 products), ICEBERG (13 products), RAVE (26 products) are particularly comprehensive.</li>
+        <li><strong>Authority Signals:</strong> Comparison articles (ZYN vs VELO, VELO vs Nordic Spirit, ICEBERG comparisons) position SnusFriend as a trusted guide. Factual accuracy critical — ensure all product names/mg values are current.</li>
+        <li><strong>Internal Linking:</strong> 9/10 articles have 15+ internal links. These should link to related brand pages, flavour category pages, and beginner guides. Verify link health before publication.</li>
+      </ul>
+
+      <h3 style="color: #a3e635; margin-top: 2rem; margin-bottom: 1rem;">Publication Readiness</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Article</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ZYN Flavours Complete Guide</td>
+            <td>25/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now</td>
+          </tr>
+          <tr>
+            <td>VELO Flavours Complete Guide</td>
+            <td>25/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now (or consolidate with #3)</td>
+          </tr>
+          <tr>
+            <td>All VELO Flavours Ranked 2026</td>
+            <td>25/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now (or consolidate with #2)</td>
+          </tr>
+          <tr>
+            <td>ZYN Strength Chart</td>
+            <td>25/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now</td>
+          </tr>
+          <tr>
+            <td>ZYN vs VELO 2026</td>
+            <td>24/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now</td>
+          </tr>
+          <tr>
+            <td>VELO vs Nordic Spirit</td>
+            <td>25/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now</td>
+          </tr>
+          <tr>
+            <td>LOOP vs Skruf</td>
+            <td>20/25</td>
+            <td style="color: #f87171;">✗ Hold</td>
+            <td>Revise (add table + FAQ)</td>
+          </tr>
+          <tr>
+            <td>FUMI Complete Guide</td>
+            <td>24/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now</td>
+          </tr>
+          <tr>
+            <td>ICEBERG Complete Guide</td>
+            <td>25/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now</td>
+          </tr>
+          <tr>
+            <td>RAVE Review</td>
+            <td>24/25</td>
+            <td style="color: #10b981;">✓ Ready</td>
+            <td>Publish now</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      <p>Blog SEO Audit — Batch 4 | April 7, 2026 | SnusFriend Content Strategy</p>
+    </div>
+  </div>
+</body>
+</html>

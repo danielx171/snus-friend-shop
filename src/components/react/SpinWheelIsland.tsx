@@ -1,88 +1,83 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import QueryProvider from './QueryProvider';
 import ErrorBoundaryWrapper from './ErrorBoundaryWrapper';
-import { supabase } from '@/lib/supabase-browser';
+import { useAuthUser } from '@/hooks/useAuthUser';
 import { useSpinWheel, useSpinStatus } from '@/hooks/useSpinWheel';
 import type { SpinResult } from '@/hooks/useSpinWheel';
 import SpinWheel from '@/components/rewards/SpinWheel';
 import PrizeReveal from '@/components/rewards/PrizeReveal';
-import { useToast } from '@/hooks/use-toast';
+import { tenant } from '@/config/tenant';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
+
+/* Guest spin — visual only, random prize for animation */
+const GUEST_PRIZES: SpinResult[] = [
+  { prize_key: 'points_5',      prize_display: { icon: '💰', title: `5 ${loyaltyCurrencyName}`,    description: `${loyaltyCurrencyName} for your balance`,       type: 'points'  }, points_awarded: 5 },
+  { prize_key: 'points_10',     prize_display: { icon: '💰', title: `10 ${loyaltyCurrencyName}`,   description: `${loyaltyCurrencyName} for your balance`,    type: 'points'  }, points_awarded: 10 },
+  { prize_key: 'voucher_15pct', prize_display: { icon: '🎟️', title: '15% Off',     description: 'Discount on your next order',     type: 'voucher' } },
+  { prize_key: 'points_25',     prize_display: { icon: '⚡', title: `25 ${loyaltyCurrencyName}`,   description: `${loyaltyCurrencyName} for your balance`,    type: 'points'  }, points_awarded: 25 },
+  { prize_key: 'points_5b',     prize_display: { icon: '💰', title: `5 ${loyaltyCurrencyName}`,    description: `${loyaltyCurrencyName} for your balance`,    type: 'points'  }, points_awarded: 5 },
+  { prize_key: 'free_can',      prize_display: { icon: '🎁', title: 'Free Can',    description: 'A free can with your next order', type: 'voucher' } },
+  { prize_key: 'points_50',     prize_display: { icon: '⭐', title: `50 ${loyaltyCurrencyName}`,   description: `${loyaltyCurrencyName} for your balance`,    type: 'points'  }, points_awarded: 50 },
+  { prize_key: 'free_month',    prize_display: { icon: '🏆', title: 'Free Month!', description: `A free month of ${tenant.name}!`, type: 'jackpot' } },
+];
 
 function SpinWheelInner() {
-  const { toast } = useToast();
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUserId(data.session?.user?.id ?? null);
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUserId(session?.user?.id ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
+  const { userId, authChecked } = useAuthUser();
   const spinStatus = useSpinStatus(userId);
   const spinMutation = useSpinWheel();
   const hasSpunToday = spinStatus.data === true;
 
   const [revealedPrize, setRevealedPrize] = useState<SpinResult | null>(null);
+  const [guestHasSpun, setGuestHasSpun] = useState(false);
+  const [isGuestSpin, setIsGuestSpin] = useState(false);
 
   const handleSpin = useCallback(async (): Promise<SpinResult> => {
     if (!userId) {
-      toast({
-        title: 'Sign in to spin',
-        description: 'Create a free account to start earning rewards.',
-      });
-      throw new Error('Not authenticated');
+      // Guest spin — pick a random prize for the animation, no backend call
+      const prize = GUEST_PRIZES[Math.floor(Math.random() * GUEST_PRIZES.length)];
+      setGuestHasSpun(true);
+      return prize;
     }
     return spinMutation.mutateAsync();
-  }, [userId, spinMutation, toast]);
+  }, [userId, spinMutation]);
 
   const handlePrizeWon = useCallback((prize: SpinResult) => {
+    setIsGuestSpin(!userId);
     setRevealedPrize(prize);
-  }, []);
+  }, [userId]);
 
   const handleClosePrize = useCallback(() => {
     setRevealedPrize(null);
   }, []);
 
+  // Don't render until auth is resolved — prevents flash of "Sign in" wall for
+  // logged-in users on prerendered (SSG) pages where __AUTH_STATE__ is null at build time
+  if (!authChecked) return null;
+
+  const isExhausted = userId ? hasSpunToday : guestHasSpun;
+
   return (
     <>
       <div className="text-center mb-6">
         <p className="text-sm text-muted-foreground">
-          {hasSpunToday
-            ? 'Come back tomorrow for another spin!'
+          {isExhausted
+            ? userId
+              ? 'Come back tomorrow for another spin!'
+              : 'Create a free account to claim your prize and spin daily!'
             : 'Spin the wheel once a day to win rewards'}
         </p>
       </div>
-
-      {!userId && (
-        <div className="text-center mb-6 p-4 rounded-xl bg-muted/50 border border-border/30">
-          <p className="text-sm text-muted-foreground mb-3">
-            Sign in to spin the wheel and collect rewards
-          </p>
-          <a
-            href="/login?redirect=/rewards"
-            className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition gap-2"
-          >
-            Sign in
-          </a>
-        </div>
-      )}
 
       <div className="mb-10">
         <SpinWheel
           onSpin={handleSpin}
           isSpinning={spinMutation.isPending}
-          isExhausted={hasSpunToday || !userId}
+          isExhausted={isExhausted}
           onPrizeWon={handlePrizeWon}
         />
       </div>
 
-      <PrizeReveal prize={revealedPrize} onClose={handleClosePrize} />
+      <PrizeReveal prize={revealedPrize} onClose={handleClosePrize} guestMode={isGuestSpin} />
     </>
   );
 }

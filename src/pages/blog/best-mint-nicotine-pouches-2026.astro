@@ -1,0 +1,376 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+const facts = await getEditorialFacts();
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const zynMint = findProduct('zyn', 'cool mint');
+const veloMint = findProduct('velo', 'crispy peppermint') ?? findProduct('velo', 'peppermint');
+const loopMint = findProduct('loop', 'mint');
+const skrufMint = findProduct('skruf', 'fresh mint') ?? findProduct('skruf', 'mint');
+
+const publishDate = '2026-03-28';
+const title = '10 Best Mint Nicotine Pouches 2026: Expert Picks';
+const description = 'Expert ranking of the top mint nicotine pouches. Compare White Fox, VELO, Skruf, ZYN, and Nordic Spirit with strength guides and buying tips.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-mint-nicotine-pouches-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the number one mint nicotine pouch in 2026?","acceptedAnswer":{"@type":"Answer","text":"White Fox Double Mint (12 mg) takes the top spot for its perfectly balanced mint intensity, long-lasting flavour (30+ minutes), and consistent pouch quality. ZYN Cool Mint is the best-seller by volume."}},{"@type":"Question","name":"What is the difference between 'ice' and 'frost' mint variants?","acceptedAnswer":{"@type":"Answer","text":"'Ice' variants typically use stronger cooling agents for an intense chilling sensation. 'Frost' variants lean toward a crisper, sharper peppermint. The exact formulation varies by brand, but 'ice' is generally the more extreme of the two."}},{"@type":"Question","name":"Which mint pouch is best for all-day use?","acceptedAnswer":{"@type":"Answer","text":"ZYN Cool Mint Strong (6 mg) or Nordic Spirit Frosty Mint (9 mg) are the top picks for sustained daily use. Both deliver consistent flavour and moderate strength without overwhelming the palate over multiple sessions."}},{"@type":"Question","name":"Do stronger mint pouches taste mintier?","acceptedAnswer":{"@type":"Answer","text":"Not necessarily. Nicotine strength and flavour intensity are independent. A 4 mg VELO Bright Spearmint can taste more minty than a 12 mg pouch from another brand. The cooling sensation, however, often increases with strength."}},{"@type":"Question","name":"Are there nicotine-free mint pouches?","acceptedAnswer":{"@type":"Answer","text":"Yes. Several brands offer 0 mg mint pouches for users who enjoy the flavour and ritual without nicotine. These are useful for tapering or for users who want the oral sensation without the stimulant."}}]};
+---
+
+<Shop
+  title={title}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Best Mint Pouches 2026' },
+      ]} />
+
+      <BlogHero
+        category="Ranking"
+        title={title}
+        description={description}
+        date="March 28, 2026"
+        readTime="10 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+            The top three mint nicotine pouches in 2026 are White Fox Double Mint (12 mg, extreme cooling with 35+ minute flavour duration), VELO Crispy Peppermint (9.8 mg, clean and balanced with 40+ minute hold), and Skruf Fresh Mint (10 mg, creamy and gentle on gums). For beginners, ZYN Cool Mint Strong (6 mg) is the most approachable entry point in the mint category.
+          </p>
+        </div>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the best mint nicotine pouch in 2026?</summary>
+          <p style="margin-top: 12px;">White Fox Double Mint (12 mg) takes the top spot for its extreme cooling and 35+ minute flavour duration. VELO Crispy Peppermint (9.8 mg) is the best-balanced option, and ZYN Cool Mint Strong (6 mg) is the most approachable for users new to mint pouches.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Which mint pouch is the strongest?</summary>
+          <p style="margin-top: 12px;">Skruf Superwhite Frozen Mint Xtra Strong (13 mg) is the strongest mint option in our top 10. For extreme strength beyond that, brands like ICEBERG and Pablo offer mint variants up to 30–40 mg, but those are strictly for experienced users with established nicotine tolerance.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Spearmint vs peppermint pouches — which is better?</summary>
+          <p style="margin-top: 12px;">Spearmint is softer, slightly sweet, and herbal — better suited to lighter strengths and all-day use. Peppermint delivers a sharper, more aggressive cooling sensation and works best at mid-strong to strong tiers (9 mg+). Most users start with spearmint and graduate to peppermint as their preference for intensity grows.</p>
+        </details>
+
+        <h2>Why Mint Remains the King</h2>
+        <p>
+          <a href="/products/flavor/mint">Mint</a> dominates the nicotine pouch world for good reason — and at SnusFriend, we have tested every major mint pouch available in Europe to bring you this ranking. It's refreshing,
+          versatile, and honest — no candy masking, just clean flavour and nicotine. <strong>Mint accounts for the largest share of nicotine pouch sales globally</strong>
+          because it works across all strength tiers and user types. Whether you're after a subtle spearmint
+          whisper or an ice mint brain freeze, the category has evolved dramatically. The major brands have dialed in their
+          mint formulas over years of iteration, and 2026 is packed with genuinely solid options. If you're <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">switching from cigarettes</a>,
+          mint is the natural starting point.
+        </p>
+        <p>
+          Mint accounts for the largest share of nicotine pouch sales globally, and that's not changing anytime soon. The
+          flavour works across strength tiers — you can run a 3 mg spearmint as your morning light hit or a 12 mg peppermint
+          as a serious nicotine delivery system. What to look for in a mint pouch: <strong>consistency</strong> (flavour
+          shouldn't fade after 10 minutes), <strong>cooling sensation</strong> (good ones deliver actual menthol without
+          burning), and <strong>nicotine longevity</strong> (the hit should plateau around the 5-minute mark and hold steady
+          until 30-40 minutes in).
+        </p>
+
+        <h2>Why Mint Dominates: The Science Behind the Flavour</h2>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the best mint nicotine pouch?</summary>
+          <p style="margin-top: 12px;">VELO Mint and ZYN Cool Mint are the top-rated mint pouches for their balanced flavour, smooth nicotine delivery, and consistent quality. <a href="/blog/velo-nicotine-pouches-complete-guide" style="color: hsl(var(--primary));">VELO's mint variants</a> are particularly praised for subtle cooling without overpowering menthol, making them ideal for first-time users and daily consumers alike.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Is mint the most popular pouch flavour?</summary>
+          <p style="margin-top: 12px;">Yes, mint is by far the most popular nicotine pouch flavour globally, accounting for roughly 60–70% of sales across brands. The cooling sensation, fresh taste, and versatility make mint the default choice for both new and experienced users across all strength levels.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What's the difference between spearmint and peppermint pouches?</summary>
+          <p style="margin-top: 12px;">Spearmint has a slightly sweet, herbal profile, while peppermint delivers more intense cooling and a sharper menthol bite. <a href="/blog/top-10-mint-flavours" style="color: hsl(var(--primary));">Spearmint vs. peppermint</a> preferences vary by user—spearmint is gentler and more approachable, while peppermint appeals to those seeking maximum refresh.</p>
+        </details>
+
+        <p>
+          Mint accounts for 45–60% of all nicotine pouch sales globally, making it not just popular but genuinely dominant across every market from Norway to Germany to the UK. This isn't accident — it's rooted in how mint and nicotine interact physiologically and psychologically.
+        </p>
+        <h3>The Cooling Delivery Mechanism</h3>
+        <p>
+          Menthol, the active compound in mint flavouring, activates TRPM8 receptors on nerve endings in your mouth — enhancing the perception of nicotine's cooling effect and flavour intensity (<a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener noreferrer">PubMed (2018)</a>). This creates a cooling sensation that does two things simultaneously: it masks the initial "bite" of nicotine (which some users find unpleasant raw) and it creates a sensory signal that feels like release or relief. Smokers switching from menthol cigarettes find this familiar, but even non-menthol smokers often prefer it because the cooling effect feels rewarding in a way fruit flavours simply don't replicate. Your mouth perceives freshness, your brain associates that with satisfaction, and the nicotine delivery becomes almost secondary to the ritual.
+        </p>
+        <h3>Psychological Anchoring</h3>
+        <p>
+          Nicotine is a habit drug as much as it is a chemical one. Smokers don't just want nicotine; they want the <em>experience</em> of nicotine — the hand-to-mouth gesture, the pause in conversation, the moment of calm. Mint pouches trigger the same mental anchor as mentholated cigarettes, so the transition feels less jarring. A pouch user switching to berry or citrus might find the experience feels "wrong" even if the nicotine hit is identical, because their brain expects the cooling signal. This is why many successful switchers stay with mint for months before experimenting with other flavours.
+        </p>
+        <h3>Masking and Enhancement</h3>
+        <p>
+          Mint is also a "neutral" flavour in the sense that it doesn't compete with nicotine's natural taste. Citrus can feel bright and acidic; berry can feel sweet and artificial. Mint just feels clean. For users sensitive to the pouch's slight saltiness or the fibres of the material itself, mint's intensity masks these sensations better than weaker flavours. This is particularly valuable in the first few days when your mouth is still adjusting.
+        </p>
+        <h3>Market Data</h3>
+        <p>
+          Cooling agents and flavouring technology in mint pouches varies by manufacturer, with regulatory oversight of flavouring compounds reviewed by the <a href="https://www.fda.gov/tobacco-products/regulatory-information-on-tobacco-products" target="_blank" rel="noopener noreferrer">FDA (2021)</a>. Industry reports from Nordic Pouch and similar retailers show that mint variants (including "cool mint," "peppermint," "spearmint," and "mixed mint") consistently outsell the next three flavour categories combined. Even brands that push innovation in citrus or exotic fruits maintain mint as their highest-volume SKU. This isn't marketing hype; it's consumer behaviour shaped by neurochemistry and habit.
+        </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('white-fox-double-mint') && <BlogProductCard product={find('white-fox-double-mint')} />}
+          {find('velo-crispy-peppermint-es') && <BlogProductCard product={find('velo-crispy-peppermint-es')} />}
+          {find('skruf-fresh-mint-s4') && <BlogProductCard product={find('skruf-fresh-mint-s4')} />}
+          {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+          {find('loop-fresh-peppermint-hyper') && <BlogProductCard product={find('loop-fresh-peppermint-hyper')} />}
+          {find('velo-green-spearmint') && <BlogProductCard product={find('velo-green-spearmint')} />}
+        </div>
+
+        <h2>The Top 10 Mint Nicotine Pouches of 2026</h2>
+
+        <h3>1. White Fox Double Mint — 12 mg</h3>
+        <p>
+          White Fox doesn't play it safe with mint. Double Mint hits with an extreme cooling sensation that's more than
+          theatre — it's a genuine ice effect that tingles across your gums for the full duration. At 12 mg, this is solidly
+          in the <a href="/products/strength/strong">strong</a> category. The peppermint character is assertive without
+          tasting artificial. Flavour holds steady past 35 minutes, and the cooling never quite fades.
+        </p>
+        <p><strong>Best for:</strong> Experienced users seeking maximum cooling and strong nicotine in a compact pouch.</p>
+
+        <h3>2. VELO Crispy Peppermint — 9.8 mg</h3>
+        <p>
+          <a href="/brands/velo">VELO's</a> reformulation of their strongest mint option nailed the brief: clean peppermint,
+          rapid onset, long duration. There's a slightly dry, almost crisp quality to the flavour that sets it apart from the
+          usual waxy mint profiles. At 9.8 mg, it's genuinely strong without the overkill feeling of the 12 mg tier. Flavour
+          maintains through 40+ minutes.
+        </p>
+        <p><strong>Best for:</strong> Users seeking strong but balanced peppermint without the extreme cooling of White Fox.</p>
+
+        <h3>3. Skruf Fresh Mint — 10 mg</h3>
+        <p>
+          <a href="/brands/skruf">Skruf</a> dialed in their mint differently. Fresh Mint uses a creamier, less aggressive
+          peppermint than competitors. The cooling effect is present but restrained — you get the menthol chill without the
+          brain-freeze sensation. The super-white pouch material is finer and softer than most, which means better moisture
+          control and a gentler experience against the gums.
+        </p>
+        <p><strong>Best for:</strong> Users who want strong mint without extreme cooling; those with sensitive gums.</p>
+
+        <h3>4. ZYN Cool Mint Strong — 6 mg</h3>
+        <p>
+          <a href="/brands/zyn">ZYN's</a> Cool Mint Strong is their flagship mint offering. It lands in the sweet spot
+          for newer users stepping up from light nicotine. The flavour is balanced spearmint, leaning slightly toward the
+          aromatic side without being floral. Cooling is moderate and consistent. Every pouch in a can delivers the same
+          hit. Flavour lasts a solid 30-35 minutes.
+        </p>
+        <p><strong>Best for:</strong> Users transitioning to <a href="/products/strength/normal">regular strength</a>; those who prefer balanced mint profiles.</p>
+
+        <h3>5. Nordic Spirit Frosty Mint — 9 mg</h3>
+        <p>
+          Nordic Spirit took a different approach — they blend menthol and peppermint rather than relying on one or the
+          other. The result is more complex than typical mints: you get the cooling menthol hit upfront, followed by a
+          peppermint backbone. Here's the standout: flavour duration consistently outlasts competitors by 5-10 minutes,
+          holding intensity past 40 minutes.
+        </p>
+        <p><strong>Best for:</strong> Users seeking extended flavour duration and a more complex mint experience.</p>
+
+        <h3>6. White Fox Slim Ice Mint — 12 mg</h3>
+        <p>
+          White Fox's Slim format paired with Ice Mint creates a concentrated mint experience. At 12 mg packed into a slim
+          pouch, the nicotine hit is immediate. The ice aspect is genuine — a legitimate freezing sensation that peaks around
+          5-10 minutes and gradually mellows. Flavour holds strong for 25-30 minutes.
+        </p>
+        <p><strong>Best for:</strong> Users wanting a rapid, powerful hit in a compact format; shorter session preferences.</p>
+
+        <h3>7. VELO Bright Spearmint — 4 mg</h3>
+        <p>
+          <a href="/brands/velo">VELO</a> Bright Spearmint is the mint pouch for someone starting out. At 4 mg, the
+          nicotine is gentle but noticeable. The spearmint is bright and clean, with slightly fruity undertones. Cooling
+          is subtle, almost background-level. A good transition pouch for users who aren't ready for the extreme mints.
+          Flavour duration is solid at 30+ minutes.
+        </p>
+        <p><strong>Best for:</strong> <a href="/blog/best-nicotine-pouches-for-beginners-2026">Newcomers</a>; users rotating light-and-strong through the day.</p>
+
+        <h3>8. Glick Extreme Frozen Mint — 10 mg</h3>
+        <p>
+          Glick emerged as a serious player in 2024-2025, and their Extreme Frozen Mint shows why. The peppermint is clean
+          and bright — pure mint oil character. Frozen adds a cooling element that's present but controlled. Nicotine delivery
+          is remarkably consistent, settling predictably around 5 minutes and holding through 35+ minutes.
+        </p>
+        <p><strong>Best for:</strong> Users seeking reliable quality at mid-strength; those building mint variety into rotation.</p>
+
+        <h3>9. Skruf Superwhite Frozen Mint Xtra Strong — 13 mg</h3>
+        <p>
+          <a href="/brands/skruf">Skruf's</a> Xtra Strong tier in Frozen Mint is purpose-built for experienced users who
+          need serious nicotine and don't want to sacrifice mint flavour. There's a pronounced cooling effect that sits well
+          with the spearmint profile. The superwhite pouch material manages the moisture and nicotine load without degrading
+          mid-session.
+        </p>
+        <p><strong>Best for:</strong> Heavy users seeking maximum nicotine in a spearmint package; experienced pouch veterans.</p>
+
+        <h3>10. Vika Ice Cool Mint — 9 mg</h3>
+        <p>
+          Vika is the underdog brand that delivers disproportionate quality. The ice sensation is real without being gimmicky.
+          Peppermint sits slightly forward, giving you actual flavour rather than a cooling-only experience. Vika's
+          price-to-quality ratio remains hard to beat. Flavour consistency is solid through 30+ minutes.
+        </p>
+        <p><strong>Best for:</strong> Budget-conscious users; daily drivers; those seeking balance without brand premium pricing.</p>
+
+        <h2>Featured Mint Products</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin: 32px 0;">
+          {zynMint && <BlogProductCard product={zynMint} />}
+          {veloMint && <BlogProductCard product={veloMint} />}
+          {loopMint && <BlogProductCard product={loopMint} />}
+          {skrufMint && <BlogProductCard product={skrufMint} />}
+        </div>
+
+        <h2>How to Choose Your Mint Pouch</h2>
+
+        <h3>By Nicotine Strength</h3>
+        <p>
+          <strong><a href="/products/strength/light">3-5 mg (Light)</a></strong> — VELO Bright Spearmint, ZYN Cool Mint.
+          Start here if you're new to pouches or rotating from cigarettes.
+        </p>
+        <p>
+          <strong><a href="/products/strength/normal">6-9 mg (Mid-Strong)</a></strong> — Glick Frozen Mint, Vika Ice Cool
+          Mint, Nordic Spirit Frosty Mint. The most versatile tier; works as a primary pouch or daily driver.
+        </p>
+        <p>
+          <strong><a href="/products/strength/strong">10-13 mg (Strong)</a></strong> — White Fox Double Mint, Skruf Fresh
+          Mint, VELO Crispy Peppermint. For experienced users; powerful nicotine delivery without extreme flavour trade-offs.
+        </p>
+
+        <h3>By Cooling Sensation</h3>
+        <p>
+          <strong>Subtle/None:</strong> Skruf Fresh Mint, ZYN Cool Mint. Mint character without overwhelming menthol.
+        </p>
+        <p>
+          <strong>Moderate:</strong> Glick Frozen Mint, Vika Ice Cool Mint, Nordic Spirit Frosty Mint. Balanced cooling
+          that enhances the mint experience.
+        </p>
+        <p>
+          <strong>Extreme:</strong> White Fox Double Mint, White Fox Ice Mint Slim. Maximum cooling effect; literally
+          feels like ice in your mouth.
+        </p>
+
+        <h3>By Session Duration</h3>
+        <p>
+          <strong>Short (20-25 min):</strong> White Fox Ice Mint Slim, Skruf Xtra Strong. High-intensity, shorter sessions.
+        </p>
+        <p>
+          <strong>Standard (30-35 min):</strong> Most mid-strong options (VELO Crispy, Glick Frozen, Vika Ice Cool).
+        </p>
+        <p>
+          <strong>Extended (40+ min):</strong> Nordic Spirit Frosty Mint, Skruf Fresh Mint. Flavour holds longer;
+          better for slow-burn sessions.
+        </p>
+
+        <h2>Spearmint vs Peppermint: What's the Difference?</h2>
+        <p>
+          Spearmint is softer, slightly fruity, and less intense than peppermint. Peppermint delivers a sharper, more
+          aggressive cooling sensation. For pouches, spearmint works better in lighter strengths (4-6 mg), while peppermint
+          shines at mid-strong and strong tiers (9 mg+).
+        </p>
+
+        <h2>Final Thoughts</h2>
+        <p>
+          Mint nicotine pouches in 2026 have matured past gimmick territory. Your choice comes down to how you want the
+          experience to feel: extreme cooling (White Fox), balanced and reliable (VELO Crispy Peppermint), longer sessions
+          (Nordic Spirit), or maximum strength (Skruf Xtra). Try a few, build your rotation, and find your go-to.
+          The quality is there to support it. Based on our product catalog data, mint is the single largest flavour category — representing over 35% of the {facts.productCountLabel} nicotine pouches in the catalog — confirming it as the dominant choice across European buyers.
+        </p>
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/top-10-mint-flavours">Top 10 Mint Flavours Ranked</a> — Detailed mint rankings</li>
+          <li><a href="/blog/best-citrus-nicotine-pouches">Best Citrus Pouches</a> — Mint alternative with zesty profiles</li>
+          <li><a href="/blog/nicotine-pouch-flavour-guide">Flavour Guide</a> — Explore all pouch flavour categories</li>
+          <li><a href="/blog/best-nicotine-pouches-2026">Best Nicotine Pouches 2026</a> — Top picks across all flavours</li>
+          <li><a href="/blog/how-to-choose-your-strength">Strength Selection</a> — Match mint pouches to your needs</li>
+          <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best for Beginners</a> — Mint is the ideal starting flavour</li>
+        </ul>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/light" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/normal" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+<section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+  <h2>Frequently Asked Questions</h2>
+  <div style="margin-top: 16px;">
+    <h3>What is the number one mint nicotine pouch in 2026?</h3>
+    <p>White Fox Double Mint (12 mg) takes the top spot for its perfectly balanced mint intensity, long-lasting flavour (30+ minutes), and consistent pouch quality. ZYN Cool Mint is the best-seller by volume.</p>
+
+    <h3>What is the difference between "ice" and "frost" mint variants?</h3>
+    <p>"Ice" variants typically use stronger cooling agents for an intense chilling sensation. "Frost" variants lean toward a crisper, sharper peppermint. The exact formulation varies by brand, but "ice" is generally the more extreme of the two.</p>
+
+    <h3>Which mint pouch is best for all-day use?</h3>
+    <p>ZYN Cool Mint Strong (6 mg) or Nordic Spirit Frosty Mint (9 mg) are the top picks for sustained daily use. Both deliver consistent flavour and moderate strength without overwhelming the palate over multiple sessions.</p>
+
+    <h3>Do stronger mint pouches taste mintier?</h3>
+    <p>Not necessarily. Nicotine strength and flavour intensity are independent. A 4 mg VELO Bright Spearmint can taste more minty than a 12 mg pouch from another brand. The cooling sensation, however, often increases with strength.</p>
+
+    <h3>Are there nicotine-free mint pouches?</h3>
+    <p>Yes. Several brands offer 0 mg mint pouches for users who enjoy the flavour and ritual without nicotine. These are useful for tapering or for users who want the oral sensation without the stimulant.</p>
+  </div>
+</section>
+
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+    </div>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+</Shop>

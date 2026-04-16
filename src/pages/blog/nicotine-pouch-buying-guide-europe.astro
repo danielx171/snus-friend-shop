@@ -1,0 +1,345 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const publishDate = '2026-03-28';
+const title = 'Nicotine Pouch Buying Guide for Europe (2026)';
+const description = 'Everything European buyers need to know about choosing, buying, and using nicotine pouches. Strength tiers, regulations, top brands, and honest tips.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/nicotine-pouch-buying-guide-europe` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are nicotine pouches safer than cigarettes?","acceptedAnswer":{"@type":"Answer","text":"While no nicotine product is risk-free, nicotine pouches eliminate combustion, tar, and the 7,000+ chemicals found in cigarette smoke. Public health bodies including the Royal College of Physicians recognise tobacco-free nicotine products as substantially less harmful than smoking."}},{"@type":"Question","name":"Can I buy nicotine pouches online in Europe?","acceptedAnswer":{"@type":"Answer","text":"Yes. Online sales are legal in most EU countries. Some nations (notably the Netherlands and Belgium) have specific restrictions. Always check your local regulations before ordering."}},{"@type":"Question","name":"How much do nicotine pouches cost in Europe?","acceptedAnswer":{"@type":"Answer","text":"Prices typically range from €3–6 per can of 20 pouches, depending on the brand and your country. Premium brands like ZYN and VELO sit at the higher end; budget brands like 77 Pouches and Chainpop are more affordable."}},{"@type":"Question","name":"What is the difference between nicotine pouches and snus?","acceptedAnswer":{"@type":"Answer","text":"Snus contains tobacco leaf; nicotine pouches do not. Snus is banned in the EU (except Sweden) under the Tobacco Products Directive. Nicotine pouches fall outside this ban because they are tobacco-free."}},{"@type":"Question","name":"How should I store nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Store unopened cans in a cool, dry place away from direct sunlight. Once opened, use within 1–2 weeks for best flavour. Refrigeration extends freshness but is not required."}},{"@type":"Question","name":"Do I need to be 18 to buy nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"In most European countries, you must be 18+ to purchase nicotine products. Some countries set the minimum age at 16 or have no specific age restriction for non-tobacco nicotine. SnusFriend requires customers to be 18+."}}]};
+---
+
+<Shop
+  title={title}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Europe Buying Guide' },
+      ]} />
+
+      <BlogHero
+        category="Guide"
+        title={title}
+        description={description}
+        date="March 28, 2026"
+        readTime="12 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Quick Answer: Buying Nicotine Pouches in Europe</summary>
+          <p style="margin-top: 12px;">You can legally buy nicotine pouches in most European countries, either in local stores or from EU-based online retailers. The key factors are legality (varies by country), shipping speed (1&ndash;5 days within the EU), payment options, and whether customs or excise duties apply. EU-to-EU orders generally incur no customs fees. Countries with the smoothest buying experience include Germany, the Netherlands, Austria, and Poland. The UK and Norway require customs declarations for cross-border orders. Our country-by-country breakdowns below cover everything you need to know before placing your first order.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Can I buy nicotine pouches online in Europe?</summary>
+          <p style="margin-top: 12px;">Yes, you can buy nicotine pouches online in most European countries through EU-based specialist retailers. EU-to-EU orders typically arrive within 1&ndash;5 days with no customs fees, and reputable shops like SnusFriend ship to the majority of European countries. Check your country's local rules before ordering, as a handful of nations including France and Belgium have specific restrictions on sales.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Which EU countries ban nicotine pouches?</summary>
+          <p style="margin-top: 12px;">France banned the commercial sale of nicotine pouches in February 2025, while Belgium enforces a complete ban including cross-border imports. Luxembourg effectively prohibited them in late 2025 by capping nicotine content to a negligible level. Denmark allows sales but introduced strict restrictions in April 2026, limiting nicotine to 9 mg and permitting only tobacco and menthol flavours.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">How much do nicotine pouches cost in Europe?</summary>
+          <p style="margin-top: 12px;">Prices vary by channel: retail shops (petrol stations, convenience stores) typically charge €5&ndash;€8 per can, while online retailers sell the same products for €2.50&ndash;€4 per can when bought in bulk. For a typical user going through one can per week, online buying costs €10&ndash;€16 per month — significantly less than buying in-store and often cheaper than cigarettes.</p>
+        </details>
+
+        <h2>How Nicotine Pouches Work</h2>
+        <p>
+          <strong>Nicotine pouches are small white sachets that contain nicotine, plant-based fibres, flavourings, and other ingredients designed for oral delivery</strong>. You place one between your upper lip and gum, and the nicotine absorbs through the mucous membrane. It takes about 2 to 5 minutes to feel the first effects, with nicotine delivery peaking around 5 to 10 minutes. All pouches sold in the EU comply with tobacco product regulations (TPD 2014/40/EU) for safety, quality, and labelling.
+        </p>
+        <p>
+          Unlike traditional <a href="/blog/nicotine-pouches-vs-snus">snus</a> (which contains tobacco), modern nicotine
+          pouches are tobacco-free. They're completely white, discreet, and don't stain your teeth. You keep the pouch in
+          for 15-45 minutes, then pop it out and bin it. Think of it as a slow-release nicotine delivery system with no
+          smoke, no combustion, no ash.
+        </p>
+
+        <h2>Choosing Your Strength: The Tier System</h2>
+        <p>
+          This is the most important decision you'll make. Get the strength wrong, and you'll either be disappointed
+          (too weak) or uncomfortably buzzed (too strong).
+        </p>
+        <p>
+          <strong><a href="/products/strength/light">Mild (2-4 mg per pouch)</a></strong> — For complete beginners or
+          people who want a light kick. Good for testing whether you even like nicotine before committing to stronger options.
+        </p>
+        <p>
+          <strong><a href="/products/strength/normal">Regular (4-8 mg per pouch)</a></strong> — The sweet spot for most
+          people transitioning from cigarettes. A noticeable buzz without being overwhelming. Most popular brands like
+          <a href="/brands/zyn">ZYN</a> and <a href="/brands/velo">VELO</a> sell their core products in this range.
+        </p>
+        <p>
+          <strong><a href="/products/strength/strong">Strong (8-12 mg per pouch)</a></strong> — For people with moderate
+          nicotine tolerance. If you smoke a pack a day or more, this is where you'll probably land.
+        </p>
+        <p>
+          <strong><a href="/products/strength/extra-strong">Extra Strong (12-20 mg per pouch)</a></strong> — Designed
+          for heavy users. These hit hard and fast. Not for newbies.
+        </p>
+        <p>
+          <strong><a href="/products/strength/super-strong">Extreme (20+ mg per pouch)</a></strong> — Some brands push
+          up to 30+ mg per pouch. These cater to seasoned nicotine users who've built serious tolerance.
+        </p>
+        <p>
+          <strong>How to choose:</strong> Start lower than you think you need. The nicotine hits differently depending
+          on the brand too — some brands have higher moisture and deliver more smoothly and quickly. Read our
+          <a href="/blog/how-to-choose-your-strength">strength guide</a> for the full breakdown.
+        </p>
+
+        <h2>Understanding Formats: Slim vs Mini vs Normal</h2>
+        <p>
+          <strong>Slim</strong> — The standard size for most brands. Sits comfortably between your lip and gum. Most
+          popular format in Europe.
+        </p>
+        <p>
+          <strong>Mini</strong> — Noticeably smaller and more discreet. Ideal if you want something nearly invisible.
+          ZYN offers a lot of options in mini format.
+        </p>
+        <p>
+          <strong>Normal (or "Full")</strong> — Thicker and larger, holds more material and delivers a bigger nicotine
+          boost. Less common now as most modern brands have standardized on slim.
+        </p>
+
+        <h2>Flavour Categories Explained</h2>
+        <p>
+          <strong><a href="/products/flavor/mint">Mint and Menthol</a></strong> — The most popular category. Clean,
+          fresh, and genuinely pleasant. Ranges from subtle spearmint to aggressive peppermint.
+        </p>
+        <p>
+          <strong><a href="/products/flavor/berry">Fruit and Berry</a></strong> — Covers everything from strawberry to
+          watermelon to mixed berry. Quality varies — some taste artificial, others surprisingly natural.
+        </p>
+        <p>
+          <strong><a href="/products/flavor/citrus">Citrus</a></strong> — Lemon, lime, grapefruit, orange. Zesty and
+          refreshing. Less heavy than berry flavours.
+        </p>
+        <p>
+          <strong><a href="/products/flavor/coffee">Coffee and Tobacco</a></strong> — For purists who want something
+          resembling snus or traditional tobacco products. Coffee flavours give a warm, earthy vibe.
+        </p>
+
+        <h2>Top Brands for European Buyers</h2>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Can you buy nicotine pouches online in Europe?</summary>
+          <p style="margin-top: 12px;">Yes, nicotine pouches are legal to buy online in most EU countries and are widely available through specialised retailers and major e-commerce platforms. <a href="/blog/nicotine-pouch-buying-guide-europe" style="color: hsl(var(--primary));">EU regulations</a> permit online sales where local laws allow, with delivery typically 2–5 days across the EU.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Which EU countries ban nicotine pouches?</summary>
+          <p style="margin-top: 12px;">France and Belgium have the strictest restrictions; France bans nicotine pouches outright, while Belgium restricts sales to licensed tobacconists. Most other EU countries—including Germany, UK, Netherlands, and Scandinavia—allow unrestricted online and retail sales to adults 18+.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Do you need a prescription for nicotine pouches in Europe?</summary>
+          <p style="margin-top: 12px;">No prescription is required anywhere in Europe; nicotine pouches are classified as consumer products and sold over-the-counter to adults 18+. Unlike some pharmaceuticals, they're available directly from retailers without medical involvement or documentation.</p>
+        </details>
+
+        <p>
+          <strong><a href="/brands/zyn">ZYN</a></strong> — The market leader. Consistent, well-made, available everywhere
+          in Europe. Huge range of flavours and strengths. Pouches are drier than competitors, meaning slower nicotine
+          release — good if you want a steady buzz. Their "Citrus" and "Cool Mint" are reliable crowd-pleasers.
+        </p>
+        <p>
+          <strong><a href="/brands/velo">VELO</a></strong> — Premium option with excellent build quality. Pouches are
+          softer and more moist than ZYN, so the nicotine and flavour hit faster. Wild flavour combinations available.
+          Slightly pricier but many people think it's worth it.
+        </p>
+        <p>
+          <strong><a href="/brands/loop">Loop</a></strong> — The Scandinavian innovator with patented InstantRush
+          technology — faster and stronger initial nicotine release, followed by a longer sustained experience.
+        </p>
+        <p>
+          <strong><a href="/brands/skruf">Skruf</a></strong> — A Swedish brand with serious heritage. Dependable and
+          popular in Scandinavia. Strong minty flavours and straightforward branding.
+        </p>
+        <p>
+          <strong><a href="/brands/helwit">HELWIT</a></strong> — A newer European brand focusing on natural ingredients
+          and sustainable packaging. More "natural" tasting than mass-market brands.
+        </p>
+
+        <h2>EU Regulations: What You Need to Know</h2>
+        <p>
+          Nicotine pouches are not classified as tobacco products under EU law, which means individual member states make
+          their own rules (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32014L0040" target="_blank" rel="noopener noreferrer">EU TPD 2014/40/EU</a>). This has led to a patchwork of regulations.
+        </p>
+        <p>
+          <strong>Germany and Belgium</strong> — Commercial sales are banned in both countries. Belgium enforces a complete ban including import; Germany bans domestic sale but personal import from other EU countries may be tolerated in small quantities — check current customs guidance before ordering.
+        </p>
+        <p>
+          <strong>Denmark</strong> — Strict new rules as of April 2026: only tobacco and menthol flavours allowed,
+          nicotine capped at 9 mg per pouch, and excise taxes added.
+        </p>
+        <p>
+          <strong>Austria</strong> — Classified as controlled adult nicotine products and must be sold through licensed
+          tobacconists only. Excise taxes apply.
+        </p>
+        <p>
+          <strong>France</strong> — Banned commercial sale of nicotine pouches in February 2025. An additional decree set for April 2026 was temporarily suspended by the French Council of State, pending a final ruling expected June 2026. Commercial sales remain prohibited under existing French public health law.
+        </p>
+        <p>
+          <strong>UK</strong> (post-Brexit) — Largely unregulated. No major restrictions. Age restrictions (18+) apply.
+        </p>
+        <p>
+          <strong>Scandinavia</strong> (Sweden, Norway) — Generally permissive. These countries see nicotine pouches as
+          a harm-reduction tool and Sweden allows up to 20mg pouches under a permissive regulatory stance (<a href="https://www.folkhalsomyndigheten.se/the-public-health-agency-of-sweden/news/tobacco/" target="_blank" rel="noopener noreferrer">Swedish Public Health Agency (2023)</a>). No major restrictions yet.
+        </p>
+        <p>
+          <strong>Luxembourg</strong> — Effectively banned as of November 2025, when Bill 8333 capped nicotine at 0.048 mg per pouch (a de facto prohibition) and banned flavourings in nicotine products.
+        </p>
+        <p>
+          <strong>Coming soon: EU-wide rules.</strong> The Tobacco Products Directive 3 (TPD3) is expected mid-2026, with full implementation around 2028. It will likely introduce EU-wide nicotine content limits, packaging standards, and sales channel controls for nicotine pouches. This will replace the current country-by-country patchwork.
+        </p>
+        <p>
+          <strong>Before buying online:</strong> Check your country's current status, as regulations change quickly. Under TPD, all compliant products must meet child-resistant packaging requirements (<a href="https://ec.europa.eu/info/law/better-regulation/feedback-tob_en" target="_blank" rel="noopener noreferrer">EC Tobacco Regulation (2023)</a>). If
+          you're in a banned/restricted country, cross-border shipping likely won't work. Always look for reputable
+          sellers with age verification.
+        </p>
+
+        <h2>How to Store Your Pouches</h2>
+        <p>
+          <strong>Keep them cool and dry.</strong> Room temperature (18-22 C) is ideal. Heat speeds up degradation.
+          Always seal the tin tightly — exposure to air dries them out within days.
+        </p>
+        <p>
+          <strong>Consider the fridge.</strong> If you're a light user and pouches sit around for weeks, keeping the tin
+          sealed in the fridge extends freshness by 2-3 months. Don't freeze — it changes the texture.
+        </p>
+        <p>
+          <strong>Shelf life:</strong> Unopened cans last 12-24 months. Once opened, enjoy them within 30-60 days for
+          peak freshness.
+        </p>
+
+        <h2>How Much Should You Pay?</h2>
+        <p>
+          <strong>Retail shops</strong> (convenience stores, petrol stations): 5-8 EUR per can. Most expensive.
+        </p>
+        <p>
+          <strong>Online retailers</strong> (within Europe): 2.50-4 EUR per can. Cheapest option when buying in bulk.
+        </p>
+        <p>
+          <strong>The maths:</strong> If you use one can per week (25 pouches typically), that's 10-40 EUR per month
+          depending on where and what you buy. Compare that to cigarettes (7-10 EUR per pack in most of Europe) and
+          it's competitive or cheaper, especially online.
+        </p>
+
+        <h2>FAQ</h2>
+        <h3>Are nicotine pouches safer than cigarettes?</h3>
+        <p>
+          They're not risk-free (nicotine is addictive), but they eliminate combustion, tar, and most carcinogens in
+          smoke. Most harm reduction experts see them as significantly lower-risk than smoking.
+        </p>
+
+        <h3>How long does one pouch last?</h3>
+        <p>
+          15-45 minutes, depending on the brand, strength, and your preference. ZYN tends to last longer (steadier
+          release). VELO hits hard and fades faster. Read our
+          <a href="/blog/how-long-do-nicotine-pouches-last">detailed duration guide</a>.
+        </p>
+
+        <h3>What's the difference between nicotine pouches and snus?</h3>
+        <p>
+          Snus contains tobacco leaf; nicotine pouches don't. Both deliver nicotine through the gum line, but snus
+          tastes different (earthier, more complex). Pouches are whiter, cleaner, easier to travel with. Read our
+          <a href="/blog/nicotine-pouches-vs-snus">full comparison</a>.
+        </p>
+
+        <h3>Can I use them at work without anyone noticing?</h3>
+        <p>
+          Completely discreet if you use mini pouches. Nobody can tell you're using them — no smell, no visible smoke,
+          no spitting. They're great for offices.
+        </p>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/light" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/normal" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+<section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+  <h2>Frequently Asked Questions</h2>
+  <div style="margin-top: 16px;">
+    <h3>Are nicotine pouches safer than cigarettes?</h3>
+    <p>While no nicotine product is risk-free, nicotine pouches eliminate combustion, tar, and the 7,000+ chemicals found in cigarette smoke. Public health bodies including the Royal College of Physicians recognise tobacco-free nicotine products as substantially less harmful than smoking.</p>
+
+    <h3>Can I buy nicotine pouches online in Europe?</h3>
+    <p>Yes. Online sales are legal in most EU countries. Some nations (notably the Netherlands and Belgium) have specific restrictions. Always check your local regulations before ordering.</p>
+
+    <h3>How much do nicotine pouches cost in Europe?</h3>
+    <p>Prices typically range from €3–6 per can of 20 pouches, depending on the brand and your country. Premium brands like ZYN and VELO sit at the higher end; budget brands like 77 Pouches and Chainpop are more affordable.</p>
+
+    <h3>What is the difference between nicotine pouches and snus?</h3>
+    <p>Snus contains tobacco leaf; nicotine pouches do not. Snus is banned in the EU (except Sweden) under the Tobacco Products Directive. Nicotine pouches fall outside this ban because they are tobacco-free.</p>
+
+    <h3>How should I store nicotine pouches?</h3>
+    <p>Store unopened cans in a cool, dry place away from direct sunlight. Once opened, use within 1–2 weeks for best flavour. Refrigeration extends freshness but is not required.</p>
+
+    <h3>Do I need to be 18 to buy nicotine pouches?</h3>
+    <p>In most European countries, you must be 18+ to purchase nicotine products. Some countries set the minimum age at 16 or have no specific age restriction for non-tobacco nicotine. SnusFriend requires customers to be 18+.</p>
+  </div>
+</section>
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/nicotine-pouches-legal-europe-2026">Nicotine Pouches Legal in Europe?</a> — Country-by-country legal status</li>
+          <li><a href="/blog/how-much-do-nicotine-pouches-cost">How Much Do Nicotine Pouches Cost?</a> — Pricing guide across brands</li>
+          <li><a href="/blog/nicotine-pouch-tax-regulations-2026">Tax and Regulations 2026</a> — Import duties and regulatory overview</li>
+        </ul>
+
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+    </div>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+</Shop>

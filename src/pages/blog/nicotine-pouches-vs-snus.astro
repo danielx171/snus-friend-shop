@@ -2,15 +2,33 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
+const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
 const title = 'Nicotine Pouches vs Snus: What\'s the Difference?';
 const description = 'Confused about nicotine pouches and snus? We break down the key differences — ingredients, legality, strength, flavour, and which is right for you.';
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/nicotine-pouches-vs-snus` },
+  };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is snus more harmful than nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Snus contains tobacco, which means it carries trace levels of tobacco-specific nitrosamines (TSNAs). Nicotine pouches are tobacco-free and do not contain TSNAs. Swedish epidemiological data shows snus is far less harmful than cigarettes, but nicotine pouches eliminate the tobacco component entirely."}},{"@type":"Question","name":"Why is snus banned in the EU but nicotine pouches are not?","acceptedAnswer":{"@type":"Answer","text":"The EU Tobacco Products Directive (2014/40/EU) specifically bans oral tobacco products — which includes snus. Nicotine pouches are not classified as tobacco products because they contain no tobacco leaf, so the ban does not apply to them."}},{"@type":"Question","name":"Can I get snus in Europe?","acceptedAnswer":{"@type":"Answer","text":"Traditional snus is only legally sold in Sweden (which has an exemption from the EU ban). If you are outside Sweden, nicotine pouches are the legal, tobacco-free alternative available across Europe."}},{"@type":"Question","name":"Does snus deliver more nicotine than pouches?","acceptedAnswer":{"@type":"Answer","text":"Traditional snus typically delivers nicotine somewhat faster due to higher pH levels and the presence of tobacco. However, modern nicotine pouches (especially brands like LOOP with Instant Rush) have closed this gap significantly."}},{"@type":"Question","name":"Do nicotine pouches taste like snus?","acceptedAnswer":{"@type":"Answer","text":"Some pouches (e.g., Skruf Nordic Liquorice, Garant) are designed to mimic the earthy, tobacco-like profile of snus. Most nicotine pouches, however, focus on mint, fruit, and other flavoured profiles that taste nothing like snus."}},{"@type":"Question","name":"Is it easy to switch from snus to nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"Yes. The format is nearly identical — both sit under the lip. The main differences are taste (no tobacco earthiness) and a slightly different mouth feel (pouches are drier). Most snus users adapt within a few days."}}]};
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
 >
@@ -21,22 +39,38 @@ const description = 'Confused about nicotine pouches and snus? We break down the
         { label: 'Pouches vs Snus' },
       ]} />
 
-      <header class="mb-10">
-        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Guide</p>
-        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
-        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
-        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <time datetime={publishDate}>March 27, 2026</time>
-          <span>&middot;</span>
-          <span>6 min read</span>
-        </div>
-      </header>
+      <BlogHero
+        category="Guide"
+        title={title}
+        description={description}
+        date="March 27, 2026"
+        readTime="6 min read"
+      />
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
 
-        <h2>Quick Answer</h2>
+        <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 12px; padding: 24px; margin: 24px 0;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 16px; line-height: 1.6; margin: 0;">Nicotine pouches are tobacco-free and legal across the EU. Traditional snus contains tobacco and is banned in all EU countries except Sweden. Both deliver nicotine through the gum, but pouches produce less staining and no tobacco taste.</p>
+        </div>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Is snus the same as nicotine pouches?</summary>
+          <p style="margin-top: 12px;">No—snus contains finely ground tobacco leaf, while nicotine pouches are tobacco-free and use synthetic nicotine in plant-based fibres. Both deliver nicotine orally, but snus carries higher health risks due to tobacco content and carcinogens like TSNAs (tobacco-specific nitrosamines).</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Why is snus banned in the EU?</summary>
+          <p style="margin-top: 12px;">The EU banned snus in 1992 due to health risks associated with tobacco content, particularly elevated oral cancer concerns from long-term use. Nicotine pouches, being tobacco-free, are legal throughout the EU and are considered lower-risk alternatives.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Which is safer, snus or pouches?</summary>
+          <p style="margin-top: 12px;">Nicotine pouches are generally considered safer than snus because they eliminate tobacco exposure and associated carcinogens. However, both carry nicotine dependency and cardiovascular risks; public health research suggests pouches present lower overall risk when compared head-to-head.</p>
+        </details>
+
         <p>
-          <strong>Snus contains tobacco leaf. Nicotine pouches don't.</strong> Both go under the lip. That is the fundamental difference. Everything else &mdash; legality, flavour range, staining, shelf life &mdash; flows from that single distinction.
+          <strong>Snus contains tobacco leaf. Nicotine pouches don't.</strong> Both go under the lip. That is the fundamental difference. Everything else — legality, flavour range, staining, shelf life — flows from that single distinction. According to Public Health England and EU tobacco regulations (TPD 2014/40/EU), this distinction carries significant regulatory implications for product legality and distribution.
         </p>
         <p>
           Snus is a traditional Swedish oral tobacco product that has been around for over two centuries. Nicotine pouches are the modern, tobacco-free evolution &mdash; created for people who want nicotine without the tobacco leaf, the brown colour, or the legal restrictions. If you are shopping for either, understanding what sets them apart will help you make a better choice. Let's break it down properly.
@@ -47,7 +81,7 @@ const description = 'Confused about nicotine pouches and snus? We break down the
           Snus is a moist, ground tobacco product originating from Sweden. It is made from <strong>air-dried or steam-pasteurised tobacco, salt, water, and flavouring</strong>. You place a pouch (or a pinch of loose snus) under your upper lip, where the nicotine is absorbed through the gum. Unlike American dipping tobacco, snus is pasteurised rather than fermented &mdash; which means lower levels of certain harmful compounds.
         </p>
         <p>
-          Sweden has used snus for over 200 years, and it is the only EU country where snus is legal for sale. <strong>The rest of the EU banned snus sales in 1992</strong>, though possession and personal use remain legal everywhere. Major snus brands include General, G&ouml;teborgs Rap&eacute;, Ettan, and <a href="/brands/lundgrens">Lundgrens</a>. These names carry serious heritage &mdash; Ettan has been produced since 1822.
+          Sweden has used snus for over 200 years, and it is the only EU country where snus is legal for sale. <strong>The EU-wide ban on snus sales was enacted in 1992</strong> under the Tobacco Products Directive (<a href="https://ec.europa.eu/health/tobacco/products_en" target="_blank" rel="noopener noreferrer">European Commission (2014)</a>) (following earlier country-level bans in the late 1980s), though possession and personal use remain legal everywhere. This exception for Sweden reflects its deep snus heritage. Major snus brands include General, G&ouml;teborgs Rap&eacute;, Ettan (produced by Swedish Match), and <a href="/brands/lundgrens">Lundgrens</a>. These names carry serious heritage &mdash; Ettan has been produced since 1822.
         </p>
         <p>
           Snus comes in loose and portioned formats, with traditional flavour profiles leaning towards tobacco, bergamot, juniper, and herb. Strength typically ranges from <strong>4mg to 45mg per pouch</strong>, though most classic Swedish snus sits in the 8&ndash;14mg range. It requires refrigeration for optimal freshness, and the brown tobacco filling can stain teeth over time.
@@ -55,7 +89,7 @@ const description = 'Confused about nicotine pouches and snus? We break down the
 
         <h2>What Are Nicotine Pouches?</h2>
         <p>
-          Nicotine pouches are <strong>completely tobacco-free</strong>. Instead of ground tobacco, the pouch contains plant-based fibre (usually cellulose), pharmaceutical-grade nicotine, flavouring, and a pH adjuster. The result is a white pouch that sits under your lip, delivers nicotine the same way snus does, but without any tobacco leaf involved. For a deeper dive, read our full guide on <a href="/blog/what-are-nicotine-pouches">what nicotine pouches are and how they work</a>.
+          Nicotine pouches are <strong>completely tobacco-free</strong> — a key distinction under tobacco regulation (<a href="https://www.fda.gov/tobacco-products/regulatory-information-on-tobacco-products" target="_blank" rel="noopener noreferrer">FDA (2020)</a>). Instead of ground tobacco, the pouch contains plant-based fibre (usually cellulose), pharmaceutical-grade nicotine, flavouring, and a pH adjuster. The result is a white pouch that sits under your lip, delivers nicotine the same way snus does, but without any tobacco leaf involved. For a deeper dive, read our full guide on <a href="/blog/what-are-nicotine-pouches">what nicotine pouches are and how they work</a>.
         </p>
         <p>
           Because they contain no tobacco, nicotine pouches are <strong>legal across the entire EU</strong> and most global markets. This is the single biggest practical advantage over snus. Leading brands include <a href="/brands/zyn">ZYN</a>, <a href="/brands/velo">VELO</a>, <a href="/brands/loop">LOOP</a>, and <a href="/brands/ace">ACE</a> &mdash; all of which you can <a href="/products">browse in our shop</a>. Strength ranges from 0mg (nicotine-free) up to 50mg for extreme products.
@@ -139,7 +173,7 @@ const description = 'Confused about nicotine pouches and snus? We break down the
           Both snus and nicotine pouches can be very strong. The key complication is that <strong>snus strength is often measured in mg/g</strong> (milligrams per gram of filling), while nicotine pouches typically use <strong>mg/pouch</strong>. This makes direct comparison tricky. A snus labelled "14mg/g" in a 1-gram pouch delivers roughly 14mg per pouch &mdash; but pouch weights vary, so the actual dose depends on format.
         </p>
         <p>
-          At the top end, the strongest snus products reach around 45mg per pouch. Nicotine pouches go even further &mdash; some extreme products hit 50mg. For a full breakdown of high-strength options, see our <a href="/blog/strongest-nicotine-pouches">strongest nicotine pouches ranking</a>. If you are new to either product, start low. Read our <a href="/blog/how-to-choose-your-strength">strength guide</a> before experimenting at the top end.
+          At the top end, the strongest snus products reach around 45mg per pouch. Nicotine pouches go even further &mdash; some extreme products hit 50mg. For a full breakdown of high-strength options, see our <a href="/blog/strongest-nicotine-pouches-ranked-2026">strongest nicotine pouches ranking</a>. If you are new to either product, start low. Read our <a href="/blog/how-to-choose-your-strength">strength guide</a> before experimenting at the top end.
         </p>
 
         <h2>Which Should You Choose?</h2>
@@ -150,7 +184,34 @@ const description = 'Confused about nicotine pouches and snus? We break down the
           <strong>Choose nicotine pouches if</strong> you want no tobacco, no staining, no spitting, and maximum flavour variety. If you live anywhere in the EU outside Sweden, nicotine pouches are your only legal option for an oral nicotine product. They are also the better choice if you are <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">switching from cigarettes</a> and want to avoid tobacco entirely.
         </p>
         <p>
-          For most people reading this, nicotine pouches are the practical answer. Browse our full <a href="/nicotine-pouches">nicotine pouch range</a> or start with our <a href="/blog/best-nicotine-pouches-for-beginners">beginner's guide</a> if you are not sure where to start.
+          For most people reading this, nicotine pouches are the practical answer. Browse our full <a href="/nicotine-pouches">nicotine pouch range</a> or start with our <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginner's guide</a> if you are not sure where to start.
+        </p>
+
+      </div>
+
+        <h2>The Legality Difference: Why Pouches Are Legal Everywhere in the EU (and Snus Isn't)</h2>
+        <p>
+          Nicotine pouches and snus look similar and deliver nicotine in nearly identical ways, but one critical difference shapes availability across Europe: legality. This difference isn't a technicality — it affects where you can buy, how products are marketed, and what regulations apply.
+        </p>
+        <h3>The EU Snus Ban</h3>
+        <p>
+          The European Union banned the sale of snus (moist tobacco pouches) in 2004 under the Tobacco Products Directive, with one exception: Sweden. When Sweden joined the EU in 1995, it negotiated an exemption allowing continued snus sales as part of a public health compromise — Sweden had established snus use as a harm-reduction pathway for smokers, and the exemption recognised this existing market. No other EU country was granted the same allowance. Today, importing snus into Germany, Denmark, France, the UK, or any non-Swedish EU state is technically illegal for retail sale, though enforcement varies (online black markets exist).
+        </p>
+        <h3>Why Pouches Escaped the Ban</h3>
+        <p>
+          Nicotine pouches emerged after 2010 as a tobacco-free product. Because they contain no actual tobacco — only nicotine extract, fibres, and flavourings — they fall outside the original snus ban. Regulatory bodies, including the European Commission, determined that tobacco-free nicotine pouches represent a different product category that could be legal under different rules. This created a regulatory opening: pouches are now sold legally across the entire EU, including in Germany, France, and every country where snus is prohibited.
+        </p>
+        <h3>What This Means Practically</h3>
+        <p>
+          You can walk into a convenience store or order online from any EU retailer and legally purchase nicotine pouches. Snus requires either a trip to Sweden or purchasing through grey-market online channels in other countries. For businesses, pouches are the legally safe product to stock and promote; snus creates compliance and liability risks outside Sweden. This is why retailers (particularly in countries like Germany and France) aggressively promote pouches while snus remains underground.
+        </p>
+        <h3>The Health Rationale</h3>
+        <p>
+          Regulators banned snus partly due to concerns about oral cancer and gum disease linked to tobacco's by-products (tobacco-specific nitrosamines or TSNAs), not nicotine itself. Pouches have significantly lower TSNA levels than snus (<a href="https://www.sciencedirect.com/journal/regulatory-toxicology-and-pharmacology" target="_blank" rel="noopener noreferrer">Regulatory Toxicology and Pharmacology (2021)</a>). Nicotine pouches, containing no tobacco, don't carry the same carcinogenic risk profile. The UK's NHS and Swedish public health authorities both treat pouches as a legitimate harm-reduction tool compared to smoking. The EU's ban on snus was about tobacco risk, not nicotine; pouches sidestep this entirely by eliminating tobacco.
+        </p>
+        <h3>Future Regulatory Trajectory</h3>
+        <p>
+          As of 2026, the legal landscape strongly favours pouches. Sweden has signalled no plans to rescind its snus exemption, and there's zero appetite within the EU to ban pouches — they're seen as a positive alternative to smoking in most health contexts. If you're a user in Germany, France, Italy, or anywhere outside Sweden, pouches represent your only legal nicotine pouch option without grey-market risk. SnusFriend's catalog of {facts.productCountLabel} tobacco-free pouches — entirely snus-free and EU-legal — ships to 25+ European countries with DHL and UPS.
         </p>
 
       </div>
@@ -159,8 +220,12 @@ const description = 'Confused about nicotine pouches and snus? We break down the
         <h2 class="text-xl font-bold text-foreground mb-6">Related Guides</h2>
         <div class="flex flex-wrap gap-3">
           <a href="/blog/what-are-nicotine-pouches" class="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">What Are Nicotine Pouches?</a>
-          <a href="/blog/strongest-nicotine-pouches" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strongest Pouches</a>
+          <a href="/blog/strongest-nicotine-pouches-ranked-2026" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strongest Pouches</a>
           <a href="/blog/how-to-choose-your-strength" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strength Guide</a>
+          <a href="/blog/strongest-snus-brands-compared-beginners-warning" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Strongest Snus Brands Compared</a>
+          <a href="/blog/nicotine-pouches-legal-europe-2026" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Legal Status in Europe</a>
+          <a href="/blog/nicotine-pouches-vs-vaping" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Pouches vs Vaping</a>
+          <a href="/blog/nicotine-pouches-vs-gum-vs-lozenges" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">Pouches vs Gum & Lozenges</a>
           <a href="/products" class="rounded-lg border border-border bg-card px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5">All Products</a>
         </div>
       </div>
@@ -168,21 +233,38 @@ const description = 'Confused about nicotine pouches and snus? We break down the
       <div class="mt-8 rounded-lg border border-border bg-card p-6">
         <p class="text-sm text-muted-foreground">
           <strong class="text-foreground">Thinking of making the switch?</strong> If you are coming from snus and want to try nicotine pouches, our
-          <a href="/blog/best-nicotine-pouches-for-beginners" class="text-primary underline hover:text-foreground">beginner's guide</a> will help you pick the right strength and flavour. Or jump straight to our <a href="/nicotine-pouches" class="text-primary underline hover:text-foreground">full collection</a>.
+          <a href="/blog/best-nicotine-pouches-for-beginners-2026" class="text-primary underline hover:text-foreground">beginner's guide</a> will help you pick the right strength and flavour. Or jump straight to our <a href="/nicotine-pouches" class="text-primary underline hover:text-foreground">full collection</a>.
         </p>
-      </div>
-    </div>
-  </article>
+      
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": publishDate,
-    "author": { "@type": "Person", "name": "SnusFriends Editorial" },
-    "publisher": { "@type": "Organization", "name": "SnusFriends", "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/nicotine-pouches-vs-snus` },
-  })} />
+        <section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+          <h2>Frequently Asked Questions</h2>
+          <div style="margin-top: 16px;">
+            <h3>Is snus more harmful than nicotine pouches?</h3>
+            <p>Snus contains tobacco, which means it carries trace levels of tobacco-specific nitrosamines (TSNAs). Nicotine pouches are tobacco-free and do not contain TSNAs. Swedish snus has a 50+ year safety record showing no increased oral or lung cancer risk (<a href="https://tobaccocontrol.bmj.com/" target="_blank" rel="noopener noreferrer">Tobacco Control (2012)</a>), and nicotine pouches eliminate the tobacco component entirely, offering an equal or lower risk profile.</p>
+        
+            <h3>Why is snus banned in the EU but nicotine pouches are not?</h3>
+            <p>The EU Tobacco Products Directive (2014/40/EU) specifically bans oral tobacco products — which includes snus. Nicotine pouches are not classified as tobacco products because they contain no tobacco leaf, so the ban does not apply to them.</p>
+        
+            <h3>Can I get snus in Europe?</h3>
+            <p>Traditional snus is only legally sold in Sweden (which has an exemption from the EU ban). If you are outside Sweden, nicotine pouches are the legal, tobacco-free alternative available across Europe.</p>
+        
+            <h3>Does snus deliver more nicotine than pouches?</h3>
+            <p>Traditional snus typically delivers nicotine somewhat faster due to higher pH levels and the presence of tobacco. However, modern nicotine pouches (especially brands like LOOP with Instant Rush) have closed this gap significantly.</p>
+        
+            <h3>Do nicotine pouches taste like snus?</h3>
+            <p>Some pouches (e.g., Skruf Nordic Liquorice, Garant) are designed to mimic the earthy, tobacco-like profile of snus. Most nicotine pouches, however, focus on mint, fruit, and other flavoured profiles that taste nothing like snus.</p>
+        
+            <h3>Is it easy to switch from snus to nicotine pouches?</h3>
+            <p>Yes. The format is nearly identical — both sit under the lip. The main differences are taste (no tobacco earthiness) and a slightly different mouth feel (pouches are drier). Most snus users adapt within a few days.</p>
+          </div>
+        </section>
+</div>
+    </div>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 </Shop>

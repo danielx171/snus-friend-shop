@@ -1,4 +1,4 @@
-// @ts-ignore: Deno file import
+// @ts-expect-error — Deno types: Deno file import
 import { corsHeaders } from "../_shared/cors.ts";
 
 Deno.serve(async (req) => {

@@ -4,9 +4,12 @@ export const prerender = false;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import ProfileCardIsland from '@/components/react/ProfileCardIsland';
+import AvatarSelectorIsland from '@/components/react/AvatarSelectorIsland';
 import AchievementGridIsland from '@/components/react/AchievementGridIsland';
 import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
+import { buildAbsoluteUrl } from '@/config/site';
+import { rewards } from '@/config/rewards';
 
 // Auth check
 const user = Astro.locals.user;
@@ -19,30 +22,50 @@ const supabase = Astro.locals.supabase;
 // Tab selection via query param (default: orders)
 const tab = Astro.url.searchParams.get('tab') || 'orders';
 
-// Fetch orders
-const { data: orders } = await supabase
-  .from('orders')
-  .select('*')
-  .eq('user_id', user.id)
-  .order('created_at', { ascending: false })
-  .limit(20);
-
-// Fetch points balance
+// Tab-aware data fetching — only query what the active tab needs
 const { data: pointsBalance } = await supabase
-  .from('points_balances')
-  .select('*')
-  .eq('user_id', user.id)
-  .single();
+  .from('points_balances').select('*').eq('user_id', user.id).single();
 
-// Fetch review count for profile stats
-const { count: reviewsCount } = await supabase
-  .from('product_reviews')
-  .select('id', { count: 'exact', head: true })
-  .eq('user_id', user.id);
+let orders: any[] | null = null;
+let reviewsCount: number | null = 0;
+let subscriptions: any[] | null = null;
+let referralCode: string | null = null;
+let referralCodeRow: { id: string } | null = null;
+let referralCount: number | null = 0;
 
-// User metadata
+if (tab === 'orders') {
+  const [ordersRes, reviewsRes] = await Promise.all([
+    supabase.from('orders').select('*').eq('user_id', user.id)
+      .order('created_at', { ascending: false }).limit(20),
+    supabase.from('product_reviews').select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id),
+  ]);
+  orders = ordersRes.data;
+  reviewsCount = reviewsRes.count ?? 0;
+} else if (tab === 'subscriptions' && rewards.subscriptions.enabled) {
+  const res = await supabase.from('subscriptions').select('*')
+    .eq('user_id', user.id).order('created_at', { ascending: false });
+  subscriptions = res.data;
+} else if (tab === 'membership') {
+  const [codeRes, codeRowRes] = await Promise.all([
+    supabase.rpc('get_or_create_referral_code', { p_user_id: user.id }),
+    supabase.from('referral_codes').select('id').eq('user_id', user.id).single(),
+  ]);
+  referralCode = codeRes.data;
+  referralCodeRow = codeRowRes.data;
+  const { count } = await supabase.from('referral_redemptions')
+    .select('id', { count: 'exact', head: true })
+    .eq('referral_code_id', referralCodeRow?.id ?? '00000000-0000-0000-0000-000000000000');
+  referralCount = count ?? 0;
+}
+
+const referralUrl = referralCode ? buildAbsoluteUrl(`/register?ref=${referralCode}`) : null;
+
+// User metadata + nickname
+import { generateNickname } from '@/lib/nickname';
 const fullName = user.user_metadata?.full_name || '';
 const phone = user.user_metadata?.phone || '';
+const nickname = user.user_metadata?.nickname || generateNickname(user.id);
 
 // Check action results
 const profileResult = Astro.getActionResult(actions.account.updateProfile);
@@ -67,11 +90,13 @@ function statusColor(status: string): string {
 // Tier calculation
 const balance = pointsBalance?.balance ?? 0;
 const lifetime = pointsBalance?.lifetime_earned ?? 0;
-function getTier(pts: number) {
-  if (pts >= 5000) return { name: 'Diamond', next: null, threshold: 5000 };
-  if (pts >= 2000) return { name: 'Gold', next: 'Diamond', threshold: 5000 };
-  if (pts >= 500) return { name: 'Silver', next: 'Gold', threshold: 2000 };
-  return { name: 'Bronze', next: 'Silver', threshold: 500 };
+function getTier(pts: number): { name: string; next: string | null; threshold: number } {
+  const t = rewards.tiers;
+  if (pts >= t[4].threshold) return { name: t[4].name, next: null, threshold: t[4].threshold };
+  if (pts >= t[3].threshold) return { name: t[3].name, next: t[4].name, threshold: t[4].threshold };
+  if (pts >= t[2].threshold) return { name: t[2].name, next: t[3].name, threshold: t[3].threshold };
+  if (pts >= t[1].threshold) return { name: t[1].name, next: t[2].name, threshold: t[2].threshold };
+  return { name: t[0].name, next: t[1].name, threshold: t[1].threshold };
 }
 const tier = getTier(lifetime);
 const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold) * 100)) : 100;
@@ -87,7 +112,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
       <Breadcrumb items={[{ label: 'Account' }]} />
 
       <h1 class="text-3xl font-bold tracking-tight mb-2">My Account</h1>
-      <p class="text-muted-foreground mb-6">Welcome back, {fullName || user.email}</p>
+      <p class="text-muted-foreground mb-6">Welcome back, <span class="font-semibold text-foreground">{nickname}</span></p>
 
       <!-- Gamification Profile Card -->
       <div class="mb-8">
@@ -97,6 +122,11 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
           reviewsCount={reviewsCount ?? 0}
           snusPoints={balance}
         />
+      </div>
+
+      <!-- Avatar Selector -->
+      <div class="mb-8 rounded-xl border border-border bg-card/80 p-6">
+        <AvatarSelectorIsland client:visible />
       </div>
 
       <!-- Tab Navigation -->
@@ -134,43 +164,79 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
         >
           Membership
         </a>
+        {rewards.subscriptions.enabled && (
+          <a
+            href="/account?tab=subscriptions"
+            class:list={[
+              'px-4 py-2.5 text-sm font-medium rounded-t-lg transition',
+              tab === 'subscriptions'
+                ? 'bg-card/60 text-foreground border border-border border-b-transparent -mb-px'
+                : 'text-muted-foreground hover:text-foreground',
+            ]}
+          >
+            Subscriptions
+          </a>
+        )}
       </div>
 
       <!-- Orders Tab -->
       {tab === 'orders' && (
         <div class="space-y-4">
           {(!orders || orders.length === 0) ? (
-            <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center">
+            <div class="rounded-xl border border-border bg-card/80 p-8 text-center">
               <p class="text-muted-foreground mb-4">You have not placed any orders yet.</p>
               <a href="/products" class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition">
                 Browse Products
               </a>
             </div>
           ) : (
-            orders.map((order: any) => (
-              <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-5">
-                <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-                  <div>
-                    <span class="text-sm text-muted-foreground">Order</span>
-                    <span class="ml-1.5 font-mono text-sm font-medium">
-                      #{order.nyehandel_order_id || order.id.slice(0, 8)}
+            orders.map((order: any) => {
+              const canCancel = ['pending', 'confirmed', 'open', 'approved'].includes(order.checkout_status);
+              return (
+                <div class="rounded-xl border border-border bg-card/80 p-5">
+                  <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                    <div>
+                      <span class="text-sm text-muted-foreground">Order</span>
+                      <span class="ml-1.5 font-mono text-sm font-medium">
+                        #{order.nyehandel_order_id || order.id.slice(0, 8)}
+                      </span>
+                    </div>
+                    <span class:list={['px-2.5 py-0.5 rounded-full text-xs font-medium', statusColor(order.checkout_status)]}>
+                      {order.checkout_status}
                     </span>
                   </div>
-                  <span class:list={['px-2.5 py-0.5 rounded-full text-xs font-medium', statusColor(order.checkout_status)]}>
-                    {order.checkout_status}
-                  </span>
+                  <div class="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                    <span>{new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                    <span>{order.currency} {order.total_price.toFixed(2)}</span>
+                    {order.tracking_url && (
+                      <a href={order.tracking_url} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
+                        Track shipment
+                      </a>
+                    )}
+                    {canCancel && (
+                      <button
+                        type="button"
+                        class="text-destructive/70 hover:text-destructive transition text-sm"
+                        data-cancel-order={order.id}
+                        data-order-display={order.nyehandel_order_id || order.id.slice(0, 8)}
+                        data-order-amount={`${order.currency} ${order.total_price.toFixed(2)}`}
+                      >
+                        Cancel Order
+                      </button>
+                    )}
+                    {order.line_items_snapshot && (
+                      <button
+                        type="button"
+                        class="text-primary/70 hover:text-primary transition text-sm"
+                        data-reorder={JSON.stringify(order.line_items_snapshot)}
+                      >
+                        Reorder
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div class="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                  <span>{new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                  <span>{order.currency} {order.total_price.toFixed(2)}</span>
-                  {order.tracking_url && (
-                    <a href={order.tracking_url} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
-                      Track shipment
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       )}
@@ -179,7 +245,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
       {tab === 'settings' && (
         <div class="space-y-8">
           {/* Profile Form */}
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6">
             <h2 class="text-lg font-semibold mb-4">Profile</h2>
 
             {profileResult?.error && (
@@ -235,7 +301,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
           </div>
 
           {/* Change Password Form */}
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6">
             <h2 class="text-lg font-semibold mb-4">Change Password</h2>
 
             {passwordResult?.error && (
@@ -283,7 +349,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
           </div>
 
           {/* Logout */}
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6">
             <h2 class="text-lg font-semibold mb-4">Sign Out</h2>
             <p class="text-sm text-muted-foreground mb-4">Sign out of your account on this device.</p>
             <form method="POST" action={actions.auth.logout}>
@@ -301,7 +367,7 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
       <!-- Membership Tab -->
       {tab === 'membership' && (
         <div class="space-y-6">
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6">
             <div class="flex items-center justify-between mb-6">
               <h2 class="text-lg font-semibold">{tenant.loyaltyProgramName}</h2>
               <span class="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm font-medium">
@@ -346,20 +412,20 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
           </div>
 
           <!-- Achievements -->
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6">
             <AchievementGridIsland client:visible />
           </div>
 
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6">
             <h3 class="text-sm font-semibold mb-3">How to Earn Points</h3>
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Place orders — earn 1 point per EUR spent
+                Place orders — earn {rewards.earnRatePerEur} point per EUR spent
               </li>
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Write product reviews — earn 50 points each
+                Write product reviews — earn {rewards.verifiedReview} points each
               </li>
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
@@ -367,23 +433,182 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
               </li>
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Refer a friend — both earn 200 points
+                Refer a friend — both earn points
               </li>
             </ul>
           </div>
+
+          <!-- Referral Program -->
+          {referralCode && (
+            <div class="rounded-xl border border-primary/20 bg-primary/5 p-6">
+              <h3 class="text-sm font-semibold mb-3">Refer a Friend</h3>
+              <p class="text-sm text-muted-foreground mb-4">
+                Share your code with friends. They get {rewards.referralFriend} {tenant.loyaltyCurrencyName}, you get {rewards.referralSelf} — everyone wins.
+              </p>
+              <div class="flex items-center gap-2 mb-4">
+                <div class="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 font-mono text-sm text-foreground select-all">
+                  {referralCode}
+                </div>
+                <button
+                  type="button"
+                  id="copy-referral-btn"
+                  data-code={referralCode}
+                  class="shrink-0 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+                >
+                  Copy
+                </button>
+              </div>
+              <div class="flex items-center gap-4 text-xs text-muted-foreground">
+                <span>{referralCount ?? 0} friend{(referralCount ?? 0) !== 1 ? 's' : ''} referred</span>
+                <span>{((referralCount ?? 0) * rewards.referralSelf).toLocaleString()} points earned</span>
+              </div>
+              <div class="flex gap-2 mt-4">
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(`Join ${tenant.name} and get ${rewards.referralFriend} bonus points! Use my code: ${referralCode} — ${referralUrl}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-center text-xs font-medium text-foreground hover:bg-muted transition"
+                >
+                  WhatsApp
+                </a>
+                <a
+                  href={`mailto:?subject=Join ${tenant.name}&body=${encodeURIComponent(`Hey! Join ${tenant.name} and get ${rewards.referralFriend} bonus points. Use my referral code: ${referralCode}\n\n${referralUrl}`)}`}
+                  class="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-center text-xs font-medium text-foreground hover:bg-muted transition"
+                >
+                  Email
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <!-- Subscriptions Tab — only renders when rewards.subscriptions.enabled -->
+      {tab === 'subscriptions' && rewards.subscriptions.enabled && (
+        <div class="space-y-4">
+          {(!subscriptions || subscriptions.length === 0) ? (
+            <div class="rounded-xl border border-border bg-card/80 p-8 text-center">
+              <p class="text-muted-foreground mb-2">No active subscriptions.</p>
+              <p class="text-sm text-muted-foreground mb-4">
+                Subscribe to your favourite products and save up to 15% on every delivery.
+              </p>
+              <a href="/products" class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition">
+                Browse Products
+              </a>
+            </div>
+          ) : (
+            subscriptions.map((sub: any) => (
+              <div class="rounded-xl border border-border bg-card/80 p-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                  <div>
+                    <a href={`/products/${sub.product_slug}`} class="text-sm font-semibold text-foreground hover:text-primary transition">
+                      {sub.product_name || sub.product_slug}
+                    </a>
+                    <div class="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                      <span>{sub.interval === 'monthly' ? 'Monthly' : 'Every 6 months'}</span>
+                      <span class="text-primary font-medium">{sub.discount_pct}% off</span>
+                    </div>
+                  </div>
+                  <span class:list={[
+                    'px-2.5 py-0.5 rounded-full text-xs font-medium',
+                    sub.status === 'active' ? 'bg-primary/20 text-primary' :
+                    sub.status === 'paused' ? 'bg-muted text-muted-foreground' :
+                    'bg-destructive/20 text-destructive'
+                  ]}>
+                    {sub.status}
+                  </span>
+                </div>
+                <div class="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                  {sub.status === 'active' && sub.next_order_at && (
+                    <span>Next delivery: {new Date(sub.next_order_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                  )}
+                  {sub.status === 'active' && (
+                    <button type="button" class="text-muted-foreground hover:text-foreground transition text-sm" data-sub-action="pause" data-sub-id={sub.id}>
+                      Pause
+                    </button>
+                  )}
+                  {sub.status === 'paused' && (
+                    <button type="button" class="text-primary hover:text-primary/80 transition text-sm" data-sub-action="resume" data-sub-id={sub.id}>
+                      Resume
+                    </button>
+                  )}
+                  {sub.status !== 'cancelled' && (
+                    <button type="button" class="text-destructive/70 hover:text-destructive transition text-sm" data-sub-action="cancel" data-sub-id={sub.id}>
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>
   </section>
 </Shop>
 
-<!-- Progressive enhancement: client-side password match check -->
-<script>
+<!-- Cancel Order Confirmation Dialog -->
+<dialog id="cancel-dialog" class="bg-card border border-border rounded-xl shadow-xl p-6 max-w-md w-full backdrop:bg-black/50 text-foreground">
+  <h2 class="text-lg font-semibold mb-2" id="cancel-dialog-title">Cancel Order?</h2>
+  <p class="text-sm text-muted-foreground mb-4" id="cancel-dialog-body">
+    Are you sure you want to cancel this order? If it hasn't been picked and packed yet, we'll cancel it right away and start your refund.
+  </p>
+  <p class="text-sm text-muted-foreground mb-4">
+    <strong class="text-foreground">Refund timeline:</strong> Once cancelled, your refund will be processed within 3–5 business days back to your original payment method.
+  </p>
+  <div class="mb-4">
+    <label for="cancel-reason" class="block text-sm font-medium text-muted-foreground mb-1">Why are you cancelling? (optional)</label>
+    <input
+      type="text"
+      id="cancel-reason"
+      placeholder="Changed my mind, ordered the wrong item…"
+      class="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+    />
+  </div>
+  <div id="cancel-error" class="hidden rounded-lg bg-destructive/10 border border-destructive/30 p-3 mb-4 text-sm text-destructive"></div>
+  <div id="cancel-success" class="hidden rounded-lg bg-emerald-500/10 border border-emerald-500/30 p-3 mb-4 text-sm text-emerald-400"></div>
+  <div class="flex gap-3 justify-end" id="cancel-dialog-actions">
+    <button type="button" id="cancel-dialog-close" class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/50 transition">
+      Keep My Order
+    </button>
+    <button type="button" id="cancel-dialog-confirm" class="rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:bg-destructive/90 transition">
+      Yes, Cancel My Order
+    </button>
+  </div>
+</dialog>
+
+<!-- Progressive enhancement: client-side interactions -->
+<script
+  is:inline
+  define:vars={{
+    cartKey: tenant.storage.cartKey,
+    publicSupabaseUrl: import.meta.env.PUBLIC_SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL ?? '',
+  }}
+>
+  // Copy referral code
+  const copyBtn = document.getElementById('copy-referral-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      const code = copyBtn.dataset.code ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      } catch {
+        copyBtn.textContent = 'Failed';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+      }
+    });
+  }
+
+  // Password match check
   const form = document.getElementById('change-password-form');
   if (form) {
     form.addEventListener('submit', (e) => {
-      const pw = (document.getElementById('newPassword') as HTMLInputElement)?.value;
-      const cpw = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
+      const pwInput = document.getElementById('newPassword');
+      const confirmInput = document.getElementById('confirmPassword');
+      const pw = pwInput && 'value' in pwInput ? pwInput.value : '';
+      const cpw = confirmInput && 'value' in confirmInput ? confirmInput.value : '';
       const msg = document.getElementById('pw-mismatch');
       if (pw !== cpw) {
         e.preventDefault();
@@ -393,4 +618,190 @@ const progress = tier.next ? Math.min(100, Math.round((lifetime / tier.threshold
       }
     });
   }
+
+  // Cancel order dialog
+  const dialog = document.getElementById('cancel-dialog');
+  const closeBtn = document.getElementById('cancel-dialog-close');
+  const confirmBtn = document.getElementById('cancel-dialog-confirm');
+  const titleEl = document.getElementById('cancel-dialog-title');
+  const errorEl = document.getElementById('cancel-error');
+  const successEl = document.getElementById('cancel-success');
+  const actionsEl = document.getElementById('cancel-dialog-actions');
+  const reasonInput = document.getElementById('cancel-reason');
+  let currentOrderId = '';
+
+  document.querySelectorAll('[data-cancel-order]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const orderId = btn.dataset.cancelOrder ?? '';
+      const orderDisplay = btn.dataset.orderDisplay ?? '';
+      currentOrderId = orderId;
+      if (titleEl) titleEl.textContent = `Cancel Order #${orderDisplay}?`;
+      if (errorEl) { errorEl.classList.add('hidden'); errorEl.textContent = ''; }
+      if (successEl) successEl.classList.add('hidden');
+      if (actionsEl) actionsEl.classList.remove('hidden');
+      if (reasonInput && 'value' in reasonInput) reasonInput.value = '';
+      if (confirmBtn) {
+        confirmBtn.textContent = 'Yes, Cancel My Order';
+        confirmBtn.disabled = false;
+      }
+      dialog?.showModal?.();
+    });
+  });
+
+  closeBtn?.addEventListener('click', () => dialog?.close?.());
+  dialog?.addEventListener('click', (e) => { if (e.target === dialog) dialog.close?.(); });
+
+  confirmBtn?.addEventListener('click', async () => {
+    if (!currentOrderId) return;
+    const btn = confirmBtn;
+    btn.disabled = true;
+    btn.textContent = 'Cancelling…';
+    if (errorEl) { errorEl.classList.add('hidden'); errorEl.textContent = ''; }
+
+    try {
+      const supabaseMeta = document.querySelector('meta[name="supabase-url"]');
+      const supabaseUrl = supabaseMeta?.content || publicSupabaseUrl;
+      const token = document.cookie.split(';').map((c) => c.trim()).find((c) => c.startsWith('sb-access-token='))?.split('=')[1] ?? '';
+
+      const res = await fetch(`${supabaseUrl}/functions/v1/cancel-nyehandel-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          order_id: currentOrderId,
+          reason: reasonInput && 'value' in reasonInput ? reasonInput.value || undefined : undefined,
+        }),
+      });
+
+      if (res.ok) {
+        if (actionsEl) actionsEl.classList.add('hidden');
+        if (successEl) {
+          successEl.textContent = 'Order cancelled. Your refund will be processed within 3–5 business days. Reloading…';
+          successEl.classList.remove('hidden');
+        }
+        setTimeout(() => window.location.reload(), 2000);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        const msg = data.message || data.error || 'Could not cancel this order. Please contact support.';
+        if (errorEl) { errorEl.textContent = msg; errorEl.classList.remove('hidden'); }
+        btn.disabled = false;
+        btn.textContent = 'Yes, Cancel My Order';
+      }
+    } catch {
+      if (errorEl) { errorEl.textContent = 'Network error. Please try again.'; errorEl.classList.remove('hidden'); }
+      btn.disabled = false;
+      btn.textContent = 'Yes, Cancel My Order';
+    }
+  });
+
+  // Reorder buttons
+  document.querySelectorAll('[data-reorder]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      try {
+        const raw = btn.dataset.reorder;
+        if (!raw) return;
+        const snapshot = typeof raw === 'string' ? JSON.parse(raw) : raw;
+        if (!Array.isArray(snapshot) || snapshot.length === 0) return;
+
+        // Read existing cart from localStorage
+        const existing = JSON.parse(localStorage.getItem(cartKey) || '[]');
+
+        for (const item of snapshot) {
+          // SKU format: "{productSlug}-{packSize}" e.g. "zyn-cool-mint-6mg-pack3"
+          const sku = item.sku || '';
+          const lastDash = sku.lastIndexOf('-');
+          if (lastDash === -1) continue;
+          const slug = sku.slice(0, lastDash);
+          const packSize = sku.slice(lastDash + 1);
+          if (!slug || !packSize.startsWith('pack')) continue;
+
+          const qty = item.quantity ?? 1;
+          const price = item.unit_price ?? 0;
+          const name = item.product_name ?? 'Product';
+
+          // Build minimal product for the cart store
+          const cartItem = {
+            product: {
+              id: slug,
+              name: name,
+              brand: '',
+              categoryKey: 'nicotinePouches',
+              flavorKey: 'mint',
+              strengthKey: 'normal',
+              formatKey: 'slim',
+              nicotineContent: 0,
+              portionsPerCan: 20,
+              descriptionKey: '',
+              image: '',
+              ratings: 0,
+              badgeKeys: [],
+              prices: { [packSize]: price, pack1: price, pack3: 0, pack5: 0, pack10: 0, pack30: 0 },
+              manufacturer: '',
+              stock: 99,
+            },
+            packSize: packSize,
+            quantity: qty,
+          };
+
+          // Check if already in cart
+          const existingIdx = existing.findIndex(
+            (c) => c.product?.id === slug && c.packSize === packSize
+          );
+          if (existingIdx >= 0) {
+            existing[existingIdx].quantity += qty;
+          } else {
+            existing.push(cartItem);
+          }
+        }
+
+        localStorage.setItem(cartKey, JSON.stringify(existing));
+        window.location.href = '/cart';
+      } catch (e) {
+        console.error('Reorder failed:', e);
+      }
+    });
+  });
+
+  // Subscription management buttons
+  document.querySelectorAll('[data-sub-action]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const action = btn.dataset.subAction;
+      const subId = btn.dataset.subId;
+      if (!action || !subId) return;
+
+      const confirmed = action === 'cancel'
+        ? confirm('Cancel this subscription? You can always create a new one later.')
+        : true;
+      if (!confirmed) return;
+
+      btn.disabled = true;
+      btn.textContent = action === 'pause' ? 'Pausing...' : action === 'resume' ? 'Resuming...' : 'Cancelling...';
+
+      try {
+        const supabaseUrl = publicSupabaseUrl;
+        const cookies = document.cookie.split(';');
+        const authCookies = cookies.filter(c => c.trim().match(/^sb-.*-auth-token/));
+        const token = authCookies.length > 0 ? authCookies[0].split('=').slice(1).join('=').trim() : '';
+
+        const res = await fetch(`${supabaseUrl}/functions/v1/manage-subscription`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ action, subscription_id: subId }),
+        });
+
+        if (res.ok) {
+          window.location.reload();
+        } else {
+          alert('Something went wrong. Please try again.');
+          btn.disabled = false;
+          btn.textContent = action.charAt(0).toUpperCase() + action.slice(1);
+        }
+      } catch {
+        alert('Network error. Please try again.');
+        btn.disabled = false;
+      }
+    });
+  });
 </script>

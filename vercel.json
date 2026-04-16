@@ -2,5 +2,100 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "astro",
   "installCommand": "bun install",
-  "buildCommand": "rm -rf .vercel/output && bun run build"
+  "buildCommand": "rm -rf .vercel/output && bun run build",
+  "redirects": [
+    {
+      "source": "/:path((?!api/).+)/",
+      "destination": "/:path",
+      "permanent": true
+    },
+    {
+      "source": "/shop",
+      "destination": "/products",
+      "permanent": true
+    },
+    {
+      "source": "/blog/zyn-vs-velo",
+      "destination": "/blog/zyn-vs-velo-2026",
+      "permanent": true
+    },
+    {
+      "source": "/blog/strongest-nicotine-pouches",
+      "destination": "/blog/strongest-nicotine-pouches-ranked-2026",
+      "permanent": true
+    },
+    {
+      "source": "/blog/strongest-nicotine-pouches/",
+      "destination": "/blog/strongest-nicotine-pouches-ranked-2026",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-nicotine-pouches-for-beginners",
+      "destination": "/blog/best-nicotine-pouches-for-beginners-2026",
+      "permanent": true
+    },
+    {
+      "source": "/products/strength/mild",
+      "destination": "/products/strength/light",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/strength/regular",
+      "destination": "/products/strength/normal",
+      "statusCode": 301
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.vercel-scripts.com https://*.vercel-insights.com https://*.posthog.com https://*.sentry.io https://browser.sentry-cdn.com https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://*.posthog.com https://*.sentry.io https://browser.sentry-cdn.com https://*.google-analytics.com; frame-src 'none'"
+        }
+      ]
+    },
+    {
+      "source": "/_astro/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/data/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+        }
+      ]
+    }
+  ]
 }

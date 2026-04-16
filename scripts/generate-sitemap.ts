@@ -9,8 +9,10 @@
 import { createClient } from '@supabase/supabase-js';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
+import { resolveTenantRuntime } from '../src/config/tenant';
 
-const SITE_URL = 'https://snusfriends.com';
+const runtime = resolveTenantRuntime(process.env);
+const SITE_URL = runtime.siteUrl;
 const OUT = resolve(import.meta.dir, '../public/sitemap.xml');
 
 // Load env — Bun reads .env.local automatically

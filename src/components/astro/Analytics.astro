@@ -7,27 +7,183 @@ import { tenant } from '@/config/tenant';
 const sentryDsn = (import.meta.env.PUBLIC_SENTRY_DSN ?? '').trim();
 const posthogKey = (import.meta.env.PUBLIC_POSTHOG_KEY ?? '').trim();
 const posthogHost = (import.meta.env.PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com').trim();
+const posthogEnabled = Boolean(posthogKey);
 const isProd = import.meta.env.PROD;
 const consentKey = tenant.storage.consentKey;
 ---
 
-{isProd && (sentryDsn || posthogKey) && (
-  <script
-    is:inline
-    define:vars={{ sentryDsn, posthogKey, posthogHost, consentKey }}
-  >
+{isProd && (
+  <>
+    <script is:inline define:vars={{ posthogKey, posthogHost, consentKey, posthogEnabled }}>
+      window.__ANALYTICS_CONFIG__ = {
+        consentKey: consentKey,
+        posthogKey: posthogKey,
+        posthogHost: posthogHost,
+        posthogEnabled: posthogEnabled,
+      };
+      window.__POSTHOG_STATUS__ = {
+        configured: posthogEnabled,
+        consentGranted: false,
+        booted: false,
+        disabledReason: posthogEnabled ? null : 'missing_public_posthog_key',
+        posthogHost: posthogHost,
+      };
+    </script>
+
+    <script
+      is:inline
+      define:vars={{ sentryDsn }}
+    >
     (function () {
+      window.__ANALYTICS_BOOTSTRAPPED__ = true;
+
+      function getConfig() {
+        return window.__ANALYTICS_CONFIG__ ?? {
+          consentKey: '',
+          posthogKey: '',
+          posthogHost: 'https://us.i.posthog.com',
+          posthogEnabled: false,
+        };
+      }
+
+      function getPostHogStatus() {
+        return window.__POSTHOG_STATUS__ ?? {
+          configured: Boolean(getConfig().posthogKey),
+          consentGranted: false,
+          booted: false,
+          disabledReason: getConfig().posthogKey ? null : 'missing_public_posthog_key',
+          posthogHost: getConfig().posthogHost,
+        };
+      }
+
+      function setPostHogStatus(nextStatus) {
+        window.__POSTHOG_STATUS__ = Object.assign({}, getPostHogStatus(), nextStatus);
+      }
+
+      function warnPostHog(message) {
+        if (window.__POSTHOG_WARNED__) return;
+        window.__POSTHOG_WARNED__ = true;
+        console.warn('[analytics] ' + message);
+      }
+
+      function markPostHogCapture(eventName, metadata) {
+        var count = (window.__POSTHOG_CAPTURE_COUNT__ ?? 0) + 1;
+        window.__POSTHOG_CAPTURE_COUNT__ = count;
+        window.__POSTHOG_LAST_CAPTURE__ = Object.assign(
+          {
+            event: eventName,
+            count: count,
+            path: window.location.pathname + window.location.search,
+            timestamp: new Date().toISOString(),
+          },
+          metadata || {}
+        );
+      }
+
+      function readConsent() {
+        var raw = null;
+        try {
+          raw = localStorage.getItem(getConfig().consentKey);
+        } catch (_) {
+          return null;
+        }
+        try { return raw ? JSON.parse(raw) : null; } catch (_) { return null; }
+      }
+
+      function capturePostHogPageview() {
+        var currentPath = window.location.pathname + window.location.search;
+        if (!window.posthog || window.__LAST_POSTHOG_PATH__ === currentPath) return;
+
+        markPostHogCapture('$pageview', {
+          currentUrl: window.location.href,
+          reason: 'pageview',
+        });
+        window.posthog.capture('$pageview', {
+          $current_url: window.location.href,
+        });
+
+        window.__LAST_POSTHOG_PATH__ = currentPath;
+      }
+
+      function loadPostHog() {
+        var config = getConfig();
+        if (!config.posthogKey) {
+          setPostHogStatus({
+            configured: false,
+            booted: false,
+            disabledReason: 'missing_public_posthog_key',
+            posthogHost: config.posthogHost,
+          });
+          warnPostHog('PostHog disabled: PUBLIC_POSTHOG_KEY is missing for this deployment.');
+          return;
+        }
+
+        if (window.__POSTHOG_LOADED__) {
+          setPostHogStatus({
+            configured: true,
+            booted: true,
+            disabledReason: null,
+            posthogHost: config.posthogHost,
+          });
+          capturePostHogPageview();
+          return;
+        }
+
+        var ph = document.createElement('script');
+        ph.async = true;
+        ph.crossOrigin = 'anonymous';
+        ph.src = config.posthogHost + '/static/array.js';
+        ph.onerror = function () {
+          setPostHogStatus({
+            configured: true,
+            booted: false,
+            disabledReason: 'posthog_script_load_failed',
+            posthogHost: config.posthogHost,
+          });
+          warnPostHog('PostHog failed to load from ' + config.posthogHost + '.');
+        };
+        ph.onload = function () {
+          if (!window.posthog) {
+            setPostHogStatus({
+              configured: true,
+              booted: false,
+              disabledReason: 'posthog_bootstrap_missing',
+              posthogHost: config.posthogHost,
+            });
+            warnPostHog('PostHog script loaded but `window.posthog` was not available.');
+            return;
+          }
+
+          window.posthog.init(config.posthogKey, {
+            api_host: config.posthogHost,
+            capture_pageview: false,
+            capture_pageleave: true,
+            persistence: 'localStorage',
+            autocapture: true,
+          });
+          window.__POSTHOG_LOADED__ = true;
+          setPostHogStatus({
+            configured: true,
+            booted: true,
+            disabledReason: null,
+            posthogHost: config.posthogHost,
+          });
+          capturePostHogPageview();
+        };
+        document.head.appendChild(ph);
+      }
+
       // Read consent from localStorage (matches nanostores/persistent format)
-      var raw = localStorage.getItem(consentKey);
-      var consent;
-      try { consent = raw ? JSON.parse(raw) : null; } catch (_) { consent = null; }
+      var consent = readConsent();
       var analyticsAllowed = consent && consent.analytics === true;
+      setPostHogStatus({ consentGranted: analyticsAllowed === true });
 
       // ── Sentry — essential error tracking (no consent needed) ──
       if (sentryDsn) {
         var s = document.createElement('script');
-        s.src = 'https://browser.sentry-cdn.com/8.0.0/bundle.min.js';
+        s.src = 'https://browser.sentry-cdn.com/8.49.0/bundle.min.js';
         s.crossOrigin = 'anonymous';
+        s.async = true;
         s.onload = function () {
           if (window.Sentry) {
             window.Sentry.init({
@@ -42,6 +198,10 @@ const consentKey = tenant.storage.consentKey;
                 'Network request failed',
                 'Load failed',
                 'ChunkLoadError',
+                'InvalidStateError',
+                'Failed to fetch dynamically imported module',
+                'Importing a module script failed',
+                'No QueryClient set',
               ],
             });
           }
@@ -50,36 +210,49 @@ const consentKey = tenant.storage.consentKey;
       }
 
       // ── PostHog — analytics consent required ──
-      if (posthogKey && analyticsAllowed) {
-        var ph = document.createElement('script');
-        ph.async = true;
-        ph.crossOrigin = 'anonymous';
-        ph.src = posthogHost + '/static/array.js';
-        ph.onload = function () {
-          if (window.posthog) {
-            window.posthog.init(posthogKey, {
-              api_host: posthogHost,
-              capture_pageview: true,
-              capture_pageleave: true,
-              persistence: 'localStorage',
-              autocapture: true,
-            });
-          }
-        };
-        document.head.appendChild(ph);
+      if (analyticsAllowed) {
+        loadPostHog();
+      } else {
+        setPostHogStatus({
+          booted: false,
+          disabledReason: getConfig().posthogKey ? 'awaiting_analytics_consent' : 'missing_public_posthog_key',
+        });
       }
 
-      // Listen for consent changes (user accepts analytics after page load)
+      function handleConsentChange(nextConsent) {
+        var granted = Boolean(nextConsent && nextConsent.analytics);
+        setPostHogStatus({
+          consentGranted: granted,
+          disabledReason: granted
+            ? null
+            : (getConfig().posthogKey ? 'awaiting_analytics_consent' : 'missing_public_posthog_key'),
+        });
+        if (granted) {
+          loadPostHog();
+        }
+      }
+
       window.addEventListener('storage', function (e) {
-        if (e.key === consentKey) {
+        if (e.key === getConfig().consentKey) {
           try {
             var updated = e.newValue ? JSON.parse(e.newValue) : null;
-            if (updated && updated.analytics && posthogKey && !window.posthog?.__loaded) {
-              location.reload();
-            }
+            handleConsentChange(updated);
           } catch (_) { /* ignore parse errors */ }
+        }
+      });
+
+      window.addEventListener('cookie-consent-updated', function (e) {
+        handleConsentChange(e.detail);
+      });
+
+      document.addEventListener('astro:page-load', function () {
+        var latestConsent = readConsent();
+        if (latestConsent && latestConsent.analytics === true) {
+          setPostHogStatus({ consentGranted: true });
+          capturePostHogPageview();
         }
       });
     })();
   </script>
+  </>
 )}

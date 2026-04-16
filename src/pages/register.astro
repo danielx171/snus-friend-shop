@@ -2,14 +2,26 @@
 export const prerender = false;
 
 import Shop from '@/layouts/Shop.astro';
-import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
 
 const result = Astro.getActionResult(actions.auth.register);
 
+// If Supabase "Confirm email" is OFF, signUp returns a session → skip the inbox
+// screen and drop the user straight into their account.
+if (result?.data?.redirect) {
+  return Astro.redirect(result.data.redirect);
+}
+
 const errorMessage = result?.error?.message;
 const successMessage = result?.data?.message;
+const successEmail = result?.data?.email ?? '';
+const emailDomain = successEmail.includes('@') ? successEmail.split('@')[1].toLowerCase() : '';
+const isGmail = /^(gmail|googlemail)\.com$/.test(emailDomain);
+const isOutlook = /^(outlook|hotmail|live|msn)\.(com|[a-z]{2,3})$/.test(emailDomain);
+const refCode = Astro.url.searchParams.get('ref') ?? '';
 ---
 
 <Shop
@@ -17,66 +29,124 @@ const successMessage = result?.data?.message;
   description={`Join ${tenant.name} to earn rewards, track orders, and get exclusive offers on nicotine pouches.`}
   noindex={true}
 >
-  <section class="bg-background text-foreground">
-    <div class="max-w-3xl mx-auto px-4 py-12">
-      <Breadcrumb items={[{ label: 'Register' }]} />
+  <section class="min-h-[80vh] flex items-center bg-background text-foreground">
+    <div class="w-full max-w-md mx-auto px-4 py-12">
 
-      <div class="max-w-md mx-auto">
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8">
-          <h1 class="text-3xl font-bold tracking-tight mb-2 text-center">Create Account</h1>
-          <p class="text-muted-foreground text-center mb-8">
-            Join {tenant.name} and start earning rewards
-          </p>
+      <!-- Brand mark -->
+      <div class="text-center mb-8">
+        <a href="/" class="inline-flex items-center gap-2 text-primary font-black text-xl tracking-tight">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground text-base font-black">S</span>
+          {tenant.name}
+        </a>
+        <h1 class="mt-5 text-2xl font-bold tracking-tight text-foreground">Create your account</h1>
+        <p class="mt-1 text-sm text-muted-foreground">Join and start earning {loyaltyCurrencyName} on every order</p>
+      </div>
 
-          {errorMessage && (
-            <div class="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-center">
-              <p class="text-sm text-destructive font-medium">{errorMessage}</p>
+      <div class="rounded-2xl border border-border bg-card/80 p-7 shadow-sm">
+
+        {errorMessage && (
+          <div role="alert" aria-live="assertive" class="mb-5 rounded-lg border border-destructive/30 bg-destructive/5 p-3.5 text-center">
+            <p class="text-sm text-destructive font-medium">{errorMessage}</p>
+          </div>
+        )}
+
+        {successMessage ? (
+          <!-- Success state: "Check your inbox" with email echo, provider shortcuts, and resend -->
+          <div class="py-4">
+            <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+              <svg class="h-7 w-7 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+              </svg>
             </div>
-          )}
+            <h2 class="text-lg font-semibold text-foreground mb-1 text-center">Check your inbox</h2>
+            <p class="text-sm text-muted-foreground text-center">
+              We sent a confirmation link to{' '}
+              {successEmail
+                ? <strong class="text-foreground font-mono break-all">{successEmail}</strong>
+                : <span>the email you provided</span>}.
+            </p>
+            <p class="text-xs text-muted-foreground text-center mt-1">Click the link in that email to finish creating your account.</p>
 
-          {successMessage && (
-            <div class="mb-6 rounded-lg border border-primary/30 bg-primary/5 p-4 text-center">
-              <p class="text-sm text-foreground font-medium mb-1">Check your inbox</p>
-              <p class="text-sm text-muted-foreground">{successMessage}</p>
+            {(isGmail || isOutlook) && (
+              <div class="mt-5 flex gap-2 justify-center">
+                {isGmail && (
+                  <a
+                    href="https://mail.google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card/60 px-4 text-sm font-medium text-foreground hover:bg-muted transition"
+                  >
+                    Open Gmail
+                    <svg class="h-3.5 w-3.5 opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                  </a>
+                )}
+                {isOutlook && (
+                  <a
+                    href="https://outlook.live.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card/60 px-4 text-sm font-medium text-foreground hover:bg-muted transition"
+                  >
+                    Open Outlook
+                    <svg class="h-3.5 w-3.5 opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                  </a>
+                )}
+              </div>
+            )}
+
+            <div class="mt-6 border-t border-border pt-5 text-center">
+              <p class="text-xs text-muted-foreground mb-2">Didn't receive it?</p>
+              <button
+                type="button"
+                class="text-sm font-medium text-primary hover:underline disabled:opacity-60 disabled:cursor-not-allowed"
+                id="resend-btn"
+                data-email={successEmail}
+              >
+                Resend confirmation link
+              </button>
+              <p id="resend-status" class="text-xs text-muted-foreground mt-2 hidden" aria-live="polite"></p>
             </div>
-          )}
 
-          {!successMessage && (
-            <form method="POST" action={actions.auth.register} class="space-y-5">
-              <div>
-                <label for="fullName" class="block text-sm font-medium text-foreground mb-1.5">
-                  Full name
-                </label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  required
-                  autocomplete="name"
-                  placeholder="Your full name"
-                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
-                />
-              </div>
+            <p class="mt-5 text-xs text-muted-foreground text-center">
+              Wrong email?
+              <a href="/register" class="text-primary hover:underline ml-1">Start over</a>
+              {' · '}
+              <a href="/login" class="text-primary hover:underline ml-1">Sign in instead</a>
+            </p>
+          </div>
+        ) : (
+          <form method="POST" action={actions.auth.register} class="space-y-4" id="register-form">
 
-              <div>
-                <label for="email" class="block text-sm font-medium text-foreground mb-1.5">
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  autocomplete="email"
-                  placeholder="you@example.com"
-                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
-                />
-              </div>
+            <div>
+              <label for="fullName" class="block text-sm font-medium text-foreground mb-1.5">Full name</label>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                required
+                autofocus
+                autocomplete="name"
+                placeholder="Your full name"
+                class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+              />
+            </div>
 
-              <div>
-                <label for="password" class="block text-sm font-medium text-foreground mb-1.5">
-                  Password
-                </label>
+            <div>
+              <label for="email" class="block text-sm font-medium text-foreground mb-1.5">Email address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="you@example.com"
+                class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+              />
+            </div>
+
+            <div>
+              <label for="password" class="block text-sm font-medium text-foreground mb-1.5">Password</label>
+              <div class="relative">
                 <input
                   type="password"
                   id="password"
@@ -85,23 +155,28 @@ const successMessage = result?.data?.message;
                   autocomplete="new-password"
                   minlength="8"
                   placeholder="At least 8 characters"
-                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 pr-11 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
                 />
-                <div id="password-strength" class="mt-2 space-y-1" aria-live="polite" style="display:none">
-                  <div class="flex gap-1">
-                    <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="1"></div>
-                    <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="2"></div>
-                    <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="3"></div>
-                    <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="4"></div>
-                  </div>
-                  <p id="strength-label" class="text-xs text-muted-foreground"></p>
-                </div>
+                <button type="button" id="toggle-pw1" aria-label="Toggle password visibility"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition p-0.5">
+                  <svg id="eye1-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg id="eye1-closed" class="hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                </button>
               </div>
+              <div id="password-strength" class="mt-2 space-y-1" aria-live="polite" style="display:none">
+                <div class="flex gap-1">
+                  <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="1"></div>
+                  <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="2"></div>
+                  <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="3"></div>
+                  <div class="h-1 flex-1 rounded-full bg-muted transition-colors" data-segment="4"></div>
+                </div>
+                <p id="strength-label" class="text-xs text-muted-foreground"></p>
+              </div>
+            </div>
 
-              <div>
-                <label for="confirm-password" class="block text-sm font-medium text-foreground mb-1.5">
-                  Confirm password
-                </label>
+            <div>
+              <label for="confirm-password" class="block text-sm font-medium text-foreground mb-1.5">Confirm password</label>
+              <div class="relative">
                 <input
                   type="password"
                   id="confirm-password"
@@ -110,60 +185,82 @@ const successMessage = result?.data?.message;
                   autocomplete="new-password"
                   minlength="8"
                   placeholder="Repeat your password"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 pr-11 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                />
+                <button type="button" id="toggle-pw2" aria-label="Toggle confirm password visibility"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition p-0.5">
+                  <svg id="eye2-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg id="eye2-closed" class="hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                </button>
+              </div>
+              <p id="pw-mismatch" class="mt-1.5 text-xs text-destructive hidden">Passwords do not match</p>
+            </div>
+
+            {refCode && (
+              <input type="hidden" name="referralCode" value={refCode} />
+            )}
+
+            {!refCode && (
+              <div>
+                <label for="referralCode" class="block text-sm font-medium text-foreground mb-1.5">
+                  Referral code <span class="text-muted-foreground font-normal">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  id="referralCode"
+                  name="referralCode"
+                  placeholder="e.g. SF-A1B2C3D4"
                   class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
                 />
+                <p class="text-xs text-muted-foreground mt-1">Have a friend's code? Enter it for {rewards.referralFriend} bonus {loyaltyCurrencyName}.</p>
               </div>
+            )}
 
-              <div class="space-y-3">
-                <label class="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="ageVerified"
-                    required
-                    class="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary/50"
-                  />
-                  <span class="text-sm text-muted-foreground">
-                    I confirm that I am <strong class="text-foreground">18 years or older</strong>
-                  </span>
-                </label>
+            <div class="space-y-3 pt-1">
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" name="ageVerified" required
+                  class="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary/50" />
+                <span class="text-sm text-muted-foreground">
+                  I confirm I am <strong class="text-foreground">18 years or older</strong>
+                </span>
+              </label>
 
-                <label class="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="termsAccepted"
-                    required
-                    class="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary/50"
-                  />
-                  <span class="text-sm text-muted-foreground">
-                    I agree to the
-                    <a href="/terms" class="text-primary hover:underline">Terms of Service</a>
-                    and
-                    <a href="/privacy" class="text-primary hover:underline">Privacy Policy</a>
-                  </span>
-                </label>
-              </div>
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" name="termsAccepted" required
+                  class="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary/50" />
+                <span class="text-sm text-muted-foreground">
+                  I agree to the
+                  <a href="/terms" class="text-primary hover:underline">Terms of Service</a>
+                  and
+                  <a href="/privacy" class="text-primary hover:underline">Privacy Policy</a>
+                </span>
+              </label>
+            </div>
 
-              <button
-                type="submit"
-                class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-primary/50"
-              >
-                Create Account
-              </button>
-            </form>
-          )}
-
-          <p class="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?
-            <a href="/login" class="text-primary font-medium hover:underline">
-              Sign in
-            </a>
-          </p>
-        </div>
+            <button
+              type="submit"
+              id="register-btn"
+              class="w-full flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+            >
+              <svg id="register-spinner" class="hidden animate-spin" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"/>
+              </svg>
+              <span id="register-btn-text">Create Account</span>
+            </button>
+          </form>
+        )}
       </div>
+
+      <p class="mt-5 text-center text-sm text-muted-foreground">
+        Already have an account?
+        <a href="/login" class="text-primary font-medium hover:underline">Sign in</a>
+      </p>
     </div>
   </section>
 
   <script>
+    // Password strength meter
     const pw = document.getElementById('password') as HTMLInputElement | null;
     const meter = document.getElementById('password-strength');
     const label = document.getElementById('strength-label');
@@ -172,39 +269,92 @@ const successMessage = result?.data?.message;
     if (pw && meter && label && segments) {
       pw.addEventListener('input', () => {
         const v = pw.value;
-        if (!v) {
-          meter.style.display = 'none';
-          return;
-        }
+        if (!v) { meter.style.display = 'none'; return; }
         meter.style.display = '';
-
         let score = 0;
         if (v.length >= 8) score++;
         if (/[A-Z]/.test(v)) score++;
         if (/[0-9]/.test(v)) score++;
         if (/[^A-Za-z0-9]/.test(v)) score++;
         if (v.length >= 12) score++;
-
-        type Level = { fill: number; color: string; text: string };
-        const levels: Record<string, Level> = {
-          weak:   { fill: 1, color: 'hsl(var(--color-error))',   text: 'Weak' },
-          fair:   { fill: 2, color: 'hsl(var(--color-warning))', text: 'Fair' },
-          good:   { fill: 3, color: 'hsl(var(--color-success))', text: 'Good' },
-          strong: { fill: 4, color: 'hsl(var(--color-success) / 0.85)', text: 'Strong' },
-        };
-
-        const level = score <= 1 ? levels.weak
-          : score === 2 ? levels.fair
-          : score === 3 ? levels.good
-          : levels.strong;
-
+        const levels = [
+          { fill: 1, color: 'hsl(var(--color-error))',   text: 'Weak' },
+          { fill: 2, color: 'hsl(var(--color-warning))', text: 'Fair' },
+          { fill: 3, color: 'hsl(var(--color-success))', text: 'Good' },
+          { fill: 4, color: 'hsl(var(--color-success))', text: 'Strong' },
+        ];
+        const level = levels[Math.min(score <= 1 ? 0 : score === 2 ? 1 : score === 3 ? 2 : 3, 3)];
         segments.forEach((seg, i) => {
           seg.style.backgroundColor = i < level.fill ? level.color : '';
-          if (i >= level.fill) seg.style.backgroundColor = '';
         });
-
         label.textContent = level.text;
         label.style.color = level.color;
+      });
+    }
+
+    // Password match indicator
+    const confirm = document.getElementById('confirm-password') as HTMLInputElement | null;
+    const mismatch = document.getElementById('pw-mismatch');
+    if (confirm && pw && mismatch) {
+      confirm.addEventListener('input', () => {
+        mismatch.classList.toggle('hidden', confirm.value === '' || confirm.value === pw.value);
+      });
+    }
+
+    // Password visibility toggles
+    const { makeToggle } = await import('@/scripts/password-toggle');
+    makeToggle('toggle-pw1', 'password', 'eye1-open', 'eye1-closed');
+    makeToggle('toggle-pw2', 'confirm-password', 'eye2-open', 'eye2-closed');
+
+    // Loading state on submit
+    const form = document.getElementById('register-form') as HTMLFormElement | null;
+    const btn = document.getElementById('register-btn') as HTMLButtonElement | null;
+    const spinner = document.getElementById('register-spinner');
+    const btnText = document.getElementById('register-btn-text');
+    if (form && btn && spinner && btnText) {
+      form.addEventListener('submit', (e) => {
+        // Client-side password match check before submitting
+        if (pw && confirm && pw.value !== confirm.value) {
+          e.preventDefault();
+          mismatch?.classList.remove('hidden');
+          confirm.focus();
+          return;
+        }
+        btn.disabled = true;
+        spinner.classList.remove('hidden');
+        btnText.textContent = 'Creating account\u2026';
+      });
+    }
+
+    // Inbox screen: resend via Astro Actions (action has accept: 'json')
+    const resendBtn = document.getElementById('resend-btn') as HTMLButtonElement | null;
+    const resendStatus = document.getElementById('resend-status') as HTMLParagraphElement | null;
+    if (resendBtn && resendStatus) {
+      resendBtn.addEventListener('click', async () => {
+        const email = resendBtn.dataset.email;
+        if (!email) return;
+        resendBtn.disabled = true;
+        resendStatus.classList.remove('hidden');
+        resendStatus.textContent = 'Sending\u2026';
+        try {
+          const res = await fetch('/_actions/auth.sendMagicLink', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          if (res.ok) {
+            resendStatus.textContent = 'Link sent. Check your inbox in a minute.';
+            resendStatus.className = 'text-xs text-primary mt-2';
+          } else {
+            resendStatus.textContent = 'Could not send. Try again shortly.';
+            resendStatus.className = 'text-xs text-destructive mt-2';
+            resendBtn.disabled = false;
+          }
+        } catch {
+          resendStatus.textContent = 'Network error. Check your connection.';
+          resendStatus.className = 'text-xs text-destructive mt-2';
+          resendBtn.disabled = false;
+        }
       });
     }
   </script>

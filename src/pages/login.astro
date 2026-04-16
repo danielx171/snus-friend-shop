@@ -2,98 +2,154 @@
 export const prerender = false;
 
 import Shop from '@/layouts/Shop.astro';
-import Breadcrumb from '@/components/astro/Breadcrumb.astro';
-import { actions } from 'astro:actions';
 import { tenant } from '@/config/tenant';
 
-const result = Astro.getActionResult(actions.auth.login);
-
-if (result && !result.error && result.data?.redirect) {
-  const dest = result.data.redirect ?? '/account';
-  const safeDest = dest.startsWith('/') && !dest.startsWith('//') ? dest : '/account';
-  return Astro.redirect(safeDest);
-}
-
 const redirectTo = Astro.url.searchParams.get('redirect') || '/account';
-const errorMessage = result?.error?.message;
+
+const user = Astro.locals.user;
+if (user) {
+  return Astro.redirect(redirectTo);
+}
 ---
 
 <Shop
-  title={`Login | ${tenant.name}`}
+  title={`Sign In | ${tenant.name}`}
   description={`Sign in to your ${tenant.name} account to manage orders, earn rewards, and track deliveries.`}
   noindex={true}
 >
-  <section class="bg-background text-foreground">
-    <div class="max-w-3xl mx-auto px-4 py-12">
-      <Breadcrumb items={[{ label: 'Login' }]} />
+  <section class="min-h-[80vh] flex items-center bg-background text-foreground">
+    <div class="w-full max-w-md mx-auto px-4 py-12">
 
-      <div class="max-w-md mx-auto">
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8">
-          <h1 class="text-3xl font-bold tracking-tight mb-2 text-center">Welcome Back</h1>
-          <p class="text-muted-foreground text-center mb-8">
-            Sign in to your {tenant.name} account
-          </p>
-
-          {errorMessage && (
-            <div class="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-center">
-              <p class="text-sm text-destructive font-medium">{errorMessage}</p>
-            </div>
-          )}
-
-          <form method="POST" action={actions.auth.login} class="space-y-5">
-            <input type="hidden" name="redirect" value={redirectTo} />
-
-            <div>
-              <label for="email" class="block text-sm font-medium text-foreground mb-1.5">
-                Email address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                autocomplete="email"
-                placeholder="you@example.com"
-                class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
-              />
-            </div>
-
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <label for="password" class="block text-sm font-medium text-foreground">
-                  Password
-                </label>
-                <a href="/forgot-password" class="text-sm text-primary hover:underline">
-                  Forgot password?
-                </a>
-              </div>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                autocomplete="current-password"
-                placeholder="Enter your password"
-                class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
-              />
-            </div>
-
-            <button
-              type="submit"
-              class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
-              Sign In
-            </button>
-          </form>
-
-          <p class="mt-6 text-center text-sm text-muted-foreground">
-            Don't have an account?
-            <a href="/register" class="text-primary font-medium hover:underline">
-              Create account
-            </a>
-          </p>
-        </div>
+      <!-- Brand mark -->
+      <div class="text-center mb-8">
+        <a href="/" class="inline-flex items-center gap-2 text-primary font-black text-xl tracking-tight">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground text-base font-black">S</span>
+          {tenant.name}
+        </a>
+        <h1 class="mt-5 text-2xl font-bold tracking-tight text-foreground">Welcome back</h1>
+        <p class="mt-1 text-sm text-muted-foreground">Sign in to your account</p>
       </div>
+
+      <div class="rounded-2xl border border-border bg-card/80 p-7 shadow-sm" data-login-page>
+
+        <!-- Error banner -->
+        <div id="login-error" role="alert" aria-live="assertive" class="mb-5 rounded-lg border border-destructive/30 bg-destructive/5 p-3.5 text-center hidden">
+          <p id="login-error-text" class="text-sm text-destructive font-medium"></p>
+        </div>
+
+        <!-- Shared email field -->
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-foreground mb-1.5">Email address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+            autofocus
+            placeholder="you@example.com"
+            class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+          />
+        </div>
+
+        <!-- Password field -->
+        <div class="mb-5">
+          <div class="flex items-center justify-between mb-1.5">
+            <label for="password" class="block text-sm font-medium text-foreground">Password</label>
+            <a href="/forgot-password" class="text-xs text-primary hover:underline">Forgot password?</a>
+          </div>
+          <div class="relative">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Enter your password"
+              class="w-full rounded-lg border border-border bg-background px-4 py-2.5 pr-11 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+            />
+            <button
+              type="button"
+              id="toggle-password"
+              aria-label="Toggle password visibility"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition p-0.5"
+            >
+              <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg id="eye-closed" class="hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+                <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
+                <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
+                <line x1="2" x2="22" y1="2" y2="22"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sign in button -->
+        <button
+          type="button"
+          id="login-btn"
+          class="w-full flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <svg id="login-spinner" class="hidden animate-spin" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"/>
+          </svg>
+          <span id="login-btn-text">Sign In</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="relative my-5">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-border"></div></div>
+          <div class="relative flex justify-center text-xs"><span class="bg-card/60 px-3 text-muted-foreground">or sign in without a password</span></div>
+        </div>
+
+        <!-- Magic link — uses same email field above -->
+        <button
+          type="button"
+          id="magic-link-btn"
+          class="w-full flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted/40 transition focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+          <span id="magic-btn-text">Send me a login link</span>
+        </button>
+
+        <!-- Magic link feedback -->
+        <div id="magic-link-msg" class="mt-3 hidden rounded-lg p-3 text-center text-sm"></div>
+      </div>
+
+      <p class="mt-5 text-center text-sm text-muted-foreground">
+        Don't have an account?
+        <a href="/register" class="text-primary font-medium hover:underline">Create account</a>
+      </p>
     </div>
   </section>
 </Shop>
+
+<script>
+  const { bootLoginForms } = await import('@/scripts/login-form');
+
+  bootLoginForms({
+    login: {
+      missingEmailMessage: 'Please enter your email address.',
+      missingPasswordMessage: 'Please enter your password.',
+      invalidCredentialsMessage: 'Incorrect email or password.',
+      networkErrorMessage: 'Network error — please try again.',
+      submittingText: 'Signing in…',
+      successText: 'Success!',
+      idleText: 'Sign In',
+    },
+    magicLink: {
+      missingEmailMessage: 'Please enter your email address first.',
+      networkErrorMessage: 'Network error — please try again.',
+      genericErrorMessage: 'Something went wrong.',
+      submittingText: 'Sending…',
+      successButtonText: 'Link sent ✓',
+      idleText: 'Send me a login link',
+    },
+  });
+</script>

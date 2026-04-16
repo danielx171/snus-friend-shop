@@ -74,8 +74,8 @@ export function useQuests(userId: string | null) {
           ...q,
           currentValue: 0,
           completed: false,
-          startedAt: null,
-          completedAt: null,
+          startedAt: null as string | null,
+          completedAt: null as string | null,
           rewardAvatarName: q.reward_avatar_id ? (avatarMap[q.reward_avatar_id]?.name ?? null) : null,
           rewardAvatarRarity: q.reward_avatar_id ? (avatarMap[q.reward_avatar_id]?.rarity ?? null) : null,
         }));

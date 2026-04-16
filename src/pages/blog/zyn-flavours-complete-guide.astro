@@ -1,0 +1,420 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BrandFactCallout from '@/components/astro/BrandFactCallout.astro';
+import { brandFacts } from '@/data/brand-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildBlogPostingSchema } from '@/lib/blog-schema';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const zynCoolMint = findProduct('zyn', 'cool mint');
+const zynCitrus = findProduct('zyn', 'citrus');
+const zynAppleMint = findProduct('zyn', 'apple mint');
+const zynMenthol = findProduct('zyn', 'menthol');
+const zynFact = brandFacts.zyn;
+const zynCatalogCount = allProducts.filter((product) => product.data.brandSlug === 'zyn').length;
+
+const publishDate = '2026-03-28';
+const modifiedDate = '2026-04-11';
+const title = 'Every ZYN Flavor Explained: Taste & Strength Guide 2026';
+const description = 'Every ZYN flavour ranked by taste, strength, and popularity. Cool Mint, Citrus, Espressino, and more — with prices and where to buy in Europe.';
+
+const blogPostingJsonLd = buildBlogPostingSchema({
+  headline: title,
+  description,
+  slug: 'zyn-flavours-complete-guide',
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  imagePath: '/og/article-zyn-flavours-complete-guide.png',
+});
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How many ZYN flavours are available in 2026?", "acceptedAnswer": { "@type": "Answer", "text": `The global ZYN assortment is larger than the European shelf lineup. At ${tenant.name} we currently list ${zynCatalogCount} ZYN product pages, while most European retailers stock a smaller market-specific flavour range.` } },
+      { "@type": "Question", "name": "What is the best ZYN flavour?", "acceptedAnswer": { "@type": "Answer", "text": "Apple Mint is the top-ranked ZYN flavour for its crisp Granny Smith apple character with a cool mint finish. Flavour holds for 35+ minutes. Cool Mint 6 mg takes second place as the most consistent ZYN across every metric." } },
+      { "@type": "Question", "name": "Which ZYN strength is closest to a cigarette?", "acceptedAnswer": { "@type": "Answer", "text": "A standard cigarette delivers 0.9–1.2 mg of absorbed nicotine per stick. ZYN's nicotine absorbs differently via oral mucosa. Most ex-smokers find S3–S4 (6–11 mg) satisfies the craving. Start at S3 for a pack-a-day equivalent." } },
+      { "@type": "Question", "name": "Are ZYN pouches FDA-approved?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. In January 2025, the FDA authorised 20 ZYN nicotine pouch products across mint, citrus, and coffee categories following extensive scientific review." } },
+      { "@type": "Question", "name": "How long does a ZYN pouch last?", "acceptedAnswer": { "@type": "Answer", "text": "A typical ZYN pouch releases nicotine for 30–60 minutes. Stronger pouches (S5–S6) feel done sooner; weaker ones (S1–S2) stretch longer. Most users keep a pouch in for 30–45 minutes." } },
+      { "@type": "Question", "name": "What is the ZYN After Dark series?", "acceptedAnswer": { "@type": "Answer", "text": "After Dark is ZYN's limited-edition cocktail-inspired range launched in 2025. It includes Mojito (lime and mint), Espresso (espresso martini with cocoa notes), and Spiced Cider (warm cinnamon-apple). These rotate in and out of stock." } },
+      { "@type": "Question", "name": "What is the difference between ZYN Mini and Slim?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN Mini pouches are smaller, nearly invisible under the lip, and come in lower strengths (1.5–6 mg). ZYN Slim pouches are longer and thinner, available in higher strengths (6–16.5 mg), and deliver more nicotine over a longer session. Mini is best for beginners and discreet use; Slim is the standard for daily users." } },
+      { "@type": "Question", "name": "What is the strongest ZYN?", "acceptedAnswer": { "@type": "Answer", "text": "The strongest ZYN pouch is Cool Mint Ice S6 at 16.5 mg per pouch. This is ZYN's maximum strength tier, followed by Menthol Ice and Blackcurrant Ice at S5 (13.5 mg). ZYN's S6 is strong by ZYN standards but moderate compared to brands like Siberia (49.5 mg) or Rabbit (50 mg)." } }
+    ]
+  };
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  canonical="/blog/zyn-flavours-complete-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+
+  <div class="bg-background text-foreground">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">
+
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'ZYN Flavours Guide' },
+      ]} />
+
+      <BlogHero
+        title={title}
+        description={description}
+        date={publishDate}
+        readTime="12 min read"
+        category="Flavour Guide"
+      />
+
+      <BrandFactCallout fact={zynFact} />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 12px; padding: 24px; margin: 24px 0;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 16px; line-height: 1.6; margin: 0;">ZYN has a broad market-specific flavour lineup in Europe, while the wider global range is larger than what most retailers stock. At {tenant.name} we currently list {zynCatalogCount} ZYN products, with mint, citrus, coffee, and fruit profiles making up the most common starting points.</p>
+        </div>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the best ZYN flavour?</summary>
+          <p style="margin-top: 12px;">Wintergreen and Peppermint are ZYN's most popular flavours, praised for authentic taste and consistent nicotine release. Cinnamon and Citrus Blend also rank highly among users seeking bold, distinctive profiles with smooth delivery.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">How many ZYN flavours are there?</summary>
+          <p style="margin-top: 12px;">Use two numbers: the global ZYN assortment is larger, while the Europe-visible range is smaller and market-specific. Our live catalog currently lists {zynCatalogCount} ZYN products, but no single European retailer carries every global variant at once.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the new ZYN flavour 2026?</summary>
+          <p style="margin-top: 12px;">ZYN regularly rotates limited-edition flavours throughout 2026 in response to regional demand and seasonal trends. Check the <a href="/brands/zyn" style="color: hsl(var(--primary));">ZYN product page</a> for the latest releases, as new variants are added quarterly.</p>
+        </details>
+
+        <h2>Why ZYN Dominates</h2>
+        <p>
+          <a href="/brands/zyn">ZYN</a> became a mainstream reference point by sticking to a clear formula: consistent nicotine delivery, clean flavour profiles, and formats that feel easy to recommend to new users. Swedish Match (now part of <a href="https://www.pmi.com/investor-relations/news-and-events" target="_blank" rel="noopener noreferrer">Philip Morris International</a>) built the brand around reliability first, which is why ZYN still shows up in so many comparison pieces and retail shelves.
+        </p>
+        <p>
+          The exact flavour count depends on where you shop. At {tenant.name} we currently list {zynCatalogCount} ZYN products, while most European storefronts stock a smaller, market-specific subset of the wider global catalogue. This guide focuses on the flavours you are most likely to encounter and actually compare. For expert comparisons, see our <a href="/blog/all-velo-flavors-ranked-2026">VELO flavours guide</a>.
+        </p>
+
+        <h2>How We Ranked</h2>
+        <p>
+          {tenant.name}'s editorial team evaluated every flavour on three criteria. <strong>Flavour accuracy</strong>: does it taste like what it claims to be? A citrus pouch should deliver actual citrus, not a vague sweetness. <strong>Longevity</strong>: how long does the flavour hold before it fades? Anything under 20 minutes is a problem. <strong>Nicotine delivery</strong>: is the hit smooth and predictable, or does it spike and crash? We also factored in community feedback from reviews on {tenant.name}.
+        </p>
+
+        <h2>The Top 10 ZYN Flavours</h2>
+
+        <h3>1. Apple Mint</h3>
+        <p>
+          Apple Mint has quietly become the most popular ZYN flavour in Europe, and it earns the top spot here. The apple is crisp and natural — think Granny Smith, not candy — with a cool mint finish that kicks in around the 5-minute mark. Available in slim format at 6 mg and 9 mg. Flavour holds for 35+ minutes with no bitter tail. If you only try one ZYN, make it this one.
+        </p>
+
+        <h3>2. Cool Mint — 6 mg</h3>
+        <p>
+          The classic. <a href="/products/flavor/mint">Cool Mint</a> is ZYN's flagship and the flavour most people start with. Spearmint-forward with a moderate cooling effect — it's refreshing without being aggressive. At 6 mg, the nicotine delivery is smooth and predictable. Flavour consistency is exceptional: the first minute tastes the same as the thirtieth. It's the benchmark every other mint pouch is measured against.
+        </p>
+
+        <h3>3. Citrus — 6 mg</h3>
+        <p>
+          <a href="/products/flavor/citrus">Citrus</a> is ZYN's other pillar, and it's surprisingly good for what sounds like a generic flavour name. It leans bergamot and lemon zest rather than orange juice — more sophisticated than expected. The nicotine delivery matches Cool Mint, and the flavour longevity is comparable. Works well as an all-day rotation partner alongside a mint variant.
+        </p>
+
+        <h3>4. Spearmint — 3 mg</h3>
+        <p>
+          The <a href="/products/strength/light">lighter strength</a> option that doesn't sacrifice flavour. Spearmint is gentler than Cool Mint — less menthol chill, more herbal sweetness. At 3 mg, it's ideal for morning use or for anyone transitioning down from higher strengths. The slim pouch sits flat and comfortable. Flavour fades more gradually than Cool Mint but peaks lower.
+        </p>
+
+        <h3>5. Menthol Ice Super Strong</h3>
+        <p>
+          One of ZYN's newer releases and a serious step up in intensity. The menthol is clinical-strength — this will numb your gums for the first two minutes, then settle into a sustained cold burn. At <a href="/products/strength/extra-strong">super strong</a> nicotine levels, this is for experienced users only. Not subtle. Not trying to be. Flavour holds for 40+ minutes because the menthol compound is slow-release.
+        </p>
+
+        <h3>6. Black Cherry Strong</h3>
+        <p>
+          A pleasant surprise in the ZYN lineup. Black Cherry delivers a dark, tart fruitiness that avoids the artificial candy trap. The "strong" label puts it at a nicotine level that most regular users will find satisfying without being overwhelming. The cherry flavour is front-loaded — strongest in the first 10 minutes, then gradually gives way to a mildly sweet base. Solid pick for fruit-flavour fans who find berry blends too sweet.
+        </p>
+
+        <h3>7. Coffee — 6 mg</h3>
+        <p>
+          ZYN Coffee is a love-it-or-leave-it flavour. When it works, it delivers a genuine espresso character — roasted, slightly bitter, with no added sweetness. It pairs absurdly well with actual <a href="/products/flavor/coffee">coffee</a>. The downside: the flavour is more subtle than the mint or citrus offerings, and some users find it too mild after minute 20. At 6 mg, the nicotine delivery is standard ZYN.
+        </p>
+
+        <h3>8. Peppermint — 6 mg</h3>
+        <p>
+          Peppermint sits between Cool Mint and Menthol on the intensity scale. More herbal than Cool Mint, less menthol than Menthol. It's a middle-ground flavour that appeals to users who find Cool Mint too familiar but Menthol Ice too extreme. Solid all-rounder. Flavour longevity is above average at 30+ minutes.
+        </p>
+
+        <h3>9. Blackcurrant Ice Super Strong</h3>
+        <p>
+          The European exclusive that's been generating buzz since late 2025. Blackcurrant is a bold flavour choice — tart, dark berry with a tannic edge — and the ice compound adds a cooling layer that balances the tartness. Super strong nicotine means this isn't for beginners, but for experienced users who want something genuinely different from mint, it's one of the most interesting ZYN releases in years.
+        </p>
+
+        <h3>10. Red Fruits Strong</h3>
+        <p>
+          A blended berry flavour that sits in the middle of the pack. Red Fruits covers strawberry, raspberry, and cranberry territory without committing to any single one. It's pleasant and easy to use all day, but it lacks the sharpness that makes the top-five flavours memorable. Good for variety rotation, less good as a daily driver.
+        </p>
+
+        <h2 style="margin-top: 48px;">Featured ZYN Products</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin: 32px 0;">
+          {zynCoolMint && <BlogProductCard product={zynCoolMint} />}
+          {zynCitrus && <BlogProductCard product={zynCitrus} />}
+          {zynAppleMint && <BlogProductCard product={zynAppleMint} />}
+          {zynMenthol && <BlogProductCard product={zynMenthol} />}
+        </div>
+
+        <h2>The After Dark Series</h2>
+        <p>
+          ZYN's limited-edition After Dark range launched in 2025 with three cocktail-inspired flavours: <strong>Mojito</strong> (lime and mint — the best of the three), <strong>Espresso</strong> (espresso martini with coffee and cocoa notes), and <strong>Spiced Cider</strong> (warm cinnamon-apple). These rotate in and out of stock, so grab them when they're available. The Mojito variant is genuinely excellent — it takes the Cool Mint base and adds a natural lime brightness that lifts the whole experience.
+        </p>
+
+        <h2>ZYN Flavour Categories</h2>
+
+        <p>ZYN's flavour portfolio spans seven distinct categories. Understanding them helps you narrow down your options quickly.</p>
+
+        <h3>Mint & Menthol</h3>
+        <p>
+          ZYN's largest category, accounting for roughly 40% of sales globally (<a href="https://www.euromonitor.com/smokeless-tobacco-global-market-trends" target="_blank" rel="noopener noreferrer">Euromonitor International (2025)</a>). Ranges from soft <strong>Spearmint</strong> to frozen <strong>Cool Mint Ice</strong>. <strong>Mint Fizz</strong> adds a subtle carbonated twist, while <strong>Cactus Spice</strong> introduces a desert-herb note for adventurous users.
+        </p>
+        <p><strong>Strengths:</strong> 1.5 mg (Spearmint Mini) up to 16.5 mg (Cool Mint Ice S6)</p>
+
+        <h3>Citrus</h3>
+        <p>
+          Bright and energising. <strong>Citrus</strong> blends lemon, lime, and orange. <strong>Lemon Spritz</strong> leans harder into fresh lemon with subtle fizz.
+        </p>
+        <p><strong>Strengths:</strong> 3–11 mg</p>
+
+        <h3>Berry & Red Fruits</h3>
+        <p>
+          Sweeter without being confectionery-like. <strong>Red Berry Fizz</strong> combines sweetness with effervescence, while <strong>Blackcurrant Ice</strong> delivers dark, tart fruit with a cool menthol undertone.
+        </p>
+        <p><strong>Strengths:</strong> 9–13.5 mg</p>
+
+        <h3>Coffee</h3>
+        <p>
+          From approachable <strong>Coffee Mini</strong> (3 mg) to bold <strong>Dark Roast Slim</strong> (11 mg). <strong>Macchiato</strong> introduces espresso with a hint of cream.
+        </p>
+        <p><strong>Strengths:</strong> 3–11 mg</p>
+
+        <h3>Fruit</h3>
+        <p>
+          The most diverse category. <strong>Apple Mint</strong> (#1 ranked), <strong>Black Cherry</strong>, <strong>Peach Mini</strong>, and <strong>Cucumber Lime Slim</strong> offer everything from summery sweetness to spa-like freshness.
+        </p>
+        <p><strong>Strengths:</strong> 3–11 mg</p>
+
+        <h3>Licorice</h3>
+        <p>
+          ZYN's most polarising category — beloved in Scandinavia, niche elsewhere. <strong>Black Licorice</strong> delivers pure anise root. <strong>Violet Licorice</strong> adds a floral herbal twist for a more approachable entry point.
+        </p>
+        <p><strong>Strengths:</strong> 3–9 mg</p>
+
+        <h3>Original</h3>
+        <p>
+          The plain-spoken entry point — a neutral, slightly sweet base with minimal flavour interference. Ideal for users who want the nicotine experience without sensory distraction.
+        </p>
+        <p><strong>Strengths:</strong> 3–6 mg</p>
+
+        <h2>ZYN Strength Chart: S1 to S6</h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-3 pr-4 text-foreground font-semibold">Tier</th>
+                <th class="text-left py-3 pr-4 text-foreground font-semibold">mg/pouch</th>
+                <th class="text-left py-3 pr-4 text-foreground font-semibold">Format</th>
+                <th class="text-left py-3 text-foreground font-semibold">Best For</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">S1 / Entry</td>
+                <td class="py-3 pr-4">1.5–3 mg</td>
+                <td class="py-3 pr-4">Mini</td>
+                <td class="py-3">First-time users, testing preferences</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">S2 / Light</td>
+                <td class="py-3 pr-4">3–6 mg</td>
+                <td class="py-3 pr-4">Mini or Slim</td>
+                <td class="py-3">Beginners, frequent daily use</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">S3 / Regular</td>
+                <td class="py-3 pr-4">6–9 mg</td>
+                <td class="py-3 pr-4">Slim</td>
+                <td class="py-3">Moderate users, ex-smokers</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">S4 / Strong</td>
+                <td class="py-3 pr-4">10.6–11 mg</td>
+                <td class="py-3 pr-4">Slim</td>
+                <td class="py-3">Regular users, all-day use</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">S5 / Very Strong</td>
+                <td class="py-3 pr-4">13.5 mg</td>
+                <td class="py-3 pr-4">Slim</td>
+                <td class="py-3">Experienced users, high tolerance</td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-4">S6 / Maximum</td>
+                <td class="py-3 pr-4">16.5 mg</td>
+                <td class="py-3 pr-4">Slim</td>
+                <td class="py-3">Power users only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Most users find their home at S3–S4 (6–11 mg). If you're new to nicotine pouches, start at S1–S2. If you're transitioning from cigarettes, S3–S4 typically mirrors a standard cigarette's nicotine yield.</p>
+
+        <div style="margin: 24px 0; padding: 16px 20px; background: hsl(var(--muted)); border-left: 4px solid hsl(var(--primary)); border-radius: 6px;">
+          <p style="margin: 0; font-size: 15px;">For a detailed breakdown of every ZYN strength level — including mg/pouch for all 52 products across both Mini and Slim formats — see our dedicated <a href="/blog/zyn-strength-chart-every-level-explained" style="font-weight: 600;"><strong>ZYN Strength Chart: S1 to S6 Explained</strong></a>.</p>
+        </div>
+
+        <h2 id="best-zyn-flavor">Best ZYN Flavor 2026</h2>
+        <p>
+          The best ZYN flavor in 2026 is <strong>Apple Mint</strong>. It delivers a crisp, natural Granny Smith apple character with a cool mint finish that develops around the 5-minute mark. Flavour holds for 35+ minutes with no bitter aftertaste. Cool Mint takes second place for its unmatched consistency — same taste from the first minute to the last — followed by Citrus for its sophisticated bergamot-lemon profile.
+        </p>
+        <p>
+          If you prefer strong flavours, <strong>Blackcurrant Ice Super Strong</strong> is the standout: tart, dark berry with a menthol cooling layer. For something mellow, <strong>Spearmint 3 mg</strong> is the gentlest ZYN with a soft herbal sweetness. The right "best" depends on your palate — try our <a href="/flavor-quiz">flavour quiz</a> for a personalised recommendation.
+        </p>
+
+        <h2 id="zyn-formats">ZYN Formats: Mini vs Slim</h2>
+        <p>
+          ZYN pouches come in two formats — <strong>Mini</strong> and <strong>Slim</strong> — and the format affects comfort, discretion, and nicotine delivery more than most users expect.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-3 pr-4 text-foreground font-semibold">Feature</th>
+                <th class="text-left py-3 pr-4 text-foreground font-semibold">Mini</th>
+                <th class="text-left py-3 text-foreground font-semibold">Slim</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Size</td>
+                <td class="py-3 pr-4">Smaller, compact</td>
+                <td class="py-3">Longer, thinner</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Discretion</td>
+                <td class="py-3 pr-4">Nearly invisible under the lip</td>
+                <td class="py-3">Visible if someone looks closely</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Nicotine range</td>
+                <td class="py-3 pr-4">1.5–6 mg (S1–S2)</td>
+                <td class="py-3">6–16.5 mg (S3–S6)</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4 font-medium text-foreground">Comfort</td>
+                <td class="py-3 pr-4">Barely noticeable</td>
+                <td class="py-3">Slight presence, sits flat</td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-4 font-medium text-foreground">Best for</td>
+                <td class="py-3 pr-4">Beginners, meetings, discreet use</td>
+                <td class="py-3">Regular users, longer sessions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>Which format should you choose?</strong> If you're new to ZYN or want maximum discretion, start with Mini. If you want stronger nicotine and longer flavour, Slim is the standard format for daily users. Most ZYN flavours are available in both — check the <a href="/brands/zyn">full ZYN catalogue</a> to see format options for each flavour.
+        </p>
+
+        <h2 id="strongest-zyn">Strongest ZYN Flavor</h2>
+        <p>
+          The strongest ZYN pouch is <strong>Cool Mint Ice S6</strong> at <strong>16.5 mg per pouch</strong>. This is ZYN's maximum strength tier — meant exclusively for experienced, high-tolerance users. Menthol Ice Super Strong and Blackcurrant Ice Super Strong follow close behind at S5 (13.5 mg).
+        </p>
+        <p>
+          For context, ZYN's S6 is strong by ZYN standards but moderate compared to brands like <a href="/brands/siberia">Siberia</a> (49.5 mg) or <a href="/brands/rabbit">Rabbit</a> (50 mg). If you want to explore beyond ZYN's ceiling, see our <a href="/blog/strongest-nicotine-pouches-ranked-2026">strongest nicotine pouches ranked</a> guide. If you're unsure what strength to start with, our <a href="/blog/how-to-choose-your-strength">strength choosing guide</a> walks through the tiers step by step.
+        </p>
+
+        <h2>How ZYN Compares</h2>
+        <p>
+          ZYN's main competitors in Europe are <a href="/brands/velo">VELO</a>, <a href="/brands/white-fox">White Fox</a>, and <a href="/brands/skruf">Skruf</a>. Each has strengths: VELO offers a wider flavour range (30+ variants), White Fox delivers more extreme cooling effects, and Skruf has a more subtle, tea-like approach to flavour. ZYN wins on consistency — the flavour and nicotine delivery are predictable from can to can, which matters when you're going through a pouch every hour.
+        </p>
+        <p>
+          Where ZYN loses: it's generally not the cheapest option per can, and the higher-strength European variants aren't always easy to find. If price matters, check our <a href="/blog/best-budget-nicotine-pouches">budget pouch guide</a>. For a detailed head-to-head, read our <a href="/blog/all-velo-flavors-ranked-2026">VELO flavours guide</a>.
+        </p>
+
+        <h2>How to Choose Your ZYN Flavour</h2>
+
+        <p><strong>Step 1: Identify your taste preference.</strong> Mint, fruit, coffee, or something neutral? If you've used snus or cigarettes, your preference probably hasn't changed. If you're new to nicotine, think about what you enjoy in food and drink.</p>
+
+        <p><strong>Step 2: Set your strength.</strong> Former smokers typically need S3–S4. First-time nicotine users should start at S1–S2. Don't confuse strength with satisfaction — a weaker flavour you enjoy beats a strong one you tolerate.</p>
+
+        <p><strong>Step 3: Match to your use case.</strong> Mint works best for alertness; coffee for morning ritual; fruit for afternoon variety; licorice for sensory novelty.</p>
+
+        <p><strong>Step 4: Sample before committing.</strong> Buy a single can before ordering in bulk. Flavour preference is highly individual. Try our <a href="/flavor-quiz">flavour quiz</a> for personalised recommendations, or see the <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginner's guide</a>.</p>
+
+        <h2>Where to Buy ZYN</h2>
+        <p>
+          Based on our catalog data, we carry a broad live ZYN assortment and regularly update it as stock changes. Browse the <a href="/brands/zyn">full ZYN collection</a>. We ship across the EU with DHL and UPS, and our current catalog shows {zynCatalogCount} ZYN product pages across multiple flavour families and strengths.
+        </p>
+
+        <h2>FAQ: ZYN Flavours</h2>
+
+        <h3>How many ZYN flavours are available in 2026?</h3>
+        <p>The global ZYN assortment is larger than the average European shelf range. At {tenant.name} we currently list {zynCatalogCount} ZYN products, while most retailers stock a smaller market-specific flavour mix.</p>
+
+        <h3>What is the best ZYN flavour?</h3>
+        <p>Apple Mint is the top-ranked ZYN flavour for its crisp Granny Smith apple character with a cool mint finish. Flavour holds for 35+ minutes. Cool Mint 6 mg takes second place as the most consistent ZYN across every metric.</p>
+
+        <h3>Which ZYN strength is closest to a cigarette?</h3>
+        <p>A standard cigarette delivers 0.9–1.2 mg of absorbed nicotine per stick. ZYN's nicotine absorbs differently via oral mucosa. Most ex-smokers find S3–S4 (6–11 mg) satisfies the craving. Start at S3 for a pack-a-day equivalent.</p>
+
+        <h3>Are ZYN pouches FDA-approved?</h3>
+        <p>Yes. In January 2025, the FDA authorised 20 ZYN nicotine pouch products across mint, citrus, and coffee categories following extensive scientific review.</p>
+
+        <h3>How long does a ZYN pouch last?</h3>
+        <p>A typical ZYN pouch releases nicotine for 30–60 minutes. Stronger pouches (S5–S6) feel done sooner; weaker ones (S1–S2) stretch longer. Most users keep a pouch in for 30–45 minutes.</p>
+
+        <h3>What is the ZYN After Dark series?</h3>
+        <p>After Dark is ZYN's limited-edition cocktail-inspired range launched in 2025. It includes Mojito (lime and mint), Espresso (espresso martini with cocoa notes), and Spiced Cider (warm cinnamon-apple). These rotate in and out of stock.</p>
+
+        <BlogNewsletterCta />
+
+        <h2>Related Reading</h2>
+        <ul>
+          <li><a href="/blog/nicotine-pouch-flavour-guide">Complete Flavour Guide</a> — Every flavour category explained</li>
+          <li><a href="/blog/zyn-strength-chart-every-level-explained">ZYN Strength Chart: S1 to S6 Explained</a></li>
+          <li><a href="/blog/all-velo-flavors-ranked-2026">Every VELO Flavour Ranked 2026</a></li>
+          <li><a href="/blog/best-nicotine-pouches-2026">Best Nicotine Pouches 2026: Expert Picks</a></li>
+          <li><a href="/blog/best-mint-nicotine-pouches-2026">Best Mint Nicotine Pouches</a></li>
+          <li><a href="/blog/best-budget-nicotine-pouches">Best Budget Nicotine Pouches Under EUR 3</a></li>
+          <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best Nicotine Pouches for Beginners 2026</a></li>
+          <li><a href="/blog/nicotine-pouch-side-effects">Nicotine Pouch Side Effects: What the Research Says</a></li>
+          <li><a href="/brands/zyn">ZYN Brand Page & Full Catalogue</a></li>
+        </ul>
+
+        <p><em>Last updated: 1 April 2026. Rankings based on independent editorial testing and community feedback.</em></p>
+
+
+        <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+
+      </div>
+    </div>
+  </div></Shop>

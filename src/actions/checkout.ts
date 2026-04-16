@@ -3,8 +3,11 @@ import { z } from 'astro/zod';
 
 const cartItemSchema = z.object({
   sku: z.string(),
+  slug: z.string(),
   quantity: z.number().int().positive(),
   product_name: z.string(),
+  brand: z.string(),
+  image_url: z.string(),
   pack_label: z.string(),
   unit_price: z.number().positive(),
 });
@@ -18,6 +21,7 @@ export const checkout = {
         email: z.string().email(),
         firstname: z.string().min(1),
         lastname: z.string().min(1),
+        phone: z.string().optional(),
       }),
       billing_address: z.object({
         address: z.string().min(1),
@@ -26,6 +30,7 @@ export const checkout = {
         country: z.string().length(2),
       }),
       shipping_method: z.string().min(1),
+      discount_code: z.string().optional(),
       display_total: z.number().positive(),
       display_currency: z.string(),
     }),
@@ -34,21 +39,12 @@ export const checkout = {
         throw new ActionError({ code: 'INTERNAL_SERVER_ERROR', message: 'Database not configured' });
       }
 
+      // Auth is optional — guests can checkout without an account
+      let authToken: string | null = null;
       const user = context.locals.user;
-      if (!user) {
-        throw new ActionError({
-          code: 'UNAUTHORIZED',
-          message: 'You must be logged in to checkout.',
-        });
-      }
-
-      // Get a fresh access token from the session
-      const { data: { session } } = await context.locals.supabase.auth.getSession();
-      if (!session) {
-        throw new ActionError({
-          code: 'UNAUTHORIZED',
-          message: 'Session expired. Please log in again.',
-        });
+      if (user) {
+        const { data: { session } } = await context.locals.supabase.auth.getSession();
+        authToken = session?.access_token ?? null;
       }
 
       const payload = {
@@ -56,14 +52,18 @@ export const checkout = {
         idempotency_key: crypto.randomUUID(),
       };
 
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
       const res = await fetch(
         `${import.meta.env.SUPABASE_URL}/functions/v1/create-nyehandel-checkout`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
-          },
+          headers,
           body: JSON.stringify(payload),
         },
       );
@@ -75,7 +75,7 @@ export const checkout = {
           item_sku_required: 'One or more products are unavailable.',
           customer_fields_required: 'Please fill in all contact fields.',
           address_fields_required: 'Please fill in your full shipping address.',
-          shipping_method_invalid: 'Please select a valid shipping method.',
+          invalid_shipping_method: 'Please select a valid shipping method.',
           nyehandel_api_error: 'Payment provider error. Please try again.',
         };
 
@@ -84,6 +84,20 @@ export const checkout = {
       }
 
       const { redirect_url } = await res.json();
+
+      // Save last address for logged-in users (pre-fill on next checkout)
+      if (user && context.locals.supabase) {
+        context.locals.supabase.auth.updateUser({
+          data: {
+            last_address: {
+              firstname: input.customer.firstname,
+              lastname: input.customer.lastname,
+              ...input.billing_address,
+            },
+          },
+        }).catch(() => {}); // Fire-and-forget — don't block checkout
+      }
+
       return { redirect_url };
     },
   }),

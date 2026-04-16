@@ -8,8 +8,21 @@ interface ImportMetaEnv {
   readonly PUBLIC_SENTRY_DSN: string;
   readonly PUBLIC_POSTHOG_KEY: string;
   readonly PUBLIC_POSTHOG_HOST: string;
+  readonly PUBLIC_GA_MEASUREMENT_ID: string;
+  readonly PUBLIC_GOOGLE_SITE_VERIFICATION: string;
   readonly SUPABASE_URL: string;
   readonly SUPABASE_SERVICE_ROLE_KEY: string;
+  readonly PAGESPEED_API_KEY: string;
+  readonly GOOGLE_APPLICATION_CREDENTIALS: string;
+  readonly GOOGLE_SERVICE_ACCOUNT_KEY_PATH: string;
+  readonly GA4_PROPERTY_ID: string;
+  readonly SEARCH_CONSOLE_PROPERTY: string;
+  readonly DATAFORSEO_LOGIN: string;
+  readonly DATAFORSEO_PASSWORD: string;
+  readonly DATAFORSEO_LOCATION_CODE: string;
+  readonly DATAFORSEO_LANGUAGE_CODE: string;
+  // Legacy — no longer read by `audit:rank` after the DataForSEO migration.
+  readonly GOOGLE_CUSTOM_SEARCH_API_KEY: string;
   // Legacy VITE_ vars (still used by existing React components during migration)
   readonly VITE_SUPABASE_URL: string;
   readonly VITE_SUPABASE_PUBLISHABLE_KEY: string;
@@ -34,14 +47,50 @@ declare global {
   interface Window {
     __pwaInstallPromptEvent: BeforeInstallPromptEvent | null;
     __AUTH_STATE__: { id: string; email: string } | null;
+    __validThemes: string[];
+    __ANALYTICS_CONFIG__?: {
+      consentKey: string;
+      posthogKey: string;
+      posthogHost: string;
+      posthogEnabled: boolean;
+    };
+    __ANALYTICS_BOOTSTRAPPED__?: boolean;
+    __OBSERVABILITY_CONFIG__?: { consentKey: string; gaMeasurementId: string };
+    __OBSERVABILITY_BOOTSTRAPPED__?: boolean;
+    __VERCEL_SPEED_INSIGHTS_ENABLED__?: boolean;
+    __VERCEL_SPEED_INSIGHTS_SET_ROUTE__?: ((route: string | null) => void) | null;
+    __GA4_ENABLED__?: boolean;
+    __LAST_GA_PATH__?: string;
+    __refreshObservability__?: () => void;
+    __POSTHOG_LOADED__?: boolean;
+    __LAST_POSTHOG_PATH__?: string;
+    __POSTHOG_CAPTURE_COUNT__?: number;
+    __POSTHOG_LAST_CAPTURE__?: {
+      event: string;
+      count: number;
+      path: string;
+      timestamp: string;
+      currentUrl?: string;
+      reason?: string;
+    };
+    __POSTHOG_WARNED__?: boolean;
+    __POSTHOG_STATUS__?: {
+      configured: boolean;
+      consentGranted: boolean;
+      booted: boolean;
+      disabledReason: string | null;
+      posthogHost: string;
+    };
+    dataLayer: unknown[];
+    gtag?: (...args: unknown[]) => void;
   }
-}
 
-// Augment Astro locals with auth data
-declare namespace App {
-  interface Locals {
-    user: import('@supabase/supabase-js').User | null;
-    supabase: import('@supabase/supabase-js').SupabaseClient | null;
+  // Augment Astro locals with auth data
+  namespace App {
+    interface Locals {
+      user: import('@supabase/supabase-js').User | null;
+      supabase: import('@supabase/supabase-js').SupabaseClient | null;
+    }
   }
 }
 

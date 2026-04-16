@@ -2,83 +2,427 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import QuestBoardIsland from '@/components/react/QuestBoardIsland';
+import LeaderboardIsland from '@/components/react/LeaderboardIsland';
+import AchievementGridIsland from '@/components/react/AchievementGridIsland';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
+import { buildAbsoluteUrl } from '@/config/site';
+import { supabase, hasSupabaseEnv } from '@/integrations/supabase/client';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
+
+// Query real community stats at build time
+let memberCount = 0;
+let reviewCount = 0;
+let pointsEarned = 0;
+
+if (hasSupabaseEnv) {
+  try {
+    const [usersRes, reviewsRes, pointsRes] = await Promise.all([
+      supabase.from('user_profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('product_reviews').select('id', { count: 'exact', head: true }),
+      supabase.from('points_transactions').select('points').gt('points', 0),
+    ]);
+    memberCount = usersRes.count ?? 0;
+    reviewCount = reviewsRes.count ?? 0;
+    pointsEarned = (pointsRes.data ?? []).reduce((sum: number, r: { points: number }) => sum + r.points, 0);
+  } catch (_) { /* fall back to 0s */ }
+}
+
+// Format numbers for display
+function formatStat(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, '')}K`;
+  return n.toLocaleString('en-GB');
+}
+
 ---
 
 <Shop
-  title={`Community | ${tenant.name}`}
-  description={`Join the ${tenant.name} community — share reviews, climb the leaderboard, and complete quests to earn rewards.`}
+  title={`Community — Connect, Compete & Earn | ${tenant.name}`}
+  description={`Join the ${tenant.name} community. Share reviews, climb The Board, complete missions, unlock badges, and earn exclusive rewards through our gamified loyalty system.`}
 >
   <section class="bg-background text-foreground">
-    <div class="max-w-4xl mx-auto px-4 py-12">
-      <Breadcrumb items={[{ label: 'Community' }]} />
+    <!-- Logged-out preview hero -->
+    <div class="relative overflow-hidden bg-gradient-to-b from-primary/8 via-primary/3 to-background border-b border-border/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24">
+        <Breadcrumb items={[{ label: 'Community' }]} />
 
-      <h1 class="text-4xl font-bold tracking-tight mb-3">Community</h1>
-      <p class="text-lg text-muted-foreground mb-10">
-        Connect with fellow pouch enthusiasts. Share reviews, earn points, and climb the ranks.
-      </p>
-
-      <!-- Leaderboard Preview -->
-      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-8">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-2xl font-semibold">Leaderboard</h2>
-          <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-            Coming Soon
-          </span>
+        <div class="text-center mb-10">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 text-foreground">
+            Not just a store. A club for people who know what they like.
+          </h1>
+          <p class="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
+            {tenant.name} Community is where pouch enthusiasts share reviews, vote on new products, and earn recognition for their taste. Your opinions shape what we stock.
+          </p>
         </div>
-        <div class="space-y-3">
-          {[1, 2, 3].map((rank) => (
-            <div class="flex items-center gap-4 rounded-lg bg-muted/40 p-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                {rank}
-              </span>
-              <div class="flex-1">
-                <div class="h-4 w-32 rounded bg-muted animate-pulse" />
-              </div>
-              <div class="h-4 w-16 rounded bg-muted animate-pulse" />
+
+        <div class="space-y-6 mb-12">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
             </div>
-          ))}
+            <div>
+              <h3 class="font-semibold text-foreground mb-1">Reviews That Matter</h3>
+              <p class="text-sm text-muted-foreground">Your reviews help other buyers and earn you coins. The best reviewers get badges, leaderboard recognition, and a voice that carries weight.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-foreground mb-1">Pioneer Lab</h3>
+              <p class="text-sm text-muted-foreground">Suggest products you want us to stock. Vote on other people's ideas. When enough members back a suggestion, we make it happen.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-foreground mb-1">The Board</h3>
+              <p class="text-sm text-muted-foreground">A monthly leaderboard that tracks the most active contributors. No pay-to-win — it rewards reviews, missions, and community input.</p>
+            </div>
+          </div>
         </div>
-        <p class="text-xs text-muted-foreground/60 mt-4 text-center">
-          Leaderboard launches with our community beta.
-        </p>
+
+        <div class="text-center">
+          <a
+            href="/register?redirect=/community"
+            class="inline-flex items-center justify-center rounded-lg bg-primary px-8 h-12 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Join the community — it's free
+            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </a>
+          <p class="mt-3 text-xs text-muted-foreground">No subscription. No catch. Just a community that values your taste.</p>
+        </div>
+
+        <!-- Key Stats -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 max-w-2xl mx-auto mt-10">
+          <div class="rounded-lg bg-card/80 border border-border/30 p-4 sm:p-6 text-center">
+            <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">{memberCount > 0 ? formatStat(memberCount) : 'Growing'}</div>
+            <p class="text-xs sm:text-sm text-muted-foreground">Members</p>
+          </div>
+          <div class="rounded-lg bg-card/80 border border-border/30 p-4 sm:p-6 text-center">
+            <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">{reviewCount > 0 ? formatStat(reviewCount) : 'Be first'}</div>
+            <p class="text-xs sm:text-sm text-muted-foreground">Reviews Posted</p>
+          </div>
+          <div class="rounded-lg bg-card/80 border border-border/30 p-4 sm:p-6 text-center">
+            <div class="text-2xl sm:text-3xl font-bold text-primary mb-1">{pointsEarned > 0 ? formatStat(pointsEarned) : 'Join in'}</div>
+            <p class="text-xs sm:text-sm text-muted-foreground">{loyaltyCurrencyName} Earned</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <!-- Leaderboard Section -->
+      <div class="mb-12 sm:mb-16">
+        <div class="mb-6">
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2">The Board</h2>
+          <p class="text-muted-foreground">
+            Earn {loyaltyCurrencyName} with every review, purchase, and mission completion. Climb The Board and unlock exclusive tier-based rewards.
+          </p>
+        </div>
+        <LeaderboardIsland client:visible />
       </div>
 
-      <!-- Recent Reviews -->
-      <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-8">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-2xl font-semibold">Recent Reviews</h2>
-          <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-            Coming Soon
-          </span>
+      <!-- Active Quests Section -->
+      <div class="relative mb-12 sm:mb-16">
+        <div class="absolute inset-0 -mx-4 sm:-mx-6 lg:-mx-8 homepage-section-glow rounded-2xl pointer-events-none" aria-hidden="true" />
+        <div class="relative">
+          <div class="mb-6">
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Active Missions</h2>
+            <p class="text-muted-foreground">
+              Complete daily and weekly challenges to earn bonus {loyaltyCurrencyName}, unlock badges, and progress through the mission tiers.
+            </p>
+          </div>
+          <QuestBoardIsland client:idle />
         </div>
-        <div class="grid gap-4 sm:grid-cols-2">
-          {['VELO Freeze Max', 'ZYN Spearmint'].map((product) => (
-            <div class="rounded-lg bg-muted/40 p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="flex gap-0.5">
-                  {[1, 2, 3, 4, 5].map(() => (
-                    <span class="text-primary/30">&#9733;</span>
-                  ))}
-                </div>
-              </div>
-              <p class="text-sm font-medium text-foreground mb-1">{product}</p>
-              <div class="h-3 w-full rounded bg-muted animate-pulse mb-1" />
-              <div class="h-3 w-2/3 rounded bg-muted animate-pulse" />
-            </div>
-          ))}
-        </div>
-        <p class="text-xs text-muted-foreground/60 mt-4 text-center">
-          Be the first to leave a review when we launch.
-        </p>
       </div>
 
-      <!-- Quests -->
-      <div class="mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Quests</h2>
-        <QuestBoardIsland client:idle />
+      <!-- Achievements Section -->
+      <div class="mb-12 sm:mb-16">
+        <div class="mb-6">
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Badges Showcase</h2>
+          <p class="text-muted-foreground">
+            Unlock rare badges by completing special challenges, reaching milestones, and exploring hidden missions.
+          </p>
+        </div>
+        <div class="rounded-xl border border-border bg-card/80 p-6">
+          <AchievementGridIsland client:visible />
+        </div>
+      </div>
+
+      <!-- How It Works Section -->
+      <div class="mb-12 sm:mb-16">
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-8">How The Tier System Works</h2>
+
+        <!-- Tier Progression Visual -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-10">
+          <!-- Explorer -->
+          <div class="rounded-xl border border-border bg-card/80 p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <span class="text-4xl">🌱</span>
+            </div>
+            <h3 class="text-lg font-bold mb-2">Explorer</h3>
+            <div class="text-2xl font-bold text-zinc-400 mb-2">0+</div>
+            <p class="text-sm text-muted-foreground mb-4">
+              Welcome to the community. Start your journey here.
+            </p>
+            <ul class="text-xs text-muted-foreground space-y-2 text-left">
+              <li>✓ Welcome spin bonus</li>
+            </ul>
+          </div>
+
+          <!-- Member -->
+          <div class="rounded-xl border border-border bg-card/80 p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <span class="text-4xl">⭐</span>
+            </div>
+            <h3 class="text-lg font-bold mb-2">Member</h3>
+            <div class="text-2xl font-bold text-blue-400 mb-2">{rewards.tiers[1].threshold}+</div>
+            <p class="text-sm text-muted-foreground mb-4">
+              Active member with community privileges.
+            </p>
+            <ul class="text-xs text-muted-foreground space-y-2 text-left">
+              <li>✓ Community posting</li>
+              <li>✓ Review reactions</li>
+            </ul>
+          </div>
+
+          <!-- Connoisseur -->
+          <div class="rounded-xl border border-primary/30 bg-card/80 p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <span class="text-4xl">🔥</span>
+            </div>
+            <h3 class="text-lg font-bold mb-2">Connoisseur</h3>
+            <div class="text-2xl font-bold text-emerald-400 mb-2">{rewards.tiers[2].threshold}+</div>
+            <p class="text-sm text-muted-foreground mb-4">
+              Dedicated member with exclusive perks.
+            </p>
+            <ul class="text-xs text-muted-foreground space-y-2 text-left">
+              <li>✓ Custom avatar border</li>
+              <li>✓ Early sale access</li>
+            </ul>
+          </div>
+
+          <!-- Specialist -->
+          <div class="rounded-xl border border-primary/30 bg-card/80 p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <span class="text-4xl">🏆</span>
+            </div>
+            <h3 class="text-lg font-bold mb-2">Specialist</h3>
+            <div class="text-2xl font-bold text-purple-400 mb-2">{rewards.tiers[3].threshold.toLocaleString()}+</div>
+            <p class="text-sm text-muted-foreground mb-4">
+              Highly experienced with premium perks.
+            </p>
+            <ul class="text-xs text-muted-foreground space-y-2 text-left">
+              <li>✓ Double mission rewards</li>
+              <li>✓ Exclusive polls</li>
+            </ul>
+          </div>
+
+          <!-- Founder -->
+          <div class="rounded-xl border border-primary/30 bg-card/80 p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <span class="text-4xl">👑</span>
+            </div>
+            <h3 class="text-lg font-bold mb-2">Founder</h3>
+            <div class="text-2xl font-bold text-amber-400 mb-2">{rewards.tiers[4].threshold.toLocaleString()}+</div>
+            <p class="text-sm text-muted-foreground mb-4">
+              Legendary status in the community.
+            </p>
+            <ul class="text-xs text-muted-foreground space-y-2 text-left">
+              <li>✓ Gold badge</li>
+              <li>✓ VIP support</li>
+              <li>✓ Founder-only vouchers</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- How to Earn Section -->
+        <div class="rounded-xl border border-border bg-card/80 p-6 sm:p-8">
+          <h3 class="text-xl font-bold mb-6">Ways to Earn {loyaltyCurrencyName}</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 text-2xl">⭐</span>
+              <div>
+                <h4 class="font-semibold mb-1">Write a Review</h4>
+                <p class="text-sm text-muted-foreground">Post a product review and earn up to {rewards.verifiedReviewFirst} {loyaltyCurrencyName}.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 text-2xl">🛍️</span>
+              <div>
+                <h4 class="font-semibold mb-1">Make a Purchase</h4>
+                <p class="text-sm text-muted-foreground">Earn {rewards.earnRatePerEur} {loyaltyCurrencyName} per EUR spent on products.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 text-2xl">✅</span>
+              <div>
+                <h4 class="font-semibold mb-1">Complete Missions</h4>
+                <p class="text-sm text-muted-foreground">Daily and weekly missions award {rewards.missionMin}–{rewards.missionMax} {loyaltyCurrencyName}.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 text-2xl">🎯</span>
+              <div>
+                <h4 class="font-semibold mb-1">Earn Badges</h4>
+                <p class="text-sm text-muted-foreground">Unlock special badges for 5–25 bonus {loyaltyCurrencyName}.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Section -->
+      <div class="mb-12 sm:mb-16">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-1">Community Reviews</h2>
+            <p class="text-muted-foreground">
+              Share your honest opinion and help others discover their favourite pouches.
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-border bg-card/80 p-6 sm:p-8">
+          <p class="text-muted-foreground mb-6">
+            Every review helps fellow pouch enthusiasts make better choices. Share your honest experience with any product you've tried — you'll earn {rewards.verifiedReview} {loyaltyCurrencyName} for each review.
+          </p>
+
+          <div class="flex gap-3">
+            <a
+              href="/products"
+              class="flex-1 rounded-lg border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/10 transition text-center"
+            >
+              Browse Products
+            </a>
+            <a
+              href="/products"
+              class="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition text-center"
+            >
+              Write a Review
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Guidelines -->
+      <div class="mb-12 sm:mb-16">
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-6">Community Guidelines</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="rounded-xl border border-border bg-card/80 p-6">
+            <div class="flex gap-4 mb-4">
+              <span class="text-2xl">✨</span>
+              <div>
+                <h3 class="font-semibold mb-2">Be Respectful</h3>
+                <p class="text-sm text-muted-foreground">
+                  Treat other community members with kindness and dignity, regardless of differing opinions or backgrounds.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-border bg-card/80 p-6">
+            <div class="flex gap-4 mb-4">
+              <span class="text-2xl">✓</span>
+              <div>
+                <h3 class="font-semibold mb-2">Be Honest</h3>
+                <p class="text-sm text-muted-foreground">
+                  Share genuine experiences and authentic opinions. Reviews should be based on real use, not marketing hype.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-border bg-card/80 p-6">
+            <div class="flex gap-4 mb-4">
+              <span class="text-2xl">🙌</span>
+              <div>
+                <h3 class="font-semibold mb-2">Be Helpful</h3>
+                <p class="text-sm text-muted-foreground">
+                  Provide constructive feedback. Compare products, explain your preferences, and help others make informed choices.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-border bg-card/80 p-6">
+            <div class="flex gap-4 mb-4">
+              <span class="text-2xl">⚠️</span>
+              <div>
+                <h3 class="font-semibold mb-2">No Spam or Abuse</h3>
+                <p class="text-sm text-muted-foreground">
+                  Avoid promotional spam, offensive language, or harassing behaviour. Keep discussions focused on nicotine pouches.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Footer -->
+      <div class="rounded-xl border border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10 p-8 sm:p-10 text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-3">Ready to Join?</h2>
+        <p class="text-muted-foreground mb-6 max-w-2xl mx-auto">
+          Create your free {tenant.name} account to start earning {loyaltyCurrencyName}, unlocking badges, and competing on The Board.
+        </p>
+        <a
+          href="/login?redirect=/community"
+          class="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-3 text-base font-semibold text-primary-foreground hover:bg-primary/90 transition"
+        >
+          Get Started Now
+        </a>
       </div>
     </div>
   </section>
+
+  <JsonLd
+    data={{
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `The ${tenant.name} Community`,
+      "description": `Join the ${tenant.name} community. Share reviews, earn ${loyaltyCurrencyName}, complete missions, and unlock exclusive rewards.`,
+      "url": buildAbsoluteUrl("/community"),
+      "publisher": {
+        "@type": "Organization",
+        "name": tenant.name,
+        "logo": {
+          "@type": "ImageObject",
+          "url": buildAbsoluteUrl("/logo.svg")
+        }
+      },
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": tenant.name,
+        "url": buildAbsoluteUrl("/")
+      },
+      "mainEntity": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": buildAbsoluteUrl("/")
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Community",
+            "item": buildAbsoluteUrl("/community")
+          }
+        ]
+      }
+    }}
+  />
 </Shop>

@@ -1,0 +1,107 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
+import { buildAbsoluteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
+import { getDefaultAuthorPath } from '@/lib/blog-schema';
+
+const authorPath = getDefaultAuthorPath();
+const authorName = tenant.defaultAuthor.name;
+const authorCredentials = tenant.defaultAuthor.credentials?.join(' · ');
+const title = `Editorial Policy — ${tenant.name}`;
+const description = `How ${tenant.name} writes, tests, fact-checks, and updates its nicotine pouch content. Our commitment to honest, evidence-based editorial standards.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Editorial Policy',
+  description,
+  url: buildAbsoluteUrl('/editorial-policy'),
+};
+---
+
+<Shop title={title} description={description}>
+  <JsonLd data={jsonLd} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' },
+        { label: 'Editorial Policy' },
+      ]} />
+
+      <header class="mb-10">
+        <h1 class="text-4xl font-bold text-foreground mb-2">Editorial Policy</h1>
+      </header>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1 [&_li]:leading-relaxed">
+
+        <h2>Our Commitment to Honest, Evidence-Based Content</h2>
+
+        <p>
+          {tenant.name} is a nicotine pouch retailer — we sell the products we write about. We believe that transparency about this relationship, combined with rigorous editorial standards, is the only way to earn your trust. This page explains how we create content, how we test products, and how we handle the inherent tension between commerce and editorial integrity.
+        </p>
+
+        <h2>How We Select and Test Products</h2>
+
+        <p>
+          Every product review on {tenant.name} is based on hands-on testing by our editorial team. We do not publish reviews based on press releases, manufacturer claims, or secondhand accounts. Our testing process evaluates five dimensions: flavour accuracy and quality, nicotine delivery consistency, pouch construction and moisture, duration of effect, and overall value for money. Products are scored on a standardised rubric. No brand pays for placement, priority positioning, or favourable review scores. If a product underperforms, we say so — even if we sell it.
+        </p>
+
+        <h2>Our Fact-Checking Process</h2>
+
+        <p>
+          Nicotine is a health-related topic, and we take that responsibility seriously. All health claims, safety statements, and dosing guidance published on {tenant.name} are verified against peer-reviewed scientific literature. Our primary sources include studies indexed on PubMed and the Cochrane Library, guidance from the NHS and UK Health Security Agency (formerly Public Health England), reports from the Royal College of Physicians and the WHO, and regulatory assessments from the UK Committee on Toxicity (COT) and the EU Scientific Committee on Health.
+        </p>
+
+        <p>
+          When we cite a study, we link to it directly so you can read the original research. When evidence is limited, inconclusive, or emerging, we state that clearly rather than overstating certainty. We do not cherry-pick studies that support a preferred conclusion.
+        </p>
+
+        <h2>Who Writes and Who Edits</h2>
+
+        <p>
+          Content creation and editorial review are separate roles at {tenant.name}. Articles are drafted by writers with subject-matter expertise in nicotine products, harm reduction, or consumer health. All health-related content is reviewed by our senior editor, <a href={authorPath}>{authorName}</a>{authorCredentials ? `, ${authorCredentials}` : ''}. The writer drafts, the editor verifies — no health article is published without editorial sign-off.
+        </p>
+
+        <h2>Our Correction Policy</h2>
+
+        <p>
+          We make mistakes, and when we do, we fix them transparently. If a factual error is identified in any published article — whether by our team, a reader, or an external reviewer — we update the article promptly and add a dated correction note at the top of the page (e.g., "Correction, 15 April 2026: An earlier version of this article stated X. The correct information is Y."). We do not silently edit articles. The <code>dateModified</code> field in our article schema is updated to reflect the correction date, ensuring search engines recognise the update.
+        </p>
+
+        <p>
+          If you spot an error in any of our content, please contact us at <a href={`mailto:${tenant.supportEmail}`}>{tenant.supportEmail}</a>. We appreciate corrections and take them seriously.
+        </p>
+
+        <h2>Conflicts of Interest Disclosure</h2>
+
+        <p>
+          We are transparent about our commercial interests. {tenant.name} earns revenue from product sales. Our editorial content — including product reviews, health guides, comparison articles, and buying guides — exists in part to drive traffic and sales. We acknowledge this openly. To manage this conflict, our editorial team operates with the following safeguards:
+        </p>
+
+        <ul>
+          <li>Review scores are never influenced by commercial relationships</li>
+          <li>We publish negative reviews and honest assessments of products we sell</li>
+          <li>No brand or manufacturer has editorial approval or preview rights</li>
+          <li>Our health content follows the same evidence standards regardless of which products it discusses</li>
+        </ul>
+
+        <p>
+          We believe informed consumers make better choices, and better choices lead to more trust — which is more valuable to us long-term than any single favourable review.
+        </p>
+
+        <h2>Content Update Schedule</h2>
+
+        <p>
+          The nicotine pouch market evolves rapidly — new products, new research, new regulations. We review and update our highest-traffic articles on a quarterly cycle. "Best of" lists are updated whenever significant new products launch. Health and safety articles are reviewed whenever new research is published in our tracked journals. Regulatory articles are updated when EU, UK, or national regulations change.
+        </p>
+
+      </div>
+
+      <p class="text-sm text-muted-foreground mt-12 pt-6 border-t border-border italic">Last updated: April 2026</p>
+    </div>
+  </article>
+</Shop>

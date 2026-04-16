@@ -1,7 +1,147 @@
 # SnusFriend Roadmap
 
-> Migrated from Vite SPA to Astro 6 (March 2026). Steps 1-55 complete. Astro migration live.
+> Migrated from Vite SPA to Astro 6 (March 2026). Steps 1-56 done.
 > Original checkout migrated Shopify → Nyehandel (Steps 25-40). Shopify fully removed.
+> Launch Polish Sprint (Apr 8-12) complete: all waves shipped. See `CURRENT_PRIORITIES.md` for the active punch list.
+
+## White-Label Tenant B Readiness (2026-04-16)
+
+- [x] Extended tenant runtime/config for Tenant B launch blockers:
+  - `loyaltyCurrencyName`
+  - `orderPrefix`
+  - `locale`
+  - `storage.compareKey`
+  - `storage.beginnerKey`
+  - `storage.historyKey`
+  - `storage.buyNowKey`
+- [x] Removed the remaining storage-key bypasses so compare/history/beginner mode/buy-now flows now read tenant storage config instead of hardcoded `snusfriend_*` keys.
+- [x] Finished tenant-safe checkout/runtime values in the Nyehandel surfaces and storefront analytics currency flow.
+- [x] Added a shared loyalty identity layer so storefront copy and translated strings can resolve tenant-specific loyalty labels without duplicating brand literals.
+- [x] Added the shared blog/schema helper layer (`src/lib/blog-schema.ts`) and migrated the default-author route model to `/authors/[slug]` while keeping the legacy default route working.
+- [x] Migrated the highest-risk shared blog/editorial surfaces onto the tenant-aware helper path (`/blog`, the default author route, and the first key blog posts touched in this batch).
+- [x] Added the Tenant B rollout package docs (`TENANT_LAUNCH_RUNBOOK.md`) and aligned `.env.example` / deployment docs with the current runtime keys.
+- [ ] Post-launch hardening queue:
+  - full blog JSON-LD migration onto the shared helper
+  - OG/build script domain cleanup
+  - script defaults (`smoke-check`, `indexnow`, SEO audit config)
+  - optional tenant overrides for feature flags/reward config
+  - managed-service onboarding docs/automation
+
+## Toolchain Stabilization (2026-04-16)
+
+- [x] Standardized the repo runtime on Node 24 via `.nvmrc`, `.node-version`, and `package.json#engines`.
+- [x] Added repo-level Bun pinning with `.bun-version` and `package.json#packageManager`.
+- [x] Replaced the stale hardcoded `__APP_VERSION__` define in `astro.config.mjs` with the live `package.json` version.
+- [x] Renamed the scaffold-era package metadata to `snus-friend-shop`.
+- [x] Standardized the IndexNow script path to Bun + TypeScript and aligned the `init` workflow to `bunx vercel`.
+- [x] Added explicit local-tool version requirements and verification steps to `DEPLOYMENT_CHECKLIST.md`.
+- [x] Finished the low-risk dependency maintenance pass:
+  - `jsdom` upgrade
+  - current-major Astro/Supabase package refresh
+  - full lint/check/build/test verification
+- [x] Completed the React 19 maintenance pass and confirmed the storefront baseline still clears local verification:
+  - `react` / `react-dom` upgraded to 19.2.0
+  - React type packages aligned to 19.x
+  - `bun run lint`, `bun run test`, `bun run build`, and `bun run check` all pass on the upgraded baseline
+- [ ] Deferred until after Tenant B:
+  - React ecosystem follow-up only if a concrete compatibility issue appears in production or preview smoke
+  - broader Astro/Vite major-platform work
+  - TypeScript strictness expansion
+  - larger lint-rule expansion
+
+## Repo Maintenance Automation (2026-04-16)
+
+- [x] Added a lightweight GitHub Actions CI workflow for `lint`, `test`, `build`, and `check` on pull requests plus pushes to `main`.
+- [x] Added a controlled Dependabot policy for weekly low-risk npm and GitHub Actions updates.
+- [x] Documented the CI/dependency-update expectations in `DEPLOYMENT_CHECKLIST.md`.
+- [ ] After Tenant B is stable, review whether the next maintenance pass should expand CI (preview smoke, deployment checks) or keep the current lightweight gate.
+
+## Astro Consolidation + Codex Workbench (2026-04-15)
+
+- [x] Consolidated shared storefront hydration clusters:
+  - `src/components/astro/ProductCard.astro` now hydrates a single controls island for wishlist + compare + add-to-cart.
+  - `src/components/astro/Header.astro` now hydrates a single utility island for compare, rewards, and cart state.
+- [x] Removed stale ProductCard mouse-tracking tilt JS and replaced inline brand navigation with a native brand link.
+- [x] Tightened global font preload behavior in `src/layouts/Base.astro` so the layout preloads the default sans font instead of unused global Inter/Space Grotesk preloads.
+- [x] Added repo-local Codex MCP config in `.codex/config.toml` for Context7, Sentry, and GitHub.
+- [x] Updated the skill layer:
+  - updated `snusfriend-design-system`
+  - updated `web-quality-audit`
+  - added `astro-island-budget`
+  - added `snusfriend-audit-runbook`
+  - added `trust-sensitive-editorial`
+- [x] Added a shared `src/components/astro/JsonLd.astro` helper and migrated key storefront/info pages away from repeated inline JSON-LD blocks.
+- [x] Removed `pagefind` entirely from the repo.
+  Search remains JSON-driven, so the extra dependency and indexing scripts are gone.
+- [x] Migrated the long-tail JSON-LD pages to the shared helper.
+  The main sweep plus the standalone `src/pages/blog/index.astro` follow-up are now shipped.
+- [x] Extracted a shared waitlist/newsletter form handler for the footer, blog CTA, and deals signup.
+- [x] Replaced the remaining inline form handlers on contact, login, and order confirmation with shared Astro-first script helpers.
+- [x] Hardened the homepage’s low-priority personalization path.
+  `src/pages/index.astro` now points the personalized rows at `/data/products.json` instead of inlining a large product blob, and the mobile hero strip now uses the lighter animation/filter path.
+- [ ] Next Astro pass:
+  - keep trimming clustered islands from high-traffic storefront chrome
+  - keep profiling remaining high-impact client-side scripts before the next polish sprint, even though the 2026-04-15 production homepage PSI median already clears the current target (mobile 92 / LCP 2.4s, desktop 100 / LCP 0.6s)
+
+## White-label Foundation + Multi-Store Platform (planned)
+
+- [ ] WL-0: Deploy the current stabilization branch and smoke production before layering on multi-store work.
+  Confirm the cart/analytics cleanup is live, Speed Insights is healthy, and PostHog pageviews are trustworthy again.
+- [ ] WL-0b: Restore production PostHog bootstrap and finish the legal/editorial tenant-identity pass.
+  Code-side recovery now guarantees a production `window.__ANALYTICS_CONFIG__` payload, exposes `window.__POSTHOG_STATUS__` for deploy smoke, and moves `/privacy`, `/terms`, `/editorial-policy`, `/about`, the default author surface, and the high-visibility country/brand datasets onto tenant-driven identity.
+  Pending: redeploy and confirm production PostHog boot + pageview flow after consent.
+- [x] WL-1: Centralize site identity and storefront hosts.
+  Shared tenant/runtime resolution now drives Astro config, frontend site helpers, storefront host allowlists, redirect parsing, Supabase shared site config, and edge-function CORS fallbacks.
+- [x] WL-2: Remove core-path hardcoded SnusFriend domains from shared identity outputs.
+  Auth/redirect parsing, checkout-adjacent URL handling, RSS, llms outputs, shared OG SVG routes, and sitemap/OG generation now derive from the active storefront runtime instead of hardcoded `snusfriends.com`.
+- [ ] WL-3: Make transactional/storefront messaging tenant-aware.
+  Cart recovery, review request, support/contact, and order emails must stop hardcoding `snusfriends.com` before a second domain can ship safely.
+  First batch shipped the shared tenant-aware sender/support/tagline/loyalty/free-shipping copy layer across the mail helpers, plus cart recovery totals now follow the active storefront currency instead of a fixed `EUR` fallback.
+- [ ] WL-4: Make SEO output deployment-aware.
+  Sweep sitemap/canonical/schema/robots generation so each branded deployment emits its own correct absolute URLs.
+- [ ] WL-5: Prove the architecture with one second storefront before building self-serve dropshipper tooling.
+  The cut line is: the second storefront can load, check out, send correct branded emails, and reach the shared 3PL flow without leaking SnusFriend identity.
+
+## Audit-Driven Growth + Trust Stabilization (2026-04-14)
+
+- [x] Added repo-owned SEO script surfaces in `scripts/`:
+  - `bun run audit:gsc:sync`
+  - `bun run audit:pagespeed:sync`
+  - `bun run audit:rank`
+- [x] Added shared helpers for script-side Supabase admin access, PageSpeed fetch/summarize logic, and fixed PageSpeed target URL configuration.
+- [x] Added a shared brand-facts layer under `src/data/brand-facts.ts` plus a reusable attribution callout for high-risk brand/editorial pages.
+- [x] Reconciled the homepage hero + guide grid away from unsupported superlatives and toward proof-led copy based on catalog size, shipping, and rewards.
+- [x] Reconciled the highest-risk ownership/manufacturer drift on:
+  - `src/pages/blog/on-nicotine-pouches-complete-guide.astro`
+  - `src/pages/blog/nordic-spirit-nicotine-pouches-complete-guide.astro`
+  - `src/pages/blog/velo-vs-loop-2026.astro`
+  - `src/pages/blog/zyn-vs-skruf-2026.astro`
+  - `src/pages/blog/zyn-vs-nordic-spirit.astro`
+  - `src/pages/blog/zyn-flavours-complete-guide.astro`
+- [x] Shipped the first CTR refresh on the six target pages by updating titles/descriptions and strengthening internal linking from the homepage/blog hub.
+- [x] Fix the PageSpeed CLI auth path.
+  `bun run audit:measurement:smoke` now passes locally with the server-safe PageSpeed key, and the audit scripts now load `.env.local` explicitly so stale inherited shell exports do not override local audit keys.
+- [x] Ship the DataForSEO-based proactive rank-tracking backend in code.
+  `scripts/rank-audit.ts` is now wired to DataForSEO live organic results for keyword snapshots while GSC remains the primary historical ranking source.
+- [x] Run the first live DataForSEO snapshots after credential setup.
+  `bun run audit:measurement:smoke` and a curated `bun run audit:rank --limit=5` batch both wrote real `seo_rank_tracking` rows, including a confirmed `snusfriends` match-path hit at organic position `1`.
+- [x] Add measurement rollout helpers for the next live audit pass.
+  `bun run audit:preflight` now checks the env/dependency surface first, and `bun run audit:measurement:smoke` runs the first PageSpeed + rank smoke flow once keys are in place.
+- [x] Sync the first live Search Console history after the audit rollout.
+  `bun run audit:gsc:sync --days=7` synced 672 rows into `seo_gsc_stats` for `2026-04-08` through `2026-04-14`.
+- [x] Run the default full DataForSEO rank batch after the curated validation pass.
+  `bun run audit:rank` now saves the wider 20-keyword snapshot locally, preserving strictly sequential organic positions and a confirmed `snusfriends.com` match-path row.
+- [ ] Remove the fully legacy Google CSE env/config after the transition window.
+  `GOOGLE_CUSTOM_SEARCH_API_KEY` and `seo_config.google_cse_cx` are no longer needed by `audit:rank`; clean them up after the first successful DataForSEO runs.
+- [x] Make `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` available in the local audit environment so the new sync jobs and Astro content-layer checks can run end-to-end outside Vercel.
+- [x] Baseline the SEO audit tables in code.
+  Added `supabase/migrations/20260415180000_baseline_live_seo_audit_tables.sql` and synced `src/integrations/supabase/types.ts` to the live table shapes, defaults, indexes, RLS state, and policy names for `seo_config`, `seo_keywords`, `seo_rank_tracking`, `seo_pagespeed_audits`, and `seo_gsc_stats`.
+- [x] Verify deployed guest-account creation on `/order-confirmation` with a real guest order fixture.
+  Fixed a production `create-nyehandel-checkout` persistence bug first so guest orders stop failing on `orders.total_price NOT NULL`, then verified on production that a fresh guest order row persists, `/order-confirmation?order=...&email=...` renders the happy path, wrong-email access falls back safely, and guest-account creation succeeds without creating duplicate auth users on repeat attempts.
+- [ ] Continue the second trust pass:
+  - deeper ON! product-line cleanup
+  - country/legal reconciliation with external review
+  - medical/YMYL review workflow before stronger health claims ship
 
 ## UX & Infrastructure (completed 2026-03-20)
 
@@ -111,11 +251,11 @@ React → create-nyehandel-checkout (Edge Fn) → Nyehandel payment API → call
 ### Design Polish
 - [x] Step 51: Establish flagship brand color across all 4 themes. Extract semantic colors to CSS vars.
 - [x] Step 52: FAQ search filter for 80+ questions. Improved blog empty state.
-- [ ] Step 53: Password strength meter on RegisterPage. Confetti prefers-reduced-motion check.
+- [x] Step 53: Password strength meter on RegisterPage. Confetti prefers-reduced-motion check.
 
 ### Tech Debt
 - [x] Step 54: Centralize SITE_URL config (3 pages → import from config/brand). Review photo upload limits already in place (3 photos, 5MB, jpeg/png/webp).
-- [ ] Step 55: Critical path tests — checkout validation, cart operations, email regex, auth flow.
+- [x] Step 55: Critical path tests — 43 new tests across cart, email regex, checkout/NYE line items, auth schemas. 54/54 green.
 
 ### Go-Live
 - [x] Step 56: Remove preview mode (VITE_PREVIEW_MODE deleted — was dead code, never used). Site live on snusfriends.com.

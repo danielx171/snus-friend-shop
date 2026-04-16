@@ -1,0 +1,48 @@
+---
+// Trustpilot TrustBox widget. Auto-hides until both `trustpilotBusinessUnitId`
+// and `trustpilotFooterTemplateId` are set in `src/config/tenant.ts`.
+//
+// Once live, the bootstrap script lazy-loads asynchronously so this doesn't
+// affect LCP. Do NOT add `aggregateRating` to Organization schema until
+// Trustpilot reports ≥10 real reviews — fabricated or zero-rated aggregates
+// are a Schema.org policy violation.
+import { tenant } from '@/config/tenant';
+
+interface Props {
+  /** Visual variant — only 'footer' currently wired. */
+  variant?: 'footer';
+}
+
+const { variant = 'footer' } = Astro.props as Props;
+
+const businessUnitId = tenant.trust.trustpilotBusinessUnitId;
+const templateId = tenant.trust.trustpilotFooterTemplateId;
+const profileUrl = tenant.trust.trustpilotUrl;
+
+const enabled = Boolean(businessUnitId && templateId);
+
+// Micro Combo (default for the footer) recommends 24px height × 100% width.
+const sizing = variant === 'footer'
+  ? { height: '24px', width: '100%' }
+  : { height: '52px', width: '100%' };
+---
+
+{enabled && (
+  <div class="trustpilot-widget-wrapper flex flex-col items-center gap-1">
+    <span class="text-xs font-medium text-muted-foreground">Trusted by customers</span>
+    <div
+      class="trustpilot-widget"
+      data-locale="en-GB"
+      data-template-id={templateId}
+      data-businessunit-id={businessUnitId}
+      data-style-height={sizing.height}
+      data-style-width={sizing.width}
+      data-theme="light"
+    >
+      {profileUrl && (
+        <a href={profileUrl} target="_blank" rel="noopener noreferrer">Trustpilot</a>
+      )}
+    </div>
+    <script is:inline async src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" charset="UTF-8"></script>
+  </div>
+)}

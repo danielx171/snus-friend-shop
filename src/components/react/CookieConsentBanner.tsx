@@ -44,61 +44,64 @@ const CookieConsentBanner: React.FC = () => {
   if (!ageVerified) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-card p-4 shadow-lg">
+    <>
+    {/* Spacer to prevent content from being hidden behind fixed banner */}
+    <div className="h-12 sm:h-10" />
+    <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-card p-3 sm:p-4 shadow-lg">
       {!showManage ? (
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 sm:flex-row sm:justify-between">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             We use cookies to improve your experience.
           </p>
-          <div className="flex gap-3">
+          <div className="flex w-full gap-3 sm:w-auto">
             <button
               onClick={handleManage}
-              className="rounded-md border border-border bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
+              className="min-h-[44px] flex-1 rounded-md border border-border bg-secondary px-4 py-2.5 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80 sm:flex-initial"
             >
               Manage Preferences
             </button>
             <button
               onClick={acceptAll}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              className="min-h-[44px] flex-1 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:flex-initial"
             >
               Accept All
             </button>
           </div>
         </div>
       ) : (
-        <div className="mx-auto max-w-4xl space-y-4">
-          <div className="flex items-center justify-between">
+        <div className="mx-auto max-w-4xl space-y-3">
+          <label className="flex min-h-[44px] items-center justify-between">
             <span className="text-sm font-medium">Essential</span>
-            <input type="checkbox" checked disabled className="h-4 w-4 accent-primary" />
-          </div>
-          <div className="flex items-center justify-between">
+            <input type="checkbox" checked disabled className="h-5 w-5 accent-primary" />
+          </label>
+          <label className="flex min-h-[44px] items-center justify-between">
             <span className="text-sm font-medium">Analytics</span>
             <input
               type="checkbox"
               checked={analytics}
               onChange={(e) => setAnalytics(e.target.checked)}
-              className="h-4 w-4 accent-primary"
+              className="h-5 w-5 accent-primary"
             />
-          </div>
-          <div className="flex items-center justify-between">
+          </label>
+          <label className="flex min-h-[44px] items-center justify-between">
             <span className="text-sm font-medium">Marketing</span>
             <input
               type="checkbox"
               checked={marketing}
               onChange={(e) => setMarketing(e.target.checked)}
-              className="h-4 w-4 accent-primary"
+              className="h-5 w-5 accent-primary"
             />
-          </div>
+          </label>
           <div className="flex items-center justify-between pt-2">
             <button
               onClick={rejectAll}
-              className="text-sm text-muted-foreground underline transition-colors hover:text-foreground"
+              className="min-h-[44px] px-2 text-sm text-muted-foreground underline transition-colors hover:text-foreground"
             >
               Reject All
             </button>
             <button
               onClick={handleSave}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              className="min-h-[44px] rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Save Preferences
             </button>
@@ -106,6 +109,7 @@ const CookieConsentBanner: React.FC = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

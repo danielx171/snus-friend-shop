@@ -8,12 +8,16 @@ import {
   $cartCount,
   $freeShippingProgress,
   closeCart,
+  openCart,
   removeFromCart,
   updateCartQuantity,
+  upgradePackSize,
+  getPackSavings,
+  $mixDiscount,
+  syncCartFromStorage,
 } from '@/stores/cart';
 import type { CartItem } from '@/stores/cart';
-import type { PackSize } from '@/data/products';
-import { tenant } from '@/config/tenant';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
 
 const packSizeLabels: Record<string, string> = {
   pack1: '1 can',
@@ -83,7 +87,7 @@ const CartItemRow = React.memo<CartItemRowProps>(function CartItemRow({ item }) 
             type="button"
             onClick={handleDecrement}
             aria-label={`Decrease quantity of ${product.name}`}
-            className="flex h-6 w-6 items-center justify-center rounded border border-border text-sm transition-colors hover:bg-muted"
+            className="flex h-8 w-8 items-center justify-center rounded border border-border text-sm transition-colors hover:bg-muted sm:h-6 sm:w-6"
           >
             -
           </button>
@@ -94,7 +98,7 @@ const CartItemRow = React.memo<CartItemRowProps>(function CartItemRow({ item }) 
             type="button"
             onClick={handleIncrement}
             aria-label={`Increase quantity of ${product.name}`}
-            className="flex h-6 w-6 items-center justify-center rounded border border-border text-sm transition-colors hover:bg-muted"
+            className="flex h-8 w-8 items-center justify-center rounded border border-border text-sm transition-colors hover:bg-muted sm:h-6 sm:w-6"
           >
             +
           </button>
@@ -188,13 +192,35 @@ export default function CartDrawer() {
   const items = useStore($cartItems);
   const total = useStore($cartTotal);
   const count = useStore($cartCount);
+  const mixDiscount = useStore($mixDiscount);
 
   // Prevent hydration mismatch: server has no localStorage, so
   // render nothing until after first mount when persistentAtom syncs.
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    // Listen for open-cart event from other islands (AddToCartButton, MobileBottomNav, etc.)
+    // Re-read cart from localStorage first — Astro islands have separate module instances,
+    // so persistentAtom in the adding island wrote to localStorage but our instance doesn't know.
+    const handler = () => {
+      syncCartFromStorage();
+      // Small delay to let React process the $cartItems update before opening
+      requestAnimationFrame(() => {
+        syncCartFromStorage(); // re-read in case first was batched
+        openCart();
+      });
+    };
+    window.addEventListener('open-cart', handler);
+    return () => window.removeEventListener('open-cart', handler);
+  }, []);
+
+  // Sync cart from localStorage whenever the drawer opens
+  useEffect(() => {
+    if (isOpen) syncCartFromStorage();
+  }, [isOpen]);
 
   const handleOpenChange = useCallback((open: boolean) => {
+    if (open) syncCartFromStorage();
     if (!open) closeCart();
   }, []);
 
@@ -236,6 +262,26 @@ export default function CartDrawer() {
               {/* Body — scrollable */}
               <div className="flex-1 overflow-y-auto px-4 py-3">
                 <FreeShippingBar />
+                {/* Pack upsell nudges */}
+                {items.map((item) => {
+                  const savings = getPackSavings(item);
+                  if (!savings) return null;
+                  const packLabel = savings.bestPack.replace('pack', '') + '-pack';
+                  return (
+                    <div key={`upsell-${item.product.id}`} className="mb-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
+                      <p className="text-xs text-foreground">
+                        <strong>Save {savings.savingsPercent}%</strong> — switch {item.product.name} to a {packLabel} (€{savings.pricePerCan.toFixed(2)}/can)
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => upgradePackSize(item.product.id, item.packSize, savings.bestPack)}
+                        className="mt-1.5 rounded-md bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90"
+                      >
+                        Upgrade to {packLabel}
+                      </button>
+                    </div>
+                  );
+                })}
                 <div className="divide-y divide-border">
                   {items.map((item) => (
                     <CartItemRow
@@ -244,6 +290,29 @@ export default function CartDrawer() {
                     />
                   ))}
                 </div>
+
+                {/* Quick add suggestion */}
+                {items.length > 0 && items.length < 5 && (
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">Complete your order</p>
+                    <div className="flex gap-2">
+                      <a
+                        href="/products"
+                        onClick={closeCart}
+                        className="flex-1 rounded-lg border border-border bg-card/60 p-2 text-center text-xs font-medium text-foreground transition hover:border-primary/30"
+                      >
+                        Browse more pouches
+                      </a>
+                      <a
+                        href="/flavor-quiz"
+                        onClick={closeCart}
+                        className="flex-1 rounded-lg border border-primary/20 bg-primary/5 p-2 text-center text-xs font-medium text-primary transition hover:bg-primary/10"
+                      >
+                        Take the flavour quiz
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Footer — sticky bottom */}
@@ -254,6 +323,44 @@ export default function CartDrawer() {
                     &euro;{total.toFixed(2)}
                   </span>
                 </div>
+
+                {/* Mix discount indicator */}
+                {mixDiscount.active ? (
+                  <div className="flex items-center justify-between rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-2">
+                    <span className="text-xs font-medium text-green-400">
+                      Mix &amp; Save {mixDiscount.pct}% ({mixDiscount.canCount} cans)
+                    </span>
+                    <span className="text-xs font-bold text-green-400">
+                      -&euro;{mixDiscount.amount.toFixed(2)}
+                    </span>
+                  </div>
+                ) : mixDiscount.cansNeeded > 0 && count > 0 ? (
+                  <div className="rounded-lg bg-muted/50 px-3 py-2">
+                    <span className="text-xs text-muted-foreground">
+                      Add {mixDiscount.cansNeeded} more can{mixDiscount.cansNeeded !== 1 ? 's' : ''} to save {mixDiscount.nextTierPct}% — mix any brands!
+                    </span>
+                  </div>
+                ) : null}
+
+                {/* Points preview */}
+                {total > 0 && (
+                  <div className="flex items-center gap-1.5 rounded-lg bg-primary/5 px-3 py-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="text-primary flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    <span className="text-xs font-medium text-primary">
+                      You&apos;ll earn {Math.floor(total * 1).toLocaleString()} {loyaltyCurrencyName} with this order {/* matches rewards.earnRatePerEur */}
+                    </span>
+                  </div>
+                )}
 
                 <div className="flex gap-2">
                   <a

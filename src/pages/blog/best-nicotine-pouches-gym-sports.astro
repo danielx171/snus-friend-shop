@@ -1,0 +1,285 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-04-08';
+const title = 'Best Nicotine Pouches for the Gym 2026: Sport-Friendly Picks';
+const description = 'Many athletes use nicotine pouches during workouts. Here\'s what research says about nicotine and exercise, plus 6 sport-friendly picks.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-gym-sports` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is nicotine banned in professional sports?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine itself is not on the World Anti-Doping Agency (WADA) banned list, so it's legal in most Olympic sports. However, individual sports organizations may have their own rules — check with your sport's governing body. Always verify before competing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use nicotine pouches with pre-workout supplements?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine + caffeine combine as stimulants, elevating heart rate and blood pressure significantly. This increases cardiac stress and nausea risk. If you use pre-workout drinks (which typically contain 200-400mg caffeine), avoid nicotine or use a very low-strength pouch (3mg)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will nicotine help me lose weight?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine slightly increases metabolism and may suppress appetite, leading to minor weight loss (1-2kg over months). However, addiction and long-term health risks far outweigh this marginal benefit. It's not a weight-loss strategy — it's a stimulant with serious trade-offs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What if I feel dizzy or nauseous during exercise with nicotine?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Remove the pouch immediately. Dizziness during exercise indicates nicotine is causing excessive cardiovascular stress. Rest, hydrate, and cool down. Next time, use a lower strength (drop from 8mg to 4mg) or skip nicotine entirely."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is nicotine effective for endurance sports like marathons?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Research shows modest benefits (1-3% time-to-exhaustion improvement), but the cardiovascular stress of high-dose nicotine during long endurance efforts could negate gains. For marathon running, stick to low strength (4-6mg) and practice with it in training first."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can beginners use nicotine pouches for fitness?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not recommended. If you're new to nicotine, your body hasn't developed tolerance. Low-strength pouches (3-4mg) with moderate exercise are the only safe option. New users are more prone to nausea, dizziness, and adverse effects. Build fitness first."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I use nicotine for strength training or cardio?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nicotine is more beneficial for activities requiring focus and endurance (cardio, tactical sports) than pure strength training. For weight lifting, the focus gain may be marginal, and cardiovascular stress during heavy lifts is a real concern."
+            }
+          }
+        ]
+      };
+---
+
+<Shop title={title} description={description} ogType="article">
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Gym & Sports Guide' },
+      ]} />
+
+      <BlogHero
+        category="Guide"
+        title={title}
+        description={description}
+        date="April 8, 2026"
+        readTime="8 min read"
+      />
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">Quick Answer: Best Pouches for the Gym</summary>
+        <p style="margin-top: 12px;">The best nicotine pouches for gym and sports use are slim-format, moderate-strength (4&ndash;8 mg), and won't cause excessive salivation during intense activity. Our top picks are ZYN Slim Cool Mint 6mg, VELO Freeze 6mg, and Loop Mint Mania Slim &mdash; all sit discreetly, deliver steady nicotine without stomach discomfort, and hold up during cardio and lifting. Research suggests nicotine may support alertness and reaction time, though it's not a performance-enhancing substance. Choose a strength you're already comfortable with; the gym isn't the place to experiment with higher doses.</p>
+      </details>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>Introduction: Nicotine and Athletic Performance</h2>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Do nicotine pouches affect athletic performance?</summary>
+  <p style="margin-top: 12px;">Yes. Nicotine increases heart rate, blood pressure, and oxygen demand, which adds cardiovascular strain during intense exercise and can reduce endurance. Some users report improved focus on low-intensity activity (light cardio, mobility work), but heavy lifting, running, or competitive sport often suffer. <a href="/blog/best-nicotine-pouches-gym-sports" style="color: hsl(var(--primary));">Timing and dosage matter</a>—use low-strength pouches hours before workouts, not immediately before.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Is nicotine banned in sports?</summary>
+  <p style="margin-top: 12px;">Nicotine is not banned by most major sports organizations (Olympic, FIFA, NBA), though some professional leagues monitor it as a performance-enhancing substance and track usage. Amateur and collegiate sports vary—check your specific federation's rules. In competitive bodybuilding or esports, nicotine is sometimes used for focus, but it's never considered an advantage at elite athletic levels.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Can you use nicotine pouches while running?</summary>
+  <p style="margin-top: 12px;">Not recommended, especially for distance running. Nicotine raises heart rate and can trigger dizziness, nausea, or palpitations during sustained aerobic effort. If you use pouches regularly, abstain for at least 2–3 hours before running to avoid compounding cardiovascular stress. Low-intensity activities (walking, yoga) tolerate nicotine better, but intense cardio is safest pouch-free.</p>
+</details>
+
+        <p>Many athletes use nicotine — from traditional tobacco to modern pouches — as a performance tool. Nicotine is a stimulant, and some research suggests it may enhance focus, reaction time, and endurance capacity. However, the science is nuanced, and there are real risks to consider alongside potential benefits.</p>
+
+        <p>This guide explores what research tells us about nicotine and exercise, helps you choose sport-friendly pouches if you decide to use them, and covers safety considerations for athletic use. We're not endorsing nicotine use — just presenting balanced facts.</p>
+
+        <h2>What Science Says: Nicotine and Athletic Performance</h2>
+
+        <h3>Endurance and Time-to-Exhaustion</h3>
+        <p>A landmark study by M&uuml;ndel et al. (2017) in the <em>International Journal of Sports Medicine</em> found that nicotine improved time-to-exhaustion in trained cyclists, increasing aerobic capacity by approximately 2&ndash;3%. The effect was measurable but modest. Cyclists who used nicotine before cycling tests lasted slightly longer at high intensity before fatigue.</p>
+        <p><strong>Practical takeaway:</strong> Nicotine may provide a 1&ndash;3% endurance edge in aerobic activities. For a 40-minute run, that's roughly 1 minute of extra capacity.</p>
+
+        <h3>Focus, Reaction Time, and Alertness</h3>
+        <p>Multiple meta-analyses (M&uuml;ndel &amp; Jones, 2006) show nicotine reliably improves attention and reaction time in laboratory tests. Athletes report enhanced mental clarity, reduced mental fatigue, and sharper decision-making during competition. This effect is more pronounced in sports requiring tactical awareness (racquet sports, field sports) than pure endurance.</p>
+        <p><strong>Practical takeaway:</strong> Nicotine is an effective cognitive stimulant. Athletes in sports requiring focus (tennis, badminton, CrossFit technique) may perceive meaningful benefit.</p>
+
+        <h3>Important Risks and Drawbacks</h3>
+        <p><strong>Cardiovascular stress:</strong> Nicotine increases heart rate and blood pressure, placing additional load on the cardiovascular system during exercise. Athletes with hypertension or heart conditions should avoid nicotine entirely. Even healthy athletes experience elevated cardiac stress; this may offset endurance gains.</p>
+        <p><strong>Diuretic effect:</strong> Nicotine is a mild diuretic and can increase fluid loss. Combined with sweating, this elevates dehydration risk. Athletes who use nicotine must hydrate more aggressively.</p>
+        <p><strong>Nausea:</strong> High nicotine doses (10mg+) with exercise can trigger nausea, dizziness, or headache — especially on an empty stomach or in untrained users. This significantly impairs performance.</p>
+        <p><strong>Addiction:</strong> Nicotine is highly addictive. Regular use creates physical and psychological dependence, making it difficult to stop. Athletes should consider whether short-term performance gains justify long-term addiction risk.</p>
+        <p><strong>Sport bans:</strong> Nicotine is banned by some sports organisations (including WADA — World Anti-Doping Agency — in certain contexts). Check your sport's eligibility rules before using.</p>
+
+        <h2>Format Recommendations for Active Use</h2>
+
+        <h3>Slim Pouches Are Superior for Gym Use</h3>
+        <p>Slim or mini formats are ideal for workouts because they:</p>
+        <ul>
+          <li>Create less bulk in your mouth (unobtrusive during exercise)</li>
+          <li>Reduce jaw/mouth discomfort during breathing or speech</li>
+          <li>Allow easier communication (important for group classes, spotters)</li>
+          <li>Cause less salivation and drool (important during cardio)</li>
+        </ul>
+
+        <h3>Moderate Strength (6&ndash;10mg) Is the Sweet Spot</h3>
+        <p>Lightweight users or those new to pouches should start with 4&ndash;6mg strength. Higher strengths (10mg+) can trigger nausea during intense exercise, negating performance gains. Moderate strength delivers cognitive boost without digestive distress.</p>
+
+        <h3>Refreshing Flavours Over Tobacco Profiles</h3>
+        <p>Mint, citrus, and cooling variants are better for gym use because:</p>
+        <ul>
+          <li>Menthol provides a cooling sensation that many athletes find energising</li>
+          <li>Clean flavours don't trigger nausea on exertion (tobacco profiles sometimes do)</li>
+          <li>Mint flavours freshen breath during gym sessions with others</li>
+        </ul>
+
+        <h2>6 Best Nicotine Pouches for Gym &amp; Sports</h2>
+
+        <h3>1. Zyn Cool Mint S2</h3>
+        <p><strong>Strength:</strong> 3mg | <strong>Format:</strong> Slim | <strong>Material:</strong> Ultra-thin cellulose</p>
+        <p>Zyn's S2 (lowest strength) in slim format is gentle enough for active use. The cool mint provides a crisp, energising sensation without overwhelming the palate. Ultra-thin construction means minimal mouth awareness during movement. Best for: light users, high-intensity interval training, contact sports.</p>
+
+        <h3>2. Velo Ice Cool S2</h3>
+        <p><strong>Strength:</strong> 4mg | <strong>Format:</strong> Slim | <strong>Material:</strong> Premium fleece</p>
+        <p>Velo's ice cool flavour is specifically engineered to feel refreshing during physical activity. The soft fleece pouch conforms to your mouth without discomfort. 4mg provides noticeable focus benefit without nausea risk. Premium quality ensures consistency across pouches. Best for: runners, cyclists, cardio enthusiasts.</p>
+
+        <h3>3. ON! Mint</h3>
+        <p><strong>Strength:</strong> 8mg | <strong>Format:</strong> Slim | <strong>Material:</strong> Fleece</p>
+        <p>ON! is specifically marketed toward active users. The slim format sits invisibly, and the balanced 8mg delivers noticeable cognitive benefit without excessive cardiac stress. Menthol-forward profile appeals to athletes. ON! pouches are engineered for durability during intense exercise. Best for: tactical sports (tennis, basketball), strength training, endurance athletes.</p>
+
+        <h3>4. LOOP Mint Mania Mini</h3>
+        <p><strong>Strength:</strong> 5&ndash;6mg | <strong>Format:</strong> Mini | <strong>Material:</strong> Soft fleece</p>
+        <p>LOOP's mini format is ultra-discreet for team sports or group fitness classes. Mint mania flavour is crisp and energising. 5&ndash;6mg is balanced between noticeable effect and nausea avoidance. Soft fleece reduces mouth friction. Best for: group fitness classes, team sports, CrossFit, gym classes.</p>
+
+        <h3>5. Nordic Spirit Mint Slim</h3>
+        <p><strong>Strength:</strong> 7&ndash;9mg | <strong>Format:</strong> Slim | <strong>Material:</strong> Fleece</p>
+        <p>Nordic Spirit products are engineered for comfort during extended wear. The slim format suits athletic use, and the moderate strength provides focus benefit. Smooth pouch construction means no mouth irritation during exertion. Swedish manufacturing ensures consistency. Best for: endurance athletes (distance running, cycling), technical focus sports.</p>
+
+        <h3>6. Skruf Fresh Mint S2</h3>
+        <p><strong>Strength:</strong> 4mg | <strong>Format:</strong> Slim | <strong>Material:</strong> Fleece</p>
+        <p>Skruf's S2 fresh mint is one of the gentlest options available. Ultra-low strength minimises cardiovascular stress while delivering subtle focus improvement. Fresh (not cooling menthol) profile appeals to athletes who find heavy mint overpowering. Best for: sensitive users, high-frequency gym-goers, endurance athletes concerned about cardiac load.</p>
+
+        <h2>Recommended Products</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-cool-mint-slim-s2') && <BlogProductCard product={find('zyn-cool-mint-slim-s2')} />}
+          {find('velo-ice-cool-s2') && <BlogProductCard product={find('velo-ice-cool-s2')} />}
+          {find('on-mint') && <BlogProductCard product={find('on-mint')} />}
+          {find('loop-mint-mania') && <BlogProductCard product={find('loop-mint-mania')} />}
+          {find('nordic-spirit-mint') && <BlogProductCard product={find('nordic-spirit-mint')} />}
+          {find('skruf-fresh-mint-s2') && <BlogProductCard product={find('skruf-fresh-mint-s2')} />}
+        </div>
+
+        <h2>Timing: When to Use Nicotine for Exercise</h2>
+
+        <h3>Before Workout (20&ndash;30 Minutes Prior)</h3>
+        <p>Using a pouch 20&ndash;30 minutes before exercise allows nicotine to absorb and reach peak plasma levels right as you begin. This maximises focus and cognitive benefits during your session. Drawback: if you experience nausea, you've already begun exercising and can't easily remove the pouch.</p>
+
+        <h3>During Exercise</h3>
+        <p>Placing a pouch at the start of your session allows gradual absorption during the workout. This can extend alertness and focus through the second half of long sessions (45+ minutes). Drawback: salivation and swallowing during intense cardio is uncomfortable, and some athletes find it distracting.</p>
+
+        <h3>After Workout (Post-Exercise Recovery)</h3>
+        <p>Some athletes use nicotine post-workout for focus and mental clarity during cooldown or recovery stretches. This avoids any cardiovascular stress during peak exertion. Drawback: minimal performance benefit if used after exercise is complete.</p>
+
+        <p><strong>Recommendation:</strong> For most athletic uses, 20&ndash;30 minutes pre-exercise is optimal. You get peak nicotine levels during your main set without interference from salivation or stomach discomfort.</p>
+
+        <h2>Hydration and Fluid Management</h2>
+
+        <h3>Why Extra Hydration Matters</h3>
+        <p>Nicotine increases urine output by roughly 10&ndash;15% through its mild diuretic effect. Combined with sweat loss during exercise, this elevates dehydration risk significantly. Dehydration impairs performance, increases injury risk, and can trigger heat illness.</p>
+
+        <h3>Hydration Protocol for Nicotine + Exercise</h3>
+        <ul>
+          <li><strong>Pre-exercise (2 hours before):</strong> Drink 400&ndash;600ml water. If using nicotine, drink an extra 200ml (total 600&ndash;800ml).</li>
+          <li><strong>During exercise:</strong> Aim for 150&ndash;250ml water per 15 minutes of exercise. With nicotine, add 50ml extra per 15-minute interval.</li>
+          <li><strong>Post-exercise:</strong> Rehydrate with 150% of fluid lost during exercise. Nicotine users should drink even more — aim for 2.3 litres per kg of body weight lost.</li>
+        </ul>
+
+        <p><strong>Electrolyte consideration:</strong> Heavy sweating + diuretics depletes sodium and potassium. Using an electrolyte drink (not just water) during long sessions (90+ minutes) is especially important for nicotine users.</p>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <h3>Is nicotine banned in professional sports?</h3>
+        <p>Nicotine itself is not on the World Anti-Doping Agency (WADA) banned list, so it's legal in most Olympic sports. However, individual sports organisations may have their own rules — check with your sport's governing body. Some sports (e.g., certain Olympic events) monitor nicotine use but allow it. Always verify before competing.</p>
+
+        <h3>Can I use nicotine pouches with pre-workout supplements?</h3>
+        <p>Nicotine + caffeine combine as stimulants, elevating heart rate and blood pressure significantly. This increases cardiac stress and nausea risk. If you use pre-workout drinks (which typically contain 200&ndash;400mg caffeine), avoid nicotine or use a very low-strength pouch (3mg). Combining high-strength nicotine with strong pre-workout is risky.</p>
+
+        <h3>Will nicotine help me lose weight?</h3>
+        <p>Nicotine slightly increases metabolism and may suppress appetite, leading to minor weight loss (1&ndash;2kg over months). However, addiction and long-term health risks far outweigh this marginal benefit. It's not a weight-loss strategy — it's a stimulant with serious trade-offs.</p>
+
+        <h3>What if I feel dizzy or nauseous during exercise with nicotine?</h3>
+        <p>Remove the pouch immediately. Dizziness during exercise indicates nicotine is causing excessive cardiovascular stress. Rest, hydrate, and cool down. Next time, use a lower strength (drop from 8mg to 4mg) or skip nicotine entirely. Your safety is more important than any performance edge.</p>
+
+        <h3>Is nicotine effective for endurance sports like marathons?</h3>
+        <p>Research shows modest benefits (1&ndash;3% time-to-exhaustion improvement), but the cardiovascular stress of high-dose nicotine during long endurance efforts could negate gains. For marathon running, if you use nicotine at all, stick to low strength (4&ndash;6mg) and practise with it in training first. Experiment during training, not race day.</p>
+
+        <h3>Can beginners use nicotine pouches for fitness?</h3>
+        <p>Not recommended. If you're new to nicotine, your body hasn't developed tolerance. Low-strength pouches (3&ndash;4mg) with moderate exercise are the only safe option if you insist on experimenting. New users are more prone to nausea, dizziness, and adverse effects. Build fitness first, experiment with nicotine later (if at all).</p>
+
+        <h3>Should I use nicotine for strength training or cardio?</h3>
+        <p>Nicotine is more beneficial for activities requiring focus and endurance (cardio, tactical sports) than pure strength training. For weight lifting, the focus gain may be marginal, and cardiovascular stress during heavy lifts is a real concern. If you use nicotine for gym sessions, cardio days make more sense than strength-focused days.</p>
+
+        <div class="not-prose bg-primary/10 border-l-4 border-primary rounded-md p-4 my-6">
+          <p class="text-sm text-muted-foreground"><strong class="text-primary">Health Warning:</strong> If you have high blood pressure, heart palpitations, arrhythmia, or any cardiovascular condition, do NOT use nicotine pouches during exercise. The combined stress is dangerous. Always consult your doctor before using nicotine if you have any health concerns.</p>
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>Nicotine pouches can provide modest performance benefits — improved focus, slight endurance gains, and sharper decision-making — making them appealing to some athletes. The science is real but modest: expect 1&ndash;3% performance improvement at best, not transformational change.</p>
+
+        <p>If you decide to use pouches for training or competition, choose slim formats with moderate strength (4&ndash;8mg) and refreshing flavours. Practise with them during training, not race day. Prioritise hydration aggressively, monitor for nausea or dizziness, and understand the addiction risk.</p>
+
+        <p>For many athletes, the modest performance edge doesn't justify long-term nicotine dependence. Consider whether the gains align with your athletic goals and personal health priorities. And remember: consistency, sleep, nutrition, and training quality matter far more than any ergogenic aid.</p>
+
+        <p>Want more pouch advice? Explore our guide on <a href="/blog/best-nicotine-pouches-sensitive-gums">pouches for sensitive gums</a> or browse our <a href="/nicotine-pouches">full product catalog</a>.</p>
+
+      </div>
+
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+
+      <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+        Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+      </p>
+    </div>
+  </article>
+</Shop>

@@ -1,0 +1,267 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const publishDate = '2026-03-31';
+const title = 'Every VELO Flavour Ranked: 2026 Guide';
+const description = 'All 30+ VELO nicotine pouch flavours ranked. From Freezing Peppermint to Ruby Berry and the new VELO Shift collection — find your best match.';
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/all-velo-flavors-ranked-2026" }
+  };
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is the best VELO flavour?", "acceptedAnswer": { "@type": "Answer", "text": "Freezing Peppermint (10 mg) is the top-ranked VELO flavour for its intense cooling effect and clean peppermint taste that lasts 40+ minutes. For a less intense option, Ruby Berry (6 mg) is the best fruit flavour on the market." } },
+      { "@type": "Question", "name": "How strong are VELO nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "VELO ranges from 2 mg (light) to 17 mg (Mighty Peppermint Max). The most popular strength is 6 mg (medium), suitable for daily use. VELO uses a dot system: 2 dots (light) through 5 dots (extra strong/max)." } },
+      { "@type": "Question", "name": "What is VELO Shift?", "acceptedAnswer": { "@type": "Answer", "text": "VELO Shift is a reformulated line launched in autumn 2025 with a new slim pouch design and eco-friendlier can. The flavours emphasise heating or cooling effects. Standouts include Shift Spearmint and Shift Berry Frost." } },
+      { "@type": "Question", "name": "Is VELO better than ZYN?", "acceptedAnswer": { "@type": "Answer", "text": "It depends on preference. ZYN offers more consistency and a focused flavour range. VELO offers more variety, bolder flavours, and goes up to higher strengths (17 mg vs ZYN's 16.5 mg). Try both to see which approach suits you." } }
+    ]
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  canonical="/blog/all-velo-flavors-ranked-2026"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+
+  <div class="bg-background text-foreground">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">
+
+      <Breadcrumb
+        items={[
+          { label: 'Blog', href: '/blog' },
+          { label: 'All VELO Flavours 2026' }
+        ]}
+      />
+
+      <BlogHero
+        title={title}
+        description={description}
+        date={publishDate}
+        readTime="11 min read"
+        category="Ranking"
+      />
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">Quick Answer: Best VELO Flavours 2026</summary>
+        <p style="margin-top: 12px;">VELO offers over 20 flavours across its European range, spanning mint, fruit, citrus, and coffee categories. Our top-ranked VELO flavours for 2026 are: Freezing Peppermint (intense, crisp cooling), Ice Cool Mint (balanced everyday mint), and Tropical Mango (best fruit option). VELO's strength range runs from 4 mg to 17 mg (MAX series), with most flavours available in at least two strengths. Every flavour below is ranked on taste quality, nicotine delivery consistency, pouch comfort, and how well the flavour holds up over 30+ minutes of use.</p>
+      </details>
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">What is the best VELO flavour?</summary>
+        <p style="margin-top: 12px;">Freezing Peppermint (10 mg) ranks #1 for its intense cooling effect and clean peppermint taste that holds for 40+ minutes. For fruit fans, Ruby Berry (6 mg) delivers a sophisticated cranberry-pomegranate profile that outclasses most berry pouches on the market.</p>
+      </details>
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">How many VELO flavours are there?</summary>
+        <p style="margin-top: 12px;">VELO offers over 30 flavours across its European range, spanning mint, fruit, citrus, and coffee categories. The newest additions come from the VELO Shift collection, launched in autumn 2025 with a reformulated slim pouch and eco-friendlier can design.</p>
+      </details>
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">Is VELO better than ZYN?</summary>
+        <p style="margin-top: 12px;">It depends on preference. ZYN wins on consistency and a focused flavour range, while VELO wins on variety and goes up to higher strengths (17 mg vs ZYN's 16.5 mg in Europe). Users who want bolder fruit flavours and more extreme cooling options tend to prefer VELO.</p>
+      </details>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <h2>VELO: Europe's Biggest Nicotine Pouch Brand</h2>
+        <p>
+          <a href="/brands/velo">VELO</a> is BAT's (British American Tobacco) nicotine pouch brand, and it holds the largest market share in Europe. Where <a href="/brands/zyn">ZYN</a> wins on consistency and simplicity, VELO wins on variety — with over 30 flavours across a range of strengths from 2 mg up to 17 mg. The brand has gone through several evolutions: the original VELO lineup, the VELO X-Freeze ultra-cooling variants, and the newest VELO Shift collection that launched in autumn 2025 with an eco-friendlier can design and revamped pouch format.
+        </p>
+        <p>
+          This guide ranks every current VELO flavour based on taste quality, nicotine delivery, and longevity. If you've only tried one or two VELO variants, this will help you figure out what to try next.
+        </p>
+
+        <h2>How We Ranked</h2>
+        <p>
+          Same methodology as our ZYN ranking: <strong>flavour accuracy</strong> (does it taste like what it claims?), <strong>longevity</strong> (does it hold past 20 minutes?), and <strong>nicotine delivery</strong> (smooth and predictable vs. spiky). We also weighted novelty — VELO's range is so large that the best flavours are the ones that do something genuinely different from what you can get elsewhere.
+        </p>
+
+        <h2>Top 10 VELO Flavours</h2>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the best VELO flavour?</summary>
+          <p style="margin-top: 12px;">The best VELO flavour depends on your taste preference, but Mint and Smooth Mint consistently rank highest among users for their clean, refreshing profile. <a href="/blog/best-mint-nicotine-pouches-2026" style="color: hsl(var(--primary));">Mint-flavoured pouches</a> dominate the category, though Citrus Punch and Berry Blast appeal to those seeking fruitier options.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">How many VELO flavours are there?</summary>
+          <p style="margin-top: 12px;">VELO offers over 15 unique flavours globally, including mint variants, fruit blends, and spice-forward options. The exact lineup varies by region and season, with new limited editions occasionally released to keep the range fresh and exciting for regular users.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Does VELO have a mint flavour?</summary>
+          <p style="margin-top: 12px;">Yes, VELO has multiple mint options—Mint, Smooth Mint, and Peppermint are among the most popular. <a href="/blog/velo-nicotine-pouches-complete-guide" style="color: hsl(var(--primary));">VELO's mint variants</a> are known for their clean, balanced flavour that doesn't overwhelm, making them ideal for all-day use.</p>
+        </details>
+
+        <h3>1. Freezing Peppermint — 10 mg</h3>
+        <p>
+          VELO's most intense mint offering and our top pick for the brand. "Freezing" is not an exaggeration — the cooling effect is immediate and aggressive, hitting within 30 seconds of placement. The peppermint flavour underneath is clean and sharp, not sweet. At 10 mg, the nicotine delivery is <a href="/products/strength/strong">strong</a> but controlled. Flavour lasts 40+ minutes. If you like your mint extreme, this is the benchmark.
+        </p>
+
+        <h3>2. Ruby Berry — 6 mg</h3>
+        <p>
+          The best berry-flavoured pouch on the market, full stop. Ruby Berry delivers a mix of cranberry and pomegranate — tart, slightly dry, with no artificial candy sweetness. It's sophisticated in a way that most <a href="/products/flavor/berry">berry flavours</a> aren't. At 6 mg, it works as an all-day option. Flavour peaks around minute 5 and holds steady for 30 minutes. This is the flavour we recommend to people who think they don't like fruit pouches.
+        </p>
+
+        <h3>3. Icy Berries — 10 mg</h3>
+        <p>
+          Where Ruby Berry is subtle, Icy Berries is bold. It combines mixed berries with a cooling menthol layer that bridges the gap between fruit and mint. The berry flavour is broader here — strawberry, blueberry, and blackcurrant all show up. The 10 mg strength means this hits hard, and the cooling effect gives it an extra dimension that pure fruit pouches lack. Great for users rotating between mint and fruit.
+        </p>
+
+        <h3>4. Bright Spearmint — 6 mg</h3>
+        <p>
+          VELO's answer to ZYN Cool Mint. Bright Spearmint is gentler than Freezing Peppermint — herbal and sweet rather than icy. It's the kind of <a href="/products/flavor/mint">mint</a> flavour you can use all day without fatigue. At 6 mg, it's the ideal daily driver for users who want mint without intensity. Flavour longevity is solid at 25–30 minutes, though it does fade more than the Freezing variant.
+        </p>
+
+        <h3>5. Zesty Elderflower — 6 mg</h3>
+        <p>
+          One of the most unique flavours in any brand's catalogue. Elderflower is floral, slightly honeyed, with a citrus brightness that lifts it above novelty status. It's the kind of flavour you either love immediately or dismiss — there's no middle ground. At 6 mg, the nicotine is moderate and the flavour does most of the talking. If you're bored with mint and berry rotations, this is the pattern-breaker.
+        </p>
+
+        <h3>6. Mighty Peppermint Max — 17 mg</h3>
+        <p>
+          The strongest VELO in the European range. At 17 mg, this is strictly for users with high nicotine tolerance — the kind of strength that makes <a href="/products/strength/extra-strong">extra strong</a> ZYN variants feel light. The peppermint flavour is the same clean profile as Freezing Peppermint, but the nicotine dominates the experience. Use with caution. Definitely not for beginners.
+        </p>
+
+        <h3>7. Tropical Mango — 6 mg</h3>
+        <p>
+          VELO's mango flavour is better than it has any right to be. Most mango-flavoured nicotine products taste like air freshener — this one manages to deliver a ripe, sweet mango that actually resembles the fruit. The flavour is front-loaded (strongest in the first 10 minutes) and fades to a pleasant sweetness. Pairs well with warm weather. At 6 mg, it's an easy, enjoyable pouch.
+        </p>
+
+        <h3>8. Icy Cherry — 10 mg</h3>
+        <p>
+          Cherry with a menthol finish. The cherry is more Morello than Maraschino — tart and dry rather than sweet and artificial. The ice compound adds a cooling layer that prevents the fruitiness from becoming cloying. At 10 mg, this is a strong option. Flavour holds for about 25 minutes. Good for users who want something different from the mint-berry axis.
+        </p>
+
+        <h3>9. Frosty Lemon — 6 mg</h3>
+        <p>
+          A <a href="/products/flavor/citrus">citrus</a> option that leans sharp and clean. Frosty Lemon delivers lemon zest with a cooling finish — think iced lemonade rather than lemon candy. It's refreshing and works well as a morning pouch. At 6 mg, nicotine delivery is standard. The flavour is lighter than most VELO offerings, which some users will love and others will find too subtle.
+        </p>
+
+        <h3>10. Orange Spark — 6 mg</h3>
+        <p>
+          A warmer citrus alternative to Frosty Lemon. Orange Spark is sweeter and rounder — blood orange with a hint of mandarin. No cooling effect, which makes it stand out in a lineup that leans heavily on ice compounds. The flavour is pleasant and uncomplicated. At 6 mg, it's an easygoing all-day option for citrus fans who don't want the cold.
+        </p>
+
+        <h2>The VELO Shift Collection</h2>
+        <p>
+          Launched in autumn 2025, VELO Shift is a reformulated line with a new slim pouch design and an eco-friendlier can (reduced plastic). The flavours emphasise "heating or cooling effects" — a departure from the standard VELO range. The Shift collection is rolling out across European markets, so availability varies by country. Early standouts include Shift Spearmint (similar to Bright Spearmint but with a new pouch material that releases flavour faster) and Shift Berry Frost (a bolder take on the Icy Berries profile).
+        </p>
+
+        <h2>VELO Strength Guide</h2>
+        <p>
+          VELO uses a dot system on the can (2 dots through 5 dots) alongside mg values. Here's the mapping:
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-3 pr-4 text-foreground font-semibold">Dots</th>
+                <th class="text-left py-3 pr-4 text-foreground font-semibold">Strength</th>
+                <th class="text-left py-3 pr-4 text-foreground font-semibold">mg/pouch</th>
+                <th class="text-left py-3 text-foreground font-semibold">Best For</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">●●</td>
+                <td class="py-3 pr-4">Light</td>
+                <td class="py-3 pr-4">2–4 mg</td>
+                <td class="py-3">Beginners, all-day use</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">●●●</td>
+                <td class="py-3 pr-4">Medium</td>
+                <td class="py-3 pr-4">6 mg</td>
+                <td class="py-3">Most popular tier, balanced</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 pr-4">●●●●</td>
+                <td class="py-3 pr-4">Strong</td>
+                <td class="py-3 pr-4">10 mg</td>
+                <td class="py-3">Regular users, noticeable buzz</td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-4">●●●●●</td>
+                <td class="py-3 pr-4">Extra Strong / Max</td>
+                <td class="py-3 pr-4">14–17 mg</td>
+                <td class="py-3">Experienced users only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          If you're coming from ZYN, a VELO 6 mg is roughly comparable to a ZYN 6 mg in perceived strength. VELO's higher-strength offerings (14–17 mg) go beyond what ZYN currently offers in Europe, which is one reason VELO has a strong following among heavy users.
+        </p>
+
+        <h2>VELO vs. ZYN: Which Is Better?</h2>
+        <p>
+          It depends on what you value. <strong>ZYN</strong> is more consistent can-to-can, has a tighter flavour range (focused on doing fewer things well), and has FDA authorisation in the US. <strong>VELO</strong> offers more variety, goes to higher strengths, and tends to have bolder flavour profiles — particularly in the fruit and cooling categories. The pouch format is similar (both slim), though many users find VELO's newer pouch material slightly softer.
+        </p>
+        <p>
+          Our recommendation: try both. Start with ZYN Cool Mint and VELO Freezing Peppermint side by side — you'll quickly know which approach to mint you prefer, and that'll guide the rest of your exploration. Browse both full ranges at SnusFriend: <a href="/brands/zyn">ZYN</a> | <a href="/brands/velo">VELO</a>.
+        </p>
+
+        <h2>Where to Buy VELO</h2>
+        <p>
+          SnusFriend stocks the full VELO European range, including Shift variants and limited editions when available. Browse the <a href="/brands/velo">complete VELO collection</a>. We ship across the EU with DHL and UPS.
+        </p>
+
+        <h2>FAQ: VELO Flavours</h2>
+
+        <h3>What is the best VELO flavour?</h3>
+        <p>Freezing Peppermint (10 mg) is the top-ranked VELO flavour for its intense cooling effect and clean peppermint taste that lasts 40+ minutes. For a less intense option, Ruby Berry (6 mg) is the best fruit flavour on the market.</p>
+
+        <h3>How strong are VELO nicotine pouches?</h3>
+        <p>VELO ranges from 2 mg (light) to 17 mg (Mighty Peppermint Max). The most popular strength is 6 mg (medium), suitable for daily use. VELO uses a dot system: 2 dots (light) through 5 dots (extra strong/max).</p>
+
+        <h3>What is VELO Shift?</h3>
+        <p>VELO Shift is a reformulated line launched in autumn 2025 with a new slim pouch design and eco-friendlier can. The flavours emphasise heating or cooling effects. Standouts include Shift Spearmint and Shift Berry Frost.</p>
+
+        <h3>Is VELO better than ZYN?</h3>
+        <p>It depends on preference. ZYN offers more consistency and a focused flavour range. VELO offers more variety, bolder flavours, and goes up to higher strengths (17 mg vs ZYN's 16.5 mg). Try both to see which approach suits you. See our <a href="/blog/zyn-flavours-complete-guide">ZYN flavours guide</a> for the full comparison.</p>
+
+        <BlogNewsletterCta />
+
+        <h2>Related Reading</h2>
+        <ul>
+          <li><a href="/blog/nicotine-pouch-flavour-guide">Complete Flavour Guide</a> — Every flavour category explained</li>
+          <li><a href="/blog/zyn-flavours-complete-guide">All ZYN Flavours Ranked 2026</a></li>
+          <li><a href="/blog/velo-vs-nordic-spirit">VELO vs. Nordic Spirit: Head-to-Head</a></li>
+          <li><a href="/blog/best-nicotine-pouches-2026">Best Nicotine Pouches 2026: Expert Picks</a></li>
+          <li><a href="/blog/best-strong-nicotine-pouches">Best Strong Nicotine Pouches</a></li>
+          <li><a href="/blog/best-slim-nicotine-pouches">Best Slim Nicotine Pouches</a></li>
+          <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best Nicotine Pouches for Beginners 2026</a></li>
+          <li><a href="/brands/velo">VELO Brand Page & Full Catalogue</a></li>
+        </ul>
+
+        <p><em>Last updated: 1 April 2026. Rankings based on independent editorial testing and community feedback.</em></p>
+
+
+        <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+
+      </div>
+    </div>
+  </div></Shop>

@@ -1,0 +1,193 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import { buildAbsoluteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
+const loyaltyCurrencyName = tenant.loyaltyCurrencyName;
+
+const title = 'Discount Codes & Deals';
+const description = `Find active ${tenant.name} discount codes, learn how to use them, and sign up for exclusive deals on nicotine pouches. New subscriber codes available.`;
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Can I use more than one discount code per order?", "acceptedAnswer": { "@type": "Answer", "text": "No, only one code per order. Use the one with the biggest discount and save the others for next time." } },
+      { "@type": "Question", "name": `How do I use a discount code at ${tenant.name}?`, "acceptedAnswer": { "@type": "Answer", "text": "During checkout, click 'Have a discount code?' in the order summary. Enter your code, press Apply, and the discount is deducted from your total." } },
+      { "@type": "Question", "name": "Do discount codes work on all products?", "acceptedAnswer": { "@type": "Answer", "text": "Most codes apply to the full catalogue, but some are brand-specific or exclude limited-edition items. The terms are shown when you receive the code." } },
+      { "@type": "Question", "name": `How often does ${tenant.name} release new codes?`, "acceptedAnswer": { "@type": "Answer", "text": "It varies — newsletter subscribers are always the first to know. We share codes regularly through the newsletter and seasonal promotions." } }
+    ]
+  };
+---
+
+<Shop
+  title={`${title} | ${tenant.name}`}
+  description={description}
+  canonical="/deals"
+>
+  <JsonLd data={faqJsonLd} />
+  <JsonLd data={{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": `${title} | ${tenant.name}`,
+    "description": description,
+    "url": buildAbsoluteUrl('/deals')
+  }} />
+
+  <div class="bg-background text-foreground">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-16">
+
+      <Breadcrumb
+        items={[
+          { label: 'Deals & Discounts' }
+        ]}
+      />
+
+      <!-- Hero -->
+      <div class="mb-12">
+        <h1 class="text-4xl font-bold tracking-tight text-foreground mb-3">{title}</h1>
+        <p class="text-lg text-muted-foreground">
+          Save on your favourite nicotine pouches. We share codes through our newsletter, seasonal promotions, and loyalty rewards — here's everything you need to know.
+        </p>
+      </div>
+
+      <div class="space-y-12">
+
+        <!-- How discount codes work -->
+        <section>
+          <h2 class="text-2xl font-bold text-foreground mb-4">How to use a discount code</h2>
+          <div class="text-muted-foreground space-y-4">
+            <p>
+              Using a code takes about five seconds. During checkout, click <strong class="text-foreground">"Have a discount code?"</strong> in your order summary. Enter your code, press Apply, and the discount is deducted from your total before you pay. That's it.
+            </p>
+            <p>
+              A few details worth knowing: only one code can be used per order, codes aren't case-sensitive (typing "welcome10" works the same as "WELCOME10"), and some codes have a minimum order value or an expiry date. If a code isn't working, check for typos first — then check whether it's still within its valid period.
+            </p>
+          </div>
+        </section>
+
+        <hr class="border-border" />
+
+        <!-- Where to find codes -->
+        <section>
+          <h2 class="text-2xl font-bold text-foreground mb-4">Where to find discount codes</h2>
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div class="rounded-lg border border-border bg-card p-5">
+              <h3 class="text-lg font-semibold text-foreground mb-2">Newsletter</h3>
+              <p class="text-sm text-muted-foreground">
+                Subscribers get early access to promotions and exclusive codes that aren't shared anywhere else. New subscribers receive a welcome discount. The single best way to save.
+              </p>
+            </div>
+            <div class="rounded-lg border border-border bg-card p-5">
+              <h3 class="text-lg font-semibold text-foreground mb-2">Seasonal promotions</h3>
+              <p class="text-sm text-muted-foreground">
+                We run occasional site-wide deals tied to events, new brand launches, or stock clearances. Announced on the homepage and in the newsletter.
+              </p>
+            </div>
+            <div class="rounded-lg border border-border bg-card p-5">
+              <h3 class="text-lg font-semibold text-foreground mb-2">Loyalty rewards</h3>
+              <p class="text-sm text-muted-foreground">
+                Earn {loyaltyCurrencyName} as you shop and engage. Higher tiers unlock exclusive vouchers. Check your <a href="/rewards" class="text-primary underline hover:text-foreground">rewards progress</a>.
+              </p>
+            </div>
+            <div class="rounded-lg border border-border bg-card p-5">
+              <h3 class="text-lg font-semibold text-foreground mb-2">Social media</h3>
+              <p class="text-sm text-muted-foreground">
+                We occasionally drop flash codes on our social channels. Follow us to catch them.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <hr class="border-border" />
+
+        <!-- Newsletter CTA -->
+        <section class="rounded-xl border border-primary/20 bg-primary/5 p-6 sm:p-8 text-center">
+          <h2 class="text-2xl font-bold text-foreground mb-2">Get your first discount code</h2>
+          <p class="text-muted-foreground mb-6">
+            Sign up for the {tenant.name} newsletter and we'll send you an exclusive welcome code. No spam — just deals, new arrivals, and the occasional flavour recommendation.
+          </p>
+          <form
+            class="mx-auto flex max-w-md flex-col gap-3 sm:flex-row"
+            data-waitlist-form
+            data-function-base={supabaseUrl}
+            data-waitlist-source="deals-newsletter"
+            data-success-message="You're in! Check your inbox for your welcome code."
+            data-message-class="mt-3 text-sm"
+            data-submitting-text="Sending..."
+          >
+            <input
+              type="email"
+              name="email"
+              placeholder="Your email address"
+              required
+              class="flex-1 rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+            <button
+              type="submit"
+              class="rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 whitespace-nowrap"
+            >
+              Get My Code
+            </button>
+          </form>
+          <p data-waitlist-message class="mt-3 hidden text-sm" aria-live="polite" aria-atomic="true"></p>
+          <p class="mt-3 text-xs text-muted-foreground">
+            We send 1–2 emails per month. Unsubscribe anytime. See our <a href="/privacy" class="underline hover:text-foreground">privacy policy</a>.
+          </p>
+        </section>
+
+        <hr class="border-border" />
+
+        <!-- FAQ -->
+        <section>
+          <h2 class="text-2xl font-bold text-foreground mb-6">Common questions about discounts</h2>
+          <div class="space-y-4">
+            <details class="group rounded-lg border border-border bg-card">
+              <summary class="flex cursor-pointer items-center justify-between px-5 py-4 text-sm font-medium text-foreground">
+                Can I use more than one code per order?
+                <svg class="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="px-5 pb-4 text-sm text-muted-foreground">
+                No — one code per order. If you have multiple codes, use the one with the biggest discount and save the others for next time.
+              </div>
+            </details>
+
+            <details class="group rounded-lg border border-border bg-card">
+              <summary class="flex cursor-pointer items-center justify-between px-5 py-4 text-sm font-medium text-foreground">
+                My code isn't working. What do I do?
+                <svg class="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="px-5 pb-4 text-sm text-muted-foreground">
+                Check for typos first. Then check whether the code has expired or requires a minimum order value. Some codes exclude certain products or brands. If it still doesn't work, <a href="/contact" class="text-primary underline hover:text-foreground">contact us</a> and we'll take a look.
+              </div>
+            </details>
+
+            <details class="group rounded-lg border border-border bg-card">
+              <summary class="flex cursor-pointer items-center justify-between px-5 py-4 text-sm font-medium text-foreground">
+                Do codes work on all products?
+                <svg class="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="px-5 pb-4 text-sm text-muted-foreground">
+                Most codes apply to the full catalogue, but some are brand-specific or exclude limited-edition items. The terms are shown when you receive the code.
+              </div>
+            </details>
+
+            <details class="group rounded-lg border border-border bg-card">
+              <summary class="flex cursor-pointer items-center justify-between px-5 py-4 text-sm font-medium text-foreground">
+                How often do you release new codes?
+                <svg class="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="px-5 pb-4 text-sm text-muted-foreground">
+                It varies — newsletter subscribers are always the first to know. We don't run constant sales (our prices are already competitive), but we share codes regularly through the newsletter and seasonal promotions.
+              </div>
+            </details>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</Shop>

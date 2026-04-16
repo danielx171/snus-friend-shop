@@ -1,0 +1,286 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const skrufFreshMint = findProduct('skruf', 'fresh mint');
+const skrufFrozenShot = findProduct('skruf', 'frozen shot');
+const skrufFresh = findProduct('skruf', 'fresh');
+const skrufBlackcurrant = findProduct('skruf', 'blackcurrant');
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Skruf Nicotine Pouches: Complete Brand Guide",
+    "description": "Skruf nicotine pouches reviewed — Sweden's craft brand by Imperial Brands. 15 products, strengths 6-11.5 mg, flavours from Purple Cassice to Fresh Freeze.",
+    "image": "https://snusfriends.com/images/skruf-hero.jpg",
+    "datePublished": "2026-03-28",
+    "dateModified": "2026-03-28",
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.png" } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/skruf-nicotine-pouches-complete-guide" }
+  };
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is Skruf and who makes it?", "acceptedAnswer": { "@type": "Answer", "text": "Skruf is a Swedish nicotine pouch brand owned by Imperial Brands, a global consumer goods company. Founded in 2002 by Skruf Snus AB in Sweden, Skruf represents the original craft snus heritage and remains one of Sweden's most respected heritage brands in the nicotine category." } },
+      { "@type": "Question", "name": "What does the S2, S3, S4 strength system mean?", "acceptedAnswer": { "@type": "Answer", "text": "Skruf uses a strength numbering system: S2 is light (6 mg), S3 is medium (9 mg), and S4 is strong (11-12 mg). This tiered approach helps users choose the right strength progressively. Unlike single-product brands, Skruf offers multiple flavours at each strength level, giving flexibility across the range." } },
+      { "@type": "Question", "name": "Which Skruf product is the strongest?", "acceptedAnswer": { "@type": "Answer", "text": "Skruf's strongest products are Fresh Freeze Ultra (11.5 mg), Crystal Fresh Extra Strong (11.5 mg), and several S4 offerings including Intense Spearmint Ice and Intense Peppermint Ice (both 11.3 mg). Fresh Apple Extra Strong at 11 mg is also a popular ultra-strong choice for fruit flavour lovers." } },
+      { "@type": "Question", "name": "Is Skruf better than Loop or other brands?", "acceptedAnswer": { "@type": "Answer", "text": "There is no universally 'better' brand — preference depends on strength, flavour, and pouch format. Skruf excels at heritage flavours (licorice, berry) and craft authenticity. Loop focuses on Nordic minimalism. We recommend trying both to discover your preference. See our comparison guide for detailed differences." } },
+      { "@type": "Question", "name": "Where can I buy Skruf nicotine pouches?", "acceptedAnswer": { "@type": "Answer", "text": "SnusFriend stocks all 15 Skruf products across the EU. Visit /brands/skruf to browse the full range, compare strengths, and order online. We offer discreet delivery and competitive pricing on all Skruf nicotine pouches." } }
+    ]
+  };
+---
+
+<Shop
+  title="Skruf Nicotine Pouches: Complete 2026 Guide"
+  description="Skruf nicotine pouches reviewed — Sweden's craft brand by Imperial Brands. 15 products, strengths 6-11.5 mg, flavours from Purple Cassice to Fresh Freeze."
+  canonical="/blog/skruf-nicotine-pouches-complete-guide"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+
+  <article class="mx-auto max-w-3xl px-4 py-12">
+    <Breadcrumb items={[
+      { label: 'Blog', href: '/blog' },
+      { label: 'Skruf Complete Guide' },
+    ]} />
+
+    <BlogHero
+      category="Brand Spotlight"
+      title="Skruf Nicotine Pouches: Complete Brand Guide"
+      description="Skruf nicotine pouches reviewed — Sweden's craft brand by Imperial Brands. 15 products, strengths 6-11.5 mg, flavours from Purple Cassice to Fresh Freeze."
+      date="28 March 2026"
+      readTime="7 min read"
+    />
+
+    <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+      <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+      <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+        Skruf is a Swedish nicotine pouch brand with a heritage in traditional snus, offering tobacco-free pouches from 4mg to 12mg. Known for smooth flavour profiles and premium pouch construction.
+      </p>
+    </div>
+
+    <section class="key-takeaways" style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 30px 0; border-radius: 4px;">
+        <h2 style="margin-top: 0;">Key Takeaways</h2>
+        <ul style="margin: 15px 0;">
+            <li>Skruf is Sweden's original craft snus brand (founded 2002) by Imperial Brands — heritage authenticity matters to serious users.</li>
+            <li>15 products across S2/S3/S4 strength system: 6 mg (light) → 11.5 mg (ultra-strong) — no guessing, clear progression.</li>
+            <li>Flavour diversity: mint dominates (8 products), but berry, licorice, and fruit round out the range — something for every palate.</li>
+            <li>Best for heritage seekers and craft enthusiasts who value Swedish tradition over trendy new brands.</li>
+            <li>Fresh Mint and Intense Spearmint Ice are customer favourites; Fresh Freeze Ultra is the limited-edition collector's item.</li>
+        </ul>
+    </section>
+
+    <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+      {find('skruf-fresh-mint-s4') && <BlogProductCard product={find('skruf-fresh-mint-s4')} />}
+      {find('skruf-nordic-liqourice-s4') && <BlogProductCard product={find('skruf-nordic-liqourice-s4')} />}
+      {find('skruf-frozen-mint-superslim-s4') && <BlogProductCard product={find('skruf-frozen-mint-superslim-s4')} />}
+      {find('skruf-purple-cassic-s3') && <BlogProductCard product={find('skruf-purple-cassic-s3')} />}
+    </div>
+
+    <h2>Skruf Product Overview</h2>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Who owns Skruf?</summary>
+  <p style="margin-top: 12px;">Skruf is owned by Swedish Match, one of Scandinavia's largest tobacco and nicotine manufacturers with over 150 years of heritage. Swedish Match operates multiple premium brands including Skruf, which has become one of the market's most successful products due to its distinctive flavour complexity and consistent quality.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Where is Skruf made?</summary>
+  <p style="margin-top: 12px;">Skruf is manufactured in Sweden, benefiting from Swedish Match's state-of-the-art facilities and decades of expertise in nicotine pouch production. Swedish manufacturing ensures rigorous quality control, premium ingredients, and compliance with the strict EU standards that define the Scandinavian nicotine pouch category.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">What is the strongest Skruf pouch?</summary>
+  <p style="margin-top: 12px;">Skruf Super Strong delivers 8–9 mg of nicotine per pouch, making it Skruf's maximum-strength offering and placing it among the industry's highest-strength mainstream products. The Super Strong variant maintains Skruf's signature complex flavour profile (often featuring liquorice or herbal notes) while delivering intense, long-lasting nicotine satisfaction. <a href="/brands/skruf-nicotine-pouches" style="color: hsl(var(--primary));">Explore Skruf's complete lineup</a> to find your preferred strength.</p>
+</details>
+
+    <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>
+    <div style="overflow-x: auto; margin: 32px 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <thead>
+          <tr style="border-bottom: 2px solid hsl(var(--border));">
+            <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Product</th>
+            <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Format</th>
+            <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Strength (mg/pouch)</th>
+            <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Flavour</th>
+            <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Pouches/Can</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Fresh Mint #2</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">8</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">17</td></tr>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Fresh Mint #3</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">10</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">17</td></tr>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Fresh Mint #4</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">12</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">17</td></tr>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Nordic Liquorice #2</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">8</td><td style="padding: 10px 16px;">Licorice</td><td style="padding: 10px 16px;">17</td></tr>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Nordic Liquorice #3</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">10</td><td style="padding: 10px 16px;">Licorice</td><td style="padding: 10px 16px;">17</td></tr>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Frozen Shot #4</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">12</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">17</td></tr>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Blackberry #2</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">8</td><td style="padding: 10px 16px;">Berry</td><td style="padding: 10px 16px;">17</td></tr>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Cassice #2</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">8</td><td style="padding: 10px 16px;">Berry</td><td style="padding: 10px 16px;">17</td></tr>
+          <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">Skruf Fresh Mint Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">17</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Who Is Skruf?</h2>
+    <p>Skruf is not a new startup or Instagram-famous brand. It's a <strong>legacy Swedish snus maker founded in 2002 by Skruf Snus AB and now owned by Imperial Brands</strong>, a multinational consumer goods company listed on the FTSE. Imperial Brands operates globally under all applicable tobacco regulations including EU TPD 2014/40/EU. Skruf represents the authenticity of Swedish nicotine tradition — the kind of brand Swedish users grew up with, before the pouch explosion of the 2010s.</p>
+    <p>Unlike brands chasing extreme strength or viral aesthetics, Skruf focuses on <strong>balanced craft flavours designed for everyday enjoyment</strong> and <strong>consistent quality across all strength tiers</strong>. If you value heritage over hype, Skruf's track record speaks for itself. Compare Skruf with other heritage brands in our <a href="/blog/best-nicotine-pouches-2026">2026 nicotine pouch rankings</a>.</p>
+
+    <h2>The S2/S3/S4 Strength System Explained</h2>
+    <p>Skruf uses a tiered numbering system that makes strength selection straightforward:</p>
+    <ul>
+        <li><strong>S2 (Light):</strong> 6 mg nicotine — entry-level; ideal for beginners or all-day use without heavy stimulation.</li>
+        <li><strong>S3 (Medium):</strong> 9 mg nicotine — moderate; suits regular users comfortable with sustained nicotine hit.</li>
+        <li><strong>S4 (Strong):</strong> 11–12 mg nicotine — high; for experienced users seeking intense satisfaction.</li>
+    </ul>
+    <p>This system means <strong>you can find the same flavour at multiple strengths</strong>. Want Fresh Mint? You can get S2 (6 mg), S3 (9 mg), or S4 (11 mg). This flexibility is Skruf's design genius and sets it apart from single-product brands.</p>
+
+    <h2>Complete Flavour Range</h2>
+
+    <h3>Mint (The Skruf Core — 8 Products)</h3>
+    <p>Mint is Skruf's fortress. The range spans from balanced to extreme:</p>
+    <ul>
+        <li><strong>Fresh Mint S2 (6 mg):</strong> Clean, cool, subtle — the entry gateway.</li>
+        <li><strong>Fresh Mint S3 (9 mg):</strong> The workhorse; balanced cooling and flavour.</li>
+        <li><strong>Fresh Mint S4 (11 mg):</strong> Intense freshness; for mint devotees.</li>
+        <li><strong>Aloe Fresh S2 (6.5 mg):</strong> Mint softened with aloe — uniquely herbal.</li>
+        <li><strong>Frozen Mint Superslim S4 (8 mg):</strong> Slender pouch, bold cooling effect.</li>
+        <li><strong>Intense Spearmint Ice S4 (11.3 mg):</strong> Sharper spearmint with icy bite.</li>
+        <li><strong>Intense Peppermint Ice S4 (11.3 mg):</strong> Peppermint for a punchier, warmer mint profile.</li>
+        <li><strong>Crystal Fresh Extra Strong (11.5 mg):</strong> Skruf's ultra-strong mint — cooling without sweetness.</li>
+    </ul>
+    <p>If you love mint, Skruf has you covered from gentle S2 to fearless 11.5 mg. The "Intense" line adds sharp botanical notes; the "Ice" variants emphasize cooling sensation.</p>
+
+    <h3>Berry (3 Products)</h3>
+    <ul>
+        <li><strong>Purple Cassice S2 (6 mg):</strong> Blackcurrant-forward; deep, natural berry.</li>
+        <li><strong>Indigo Berry S2 (6 mg):</strong> Blueberry-leaning; slightly sweeter than Cassice.</li>
+        <li><strong>Purple Cassic S3 (9 mg):</strong> Same blackcurrant profile, medium strength.</li>
+    </ul>
+    <p>Skruf's berry line is understated and authentic — no artificial sugar-bomb coating, just genuine fruit essence.</p>
+
+    <h3>Licorice (2 Products)</h3>
+    <ul>
+        <li><strong>Nordic Licorice S2 (6 mg):</strong> Soft, traditional licorice — Scandinavian classic.</li>
+        <li><strong>Nordic Licorice S4 (12 mg):</strong> Same flavour, maximum strength.</li>
+    </ul>
+    <p>Licorice lovers often skip modern brands entirely; Skruf's traditional Nordic licorice keeps that heritage alive.</p>
+
+    <h3>Fruit (1 Product)</h3>
+    <ul>
+        <li><strong>Fresh Apple Extra Strong (11 mg):</strong> Crisp, green apple — one of few fruit-not-berries options on the market.</li>
+    </ul>
+
+    <h2>Top 5 Skruf Products — What to Try First</h2>
+
+    <h3>1. Fresh Mint S3 (9 mg) — The Balanced Entry</h3>
+    <p>If you're new to Skruf, this is the obvious start. Medium strength, clean flavour, proven formula. Thousands of daily users rely on it.</p>
+    {skrufFresh && <BlogProductCard {...skrufFresh.data} />}
+
+    <h3>2. Purple Cassice S2 (6 mg) — The Heritage Flavour</h3>
+    <p>Berry is where Skruf's craft roots show. This blackcurrant pouch has been refined for 20+ years. If you want to taste tradition, this is it.</p>
+    {skrufBlackcurrant && <BlogProductCard {...skrufBlackcurrant.data} />}
+
+    <h3>3. Intense Spearmint Ice S4 (11.3 mg) — The Sophisticated Strong</h3>
+    <p>Not just cooling blastwave — spearmint has botanical complexity. For advanced users who want flavour and strength in equal measure.</p>
+
+    <h3>4. Fresh Apple Extra Strong (11 mg) — The Rare Fruit</h3>
+    <p>Apple is uncommon in the strong nicotine space. If you've exhausted mint, this green-apple profile offers a genuine departure. Limited-run appeal.</p>
+
+    <h3>5. Fresh Freeze Ultra (11.5 mg) — The Limited Collector</h3>
+    <p>Skruf's rotating limited-edition drops. When Fresh Freeze appears, it sells fast. Maximum strength, frozen freshness, pure pouch craft.</p>
+    {skrufFrozenShot && <BlogProductCard {...skrufFrozenShot.data} />}
+
+    <h2>Who Is Skruf For?</h2>
+
+    <p><strong>Skruf is ideal for:</strong></p>
+    <ul>
+        <li><strong>Heritage seekers:</strong> You want snus with pedigree, not just the newest TikTok brand.</li>
+        <li><strong>Swedish tradition enthusiasts:</strong> You appreciate the original craft over modern gimmicks.</li>
+        <li><strong>Strength progressors:</strong> You like having the same flavour at S2, S3, S4 to dial in your perfect level.</li>
+        <li><strong>Mint lovers:</strong> Skruf's mint range is unmatched in breadth and refinement.</li>
+        <li><strong>Licorice purists:</strong> If traditional Nordic licorice calls to you, Skruf is essential.</li>
+    </ul>
+
+    <p><strong>Skruf is less ideal for:</strong></p>
+    <ul>
+        <li>Users seeking extreme 40+ mg strengths (Siberia is your brand).</li>
+        <li>Those wanting novelty or trendy flavours (Loop, Velo fill that space).</li>
+        <li>Budget-first shoppers (Skruf is mid-range, not budget).</li>
+    </ul>
+
+    <h2>Skruf vs. The Competition</h2>
+
+    <p><strong>Skruf vs. <a href="/blog/loop-vs-skruf">Loop</a>:</strong> Loop is minimalist Nordic design and clean strength. Skruf is heritage flavours and tiered progression. Loop is new-wave cool; Skruf is classic craft.</p>
+    <p><strong>Skruf vs. Velo:</strong> Velo is bold flavours and aggressive marketing. Skruf is understated authenticity. Velo chases trends; Skruf sets them.</p>
+    <p><strong>Skruf vs. White Fox:</strong> White Fox is mint-only ultra-strength (12–24 mg). Skruf is diverse flavours across accessible strengths (6–11.5 mg). Different markets.</p>
+
+    <h2>How to Choose Your Skruf Strength</h2>
+
+    <p>See our detailed <a href="/blog/how-to-choose-your-strength">strength guide</a> for full context. In brief:</p>
+    <ul>
+        <li><strong>First time with pouches?</strong> Start S2 (6 mg). You can always go stronger next time.</li>
+        <li><strong>Former snus user?</strong> Try S3 (9 mg) — familiar but precise.</li>
+        <li><strong>Heavy nicotine user?</strong> Jump to S4 (11–12 mg) or compare with <a href="/brands/white-fox">White Fox</a> or <a href="/brands/siberia">Siberia</a> for higher tiers.</li>
+    </ul>
+
+    <h2>Where to Buy Skruf Nicotine Pouches</h2>
+
+    <p>All 15 Skruf products are in stock at SnusFriend. Browse the <a href="/brands/skruf">full Skruf brand page</a>, compare products, and order online with discreet EU-wide delivery.</p>
+    <p>New to nicotine pouches? Visit our <a href="/nicotine-pouches">getting started guide</a> for fundamentals.</p>
+
+    <h2>FAQ</h2>
+
+    <h3>What is Skruf and who makes it?</h3>
+    <p>Skruf is a Swedish nicotine pouch brand owned by Imperial Brands, a global consumer goods company. Founded in 2002 by Skruf Snus AB in Sweden, Skruf represents the original craft snus heritage and remains one of Sweden's most respected heritage brands in the nicotine category.</p>
+
+    <h3>What does the S2, S3, S4 strength system mean?</h3>
+    <p>Skruf uses a strength numbering system: S2 is light (6 mg), S3 is medium (9 mg), and S4 is strong (11–12 mg). This tiered approach helps users choose the right strength progressively. Unlike single-product brands, Skruf offers multiple flavours at each strength level, giving flexibility across the range.</p>
+
+    <h3>Which Skruf product is the strongest?</h3>
+    <p>Skruf's strongest products are Fresh Freeze Ultra (11.5 mg), Crystal Fresh Extra Strong (11.5 mg), and several S4 offerings including Intense Spearmint Ice and Intense Peppermint Ice (both 11.3 mg). Fresh Apple Extra Strong at 11 mg is also a popular ultra-strong choice for fruit flavour lovers.</p>
+
+    <h3>Is Skruf better than Loop or other brands?</h3>
+    <p>There is no universally 'better' brand — preference depends on strength, flavour, and pouch format. Skruf excels at heritage flavours (licorice, berry) and craft authenticity. Loop focuses on Nordic minimalism. We recommend trying both to discover your preference. See our <a href="/blog/loop-vs-skruf">comparison guide</a> for detailed differences.</p>
+
+    <h3>Where can I buy Skruf nicotine pouches?</h3>
+    <p>SnusFriend stocks all 15 Skruf products across the EU. Visit <a href="/brands/skruf">/brands/skruf</a> to browse the full range, compare strengths, and order online. We offer discreet delivery and competitive pricing on all Skruf nicotine pouches.</p>
+
+    <h2>Final Thoughts</h2>
+    <p>Skruf is the thinking user's brand. It doesn't shout; it delivers. Heritage, consistent quality, flavour diversity, and a tiered strength system that respects user progression. If you're tired of Instagram marketing and viral gimmicks, Skruf's 20+ years of craft refinement will feel like coming home.</p>
+    <p>Try Fresh Mint S3 first. If mint doesn't move you, explore Purple Cassice or Nordic Licorice. You'll understand why Swedish users never left.</p>
+
+    <hr style="margin: 40px 0;">
+
+    <h2>Related Reading</h2>
+    <ul>
+      <li><a href="/blog/loop-vs-skruf">Loop vs Skruf 2026</a> — Detailed comparison of two heritage Nordic brands</li>
+      <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best Nicotine Pouches for Beginners</a> — Skruf S2 is beginner-friendly</li>
+      <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Strength</a> — Understanding the S2/S3/S4 system</li>
+      <li><a href="/blog/nicotine-pouch-flavour-guide">Nicotine Pouch Flavour Guide</a> — Explore all flavour categories</li>
+      <li><a href="/blog/best-nicotine-pouches-2026">Best Nicotine Pouches 2026</a> — How Skruf ranks overall</li>
+    </ul>
+
+    <p><strong>Ready to explore Skruf?</strong> Shop all <a href="/brands/skruf">15 Skruf products</a> at SnusFriend.</p>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+</Shop>

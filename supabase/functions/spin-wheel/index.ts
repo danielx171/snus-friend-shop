@@ -1,16 +1,16 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// @ts-ignore: Deno file import
-import { corsHeaders } from "../_shared/cors.ts";
-
-const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
+// @ts-expect-error — Deno types: Deno file import
+import { getCorsHeaders } from "../_shared/cors.ts";
+// @ts-expect-error — Deno types: Deno file import
+import { loyaltyCurrencyName } from "../_shared/site-config.ts";
 
 const PRIZE_DISPLAY: Record<string, { icon: string; title: string; description: string; type: string }> = {
-  points_5:      { icon: '\u{1FA99}', title: '5 SnusPoints',       description: 'Added to your balance!',                          type: 'points' },
-  points_10:     { icon: '\u{1FA99}', title: '10 SnusPoints',      description: 'Nice! Points added.',                              type: 'points' },
-  points_25:     { icon: '\u{1F48E}', title: '25 SnusPoints',      description: 'Great spin! Points added.',                        type: 'points' },
-  points_5b:     { icon: '\u{1FA99}', title: '5 SnusPoints',       description: 'Added to your balance!',                          type: 'points' },
-  points_50:     { icon: '\u{1F4B0}', title: '50 SnusPoints!',     description: 'Big win!',                                        type: 'points' },
+  points_5:      { icon: '\u{1FA99}', title: `5 ${loyaltyCurrencyName}`,  description: 'Added to your balance!',                          type: 'points' },
+  points_10:     { icon: '\u{1FA99}', title: `10 ${loyaltyCurrencyName}`, description: 'Nice! Points added.',                              type: 'points' },
+  points_25:     { icon: '\u{1F48E}', title: `25 ${loyaltyCurrencyName}`, description: 'Great spin! Points added.',                        type: 'points' },
+  points_5b:     { icon: '\u{1FA99}', title: `5 ${loyaltyCurrencyName}`,  description: 'Added to your balance!',                          type: 'points' },
+  points_50:     { icon: '\u{1F4B0}', title: `50 ${loyaltyCurrencyName}!`, description: 'Big win!',                                       type: 'points' },
   voucher_15pct: { icon: '\u{1F3F7}\uFE0F', title: '15% Off Voucher',    description: 'Valid 30 days on any order.',                      type: 'voucher' },
   free_can:      { icon: '\u{1F381}', title: 'Free Can!',          description: 'A free STNG Berry Seltzer added to your rewards.', type: 'voucher' },
   free_month:    { icon: '\u{1F451}', title: 'FREE MONTH!',        description: 'Contact us to redeem your free month.',            type: 'jackpot' },
@@ -36,6 +36,9 @@ function weightedRandomPick(weights: Record<string, number>): string {
 }
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req.headers.get('origin'));
+  const JSON_HEADERS = { ...corsHeaders, 'Content-Type': 'application/json' };
+
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -110,7 +113,7 @@ Deno.serve(async (req: Request) => {
     const { data: configRows, error: configError } = await admin
       .from('spin_config')
       .select('key, value')
-      .in('key', ['prize_weights', 'clearance_sku']);
+      .in('key', ['prize_weights', 'clearance_sku', 'vip_multiplier']);
 
     if (configError) {
       console.error('spin_config read error', { error: configError, requestId });
@@ -132,6 +135,22 @@ Deno.serve(async (req: Request) => {
 
     const clearanceSku: string | null = configMap.clearance_sku ?? null;
 
+    // deno-lint-ignore no-explicit-any
+    const vipConfig: { points_multiplier?: number; discount_boost?: number } = configMap.vip_multiplier ?? {};
+
+    // 2b. Look up user's reputation level for VIP multiplier
+    const { data: repData } = await admin
+      .from('user_reputation')
+      .select('level')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    // VIP multiplier applies at Expert (level 4) and Legend (level 5)
+    const userLevel = repData?.level ?? 1;
+    const isVip = userLevel >= 4;
+    const pointsMultiplier = isVip ? (vipConfig.points_multiplier ?? 2) : 1;
+    const discountBoost = isVip ? (vipConfig.discount_boost ?? 5) : 0;
+
     // 3. Weighted random pick
     const prizeKey = weightedRandomPick(prizeWeights);
 
@@ -141,8 +160,9 @@ Deno.serve(async (req: Request) => {
     let effectivePrizeKey = prizeKey;
 
     if (prizeKey in POINTS_MAP) {
-      // Points prize
-      const pts = POINTS_MAP[prizeKey];
+      // Points prize — apply VIP multiplier for Expert/Legend tier
+      const basePts = POINTS_MAP[prizeKey];
+      const pts = Math.round(basePts * pointsMultiplier);
       pointsAwarded = pts;
 
       const { error: txnError } = await admin
@@ -160,13 +180,15 @@ Deno.serve(async (req: Request) => {
       // Atomic increment — avoids race condition with concurrent spins
       await admin.rpc('increment_points_balance', { p_user_id: userId, p_points: pts });
     } else if (prizeKey === 'voucher_15pct') {
+      // Apply VIP discount boost (e.g. 15% + 5% = 20% for Expert/Legend)
+      const discountPercent = 15 + discountBoost;
       const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
       const { data: voucher, error: vErr } = await admin
         .from('vouchers')
         .insert({
           user_id: userId,
           type: 'discount_pct',
-          value: { percent: 15 },
+          value: { percent: discountPercent },
           expires_at: expiresAt,
           source: 'spin_wheel',
         })
@@ -205,16 +227,17 @@ Deno.serve(async (req: Request) => {
         }
         voucherId = voucher?.id;
       } else {
-        // Fallback: award 25 points instead
+        // Fallback: award 25 points instead (with VIP multiplier)
         effectivePrizeKey = 'points_25';
-        pointsAwarded = 25;
+        const fallbackPts = Math.round(25 * pointsMultiplier);
+        pointsAwarded = fallbackPts;
 
         await admin
           .from('points_transactions')
-          .insert({ user_id: userId, points: 25, reason: 'spin_wheel:free_can_fallback' });
+          .insert({ user_id: userId, points: fallbackPts, reason: 'spin_wheel:free_can_fallback' });
 
         // Atomic increment — avoids race condition
-        await admin.rpc('increment_points_balance', { p_user_id: userId, p_points: 25 });
+        await admin.rpc('increment_points_balance', { p_user_id: userId, p_points: fallbackPts });
       }
     } else if (prizeKey === 'free_month') {
       const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -263,8 +286,13 @@ Deno.serve(async (req: Request) => {
     };
     if (voucherId) responseBody.voucher_id = voucherId;
     if (pointsAwarded) responseBody.points_awarded = pointsAwarded;
+    if (isVip) {
+      responseBody.vip_bonus = true;
+      responseBody.points_multiplier = pointsMultiplier;
+      responseBody.discount_boost = discountBoost;
+    }
 
-    console.log('spin_wheel result', { userId, prizeKey: effectivePrizeKey, pointsAwarded, voucherId, requestId });
+    console.log('spin_wheel result', { userId, prizeKey: effectivePrizeKey, pointsAwarded, voucherId, isVip, userLevel, requestId });
 
     return new Response(
       JSON.stringify(responseBody),

@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { addToCart, openCart } from '@/stores/cart';
+import { addToCart } from '@/stores/cart';
 import type { Product, PackSize } from '@/data/products';
+import { rewards } from '@/config/rewards';
+import { loyaltyCurrencyName } from '@/lib/loyalty';
+import { getStorageKey } from '@/lib/tenant-storage';
 
 interface AddToCartButtonProps {
   product: {
@@ -25,6 +28,8 @@ const packOptions: { key: PackSize; label: string; qty: number }[] = [
   { key: 'pack10', label: '10 cans', qty: 10 },
 ];
 
+const BUY_NOW_KEY = getStorageKey('buyNowKey');
+
 const AddToCartButton = React.memo<AddToCartButtonProps>(
   function AddToCartButton({ product }) {
     const [selectedPack, setSelectedPack] = useState<PackSize>('pack1');
@@ -34,32 +39,41 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
     const selectedPrice = product.prices[selectedPack];
     const availablePacks = packOptions.filter((p) => product.prices[p.key] != null && product.prices[p.key] > 0);
 
+    const buildCartProduct = useCallback((): Product => ({
+      id: product.slug,
+      name: product.name,
+      brand: product.brand,
+      categoryKey: 'nicotinePouches',
+      flavorKey: (product.flavorKey ?? 'mint') as Product['flavorKey'],
+      strengthKey: (product.strengthKey ?? 'normal') as Product['strengthKey'],
+      formatKey: (product.formatKey ?? 'slim') as Product['formatKey'],
+      nicotineContent: product.nicotineContent ?? 0,
+      portionsPerCan: product.portionsPerCan ?? 20,
+      descriptionKey: '',
+      image: product.imageUrl,
+      ratings: 0,
+      badgeKeys: [],
+      prices: product.prices as Product['prices'],
+      manufacturer: product.brand,
+      stock: product.stock,
+    }), [product]);
+
     const handleAdd = useCallback(() => {
       if (isOutOfStock) return;
+      addToCart(buildCartProduct(), selectedPack, quantity);
+      window.dispatchEvent(new CustomEvent('open-cart'));
+    }, [buildCartProduct, selectedPack, quantity, isOutOfStock]);
 
-      // Build a minimal Product object compatible with the cart store
-      const cartProduct: Product = {
-        id: product.slug,
-        name: product.name,
-        brand: product.brand,
-        categoryKey: 'nicotinePouches',
-        flavorKey: (product.flavorKey ?? 'mint') as Product['flavorKey'],
-        strengthKey: (product.strengthKey ?? 'normal') as Product['strengthKey'],
-        formatKey: (product.formatKey ?? 'slim') as Product['formatKey'],
-        nicotineContent: product.nicotineContent ?? 0,
-        portionsPerCan: product.portionsPerCan ?? 20,
-        descriptionKey: '',
-        image: product.imageUrl,
-        ratings: 0,
-        badgeKeys: [],
-        prices: product.prices as Product['prices'],
-        manufacturer: product.brand,
-        stock: product.stock,
+    const handleBuyNow = useCallback(() => {
+      if (isOutOfStock) return;
+      const item = {
+        product: buildCartProduct(),
+        packSize: selectedPack,
+        quantity,
       };
-
-      addToCart(cartProduct, selectedPack, quantity);
-      openCart();
-    }, [product, selectedPack, quantity, isOutOfStock]);
+      sessionStorage.setItem(BUY_NOW_KEY, JSON.stringify(item));
+      window.location.href = '/checkout?buyNow=1';
+    }, [buildCartProduct, selectedPack, quantity, isOutOfStock]);
 
     const decrement = useCallback(() => {
       setQuantity((q) => Math.max(1, q - 1));
@@ -138,7 +152,7 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
             type="button"
             onClick={handleAdd}
             disabled={isOutOfStock}
-            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-initial"
+            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-6 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -153,13 +167,37 @@ const AddToCartButton = React.memo<AddToCartButtonProps>(
             </svg>
             {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
           </button>
+
+          {!isOutOfStock && (
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-6 text-base font-semibold text-primary transition hover:bg-primary/20"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Buy Now
+            </button>
+          )}
         </div>
 
-        {/* Selected price summary */}
-        {selectedPrice != null && quantity > 1 && (
-          <p className="text-sm text-muted-foreground">
-            Total: <span className="font-semibold text-foreground">&euro;{(selectedPrice * quantity).toFixed(2)}</span>
-          </p>
+        {/* Live total + loyalty earn — scales with pack + quantity */}
+        {selectedPrice != null && (
+          <div className="rounded-lg border border-border/60 bg-card/40 px-4 py-3 text-sm">
+            <p className="flex items-baseline justify-between">
+              <span className="text-muted-foreground">Total</span>
+              <span className="text-lg font-bold text-foreground">
+                &euro;{(selectedPrice * quantity).toFixed(2)}
+              </span>
+            </p>
+            <p className="mt-1 flex items-baseline justify-between text-xs">
+              <span className="text-muted-foreground">You'll earn</span>
+              <span className="font-semibold text-primary">
+                {Math.floor(selectedPrice * quantity * rewards.earnRatePerEur).toLocaleString()} {loyaltyCurrencyName}
+              </span>
+            </p>
+          </div>
         )}
       </div>
     );

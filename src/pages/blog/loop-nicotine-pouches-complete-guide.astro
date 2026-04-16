@@ -2,15 +2,52 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const loopMint = findProduct('loop', 'mint');
+const loopJalapeno = findProduct('loop', 'jalapeno');
+const loopMango = findProduct('loop', 'mango');
+const loopAny = findProduct('loop');
 
 const publishDate = '2026-03-27';
 const title = 'LOOP Nicotine Pouches: The Flavour-First Brand';
-const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant Rush technology for faster nicotine delivery. 32 products, bold flavours, and eco-conscious design.';
+const description = 'LOOP nicotine pouches reviewed — Swedish-made with Instant Rush technology. 32 products, bold flavours, and eco-conscious design.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/loop-nicotine-pouches-complete-guide` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What makes LOOP different from other nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP's Instant Rush technology delivers nicotine faster than most competitors — users feel the effect within 30–60 seconds. Combined with bold, experimental flavours and eco-conscious packaging, LOOP positions itself as the innovation leader in the category."}},{"@type":"Question","name":"How strong are LOOP nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP covers a wide strength range from 6 mg (medium) to Hyper Strong at 15+ mg/pouch. Their standard range sits at 6–10 mg, suitable for regular users. The Hyper Strong line is strictly for experienced users."}},{"@type":"Question","name":"What are the most popular LOOP flavours?","acceptedAnswer":{"@type":"Answer","text":"LOOP Mint Mania and LOOP Jalapeño Lime are the top sellers. Mint Mania offers a classic spearmint experience; Jalapeño Lime is LOOP's signature experimental flavour that has gained a cult following."}},{"@type":"Question","name":"Is LOOP eco-friendly?","acceptedAnswer":{"@type":"Answer","text":"LOOP emphasises sustainability in its packaging and production. The cans use less plastic than competitors and are designed for recycling. The plant-fibre pouches are biodegradable, though they should still be disposed of responsibly."}},{"@type":"Question","name":"How does LOOP compare to ZYN?","acceptedAnswer":{"@type":"Answer","text":"LOOP delivers nicotine faster (Instant Rush vs ZYN's standard release) and offers bolder flavours. ZYN is better for users who prefer subtler, longer-lasting flavour profiles and a wider range of lower strengths. Both are premium Swedish brands."}},{"@type":"Question","name":"Where can I buy LOOP nicotine pouches?","acceptedAnswer":{"@type":"Answer","text":"LOOP is available across most European markets online and in select retail stores. SnusFriend stocks the full LOOP range with free EU shipping on qualifying orders."}}]};
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
 >
@@ -21,32 +58,88 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
         { label: 'LOOP Guide' },
       ]} />
 
-      <header class="mb-10">
-        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Brand Spotlight</p>
-        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
-        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
-        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <time datetime={publishDate}>March 27, 2026</time>
-          <span>&middot;</span>
-          <span>8 min read</span>
-        </div>
-      </header>
+      <BlogHero
+        category="Brand Spotlight"
+        title={title}
+        description={description}
+        date="March 27, 2026"
+        readTime="8 min read"
+      />
+
+      <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+        <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+        <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+          LOOP is a Swedish nicotine pouch brand by Another Snus Factory, known for bold, unconventional flavours like Jalape&ntilde;o Lime and Sicily Spritz. Available on SnusFriend from 6mg to 15mg.
+        </p>
+      </div>
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('loop-jalapeno-lime-mini') && <BlogProductCard product={find('loop-jalapeno-lime-mini')} />}
+          {find('loop-fresh-peppermint-hyper') && <BlogProductCard product={find('loop-fresh-peppermint-hyper')} />}
+          {find('loop-red-chili-melon-hyper-strong') && <BlogProductCard product={find('loop-red-chili-melon-hyper-strong')} />}
+          {find('loop-creamy-cappuccino-mini') && <BlogProductCard product={find('loop-creamy-cappuccino-mini')} />}
+        </div>
+
+        <h2>LOOP Product Overview</h2>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Where is LOOP made?</summary>
+  <p style="margin-top: 12px;">LOOP nicotine pouches are manufactured in Sweden, upholding Scandinavian quality and hygiene standards that have become the gold standard in the industry. Swedish production ensures rigorous quality control and consistency across all batches sold globally.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Is LOOP owned by Swedish Match?</summary>
+  <p style="margin-top: 12px;">No, LOOP is not owned by Swedish Match; it is owned and operated by BAT (British American Tobacco) as an independent brand. While Swedish Match owns other nicotine pouch brands, LOOP maintains separate ownership and operates with its own product strategy and innovation roadmap. BAT's backing has enabled LOOP to expand globally while maintaining premium positioning.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">What is the strongest LOOP pouch?</summary>
+  <p style="margin-top: 12px;">LOOP Strong, available in flavours like Spearmint and Berry, delivers 7 mg of nicotine per pouch and is LOOP's highest-strength option for experienced users. For maximum intensity, LOOP Strong provides a long-lasting, satisfying nicotine experience comparable to many premium brands. Check our <a href="/nicotine-pouches" style="color: hsl(var(--primary));">full product catalog</a> for current availability and strength options.</p>
+</details>
+
+        <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>
+        <div style="overflow-x: auto; margin: 32px 0;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <thead>
+              <tr style="border-bottom: 2px solid hsl(var(--border));">
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Product</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Format</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Strength (mg/pouch)</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Flavour</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Pouches/Can</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Mint Mania</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.4</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Mint Mania Hyper Strong</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">15</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Jalapeno Lime</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.4</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Jalapeno Lime Hyper Strong</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">15</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Red Chili Melon</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.4</td><td style="padding: 10px 16px;">Fruit</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Red Chili Melon Mini</td><td style="padding: 10px 16px;">Mini</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Fruit</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Salty Ludicris</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.4</td><td style="padding: 10px 16px;">Licorice</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Sicily Spritz</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.4</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Habanero Mint</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.4</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Coffee</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.4</td><td style="padding: 10px 16px;">Coffee</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Smooth Mint</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">22</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">LOOP Zero Jalapeno Lime</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">0</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">22</td></tr>
+            </tbody>
+          </table>
+        </div>
 
         <h2>What Makes LOOP Different?</h2>
         <p>
           In a market dominated by Swedish Match and BAT, <strong>LOOP</strong> carved out its own identity
           by refusing to play it safe. Made by Another Snus Factory (ASF) in Sweden and launched in 2019,
-          LOOP's signature innovation is their <strong>Instant Rush technology</strong> — a pouch design
-          that releases nicotine and flavour faster than traditional pouches. Where most brands take
-          a few minutes to kick in, LOOP delivers a noticeable rush almost immediately.
+          LOOP's signature innovation is their <strong>Instant Rush technology — a pouch design that releases nicotine and flavour faster than traditional pouches</strong>. Where most brands take
+          a few minutes to kick in, LOOP delivers a noticeable rush almost immediately. For a competitive comparison, see our <a href="/blog/zyn-vs-velo-2026">ZYN vs VELO guide</a>.
         </p>
         <p>
-          With <strong>32 products</strong> in the <a href="/brands/loop">SnusFriends catalogue</a>,
-          LOOP also stands out for its adventurous flavour range. While other brands stick to variations of
+          With 32 products in the <a href="/brands/loop">LOOP catalogue</a>,
+          the brand also stands out for its adventurous flavour range. While <a href="/blog/zyn-nicotine-pouches-complete-guide">ZYN</a> and <a href="/blog/velo-nicotine-pouches-complete-guide">VELO</a> stick to variations of
           mint and berry, LOOP pushes into territory like jalapeño lime and habanero mint. If you find mainstream
-          pouches a bit predictable, LOOP is the antidote.
+          pouches a bit predictable, <strong>LOOP is the antidote for flavour explorers</strong>.
         </p>
 
         <h2>LOOP Formats: Mini and Slim</h2>
@@ -83,7 +176,7 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
               <td>Flavour without nicotine, tapering down</td>
             </tr>
             <tr>
-              <td><a href="/products/strength/regular">Normal</a></td>
+              <td><a href="/products/strength/normal">Normal</a></td>
               <td>4–6 mg</td>
               <td>Everyday use, casual pouch users</td>
             </tr>
@@ -101,14 +194,14 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
         </table>
         <p>
           The nicotine-free option is worth noting — LOOP is one of the few brands that lets you enjoy
-          the full pouch ritual without any nicotine, making it useful for people reducing their intake gradually.
+          the full pouch ritual without any nicotine, making it useful for people <a href="/blog/best-nicotine-pouches-for-quitting-smoking">reducing their intake gradually</a>.
         </p>
 
         <h2>LOOP's Signature Flavours</h2>
         <p>
           LOOP's flavour range is where the brand truly shines. While they offer excellent
           <a href="/products/flavor/mint">mint</a> and <a href="/products/flavor/berry">berry</a>
-          options, the standout creations are the ones you won't find anywhere else:
+          options, the standout creations are the ones you won't find anywhere else. For mint comparisons across brands, read our <a href="/blog/top-10-mint-flavours">top 10 mint pouches article</a>:
         </p>
         <h3>Bold and Adventurous</h3>
         <p>
@@ -130,12 +223,16 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
           slightly salty rather than candy-sweet.
         </p>
 
+        <h2>Featured LOOP Products</h2>
+        {loopMint && <BlogProductCard {...loopMint.data} />}
+        {loopJalapeno && <BlogProductCard {...loopJalapeno.data} />}
+        {loopMango && <BlogProductCard {...loopMango.data} />}
+        {loopAny && !loopMint && !loopJalapeno && !loopMango && <BlogProductCard {...loopAny.data} />}
+
         <h2>The Instant Rush Experience</h2>
         <p>
           LOOP's proprietary Instant Rush technology deserves its own section because it genuinely
-          changes how the pouch feels. Traditional pouches typically need <strong>2–5 minutes</strong>
-          before you notice the nicotine. LOOP's formulation brings that down to under a minute
-          for most users.
+          changes how the pouch feels. <strong>Traditional pouches typically need 2–5 minutes before you notice the nicotine, while LOOP brings that down to under a minute for most users.</strong> This makes LOOP popular among <a href="/blog/best-nicotine-pouches-all-day-use">all-day users</a> seeking rapid onset.
         </p>
         <p>
           The trade-off is that the initial intensity is sharper — which some users love and others
@@ -155,36 +252,46 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
         <h2>Who Is LOOP Best For?</h2>
         <p>
           <strong>Flavour explorers</strong> — If you've been using the same mint pouch for months
-          and want to try something genuinely new, LOOP's range will reignite your curiosity.
+          and want to try something genuinely new, check our <a href="/blog/nicotine-pouch-flavour-guide">flavour guide</a> comparing LOOP against other adventurous brands.
         </p>
         <p>
           <strong>Fast onset fans</strong> — If you find traditional pouches too slow to kick in,
-          the Instant Rush technology delivers quicker satisfaction.
+          the Instant Rush technology delivers quicker satisfaction. Compare with <a href="/blog/how-long-do-nicotine-pouches-last">duration and onset across brands</a>.
         </p>
         <p>
-          <strong>Brand switchers</strong> — If you're exploring beyond <a href="/brands/zyn">ZYN</a>
-          or <a href="/brands/velo">VELO</a>, LOOP is the natural next step — Swedish quality with
-          more personality.
+          <strong>Brand switchers</strong> — If you're exploring beyond <a href="/blog/zyn-nicotine-pouches-complete-guide">ZYN</a>
+          or <a href="/blog/velo-nicotine-pouches-complete-guide">VELO</a>, LOOP is the natural next step — Swedish quality with
+          more personality. For a detailed comparison, see <a href="/blog/loop-vs-skruf">LOOP vs Skruf</a>.
         </p>
         <p>
           <strong>Eco-conscious users</strong> — If sustainability matters to you, LOOP walks the talk
-          with recycled packaging and transparent environmental commitments.
+          with recycled packaging and transparent environmental commitments. See our guide to <a href="/blog/nicotine-pouch-subscription-guide">sustainable pouch purchasing</a>.
         </p>
 
         <h2>LOOP vs Other Brands</h2>
         <p>
-          Compared to <a href="/brands/zyn">ZYN</a>, LOOP is bolder in both flavour and onset speed.
+          Compared to <a href="/blog/zyn-nicotine-pouches-complete-guide">ZYN</a>, LOOP is bolder in both flavour and onset speed.
           ZYN is the reliable daily driver; LOOP is the one you reach for when you want something
-          more exciting.
+          more exciting. See our full <a href="/blog/best-nicotine-pouches-2026">best nicotine pouches ranking</a>.
         </p>
         <p>
-          Compared to <a href="/brands/velo">VELO</a>, LOOP trades BAT's global polish for ASF's
+          Compared to <a href="/blog/velo-nicotine-pouches-complete-guide">VELO</a>, LOOP trades BAT's global polish for ASF's
           indie creativity. VELO has wider availability; LOOP has wilder flavours.
         </p>
         <p>
-          Compared to <a href="/brands/xqs">XQS</a>, both brands target flavour-forward users,
-          but LOOP's Instant Rush technology gives it a functional edge beyond just taste.
+          Compared to other flavour-focused brands,
+          LOOP's Instant Rush technology gives it a functional edge beyond just taste. For more brand comparisons, see our <a href="/blog/loop-vs-skruf">LOOP vs Skruf</a> article, or explore <a href="/blog/best-citrus-nicotine-pouches">citrus</a> and <a href="/blog/best-coffee-nicotine-pouches">coffee flavour guides</a>.
         </p>
+
+        <h2>Further Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/best-nicotine-pouches-2026">Best nicotine pouches 2026</a> — LOOP's overall ranking and comparison</li>
+          <li><a href="/blog/loop-vs-skruf">LOOP vs Skruf</a> — head-to-head comparison of two Swedish innovators</li>
+          <li><a href="/blog/nicotine-pouch-flavour-guide">Nicotine pouch flavour guide</a> — explore LOOP's adventurous flavours</li>
+          <li><a href="/blog/top-10-mint-flavours">Top 10 mint nicotine pouches</a> — LOOP's mint lineup ranked</li>
+          <li><a href="/blog/how-to-use-nicotine-pouches">How to use nicotine pouches</a> — guide to Instant Rush technology</li>
+          <li><a href="/blog/best-citrus-nicotine-pouches">Best citrus nicotine pouches</a> — LOOP citrus vs competitors</li>
+        </ul>
       </div>
 
       <!-- Cross-links -->
@@ -203,8 +310,8 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
           <div>
             <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
             <div class="flex flex-wrap gap-2">
-              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
-              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/light" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/normal" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
               <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
               <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
               <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
@@ -218,21 +325,34 @@ const description = 'Explore LOOP nicotine pouches — Swedish-made with Instant
         </div>
       </nav>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/loop-nicotine-pouches-complete-guide` },
-        "description": description
-      })} />
+
+<section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+  <h2>Frequently Asked Questions</h2>
+  <div style="margin-top: 16px;">
+    <h3>What makes LOOP different from other nicotine pouches?</h3>
+    <p>LOOP's Instant Rush technology delivers nicotine faster than most competitors — users feel the effect within 30–60 seconds. Combined with bold, experimental flavours and eco-conscious packaging, LOOP positions itself as the innovation leader in the category.</p>
+
+    <h3>How strong are LOOP nicotine pouches?</h3>
+    <p>LOOP covers a wide strength range from 6 mg (medium) to Hyper Strong at 15+ mg/pouch. Their standard range sits at 6–10 mg, suitable for regular users. The Hyper Strong line is strictly for experienced users.</p>
+
+    <h3>What are the most popular LOOP flavours?</h3>
+    <p>LOOP Mint Mania and LOOP Jalapeño Lime are the top sellers. Mint Mania offers a classic spearmint experience; Jalapeño Lime is LOOP's signature experimental flavour that has gained a cult following.</p>
+
+    <h3>Is LOOP eco-friendly?</h3>
+    <p>LOOP emphasises sustainability in its packaging and production. The cans use less plastic than competitors and are designed for recycling. The plant-fibre pouches are biodegradable, though they should still be disposed of responsibly.</p>
+
+    <h3>How does LOOP compare to ZYN?</h3>
+    <p>LOOP delivers nicotine faster (Instant Rush vs ZYN's standard release) and offers bolder flavours. ZYN is better for users who prefer subtler, longer-lasting flavour profiles and a wider range of lower strengths. Both are premium Swedish brands.</p>
+
+    <h3>Where can I buy LOOP nicotine pouches?</h3>
+    <p>LOOP is available across most European markets online and in select retail stores. SnusFriend stocks the full LOOP range with free EU shipping on qualifying orders.</p>
+  </div>
+</section>
+
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

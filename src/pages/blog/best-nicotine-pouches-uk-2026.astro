@@ -1,0 +1,296 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+const facts = await getEditorialFacts();
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-04-09';
+const title = 'Best Nicotine Pouches in the UK 2026: Top 10 Picks';
+const description = 'The 10 best nicotine pouches in the UK for 2026. Post-Brexit regulations explained, GBP pricing, and fast delivery. Expert picks from SnusFriend.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-nicotine-pouches-uk-2026` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are nicotine pouches legal in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Nicotine pouches are fully legal consumer products in the UK. They're not classed as tobacco, and the MHRA regulates them as consumer items. Age verification (18+) is required at purchase."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you need to be 18 to buy nicotine pouches in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Age verification is required at purchase, both in-store and online. It's illegal to sell nicotine pouches to under-18s."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can I buy nicotine pouches in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `UK supermarkets (Nordic Spirit at Tesco, Sainsbury's), specialist shops (larger selection), UK online retailers (1–2 days delivery), or SnusFriend for ${facts.productCountLabel} products (3–5 days + customs).`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will nicotine pouches be banned in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Very unlikely. The UK's harm reduction stance is significantly more permissive than the EU. Bans are not on the horizon, though oversight may increase."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much do nicotine pouches cost in the UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Supermarkets: £4.50–£6.00 per can. UK online retailers: £2.80–£4.50. Bulk orders: £2.00–£3.50 per can."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there customs duty ordering pouches from EU to UK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No tariff duty applies (0%), but UK import VAT (20%) will be charged on orders over ~£15. The carrier collects VAT at delivery."
+            }
+          }
+        ]
+      };
+---
+
+<Shop title={title} description={description} ogType="article">
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'UK Guide' },
+      ]} />
+
+      <BlogHero
+        category="Country Guide"
+        title={title}
+        description={description}
+        date={publishDate}
+        readTime="9 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div style="background: hsl(var(--muted)); border-left: 4px solid hsl(var(--primary)); padding: 1.5rem; margin: 2rem 0; border-radius: 0.375rem;">
+          <p><strong>Quick answer:</strong> ZYN Cool Mint S2 offers the best overall UK experience — widely recognized, consistent quality, and available both in-store and online. For UK retail shoppers, Nordic Spirit Spearmint is your easiest choice (stocked at Tesco and Sainsbury's). If you want premium selection from {facts.productCountLabel} products, SnusFriend ships from the EU with transparent post-Brexit customs information.</p>
+        </div>
+
+        <div style="margin: 16px 0 24px; padding: 14px 18px; background: hsl(var(--muted)); border-left: 3px solid hsl(var(--primary) / 0.4); border-radius: 6px; font-size: 13px; color: hsl(var(--muted-foreground));">
+          <strong style="color: hsl(var(--foreground));">Regulatory notice:</strong> Nicotine pouch regulations vary by country and change frequently. This article reflects our understanding as of the publication date. Always verify current local regulations before ordering. SnusFriend does not ship to countries where nicotine pouches are prohibited.
+        </div>
+
+        <h2>Legal Status &amp; Regulation in the UK</h2>
+        <p>Nicotine pouches are <strong>completely legal in the UK</strong> — but the regulatory landscape has shifted since Brexit, and it's worth understanding the current position.</p>
+
+        <p>Before Brexit, the UK followed the EU's Tobacco Products Directive (TPD), which restricted nicotine pouches through heavy regulations. Since leaving the EU, the UK is <strong>no longer bound by TPD rules for tobacco-free pouches</strong>. This means nicotine pouches remain more freely available in the UK than in many EU countries.</p>
+
+        <p>The Medicines and Healthcare products Regulatory Agency (MHRA) considered regulating nicotine pouches as medicines but decided to keep them as consumer products. They're subject to consumer protection laws and age verification (18+), but not the stricter TPD.</p>
+
+        <p><strong>Important note on snus:</strong> Traditional Swedish snus (moist tobacco pouches) is still banned in the UK due to inherited EU law. However, <em>nicotine pouches are not snus</em> — they contain nicotine salt and plant fibre, not tobacco. This is a critical distinction that confuses many people.</p>
+
+        <p>The UK government's Tobacco and Vapes Bill (ongoing as of April 2026) may introduce new regulations, including potential age-gating measures for online sales. We recommend checking the latest government announcements if buying online, as rules may evolve.</p>
+
+        <p><strong>Bottom line:</strong> Nicotine pouches are legal today. The regulatory environment is stable but watchful. Public Health England's harm reduction stance means UK policy is unlikely to swing toward bans like other countries.</p>
+
+        <h2>Top 10 Best Nicotine Pouches in the UK</h2>
+
+        <h3>1. ZYN Cool Mint S2</h3>
+        <p><strong>Medium (6 mg/pouch)</strong></p>
+        <p>ZYN is the global market leader for good reason. Cool Mint S2 combines smooth mint flavour with a satisfying nicotine hit and virtually no drip. The white pouches are discreet, and the consistency is reliable across batches.</p>
+        <p><strong>Why it made the list:</strong> Most recognised brand globally, trusted quality, and available both online and in specialist shops across the UK.</p>
+
+        <h3>2. VELO Ice Cool S3</h3>
+        <p><strong>Strong (9 mg/pouch)</strong></p>
+        <p>VELO is British American Tobacco's flagship nicotine pouch brand and designed specifically for UK tastes. Ice Cool S3 delivers a crisp, cooling sensation with strong nicotine delivery. VELO pouches are slim and comfortable for long-term wear.</p>
+        <p><strong>Why it made the list:</strong> UK-focused brand with reliable distribution and strong presence in modern convenience stores. BAT's quality control is excellent.</p>
+
+        <h3>3. Nordic Spirit Spearmint</h3>
+        <p><strong>Medium-Strong (8.8 mg/pouch)</strong></p>
+        <p>Nordic Spirit is <strong>the most available nicotine pouch in UK supermarkets</strong>. You'll find it at Tesco, Sainsbury's, and most major chains. Spearmint offers authentic herbal mint flavour without the cooling burn of mentholated varieties. The white pouches are smooth and long-lasting.</p>
+        <p><strong>Why it made the list:</strong> Ultimate convenience — no online ordering needed. Consistent flavour and strong nicotine delivery at reasonable supermarket prices (£4.50–£6.00 per can).</p>
+
+        <h3>4. ON! Mint</h3>
+        <p><strong>Light-Medium (2 mg/pouch)</strong></p>
+        <p>ON! are the smallest nicotine pouches on the market. If discretion is your priority — whether for work, social, or health reasons — ON! Mint fits effortlessly under your lip with virtually no visible bulge. Flavour is subtle and clean.</p>
+        <p><strong>Why it made the list:</strong> Best choice for first-time users, professional environments, or anyone wanting to be completely discreet.</p>
+
+        <h3>5. Loop Mint Mania</h3>
+        <p><strong>Extra Strong (13.5 mg/pouch)</strong></p>
+        <p>Loop is a Swedish brand built for serious mint enthusiasts. Mint Mania combines intense peppermint and spearmint with very strong nicotine. These are not beginner pouches — they're designed for experienced users who want maximum impact.</p>
+        <p><strong>Why it made the list:</strong> Best strong mint option for users comfortable with high nicotine. Loop's quality and consistency are exceptional.</p>
+
+        <h3>6. Skruf Super White Fresh Mint S2</h3>
+        <p><strong>Medium (6 mg/pouch)</strong></p>
+        <p>Skruf offers remarkable value. Super White Fresh Mint delivers clean mint flavour, excellent nicotine delivery, and smooth absorption — all at lower prices than premium brands. Swedish manufacture guarantees consistent quality.</p>
+        <p><strong>Why it made the list:</strong> Best value for money. Buy a 10-pack or bulk order online and save significantly compared to supermarket brands.</p>
+
+        <h3>7. White Fox Double Mint</h3>
+        <p><strong>Strong (9 mg/pouch)</strong></p>
+        <p>White Fox focuses on purity and flavour. Double Mint blends cool peppermint with subtle spearmint for a complex, refreshing taste. The white pouches are dry and comfortable, with minimal drip.</p>
+        <p><strong>Why it made the list:</strong> Best for users who want strong nicotine without artificial cooling agents. Clean, natural mint profile.</p>
+
+        <h3>8. Helwit Blueberry</h3>
+        <p><strong>Medium (6 mg/pouch)</strong></p>
+        <p>If you're tired of mint and want fruit, Helwit Blueberry is the UK's best option. The flavour is genuine blueberry — tart, slightly sweet, with no artificial aftertaste. Perfect for afternoon use or when you want something different.</p>
+        <p><strong>Why it made the list:</strong> Best fruit flavour; breaks up the monotony of mint-only rotation; good for variety seekers.</p>
+
+        <h3>9. Klar Mint</h3>
+        <p><strong>Medium-Strong (8 mg/pouch)</strong></p>
+        <p>Klar represents Scandinavian craft philosophy. This Swedish brand focuses on minimal ingredients and maximum flavour clarity. Mint is bright and herbal without cooling agents. Popular among users who appreciate artisanal products.</p>
+        <p><strong>Why it made the list:</strong> Best craft alternative to mass-market brands; appeals to users wanting "premium" positioning and ingredient transparency.</p>
+
+        <h3>10. Pablo Exclusive Mango Ice</h3>
+        <p><strong>Extra Strong (20 mg/pouch)</strong></p>
+        <p><strong>Warning: For experienced users only.</strong> Pablo Exclusive is the strongest nicotine pouch widely available (20 mg). Mango Ice combines tropical sweetness with icy cool sensation. One pouch lasts 30–45 minutes with intense nicotine delivery.</p>
+        <p><strong>Why it made the list:</strong> Best for experienced users seeking maximum nicotine; only choice for those transitioning from cigarettes or vaping who need comparable satisfaction.</p>
+
+        <h2>UK Price Comparison: Retail vs Online</h2>
+
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+            <thead>
+              <tr style="background: hsl(var(--muted));">
+                <th style="border: 1px solid hsl(var(--border)); padding: 1rem; text-align: left; font-weight: 600;">Channel</th>
+                <th style="border: 1px solid hsl(var(--border)); padding: 1rem; text-align: left; font-weight: 600;">Price per Can</th>
+                <th style="border: 1px solid hsl(var(--border)); padding: 1rem; text-align: left; font-weight: 600;">Pros</th>
+                <th style="border: 1px solid hsl(var(--border)); padding: 1rem; text-align: left; font-weight: 600;">Cons</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;"><strong>UK Supermarkets</strong> (Nordic Spirit)</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">£4.50–£6.00</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">Immediate pickup; no shipping; familiar retail experience</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">Limited selection (~3 brands); premium pricing</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;"><strong>UK Specialist Shops</strong></td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">£3.50–£5.50</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">Better selection; competitive pricing; staff knowledge</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">Only available in cities/larger towns; variable stock</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;"><strong>UK Online Retailers</strong></td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">£2.80–£4.50</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">Bulk discounts; wide selection (~100+ brands); home delivery 1–2 days</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">Shipping cost (£3–£6); no immediate access</td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;"><strong>SnusFriend (EU-based)</strong></td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">£2.00–£3.80 + potential VAT</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">Largest selection ({facts.productCountLabel} products); best bulk pricing; fast shipping (3–5 days)</td>
+                <td style="border: 1px solid hsl(var(--border)); padding: 1rem;">Post-Brexit: possible customs VAT (20%); import processing time</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background: hsl(var(--muted)); padding: 1rem; border-radius: 0.375rem; margin: 1rem 0; font-style: italic;">
+          <strong>Honest note on overseas ordering:</strong> Ordering from SnusFriend (EU-based) is legal, but you should know: orders may be subject to UK import VAT (20%) and customs processing at the border. Small orders under the VAT duty threshold (roughly £15) sometimes pass through without charge, but this is not guaranteed. Larger orders almost certainly incur VAT. This transparency is why UK customers trust SnusFriend — we don't hide the customs reality like some competitors do.
+        </div>
+
+        <h2>Shipping to the UK from SnusFriend</h2>
+        <p><strong>Delivery speed:</strong> SnusFriend ships from our EU warehouse with typical delivery to the UK of <strong>3–5 business days</strong>. Orders placed Monday–Friday ship the next working day.</p>
+
+        <p><strong>Post-Brexit customs reality:</strong> Since January 2021, orders from the EU to the UK are subject to import rules:</p>
+        <ul>
+          <li>Orders under ~£15 may pass through duty-free (no guarantee)</li>
+          <li>Orders over £15 will likely incur 20% UK import VAT at the border</li>
+          <li>Your carrier (Royal Mail, DPD, DHL) will handle VAT collection on delivery or prior notice</li>
+          <li>Processing can add 2–5 days to delivery time if customs inspection occurs</li>
+        </ul>
+
+        <p><strong>Why still order from SnusFriend despite customs?</strong> Selection. UK retail offers ~50 nicotine pouch varieties. SnusFriend offers {facts.productCountLabel}. For serious enthusiasts, the variety justifies the customs wait and VAT. For casual users, UK supermarket shopping is simpler.</p>
+
+        <h2>Recommended Products</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-cool-mint-s2') && <BlogProductCard product={find('zyn-cool-mint-s2')} />}
+          {find('velo-ice-cool-s3') && <BlogProductCard product={find('velo-ice-cool-s3')} />}
+          {find('nordic-spirit-spearmint') && <BlogProductCard product={find('nordic-spirit-spearmint')} />}
+          {find('on-mint') && <BlogProductCard product={find('on-mint')} />}
+          {find('loop-mint-mania') && <BlogProductCard product={find('loop-mint-mania')} />}
+        </div>
+
+        <h2>Getting Started: <a href="/beginners">New to Nicotine Pouches?</a></h2>
+        <p>If this is your first time, start with <strong>lower-strength options</strong> (ON! Mint at 2 mg, ZYN Cool Mint S2 at 6 mg). Let the pouch sit under your upper lip for 30–45 minutes. Avoid swallowing saliva directly — small amounts are fine, but the aim is absorption through the gum. <a href="/beginners">Our beginner guide</a> covers all the basics.</p>
+
+        <h2>Compare with Other Options</h2>
+        <p>Curious how nicotine pouches compare to cigarettes or vaping? See our full comparison: <a href="/blog/nicotine-pouches-vs-cigarettes">Nicotine Pouches vs. Cigarettes</a>. For broader brand rankings, check <a href="/blog/best-nicotine-pouches-2026">Best Nicotine Pouches Globally 2026</a>.</p>
+
+        <h2>Explore by Brand</h2>
+        <ul>
+          <li><a href="/brands/zyn">ZYN — The Global Leader</a></li>
+          <li><a href="/brands/velo">VELO — BAT's UK Flagship</a></li>
+          <li><a href="/brands/nordic-spirit">Nordic Spirit — UK's Most Available</a></li>
+        </ul>
+        <p>Or browse our <a href="/nicotine-pouches">full product catalog</a> ({facts.productCountLabel} products and flavours).</p>
+
+      </div>
+
+      <details class="mt-10 border border-border rounded-lg">
+        <summary class="cursor-pointer px-4 py-3 font-semibold text-foreground">Frequently Asked Questions</summary>
+        <div class="px-4 pb-4 space-y-4 text-muted-foreground">
+          <h3 class="text-foreground font-semibold mt-4">Are nicotine pouches legal in the UK?</h3>
+          <p>Yes. Nicotine pouches are fully legal consumer products in the UK. They're not classed as tobacco (they contain no tobacco), and the MHRA regulates them as consumer items, not medicines. You must be 18+ to purchase. The Tobacco and Vapes Bill may introduce new regulations, but bans are unlikely given UK harm reduction policy.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Do you need to be 18 to buy nicotine pouches in the UK?</h3>
+          <p>Yes. Age verification is required at purchase, both in-store and online. UK retailers use ID checks or age-gating software. It's illegal to sell nicotine pouches to under-18s.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Where can I buy nicotine pouches in the UK?</h3>
+          <p>Three options: (1) UK supermarkets — Nordic Spirit at Tesco, Sainsbury's, Asda, Morrisons; (2) UK specialist shops — larger selection, lower prices, found in most city centres; (3) Online — UK retailers for fastest delivery (1–2 days) or SnusFriend for largest selection (3–5 days + possible customs). We provide a full guide at <a href="/nicotine-pouches">/nicotine-pouches</a>.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Will nicotine pouches be banned in the UK?</h3>
+          <p>Very unlikely. The UK government's stance on harm reduction is significantly more permissive than the EU. Public Health England has recognized nicotine pouches as a lower-harm alternative to cigarettes. While the Tobacco and Vapes Bill may introduce new oversight, bans are not on the horizon.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">How much do nicotine pouches cost in the UK?</h3>
+          <p>Supermarkets: £4.50–£6.00 per can (10–20 pouches). UK online retailers: £2.80–£4.50 per can. Bulk orders (10+ cans) drop to £2.00–£3.50 per can. SnusFriend bulk pricing starts at £2.00 per can before customs VAT.</p>
+
+          <h3 class="text-foreground font-semibold mt-4">Is there customs duty ordering pouches from EU to UK?</h3>
+          <p>Nicotine pouches are not subject to tariffs (0% duty), but <strong>import VAT applies at 20%</strong>. Small orders (~£15) may slip through without charge; larger orders will have VAT collected by the carrier at delivery. This is built into SnusFriend's transparency — we list prices before VAT so you know what to expect at the border.</p>
+        </div>
+      </details>
+
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+
+      <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+        <strong>Medical Disclaimer:</strong> Nicotine pouches contain nicotine, which is addictive and may be harmful if used regularly or in high quantities. This article is for informational purposes only and is not medical advice. Nicotine pouches are not smoking cessation devices and are not approved by the MHRA as medicines. This product is intended for adult users only (18+). Keep away from children and pets.
+      </p>
+    </div>
+  </article>
+</Shop>

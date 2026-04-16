@@ -1,55 +1,94 @@
 ---
 export const prerender = false;
 
+import { Image } from 'astro:assets';
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
 import { tenant } from '@/config/tenant';
+import { rewards } from '@/config/rewards';
 import OrderQuestTrigger from '@/components/react/OrderQuestTrigger';
 
 const orderId = Astro.url.searchParams.get('order');
+const guestEmail = Astro.url.searchParams.get('email')?.trim().toLowerCase() ?? '';
 const supabase = Astro.locals.supabase;
 const user = Astro.locals.user;
 
-// Fetch order data if we have an orderId and authenticated user
+// Fetch order data.
+// Logged-in: direct query with user_id filter (RLS-enforced ownership).
+// Guest: use the get-order-confirmation edge function which gates on
+//        orderId + customer_email match. Do NOT fall back to a direct
+//        orders query for guests — that would leak order details to
+//        anyone who can guess a UUID.
 let order: any = null;
 let lineItems: any[] = [];
 let fetchError = false;
+let needsGuestEmail = false;
 
-if (orderId && supabase && user) {
+if (orderId && user && supabase) {
   const { data, error } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('id', orderId)
-    .eq('user_id', user.id)
-    .single();
-
+    .from('orders').select('*').eq('id', orderId).eq('user_id', user.id).single();
   if (error || !data) {
     fetchError = true;
   } else {
     order = data;
-    // Parse line_items_snapshot — stored as JSON
-    if (order.line_items_snapshot) {
-      try {
-        lineItems = typeof order.line_items_snapshot === 'string'
-          ? JSON.parse(order.line_items_snapshot)
-          : Array.isArray(order.line_items_snapshot)
-            ? order.line_items_snapshot
-            : [];
-      } catch {
-        lineItems = [];
+  }
+} else if (orderId && !user) {
+  if (!guestEmail) {
+    needsGuestEmail = true;
+  } else {
+    const supabaseUrl = import.meta.env.SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
+    const anonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    try {
+      const res = await fetch(`${supabaseUrl}/functions/v1/get-order-confirmation`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(anonKey ? { apikey: anonKey, Authorization: `Bearer ${anonKey}` } : {}),
+        },
+        body: JSON.stringify({ orderId, email: guestEmail }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        order = data.order ?? null;
+        if (!order) fetchError = true;
+      } else {
+        fetchError = true;
       }
+    } catch {
+      fetchError = true;
     }
   }
 }
 
-// Parse customer metadata for shipping address
-let shippingAddress: any = null;
-if (order?.customer_metadata) {
+// Parse line_items_snapshot (same shape from either path)
+if (order?.line_items_snapshot) {
   try {
-    const meta = typeof order.customer_metadata === 'string'
-      ? JSON.parse(order.customer_metadata)
-      : order.customer_metadata;
-    shippingAddress = meta?.shipping_address ?? meta?.address ?? null;
+    lineItems = typeof order.line_items_snapshot === 'string'
+      ? JSON.parse(order.line_items_snapshot)
+      : Array.isArray(order.line_items_snapshot)
+        ? order.line_items_snapshot
+        : [];
+  } catch {
+    lineItems = [];
+  }
+}
+
+// Parse shipping address — normalize raw NYE fields to renderer-expected shape
+let shippingAddress: any = null;
+if (order?.shipping_address) {
+  try {
+    const raw = typeof order.shipping_address === 'string'
+      ? JSON.parse(order.shipping_address)
+      : order.shipping_address;
+    shippingAddress = {
+      name: [raw.firstname, raw.lastname].filter(Boolean).join(' ') || raw.name || null,
+      line1: raw.address || raw.line1 || null,
+      line2: raw.line2 ?? null,
+      city: raw.city || null,
+      postal_code: raw.postcode || raw.postal_code || null,
+      state: raw.state ?? null,
+      country: raw.country || null,
+    };
   } catch {
     shippingAddress = null;
   }
@@ -86,9 +125,7 @@ function formatPrice(amount: number, currency: string = 'EUR') {
 
 // Compute subtotal from line items
 const subtotal = lineItems.reduce((sum: number, item: any) => {
-  const price = item.price ?? item.unit_price ?? 0;
-  const qty = item.quantity ?? 1;
-  return sum + (price * qty);
+  return sum + (item.unit_price * item.quantity);
 }, 0);
 ---
 
@@ -103,7 +140,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
       <div class="mx-auto">
         {/* Success header */}
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center mb-6">
+        <div class="rounded-xl border border-border bg-card/80 p-8 text-center mb-6">
           <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
             <svg class="h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -121,10 +158,36 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
                 {status}
               </span>
             </div>
+          ) : needsGuestEmail ? (
+            <div class="text-left max-w-md mx-auto">
+              <p class="text-muted-foreground mb-4">
+                We need the email address you used at checkout to confirm this order belongs to you.
+              </p>
+              <form method="get" action="/order-confirmation" class="space-y-3">
+                <input type="hidden" name="order" value={orderId} />
+                <label class="block">
+                  <span class="sr-only">Email address</span>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    placeholder="you@example.com"
+                    class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  class="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+                >
+                  View order
+                </button>
+              </form>
+            </div>
           ) : orderId && fetchError ? (
             <p class="text-muted-foreground mb-6">
-              We couldn't find order <strong class="text-foreground font-semibold">#{orderId}</strong>.
-              It may still be processing. You'll receive a confirmation email shortly.
+              We couldn't find order <strong class="text-foreground font-semibold">#{orderId}</strong>
+              {guestEmail ? ' for that email address' : ''}. Please double-check the email you used at checkout.
             </p>
           ) : (
             <p class="text-muted-foreground mb-6">
@@ -135,23 +198,20 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
         {/* Order details */}
         {order && lineItems.length > 0 && (
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6 mb-6">
             <h2 class="text-lg font-semibold mb-4">Order Details</h2>
 
             {/* Line items */}
             <div class="divide-y divide-border">
-              {lineItems.map((item: any) => {
-                const itemName = item.name ?? item.product_name ?? 'Product';
-                const itemPrice = item.price ?? item.unit_price ?? 0;
-                const itemQty = item.quantity ?? 1;
-                const itemImage = item.image_url ?? item.imageUrl ?? null;
-
-                return (
+              {lineItems.map((item: any) => (
                   <div class="flex items-center gap-4 py-3">
-                    {itemImage ? (
-                      <img
-                        src={itemImage}
-                        alt={itemName}
+                    {item.image_url ? (
+                      <Image
+                        src={item.image_url}
+                        alt={item.product_name}
+                        width={56}
+                        height={56}
+                        format="webp"
                         class="h-14 w-14 rounded-lg object-cover border border-border bg-muted/20"
                         loading="lazy"
                       />
@@ -163,15 +223,14 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
                       </div>
                     )}
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-foreground truncate">{itemName}</p>
-                      <p class="text-xs text-muted-foreground">Qty: {itemQty}</p>
+                      <p class="text-sm font-medium text-foreground truncate">{item.product_name}</p>
+                      <p class="text-xs text-muted-foreground">Qty: {item.quantity}</p>
                     </div>
                     <p class="text-sm font-medium text-foreground whitespace-nowrap">
-                      {formatPrice(itemPrice * itemQty, order.currency)}
+                      {formatPrice(item.unit_price * item.quantity, order.currency)}
                     </p>
                   </div>
-                );
-              })}
+              ))}
             </div>
 
             {/* Totals */}
@@ -202,7 +261,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
         {/* Shipping address */}
         {order && shippingAddress && (
-          <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+          <div class="rounded-xl border border-border bg-card/80 p-6 mb-6">
             <h2 class="text-lg font-semibold mb-3">Shipping Address</h2>
             <div class="text-sm text-muted-foreground space-y-0.5">
               {shippingAddress.name && <p class="text-foreground font-medium">{shippingAddress.name}</p>}
@@ -220,7 +279,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
 
         {/* Tracking link */}
         {order?.tracking_url && (
-          <div class="rounded-xl border border-primary/20 bg-primary/5 backdrop-blur-sm p-6 mb-6">
+          <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 mb-6">
             <div class="flex items-center gap-3">
               <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                 <svg class="h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -237,6 +296,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
                 href={order.tracking_url}
                 target="_blank"
                 rel="noopener noreferrer"
+                referrerpolicy="no-referrer"
                 class="ml-auto inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
               >
                 Track Package
@@ -246,7 +306,7 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
         )}
 
         {/* What happens next */}
-        <div class="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-6 mb-6">
+        <div class="rounded-xl border border-border bg-card/80 p-6 mb-6">
           <h2 class="text-sm font-semibold text-foreground mb-2">What happens next?</h2>
           <ul class="space-y-2 text-sm text-muted-foreground">
             <li class="flex items-start gap-2">
@@ -264,9 +324,78 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
           </ul>
         </div>
 
+        {/* Rewards next-step nudge */}
+        <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 mb-6">
+          <h2 class="text-lg font-semibold text-foreground mb-1">Nice choice. Here's what's next.</h2>
+          <p class="text-sm text-muted-foreground mb-4">
+            Your {tenant.loyaltyCurrencyName} will land once your order ships. In the meantime, keep the momentum going:
+          </p>
+          <div class="grid gap-3 sm:grid-cols-3">
+            <a href="/rewards#spin" class="flex items-center gap-3 rounded-lg border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-sm" data-astro-prefetch>
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-lg">🎡</span>
+              <div>
+                <p class="text-sm font-medium text-foreground">Spin the Daily Drop</p>
+                <p class="text-xs text-muted-foreground">Free rewards every day</p>
+              </div>
+            </a>
+            <a href="/rewards#missions" class="flex items-center gap-3 rounded-lg border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-sm" data-astro-prefetch>
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-lg">⚡</span>
+              <div>
+                <p class="text-sm font-medium text-foreground">Start a Mission</p>
+                <p class="text-xs text-muted-foreground">Earn bonus {tenant.loyaltyCurrencyName}</p>
+              </div>
+            </a>
+            <a href="/account#reviews" class="flex items-center gap-3 rounded-lg border border-border bg-card/60 p-3 transition hover:border-primary/30 hover:shadow-sm" data-astro-prefetch>
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-lg">✍️</span>
+              <div>
+                <p class="text-sm font-medium text-foreground">Write a Review</p>
+                <p class="text-xs text-muted-foreground">{rewards.verifiedReview} {tenant.loyaltyCurrencyName} per review</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
         {/* Quest trigger — fires order_placed progress update */}
         {order && user && orderId && (
-          <OrderQuestTrigger client:load orderId={orderId} />
+          <OrderQuestTrigger client:idle orderId={orderId} />
+        )}
+
+        {/* Guest account creation prompt */}
+        {!user && order && (
+          <div class="rounded-xl border border-primary/20 bg-primary/5 p-6 mb-6 text-center">
+            <h2 class="text-lg font-semibold mb-2">Track your order & earn rewards</h2>
+            <p class="text-sm text-muted-foreground mb-4">
+              Create an account to track this order, earn {tenant.loyaltyCurrencyName} on future purchases, and get exclusive deals.
+            </p>
+            <form id="guest-register-form" data-guest-register-form class="max-w-sm mx-auto space-y-3">
+              <input type="hidden" name="email" value={guestEmail} />
+              <input type="hidden" name="orderId" value={orderId} />
+              <div>
+                <label for="guest-password" class="block text-sm font-medium mb-1">Choose a password</label>
+                <input
+                  type="password"
+                  id="guest-password"
+                  name="password"
+                  required
+                  minlength="8"
+                  placeholder="At least 8 characters"
+                  class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              </div>
+              <div id="guest-register-error" class="hidden rounded-lg bg-destructive/10 border border-destructive/30 p-3 text-sm text-destructive"></div>
+              <div id="guest-register-success" class="hidden rounded-lg bg-emerald-500/10 border border-emerald-500/30 p-3 text-sm text-emerald-400"></div>
+              <button
+                type="submit"
+                id="guest-register-btn"
+                class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Create Account & Track Order
+              </button>
+            </form>
+            <p class="mt-3 text-xs text-muted-foreground">
+              Or <a href="/" class="text-primary hover:underline">continue without an account</a>
+            </p>
+          </div>
         )}
 
         {/* Actions */}
@@ -277,14 +406,29 @@ const subtotal = lineItems.reduce((sum: number, item: any) => {
           >
             Continue Shopping
           </a>
-          <a
-            href="/account"
-            class="inline-flex items-center justify-center rounded-lg border border-border bg-background px-6 py-2.5 text-sm font-medium text-foreground hover:bg-card transition"
-          >
-            View Orders
-          </a>
+          {user && (
+            <a
+              href="/account"
+              class="inline-flex items-center justify-center rounded-lg border border-border bg-background px-6 py-2.5 text-sm font-medium text-foreground hover:bg-card transition"
+            >
+              View Orders
+            </a>
+          )}
         </div>
       </div>
     </div>
   </section>
 </Shop>
+
+<script>
+  const { bootGuestRegisterForms } = await import('@/scripts/guest-register-form');
+
+  bootGuestRegisterForms({
+    passwordTooShortMessage: 'Password must be at least 8 characters.',
+    submittingText: 'Creating account…',
+    idleText: 'Create Account & Track Order',
+    successMessage: 'Account created! Check your email to confirm.',
+    genericErrorMessage: 'Something went wrong.',
+    networkErrorMessage: 'Network error. Please try again.',
+  });
+</script>

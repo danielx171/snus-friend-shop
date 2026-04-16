@@ -1,24 +1,10 @@
-import productPlaceholder from '@/assets/product-placeholder.jpg';
-import productDark from '@/assets/product-dark.jpg';
-import productBerry from '@/assets/product-berry.jpg';
-import productCitrus from '@/assets/product-citrus.jpg';
-
-// Language-agnostic flavor keys mapped to images
-const flavorImages: Record<string, string> = {
-  'mint': productPlaceholder,
-  'fruit': productCitrus,
-  'berry': productBerry,
-  'citrus': productCitrus,
-  'licorice': productDark,
-  'coffee': productDark,
-  'cola': productDark,
-  'vanilla': productBerry,
-  'tropical': productCitrus,
-};
-
 // Stable enum keys for translation (language-agnostic)
-export type FlavorKey = 'mint' | 'fruit' | 'berry' | 'citrus' | 'licorice' | 'coffee' | 'cola' | 'vanilla' | 'tropical';
-export type StrengthKey = 'normal' | 'strong' | 'extraStrong' | 'ultraStrong';
+export type FlavorKey = 'mint' | 'fruit' | 'berry' | 'citrus' | 'licorice' | 'coffee' | 'cola' | 'vanilla' | 'tropical' | 'tobacco';
+// Aligned with the hyphenated values emitted by src/content.config.ts:59
+// and used by every other consumer (filters, PDP, search, quiz, product JSON).
+// The previous camelCase values silently excluded super-strong products from
+// RecommendationsIsland's tier-proximity math.
+export type StrengthKey = 'light' | 'normal' | 'strong' | 'extra-strong' | 'super-strong';
 export type FormatKey = 'slim' | 'mini' | 'original' | 'large';
 export type BadgeKey = 'newPrice' | 'new' | 'popular' | 'limited';
 export type CategoryKey = 'nicotinePouches' | 'nicotineFree' | 'energyPouches';
@@ -74,9 +60,10 @@ export const flavorKeys: FlavorKey[] = [
   'cola',
   'vanilla',
   'tropical',
+  'tobacco',
 ];
 
-export const strengthKeys: StrengthKey[] = ['normal', 'strong', 'extraStrong', 'ultraStrong'];
+export const strengthKeys: StrengthKey[] = ['light', 'normal', 'strong', 'extra-strong', 'super-strong'];
 export const formatKeys: FormatKey[] = ['slim', 'mini', 'original', 'large'];
 
 // Mock products array removed — all product data now comes from Supabase via useCatalogProducts().

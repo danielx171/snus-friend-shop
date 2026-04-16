@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We'd love to hear what you think</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+        }
+        .email-wrapper {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #1a2e1a;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .header-logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .header-logo span {
+            color: #4a6741;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a2e1a;
+            margin: 0 0 20px 0;
+            line-height: 1.4;
+        }
+        .body-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0 0 16px 0;
+        }
+        .product-section {
+            background-color: #f9f9f9;
+            border-left: 4px solid #4a6741;
+            padding: 20px;
+            margin: 28px 0;
+            border-radius: 4px;
+        }
+        .product-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 12px 0;
+        }
+        .product-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .product-image {
+            width: 80px;
+            height: 80px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .product-info {
+            flex: 1;
+        }
+        .product-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a2e1a;
+            margin: 0 0 4px 0;
+            line-height: 1.4;
+        }
+        .product-meta {
+            font-size: 13px;
+            color: #999999;
+            margin: 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #4a6741;
+            color: #ffffff;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            margin: 32px 0;
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .cta-button:hover {
+            background-color: #3a5431;
+        }
+        .cta-section {
+            text-align: center;
+        }
+        .why-reviews {
+            background-color: #f9f9f9;
+            padding: 24px;
+            border-radius: 6px;
+            margin: 32px 0;
+        }
+        .why-reviews-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a2e1a;
+            margin: 0 0 12px 0;
+        }
+        .why-reviews-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555555;
+            margin: 0;
+        }
+        .footer {
+            background-color: #f5f5f5;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer-text {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #999999;
+            margin: 0 0 12px 0;
+        }
+        .footer-links {
+            font-size: 12px;
+        }
+        .footer-links a {
+            color: #4a6741;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .divider {
+            margin: 12px 0;
+            color: #e0e0e0;
+        }
+        .signature {
+            font-size: 14px;
+            color: #555555;
+            margin: 28px 0 0 0;
+            line-height: 1.6;
+        }
+        .signature-name {
+            font-weight: 600;
+            color: #1a2e1a;
+        }
+        .multi-product-note {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #555555;
+            margin: 16px 0 0 0;
+        }
+        @media (max-width: 600px) {
+            .content {
+                padding: 24px 20px;
+            }
+            .header {
+                padding: 30px 20px;
+            }
+            .product-row {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .product-image {
+                width: 100px;
+                height: 100px;
+            }
+            .product-info {
+                width: 100%;
+            }
+            .footer {
+                padding: 20px;
+            }
+            .greeting {
+                font-size: 16px;
+            }
+            .body-text {
+                font-size: 14px;
+            }
+            .cta-button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="email-container">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="header-logo">Snus<span>Friend</span></h1>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <h2 class="greeting">Hey {customer_name},</h2>
+
+                <p class="body-text">We hope you're enjoying {product_name}! A few days have passed since it arrived, and we'd love to know what you think.</p>
+
+                <p class="body-text">Genuine reviews from real customers help our community find the right products — and your honest thoughts make a real difference.</p>
+
+                <!-- Product Section -->
+                <div class="product-section">
+                    <div class="product-section-title">You purchased</div>
+                    <div class="product-row">
+                        <div class="product-image">
+                            <img src="{product_image_url}" alt="{product_name}" style="display:block;">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">{product_name}</div>
+                            <div class="product-meta">Ordered {order_date}</div>
+                            <div class="multi-product-note">If you ordered multiple items, just pick your favourite one to review first.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Section -->
+                <div class="cta-section">
+                    <a href="{review_url}" class="cta-button">Leave a Review</a>
+                </div>
+
+                <!-- Why Reviews -->
+                <div class="why-reviews">
+                    <h3 class="why-reviews-title">Why your review matters</h3>
+                    <p class="why-reviews-text">Every review helps other shoppers make confident choices. We publish all honest opinions — the good, the brilliant, and the constructive. Your voice is part of what makes SnusFriend a real community.</p>
+                </div>
+
+                <p class="body-text">Questions or issues with your order? Just reply to this email or reach out to <a href="mailto:support@snusfriends.com" style="color: #4a6741; text-decoration: none;">support@snusfriends.com</a>.</p>
+
+                <div class="signature">
+                    <div>Cheers,</div>
+                    <div class="signature-name">The SnusFriend Team</div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p class="footer-text">We only ask for honest reviews — we never incentivise positive feedback. Your authentic experience helps everyone.</p>
+
+                <div class="footer-text">
+                    <div class="divider">———</div>
+                </div>
+
+                <p class="footer-text">
+                    <strong>SnusFriend</strong><br>
+                    Your nicotine pouch community<br>
+                    <a href="https://snusfriends.com" style="color: #4a6741; text-decoration: none;">snusfriends.com</a>
+                </p>
+
+                <div class="footer-links">
+                    <a href="https://snusfriends.com/legal/privacy">Privacy</a> &nbsp;•&nbsp;
+                    <a href="https://snusfriends.com/legal/terms">Terms</a> &nbsp;•&nbsp;
+                    <a href="https://snusfriends.com/contact">Contact</a>
+                </div>
+
+                <p class="footer-text" style="margin-top: 16px; font-size: 11px;">
+                    You're receiving this because you purchased from SnusFriend. <a href="{unsubscribe_url}" style="color: #4a6741; text-decoration: none;">Manage preferences</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

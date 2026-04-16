@@ -1,0 +1,2453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnusFriend - Premium Nicotine Pouches | Europe's #1 Pouch Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a2e1a;
+            --primary-light: #2d4a2d;
+            --accent: #4a6741;
+            --accent-light: #e8f4e8;
+            --background: #f8f6f3;
+            --surface: #ffffff;
+            --text: #1a1a1a;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            --font-heading: "Space Grotesk", sans-serif;
+            --font-body: "Inter", sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text);
+            background: var(--background);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence baseFrequency="0.8" numOctaves="4" result="noise"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.02"/></svg>');
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* === ANNOUNCEMENT BAR === */
+        .announcement-bar {
+            background: var(--primary);
+            color: var(--surface);
+            padding: 12px 24px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .announcement-bar .text {
+            animation: slideText 8s infinite;
+        }
+
+        @keyframes slideText {
+            0%, 15% { opacity: 1; }
+            25%, 50% { opacity: 0; transform: translateY(-10px); }
+            60%, 85% { opacity: 1; }
+            95%, 100% { opacity: 0; transform: translateY(10px); }
+        }
+
+        .announcement-bar .close-btn {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--surface);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px 8px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .announcement-bar .close-btn:hover {
+            opacity: 1;
+        }
+
+        /* === STICKY NAV === */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 700;
+            font-family: var(--font-heading);
+            font-size: 18px;
+            min-width: fit-content;
+        }
+
+        .nav-logo svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-search {
+            flex: 0.4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--background);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .nav-search input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: var(--font-body);
+            color: var(--text);
+        }
+
+        .nav-search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--background);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: var(--text);
+            font-size: 18px;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--error);
+            color: var(--surface);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--background);
+            border-radius: 8px;
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .mobile-menu-btn span {
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s;
+            display: block;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            width: fit-content;
+        }
+
+        .hero-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero-headline {
+            font-family: var(--font-heading);
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            color: var(--text);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 24px;
+            background: var(--accent-light);
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: var(--font-heading);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--surface);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(26, 46, 26, 0.15);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .hero-trust {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding-top: 24px;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .trust-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--surface);
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .hero-right {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-cans-bg {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, var(--accent-light), transparent);
+            filter: blur(60px);
+        }
+
+        .hero-cans {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .can {
+            position: absolute;
+            width: 100px;
+            height: 120px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .can-body {
+            position: relative;
+            width: 100%;
+            height: 90%;
+            border-radius: 50% 50% 45% 45%;
+            box-shadow: inset -2px -2px 8px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .can-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+        }
+
+        .can-band {
+            position: absolute;
+            width: 90%;
+            height: 20px;
+            background: white;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--text);
+            text-align: center;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .can-lid {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            height: 12px;
+            border-radius: 50% 50% 40% 40%;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .can:nth-child(1) { animation-delay: 0s; left: 10%; z-index: 5; }
+        .can:nth-child(2) { animation-delay: 0.5s; left: 35%; top: 30px; z-index: 4; }
+        .can:nth-child(3) { animation-delay: 1s; left: 60%; z-index: 3; }
+        .can:nth-child(4) { animation-delay: 1.5s; right: 25%; top: 50px; z-index: 2; }
+        .can:nth-child(5) { animation-delay: 2s; right: 5%; z-index: 1; }
+
+        /* Product-specific gradients */
+        .can-zyno .can-body { background: linear-gradient(135deg, #00a651, #006b35); }
+        .can-zyno .can-lid { background: linear-gradient(to bottom, #00a651, #005a2a); }
+        .can-velo .can-body { background: linear-gradient(135deg, #1a73e8, #0d47a1); }
+        .can-velo .can-lid { background: linear-gradient(to bottom, #1a73e8, #0a3a7a); }
+        .can-siberia .can-body { background: linear-gradient(135deg, #c41e3a, #8b0000); }
+        .can-siberia .can-lid { background: linear-gradient(to bottom, #c41e3a, #7a0000); }
+        .can-loop .can-body { background: linear-gradient(135deg, #ff6b35, #e65100); }
+        .can-loop .can-lid { background: linear-gradient(to bottom, #ff6b35, #d94800); }
+        .can-whitefox .can-body { background: linear-gradient(135deg, #bdbdbd, #757575); }
+        .can-whitefox .can-lid { background: linear-gradient(to bottom, #bdbdbd, #5a5a5a); }
+
+        /* === SOCIAL PROOF STRIP === */
+        .social-proof {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 24px;
+        }
+
+        .proof-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+
+        .proof-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .proof-stars {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .star {
+            width: 18px;
+            height: 18px;
+            background: var(--warning);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .proof-rating {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text);
+        }
+
+        .proof-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* === FEATURED PRODUCTS === */
+        .featured-section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--surface);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            animation: fadeUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        .product-card:nth-child(5) { animation-delay: 0.5s; }
+        .product-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image-area {
+            aspect-ratio: 1;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .product-badges {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            left: 12px;
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            z-index: 2;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-bestseller {
+            background: var(--success);
+            color: var(--surface);
+        }
+
+        .badge-new {
+            background: var(--info);
+            color: var(--surface);
+        }
+
+        .badge-sale {
+            background: var(--error);
+            color: var(--surface);
+        }
+
+        .badge-urgency {
+            background: var(--warning);
+            color: var(--text);
+        }
+
+        .product-can {
+            width: 100px;
+            height: 130px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-can .can-body {
+            height: 100%;
+        }
+
+        .product-can .can-band {
+            font-size: 7px;
+            height: 18px;
+        }
+
+        .product-info {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .product-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text);
+            font-family: var(--font-heading);
+        }
+
+        .product-strength {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .strength-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .strength-dot.low { background: var(--success); }
+        .strength-dot.medium { background: var(--info); }
+        .strength-dot.high { background: var(--warning); }
+        .strength-dot.very-high { background: var(--error); }
+
+        .product-packs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .pack-pill {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+        }
+
+        .pack-pill.active {
+            background: var(--primary);
+            color: var(--surface);
+            border-color: var(--primary);
+        }
+
+        .pack-pill:hover {
+            border-color: var(--accent);
+        }
+
+        .product-price {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .price-original {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .price-discount {
+            background: var(--error);
+            color: var(--surface);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .product-per-unit {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .rating-stars .star {
+            width: 14px;
+            height: 14px;
+        }
+
+        .rating-count {
+            color: var(--text-muted);
+        }
+
+        .product-subscribe {
+            padding: 10px;
+            background: var(--accent-light);
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: center;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-subscribe:hover {
+            background: var(--accent);
+            color: var(--surface);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            padding: 10px;
+            background: var(--primary);
+            color: var(--surface);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .btn-add-cart:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 46, 26, 0.2);
+        }
+
+        .btn-add-cart.added {
+            background: var(--success);
+        }
+
+        .btn-wishlist {
+            width: 40px;
+            height: 40px;
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .btn-wishlist:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+
+        .btn-wishlist.liked {
+            background: var(--error);
+            border-color: var(--error);
+            color: var(--surface);
+        }
+
+        /* === WHY CHOOSE US === */
+        .why-us {
+            background: var(--accent-light);
+            padding: 60px 24px;
+        }
+
+        .why-us-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .why-us .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .why-us-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            text-align: center;
+            transition: all 0.3s;
+            animation: fadeUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px rgba(74, 103, 65, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+        }
+
+        .feature-title {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .feature-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* === STRENGTH GUIDE === */
+        .strength-guide {
+            background: var(--primary);
+            color: var(--surface);
+            padding: 60px 24px;
+        }
+
+        .strength-guide-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .strength-guide .section-title {
+            color: var(--surface);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .strength-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .strength-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 28px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            animation: fadeUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .strength-card:nth-child(1) { animation-delay: 0.1s; }
+        .strength-card:nth-child(2) { animation-delay: 0.2s; }
+        .strength-card:nth-child(3) { animation-delay: 0.3s; }
+        .strength-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .strength-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .strength-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .strength-icon.light { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .strength-icon.mild { background: rgba(59, 130, 246, 0.2); color: var(--info); }
+        .strength-icon.strong { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .strength-icon.intense { background: rgba(239, 68, 68, 0.2); color: var(--error); }
+
+        .strength-name {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .strength-range {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 12px;
+        }
+
+        .strength-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .strength-cta {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+        }
+
+        .strength-quiz-btn {
+            background: var(--surface);
+            color: var(--primary);
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .strength-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* === DISPATCH COUNTDOWN === */
+        .dispatch {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 28px 24px;
+        }
+
+        .dispatch-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .dispatch-left {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .dispatch-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .dispatch-countdown {
+            font-size: 16px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .dispatch-progress {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .dispatch-progress-bar {
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(to right, var(--warning), var(--success));
+            transition: width 0.3s;
+        }
+
+        .dispatch-right {
+            text-align: right;
+        }
+
+        .dispatch-shipping {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .dispatch-amount {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* === BRANDS CAROUSEL === */
+        .brands-section {
+            padding: 60px 24px;
+            background: var(--surface);
+        }
+
+        .brands-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .brands-carousel {
+            display: grid;
+            grid-auto-flow: column;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) var(--background);
+        }
+
+        .brands-carousel::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .brands-carousel::-webkit-scrollbar-track {
+            background: var(--background);
+            border-radius: 3px;
+        }
+
+        .brands-carousel::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .brand-card {
+            min-width: 160px;
+            background: var(--accent-light);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border-left: 4px solid var(--accent);
+            scroll-snap-align: start;
+            transition: all 0.3s;
+        }
+
+        .brand-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-name {
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .brand-count {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* === TESTIMONIALS === */
+        .testimonials {
+            background: var(--accent-light);
+            padding: 60px 24px;
+        }
+
+        .testimonials-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .testimonials .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--surface);
+            padding: 28px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .testimonial-card:nth-child(1) { animation-delay: 0.1s; }
+        .testimonial-card:nth-child(2) { animation-delay: 0.2s; }
+        .testimonial-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .testimonial-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .testimonial-country {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .testimonial-rating {
+            display: flex;
+            gap: 2px;
+        }
+
+        .testimonial-rating .star {
+            width: 14px;
+            height: 14px;
+        }
+
+        .testimonial-quote {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .testimonial-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            width: fit-content;
+        }
+
+        /* === NEWSLETTER === */
+        .newsletter {
+            background: var(--primary);
+            color: var(--surface);
+            padding: 60px 24px;
+        }
+
+        .newsletter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .newsletter-title {
+            font-family: var(--font-heading);
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .newsletter-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .newsletter-form input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .newsletter-form button {
+            padding: 12px 28px;
+            background: var(--success);
+            color: var(--surface);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .newsletter-form button:hover {
+            background: #10a970;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* === FOOTER === */
+        footer {
+            background: var(--text);
+            color: var(--surface);
+            padding: 60px 24px 24px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-col h3 {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            color: var(--surface);
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-col a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--surface);
+        }
+
+        .footer-payments {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-warning {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+            max-width: 400px;
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 40px 24px;
+                gap: 40px;
+            }
+
+            .hero-right {
+                height: 300px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .why-us-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .strength-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dispatch-container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .dispatch-right {
+                text-align: left;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .nav-search {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .nav-container {
+                padding: 12px 16px;
+            }
+
+            .hero-headline {
+                font-size: 36px;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .why-us-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .strength-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .proof-container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .announcement-bar {
+                padding: 12px 16px;
+                font-size: 12px;
+            }
+
+            .hero {
+                padding: 30px 16px;
+            }
+
+            .hero-headline {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .featured-section {
+                padding: 40px 16px;
+            }
+
+            .product-info {
+                padding: 16px;
+            }
+
+            .why-us {
+                padding: 40px 16px;
+            }
+
+            .strength-guide {
+                padding: 40px 16px;
+            }
+
+            .dispatch {
+                padding: 20px 16px;
+            }
+
+            .newsletter {
+                padding: 40px 16px;
+            }
+
+            .newsletter-title {
+                font-size: 24px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            footer {
+                padding: 40px 16px 16px;
+            }
+
+            .footer-grid {
+                gap: 24px;
+            }
+
+            .hero-stats {
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .stat-number {
+                font-size: 18px;
+            }
+
+            .stat-label {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="text">🚚 FREE shipping on orders over €29 | Order before 5 PM for same-day dispatch</div>
+        <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="10" fill="var(--primary)"/>
+                    <path d="M20 8 L28 20 L24 30 L16 30 L12 20 Z" fill="var(--accent)" opacity="0.8"/>
+                    <path d="M20 10 L26 20 L23 28 L17 28 L14 20 Z" fill="var(--accent-light)"/>
+                </svg>
+                SnusFriend
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#products">Shop All</a></li>
+                <li><a href="#brands">Brands</a></li>
+                <li><a href="#strength">Strengths</a></li>
+                <li><a href="#new">New Arrivals</a></li>
+            </ul>
+            <div class="nav-search">
+                <input type="text" placeholder="Search products...">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </div>
+            <div class="nav-icons">
+                <button class="icon-btn" title="Wishlist">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" title="Shopping Cart">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <div class="cart-badge">3</div>
+                </button>
+            </div>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Europe's #1 Nicotine Pouch Shop
+            </div>
+            <h1 class="hero-headline">Premium Pouches. Curated for You.</h1>
+            <p class="hero-subtitle">Discover 2,200+ products from 139 trusted brands. Lab-tested, discreetly delivered to 40+ countries.</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">2,200+</div>
+                    <div class="stat-label">Products</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">139</div>
+                    <div class="stat-label">Brands</div>
+                </div>
+            </div>
+            <div class="hero-ctas">
+                <button class="btn btn-primary">Shop Now</button>
+                <button class="btn btn-secondary">Browse Brands</button>
+            </div>
+            <div class="hero-trust">
+                <div class="trust-item">
+                    <div class="trust-icon">✓</div>
+                    Free Shipping
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">✓</div>
+                    Lab-Tested
+                </div>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-cans-bg"></div>
+            <div class="hero-cans">
+                <div class="can can-zyno">
+                    <div class="can-body">
+                        <div class="can-band">ZYN</div>
+                        <div class="can-lid"></div>
+                    </div>
+                </div>
+                <div class="can can-velo">
+                    <div class="can-body">
+                        <div class="can-band">VELO</div>
+                        <div class="can-lid"></div>
+                    </div>
+                </div>
+                <div class="can can-siberia">
+                    <div class="can-body">
+                        <div class="can-band">SIBERIA</div>
+                        <div class="can-lid"></div>
+                    </div>
+                </div>
+                <div class="can can-loop">
+                    <div class="can-body">
+                        <div class="can-band">LOOP</div>
+                        <div class="can-lid"></div>
+                    </div>
+                </div>
+                <div class="can can-whitefox">
+                    <div class="can-body">
+                        <div class="can-band">WHITE FOX</div>
+                        <div class="can-lid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Strip -->
+    <div class="social-proof">
+        <div class="proof-container">
+            <div class="proof-item">
+                <div class="proof-stars">
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="proof-rating">4.8/5</div>
+                </div>
+                <div class="proof-text">Trusted by 50,000+ Europeans</div>
+            </div>
+            <div class="proof-item">
+                <div class="proof-text">✓ Verified Delivery Partner</div>
+                <div class="proof-text">Same-Day Dispatch Available</div>
+            </div>
+            <div class="proof-item">
+                <div class="proof-text">✓ Lab-Tested & Verified</div>
+                <div class="proof-text">Quality Guaranteed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Products Section -->
+    <section class="featured-section" id="products">
+        <h2 class="section-title">Featured Products</h2>
+        <p class="section-subtitle">Our bestsellers & new arrivals</p>
+        <div class="products-grid">
+            <!-- Product 1: ZYN -->
+            <div class="product-card">
+                <div class="product-image-area">
+                    <div class="product-badges">
+                        <div class="badge badge-bestseller">Bestseller</div>
+                        <div class="badge badge-urgency">23 sold today</div>
+                    </div>
+                    <div class="product-can can-zyno">
+                        <div class="can-body">
+                            <div class="can-band">ZYN Mint</div>
+                            <div class="can-lid"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">ZYN Mint 6mg</div>
+                    <div class="product-strength">
+                        <div class="strength-dot low"></div>
+                        Light (1-6mg)
+                    </div>
+                    <div class="product-packs">
+                        <div class="pack-pill active">1 Can</div>
+                        <div class="pack-pill">5-Pack</div>
+                        <div class="pack-pill">10-Pack</div>
+                    </div>
+                    <div class="product-price">€4.99 <span class="product-per-unit">(€0.43/pouch)</span></div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <span class="rating-count">(248)</span>
+                    </div>
+                    <div class="product-subscribe">Subscribe & Save 10%</div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2: VELO -->
+            <div class="product-card">
+                <div class="product-image-area">
+                    <div class="product-badges">
+                        <div class="badge badge-new">New</div>
+                        <div class="badge badge-urgency">Only 3 left</div>
+                    </div>
+                    <div class="product-can can-velo">
+                        <div class="can-body">
+                            <div class="can-band">VELO</div>
+                            <div class="can-lid"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">VELO Freeze 8mg</div>
+                    <div class="product-strength">
+                        <div class="strength-dot medium"></div>
+                        Mild (7-10mg)
+                    </div>
+                    <div class="product-packs">
+                        <div class="pack-pill active">1 Can</div>
+                        <div class="pack-pill">5-Pack</div>
+                        <div class="pack-pill">10-Pack</div>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-original">€5.49</span>
+                        €4.99
+                        <span class="price-discount">-9%</span>
+                        <span class="product-per-unit">(€0.39/pouch)</span>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <span class="rating-count">(156)</span>
+                    </div>
+                    <div class="product-subscribe">Subscribe & Save 10%</div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3: Siberia -->
+            <div class="product-card">
+                <div class="product-image-area">
+                    <div class="product-badges">
+                        <div class="badge badge-sale">Sale</div>
+                    </div>
+                    <div class="product-can can-siberia">
+                        <div class="can-body">
+                            <div class="can-band">SIBERIA</div>
+                            <div class="can-lid"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">Siberia Black 13mg</div>
+                    <div class="product-strength">
+                        <div class="strength-dot high"></div>
+                        Strong (11-16mg)
+                    </div>
+                    <div class="product-packs">
+                        <div class="pack-pill active">1 Can</div>
+                        <div class="pack-pill">5-Pack</div>
+                        <div class="pack-pill">10-Pack</div>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-original">€6.99</span>
+                        €5.99
+                        <span class="price-discount">-14%</span>
+                        <span class="product-per-unit">(€0.51/pouch)</span>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <span class="rating-count">(312)</span>
+                    </div>
+                    <div class="product-subscribe">Subscribe & Save 10%</div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 4: LOOP -->
+            <div class="product-card">
+                <div class="product-image-area">
+                    <div class="product-badges">
+                    </div>
+                    <div class="product-can can-loop">
+                        <div class="can-body">
+                            <div class="can-band">LOOP</div>
+                            <div class="can-lid"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">LOOP Citrus 8mg</div>
+                    <div class="product-strength">
+                        <div class="strength-dot medium"></div>
+                        Mild (7-10mg)
+                    </div>
+                    <div class="product-packs">
+                        <div class="pack-pill active">1 Can</div>
+                        <div class="pack-pill">5-Pack</div>
+                        <div class="pack-pill">10-Pack</div>
+                    </div>
+                    <div class="product-price">€4.49 <span class="product-per-unit">(€0.36/pouch)</span></div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <span class="rating-count">(189)</span>
+                    </div>
+                    <div class="product-subscribe">Subscribe & Save 10%</div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 5: White Fox -->
+            <div class="product-card">
+                <div class="product-image-area">
+                    <div class="product-badges">
+                        <div class="badge badge-urgency">Back in stock</div>
+                    </div>
+                    <div class="product-can can-whitefox">
+                        <div class="can-body">
+                            <div class="can-band">WHITE FOX</div>
+                            <div class="can-lid"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">White Fox Slim 10mg</div>
+                    <div class="product-strength">
+                        <div class="strength-dot high"></div>
+                        Strong (11-16mg)
+                    </div>
+                    <div class="product-packs">
+                        <div class="pack-pill active">1 Can</div>
+                        <div class="pack-pill">5-Pack</div>
+                        <div class="pack-pill">10-Pack</div>
+                    </div>
+                    <div class="product-price">€5.49 <span class="product-per-unit">(€0.46/pouch)</span></div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <span class="rating-count">(224)</span>
+                    </div>
+                    <div class="product-subscribe">Subscribe & Save 10%</div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6: ON! -->
+            <div class="product-card">
+                <div class="product-image-area">
+                    <div class="product-badges">
+                    </div>
+                    <div class="product-can" style="--gradient-from: #009688; --gradient-to: #00695c;">
+                        <div class="can-body" style="background: linear-gradient(135deg, #009688, #00695c);">
+                            <div class="can-band">ON!</div>
+                            <div class="can-lid" style="background: linear-gradient(to bottom, #009688, #005548);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">ON! Wintergreen 4mg</div>
+                    <div class="product-strength">
+                        <div class="strength-dot low"></div>
+                        Light (1-6mg)
+                    </div>
+                    <div class="product-packs">
+                        <div class="pack-pill active">1 Can</div>
+                        <div class="pack-pill">5-Pack</div>
+                        <div class="pack-pill">10-Pack</div>
+                    </div>
+                    <div class="product-price">€3.99 <span class="product-per-unit">(€0.33/pouch)</span></div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <span class="rating-count">(167)</span>
+                    </div>
+                    <div class="product-subscribe">Subscribe & Save 10%</div>
+                    <div class="product-actions">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customers Also Bought -->
+        <div style="margin-top: 48px;">
+            <h3 style="font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 24px;">Customers Also Bought</h3>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                <div style="background: var(--surface); border-radius: 10px; padding: 16px; display: flex; gap: 12px; align-items: center; box-shadow: 0 1px 3px rgba(26,46,26,0.08); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(26,46,26,0.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 3px rgba(26,46,26,0.08)'">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #2e86ab, #1b5e7e); flex-shrink: 0;"></div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 13px; color: var(--text);">Skruf Fresh Mint 8mg</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">€4.49 &middot; 0.37/pouch</div>
+                    </div>
+                </div>
+                <div style="background: var(--surface); border-radius: 10px; padding: 16px; display: flex; gap: 12px; align-items: center; box-shadow: 0 1px 3px rgba(26,46,26,0.08); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(26,46,26,0.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 3px rgba(26,46,26,0.08)'">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #6b4c8b, #4a2d6b); flex-shrink: 0;"></div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 13px; color: var(--text);">Nordic Spirit Elderflower 6mg</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">€3.99 &middot; 0.33/pouch</div>
+                    </div>
+                </div>
+                <div style="background: var(--surface); border-radius: 10px; padding: 16px; display: flex; gap: 12px; align-items: center; box-shadow: 0 1px 3px rgba(26,46,26,0.08); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(26,46,26,0.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 3px rgba(26,46,26,0.08)'">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #00a651, #006b35); flex-shrink: 0;"></div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 13px; color: var(--text);">ZYN Espressino 3mg</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">€4.29 &middot; 0.36/pouch</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-us">
+        <div class="why-us-container">
+            <h2 class="section-title">Why 50,000+ Europeans Choose Us</h2>
+            <div class="why-us-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Largest Selection</h3>
+                    <p class="feature-desc">2,200+ products from 139 trusted brands in one place.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 3h6v2H9V3zm0 4h6v8H9V7zm-4 10h14v2H5v-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Lab-Tested Quality</h3>
+                    <p class="feature-desc">Every product verified & tested for purity and safety.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Same-Day Dispatch</h3>
+                    <p class="feature-desc">Order before 5 PM for guaranteed next-day delivery.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Loyalty Rewards</h3>
+                    <p class="feature-desc">Earn points on every purchase and redeem for discounts.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strength Guide -->
+    <section class="strength-guide" id="strength">
+        <div class="strength-guide-container">
+            <h2 class="section-title">Find Your Perfect Strength</h2>
+            <div class="strength-cards">
+                <div class="strength-card">
+                    <div class="strength-icon light">1</div>
+                    <h3 class="strength-name">Light</h3>
+                    <div class="strength-range">1–6 mg</div>
+                    <p class="strength-desc">Perfect for beginners or those preferring mild nicotine.</p>
+                    <div class="strength-cta">Shop Light →</div>
+                </div>
+                <div class="strength-card">
+                    <div class="strength-icon mild">2</div>
+                    <h3 class="strength-name">Mild</h3>
+                    <div class="strength-range">7–10 mg</div>
+                    <p class="strength-desc">Our most popular choice for balanced satisfaction.</p>
+                    <div class="strength-cta">Shop Mild →</div>
+                </div>
+                <div class="strength-card">
+                    <div class="strength-icon strong">3</div>
+                    <h3 class="strength-name">Strong</h3>
+                    <div class="strength-range">11–16 mg</div>
+                    <p class="strength-desc">For experienced users seeking stronger effects.</p>
+                    <div class="strength-cta">Shop Strong →</div>
+                </div>
+                <div class="strength-card">
+                    <div class="strength-icon intense">4</div>
+                    <h3 class="strength-name">Intense</h3>
+                    <div class="strength-range">17+ mg</div>
+                    <p class="strength-desc">Maximum strength for hardened enthusiasts only.</p>
+                    <div class="strength-cta">Shop Intense →</div>
+                </div>
+            </div>
+            <button class="strength-quiz-btn">Take Strength Quiz</button>
+        </div>
+    </section>
+
+    <!-- Dispatch Countdown -->
+    <div class="dispatch">
+        <div class="dispatch-container">
+            <div class="dispatch-left">
+                <div class="dispatch-title">Order Before 5 PM for Same-Day Dispatch</div>
+                <div class="dispatch-countdown">3 hours 42 minutes remaining</div>
+                <div class="dispatch-progress">
+                    <div class="dispatch-progress-bar"></div>
+                </div>
+            </div>
+            <div class="dispatch-right">
+                <div class="dispatch-shipping">Add €10.50 more for FREE shipping</div>
+                <div class="dispatch-amount">You save €12.99</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brands Carousel -->
+    <section class="brands-section" id="brands">
+        <div class="brands-container">
+            <h2 class="section-title">Browse by Brand</h2>
+            <div class="brands-carousel">
+                <div class="brand-card">
+                    <div class="brand-name">ZYN</div>
+                    <div class="brand-count">240+ products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-name">VELO</div>
+                    <div class="brand-count">180+ products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-name">Siberia</div>
+                    <div class="brand-count">156+ products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-name">LOOP</div>
+                    <div class="brand-count">124+ products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-name">White Fox</div>
+                    <div class="brand-count">98+ products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-name">ON!</div>
+                    <div class="brand-count">87+ products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-name">General</div>
+                    <div class="brand-count">256+ products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-name">Nicorette</div>
+                    <div class="brand-count">142+ products</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="testimonials-container">
+            <h2 class="section-title">Loved by Our Customers</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">MK</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Maria K.</div>
+                            <div class="testimonial-country">Sweden 🇸🇪</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                    <p class="testimonial-quote">"Best prices I've found anywhere. Delivery was incredibly fast and discreet."</p>
+                    <div class="testimonial-badge">Verified Buyer</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">JH</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Johan H.</div>
+                            <div class="testimonial-country">Denmark 🇩🇰</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                    <p class="testimonial-quote">"The selection is unmatched. Love the loyalty rewards program!"</p>
+                    <div class="testimonial-badge">Verified Buyer</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">SL</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Sophie L.</div>
+                            <div class="testimonial-country">Germany 🇩🇪</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                    <p class="testimonial-quote">"Customer service is fantastic. They helped me find the perfect strength for me."</p>
+                    <div class="testimonial-badge">Verified Buyer</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="newsletter-container">
+            <h2 class="newsletter-title">Join 50,000+ Pouch Enthusiasts</h2>
+            <p class="newsletter-subtitle">Get exclusive deals, new product launches, and strength guides delivered weekly to your inbox.</p>
+            <form class="newsletter-form" onsubmit="return handleNewsletter(event)">
+                <input type="email" placeholder="Your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Shop</h3>
+                    <ul>
+                        <li><a href="#">All Products</a></li>
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Best Sellers</a></li>
+                        <li><a href="#">Sale</a></li>
+                        <li><a href="#">Brands</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Newsroom</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Do Not Sell</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>
+                    <div style="margin-bottom: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.9);">Payment Methods</div>
+                    <div class="footer-payments">
+                        <div class="payment-icon">VISA</div>
+                        <div class="payment-icon">MC</div>
+                        <div class="payment-icon">AMEX</div>
+                        <div class="payment-icon">SEPA</div>
+                        <div class="payment-icon">PayPal</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="footer-warning">
+                        ⚠️ Age Restriction: Products contain nicotine. Must be 18+ to purchase. Not for sale to minors or pregnant/nursing women. Keep out of reach of children.
+                    </div>
+                </div>
+            </div>
+            <div style="padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 24px;">
+                <div class="footer-copyright">© 2026 SnusFriend. All rights reserved. | EU Registered | VAT: SE123456789</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add to Cart Animation
+        document.querySelectorAll('.btn-add-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const originalText = this.textContent;
+                this.textContent = '✓ Added!';
+                this.classList.add('added');
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.classList.remove('added');
+                }, 2000);
+            });
+        });
+
+        // Wishlist Toggle
+        document.querySelectorAll('.btn-wishlist').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('liked');
+            });
+        });
+
+        // Newsletter Form
+        function handleNewsletter(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input[type="email"]').value;
+            e.target.querySelector('button').textContent = '✓ Subscribed!';
+            e.target.querySelector('button').style.background = 'var(--success)';
+            setTimeout(() => {
+                e.target.reset();
+                e.target.querySelector('button').textContent = 'Subscribe';
+                e.target.querySelector('button').style.background = 'var(--success)';
+            }, 2000);
+        }
+
+        // Pack Pill Toggle
+        document.querySelectorAll('.pack-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.pack-pill').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Update dispatch countdown
+        function updateCountdown() {
+            const now = new Date();
+            const end = new Date();
+            end.setHours(17, 0, 0, 0); // 5 PM
+            if (now > end) {
+                end.setDate(end.getDate() + 1);
+            }
+            const diff = end - now;
+            const hours = Math.floor(diff / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const countdownEl = document.querySelector('.dispatch-countdown');
+            if (countdownEl) {
+                countdownEl.textContent = `${hours} hours ${minutes} minutes remaining`;
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+
+        // Announcement carousel
+        let currentMsg = 0;
+        const messages = [
+            '🚚 FREE shipping on orders over €29 | Order before 5 PM for same-day dispatch',
+            '🎁 New: Subscribe & Save 10% on your favorite pouches',
+            '⭐ Join 50,000+ Europeans who trust SnusFriend for quality & speed'
+        ];
+
+        setInterval(() => {
+            currentMsg = (currentMsg + 1) % messages.length;
+            const textEl = document.querySelector('.announcement-bar .text');
+            if (textEl) {
+                textEl.textContent = messages[currentMsg];
+            }
+        }, 8000);
+    </script>
+</body>
+</html>

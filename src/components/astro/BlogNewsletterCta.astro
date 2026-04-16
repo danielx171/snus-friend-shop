@@ -1,0 +1,40 @@
+---
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
+---
+
+<aside class="my-10 rounded-xl border border-primary/20 bg-primary/5 p-6 sm:p-8">
+  <h2 class="text-lg font-bold text-foreground">Get the latest guides in your inbox</h2>
+  <p class="mt-1 text-sm text-muted-foreground">New releases, strength rankings, and exclusive deals — no spam, unsubscribe anytime.</p>
+  <form
+    class="mt-4 flex gap-2"
+    data-waitlist-form
+    data-function-base={supabaseUrl}
+    data-waitlist-source="blog-newsletter"
+    data-success-message="You're in! Check your inbox."
+    data-message-class="mt-2 text-xs"
+    data-submitting-text="Submitting..."
+  >
+    <label for="blog-newsletter-email" class="sr-only">Email address</label>
+    <input
+      id="blog-newsletter-email"
+      type="email"
+      required
+      autocomplete="email"
+      aria-describedby="blog-newsletter-msg"
+      placeholder="you@email.com"
+      class="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+    />
+    <button
+      type="submit"
+      class="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      Subscribe
+    </button>
+  </form>
+  <p data-waitlist-message class="mt-2 hidden text-xs" aria-live="polite" aria-atomic="true"></p>
+</aside>
+
+<script>
+  const { bootWaitlistForms } = await import('@/scripts/waitlist-form');
+  bootWaitlistForms();
+</script>

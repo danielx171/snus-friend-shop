@@ -1,12 +1,39 @@
-import { useState, useMemo, useCallback, type FormEvent } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef, type FormEvent } from 'react';
 import { useStore } from '@nanostores/react';
-import { $cartItems, $cartTotal, clearCart } from '@/stores/cart';
+import {
+  $cartItems,
+  $cartTotal,
+  clearCart,
+  $mixDiscount,
+  persistGuestCartSnapshot,
+  setStoredGuestEmail,
+  syncCartFromStorage,
+  type CartItem,
+} from '@/stores/cart';
 import { packSizeMultipliers, type PackSize } from '@/data/products';
 import { tenant } from '@/config/tenant';
+import { storefrontHosts } from '@/config/site';
 import { actions } from 'astro:actions';
+import { trackCheckoutStarted } from '@/lib/analytics';
+import { apiFetch } from '@/lib/api';
+import { getStorageKey } from '@/lib/tenant-storage';
+import { getShippingMethodsForCountry } from '@/lib/shipping';
+import ReductionAlert from './ReductionAlert';
+
+interface SavedAddress {
+  firstname?: string;
+  lastname?: string;
+  address?: string;
+  postcode?: string;
+  city?: string;
+  country?: string;
+}
 
 interface Props {
   userEmail?: string;
+  userId?: string | null;
+  isGuest?: boolean;
+  lastAddress?: SavedAddress | null;
 }
 
 const SHIPPING_COUNTRIES = [
@@ -29,57 +56,174 @@ const SHIPPING_COUNTRIES = [
   { code: 'GB', name: 'United Kingdom' },
 ] as const;
 
-function getShippingMethods(country: string) {
-  if (country === 'SE') {
-    return [
-      { id: 'ups-standard', label: 'UPS Standard (2-3 days)', price: 4.90 },
-      { id: 'ups-express', label: 'UPS Express (1-2 days)', price: 9.90 },
-    ];
-  }
-  const euCountries = ['DE', 'AT', 'DK', 'FI', 'NL', 'BE', 'FR', 'IT', 'ES', 'PL', 'CZ', 'IE', 'PT'];
-  if (euCountries.includes(country)) {
-    return [
-      { id: 'dhl-economy-eu', label: 'DHL Economy EU (5-7 days)', price: 6.90 },
-      { id: 'dhl-express-eu', label: 'DHL Express EU (2-3 days)', price: 12.90 },
-    ];
-  }
-  return [
-    { id: 'dhl-economy-intl', label: 'DHL Economy International (7-14 days)', price: 9.90 },
-    { id: 'dhl-express-intl', label: 'DHL Express International (3-5 days)', price: 19.90 },
-  ];
-}
+const BUY_NOW_KEY = getStorageKey('buyNowKey');
 
 function packLabel(packSize: PackSize): string {
   const qty = packSizeMultipliers[packSize];
   return qty === 1 ? '1 can' : `${qty} cans`;
 }
 
-export default function CheckoutForm({ userEmail }: Props) {
-  const cartItems = useStore($cartItems);
-  const cartTotal = useStore($cartTotal);
+export default function CheckoutForm({ userEmail, userId, isGuest, lastAddress }: Props) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { syncCartFromStorage(); }, []);
+  useEffect(() => { setMounted(true); }, []);
+  const storeCartItems = useStore($cartItems);
+  const storeCartTotal = useStore($cartTotal);
+
+  // Buy Now mode: single item from sessionStorage, bypasses cart
+  const [buyNowItem, setBuyNowItem] = useState<CartItem | null>(null);
+  const [isBuyNow] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('buyNow') !== '1') return false;
+    try {
+      const raw = sessionStorage.getItem(BUY_NOW_KEY);
+      if (!raw) return false;
+      const item = JSON.parse(raw) as CartItem;
+      setBuyNowItem(item);
+      return true;
+    } catch { return false; }
+  });
+
+  const cartItems = useMemo(
+    () => (isBuyNow && buyNowItem ? [buyNowItem] : storeCartItems),
+    [isBuyNow, buyNowItem, storeCartItems],
+  );
+  const cartTotal = useMemo(
+    () => (
+      isBuyNow && buyNowItem
+        ? (buyNowItem.product.prices[buyNowItem.packSize] ?? 0) * buyNowItem.quantity
+        : storeCartTotal
+    ),
+    [isBuyNow, buyNowItem, storeCartTotal],
+  );
 
   const [email, setEmail] = useState(userEmail || '');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [address, setAddress] = useState('');
-  const [postcode, setPostcode] = useState('');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('SE');
+  const [firstName, setFirstName] = useState(lastAddress?.firstname ?? '');
+  const [lastName, setLastName] = useState(lastAddress?.lastname ?? '');
+  const [address, setAddress] = useState(lastAddress?.address ?? '');
+  const [postcode, setPostcode] = useState(lastAddress?.postcode ?? '');
+  const [city, setCity] = useState(lastAddress?.city ?? '');
+  const [country, setCountry] = useState(lastAddress?.country ?? 'SE');
   const [phone, setPhone] = useState('');
   const [shippingMethod, setShippingMethod] = useState('');
   const [ageVerified, setAgeVerified] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const shippingMethods = useMemo(() => getShippingMethods(country), [country]);
+  // Discount code state
+  const [showDiscountInput, setShowDiscountInput] = useState(false);
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountApplied, setDiscountApplied] = useState<{ code: string; amount: number; type: 'percentage' | 'fixed'; value: number } | null>(null);
+  const [discountError, setDiscountError] = useState('');
+  const [discountLoading, setDiscountLoading] = useState(false);
+  const [availableShippingNames, setAvailableShippingNames] = useState<string[] | null>(null);
+  const lastPersistedGuestEmail = useRef<string | null>(null);
+  const normalizedGuestEmail = useMemo(() => {
+    const normalized = email.trim().toLowerCase();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) ? normalized : null;
+  }, [email]);
+
+  useEffect(() => {
+    if (!isGuest) {
+      setStoredGuestEmail(null);
+      lastPersistedGuestEmail.current = null;
+      return;
+    }
+    setStoredGuestEmail(normalizedGuestEmail);
+    if (!normalizedGuestEmail || lastPersistedGuestEmail.current === normalizedGuestEmail) {
+      return;
+    }
+    lastPersistedGuestEmail.current = normalizedGuestEmail;
+    persistGuestCartSnapshot(normalizedGuestEmail);
+  }, [isGuest, normalizedGuestEmail]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    apiFetch<{ methods?: string[] }>('get-shipping-methods')
+      .then((data) => {
+        if (!cancelled) {
+          setAvailableShippingNames(Array.isArray(data.methods) ? data.methods : null);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setAvailableShippingNames(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const shippingMethods = useMemo(
+    () => getShippingMethodsForCountry(country, availableShippingNames),
+    [country, availableShippingNames],
+  );
   const selectedShipping = shippingMethods.find((m) => m.id === shippingMethod);
+  const mixDiscount = useStore($mixDiscount);
   const shippingCost = selectedShipping?.price ?? 0;
-  const orderTotal = cartTotal + shippingCost;
+  const codeDiscountAmount = discountApplied?.amount ?? 0;
+  // Mix discount and code discount don't stack — use whichever saves more
+  const mixDiscountAmount = mixDiscount.active ? mixDiscount.amount : 0;
+  const discountAmount = Math.max(codeDiscountAmount, mixDiscountAmount);
+  const usingMixDiscount = mixDiscountAmount > codeDiscountAmount && mixDiscount.active;
+  const orderTotal = cartTotal + shippingCost - discountAmount;
 
   // Reset shipping method when country changes
   const handleCountryChange = useCallback((newCountry: string) => {
     setCountry(newCountry);
     setShippingMethod('');
+  }, []);
+
+  const handleApplyDiscount = useCallback(async () => {
+    const code = discountCode.trim().toUpperCase();
+    if (!code) return;
+
+    setDiscountLoading(true);
+    setDiscountError('');
+
+    try {
+      const res = await fetch(`${import.meta.env.PUBLIC_SUPABASE_URL}/functions/v1/validate-discount`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, subtotal: cartTotal }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        const messages: Record<string, string> = {
+          INVALID_CODE: "This code isn't valid. Check for typos and try again.",
+          EXPIRED: 'This code has expired.',
+          MIN_ORDER_NOT_MET: `This code requires a minimum order of ${tenant.currencyCode} ${data.min_order?.toFixed(2) ?? '0.00'}.`,
+          MAX_USES_REACHED: 'This code has already been used.',
+        };
+        setDiscountError(messages[data.error] ?? "Couldn't verify the code right now. Try again in a moment.");
+        setDiscountLoading(false);
+        return;
+      }
+
+      setDiscountApplied({
+        code,
+        amount: data.discount_amount,
+        type: data.type,
+        value: data.value,
+      });
+      setDiscountLoading(false);
+    } catch {
+      setDiscountError("Couldn't verify the code right now. Try again in a moment.");
+      setDiscountLoading(false);
+    }
+  }, [discountCode, cartTotal]);
+
+  const handleRemoveDiscount = useCallback(() => {
+    setDiscountApplied(null);
+    setDiscountCode('');
+    setDiscountError('');
   }, []);
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
@@ -97,13 +241,19 @@ export default function CheckoutForm({ userEmail }: Props) {
     setSubmitting(true);
     setError('');
 
+    // PostHog: track checkout_started
+    trackCheckoutStarted({ cartTotal, itemCount: cartItems.length, currency: tenant.currencyCode });
+
     try {
       const items = cartItems.map((item) => ({
         sku: `${item.product.id}-${item.packSize}`,
+        slug: item.product.id,
         quantity: item.quantity,
         product_name: item.product.name,
+        brand: item.product.brand,
         pack_label: packLabel(item.packSize),
         unit_price: item.product.prices[item.packSize],
+        image_url: item.product.image,
       }));
 
       const { data, error: actionError } = await actions.checkout.createCheckout({
@@ -112,6 +262,7 @@ export default function CheckoutForm({ userEmail }: Props) {
           email,
           firstname: firstName,
           lastname: lastName,
+          phone: phone || undefined,
         },
         billing_address: {
           address,
@@ -119,7 +270,8 @@ export default function CheckoutForm({ userEmail }: Props) {
           city,
           country,
         },
-        shipping_method: shippingMethod,
+        shipping_method: selectedShipping?.name ?? shippingMethod,
+        discount_code: discountApplied?.code ?? undefined,
         display_total: orderTotal,
         display_currency: tenant.currencyCode,
       });
@@ -131,14 +283,39 @@ export default function CheckoutForm({ userEmail }: Props) {
       }
 
       if (data?.redirect_url) {
+        // Validate redirect URL to prevent open redirect attacks
+        const allowedHosts = ['nyehandel.se', 'www.nyehandel.se', ...storefrontHosts];
+        try {
+          const redirectUrl = new URL(data.redirect_url);
+          if (!allowedHosts.some(host => redirectUrl.hostname === host || redirectUrl.hostname.endsWith('.' + host))) {
+            setError('Invalid redirect URL received. Please contact support.');
+            setSubmitting(false);
+            return;
+          }
+        } catch {
+          setError('Invalid redirect URL received. Please contact support.');
+          setSubmitting(false);
+          return;
+        }
         clearCart();
+        try { sessionStorage.removeItem(BUY_NOW_KEY); } catch {
+          // Silently ignore if sessionStorage is unavailable
+        }
         window.location.href = data.redirect_url;
       }
     } catch {
       setError('Something went wrong. Please try again.');
       setSubmitting(false);
     }
-  }, [cartItems, email, firstName, lastName, address, postcode, city, country, shippingMethod, ageVerified, orderTotal]);
+  }, [cartItems, cartTotal, email, firstName, lastName, phone, address, postcode, city, country, shippingMethod, ageVerified, orderTotal, selectedShipping, discountApplied]);
+
+  if (!mounted) {
+    return (
+      <div className="rounded-xl border border-border bg-card/60 backdrop-blur-sm p-8 text-center max-w-md mx-auto">
+        <p className="text-muted-foreground">Loading checkout…</p>
+      </div>
+    );
+  }
 
   if (cartItems.length === 0 && !submitting) {
     return (
@@ -158,11 +335,22 @@ export default function CheckoutForm({ userEmail }: Props) {
     <form onSubmit={handleSubmit}>
       <h1 className="text-3xl font-bold tracking-tight mb-8">Checkout</h1>
 
+      {isGuest && (
+        <div className="rounded-lg border border-border bg-card/60 p-4 mb-6 flex items-center justify-between flex-wrap gap-2">
+          <p className="text-sm text-muted-foreground">Checking out as guest</p>
+          <a href="/login?redirect=/checkout" className="text-sm font-medium text-primary hover:underline">
+            Sign in for faster checkout
+          </a>
+        </div>
+      )}
+
       {error && (
-        <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 mb-6 text-sm text-destructive">
+        <div role="alert" aria-live="assertive" className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 mb-6 text-sm text-destructive">
           {error}
         </div>
       )}
+
+      <ReductionAlert cartItems={cartItems} userId={userId ?? null} />
 
       <div className="grid lg:grid-cols-5 gap-8">
         {/* Form Column */}
@@ -175,14 +363,22 @@ export default function CheckoutForm({ userEmail }: Props) {
                 <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-1">
                   Email
                 </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
+                {!isGuest && userEmail ? (
+                  <div className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground cursor-not-allowed">
+                    {userEmail}
+                  </div>
+                ) : (
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                )}
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -362,11 +558,86 @@ export default function CheckoutForm({ userEmail }: Props) {
               ))}
             </div>
 
+            {/* Discount Code */}
+            <div className="border-t border-border pt-3">
+              {discountApplied ? (
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 border border-green-500/20 px-3 py-1 text-xs font-medium text-green-400">
+                    <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    {discountApplied.code}
+                    <button
+                      type="button"
+                      onClick={handleRemoveDiscount}
+                      className="ml-1 hover:text-foreground transition"
+                      aria-label="Remove discount code"
+                    >
+                      <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </span>
+                </div>
+              ) : showDiscountInput ? (
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setShowDiscountInput(false)}
+                    className="text-sm text-muted-foreground hover:text-foreground transition flex items-center gap-1 mb-2"
+                  >
+                    <svg className="h-3 w-3 rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    Have a discount code?
+                  </button>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={discountCode}
+                      onChange={(e) => { setDiscountCode(e.target.value); setDiscountError(''); }}
+                      placeholder="Enter code"
+                      disabled={discountLoading}
+                      className={`flex-1 rounded-lg border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 ${
+                        discountError ? 'border-destructive' : 'border-border'
+                      }`}
+                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleApplyDiscount(); } }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleApplyDiscount}
+                      disabled={discountLoading || !discountCode.trim()}
+                      className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                    >
+                      {discountLoading ? (
+                        <svg className="h-3.5 w-3.5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                      ) : 'Apply'}
+                    </button>
+                  </div>
+                  {discountError && (
+                    <p className="text-xs text-destructive mt-1.5">{discountError}</p>
+                  )}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowDiscountInput(true)}
+                  className="text-sm text-muted-foreground hover:text-foreground transition flex items-center gap-1"
+                >
+                  <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  Have a discount code?
+                </button>
+              )}
+            </div>
+
             <div className="border-t border-border pt-3 space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
                 <span>{tenant.currencyCode} {cartTotal.toFixed(2)}</span>
               </div>
+              {discountAmount > 0 && (
+                <div className="flex justify-between text-green-400">
+                  <span>{usingMixDiscount ? `Mix & Save ${mixDiscount.pct}%` : `Discount (${discountApplied?.code})`}</span>
+                  <span>-{tenant.currencyCode} {discountAmount.toFixed(2)}</span>
+                </div>
+              )}
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Shipping</span>
                 <span>

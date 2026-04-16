@@ -1,0 +1,263 @@
+---
+import { Image } from 'astro:assets';
+import ProductCardControlsIsland from '@/components/react/ProductCardControlsIsland';
+import { brandColors, strengthColors, strengthLabels, defaultBrandColor, flavorColors, defaultFlavorColor } from '@/data/brand-colors';
+
+interface Props {
+  slug: string;
+  name: string;
+  brand: string;
+  brandSlug: string;
+  imageUrl: string;
+  prices: Record<string, number>;
+  stock: number;
+  nicotineContent: number;
+  strengthKey: string;
+  flavorKey: string;
+  ratings: number;
+  badgeKeys: string[];
+  portionsPerCan?: number;
+  /** Shown as "(N)" after star rating when > 0 */
+  reviewCount?: number;
+  /** Retail MSRP — strikethrough + savings % rendered when > displayPrice */
+  comparePrice?: number;
+}
+
+const {
+  slug, name, brand, brandSlug, imageUrl, prices, stock,
+  nicotineContent, strengthKey, flavorKey, ratings, badgeKeys,
+  portionsPerCan = 20,
+  reviewCount,
+  comparePrice,
+} = Astro.props;
+
+const isOutOfStock = stock === 0;
+
+// Brand color for image tint
+const brandColor = brandColors[brandSlug] ?? defaultBrandColor;
+
+// Strength color + flavor color
+const strengthColor = strengthColors[strengthKey] ?? strengthColors['normal'];
+const flavorColor = flavorColors[flavorKey] ?? defaultFlavorColor;
+
+// Strength dots (1-5 scale)
+const strengthMap: Record<string, number> = { normal: 2, strong: 3, 'extra-strong': 4, 'super-strong': 5 };
+const strengthDots = strengthMap[strengthKey] ?? 2;
+
+// Badge formatting
+const badgeLabelMap: Record<string, string> = {
+  NewPrice: 'New Price', newPrice: 'New Price', popular: 'Popular',
+  bestseller: 'Bestseller', new: 'New',
+};
+function formatBadge(key: string): string {
+  return badgeLabelMap[key] ?? key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase());
+}
+
+// Star rating
+const fullStars = Math.floor(ratings);
+const hasHalf = ratings - fullStars >= 0.25;
+const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+
+// Flavor labels
+const flavorLabelMap: Record<string, string> = {
+  mint: 'Mint', berry: 'Berry', citrus: 'Citrus', fruit: 'Fruit',
+  coffee: 'Coffee', cola: 'Cola', menthol: 'Menthol', wintergreen: 'Wintergreen',
+  tropical: 'Tropical', ice: 'Ice', original: 'Original', tobacco: 'Tobacco',
+  licorice: 'Licorice', vanilla: 'Vanilla',
+};
+const flavorLabel = flavorLabelMap[flavorKey] ?? flavorKey;
+
+const pack1Price = prices.pack1 ?? 0;
+const perPouchPrice = pack1Price > 0 ? (pack1Price / portionsPerCan).toFixed(2) : null;
+const hasDiscount = comparePrice != null && comparePrice > pack1Price && pack1Price > 0;
+const savingsPct = hasDiscount ? Math.round(((comparePrice! - pack1Price) / comparePrice!) * 100) : 0;
+---
+
+<article
+  data-nicotine-mg={nicotineContent}
+  class="product-card group relative flex min-h-[48px] flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1"
+  style={`background: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%); box-shadow: 0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);`}
+>
+  <a
+    href={`/products/${slug}`}
+    data-astro-prefetch
+    aria-label={`${name} by ${brand} — view product details`}
+    class="absolute inset-0 z-[1] rounded-2xl focus:outline-2 focus:outline-offset-2 focus:outline-primary"
+  />
+
+  {/* Badges — pill style with glow */}
+  <div class="absolute top-2.5 left-2.5 z-10 flex flex-wrap gap-1">
+    {isOutOfStock && (
+      <span class="rounded-full bg-destructive px-2.5 py-0.5 text-[10px] font-bold text-destructive-foreground shadow-sm">
+        Out of Stock
+      </span>
+    )}
+    {badgeKeys.map((badge) => (
+      <span
+        class="rounded-full px-2.5 py-0.5 text-[10px] font-bold shadow-sm"
+        style={`background-color: ${badge === 'popular' || badge === 'bestseller' ? '#fde68a' : badge === 'new' ? '#bbf7d0' : badge === 'newPrice' || badge === 'NewPrice' ? '#dbeafe' : '#fde68a'}; color: ${badge === 'popular' || badge === 'bestseller' ? '#92400e' : badge === 'new' ? '#166534' : badge === 'newPrice' || badge === 'NewPrice' ? '#1e40af' : '#92400e'};`}
+      >
+        {formatBadge(badge)}
+      </span>
+    ))}
+  </div>
+
+  {/* Image area with radial flavor glow */}
+  <div class="product-card-image relative z-[2] aspect-square w-full overflow-hidden">
+    {/* Radial glow behind product */}
+    <div
+      class="absolute inset-0 opacity-15 transition-opacity duration-300 group-hover:opacity-30"
+      style={`background: radial-gradient(circle at 50% 60%, ${flavorColor}90 0%, transparent 70%);`}
+    />
+    {imageUrl ? (
+      <Image
+        src={imageUrl}
+        alt={`${name}${brand ? ` by ${brand}` : ''}${strengthKey ? ` - ${strengthKey}` : ''}`}
+        width={300}
+        height={300}
+        loading="lazy"
+        format="webp"
+        quality={80}
+        class="relative z-[1] h-full w-full object-cover product-card-img"
+        style={`filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)) drop-shadow(0 0 8px ${flavorColor}15);`}
+      />
+    ) : (
+      <div class="flex h-full w-full items-center justify-center" style={`background: radial-gradient(circle at 50% 60%, ${brandColor}30 0%, transparent 70%);`}>
+        <span class="text-4xl font-bold" style={`color: ${brandColor}90;`} aria-hidden="true">
+          {brand.split(/[\s-]+/).slice(0, 2).map((w: string) => w[0]?.toUpperCase() ?? '').join('')}
+        </span>
+      </div>
+    )}
+
+    {/* Strength accent line at bottom of image */}
+    <div
+      class="absolute bottom-0 left-0 right-0 h-[2px] z-[2]"
+      style={`background: linear-gradient(90deg, transparent, ${strengthColor}, transparent); opacity: 0.8;`}
+    />
+  </div>
+
+  {/* Content */}
+  <div class="relative z-[2] flex flex-1 flex-col gap-1.5 p-3">
+    {/* Brand + strength dots row */}
+    <div class="flex items-center justify-between">
+      <a
+        href={`/brands/${brandSlug}`}
+        data-astro-prefetch
+        class="text-xs font-semibold uppercase tracking-wider hover:brightness-125 cursor-pointer transition-all"
+        style={`color: ${brandColor};`}
+      >
+        {brand}
+      </a>
+      {/* Strength dots */}
+      <div class="flex items-center gap-0.5" role="img" aria-label={`${strengthLabels[strengthKey] ?? 'Normal'} strength, ${strengthDots} of 5`}>
+        {Array.from({ length: 5 }, (_, i) => (
+          <div
+            class="rounded-full transition-all"
+            style={`width: ${i < strengthDots ? '6px' : '5px'}; height: ${i < strengthDots ? '6px' : '5px'}; background-color: ${i < strengthDots ? strengthColor : 'rgba(128,128,128,0.2)'}; ${i < strengthDots ? `box-shadow: 0 0 4px ${strengthColor}50;` : ''}`}
+          />
+        ))}
+      </div>
+    </div>
+
+    {/* Name */}
+    <h3 class="text-sm font-bold leading-tight text-foreground line-clamp-2">{name}</h3>
+
+    {/* Pill badges — flavor, mg, format */}
+    <div class="flex items-center gap-1 flex-wrap">
+      <span
+        class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium border"
+        style={`background-color: ${flavorColor}15; color: ${flavorColor}; border-color: ${flavorColor}25;`}
+      >
+        {flavorLabel}
+      </span>
+      <span
+        class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium border"
+        style={`background-color: ${strengthColor}15; color: ${strengthColor}; border-color: ${strengthColor}25;`}
+      >
+        {nicotineContent} mg
+      </span>
+    </div>
+
+    {/* Star rating */}
+    {ratings > 0 && (
+      <div class="flex items-center gap-1">
+        <div class="flex items-center gap-0.5" role="img" aria-label={`${ratings.toFixed(1)} out of 5 stars`}>
+          {Array.from({ length: fullStars }, () => (
+            <svg class="h-3 w-3 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ))}
+          {hasHalf && (
+            <svg class="h-3 w-3 text-amber-400" viewBox="0 0 20 20" aria-hidden="true">
+              <defs>
+                <linearGradient id={`half-star-${slug}`}>
+                  <stop offset="50%" stop-color="currentColor" />
+                  <stop offset="50%" stop-color="transparent" />
+                </linearGradient>
+              </defs>
+              <path fill={`url(#half-star-${slug})`} stroke="currentColor" stroke-width="0.5" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          )}
+          {Array.from({ length: emptyStars }, () => (
+            <svg class="h-3 w-3 text-muted-foreground/30" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ))}
+        </div>
+        <span class="text-xs text-muted-foreground">
+          {ratings.toFixed(1)}
+          {reviewCount != null && reviewCount > 0 && (
+            <span class="ml-1 text-muted-foreground/70">({reviewCount})</span>
+          )}
+        </span>
+      </div>
+    )}
+
+    {/* Price + strikethrough + savings % + per-pouch */}
+    <div class="flex flex-col mt-auto pt-1">
+      <div class="flex items-baseline gap-1.5 flex-wrap">
+        <span class="text-base font-bold text-foreground">&euro;{pack1Price.toFixed(2)}</span>
+        {hasDiscount && (
+          <>
+            <span class="text-xs text-muted-foreground line-through">&euro;{comparePrice!.toFixed(2)}</span>
+            <span class="rounded-sm bg-primary/15 px-1 text-[10px] font-bold text-primary">-{savingsPct}%</span>
+          </>
+        )}
+      </div>
+      {perPouchPrice && (
+        <span class="text-[10px] text-muted-foreground">&euro;{perPouchPrice}/pouch &middot; {portionsPerCan}pcs</span>
+      )}
+    </div>
+
+    <ProductCardControlsIsland
+      client:visible
+      slug={slug}
+      name={name}
+      brand={brand}
+      imageUrl={imageUrl}
+      prices={prices}
+      stock={stock}
+      nicotineContent={nicotineContent}
+      strengthKey={strengthKey}
+      flavorKey={flavorKey}
+      ratings={ratings}
+      badgeKeys={badgeKeys}
+    />
+  </div>
+</article>
+
+<style>
+  .product-card {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+    /* Pin to a stable GPU layer so the tilt rotate doesn't re-rasterize text each frame */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+  .product-card-img {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .group:hover .product-card-img {
+    transform: scale(1.05);
+  }
+</style>

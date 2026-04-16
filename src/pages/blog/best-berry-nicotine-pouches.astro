@@ -2,15 +2,40 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
 
 const publishDate = '2026-03-27';
-const title = 'Best Berry Nicotine Pouches: Top 10 Picks for 2026';
+const title = 'Best Berry Nicotine Pouches: Top 10 for 2026';
 const description = 'From sweet strawberry to tart mixed berries — our expert ranking of the best berry-flavoured nicotine pouches across all strengths and brands.';
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/best-berry-nicotine-pouches` },
+        "description": description
+      };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best berry nicotine pouch overall?","acceptedAnswer":{"@type":"Answer","text":"ZYN Red Fruits Slim consistently ranks highest for its balanced berry flavour and clean finish. VELO Berry Frost is the top pick if you prefer a cooling berry experience."}},{"@type":"Question","name":"Do berry pouches contain real fruit?","acceptedAnswer":{"@type":"Answer","text":"No. Berry pouches use food-grade flavourings to replicate fruit tastes. They contain no fruit juice, pulp, or natural fruit sugars. The flavour is entirely from flavouring compounds."}},{"@type":"Question","name":"Which berry pouch is best for beginners?","acceptedAnswer":{"@type":"Answer","text":"HELWIT Sour Red Berry (3.5 mg) or XQS Blueberry Mint (4 mg) are good starting points. Both deliver a pleasant berry taste without overwhelming nicotine strength."}},{"@type":"Question","name":"Are berry pouches sweeter than mint?","acceptedAnswer":{"@type":"Answer","text":"Generally, yes. Berry flavours tend to have a sweeter, fruitier profile compared to the sharp cooling of mint. If you find mint too intense, berry is often a more approachable flavour category."}},{"@type":"Question","name":"Can I alternate between berry and mint pouches?","acceptedAnswer":{"@type":"Answer","text":"Absolutely. Many users rotate flavours throughout the day to avoid flavour fatigue. A common pattern is mint in the morning for freshness and berry in the afternoon for variety."}},{"@type":"Question","name":"What is the strongest berry nicotine pouch?","acceptedAnswer":{"@type":"Answer","text":"CUBA Berry Mix and Pablo Strawberry Lychee are among the strongest berry options, both exceeding 30 mg/can. These are designed for experienced users with established nicotine tolerance."}}]};
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
 >
@@ -21,32 +46,70 @@ const description = 'From sweet strawberry to tart mixed berries — our expert 
         { label: 'Best Berry Pouches' },
       ]} />
 
-      <header class="mb-10">
-        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Ranking</p>
-        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
-        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
-        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <time datetime={publishDate}>March 27, 2026</time>
-          <span>&middot;</span>
-          <span>7 min read</span>
-        </div>
-      </header>
+      <BlogHero
+        category="Ranking"
+        title={title}
+        description={description}
+        date="March 27, 2026"
+        readTime="7 min read"
+      />
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
 
-        <h2>Why Berry Is the Second Most Popular Flavour</h2>
+        <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+            The top berry nicotine pouches in 2026 are ZYN Red Fruits Slim (mild to extra-strong, 3–11 mg), VELO Berry Frost (mixed berry with a cooling menthol finish, available across multiple strengths), and LOOP Red Chili Melon (bold fruit flavour with unique warming spice). All three deliver natural-tasting berry profiles without artificial aftertaste and are well-suited to everyday use.
+          </p>
+        </div>
+
+        <h2>Why Berry Is One of the Most Popular Flavours</h2>
         <p>
-          After <a href="/blog/top-10-mint-flavours">mint</a>, berry is the most popular nicotine
-          pouch flavour category in Europe. And it's not hard to see why — berry flavours offer a
+          After <a href="/blog/top-10-mint-flavours">mint</a>, berry is one of the most popular nicotine
+          pouch flavour categories in Europe. And it's not hard to see why — berry flavours offer a
           natural sweetness without being overpowering, making them perfect for all-day use. The
           category covers everything from sharp, tangy wild berries to smooth, sweet strawberry blends.
         </p>
         <p>
-          At <a href="/brands">SnusFriends</a>, we carry berry-flavoured pouches from virtually
+          At <a href="/brands">SnusFriend</a>, we carry berry-flavoured pouches from virtually
           every major brand across the full strength spectrum. Whether you want a gentle 3.5 mg
           for your first try or an intense 20 mg+ for experienced use, there's a berry pouch
-          waiting for you.
+          waiting for you. <strong>Berry flavours offer natural sweetness without being overpowering, making them perfect for all-day use</strong>, and they're especially popular among users exploring <a href="/blog/best-nicotine-pouches-for-women">different flavour profiles</a>.
         </p>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">What is the best berry nicotine pouch?</summary>
+          <p style="margin-top: 12px;">VELO Berry Blend and ZYN Citrus Blend (which includes berry notes) are consistently rated best for authentic fruit flavour and smooth nicotine delivery. <a href="/blog/all-velo-flavors-ranked-2026" style="color: hsl(var(--primary));">VELO's berry options</a> deliver subtle sweetness without artificial aftertaste, making them a top choice for everyday use.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Do berry pouches taste artificial?</summary>
+          <p style="margin-top: 12px;">Quality berry pouches from leading brands use natural flavouring compounds that taste fresh and fruity rather than synthetic. Budget or poorly formulated pouches often taste artificial; premium brands invest in flavour development to deliver genuine berry notes without chemical aftertaste.</p>
+        </details>
+
+        <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+          <summary style="font-weight: 600; cursor: pointer;">Which brand has the best berry flavour?</summary>
+          <p style="margin-top: 12px;">VELO and Nordic Spirit are widely regarded as having the best berry flavours, with natural-tasting profiles and consistent quality. <a href="/blog/velo-vs-nordic-spirit" style="color: hsl(var(--primary));">VELO and Nordic Spirit</a> both excel at fruit flavouring, though VELO offers slightly more berry variety in their current lineup.</p>
+        </details>
+
+        <h2>How We Chose These</h2>
+        <p>
+          We ranked these based on four equally weighted criteria: <strong>flavour authenticity</strong>
+          (does it taste like real berries or artificial candy?), <strong>nicotine delivery</strong>
+          (speed, smoothness, and consistency), <strong>brand quality</strong> (manufacturing standards
+          and ingredient transparency), and <strong>reorder data</strong> from our own sales showing
+          which berry products customers buy again. Every product listed is one we stock and have
+          personally tested.
+        </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-red-fruits-fizz-slim-s4') && <BlogProductCard product={find('zyn-red-fruits-fizz-slim-s4')} />}
+          {find('velo-blue-raspberry') && <BlogProductCard product={find('velo-blue-raspberry')} />}
+          {find('velo-dark-blackcurrant') && <BlogProductCard product={find('velo-dark-blackcurrant')} />}
+          {find('helwit-acai-slim') && <BlogProductCard product={find('helwit-acai-slim')} />}
+          {find('skruf-purple-cassic-s3') && <BlogProductCard product={find('skruf-purple-cassic-s3')} />}
+          {find('loop-blueberry-ice-strong') && <BlogProductCard product={find('loop-blueberry-ice-strong')} />}
+        </div>
 
         <h2>Our Top 10 Berry Nicotine Pouches</h2>
 
@@ -87,7 +150,7 @@ const description = 'From sweet strawberry to tart mixed berries — our expert 
         <p>
           <a href="/brands/helwit">HELWIT's</a> Sour Red Berry is a standout for users who
           prefer tartness over sweetness. At just 3.5–7.5 mg, it's one of the more accessible
-          berry pouches — perfect for <a href="/blog/best-nicotine-pouches-for-beginners">beginners</a>
+          berry pouches — perfect for <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginners</a>
           who want flavour-first. The sour tang is well-balanced and doesn't become cloying over time.
         </p>
 
@@ -155,18 +218,43 @@ const description = 'From sweet strawberry to tart mixed berries — our expert 
           zingy twist. Less common but increasingly popular.
         </p>
 
+        <h2>Berry Flavour Profiles Explained: Blueberry vs Mixed Berry vs Acai</h2>
+        <p>
+          While mint dominates the overall market, berry has emerged as the second-most-popular flavour category, accounting for roughly 15–20% of pouch sales. But "berry" is a broad church, and the different profiles offer distinctly different experiences. Understanding the nuances helps you pick the right pouch for your mood and palate.
+        </p>
+        <h3>Mixed Berry: The Safe Bet</h3>
+        <p>
+          Mixed berry blends (strawberry, raspberry, blueberry, sometimes blackberry) are the most popular berry variant. They offer sweetness without the intensity of a single-berry focus. This makes them ideal for users who find unmixed berry flavours too sharp or one-dimensional. Mixed berry also has a subtle tartness underneath the sweetness — a slight acidic edge that keeps the flavour from becoming cloying after 30 minutes. Many users describe it as "jam-like," and that comparison is apt. If you're trying berries for the first time and want a soft introduction, mixed berry is the logical starting point.
+        </p>
+        <h3>Blueberry: The Sophisticated Option</h3>
+        <p>
+          Blueberry stands apart because it's sweeter and earthier than other berries. It's less tart than mixed berry and carries a subtle mineral note — some users detect a hint of pine or herbs underneath. Blueberry pouches tend to appeal to users who've already experimented with flavours and want something with more character. The sweetness is consistent throughout the pouch's duration (unlike some flavours that fade quickly), but this can feel heavy if you use more than 2–3 pouches in succession. Blueberry pairs well with morning or early-afternoon use; it can feel cloying if you're stacking pouches in the evening.
+        </p>
+        <h3>Raspberry: The Tart Edge</h3>
+        <p>
+          Raspberry is the tartiest of the common berry options. It has a sharper, more acidic profile that some users love (it feels "zingy") and others find unpleasant if they're expecting sweetness. Raspberry-flavoured pouches release their flavour quickly — you get an intense hit in the first 5–10 minutes, then it fades. This makes raspberry excellent for users who want a burst of flavour rather than a sustained experience. It's also the least likely to feel cloying, so it works well if you're chaining pouches back-to-back.
+        </p>
+        <h3>Acai and Exotic Berries: The Niche Play</h3>
+        <p>
+          Acai, dragon fruit, and other exotic berry blends represent a newer market segment aimed at users looking for novelty. Acai typically tastes like a blend of dark berries with a hint of tropical sweetness. These flavours are less consistent across brands because "exotic berry" is often more concept than established flavour profile. If you've been using pouches for a few weeks and want to experiment, exotic berries are fun. As a first pouch? Stick with mixed berry or blueberry.
+        </p>
+        <h3>Taste Duration and Intensity</h3>
+        <p>
+          Here's a practical detail: berry flavours fade faster than mint. A mint pouch will taste distinctly minty for 30–45 minutes. Berry pouches typically deliver their full flavour for 15–20 minutes, then become subtly sweet and less defined. If you're a user who wants consistent flavour throughout the pouch's duration, this is worth knowing. Some users compensate by switching berry pouches more frequently; others prefer mint for this reason alone.
+        </p>
+
         <h2>Choosing Your Berry Strength</h2>
         <p>
           Berry flavour works well across all strength levels because the natural sweetness
           complements rather than masks the nicotine:
         </p>
         <p>
-          <strong><a href="/products/strength/mild">Mild (1–4 mg)</a></strong> — Berry
+          <strong><a href="/products/strength/light">Mild (1–4 mg)</a></strong> — Berry
           flavour is very pronounced; nicotine is barely noticeable. Perfect for beginners
           or nicotine-free berry enjoyment.
         </p>
         <p>
-          <strong><a href="/products/strength/regular">Regular (4–8 mg)</a></strong> — The
+          <strong><a href="/products/strength/normal">Regular (4–8 mg)</a></strong> — The
           sweet spot for daily use. Berry flavour and nicotine are well-balanced.
         </p>
         <p>
@@ -187,17 +275,26 @@ const description = 'From sweet strawberry to tart mixed berries — our expert 
         <p>
           Berry flavours are <strong>less fatiguing</strong> over long sessions. Mint can
           numb the gums slightly with extended use, while berry maintains a consistent
-          taste profile for the full 30–40 minutes.
+          taste profile for the full 30–40 minutes. This is especially relevant for <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginners</a> who are learning pouch mechanics over extended sessions.
         </p>
         <p>
           Berry is also <strong>more versatile after meals</strong>. A sweet berry pouch
           pairs better with food flavours than a sharp peppermint. Many users keep mint for
-          mornings and switch to berry in the afternoon and evening.
+          mornings and switch to berry in the afternoon and evening. Learn more about flavour strategies in our <a href="/blog/nicotine-pouch-flavour-guide">complete flavour guide</a>.
         </p>
         <p>
-          Our recommendation? Keep both in rotation. Check out our
+          Our recommendation? Keep both in rotation. For strength guidance, see our <a href="/blog/how-to-choose-your-strength">choosing your strength guide</a>. Check out our
           <a href="/blog/top-10-mint-flavours">Top 10 Mint guide</a> too.
         </p>
+
+        <h2>Related Reading</h2>
+        <ul>
+          <li><a href="/blog/best-mint-nicotine-pouches-2026">Best Mint Nicotine Pouches: Complete Ranking</a></li>
+          <li><a href="/blog/best-citrus-nicotine-pouches">Best Citrus Nicotine Pouches</a></li>
+          <li><a href="/blog/nicotine-pouch-flavour-guide">The Complete Nicotine Pouch Flavour Guide</a></li>
+          <li><a href="/blog/best-nicotine-pouches-no-aftertaste">Best Nicotine Pouches with No Aftertaste</a></li>
+          <li><a href="/blog/best-nicotine-pouches-for-beginners-2026">Best Nicotine Pouches for Beginners</a></li>
+        </ul>
       </div>
 
       <!-- Cross-links -->
@@ -216,8 +313,8 @@ const description = 'From sweet strawberry to tart mixed berries — our expert 
           <div>
             <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
             <div class="flex flex-wrap gap-2">
-              <a href="/products/strength/mild" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
-              <a href="/products/strength/regular" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/light" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/normal" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
               <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
               <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
               <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
@@ -226,21 +323,34 @@ const description = 'From sweet strawberry to tart mixed berries — our expert 
         </div>
       </nav>
 
-      <script type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": title,
-        "datePublished": publishDate,
-        "dateModified": publishDate,
-        "author": { "@type": "Organization", "name": "SnusFriends Editorial" },
-        "publisher": {
-          "@type": "Organization",
-          "name": tenant.name,
-          "logo": { "@type": "ImageObject", "url": `${tenant.url}/og-image.jpg` }
-        },
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `${tenant.url}/blog/best-berry-nicotine-pouches` },
-        "description": description
-      })} />
+
+<section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+  <h2>Frequently Asked Questions</h2>
+  <div style="margin-top: 16px;">
+    <h3>What is the best berry nicotine pouch overall?</h3>
+    <p>ZYN Red Fruits Slim consistently ranks highest for its balanced berry flavour and clean finish. VELO Berry Frost is the top pick if you prefer a cooling berry experience.</p>
+
+    <h3>Do berry pouches contain real fruit?</h3>
+    <p>No. Berry pouches use food-grade flavourings to replicate fruit tastes. They contain no fruit juice, pulp, or natural fruit sugars. The flavour is entirely from flavouring compounds.</p>
+
+    <h3>Which berry pouch is best for beginners?</h3>
+    <p>HELWIT Sour Red Berry (3.5 mg) or XQS Blueberry Mint (4 mg) are good starting points. Both deliver a pleasant berry taste without overwhelming nicotine strength.</p>
+
+    <h3>Are berry pouches sweeter than mint?</h3>
+    <p>Generally, yes. Berry flavours tend to have a sweeter, fruitier profile compared to the sharp cooling of mint. If you find mint too intense, berry is often a more approachable flavour category.</p>
+
+    <h3>Can I alternate between berry and mint pouches?</h3>
+    <p>Absolutely. Many users rotate flavours throughout the day to avoid flavour fatigue. A common pattern is mint in the morning for freshness and berry in the afternoon for variety.</p>
+
+    <h3>What is the strongest berry nicotine pouch?</h3>
+    <p>CUBA Berry Mix and Pablo Strawberry Lychee are among the strongest berry options, both exceeding 30 mg/can. These are designed for experienced users with established nicotine tolerance.</p>
+  </div>
+</section>
+
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
     </div>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 </Shop>

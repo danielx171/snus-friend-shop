@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import { useStore } from '@nanostores/react';
+import { $beginnerMode, BEGINNER_MAX_MG } from '@/stores/beginner-mode';
 import ProductCard from './ProductCard';
 import {
   filterProducts,
@@ -6,6 +8,7 @@ import {
   type FilterState,
   type SortOption,
 } from '@/lib/search';
+import { expandImageUrl } from '@/lib/image-cdn';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -37,12 +40,15 @@ const STRENGTH_LABELS: Record<string, string> = {
 
 const FLAVOR_LABELS: Record<string, string> = {
   mint: 'Mint',
-  citrus: 'Citrus',
+  fruit: 'Fruit',
   berry: 'Berry',
+  citrus: 'Citrus',
+  licorice: 'Licorice',
   coffee: 'Coffee',
+  cola: 'Cola',
+  vanilla: 'Vanilla',
+  tropical: 'Tropical',
   tobacco: 'Tobacco',
-  exotic: 'Exotic',
-  unflavored: 'Unflavored',
 };
 
 const FORMAT_LABELS: Record<string, string> = {
@@ -292,22 +298,30 @@ function MobileFilterSheet({
   onToggle: (group: keyof Omit<FilterState, 'sort'>, value: string, checked: boolean) => void;
   onClearAll: () => void;
 }) {
-  // Lock body scroll when open
+  // Lock body scroll when open + Escape key handler
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') onClose();
+      };
+      document.addEventListener('keydown', handleEscape);
+      return () => {
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', handleEscape);
+      };
     } else {
       document.body.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
     };
-  }, [open]);
+  }, [open, onClose]);
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col">
+    <div className="fixed inset-0 z-50 flex flex-col" role="dialog" aria-modal="true" aria-labelledby="mobile-filter-heading">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
 
@@ -315,7 +329,7 @@ function MobileFilterSheet({
       <div className="relative mt-auto flex max-h-[85vh] flex-col rounded-t-2xl bg-card">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
-          <h2 className="text-base font-semibold text-foreground">
+          <h2 id="mobile-filter-heading" className="text-base font-semibold text-foreground">
             Filters{activeCount > 0 ? ` (${activeCount})` : ''}
           </h2>
           <div className="flex items-center gap-3">
@@ -373,12 +387,17 @@ export default function FilterableProductGrid({
   // Products state — loaded from inline JSON or fetched from URL
   const [fetchedProducts, setFetchedProducts] = useState<SearchableProduct[]>([]);
   const [loading, setLoading] = useState(!!productsJsonUrl);
+  const [fetchError, setFetchError] = useState(false);
 
-  // Parse inline products if provided
+  // Parse inline products if provided (expand shortened image URLs)
   const inlineProducts = useMemo<SearchableProduct[]>(() => {
     if (!productsJson) return [];
     try {
-      return JSON.parse(productsJson);
+      const parsed = JSON.parse(productsJson) as SearchableProduct[];
+      return parsed.map((p) => ({
+        ...p,
+        imageUrl: expandImageUrl(p.imageUrl),
+      }));
     } catch {
       return [];
     }
@@ -389,14 +408,26 @@ export default function FilterableProductGrid({
     if (!productsJsonUrl || productsJson) return;
     fetch(productsJsonUrl)
       .then((r) => r.json())
-      .then((data) => {
-        setFetchedProducts(data);
+      .then((data: SearchableProduct[]) => {
+        // Expand shortened image URLs (CDN prefix extracted at build time)
+        const expanded = data.map((p) => ({
+          ...p,
+          imageUrl: expandImageUrl(p.imageUrl),
+        }));
+        setFetchedProducts(expanded);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => { setFetchError(true); setLoading(false); });
   }, [productsJsonUrl, productsJson]);
 
-  const allProducts = productsJson ? inlineProducts : fetchedProducts;
+  const rawProducts = productsJson ? inlineProducts : fetchedProducts;
+
+  // Beginner mode: filter to gentle products only
+  const isBeginner = useStore($beginnerMode);
+  const allProducts = useMemo(() => {
+    if (!isBeginner) return rawProducts;
+    return rawProducts.filter((p) => (p.nicotineContent ?? 99) <= BEGINNER_MAX_MG);
+  }, [rawProducts, isBeginner]);
 
   // Parse optional initial filters prop
   const parsedInitial = useMemo<Partial<FilterState> | undefined>(() => {
@@ -429,14 +460,17 @@ export default function FilterableProductGrid({
       .sort((a, b) => a[1].localeCompare(b[1]))
       .map(([value, label]) => ({ value, label }));
 
-    // Fixed strength options in order
-    const strengthOptions = [
+    // Fixed strength options in order — hide strong+ in beginner mode
+    const allStrengthOptions = [
       { value: 'light', label: STRENGTH_LABELS.light },
       { value: 'normal', label: STRENGTH_LABELS.normal },
       { value: 'strong', label: STRENGTH_LABELS.strong },
       { value: 'extra-strong', label: STRENGTH_LABELS['extra-strong'] },
       { value: 'super-strong', label: STRENGTH_LABELS['super-strong'] },
     ];
+    const strengthOptions = isBeginner
+      ? allStrengthOptions.filter((o) => o.value === 'light' || o.value === 'normal')
+      : allStrengthOptions;
 
     // Fixed flavor options
     const flavorOptions = Object.entries(FLAVOR_LABELS).map(([value, label]) => ({
@@ -456,12 +490,38 @@ export default function FilterableProductGrid({
       { key: 'flavors' as const, label: 'Flavor', options: flavorOptions },
       { key: 'formats' as const, label: 'Format', options: formatOptions },
     ];
-  }, [allProducts]);
+  }, [allProducts, isBeginner]);
 
   // Sync filters to URL whenever they change
   useEffect(() => {
     filtersToURL(filters);
   }, [filters]);
+
+  // Scroll position memory — restore saved position after products load
+  useEffect(() => {
+    if (loading || allProducts.length === 0) return;
+    const key = 'scroll_products';
+    const saved = sessionStorage.getItem(key);
+    if (saved) {
+      sessionStorage.removeItem(key);
+      // Delay to ensure grid has rendered
+      requestAnimationFrame(() => {
+        window.scrollTo(0, parseInt(saved, 10));
+      });
+    }
+  }, [loading, allProducts.length]);
+
+  // Save scroll position when clicking any product link
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      const link = (e.target as HTMLElement).closest('a[href*="/products/"]');
+      if (link && link.getAttribute('href')?.startsWith('/products/')) {
+        sessionStorage.setItem('scroll_products', String(window.scrollY));
+      }
+    };
+    document.addEventListener('click', handler, true);
+    return () => document.removeEventListener('click', handler, true);
+  }, []);
 
   // Toggle a single filter value
   const handleToggle = useCallback(
@@ -581,7 +641,7 @@ export default function FilterableProductGrid({
       {/* Desktop: sidebar + grid */}
       <div className="flex gap-6">
         {/* Desktop sidebar */}
-        <aside className="hidden w-[240px] shrink-0 lg:block">
+        <aside className="hidden w-[240px] shrink-0 lg:block" aria-label="Product filters">
           <div className="sticky top-24 rounded-xl border border-border bg-card/40 p-4">
             <FilterSidebarContent
               filterGroups={filterGroups}
@@ -593,9 +653,20 @@ export default function FilterableProductGrid({
 
         {/* Product grid */}
         <div className="flex-1">
+          {fetchError && (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-6 text-center">
+              <p className="text-sm text-destructive mb-2">Failed to load products.</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="text-xs font-medium text-primary hover:underline"
+              >
+                Refresh page
+              </button>
+            </div>
+          )}
           {loading ? (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3" role="status" aria-label="Loading products">
-              {Array.from({ length: 12 }).map((_, i) => (
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5" role="status" aria-label="Loading products">
+              {Array.from({ length: 24 }).map((_, i) => (
                 <div key={i} className="rounded-xl border border-border bg-card/50 p-4">
                   <div className="mb-3 aspect-square rounded-lg bg-muted/30 animate-pulse" />
                   <div className="mb-2 h-4 w-3/4 rounded bg-muted/30 animate-pulse" />
@@ -619,7 +690,7 @@ export default function FilterableProductGrid({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
                 {visibleProducts.map((product) => (
                   <ProductCard
                     key={product.slug}
@@ -634,6 +705,9 @@ export default function FilterableProductGrid({
                     strengthKey={product.strengthKey}
                     flavorKey={product.flavorKey}
                     ratings={product.ratings}
+                    reviewCount={product.reviewCount}
+                    comparePrice={product.comparePrice}
+                    portionsPerCan={product.portionsPerCan}
                     badgeKeys={product.badgeKeys}
                   />
                 ))}

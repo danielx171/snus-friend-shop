@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnusFriend - Europe's #1 Nicotine Pouch Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Design System */
+    :root {
+      --primary: #1a2e1a;
+      --primary-light: #2d4a2d;
+      --accent: #4a6741;
+      --accent-light: #e8f4e8;
+      --background: #f8f6f3;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --info: #3b82f6;
+
+      --font-heading: "Space Grotesk", sans-serif;
+      --font-body: "Inter", sans-serif;
+      --shadow-sm: 0 1px 2px 0 rgba(26, 46, 26, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(26, 46, 26, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(26, 46, 26, 0.15);
+      --shadow-xl: 0 20px 25px -5px rgba(26, 46, 26, 0.2);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background-color: var(--background);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Noise texture background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='60' height='60' fill='rgba(0,0,0,0.02)' filter='url(%23noise)' /%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Keyframes */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    @keyframes spin-text {
+      0% { opacity: 0; transform: translateY(20px); }
+      10% { opacity: 1; transform: translateY(0); }
+      25% { opacity: 1; transform: translateY(0); }
+      35% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(74, 103, 65, 0.5), 0 10px 30px rgba(26, 46, 26, 0.15); }
+      50% { box-shadow: 0 0 30px rgba(74, 103, 65, 0.7), 0 10px 40px rgba(26, 46, 26, 0.2); }
+    }
+
+    @keyframes shimmer {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    /* Announcement Bar */
+    .announcement {
+      height: 32px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .announcement-content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-text {
+      animation: spin-text 9s infinite;
+    }
+
+    .announcement-text:nth-child(1) { animation-delay: 0s; }
+    .announcement-text:nth-child(2) { animation-delay: 3s; }
+    .announcement-text:nth-child(3) { animation-delay: 6s; }
+
+    .announcement-close {
+      position: absolute;
+      right: 16px;
+      cursor: pointer;
+      font-size: 18px;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+
+    .announcement-close:hover {
+      opacity: 1;
+    }
+
+    /* Navigation */
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 40;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--primary);
+      text-decoration: none;
+      font-family: var(--font-heading);
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .nav-menu a::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-box {
+      position: relative;
+      width: 200px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      transition: all 0.3s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.1);
+    }
+
+    .nav-icon {
+      cursor: pointer;
+      font-size: 20px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .nav-icon:hover {
+      color: var(--accent);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--error);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-left {
+      animation: slideIn 0.8s ease-out;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent-light);
+      border: 1px solid var(--accent);
+      color: var(--primary);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hero-headline {
+      font-family: var(--font-heading);
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--primary);
+      margin-bottom: 16px;
+      text-shadow: 0 2px 8px rgba(26, 46, 26, 0.1);
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      height: 48px;
+      padding: 0 24px;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      height: 48px;
+      padding: 0 24px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+
+    .hero-trust {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trust-item-star {
+      color: #fbbf24;
+    }
+
+    .hero-right {
+      position: relative;
+      height: 480px;
+      animation: fadeUp 0.8s ease-out 0.2s both;
+    }
+
+    .hero-gradient-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, var(--accent-light) 0%, rgba(232, 244, 232, 0.3) 70%, transparent 100%);
+      border-radius: 50%;
+      filter: blur(40px);
+    }
+
+    .can {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 140px;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 11px;
+      text-align: center;
+      padding: 8px;
+      color: white;
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .can::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 30%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+      z-index: 1;
+    }
+
+    .can-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .can-1 {
+      top: 80px;
+      left: 40px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+      animation-delay: 0s;
+    }
+
+    .can-2 {
+      top: 20px;
+      right: 60px;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+      animation-delay: 0.5s;
+    }
+
+    .can-3 {
+      top: 200px;
+      right: 20px;
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.35);
+      animation-delay: 1s;
+    }
+
+    .can-4 {
+      bottom: 40px;
+      left: 80px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
+      animation-delay: 1.5s;
+    }
+
+    .can-5 {
+      bottom: 100px;
+      right: 100px;
+      background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
+      animation-delay: 2s;
+    }
+
+    /* Sparkle effects */
+    .hero-right::before,
+    .hero-right::after {
+      content: "✨";
+      position: absolute;
+      font-size: 24px;
+      animation: shimmer 2s infinite;
+    }
+
+    .hero-right::before {
+      top: 80px;
+      right: 20px;
+      animation-delay: 0s;
+    }
+
+    .hero-right::after {
+      bottom: 120px;
+      left: 30px;
+      animation-delay: 1s;
+    }
+
+    /* Social Proof Strip */
+    .social-proof {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 24px;
+    }
+
+    .social-proof-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
+    }
+
+    .trustpilot-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 0 auto;
+    }
+
+    .trustpilot-stars {
+      display: flex;
+      gap: 4px;
+      font-size: 28px;
+      color: #00b67a;
+    }
+
+    .trustpilot-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00b67a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .trustpilot-rating {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .trustpilot-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .trust-flanks {
+      display: flex;
+      gap: 32px;
+      flex: 1;
+      justify-content: space-around;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .trust-flank {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .trust-flank-title {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .trust-flags {
+      font-size: 24px;
+      display: flex;
+      gap: 4px;
+    }
+
+    /* Featured Products Section */
+    .featured-section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      background: linear-gradient(180deg, rgba(248, 246, 243, 0) 0%, rgba(232, 244, 232, 0.3) 100%);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .section-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .section-link:hover {
+      color: var(--primary);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .product-card {
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s;
+      border-left: 4px solid var(--accent);
+      animation: fadeUp 0.6s ease-out backwards;
+    }
+
+    .product-card:nth-child(1) { animation-delay: 0s; }
+    .product-card:nth-child(2) { animation-delay: 0.1s; }
+    .product-card:nth-child(3) { animation-delay: 0.2s; }
+    .product-card:nth-child(4) { animation-delay: 0.3s; }
+    .product-card:nth-child(5) { animation-delay: 0.4s; }
+    .product-card:nth-child(6) { animation-delay: 0.5s; }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .product-card:nth-child(1) {
+      border-left-color: #10b981;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+
+    .product-card:nth-child(2) {
+      border-left-color: #3b82f6;
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    }
+
+    .product-card:nth-child(3) {
+      border-left-color: #ef4444;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+    }
+
+    .product-card:nth-child(4) {
+      border-left-color: #f59e0b;
+      background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+    }
+
+    .product-card:nth-child(5) {
+      border-left-color: #8b5cf6;
+      background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+    }
+
+    .product-card:nth-child(6) {
+      border-left-color: #6b7280;
+      background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, var(--accent-light) 0%, rgba(74, 103, 65, 0.1) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-badges {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-bestseller {
+      background: var(--warning);
+      color: white;
+      transform: rotate(-2deg);
+    }
+
+    .badge-new {
+      background: var(--info);
+      color: white;
+    }
+
+    .product-info {
+      padding: 20px;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .product-rating-stars {
+      color: #fbbf24;
+      display: flex;
+      gap: 2px;
+    }
+
+    .product-strength {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(74, 103, 65, 0.1);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .strength-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .product-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .product-packs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pack-pill {
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--background);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .pack-pill.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .product-per-unit {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .product-price {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .price-current {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .price-original {
+      text-decoration: line-through;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .price-discount {
+      display: inline-block;
+      background: var(--error);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .product-urgency {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--error);
+      margin-bottom: 12px;
+      animation: pulse 2s infinite;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-add-to-cart {
+      flex: 1;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-add-to-cart:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .btn-wishlist {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-wishlist:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Why SnusFriend Section */
+    .why-section {
+      background: linear-gradient(135deg, var(--accent-light) 0%, rgba(74, 103, 65, 0.05) 100%);
+      padding: 80px 24px;
+    }
+
+    .why-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .why-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(74, 103, 65, 0.1);
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.3s;
+      animation: fadeUp 0.6s ease-out backwards;
+    }
+
+    .feature-card:nth-child(1) { animation-delay: 0s; }
+    .feature-card:nth-child(2) { animation-delay: 0.1s; }
+    .feature-card:nth-child(3) { animation-delay: 0.2s; }
+    .feature-card:nth-child(4) { animation-delay: 0.3s; }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 30px rgba(74, 103, 65, 0.15);
+    }
+
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+
+    .feature-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Brands Carousel */
+    .brands-section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .brands-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 48px;
+    }
+
+    .brands-scroll {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 12px;
+    }
+
+    .brands-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .brands-scroll::-webkit-scrollbar-track {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .brands-scroll::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .brand-card {
+      flex-shrink: 0;
+      width: 140px;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      transition: height 0.3s;
+    }
+
+    .brand-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .brand-card:hover::before {
+      height: 4px;
+    }
+
+    .brand-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .brand-count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Strength Guide Section */
+    .strength-section {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      padding: 80px 24px;
+    }
+
+    .strength-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .strength-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      color: #f3f4f6;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .strength-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .strength-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.6s ease-out backwards;
+    }
+
+    .strength-card:nth-child(1) { animation-delay: 0s; }
+    .strength-card:nth-child(2) { animation-delay: 0.1s; }
+    .strength-card:nth-child(3) { animation-delay: 0.2s; }
+    .strength-card:nth-child(4) { animation-delay: 0.3s; }
+
+    .strength-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-8px);
+    }
+
+    .strength-glow-1 { --glow-color: #86efac; }
+    .strength-glow-2 { --glow-color: #60a5fa; }
+    .strength-glow-3 { --glow-color: #fbbf24; }
+    .strength-glow-4 { --glow-color: #f87171; }
+
+    .strength-card:hover {
+      box-shadow: 0 0 40px var(--glow-color);
+    }
+
+    .strength-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .strength-name {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .strength-range {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 16px;
+    }
+
+    .strength-desc {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+    }
+
+    .strength-cta {
+      display: inline-block;
+      margin-top: 16px;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid white;
+      transition: all 0.3s;
+    }
+
+    .strength-cta:hover {
+      opacity: 0.8;
+    }
+
+    .strength-quiz-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .strength-quiz-btn:hover {
+      background: white;
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(74, 103, 65, 0.5);
+    }
+
+    /* Dispatch Bar */
+    .dispatch-section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      background: linear-gradient(135deg, rgba(232, 244, 232, 0.5) 0%, rgba(200, 230, 201, 0.3) 100%);
+      border-radius: 12px;
+      border: 1px solid var(--accent);
+    }
+
+    .dispatch-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dispatch-bar {
+      width: 100%;
+      height: 24px;
+      background: var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .dispatch-fill {
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
+      border-radius: 12px;
+      transition: width 0.3s;
+    }
+
+    .dispatch-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+      background: var(--background);
+      padding: 80px 24px;
+    }
+
+    .testimonials-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .testimonials-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .testimonial-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: var(--shadow-md);
+      animation: fadeUp 0.6s ease-out backwards;
+    }
+
+    .testimonial-card:nth-child(1) { animation-delay: 0s; }
+    .testimonial-card:nth-child(2) { animation-delay: 0.1s; }
+    .testimonial-card:nth-child(3) { animation-delay: 0.2s; }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .testimonial-author {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .testimonial-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .testimonial-rating {
+      color: #fbbf24;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-verified {
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    /* Newsletter */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      padding: 80px 24px;
+    }
+
+    .newsletter-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .newsletter-title {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .newsletter-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 32px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 14px 16px;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .newsletter-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(232, 244, 232, 0.3);
+    }
+
+    .newsletter-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .newsletter-btn:hover {
+      background: white;
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary);
+      color: white;
+      padding: 60px 24px 40px;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-section h3 {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 13px;
+      display: block;
+      margin-bottom: 12px;
+      transition: color 0.3s;
+    }
+
+    .footer-section a:hover {
+      color: white;
+    }
+
+    .footer-payments {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .payment-icon {
+      width: 32px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .footer-legal {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 60px 24px;
+      }
+
+      .hero-right {
+        height: 320px;
+      }
+
+      .hero-headline {
+        font-size: 40px;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .strength-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section-header {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .social-proof-content {
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .trust-flanks {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav {
+        height: 56px;
+        padding: 0 16px;
+      }
+
+      .nav-left {
+        gap: 12px;
+      }
+
+      .search-box {
+        width: 0;
+        padding: 0;
+      }
+
+      .search-input {
+        display: none;
+      }
+
+      .hero {
+        padding: 40px 16px;
+      }
+
+      .hero-headline {
+        font-size: 28px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .strength-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-card {
+        width: 120px;
+      }
+
+      .featured-section {
+        padding: 60px 16px;
+      }
+
+      .why-section {
+        padding: 60px 16px;
+      }
+
+      .strength-section {
+        padding: 60px 16px;
+      }
+
+      .testimonials-section {
+        padding: 60px 16px;
+      }
+
+      .newsletter-section {
+        padding: 60px 16px;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Announcement Bar -->
+  <div class="announcement">
+    <div class="announcement-content">
+      <div class="announcement-text">★★★★★ Rated 4.8/5 by 2,400+ customers</div>
+      <div class="announcement-text">🚚 Free EU shipping over €29</div>
+      <div class="announcement-text">⚡ Order before 2pm for same-day dispatch</div>
+    </div>
+    <div class="announcement-close">×</div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-left">
+      <a href="#" class="logo">
+        <div class="logo-mark">🍃</div>
+        <span>SnusFriend</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="#">Shop All</a></li>
+        <li><a href="#">Brands</a></li>
+        <li><a href="#">Strengths</a></li>
+        <li><a href="#">Flavors</a></li>
+        <li><a href="#">New Arrivals</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <div class="search-box">
+        <input type="text" class="search-input" placeholder="Search pouches...">
+      </div>
+      <div class="nav-icon">♡</div>
+      <div class="nav-icon" style="position: relative;">
+        🛍️
+        <div class="cart-badge">3</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-badge">🇪🇺 Europe's #1 Nicotine Pouch Shop</div>
+      <h1 class="hero-headline">Premium Pouches.<br>Curated for You.</h1>
+      <p class="hero-subtitle">Discover 2,200+ lab-tested, tobacco-free pouches from 139 European brands.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary">Shop All Pouches →</button>
+        <button class="btn btn-secondary">Find Your Match</button>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item">
+          <span class="trust-item-star">★★★★★</span>
+          <span>4.8/5 (2,400 reviews)</span>
+        </div>
+        <div class="trust-item">
+          <span>🚚</span>
+          <span>Free shipping €29+</span>
+        </div>
+        <div class="trust-item">
+          <span>⚡</span>
+          <span>Same-day dispatch</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-gradient-bg"></div>
+      <div class="can can-1"><div class="can-content">ZYN<br>Cool Mint</div></div>
+      <div class="can can-2"><div class="can-content">VELO<br>Ice Cool</div></div>
+      <div class="can can-3"><div class="can-content">Siberia<br>Red</div></div>
+      <div class="can can-4"><div class="can-content">LOOP<br>Jalapeno</div></div>
+      <div class="can can-5"><div class="can-content">White Fox<br>Charge</div></div>
+    </div>
+  </section>
+
+  <!-- Social Proof Strip -->
+  <section class="social-proof">
+    <div class="social-proof-content">
+      <div class="trust-flank">
+        <div class="trust-flank-title">Trusted by 50,000+ Europeans</div>
+        <div class="trust-flags">🇸🇪 🇩🇪 🇬🇧 🇳🇴 🇫🇮 🇩🇰</div>
+      </div>
+      <div class="trustpilot-badge">
+        <div class="trustpilot-stars">★ ★ ★ ★ ★</div>
+        <div class="trustpilot-label">Excellent</div>
+        <div class="trustpilot-rating">4.8 out of 5</div>
+        <div class="trustpilot-desc">based on 2,400 reviews</div>
+      </div>
+      <div class="trust-flank">
+        <div class="trust-flank-title">Industry-Leading Quality</div>
+        <div style="font-size: 24px;">✓ Lab-Tested ✓ Verified</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured-section">
+    <div class="section-header">
+      <h2 class="section-title">Most Popular Right Now</h2>
+      <a href="#" class="section-link">View All →</a>
+    </div>
+    <div class="products-grid">
+      <!-- Product 1: ZYN -->
+      <div class="product-card">
+        <div class="product-image">
+          <div class="product-badges">
+            <span class="badge badge-bestseller">🔥 Bestseller</span>
+          </div>
+          📦
+        </div>
+        <div class="product-info">
+          <div class="product-rating">
+            <div class="product-rating-stars">★★★★★</div>
+            <span>(247)</span>
+          </div>
+          <div class="product-strength">
+            <span class="strength-dot"></span>
+            Regular 6mg
+          </div>
+          <div class="product-title">ZYN Cool Mint</div>
+          <div class="product-packs">
+            <div class="pack-pill active">1 Can</div>
+            <div class="pack-pill">5-Pack</div>
+            <div class="pack-pill">10-Pack</div>
+          </div>
+          <div class="product-per-unit">€0.43 per pouch</div>
+          <div class="product-price">
+            <span class="price-current">€4.29</span>
+          </div>
+          <div class="product-urgency">🔥 23 sold today</div>
+          <div class="product-actions">
+            <button class="btn-add-to-cart">Add to Cart</button>
+            <button class="btn-wishlist">♡</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2: VELO -->
+      <div class="product-card">
+        <div class="product-image">
+          <div class="product-badges">
+            <span class="badge badge-new">✨ New</span>
+          </div>
+          📦
+        </div>
+        <div class="product-info">
+          <div class="product-rating">
+            <div class="product-rating-stars">★★★★☆</div>
+            <span>(189)</span>
+          </div>
+          <div class="product-strength">
+            <span class="strength-dot"></span>
+            Strong 10mg
+          </div>
+          <div class="product-title">VELO Ice Cool</div>
+          <div class="product-packs">
+            <div class="pack-pill active">1 Can</div>
+            <div class="pack-pill">5-Pack</div>
+            <div class="pack-pill">10-Pack</div>
+          </div>
+          <div class="product-per-unit">€0.38 per pouch</div>
+          <div class="product-price">
+            <span class="price-original">€4.79</span>
+            <span class="price-current">€3.83</span>
+            <span class="price-discount">Save 20%</span>
+          </div>
+          <div class="product-urgency"></div>
+          <div class="product-actions">
+            <button class="btn-add-to-cart">Add to Cart</button>
+            <button class="btn-wishlist">♡</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3: Siberia -->
+      <div class="product-card">
+        <div class="product-image">
+          <div class="product-badges"></div>
+          📦
+        </div>
+        <div class="product-info">
+          <div class="product-rating">
+            <div class="product-rating-stars">★★★★☆</div>
+            <span>(156)</span>
+          </div>
+          <div class="product-strength">
+            <span class="strength-dot"></span>
+            Super Strong 43mg
+          </div>
+          <div class="product-title">Siberia Red −80°</div>
+          <div class="product-packs">
+            <div class="pack-pill active">1 Can</div>
+            <div class="pack-pill">5-Pack</div>
+            <div class="pack-pill">10-Pack</div>
+          </div>
+          <div class="product-per-unit">€0.60 per pouch</div>
+          <div class="product-price">
+            <span class="price-current">€5.99</span>
+          </div>
+          <div class="product-urgency">⏰ Only 3 left</div>
+          <div class="product-actions">
+            <button class="btn-add-to-cart">Add to Cart</button>
+            <button class="btn-wishlist">♡</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 4: LOOP -->
+      <div class="product-card">
+        <div class="product-image">
+          <div class="product-badges"></div>
+          📦
+        </div>
+        <div class="product-info">
+          <div class="product-rating">
+            <div class="product-rating-stars">★★★★☆</div>
+            <span>(98)</span>
+          </div>
+          <div class="product-strength">
+            <span class="strength-dot"></span>
+            Strong 9mg
+          </div>
+          <div class="product-title">LOOP Jalapeno Lime</div>
+          <div class="product-packs">
+            <div class="pack-pill active">1 Can</div>
+            <div class="pack-pill">5-Pack</div>
+            <div class="pack-pill">10-Pack</div>
+          </div>
+          <div class="product-per-unit">€0.41 per pouch</div>
+          <div class="product-price">
+            <span class="price-current">€4.49</span>
+          </div>
+          <div class="product-urgency"></div>
+          <div class="product-actions">
+            <button class="btn-add-to-cart">Add to Cart</button>
+            <button class="btn-wishlist">♡</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 5: White Fox -->
+      <div class="product-card">
+        <div class="product-image">
+          <div class="product-badges"></div>
+          📦
+        </div>
+        <div class="product-info">
+          <div class="product-rating">
+            <div class="product-rating-stars">★★★★☆</div>
+            <span>(78)</span>
+          </div>
+          <div class="product-strength">
+            <span class="strength-dot"></span>
+            Extra Strong 16mg
+          </div>
+          <div class="product-title">White Fox Full Charge</div>
+          <div class="product-packs">
+            <div class="pack-pill active">1 Can</div>
+            <div class="pack-pill">5-Pack</div>
+            <div class="pack-pill">10-Pack</div>
+          </div>
+          <div class="product-per-unit">€0.53 per pouch</div>
+          <div class="product-price">
+            <span class="price-current">€5.29</span>
+          </div>
+          <div class="product-urgency"></div>
+          <div class="product-actions">
+            <button class="btn-add-to-cart">Add to Cart</button>
+            <button class="btn-wishlist">♡</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 6: ON! -->
+      <div class="product-card">
+        <div class="product-image">
+          <div class="product-badges"></div>
+          📦
+        </div>
+        <div class="product-info">
+          <div class="product-rating">
+            <div class="product-rating-stars">★★★★☆</div>
+            <span>(62)</span>
+          </div>
+          <div class="product-strength">
+            <span class="strength-dot"></span>
+            Regular 6mg
+          </div>
+          <div class="product-title">ON! Coffee</div>
+          <div class="product-packs">
+            <div class="pack-pill active">1 Can</div>
+            <div class="pack-pill">5-Pack</div>
+            <div class="pack-pill">10-Pack</div>
+          </div>
+          <div class="product-per-unit">€0.35 per pouch</div>
+          <div class="product-price">
+            <span class="price-current">€3.50</span>
+          </div>
+          <div class="product-urgency"></div>
+          <div class="product-actions">
+            <button class="btn-add-to-cart">Add to Cart</button>
+            <button class="btn-wishlist">♡</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why SnusFriend Section -->
+  <section class="why-section">
+    <div class="why-container">
+      <h2 class="why-title">Why 50,000+ Europeans Choose Us</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏆</div>
+          <div class="feature-title">Largest Selection</div>
+          <div class="feature-desc">2,200+ products from 139 European brands — more than anyone else.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧪</div>
+          <div class="feature-title">Lab-Tested Quality</div>
+          <div class="feature-desc">Every product verified for nicotine content and purity.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <div class="feature-title">Same-Day Dispatch</div>
+          <div class="feature-desc">Order before 2pm CET and it ships today. Free over €29.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎁</div>
+          <div class="feature-title">Rewards Program</div>
+          <div class="feature-desc">Earn points on every order. Spin to win discounts.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brands Carousel -->
+  <section class="brands-section">
+    <h2 class="brands-title">Shop by Brand</h2>
+    <div class="brands-scroll">
+      <div class="brand-card" style="border-top-color: #00a651;">
+        <div class="brand-name">ZYN</div>
+        <div class="brand-count">52 products</div>
+      </div>
+      <div class="brand-card" style="border-top-color: #1a73e8;">
+        <div class="brand-name">VELO</div>
+        <div class="brand-count">34 products</div>
+      </div>
+      <div class="brand-card" style="border-top-color: #c41e3a;">
+        <div class="brand-name">Siberia</div>
+        <div class="brand-count">8 products</div>
+      </div>
+      <div class="brand-card" style="border-top-color: #ff6b35;">
+        <div class="brand-name">LOOP</div>
+        <div class="brand-count">26 products</div>
+      </div>
+      <div class="brand-card" style="border-top-color: #888888;">
+        <div class="brand-name">White Fox</div>
+        <div class="brand-count">12 products</div>
+      </div>
+      <div class="brand-card" style="border-top-color: #4a90d9;">
+        <div class="brand-name">ON!</div>
+        <div class="brand-count">18 products</div>
+      </div>
+      <div class="brand-card" style="border-top-color: #2e86ab;">
+        <div class="brand-name">Skruf</div>
+        <div class="brand-count">22 products</div>
+      </div>
+      <div class="brand-card" style="border-top-color: #6b4c8b;">
+        <div class="brand-name">Nordic Spirit</div>
+        <div class="brand-count">15 products</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Strength Guide Section -->
+  <section class="strength-section">
+    <div class="strength-container">
+      <h2 class="strength-title">Find Your Perfect Strength</h2>
+      <div class="strength-cards">
+        <div class="strength-card strength-glow-1">
+          <span class="strength-icon">🟢</span>
+          <div class="strength-name">Light</div>
+          <div class="strength-range">1–6 mg</div>
+          <div class="strength-desc">Perfect for beginners. Gentle introduction to nicotine pouches with subtle satisfaction.</div>
+          <a href="#" class="strength-cta">Shop Light →</a>
+        </div>
+        <div class="strength-card strength-glow-2">
+          <span class="strength-icon">🔵</span>
+          <div class="strength-name">Normal</div>
+          <div class="strength-range">7–10 mg</div>
+          <div class="strength-desc">Most popular choice. Balanced nicotine hit for everyday use and satisfaction.</div>
+          <a href="#" class="strength-cta">Shop Normal →</a>
+        </div>
+        <div class="strength-card strength-glow-3">
+          <span class="strength-icon">🟠</span>
+          <div class="strength-name">Strong</div>
+          <div class="strength-range">11–16 mg</div>
+          <div class="strength-desc">For experienced users. Intense nicotine delivery without compromise.</div>
+          <a href="#" class="strength-cta">Shop Strong →</a>
+        </div>
+        <div class="strength-card strength-glow-4">
+          <span class="strength-icon">🔴</span>
+          <div class="strength-name">Extra Strong</div>
+          <div class="strength-range">17+ mg</div>
+          <div class="strength-desc">Maximum intensity. Only for veteran users seeking extreme satisfaction.</div>
+          <a href="#" class="strength-cta">Shop Extra →</a>
+        </div>
+      </div>
+      <button class="strength-quiz-btn">Take the Strength Quiz</button>
+    </div>
+  </section>
+
+  <!-- Dispatch Countdown -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 40px 24px;">
+    <div class="dispatch-section">
+      <div class="dispatch-text">⏰ Order in the next 3h 42m for same-day dispatch</div>
+      <div class="dispatch-bar">
+        <div class="dispatch-fill"></div>
+      </div>
+      <div class="dispatch-info">Add €10.50 more for FREE shipping on this order</div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <div class="testimonials-container">
+      <h2 class="testimonials-title">Loved by Customers Across Europe</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">JM</div>
+            <div>
+              <div class="testimonial-author">Johan M.</div>
+              <div class="testimonial-meta">🇸🇪 Sweden</div>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div class="testimonial-text">"Bought ZYN here for 2 years. Selection is unbeatable and delivery is super fast. Highly recommend!"</div>
+          <div class="testimonial-verified">✓ Verified Buyer</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">KH</div>
+            <div>
+              <div class="testimonial-author">Katrin H.</div>
+              <div class="testimonial-meta">🇩🇪 Germany</div>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div class="testimonial-text">"Perfect quality and reliable shipping. Finally found all my favorite brands in one place at great prices."</div>
+          <div class="testimonial-verified">✓ Verified Buyer</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">OL</div>
+            <div>
+              <div class="testimonial-author">Ole L.</div>
+              <div class="testimonial-meta">🇩🇰 Denmark</div>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div class="testimonial-text">"Same-day dispatch is brilliant. Ordered at noon, had it by evening. Customer service is top-notch too."</div>
+          <div class="testimonial-verified">✓ Verified Buyer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="newsletter-container">
+      <h2 class="newsletter-title">Join 50,000+ Pouch Enthusiasts</h2>
+      <p class="newsletter-subtitle">Get exclusive deals, new arrival alerts, and strength guides straight to your inbox.</p>
+      <form class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Your email address" required>
+        <button type="submit" class="newsletter-btn">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="#">All Pouches</a></li>
+            <li><a href="#">Brands</a></li>
+            <li><a href="#">Strengths</a></li>
+            <li><a href="#">Flavors</a></li>
+            <li><a href="#">Deals</a></li>
+            <li><a href="#">New Arrivals</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Cookies</a></li>
+            <li><a href="#">Age Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-payments">
+        <div class="payment-icon">Visa</div>
+        <div class="payment-icon">MC</div>
+        <div class="payment-icon">Amex</div>
+        <div class="payment-icon">PP</div>
+        <div class="payment-icon">K</div>
+        <div class="payment-icon">AP</div>
+      </div>
+
+      <div class="footer-legal">
+        🔞 Age restricted: You must be 18+ to purchase nicotine pouches.<br>
+        All products are shipped in compliant packaging with age verification.
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2025 SnusFriend. All rights reserved.</div>
+        <div>Made with ❤️ in Europe</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll behavior for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Cart badge pulse animation
+    const cartBadge = document.querySelector('.cart-badge');
+    if (cartBadge) {
+      setInterval(() => {
+        cartBadge.style.animation = 'none';
+        setTimeout(() => {
+          cartBadge.style.animation = 'pulse 2s infinite';
+        }, 10);
+      }, 8000);
+    }
+
+    // Add to cart button interaction
+    document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const originalText = this.textContent;
+        this.textContent = '✓ Added!';
+        this.style.background = '#10b981';
+        setTimeout(() => {
+          this.textContent = originalText;
+          this.style.background = '';
+        }, 2000);
+      });
+    });
+
+    // Newsletter form
+    document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.newsletter-btn');
+      const originalText = btn.textContent;
+      btn.textContent = '✓ Subscribed!';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        this.reset();
+      }, 2000);
+    });
+
+    // Announcement close
+    document.querySelector('.announcement-close').addEventListener('click', function() {
+      document.querySelector('.announcement').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

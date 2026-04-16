@@ -18,14 +18,21 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  // Parse cookies directly from the raw Cookie header — Astro's cookies.getAll()
+  // URL-decodes values which corrupts the base64-encoded Supabase JWT session tokens.
+  const rawCookieHeader = context.request.headers.get('cookie') ?? '';
+  const parsedCookies = rawCookieHeader.split(';').filter(Boolean).map((pair) => {
+    const eqIdx = pair.indexOf('=');
+    return {
+      name: pair.slice(0, eqIdx).trim(),
+      value: pair.slice(eqIdx + 1).trim(),
+    };
+  });
+
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
       getAll() {
-        try {
-          return context.cookies.getAll().map(c => ({ name: c.name ?? '', value: c.value }));
-        } catch {
-          return [];
-        }
+        return parsedCookies;
       },
       setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
         try {
@@ -39,26 +46,26 @@ export const onRequest = defineMiddleware(async (context, next) => {
     },
   });
 
-  const { data: { user } } = await supabase.auth.getUser();
-  context.locals.user = user;
   context.locals.supabase = supabase as any;
 
   const pathname = context.url.pathname;
-  const protectedPaths = ['/account', '/checkout', '/order-confirmation', '/rewards', '/wishlist'];
-  const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
-  const isOps = pathname.startsWith('/ops') && pathname !== '/ops/login';
 
-  if (isProtected && !user) {
-    return context.redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
-  }
+  // Pages that need auth state (getUser is a network call — skip for pages that don't need it)
+  const authRequiredPaths = ['/account', '/checkout', '/order-confirmation', '/suggestions'];
+  const needsAuth = authRequiredPaths.some((p) => pathname.startsWith(p));
 
-  if (isOps && !user) {
-    return context.redirect('/ops/login');
-  }
+  if (needsAuth) {
+    const { data: { user } } = await supabase.auth.getUser();
+    context.locals.user = user;
 
-  if (isOps && user) {
-    const isAdmin = user.app_metadata?.role === 'admin' || user.app_metadata?.role === 'ops';
-    if (!isAdmin) return context.redirect('/');
+    // Protect /account — redirect to login if not authenticated
+    if (pathname.startsWith('/account') && !user) {
+      return context.redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
+    }
+  } else {
+    // For login/register/forgot-password/etc: skip the getUser() call entirely
+    // This saves 100-300ms per page load
+    context.locals.user = null;
   }
 
   return next();

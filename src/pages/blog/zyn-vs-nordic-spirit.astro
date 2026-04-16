@@ -1,0 +1,367 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import { tenant } from '@/config/tenant';
+import BrandFactCallout from '@/components/astro/BrandFactCallout.astro';
+import { brandFacts } from '@/data/brand-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const publishDate = '2026-04-07';
+const title = 'ZYN vs Nordic Spirit 2026: Flavour, Strength, and Pouch Feel Compared';
+const description = 'Choosing between ZYN and Nordic Spirit? Compare flavour range, beginner strengths, pouch feel, and EU availability without the marketing fluff.';
+const zynFact = brandFacts.zyn;
+const nordicSpiritFact = brandFacts.nordicSpirit;
+
+const blogPostingJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "datePublished": publishDate,
+        "dateModified": publishDate,
+        "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+        "publisher": {
+          "@type": "Organization",
+          "name": tenant.name,
+          "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/og-image.jpg` }
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-vs-nordic-spirit` },
+        "description": description
+      };
+
+const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is ZYN or Nordic Spirit stronger?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nordic Spirit starts at a higher minimum strength (6 mg vs ZYN's 1.5 mg) and reaches up to 13 mg in some markets. ZYN offers a wider range from 1.5 mg to 11 mg, making it better for both light and moderate users."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which tastes better, ZYN or Nordic Spirit?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ZYN favours subtle, clean flavours designed for all-day use. Nordic Spirit offers more distinctive profiles -- Bergamot Wildberry and Elderflower are unique to the category. Taste is subjective; try one can of each to decide."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are ZYN and Nordic Spirit both Swedish?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. ZYN is made by Swedish Match (now owned by Philip Morris International) and Nordic Spirit is made by JTI (Japan Tobacco International). Both brands originate from Sweden."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is Nordic Spirit's can different?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nordic Spirit uses a tall, cylindrical can instead of the traditional flat round design. It is a deliberate premium positioning choice with matte finish, muted earth tones, and minimal branding."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which is better for beginners?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ZYN is better for beginners because it offers lower strength options starting at 1.5 mg. Nordic Spirit's lowest strength is typically 6 mg, which may be too intense for someone new to nicotine pouches."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I buy both brands from SnusFriend?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. SnusFriend stocks the full range of both ZYN and Nordic Spirit nicotine pouches, with delivery available across Europe regardless of local retail availability."
+            }
+          }
+        ]
+      };
+---
+
+<Shop
+  title={title}
+  description={description}
+  ogType="article"
+>
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'ZYN vs Nordic Spirit' },
+      ]} />
+
+      <BlogHero
+        category="Comparison"
+        title={title}
+        description={description}
+        date="April 7, 2026"
+        readTime="10 min read"
+      />
+
+      <BrandFactCallout fact={zynFact} title="Brand attribution: ZYN" />
+      <BrandFactCallout fact={nordicSpiritFact} title="Brand attribution: Nordic Spirit" />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 24px 24px; margin: 24px 0 32px;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+            ZYN offers the broader mainstream assortment and the lower beginner entry point, while Nordic Spirit leans into a tighter flavour range, a slightly softer pouch feel, and stronger UK shelf presence. Choose ZYN for range; choose Nordic Spirit for a narrower but more curated feel.
+          </p>
+        </div>
+
+        <h2>Two Swedish Powerhouses</h2>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Is ZYN better than Nordic Spirit?</summary>
+  <p style="margin-top: 12px;">ZYN and Nordic Spirit are very similar in quality, with ZYN winning on flavor variety and global availability, while Nordic Spirit appeals to users preferring a slightly smaller, more discreet pouch. ZYN has broader marketing reach and easier accessibility in most markets, whereas Nordic Spirit maintains a loyal following among Nordic users. Both are excellent premium options, so personal preference should guide your choice.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Which has more flavours, ZYN or Nordic Spirit?</summary>
+  <p style="margin-top: 12px;">ZYN offers more flavour options globally with 12–15 core flavours plus regional variants, while Nordic Spirit maintains a more focused lineup of 8–10 primary flavours. ZYN's broader portfolio appeals to experimental users, whereas Nordic Spirit's curated selection focuses on tested bestsellers. Availability varies by region, so check your local retailer for current options.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Are ZYN and Nordic Spirit the same company?</summary>
+  <p style="margin-top: 12px;">No. ZYN is part of Swedish Match / PMI, while Nordic Spirit is a JTI brand. That distinction matters because many roundup articles still swap those ownership lines around.</p>
+</details>
+
+        <p>
+          <a href="/brands/zyn">ZYN</a> and <a href="/brands/nordic-spirit">Nordic Spirit</a> are both premium pouch brands, but they appeal to different audiences. ZYN is the broader, more widely distributed mainstream option, while Nordic Spirit leans into a tighter flavour range and a more understated product feel.
+        </p>
+        <p>
+          This comparison helps you decide which belongs in your rotation. Whether you are <a href="/blog/best-nicotine-pouches-for-beginners-2026">new to pouches</a> or looking to explore premium options, read on.
+        </p>
+
+        <h2>Brand Heritage</h2>
+        <h3>ZYN: Swedish Match (Philip Morris International)</h3>
+        <p>
+          ZYN was created by Swedish Match, now part of Philip Morris International. The European range is smaller than the global ZYN assortment, which is why we keep talking about market-specific flavour availability rather than one single universal count. Read our <a href="/blog/zyn-nicotine-pouches-complete-guide">complete ZYN guide</a> for the full product breakdown.
+        </p>
+
+        <h3>Nordic Spirit: Japan Tobacco International</h3>
+        <p>
+          Nordic Spirit was launched by JTI (Japan Tobacco International) as a mainstream European pouch brand. The Scandinavian design cues and tighter range position it as the more curated alternative. See our <a href="/blog/nordic-spirit-nicotine-pouches-complete-guide">complete Nordic Spirit guide</a> for more detail.
+        </p>
+
+        <h2>Head-to-Head: Flavour Range</h2>
+        <p>
+          ZYN's European range usually lands around the mid-teens for flavours, but the exact mix depends on the country and retailer. The core lineup -- Cool Mint, Citrus, Espressino, Bellini -- is tight and well-curated. ZYN flavours tend toward clean, subtle profiles that do not overpower.
+        </p>
+        <p>
+          Nordic Spirit usually offers a smaller market-specific lineup. Spearmint, Frosty Mint, Bergamot Wildberry, Elderflower, and Mocha are the headliners. Nordic Spirit's flavour philosophy sits between ZYN's subtlety and VELO's boldness -- enough character to stay interesting, without becoming chaotic.
+        </p>
+        <p>
+          <strong>Verdict:</strong> ZYN for a wider selection. Nordic Spirit for more distinctive, nuanced flavour profiles.
+        </p>
+
+        <h2>Head-to-Head: Strength and Delivery</h2>
+        <p>
+          ZYN's European range spans 1.5 mg (mini) to 11 mg (strong slim). The strength ladder is well-spaced: beginners start at 1.5-3 mg, regulars settle at 6 mg, and strong users use 9.5-11 mg. ZYN's nicotine release is gradual and even -- no sharp spikes, which makes it comfortable for extended sessions.
+        </p>
+        <p>
+          Nordic Spirit offers strengths from 6 mg to 11 mg in most European markets, with some variants reaching 13 mg. The entry point is higher than ZYN's, which means Nordic Spirit is less suitable for complete beginners. Nicotine delivery is slightly faster than ZYN -- Nordic Spirit pouches are moister out of the can, which accelerates initial absorption. See our <a href="/blog/how-to-choose-your-strength">strength selection guide</a> for help choosing.
+        </p>
+        <p>
+          <strong>Verdict:</strong> ZYN for beginners and users who want a gentle ramp-up. Nordic Spirit for regular-to-strong users who prefer a quicker onset.
+        </p>
+
+        <h2>Head-to-Head: Format and Pouch Feel</h2>
+        <p>
+          Both brands offer slim-format pouches. ZYN's slim is dry and flat -- it moulds to the gum with almost no mouth feel after a few minutes. Some users love this (invisible, comfortable); others find the initial dryness requires a minute to activate.
+        </p>
+        <p>
+          Nordic Spirit's pouches are slightly moister and softer. They activate faster and produce more flavour in the first 2-3 minutes. The trade-off is that some users find them slightly bulkier. Nordic Spirit also offers a mini format in select flavours.
+        </p>
+        <p>
+          <strong>Verdict:</strong> Tie -- personal preference. Dry and invisible (ZYN) vs moist and fast-activating (Nordic Spirit).
+        </p>
+
+        <h2>Head-to-Head: Packaging</h2>
+        <p>
+          ZYN uses a traditional flat, round can -- the standard in the industry. Clean design, brand colour coding by flavour, easy to pocket.
+        </p>
+        <p>
+          Nordic Spirit uses a distinctive tall, cylindrical can that stands out on a shelf. The can is narrower but taller, which some users prefer for pocket carry. The design is deliberately premium -- matte finish, muted earth tones, minimal text. Nordic Spirit's packaging is arguably the best-looking in the category.
+        </p>
+        <p>
+          <strong>Verdict:</strong> Nordic Spirit for design and shelf appeal. ZYN for conventional pocketability.
+        </p>
+
+        <h2>Head-to-Head: Price</h2>
+        <p>
+          In most European markets, ZYN and Nordic Spirit are priced within EUR 0.50 of each other per can. Nordic Spirit occasionally runs slightly cheaper in the UK (where JTI has strong distribution deals), while ZYN may be cheaper in Scandinavian markets where Swedish Match has home advantage.
+        </p>
+        <p>
+          <strong>Verdict:</strong> Essentially tied. Neither brand commands a meaningful price premium over the other.
+        </p>
+
+        <h2>Head-to-Head: Availability</h2>
+        <p>
+          ZYN has the widest distribution of any nicotine pouch brand -- available in 20+ European countries, the US, and growing in Asia. If a shop sells nicotine pouches, it almost certainly sells ZYN.
+        </p>
+        <p>
+          Nordic Spirit is strongest in the UK, Germany, and select Scandinavian markets. It has grown rapidly but still has narrower distribution than ZYN, particularly in Southern and Eastern Europe. Online availability through SnusFriend covers the full range regardless of your country.
+        </p>
+        <p>
+          <strong>Verdict:</strong> ZYN for guaranteed availability anywhere. Nordic Spirit is easy to find in Western Europe but patchier elsewhere.
+        </p>
+
+        <h2>Side-by-Side Comparison Table</h2>
+        <div class="overflow-x-auto my-8">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-3 px-4 text-foreground font-semibold">Feature</th>
+                <th class="text-left py-3 px-4 text-foreground font-semibold">ZYN</th>
+                <th class="text-left py-3 px-4 text-foreground font-semibold">Nordic Spirit</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Maker</td>
+                <td class="py-3 px-4">Swedish Match (PMI)</td>
+                <td class="py-3 px-4">JTI</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Origin</td>
+                <td class="py-3 px-4">Sweden</td>
+                <td class="py-3 px-4">Sweden</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Formats</td>
+                <td class="py-3 px-4">Slim + Mini</td>
+                <td class="py-3 px-4">Slim + Mini</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Strength range</td>
+                <td class="py-3 px-4">1.5-11 mg</td>
+                <td class="py-3 px-4">6-13 mg</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Flavour count (EU)</td>
+                <td class="py-3 px-4">15-20</td>
+                <td class="py-3 px-4">10-12</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Pouch feel</td>
+                <td class="py-3 px-4">Dry, flat, invisible</td>
+                <td class="py-3 px-4">Moist, soft, fast-activating</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Can design</td>
+                <td class="py-3 px-4">Traditional round</td>
+                <td class="py-3 px-4">Tall cylindrical (premium)</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Price range (EU)</td>
+                <td class="py-3 px-4">EUR 3.50-5.50</td>
+                <td class="py-3 px-4">EUR 3.50-5.00</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Best market</td>
+                <td class="py-3 px-4">Global</td>
+                <td class="py-3 px-4">UK, Germany</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 font-medium text-foreground">Best for</td>
+                <td class="py-3 px-4">Universality, light strengths</td>
+                <td class="py-3 px-4">Nuanced flavours, premium feel</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Who Should Choose ZYN?</h2>
+        <p>
+          ZYN suits you if you want the safe, universal choice that is available everywhere, prefer subtle flavours for all-day use, need lower strength options (1.5-3 mg) for light use or <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginners</a>, or want the brand with the longest track record and largest user base.
+        </p>
+
+        <h2>Who Should Choose Nordic Spirit?</h2>
+        <p>
+          Nordic Spirit suits you if you appreciate distinctive, nuanced flavours (Bergamot Wildberry, Elderflower), prefer moister pouches with faster activation, value premium packaging and design, are based in the UK (where Nordic Spirit has the strongest retail presence), or want a brand that feels less mainstream than ZYN.
+        </p>
+
+        <h2>Final Verdict</h2>
+        <p>
+          ZYN and Nordic Spirit are both excellent choices -- you will not be disappointed with either. ZYN is the safe pick: universally available, consistently good, with the widest strength range. Nordic Spirit is the connoisseur's pick: better packaging, more interesting flavours, and a premium feel that ZYN's utilitarian design does not match.
+        </p>
+        <p>
+          The smartest move? Try one can of each in the same flavour family (e.g., ZYN Cool Mint vs Nordic Spirit Frosty Mint) and let your palate decide. Check our <a href="/blog/best-mint-nicotine-pouches-2026">best mint pouches ranking</a> for the top options.
+        </p>
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/zyn-nicotine-pouches-complete-guide">ZYN Nicotine Pouches: Complete Brand Guide</a></li>
+          <li><a href="/blog/nordic-spirit-nicotine-pouches-complete-guide">Nordic Spirit Nicotine Pouches: Complete Brand Guide</a></li>
+          <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO: The Definitive Comparison</a></li>
+          <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Strength</a></li>
+          <li><a href="/blog/best-mint-nicotine-pouches-2026">Best Mint Nicotine Pouches 2026</a></li>
+        </ul>
+      </div>
+
+      <!-- Cross-links -->
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Flavour</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/flavor/mint" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mint</a>
+              <a href="/products/flavor/berry" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Berry</a>
+              <a href="/products/flavor/citrus" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Citrus</a>
+              <a href="/products/flavor/coffee" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Coffee</a>
+              <a href="/products/flavor/fruit" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Fruit</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/light" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/normal" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+        <h2>Frequently Asked Questions</h2>
+        <div style="margin-top: 16px;">
+          <h3>Is ZYN or Nordic Spirit stronger?</h3>
+          <p>Nordic Spirit starts at a higher minimum strength (6 mg vs ZYN's 1.5 mg) and reaches up to 13 mg in some markets. ZYN offers a wider range from 1.5 mg to 11 mg, making it better for both light and moderate users. Neither brand targets the ultra-strong segment.</p>
+
+          <h3>Which tastes better, ZYN or Nordic Spirit?</h3>
+          <p>ZYN favours subtle, clean flavours designed for all-day use. Nordic Spirit offers more distinctive profiles -- Bergamot Wildberry and Elderflower are unique to the category. If you value nuance, try Nordic Spirit. If you prefer consistency, start with ZYN.</p>
+
+          <h3>Are ZYN and Nordic Spirit both Swedish?</h3>
+          <p>Yes. ZYN is made by Swedish Match (now owned by Philip Morris International) and Nordic Spirit is made by JTI (Japan Tobacco International). Both brands originate from Sweden's long nicotine pouch tradition.</p>
+
+          <h3>Why is Nordic Spirit's can different?</h3>
+          <p>Nordic Spirit uses a tall, cylindrical can instead of the traditional flat round design. It is a deliberate premium positioning choice -- the matte finish, muted earth tones, and minimal branding are designed to stand out on shelves and appeal to design-conscious consumers.</p>
+
+          <h3>Which is better for beginners?</h3>
+          <p>ZYN is the better choice for beginners because it offers lower strength options starting at 1.5 mg. Nordic Spirit's lowest strength is typically 6 mg, which may be too intense for someone new to nicotine pouches.</p>
+
+          <h3>Can I buy both brands from SnusFriend?</h3>
+          <p>Yes. SnusFriend stocks the full range of both ZYN and Nordic Spirit nicotine pouches, with delivery available across Europe regardless of local retail availability.</p>
+        </div>
+      </section>
+
+      <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+    </div>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+</Shop>

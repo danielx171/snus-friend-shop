@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnusFriend — Premium European Nicotine Pouches</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-main: #f8f6f3;
+            --primary: #1a2e1a;
+            --accent: #4a6741;
+            --text-primary: #1a1a1a;
+            --text-muted: #6b7280;
+            --border: #e5e2dd;
+            --card-bg: #ffffff;
+            --error: #dc2626;
+            --warning: #ea580c;
+            --success: #16a34a;
+            --info: #2563eb;
+            --light-success: #86efac;
+            --light-warning: #fed7aa;
+            --light-error: #fca5a5;
+
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --transition: all 0.2s ease;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* ============ ANNOUNCEMENT BAR ============ */
+        .announcement {
+            height: 32px;
+            background-color: var(--primary);
+            color: #f5f3f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 500;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .announcement-content {
+            display: flex;
+            gap: 60px;
+            animation: slide 10s infinite;
+        }
+
+        .announcement-item {
+            white-space: nowrap;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            30% { transform: translateX(0); }
+            33% { transform: translateX(-100%); }
+            63% { transform: translateX(-100%); }
+            66% { transform: translateX(-200%); }
+            100% { transform: translateX(-200%); }
+        }
+
+        /* ============ NAVIGATION ============ */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 16px 0;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logo-leaf {
+            font-size: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            flex: 1;
+            margin-left: 60px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-icon:hover {
+            color: var(--accent);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--error);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ============ HERO SECTION ============ */
+        .hero {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0fdf4;
+            color: var(--success);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            width: fit-content;
+            border: 1px solid #dcfce7;
+        }
+
+        .hero-headline {
+            font-family: var(--font-heading);
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-body);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            height: 48px;
+            padding: 12px 28px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: #0f1d0f;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(26, 46, 26, 0.15);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            height: 48px;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero-trust {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .trust-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .trust-row-icon {
+            font-size: 14px;
+        }
+
+        .hero-right {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+        }
+
+        .can-circle {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(26, 46, 26, 0.08);
+        }
+
+        .can {
+            position: absolute;
+            width: 100px;
+            height: 120px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: var(--font-heading);
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .can-1 { background: #00A651; transform: translate(-80px, -40px) rotate(-15deg); }
+        .can-2 { background: #1a73e8; transform: translate(80px, -50px) rotate(12deg); }
+        .can-3 { background: #C41E3A; transform: translate(0, 100px) rotate(-8deg); }
+        .can-4 { background: #FF6B35; transform: translate(-100px, 20px) rotate(18deg); }
+        .can-5 { background: #888888; transform: translate(100px, 30px) rotate(-12deg); }
+
+        /* ============ SOCIAL PROOF STRIP ============ */
+        .social-proof {
+            background: var(--card-bg);
+            padding: 40px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .social-proof-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .social-proof-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .trustpilot-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #f9fafb;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .badge-text {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ============ FEATURED PRODUCTS ============ */
+        .featured-section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .section-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-link:hover {
+            gap: 10px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            border-left: 4px solid;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card.strength-light { border-left-color: var(--success); }
+        .product-card.strength-normal { border-left-color: var(--info); }
+        .product-card.strength-strong { border-left-color: var(--warning); }
+        .product-card.strength-extra { border-left-color: var(--error); }
+
+        .product-image {
+            height: 180px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ede9fe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            z-index: 10;
+        }
+
+        .badge-bestseller {
+            background: #fbbf24;
+            color: #78350f;
+        }
+
+        .badge-new {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .product-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-brand {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .rating-stars {
+            color: #fbbf24;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .rating-count {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .strength-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f3f4f6;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+
+        .strength-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .pack-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pack-pill {
+            flex: 1;
+            min-width: 60px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: transparent;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+        }
+
+        .pack-pill:hover {
+            border-color: var(--accent);
+            background: #f9fdfb;
+        }
+
+        .pack-pill.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .pack-discount {
+            position: absolute;
+            top: -6px;
+            right: 0;
+            background: var(--warning);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .per-unit {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .product-footer {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-add-cart:hover {
+            background: var(--primary);
+        }
+
+        .btn-wishlist {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .btn-wishlist:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ============ BRANDS CAROUSEL ============ */
+        .brands-section {
+            background: var(--card-bg);
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brands-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .brands-title {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--primary);
+        }
+
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 16px;
+        }
+
+        .brand-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #f3f4f6 100%);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .brand-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .brand-logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 12px;
+            border-radius: 6px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .brand-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .brand-count {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ============ STRENGTH GUIDE ============ */
+        .strength-section {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .strength-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .strength-title {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .strength-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .strength-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .strength-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .strength-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            opacity: 0.9;
+        }
+
+        .strength-dot-large {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+        }
+
+        .strength-description {
+            font-size: 13px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .strength-quiz-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: var(--primary);
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 32px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .strength-quiz-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ============ SHIPPING PROGRESS ============ */
+        .shipping-progress {
+            background: var(--card-bg);
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .shipping-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .shipping-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .shipping-bar-container {
+            background: #f3f4f6;
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .shipping-bar-fill {
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            height: 100%;
+            width: 64%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* ============ TESTIMONIALS ============ */
+        .testimonials-section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .testimonials-title {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .testimonial-stars {
+            color: #fbbf24;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .verified-badge {
+            background: #dcfce7;
+            color: var(--success);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .testimonial-footer {
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .testimonial-product {
+            font-size: 11px;
+        }
+
+        /* ============ NEWSLETTER ============ */
+        .newsletter-section {
+            background: var(--card-bg);
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .newsletter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .newsletter-title {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .newsletter-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.1);
+        }
+
+        .newsletter-btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .newsletter-btn:hover {
+            background: #0f1d0f;
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 20px 20px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer-section h4 {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: rgba(245, 243, 240, 0.7);
+            text-decoration: none;
+            font-size: 13px;
+            line-height: 2;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(245, 243, 240, 0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: rgba(245, 243, 240, 0.6);
+        }
+
+        .payment-icons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .payment-icon {
+            width: 32px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 40px 20px;
+                min-height: auto;
+            }
+
+            .hero-right {
+                height: 300px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .brands-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .strength-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-headline {
+                font-size: 36px;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .brands-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .strength-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ANNOUNCEMENT BAR -->
+    <div class="announcement">
+        <div class="announcement-content">
+            <div class="announcement-item">⭐ Rated 4.8/5 by 2,400+ customers</div>
+            <div class="announcement-item">🚚 Free EU shipping over €29</div>
+            <div class="announcement-item">⚡ Same-day dispatch before 2pm CET</div>
+            <div class="announcement-item">⭐ Rated 4.8/5 by 2,400+ customers</div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-leaf">🌿</span>
+                <span>SnusFriend</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#shop">Shop All</a></li>
+                <li><a href="#brands">Brands</a></li>
+                <li><a href="#strengths">Strengths</a></li>
+                <li><a href="#flavors">Flavors</a></li>
+                <li><a href="#deals">Deals</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-icon">♡</div>
+                <div class="nav-icon" style="position: relative;">
+                    🛒
+                    <div class="cart-badge">3</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-badge">
+                🇪🇺 Europe's #1 Pouch Shop
+            </div>
+            <h1 class="hero-headline">Premium Pouches.<br>Curated for You.</h1>
+            <p class="hero-subtitle">2,200+ products from 139 European brands. Lab-tested. Tobacco-free.</p>
+            <div class="hero-ctas">
+                <button class="btn btn-primary">Shop All Pouches →</button>
+                <button class="btn btn-secondary">Find Your Match</button>
+            </div>
+            <div class="hero-trust">
+                <div class="trust-row">
+                    <span class="trust-row-icon">⭐</span>
+                    <span><strong>4.8/5</strong> · <strong>2.4k reviews</strong></span>
+                </div>
+                <div class="trust-row">
+                    <span class="trust-row-icon">🚚</span>
+                    <span><strong>Free shipping</strong> on orders over €29</span>
+                </div>
+                <div class="trust-row">
+                    <span class="trust-row-icon">⚡</span>
+                    <span><strong>Same-day dispatch</strong> before 2pm CET</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="can-circle">
+                <div class="can can-1">ZYN</div>
+                <div class="can can-2">VELO</div>
+                <div class="can can-3">Siberia</div>
+                <div class="can can-4">LOOP</div>
+                <div class="can can-5">Fox</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF STRIP -->
+    <section class="social-proof">
+        <div class="social-proof-container">
+            <p class="social-proof-text">Trusted by 50,000+ customers across Europe</p>
+            <div class="trustpilot-badge">
+                <span class="stars">★★★★★</span>
+                <span class="badge-text">4.8 out of 5 based on 2,400 reviews</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS -->
+    <section class="featured-section">
+        <div class="section-header">
+            <h2 class="section-title">Most Popular Right Now</h2>
+            <a href="#all" class="section-link">View All →</a>
+        </div>
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card strength-light">
+                <div class="product-image">
+                    <div class="product-badge badge-bestseller">🔥 Bestseller</div>
+                    🟢
+                </div>
+                <div class="product-content">
+                    <div class="product-brand">ZYN</div>
+                    <div class="product-name">Cool Mint 6mg</div>
+                    <div class="product-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">4.8 (342)</span>
+                    </div>
+                    <div class="strength-badge">
+                        <span class="strength-dot" style="background: var(--success);"></span>
+                        Light 6mg
+                    </div>
+                    <div class="pack-selector">
+                        <button class="pack-pill active">1 Can<br>€4.99</button>
+                        <button class="pack-pill">5-Pack<br>€22.95<span class="pack-discount">Save 8%</span></button>
+                        <button class="pack-pill">10-Pack<br>€42.90<span class="pack-discount">Save 14%</span></button>
+                    </div>
+                    <div class="per-unit">€0.83/pouch</div>
+                    <div class="product-footer">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card strength-strong">
+                <div class="product-image">
+                    <div class="product-badge badge-new">✨ New</div>
+                    🔵
+                </div>
+                <div class="product-content">
+                    <div class="product-brand">VELO</div>
+                    <div class="product-name">Ice Cool Strong</div>
+                    <div class="product-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-count">4.7 (156)</span>
+                    </div>
+                    <div class="strength-badge">
+                        <span class="strength-dot" style="background: var(--warning);"></span>
+                        Strong 10mg
+                    </div>
+                    <div class="pack-selector">
+                        <button class="pack-pill active">1 Can<br>€3.83</button>
+                        <button class="pack-pill">5-Pack<br>€17.50<span class="pack-discount">Save 9%</span></button>
+                        <button class="pack-pill">10-Pack<br>€32.50<span class="pack-discount">Save 15%</span></button>
+                    </div>
+                    <div class="per-unit">€0.64/pouch</div>
+                    <div class="product-footer">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card strength-extra">
+                <div class="product-image">
+                    🔴
+                </div>
+                <div class="product-content">
+                    <div class="product-brand">Siberia</div>
+                    <div class="product-name">Red −80° 43mg</div>
+                    <div class="product-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-count">4.5 (89)</span>
+                    </div>
+                    <div class="strength-badge">
+                        <span class="strength-dot" style="background: var(--error);"></span>
+                        Extra Strong 43mg
+                    </div>
+                    <div class="pack-selector">
+                        <button class="pack-pill active">1 Can<br>€5.99</button>
+                        <button class="pack-pill">5-Pack<br>€27.95<span class="pack-discount">Save 7%</span></button>
+                    </div>
+                    <div class="per-unit">€0.99/pouch</div>
+                    <div class="product-footer">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card strength-strong">
+                <div class="product-image">
+                    🟠
+                </div>
+                <div class="product-content">
+                    <div class="product-brand">LOOP</div>
+                    <div class="product-name">Jalapeno Lime</div>
+                    <div class="product-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">4.6 (203)</span>
+                    </div>
+                    <div class="strength-badge">
+                        <span class="strength-dot" style="background: var(--warning);"></span>
+                        Strong 9mg
+                    </div>
+                    <div class="pack-selector">
+                        <button class="pack-pill active">1 Can<br>€4.49</button>
+                        <button class="pack-pill">5-Pack<br>€20.95<span class="pack-discount">Save 6%</span></button>
+                    </div>
+                    <div class="per-unit">€0.75/pouch</div>
+                    <div class="product-footer">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card strength-extra">
+                <div class="product-image">
+                    ⚪
+                </div>
+                <div class="product-content">
+                    <div class="product-brand">White Fox</div>
+                    <div class="product-name">Full Charge 16mg</div>
+                    <div class="product-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-count">4.4 (127)</span>
+                    </div>
+                    <div class="strength-badge">
+                        <span class="strength-dot" style="background: var(--error);"></span>
+                        Extra Strong 16mg
+                    </div>
+                    <div class="pack-selector">
+                        <button class="pack-pill active">1 Can<br>€5.29</button>
+                        <button class="pack-pill">5-Pack<br>€24.50<span class="pack-discount">Save 8%</span></button>
+                    </div>
+                    <div class="per-unit">€0.88/pouch</div>
+                    <div class="product-footer">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card strength-light">
+                <div class="product-image">
+                    ☕
+                </div>
+                <div class="product-content">
+                    <div class="product-brand">ON!</div>
+                    <div class="product-name">Coffee 6mg</div>
+                    <div class="product-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-count">4.3 (94)</span>
+                    </div>
+                    <div class="strength-badge">
+                        <span class="strength-dot" style="background: var(--success);"></span>
+                        Light 6mg
+                    </div>
+                    <div class="pack-selector">
+                        <button class="pack-pill active">1 Can<br>€3.50</button>
+                        <button class="pack-pill">5-Pack<br>€16.00<span class="pack-discount">Save 9%</span></button>
+                    </div>
+                    <div class="per-unit">€0.58/pouch</div>
+                    <div class="product-footer">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-wishlist">♡</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BRANDS CAROUSEL -->
+    <section class="brands-section">
+        <div class="brands-container">
+            <h2 class="brands-title">Shop by Brand</h2>
+            <div class="brands-grid">
+                <div class="brand-card">
+                    <div class="brand-logo">Z</div>
+                    <div class="brand-name">ZYN</div>
+                    <div class="brand-count">52 products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">V</div>
+                    <div class="brand-name">VELO</div>
+                    <div class="brand-count">34 products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">S</div>
+                    <div class="brand-name">Siberia</div>
+                    <div class="brand-count">8 products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">L</div>
+                    <div class="brand-name">LOOP</div>
+                    <div class="brand-count">26 products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">F</div>
+                    <div class="brand-name">White Fox</div>
+                    <div class="brand-count">12 products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">O</div>
+                    <div class="brand-name">ON!</div>
+                    <div class="brand-count">18 products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">K</div>
+                    <div class="brand-name">Skruf</div>
+                    <div class="brand-count">22 products</div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo">N</div>
+                    <div class="brand-name">Nordic Spirit</div>
+                    <div class="brand-count">15 products</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHIPPING PROGRESS -->
+    <section class="shipping-progress">
+        <div class="shipping-container">
+            <p class="shipping-text">You're €18.50 away from FREE shipping! Add €10.50 more.</p>
+            <div class="shipping-bar-container">
+                <div class="shipping-bar-fill"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STRENGTH GUIDE -->
+    <section class="strength-section">
+        <div class="strength-container">
+            <h2 class="strength-title">Not Sure Which Strength?</h2>
+            <div class="strength-grid">
+                <div class="strength-card">
+                    <div class="strength-label">Light</div>
+                    <div class="strength-dot-large" style="background: var(--success);"></div>
+                    <div class="strength-description">1–6mg nicotine. Perfect for beginners or light users.</div>
+                </div>
+                <div class="strength-card">
+                    <div class="strength-label">Normal</div>
+                    <div class="strength-dot-large" style="background: var(--info);"></div>
+                    <div class="strength-description">7–10mg nicotine. Ideal for everyday use.</div>
+                </div>
+                <div class="strength-card">
+                    <div class="strength-label">Strong</div>
+                    <div class="strength-dot-large" style="background: var(--warning);"></div>
+                    <div class="strength-description">11–16mg nicotine. For experienced users.</div>
+                </div>
+                <div class="strength-card">
+                    <div class="strength-label">Extra Strong</div>
+                    <div class="strength-dot-large" style="background: var(--error);"></div>
+                    <div class="strength-description">17mg+ nicotine. Maximum intensity for veterans.</div>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button class="strength-quiz-cta">Take Our Strength Quiz →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials-section">
+        <h2 class="testimonials-title">What Our Customers Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <span class="testimonial-stars">★★★★★</span>
+                    <span class="verified-badge">✓ Verified Buyer</span>
+                </div>
+                <p class="testimonial-text">"Fantastic selection and incredibly fast shipping. Arrived in 2 days. Will definitely order again!"</p>
+                <div class="testimonial-footer">
+                    <div class="testimonial-name">Sarah M.</div>
+                    <div class="testimonial-product">ZYN Cool Mint · 2 weeks ago</div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <span class="testimonial-stars">★★★★★</span>
+                    <span class="verified-badge">✓ Verified Buyer</span>
+                </div>
+                <p class="testimonial-text">"Been a customer for 6 months. Quality is consistent, prices are fair, and customer service is top-notch."</p>
+                <div class="testimonial-footer">
+                    <div class="testimonial-name">James K.</div>
+                    <div class="testimonial-product">VELO Ice Cool · 3 weeks ago</div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <span class="testimonial-stars">★★★★★</span>
+                    <span class="verified-badge">✓ Verified Buyer</span>
+                </div>
+                <p class="testimonial-text">"Love the variety of brands and flavors. The strength quiz helped me find my perfect match. Highly recommend!"</p>
+                <div class="testimonial-footer">
+                    <div class="testimonial-name">Emma R.</div>
+                    <div class="testimonial-product">LOOP Jalapeno Lime · 1 week ago</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter-section">
+        <div class="newsletter-container">
+            <h2 class="newsletter-title">Join the SnusFriend Community</h2>
+            <p class="newsletter-subtitle">Get early access to new brands, exclusive deals, and tips from our pouch experts.</p>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="your@email.com" required>
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="#shop">All Pouches</a></li>
+                    <li><a href="#brands">Brands</a></li>
+                    <li><a href="#strength">By Strength</a></li>
+                    <li><a href="#flavor">By Flavor</a></li>
+                    <li><a href="#deals">Sale & Deals</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#careers">Careers</a></li>
+                    <li><a href="#press">Press</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#shipping">Shipping & Returns</a></li>
+                    <li><a href="#track">Track Order</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#cookies">Cookie Policy</a></li>
+                    <li><a href="#compliance">Age Verification</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copy">© 2026 SnusFriend. All rights reserved. | Est. 2022 in Stockholm.</p>
+            <div class="payment-icons">
+                <div class="payment-icon">Visa</div>
+                <div class="payment-icon">MC</div>
+                <div class="payment-icon">Apple</div>
+                <div class="payment-icon">PayPal</div>
+            </div>
+            <div class="social-icons">
+                <div class="social-icon">f</div>
+                <div class="social-icon">𝕏</div>
+                <div class="social-icon">📷</div>
+                <div class="social-icon">in</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

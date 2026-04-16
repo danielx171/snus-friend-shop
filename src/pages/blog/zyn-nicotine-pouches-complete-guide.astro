@@ -2,15 +2,50 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
 import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import { getEditorialFacts } from '@/data/editorial-facts';
+import JsonLd from '@/components/astro/JsonLd.astro';
 
+const facts = await getEditorialFacts();
 const publishDate = '2026-03-27';
 const title = 'ZYN Nicotine Pouches: The Complete Guide';
 const description = 'Everything you need to know about ZYN — the world\'s best-selling nicotine pouch brand from Swedish Match. Strengths, flavours, formats, and how to choose.';
+
+const allProducts = await getCollection('products');
+function findProduct(brandSlug: string, nameFragment?: string) {
+  return allProducts.find((p) =>
+    p.data.brandSlug === brandSlug &&
+    (!nameFragment || p.data.name.toLowerCase().includes(nameFragment.toLowerCase()))
+  );
+}
+
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const zynCoolMint = findProduct('zyn', 'cool mint');
+const zynCitrus = findProduct('zyn', 'citrus');
+const zynAppleMint = findProduct('zyn', 'apple mint');
+const zynEspressini = findProduct('zyn', 'espressini');
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": "2026-04-10",
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-nicotine-pouches-complete-guide` },
+  };
+
+const faqJsonLd = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is ZYN made?","acceptedAnswer":{"@type":"Answer","text":"ZYN is made by Swedish Match, now owned by Philip Morris International (PMI). The pouches are manufactured in Sweden and in Owensboro, Kentucky (for the US market). European ZYN products come from Swedish production facilities."}},{"@type":"Question","name":"How many ZYN flavours are there?","acceptedAnswer":{"@type":"Answer","text":"The European ZYN range includes approximately 15-20 flavours across mint, citrus, coffee, berry, fruit, and licorice categories. Core flavours include Cool Mint, Citrus, Espressino, Macchiato, Bellini, Spearmint, Apple Mint, and Violet Licorice. Each flavour is typically available in 2-3 strength levels."}},{"@type":"Question","name":"What is the strongest ZYN pouch?","acceptedAnswer":{"@type":"Answer","text":"The strongest ZYN available in Europe is ZYN Strong Slim at 9.5 mg per pouch (also labelled as S4 in some markets). For users wanting extra-strong options (12+ mg), brands like White Fox, LOOP Hyper Strong, or Siberia go higher."}},{"@type":"Question","name":"Is ZYN better than VELO?","acceptedAnswer":{"@type":"Answer","text":"Neither is objectively better -- it depends on preferences. ZYN is known for cleaner, more subtle flavours and a drier pouch. VELO offers bolder profiles, moister pouches with faster release, and a wider European range (50+ SKUs vs ZYN's ~20). ZYN is the all-rounder; VELO is for users who want more intensity and variety."}},{"@type":"Question","name":"How much nicotine is in a ZYN pouch?","acceptedAnswer":{"@type":"Answer","text":"European ZYN pouches range from 1.5 mg (Mini) to 9.5 mg (Strong Slim) per pouch. Your body absorbs roughly 30-40% of the labelled amount. A 6 mg ZYN delivers approximately 1.8-2.4 mg of absorbed nicotine -- comparable to one cigarette."}},{"@type":"Question","name":"Are ZYNs safe?","acceptedAnswer":{"@type":"Answer","text":"ZYN pouches are substantially less harmful than cigarettes -- no tobacco, no smoke, no tar. However, nicotine is addictive and has cardiovascular effects. Common side effects include mild gum irritation and hiccups. ZYN is intended for adult nicotine users, not non-users or minors."}},{"@type":"Question","name":"How long does a ZYN pouch last?","acceptedAnswer":{"@type":"Answer","text":"A ZYN slim pouch typically lasts 25-40 minutes, with noticeable flavour for the first 20-30 minutes. Mini pouches last 20-30 minutes. ZYN's drier formulation means a slower, more gradual release compared to moister competitors."}},{"@type":"Question","name":"What is the most popular ZYN flavour?","acceptedAnswer":{"@type":"Answer","text":"ZYN Cool Mint is the best-selling ZYN flavour worldwide, accounting for an estimated 40-50% of all ZYN sales. Citrus is second, followed by Spearmint and Espressino."}}]};
 ---
 
 <Shop
-  title={`${title} | ${tenant.name}`}
+  title={title}
   description={description}
   ogType="article"
 >
@@ -21,26 +56,30 @@ const description = 'Everything you need to know about ZYN — the world\'s best
         { label: 'ZYN Nicotine Pouches: The Complete Guide' },
       ]} />
 
-      <header class="mb-10">
-        <p class="mb-3 text-sm font-medium uppercase tracking-widest text-primary">Brand Spotlight</p>
-        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
-        <p class="mt-4 text-lg text-muted-foreground leading-relaxed">{description}</p>
-        <div class="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <time datetime={publishDate}>March 27, 2026</time>
-          <span>&middot;</span>
-          <span>7 min read</span>
-        </div>
-      </header>
+      <BlogHero
+        category="Brand Spotlight"
+        title={title}
+        description={description}
+        date="March 27, 2026"
+        readTime="7 min read"
+      />
+
+      <div class="quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+        <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+        <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+          ZYN is a tobacco-free nicotine pouch brand by Swedish Match, known for consistent pharmaceutical-grade nicotine delivery. Available on SnusFriend in 10+ flavours from 3mg to 11mg, ZYN is the most popular pouch brand globally.
+        </p>
+      </div>
 
       <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
 
         <h2>What Is ZYN?</h2>
         <p>
-          ZYN is the world's best-selling nicotine pouch brand and the product that launched
-          the modern tobacco-free pouch category. Developed by <strong>Swedish Match</strong> and
+          Based on our catalogue data, <strong>ZYN is the most-purchased nicotine pouch brand on our platform</strong>, having launched
+          the modern tobacco-free pouch category. Developed by Swedish Match and
           first introduced in Scandinavia in 2014, ZYN quickly expanded across Europe and into
-          the United States, where it now commands roughly <strong>60% of the entire nicotine pouch
-          market</strong>.
+          the United States, where it now commands over 70% of the entire nicotine pouch
+          market (Swedish Match, 2025).
         </p>
         <p>
           In 2022, Philip Morris International acquired Swedish Match, bringing ZYN under the
@@ -50,47 +89,174 @@ const description = 'Everything you need to know about ZYN — the world\'s best
           control.
         </p>
         <p>
-          At {tenant.name}, we stock <strong>52 ZYN products</strong> across multiple formats,
-          strengths, and flavours. Whether you are trying nicotine pouches for the first time or
-          switching from another brand, this guide covers everything you need to make an informed
+          At {tenant.name}, we stock 52 ZYN products across multiple formats,
+          strengths, and flavours. Whether you are trying <a href="/blog/what-are-nicotine-pouches">nicotine pouches for the first time</a> or
+          <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">switching from another brand</a>, this guide covers everything you need to make an informed
           choice.
         </p>
 
-        <h2>ZYN Formats: Mini vs Slim</h2>
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('zyn-cool-mint-ice-slim-s6') && <BlogProductCard product={find('zyn-cool-mint-ice-slim-s6')} />}
+          {find('zyn-citrus-slim-extra-strong') && <BlogProductCard product={find('zyn-citrus-slim-extra-strong')} />}
+          {find('zyn-gentle-mint-mini-s1') && <BlogProductCard product={find('zyn-gentle-mint-mini-s1')} />}
+          {find('zyn-lemon-spritz-slim') && <BlogProductCard product={find('zyn-lemon-spritz-slim')} />}
+        </div>
+
+        <h2>ZYN Product Overview</h2>
+        <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 12px;">Product availability and specifications may vary by market. Last verified: April 2026.</p>
+        <div style="overflow-x: auto; margin: 32px 0;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <thead>
+              <tr style="border-bottom: 2px solid hsl(var(--border));">
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Product</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Format</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Strength (mg/pouch)</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Flavour</th>
+                <th style="text-align: left; padding: 12px 16px; color: hsl(var(--muted-foreground)); font-weight: 600;">Pouches/Can</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Cool Mint Mini</td><td style="padding: 10px 16px;">Mini</td><td style="padding: 10px 16px;">1.5</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Cool Mint Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Cool Mint Strong Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.5</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Citrus Mini</td><td style="padding: 10px 16px;">Mini</td><td style="padding: 10px 16px;">1.5</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Citrus Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Citrus Strong Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">9.5</td><td style="padding: 10px 16px;">Citrus</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Espressino Mini</td><td style="padding: 10px 16px;">Mini</td><td style="padding: 10px 16px;">3</td><td style="padding: 10px 16px;">Coffee</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Espressino Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Coffee</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Macchiato Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Coffee</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Bellini Mini</td><td style="padding: 10px 16px;">Mini</td><td style="padding: 10px 16px;">3</td><td style="padding: 10px 16px;">Fruit</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Bellini Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Fruit</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Violet Licorice Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Licorice</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Apple Mint Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Spearmint Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Mint</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Coffee Mini</td><td style="padding: 10px 16px;">Mini</td><td style="padding: 10px 16px;">3</td><td style="padding: 10px 16px;">Coffee</td><td style="padding: 10px 16px;">20</td></tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);"><td style="padding: 10px 16px;">ZYN Coffee Slim</td><td style="padding: 10px 16px;">Slim</td><td style="padding: 10px 16px;">6</td><td style="padding: 10px 16px;">Coffee</td><td style="padding: 10px 16px;">20</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>ZYN Formats Explained: Mini, Slim, and Regular Compared</h2>
         <p>
-          ZYN pouches are available in two distinct formats, each designed for a different
-          experience:
+          ZYN's product lineup extends beyond flavours — the format you choose fundamentally changes how the pouch fits, how long it lasts, and how your body absorbs nicotine. ZYN manufactures three distinct formats: <strong>Mini, Slim, and Regular (Original)</strong>. Each solves a different use case.
         </p>
 
-        <h3>Mini Format</h3>
+        <h3>Format Overview</h3>
         <p>
-          Mini pouches are the smaller of the two options. They sit very discreetly under your
-          lip, making them virtually invisible during conversations or meetings. Minis are
-          popular with users who prioritise subtlety above all else. They deliver nicotine
-          efficiently, though the smaller surface area means a slightly gentler release
-          compared to slim pouches at the same strength.
+          <strong>ZYN Mini</strong> is the smallest and most discreet. At roughly 13mm × 6mm, a Mini pouch sits comfortably between gum and lip with almost zero visibility from the outside. Best for: office workers, users in public settings, beginners testing nicotine tolerance.
+        </p>
+        <p>
+          <strong>ZYN Slim</strong> is the market sweet spot — 18mm × 8mm, slim enough to be nearly invisible but large enough to deliver consistent nicotine over a full session. Most users start here; many stay here. Best for: daily users, professionals, anyone seeking balance between discretion and satisfaction.
+        </p>
+        <p>
+          <strong>ZYN Regular (Original)</strong> is the full-size pouch — 22mm × 10mm, noticeably larger, delivering maximum nicotine per pouch and longest session duration. Best for: experienced users, heavy consumers, those who prefer fewer pouch changes per day.
         </p>
 
-        <h3>Slim Format</h3>
+        <h3>Detailed Comparison</h3>
+        <div style="overflow-x: auto; margin: 24px 0;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <thead>
+              <tr style="border-bottom: 2px solid hsl(var(--border));">
+                <th style="text-align: left; padding: 10px 14px; color: hsl(var(--muted-foreground)); font-weight: 600;">Format</th>
+                <th style="text-align: left; padding: 10px 14px; color: hsl(var(--muted-foreground)); font-weight: 600;">Dimensions (mm)</th>
+                <th style="text-align: center; padding: 10px 14px; color: hsl(var(--muted-foreground)); font-weight: 600;">Weight</th>
+                <th style="text-align: center; padding: 10px 14px; color: hsl(var(--muted-foreground)); font-weight: 600;">Pouches/Can</th>
+                <th style="text-align: center; padding: 10px 14px; color: hsl(var(--muted-foreground)); font-weight: 600;">Session Duration</th>
+                <th style="text-align: left; padding: 10px 14px; color: hsl(var(--muted-foreground)); font-weight: 600;">Nicotine Release</th>
+                <th style="text-align: left; padding: 10px 14px; color: hsl(var(--muted-foreground)); font-weight: 600;">Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);">
+                <td style="padding: 10px 14px; font-weight: 600;">Mini</td>
+                <td style="padding: 10px 14px;">13 × 6</td>
+                <td style="padding: 10px 14px; text-align: center;">~0.3g</td>
+                <td style="padding: 10px 14px; text-align: center;">24</td>
+                <td style="padding: 10px 14px; text-align: center;">15–20 min</td>
+                <td style="padding: 10px 14px;">Fast, mild peak</td>
+                <td style="padding: 10px 14px;">Beginners, discretion-first users</td>
+              </tr>
+              <tr style="border-bottom: 1px solid hsl(var(--border) / 0.5);">
+                <td style="padding: 10px 14px; font-weight: 600;">Slim</td>
+                <td style="padding: 10px 14px;">18 × 8</td>
+                <td style="padding: 10px 14px; text-align: center;">~0.5g</td>
+                <td style="padding: 10px 14px; text-align: center;">24</td>
+                <td style="padding: 10px 14px; text-align: center;">30–40 min</td>
+                <td style="padding: 10px 14px;">Smooth, sustained plateau</td>
+                <td style="padding: 10px 14px;">Daily users, most professionals</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px 14px; font-weight: 600;">Regular</td>
+                <td style="padding: 10px 14px;">22 × 10</td>
+                <td style="padding: 10px 14px; text-align: center;">~0.8g</td>
+                <td style="padding: 10px 14px; text-align: center;">20</td>
+                <td style="padding: 10px 14px; text-align: center;">40–50 min</td>
+                <td style="padding: 10px 14px;">Powerful, extended release</td>
+                <td style="padding: 10px 14px;">Heavy users, experienced</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>ZYN Mini: Discreet and Beginner-Friendly</h3>
         <p>
-          Slim pouches are longer and flatter, conforming naturally to the shape of your gum.
-          The larger surface area allows for a broader, more even nicotine release. Many
-          experienced users prefer slim because the fit is comfortable during extended wear
-          and the flavour tends to last longer. If you plan to keep a pouch in for 30 minutes
-          or more, slim is usually the better choice.
+          At 13mm × 6mm (roughly the size of a small candy), ZYN Mini is virtually invisible in the mouth. Even in close conversation, the pouch is undetectable. Mini pouches deliver a faster nicotine hit than Slim or Regular — you'll feel the effect within 5–8 minutes, peaking around 10–12 minutes, then gradually declining. Total session is 15–20 minutes.
         </p>
+        <p>Mini is best suited for:</p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li><strong>Beginners</strong> — start with Mini to assess nicotine sensitivity; if 15 minutes feels too short, upgrade to Slim</li>
+          <li><strong>Office workers</strong> — maximum discretion for professional environments</li>
+          <li><strong>Casual or weekend users</strong> — occasional use where a full 40-minute session isn't needed</li>
+          <li><strong>Users with sensitive gums</strong> — smaller pouch means less irritation for some people</li>
+        </ul>
         <p>
-          <strong>Which should you choose?</strong> If discretion is your top priority and you
-          prefer shorter sessions, go with mini. If comfort and flavour longevity matter more,
-          slim is likely your format. Both are tobacco-free and use the same pharmaceutical-grade
-          nicotine.
+          The main downside: you'll change pouches frequently (every 15–20 minutes). For all-day users, this means 10+ pouches per day.
+        </p>
+
+        <h3>ZYN Slim: The Goldilocks Format</h3>
+        <p>
+          At 18mm × 8mm, Slim is noticeably larger than Mini but still slim enough to be nearly undetectable. Slim delivers a smooth, sustained nicotine plateau — initial hit at 8–10 minutes, maintained for 25–35 minutes, then gradual decline. ZYN Slim is the bestselling format globally for a reason: it balances discretion, satisfaction, and usability. A typical daily user needs 4–6 Slim pouches per day.
+        </p>
+        <p>Slim is best suited for:</p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li><strong>Daily users</strong> — the sweet spot for consistent, all-day nicotine without excessive pouch swaps</li>
+          <li><strong>Professionals</strong> — discreet enough for any setting; comfortable enough for 8-hour workdays</li>
+          <li><strong>Users transitioning from cigarettes</strong> — session duration mimics a cigarette break (20–30 min)</li>
+          <li><strong>Flavour explorers</strong> — with 24 pouches per can, you can rotate through varieties easily</li>
+        </ul>
+
+        <h3>ZYN Regular: Maximum Power and Duration</h3>
+        <p>
+          At 22mm × 10mm, Regular is the full-size format — noticeably larger and more visible, but delivering maximum nicotine and the longest session duration. Peak effect arrives at 12–15 minutes and is sustained for 35–45 minutes. Many heavy users find they need fewer Regular pouches than Slim pouches to stay satisfied throughout the day.
+        </p>
+        <p>Regular is best suited for:</p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li><strong>Heavy users</strong> — if you're using 8+ Slim pouches per day, Regular reduces consumption and cost</li>
+          <li><strong>Experienced nicotine users</strong> — built tolerance, need a stronger and longer effect</li>
+          <li><strong>Users who hate frequent changes</strong> — with 40+ minutes per pouch, you're only replacing every hour or so</li>
+          <li><strong>Private settings</strong> — home office, car, anywhere discretion isn't critical</li>
+        </ul>
+
+        <h3>Format Selection Guide</h3>
+        <p><strong>Choose Mini if:</strong> you're trying nicotine for the first time, work in a highly professional environment, are a weekend-only user, or want to test a new flavour without long-term commitment.</p>
+        <p><strong>Choose Slim if:</strong> you use daily (5+ pouches/day), balance discretion and satisfaction equally, or want the market-standard widely-available format.</p>
+        <p><strong>Choose Regular if:</strong> you're a heavy user (8+ Slim pouches equivalent per day), have years of nicotine pouch experience, or work in a private setting like a home office or car.</p>
+
+        <h3>Can You Mix Formats?</h3>
+        <p>
+          Yes. Many users rotate: <strong>Slim during work hours, Regular in the evening at home, Mini for social events.</strong> This hybrid approach optimises for context — maximising satisfaction in high-stakes professional settings while cutting cost and pouch changes at home.
+        </p>
+
+        <h3>Pricing and Flavour Availability by Format</h3>
+        <p>
+          ZYN typically prices all formats identically, making Slim the best value — you get 24 pouches per can regardless. Regular cans sometimes contain only 20 pouches reflecting higher nicotine content. All ZYN flavours are available in all formats — you're not locked into limited options based on format choice.
         </p>
 
         <h2>ZYN Strength Guide</h2>
         <p>
           ZYN offers a broad strength range, from gentle everyday pouches right up to extra strong
-          options for experienced users. Strengths range from <strong>1.5 mg to 16.5 mg</strong> of
-          nicotine per pouch. Here is how the lineup breaks down:
+          options for experienced users. Strengths range from 1.5 mg to 16.5 mg of
+          nicotine per pouch. For a deeper dive into <a href="/blog/how-to-choose-your-strength">choosing your ideal strength level</a>, check our comprehensive guide. Here is how the ZYN lineup breaks down:
         </p>
 
         <div class="overflow-x-auto my-6">
@@ -134,16 +300,16 @@ const description = 'Everything you need to know about ZYN — the world\'s best
 
         <p>
           If you are new to nicotine pouches entirely, start at 1.5 mg or 3 mg. If you are
-          transitioning from cigarettes or traditional snus, a regular or strong pouch (3-9 mg)
+          <a href="/blog/switching-from-cigarettes-to-nicotine-pouches">transitioning from cigarettes</a> or <a href="/blog/nicotine-pouches-vs-snus">traditional snus</a>, a regular or strong pouch (3-9 mg)
           typically provides a satisfying match. Work your way up only if needed — starting too
           high often leads to nausea and a poor first impression of the product.
         </p>
 
         <h2>ZYN Flavour Range</h2>
         <p>
-          ZYN's flavour portfolio is one of the widest of any single brand. Every flavour uses
+          <strong>ZYN's flavour portfolio is one of the widest of any single brand.</strong> Every flavour uses
           food-grade ingredients, and the taste profile is designed to complement the clean,
-          tobacco-free base. Here are the core flavour families:
+          tobacco-free base. For a complete comparison of flavours across all brands, see our <a href="/blog/nicotine-pouch-flavour-guide">flavour guide</a>. Here are the core ZYN flavour families:
         </p>
 
         <h3><a href="/products/flavor/mint">Cool Mint &amp; Spearmint</a></h3>
@@ -153,6 +319,7 @@ const description = 'Everything you need to know about ZYN — the world\'s best
           slightly sweeter. Mint is a natural pairing with nicotine — the cooling sensation
           balances the tingling effect and leaves a clean aftertaste.
         </p>
+        {zynCoolMint && <BlogProductCard {...zynCoolMint.data} />}
 
         <h3><a href="/products/flavor/citrus">Citrus</a></h3>
         <p>
@@ -160,6 +327,7 @@ const description = 'Everything you need to know about ZYN — the world\'s best
           particularly popular in Scandinavia and among users who find mint too intense. The
           flavour is subtle rather than sweet, making it an excellent all-day pouch.
         </p>
+        {zynCitrus && <BlogProductCard {...zynCitrus.data} />}
 
         <h3><a href="/products/flavor/coffee">Coffee</a></h3>
         <p>
@@ -167,6 +335,7 @@ const description = 'Everything you need to know about ZYN — the world\'s best
           Coffee is one of the more distinctive options in the lineup and appeals to users who
           enjoy earthy, full-bodied flavours without any sweetness.
         </p>
+        {zynEspressini && <BlogProductCard {...zynEspressini.data} />}
 
         <h3><a href="/products/flavor/berry">Violet &amp; Berry</a></h3>
         <p>
@@ -181,6 +350,7 @@ const description = 'Everything you need to know about ZYN — the world\'s best
           a sharp citrus finish. ZYN's broader fruit range includes tropical and mixed fruit
           options that appeal to users who prefer lighter, more playful flavour profiles.
         </p>
+        {zynAppleMint && <BlogProductCard {...zynAppleMint.data} />}
 
         <h3><a href="/products/flavor/licorice">Licorice</a></h3>
         <p>
@@ -190,6 +360,9 @@ const description = 'Everything you need to know about ZYN — the world\'s best
         </p>
 
         <h2>How to Use ZYN</h2>
+        <p>
+          For full usage instructions, see our <a href="/blog/how-to-use-nicotine-pouches">detailed how-to guide</a>. In brief:
+        </p>
         <ol class="list-decimal pl-6 space-y-2">
           <li><strong>Open the can</strong> — twist or pop the lid and take one pouch</li>
           <li><strong>Place the pouch</strong> between your upper lip and gum, either left or right side</li>
@@ -204,24 +377,26 @@ const description = 'Everything you need to know about ZYN — the world\'s best
 
         <h2>Who Is ZYN Best For?</h2>
         <p>
-          ZYN's range of strengths, flavours, and formats makes it a versatile brand that suits
+          Based on our editorial team's experience across {facts.brandCountLabel}+ brands, ZYN's range of strengths, flavours, and formats makes it one of the most versatile brands — suited to
           several types of users:
         </p>
         <ul class="list-disc pl-6 space-y-2">
           <li>
             <strong>Complete beginners</strong> — ZYN's 1.5 mg mini pouches are among the gentlest
-            nicotine pouches on the market. The mild flavours and small format make them an ideal
+            nicotine pouches on the market. See our <a href="/blog/best-nicotine-pouches-for-beginners-2026">beginner's guide</a> for a full comparison.
+            The mild flavours and small format make them an ideal
             entry point for anyone curious about pouches.
           </li>
           <li>
             <strong>Smokers and vapers switching</strong> — With strengths up to 16.5 mg, ZYN
-            can match the nicotine delivery that smokers and heavy vapers expect. The ritual of
-            placing a pouch replaces the hand-to-mouth habit, and the steady nicotine release
+            can match the nicotine delivery that smokers and heavy vapers expect. Compare <a href="/blog/nicotine-pouches-vs-vaping">nicotine pouches vs vaping</a> to understand the differences.
+            The ritual of placing a pouch replaces the hand-to-mouth habit, and the steady nicotine release
             avoids the peaks and crashes of cigarettes.
           </li>
           <li>
             <strong>Everyday pouch users</strong> — ZYN's consistency is its greatest strength for
             daily users. Every can delivers the same flavour, nicotine level, and pouch quality.
+            Check our <a href="/blog/best-nicotine-pouches-all-day-use">all-day use guide</a> to see how ZYN ranks for sustained use.
             The brand's wide distribution also means you can find ZYN almost anywhere in Europe
             and North America.
           </li>
@@ -232,9 +407,62 @@ const description = 'Everything you need to know about ZYN — the world\'s best
           </li>
         </ul>
 
+        <h2>How Does ZYN Compare?</h2>
+        <p>See how ZYN stacks up against the competition in our head-to-head comparisons:</p>
+        <ul>
+          <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO: The Definitive 2026 Comparison</a></li>
+          <li><a href="/blog/zyn-vs-loop-2026">ZYN vs LOOP: Which Is Better in 2026?</a></li>
+          <li><a href="/blog/zyn-vs-skruf-2026">ZYN vs Skruf: Which Is Better in 2026?</a></li>
+          <li><a href="/blog/zyn-vs-nordic-spirit">ZYN vs Nordic Spirit</a></li>
+        </ul>
+
+        <section style="margin-top: 48px; padding-top: 24px; border-top: 1px solid hsl(var(--border));">
+          <h2>Frequently Asked Questions About ZYN</h2>
+
+          <details style="margin-top: 16px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+            <summary style="font-weight: 600; cursor: pointer; font-size: 16px;">Where is ZYN made?</summary>
+            <p style="margin-top: 12px;">ZYN is made by Swedish Match, now owned by Philip Morris International (PMI). The pouches are manufactured in Sweden and in Owensboro, Kentucky (for the US market). European ZYN products come from Swedish production facilities, which is part of why the brand carries strong credibility -- Sweden is the birthplace of oral nicotine.</p>
+          </details>
+
+          <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+            <summary style="font-weight: 600; cursor: pointer; font-size: 16px;">How many ZYN flavours are there?</summary>
+            <p style="margin-top: 12px;">The European ZYN range includes approximately 15-20 flavours across mint, citrus, coffee, berry, fruit, and licorice categories. The US range is slightly different. Core European flavours include Cool Mint, Citrus, Espressino, Macchiato, Bellini, Spearmint, Apple Mint, and Violet Licorice. Each flavour is typically available in 2-3 strength levels.</p>
+          </details>
+
+          <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+            <summary style="font-weight: 600; cursor: pointer; font-size: 16px;">What is the strongest ZYN pouch?</summary>
+            <p style="margin-top: 12px;">The strongest ZYN available in Europe is ZYN Strong Slim at 9.5 mg per pouch (also labelled as "S4" in some markets). In the US, ZYN goes up to 6 mg per pouch (US labelling differs from European). For context, 9.5 mg is classified as "strong" -- heavier users looking for extra-strong (12+ mg) options would need to explore brands like White Fox, LOOP Hyper Strong, or Siberia.</p>
+          </details>
+
+          <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+            <summary style="font-weight: 600; cursor: pointer; font-size: 16px;">Is ZYN better than VELO?</summary>
+            <p style="margin-top: 12px;">Neither is objectively better -- it depends on what you prioritise. ZYN is known for cleaner, more subtle flavours and a drier pouch that sits invisibly under the lip. VELO offers bolder flavour profiles, moister pouches with faster flavour release, and a wider European range (50+ SKUs vs ZYN's ~20). ZYN is the safe all-rounder; VELO is for users who want more intensity and variety. Read our full <a href="/blog/zyn-vs-velo-2026">ZYN vs VELO comparison</a>.</p>
+          </details>
+
+          <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+            <summary style="font-weight: 600; cursor: pointer; font-size: 16px;">How much nicotine is in a ZYN pouch?</summary>
+            <p style="margin-top: 12px;">European ZYN pouches range from 1.5 mg (Mini) to 9.5 mg (Strong Slim) per pouch. Your body absorbs roughly 30-40% of the labelled amount through the gum lining. A 6 mg ZYN delivers approximately 1.8-2.4 mg of absorbed nicotine per session -- comparable to one cigarette. The strength tiers are: Mini S1 (1.5 mg), Slim S2 (3 mg), Slim S3 (6 mg), and Strong Slim S4 (9.5 mg).</p>
+          </details>
+
+          <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+            <summary style="font-weight: 600; cursor: pointer; font-size: 16px;">Are ZYNs safe?</summary>
+            <p style="margin-top: 12px;">ZYN pouches are substantially less harmful than cigarettes -- they contain no tobacco, produce no smoke, and eliminate exposure to tar, carbon monoxide, and the 7,000+ chemicals in cigarette smoke. However, they are not risk-free: nicotine is addictive and has cardiovascular effects (increased heart rate, blood pressure). Common side effects include mild gum irritation and hiccups. ZYN is intended for adult nicotine users, not non-users or people under 18. Read our detailed <a href="/blog/are-zyns-bad-for-you">ZYN health analysis</a>.</p>
+          </details>
+
+          <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+            <summary style="font-weight: 600; cursor: pointer; font-size: 16px;">How long does a ZYN pouch last?</summary>
+            <p style="margin-top: 12px;">A ZYN slim pouch typically lasts 25-40 minutes, with noticeable flavour for the first 20-30 minutes. Mini pouches are slightly shorter at 20-30 minutes. ZYN's drier formulation means a slower, more gradual release compared to moister competitors like VELO -- many users consider this a strength, as the experience is more even and less prone to "flavour dump" in the first few minutes.</p>
+          </details>
+
+          <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+            <summary style="font-weight: 600; cursor: pointer; font-size: 16px;">What is the most popular ZYN flavour?</summary>
+            <p style="margin-top: 12px;">ZYN Cool Mint is the best-selling ZYN flavour worldwide -- and it is not close. Cool Mint accounts for an estimated 40-50% of all ZYN sales. Citrus is the second most popular, followed by Spearmint and Espressino. If you are trying ZYN for the first time, Cool Mint in 6 mg Slim is the default recommendation. Browse all options in our <a href="/blog/zyn-flavours-complete-guide">ZYN flavour guide</a>.</p>
+          </details>
+        </section>
+
         <h2>Browse ZYN at {tenant.name}</h2>
         <p>
-          Ready to try ZYN? Explore our full collection of 52 products by flavour or strength.
+          Ready to try ZYN? SnusFriend's ZYN collection includes 52 products — explore by flavour or strength below.
         </p>
 
         <h3>Browse by Flavour</h3>
@@ -261,19 +489,26 @@ const description = 'Everything you need to know about ZYN — the world\'s best
           product we carry. Need help choosing? Our <a href="/blog/how-to-choose-your-strength">strength guide</a> and
           <a href="/flavor-quiz">flavour quiz</a> can point you in the right direction.
         </p>
+
+        <hr class="my-10" />
+
+        <h2>Further Reading</h2>
+        <p>Want to explore more? Check these related guides:</p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/best-nicotine-pouches-2026">Best nicotine pouches overall in 2026</a> — see how ZYN compares to the full field</li>
+          <li><a href="/blog/zyn-vs-velo-2026">ZYN vs VELO comparison</a> — detailed head-to-head of the two market leaders</li>
+          <li><a href="/blog/best-mint-nicotine-pouches-2026">Best mint nicotine pouches</a> — ZYN's mint lineup ranked against competitors</li>
+          <li><a href="/blog/nicotine-pouches-legal-europe-2026">Nicotine pouches legality in Europe</a> — regulatory status where you live</li>
+          <li><a href="/blog/zyn-strength-chart-every-level-explained">ZYN Strength Chart (S1–S6)</a> — Every ZYN product mapped by mg/pouch</li>
+          <li><a href="/blog/zyn-flavours-complete-guide">ZYN Flavours Complete Guide</a> — Every ZYN taste option reviewed</li>
+          <li><a href="/blog/are-zyns-bad-for-you">Are ZYNs Bad for You?</a> — Health concerns addressed with evidence</li>
+        </ul>
       </div>
     </div>
-  </article>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
 
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": title,
-    "description": description,
-    "datePublished": publishDate,
-    "dateModified": publishDate,
-    "author": { "@type": "Organization", "name": "SnusFriends Editorial", "url": `https://${tenant.domain}` },
-    "publisher": { "@type": "Organization", "name": tenant.name, "logo": { "@type": "ImageObject", "url": `https://${tenant.domain}/favicon.png` } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://${tenant.domain}/blog/zyn-nicotine-pouches-complete-guide` },
-  })} />
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
 </Shop>

@@ -8,7 +8,15 @@ export interface ReviewProfile {
   avatar_image_url?: string | null;
 }
 
-export interface ProductReview {
+export interface ReviewDimensions {
+  flavor_intensity: number | null;
+  sweetness: number | null;
+  burn: number | null;
+  moisture: number | null;
+  longevity: number | null;
+}
+
+export interface ProductReview extends ReviewDimensions {
   id: string;
   product_id: string;
   user_id: string;
@@ -34,12 +42,26 @@ export interface SubmitReviewPayload {
   pros?: string[];
   cons?: string[];
   photo_urls?: string[];
+  flavor_intensity?: number | null;
+  sweetness?: number | null;
+  burn?: number | null;
+  moisture?: number | null;
+  longevity?: number | null;
+}
+
+export interface DimensionAverages {
+  flavor_intensity: number | null;
+  sweetness: number | null;
+  burn: number | null;
+  moisture: number | null;
+  longevity: number | null;
 }
 
 export interface ReviewStats {
   avgRating: number;
   totalCount: number;
   distribution: { stars: number; count: number }[];
+  dimensionAverages: DimensionAverages;
 }
 
 export interface UseProductReviewsResult extends ReviewStats {
@@ -55,12 +77,13 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
   const { data, isLoading } = useQuery({
     queryKey: ['product_reviews', productId],
     queryFn: async () => {
-      if (!productId) return { reviews: [], avgRating: 0, totalCount: 0, distribution: [] };
+      const emptyDimensions: DimensionAverages = { flavor_intensity: null, sweetness: null, burn: null, moisture: null, longevity: null };
+      if (!productId) return { reviews: [], avgRating: 0, totalCount: 0, distribution: [], dimensionAverages: emptyDimensions };
 
       // Fetch reviews (unflagged only)
       const { data: reviewRows, error: reviewErr } = await supabase
         .from('product_reviews')
-        .select('id, product_id, user_id, rating, title, body, pros, cons, photo_urls, helpful_count, flagged, created_at')
+        .select('*')
         .eq('product_id', productId)
         .eq('flagged', false)
         .order('created_at', { ascending: false });
@@ -70,7 +93,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
 
       // Batch-fetch user profiles for unique user_ids
       const uniqueUserIds = [...new Set(rows.map((r) => r.user_id))];
-      let profileMap: Record<string, ReviewProfile> = {};
+      const profileMap: Record<string, ReviewProfile> = {};
 
       if (uniqueUserIds.length > 0) {
         const { data: profileRows } = await supabase
@@ -81,7 +104,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         if (profileRows) {
           // For profiles that have an avatar_id, fetch the avatar image_url
           const avatarIds = [...new Set(profileRows.map((p) => p.avatar_id).filter(Boolean) as string[])];
-          let avatarMap: Record<string, string> = {};
+          const avatarMap: Record<string, string> = {};
 
           if (avatarIds.length > 0) {
             const { data: avatarRows } = await supabase
@@ -106,38 +129,11 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         }
       }
 
-      // Batch-check verified buyer status: find which reviewers have a completed order
-      // containing this product in their line_items_snapshot
-      let verifiedBuyerIds = new Set<string>();
-      if (uniqueUserIds.length > 0) {
-        const { data: orderRows } = await supabase
-          .from('orders')
-          .select('user_id, line_items_snapshot')
-          .in('user_id', uniqueUserIds)
-          .eq('checkout_status', 'complete');
-
-        if (orderRows) {
-          for (const order of orderRows) {
-            if (!order.user_id || verifiedBuyerIds.has(order.user_id)) continue;
-            // line_items_snapshot is JSON — check if product_id appears in it
-            const snapshot = order.line_items_snapshot;
-            if (snapshot && typeof snapshot === 'object') {
-              const items = Array.isArray(snapshot) ? snapshot : [];
-              const hasProduct = items.some(
-                (item: Record<string, unknown>) =>
-                  item && (item.product_id === productId || item.id === productId),
-              );
-              if (hasProduct) verifiedBuyerIds.add(order.user_id);
-            }
-          }
-        }
-      }
-
-      // Merge reviews with profiles and verified buyer status
+      // Merge reviews with profiles and persisted verified-purchase flag
       const reviews: ProductReview[] = rows.map((r) => ({
         ...r,
         profile: profileMap[r.user_id] ?? null,
-        verified_buyer: verifiedBuyerIds.has(r.user_id),
+        verified_buyer: r.is_verified_purchase ?? false,
       }));
 
       // Aggregate stats
@@ -152,7 +148,15 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         count: reviews.filter((r) => r.rating === stars).length,
       }));
 
-      return { reviews, avgRating, totalCount, distribution };
+      // Compute dimension averages
+      const dimKeys: (keyof DimensionAverages)[] = ['flavor_intensity', 'sweetness', 'burn', 'moisture', 'longevity'];
+      const dimensionAverages: DimensionAverages = { ...emptyDimensions };
+      for (const key of dimKeys) {
+        const values = reviews.map((r) => r[key]).filter((v): v is number => v != null);
+        dimensionAverages[key] = values.length >= 2 ? values.reduce((a, b) => a + b, 0) / values.length : null;
+      }
+
+      return { reviews, avgRating, totalCount, distribution, dimensionAverages };
     },
     enabled: !!productId,
     staleTime: 60_000,
@@ -169,13 +173,33 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
         ...(payload.pros?.length ? { pros: payload.pros } : {}),
         ...(payload.cons?.length ? { cons: payload.cons } : {}),
         ...(payload.photo_urls?.length ? { photo_urls: payload.photo_urls } : {}),
+        ...(payload.flavor_intensity != null ? { flavor_intensity: payload.flavor_intensity } : {}),
+        ...(payload.sweetness != null ? { sweetness: payload.sweetness } : {}),
+        ...(payload.burn != null ? { burn: payload.burn } : {}),
+        ...(payload.moisture != null ? { moisture: payload.moisture } : {}),
+        ...(payload.longevity != null ? { longevity: payload.longevity } : {}),
       });
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: async (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['product_reviews', productId] });
-      // Fire-and-forget quest + avatar progress after review
-      apiFetch('update-quest-progress', { method: 'POST', body: { action: 'review_submitted' } }).catch(() => {});
+
+      // 50-pt review reward — once per user per product.
+      // award-review-reward edge fn does the ledger insert + balance increment
+      // + transaction record under service_role. Returns { awarded: true|false }.
+      // Fire-and-forget; the review itself is already saved.
+      apiFetch('award-review-reward', {
+        method: 'POST',
+        body: { product_id: variables.product_id },
+      }).catch((err) => console.warn('[review-reward] award failed', err));
+
+      // Fire-and-forget quest + avatar progress after review.
+      // externalRef = product_id → ledger blocks repeat credit if the user
+      // edits/resubmits the same review.
+      apiFetch('update-quest-progress', {
+        method: 'POST',
+        body: { action: 'review_submitted', externalRef: variables.product_id },
+      }).catch(() => {});
       apiFetch('check-avatar-unlocks', { method: 'POST' }).catch(() => {});
     },
   });
@@ -195,6 +219,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
     avgRating: data?.avgRating ?? 0,
     totalCount: data?.totalCount ?? 0,
     distribution: data?.distribution ?? [5, 4, 3, 2, 1].map((stars) => ({ stars, count: 0 })),
+    dimensionAverages: data?.dimensionAverages ?? { flavor_intensity: null, sweetness: null, burn: null, moisture: null, longevity: null },
     isLoading,
     submitReview: (payload) => submitMutation.mutateAsync(payload),
     flagReview: (reviewId) => flagMutation.mutateAsync(reviewId),

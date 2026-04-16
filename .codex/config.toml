@@ -1,0 +1,14 @@
+# Repo-local MCPs for this storefront workspace.
+# Authenticate once per server with:
+#   codex mcp login context7
+#   codex mcp login sentry
+#   codex mcp login github
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+
+[mcp_servers.sentry]
+url = "https://mcp.sentry.dev/mcp"
+
+[mcp_servers.github]
+url = "https://api.githubcopilot.com/mcp/"

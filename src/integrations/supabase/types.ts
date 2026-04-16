@@ -372,7 +372,6 @@ export type Database = {
           last_verified: string
           nyehandel_sku: string
           product_name: string
-          shopify_sku: string | null
           status: string
         }
         Insert: {
@@ -381,7 +380,6 @@ export type Database = {
           last_verified?: string
           nyehandel_sku: string
           product_name: string
-          shopify_sku?: string | null
           status?: string
         }
         Update: {
@@ -390,8 +388,166 @@ export type Database = {
           last_verified?: string
           nyehandel_sku?: string
           product_name?: string
-          shopify_sku?: string | null
           status?: string
+        }
+        Relationships: []
+      }
+      seo_config: {
+        Row: {
+          key: string
+          updated_at: string | null
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string | null
+          value: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string | null
+          value?: string
+        }
+        Relationships: []
+      }
+      seo_gsc_stats: {
+        Row: {
+          clicks: number | null
+          created_at: string | null
+          ctr: number | null
+          date: string
+          id: string
+          impressions: number | null
+          page: string | null
+          position: number | null
+          query: string | null
+        }
+        Insert: {
+          clicks?: number | null
+          created_at?: string | null
+          ctr?: number | null
+          date: string
+          id?: string
+          impressions?: number | null
+          page?: string | null
+          position?: number | null
+          query?: string | null
+        }
+        Update: {
+          clicks?: number | null
+          created_at?: string | null
+          ctr?: number | null
+          date?: string
+          id?: string
+          impressions?: number | null
+          page?: string | null
+          position?: number | null
+          query?: string | null
+        }
+        Relationships: []
+      }
+      seo_keywords: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          keyword: string
+          priority: number | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          keyword: string
+          priority?: number | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          keyword?: string
+          priority?: number | null
+        }
+        Relationships: []
+      }
+      seo_pagespeed_audits: {
+        Row: {
+          accessibility_score: number | null
+          best_practices_score: number | null
+          cls: number | null
+          created_at: string | null
+          device: string
+          fid_ms: number | null
+          id: string
+          inp_ms: number | null
+          lcp_ms: number | null
+          performance_score: number | null
+          raw_data: Json | null
+          seo_score: number | null
+          ttfb_ms: number | null
+          url: string
+        }
+        Insert: {
+          accessibility_score?: number | null
+          best_practices_score?: number | null
+          cls?: number | null
+          created_at?: string | null
+          device: string
+          fid_ms?: number | null
+          id?: string
+          inp_ms?: number | null
+          lcp_ms?: number | null
+          performance_score?: number | null
+          raw_data?: Json | null
+          seo_score?: number | null
+          ttfb_ms?: number | null
+          url: string
+        }
+        Update: {
+          accessibility_score?: number | null
+          best_practices_score?: number | null
+          cls?: number | null
+          created_at?: string | null
+          device?: string
+          fid_ms?: number | null
+          id?: string
+          inp_ms?: number | null
+          lcp_ms?: number | null
+          performance_score?: number | null
+          raw_data?: Json | null
+          seo_score?: number | null
+          ttfb_ms?: number | null
+          url?: string
+        }
+        Relationships: []
+      }
+      seo_rank_tracking: {
+        Row: {
+          created_at: string | null
+          id: string
+          keyword: string
+          position: number | null
+          search_results: Json | null
+          url_found: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          keyword: string
+          position?: number | null
+          search_results?: Json | null
+          url_found?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          keyword?: string
+          position?: number | null
+          search_results?: Json | null
+          url_found?: string | null
         }
         Relationships: []
       }
@@ -491,10 +647,16 @@ export type Database = {
         }
         Relationships: []
       }
+      cart_snapshots: {
+        Row: { id: string; user_id: string | null; guest_email: string | null; cart_data: Json; cart_total: number; item_count: number; recovered: boolean; email_sent: boolean; created_at: string; updated_at: string }
+        Insert: { id?: string; user_id?: string | null; guest_email?: string | null; cart_data: Json; cart_total?: number; item_count?: number; recovered?: boolean; email_sent?: boolean; created_at?: string; updated_at?: string }
+        Update: { id?: string; user_id?: string | null; guest_email?: string | null; cart_data?: Json; cart_total?: number; item_count?: number; recovered?: boolean; email_sent?: boolean; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
       orders: {
-        Row: { id: string; customer_email: string; total_price: number; currency: string; checkout_status: string; line_items_snapshot: Json | null; customer_metadata: Json | null; nyehandel_order_id: string | null; nyehandel_status: string | null; nyehandel_sync_status: string | null; tracking_id: string | null; tracking_url: string | null; shipping_method: string | null; payment_method: string | null; user_id: string | null; created_at: string; updated_at: string }
-        Insert: { id?: string; customer_email: string; total_price: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; created_at?: string; updated_at?: string }
-        Update: { id?: string; customer_email?: string; total_price?: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; created_at?: string; updated_at?: string }
+        Row: { id: string; customer_email: string; total_price: number; currency: string; checkout_status: string; line_items_snapshot: Json | null; customer_metadata: Json | null; nyehandel_order_id: string | null; nyehandel_status: string | null; nyehandel_sync_status: string | null; tracking_id: string | null; tracking_url: string | null; shipping_method: string | null; payment_method: string | null; user_id: string | null; review_email_sent_at: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; customer_email: string; total_price: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; review_email_sent_at?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; customer_email?: string; total_price?: number; currency?: string; checkout_status?: string; line_items_snapshot?: Json | null; customer_metadata?: Json | null; nyehandel_order_id?: string | null; nyehandel_status?: string | null; nyehandel_sync_status?: string | null; tracking_id?: string | null; tracking_url?: string | null; shipping_method?: string | null; payment_method?: string | null; user_id?: string | null; review_email_sent_at?: string | null; created_at?: string; updated_at?: string }
         Relationships: []
       }
       ops_alerts: {
@@ -513,6 +675,93 @@ export type Database = {
         Row: { id: string; user_id: string; order_id: string | null; points: number; reason: string; created_at: string }
         Insert: { id?: string; user_id: string; order_id?: string | null; points: number; reason: string; created_at?: string }
         Update: { id?: string; user_id?: string; order_id?: string | null; points?: number; reason?: string; created_at?: string }
+        Relationships: []
+      }
+      review_rewards: {
+        Row: { id: string; user_id: string; product_id: string; points: number; created_at: string }
+        Insert: { id?: string; user_id: string; product_id: string; points?: number; created_at?: string }
+        Update: { id?: string; user_id?: string; product_id?: string; points?: number; created_at?: string }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: { id: string; user_id: string; product_slug: string; product_name: string; pack_size: string; quantity: number; interval: string; discount_pct: number; status: string; next_order_at: string; last_order_at: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; user_id: string; product_slug: string; product_name?: string; pack_size?: string; quantity?: number; interval: string; discount_pct?: number; status?: string; next_order_at: string; last_order_at?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; user_id?: string; product_slug?: string; product_name?: string; pack_size?: string; quantity?: number; interval?: string; discount_pct?: number; status?: string; next_order_at?: string; last_order_at?: string | null; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
+      feature_suggestions: {
+        Row: {
+          id: string
+          user_id: string
+          title: string
+          description: string | null
+          votes: number
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          title: string
+          description?: string | null
+          votes?: number
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          title?: string
+          description?: string | null
+          votes?: number
+          status?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      suggestion_votes: {
+        Row: {
+          user_id: string
+          suggestion_id: string
+        }
+        Insert: {
+          user_id: string
+          suggestion_id: string
+        }
+        Update: {
+          user_id?: string
+          suggestion_id?: string
+        }
+        Relationships: []
+      }
+      social_shares: {
+        Row: {
+          id: string
+          user_id: string
+          share_type: string
+          target_id: string
+          platform: string
+          points_awarded: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          share_type: string
+          target_id: string
+          platform: string
+          points_awarded?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          share_type?: string
+          target_id?: string
+          platform?: string
+          points_awarded?: number
+          created_at?: string
+        }
         Relationships: []
       }
       pouch_parts: {
@@ -635,6 +884,12 @@ export type Database = {
         Update: { id?: string; user_id?: string; prize_key?: string; prize_value?: Json; spin_date?: string; spun_at?: string }
         Relationships: []
       }
+      reduction_goals: {
+        Row: { id: string; user_id: string; current_mg: number; target_mg: number; step_interval_days: number; started_at: string; next_step_at: string | null; status: string; created_at: string }
+        Insert: { id?: string; user_id: string; current_mg: number; target_mg: number; step_interval_days: number; started_at?: string; next_step_at?: string | null; status?: string; created_at?: string }
+        Update: { id?: string; user_id?: string; current_mg?: number; target_mg?: number; step_interval_days?: number; started_at?: string; next_step_at?: string | null; status?: string; created_at?: string }
+        Relationships: []
+      }
       vouchers: {
         Row: { id: string; user_id: string; type: string; value: Json; status: string; source: string; expires_at: string; used_at: string | null; created_at: string }
         Insert: { id?: string; user_id: string; type: string; value: Json; status?: string; source?: string; expires_at: string; used_at?: string | null; created_at?: string }
@@ -683,43 +938,61 @@ export type Database = {
       product_reviews: {
         Row: {
           body: string
+          burn: number | null
           cons: string[]
           created_at: string
           flagged: boolean
+          flavor_intensity: number | null
           helpful_count: number
           id: string
+          is_verified_purchase: boolean
+          longevity: number | null
+          moisture: number | null
           photo_urls: string[]
           product_id: string
           pros: string[]
           rating: number
+          sweetness: number | null
           title: string
           user_id: string
         }
         Insert: {
           body: string
+          burn?: number | null
           cons?: string[]
           created_at?: string
           flagged?: boolean
+          flavor_intensity?: number | null
           helpful_count?: number
           id?: string
+          is_verified_purchase?: boolean
+          longevity?: number | null
+          moisture?: number | null
           photo_urls?: string[]
           product_id: string
           pros?: string[]
           rating: number
+          sweetness?: number | null
           title: string
           user_id: string
         }
         Update: {
           body?: string
+          burn?: number | null
           cons?: string[]
           created_at?: string
           flagged?: boolean
+          flavor_intensity?: number | null
           helpful_count?: number
           id?: string
+          is_verified_purchase?: boolean
+          longevity?: number | null
+          moisture?: number | null
           photo_urls?: string[]
           product_id?: string
           pros?: string[]
           rating?: number
+          sweetness?: number | null
           title?: string
           user_id?: string
         }
@@ -1751,6 +2024,15 @@ export type Database = {
       }
     }
     Views: {
+      leaderboard_monthly: {
+        Row: {
+          user_id: string
+          total_points: number
+          display_name: string | null
+          avatar_url: string | null
+        }
+        Relationships: []
+      }
       leaderboard_top_users: {
         Row: {
           user_id: string
@@ -1779,6 +2061,13 @@ export type Database = {
       flag_review: {
         Args: {
           review_id: string
+        }
+        Returns: undefined
+      }
+      increment_points_balance: {
+        Args: {
+          p_user_id: string
+          p_points: number
         }
         Returns: undefined
       }

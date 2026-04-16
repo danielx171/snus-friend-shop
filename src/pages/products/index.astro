@@ -2,28 +2,48 @@
 export const prerender = true;
 import Shop from '@/layouts/Shop.astro';
 import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import JsonLd from '@/components/astro/JsonLd.astro';
 import FilterableProductGrid from '@/components/react/FilterableProductGrid';
+import { buildAbsoluteUrl } from '@/config/site';
+import { tenant } from '@/config/tenant';
 import { getCollection } from 'astro:content';
-import fs from 'node:fs';
-import path from 'node:path';
+import { writeProductsJson } from '@/lib/product-json';
 
 const products = await getCollection('products');
-const productData = products.map(p => ({ ...p.data, slug: p.id }));
 
-// Write product catalog to a static JSON file — keeps HTML under 200KB
-const outDir = path.resolve('./public/data');
-fs.mkdirSync(outDir, { recursive: true });
-fs.writeFileSync(path.join(outDir, 'products.json'), JSON.stringify(productData));
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Shop All Nicotine Pouches',
+  description: `Browse our full collection of ${products.length}+ premium nicotine pouches from top European brands.`,
+  url: buildAbsoluteUrl('/products'),
+  numberOfItems: products.length,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: products.length,
+    itemListElement: products.slice(0, 20).map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: buildAbsoluteUrl(`/products/${p.id}`),
+      name: p.data.name,
+    })),
+  },
+};
+
+// Write products.json once so the grid lazy-fetches it instead of shipping
+// ~300 KB inline with the HTML — critical for Lighthouse perf.
+writeProductsJson(products);
 ---
 
 <Shop
-  title="Shop All Nicotine Pouches | SnusFriend"
-  description="Browse our full collection of 700+ premium nicotine pouches from 91 top brands. Filter by strength, flavour, brand and format. Free EU shipping on qualifying orders."
+  title={`Buy Nicotine Pouches — ${products.length}+ Products, Free EU Shipping | ${tenant.name}`}
+  description={`Browse ${products.length}+ nicotine pouches from ZYN, VELO, LOOP, Siberia, and 30+ more brands. Free shipping on orders over €29. Same-day dispatch.`}
   canonical="/products"
 >
+  <JsonLd data={collectionJsonLd} />
   <Breadcrumb items={[{ label: 'Products' }]} />
 
-  <div class="container mx-auto px-4 py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
     <div class="mb-8">
       <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
         Shop All Nicotine Pouches
@@ -38,6 +58,7 @@ fs.writeFileSync(path.join(outDir, 'products.json'), JSON.stringify(productData)
       </p>
     </div>
 
+    <h2 class="sr-only">Product Catalog</h2>
     <FilterableProductGrid client:idle productsJsonUrl="/data/products.json" />
   </div>
 </Shop>

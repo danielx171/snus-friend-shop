@@ -1,0 +1,357 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import BlogProductCard from '@/components/astro/BlogProductCard.astro';
+import { tenant } from '@/config/tenant';
+import { getCollection } from 'astro:content';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const allProducts = await getCollection('products');
+const find = (slug: string) => allProducts.find(p => p.id === slug);
+
+const publishDate = '2026-03-31';
+const title = "Strongest Snus Brands Compared: Beginner Warning";
+const description = 'Strongest snus brands ranked by mg — Siberia, General, Thunder, and modern pouch brands side by side. Brand-level comparison with beginner safety warnings.';
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/strongest-snus-brands-compared-beginners-warning" }
+  };
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What's the strongest snus you can buy?", "acceptedAnswer": { "@type": "Answer", "text": "In traditional tobacco snus, products like General Extra Strong and Siberia Red reach 22+ mg/g. In the broader nicotine pouch category, Rabbit Extreme at 50 mg/pouch is the strongest product commercially available in 2026." } },
+      { "@type": "Question", "name": "Is Siberia the strongest snus?", "acceptedAnswer": { "@type": "Answer", "text": "Siberia is one of the strongest, with the Maxi All White Portion at 49.5 mg/pouch. However, Rabbit Extreme (50 mg) technically edges it out. Siberia's reputation comes from being one of the original extreme-strength brands." } },
+      { "@type": "Question", "name": "Are strong nicotine pouches more dangerous?", "acceptedAnswer": { "@type": "Answer", "text": "Higher nicotine doses increase the risk of dependency and unpleasant side effects (nausea, dizziness). However, nicotine pouches — even strong ones — are considered significantly less harmful than cigarettes because they don't involve combustion. The risk is primarily about addiction, not acute toxicity at commercial doses." } },
+      { "@type": "Question", "name": "How many cigarettes equal one strong nicotine pouch?", "acceptedAnswer": { "@type": "Answer", "text": "A typical cigarette delivers about 1.0-1.5 mg of absorbed nicotine. With oral pouches absorbing approximately 30-40% of their stated nicotine, a 16 mg pouch (like ZYN S6) delivers roughly 5-6 mg — equivalent to 3-6 cigarettes. A 50 mg pouch would be equivalent to roughly 10-20 cigarettes." } }
+    ]
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  canonical="/blog/strongest-snus-brands-compared-beginners-warning"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'Strongest Snus Brands Compared' },
+      ]} />
+
+      <BlogHero
+        category="Safety Guide"
+        title={title}
+        description={description}
+        date="31 March 2026"
+        readTime="11 min read"
+      />
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <div class="not-prose quick-answer" style="background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--card)) 100%); border: 1px solid hsl(var(--primary) / 0.2); border-radius: 12px; padding: 20px 24px; margin: 24px 0 32px;">
+          <p style="font-size: 13px; font-weight: 700; color: hsl(var(--primary)); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Quick Answer</p>
+          <p style="font-size: 15px; line-height: 1.7; color: hsl(var(--foreground));">
+            The strongest brands commercially available in 2026 are <strong>Rabbit</strong> (50 mg/pouch), <strong>Siberia</strong> (49.5 mg/pouch), and <strong>MAGGIE</strong> (45 mg/pouch). For traditional tobacco snus, Siberia and Odens reach 22–43 mg/g concentration. <strong>Beginners should not use any of these</strong> — start at 3–6 mg and build tolerance gradually. Using ultra-strong pouches without established tolerance causes nausea, dizziness, and cold sweats within minutes.
+          </p>
+        </div>
+
+        <p>
+          If you've searched "strongest snus," you're probably curious about how far the nicotine scale goes.
+          Fair enough. But before we rank them, a blunt warning: <strong>the strongest products on this list are
+          not for beginners, and using them without tolerance is genuinely unpleasant</strong> — nausea, dizziness,
+          and cold sweats are common reactions.
+        </p>
+        <p>
+          This guide compares the strongest snus and nicotine pouch brands side by side, explains why "strongest"
+          isn't always "best," and gives clear guidance on where beginners should actually start.
+        </p>
+        <p>
+          <strong>Important terminology note:</strong> Traditional snus contains tobacco. Modern nicotine pouches
+          (like most products here) are tobacco-free. Both deliver nicotine orally. When people search "strongest snus,"
+          they typically mean both categories — so this guide covers both.
+        </p>
+
+        <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-8">
+          {find('siberia-slim') && <BlogProductCard product={find('siberia-slim')} />}
+          {find('siberia-portion') && <BlogProductCard product={find('siberia-portion')} />}
+          {find('white-fox-full-charge') && <BlogProductCard product={find('white-fox-full-charge')} />}
+          {find('loop-spicy-apple-hyper-strong') && <BlogProductCard product={find('loop-spicy-apple-hyper-strong')} />}
+          {find('skruf-intense-peppermint-ice-s4') && <BlogProductCard product={find('skruf-intense-peppermint-ice-s4')} />}
+        </div>
+
+        <h2>The Strength Scale: How Snus &amp; Pouches Are Measured</h2>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">What is the strongest snus brand?</summary>
+  <p style="margin-top: 12px;">Siberia and Odens are the strongest snus brands on the market, with Siberia offering up to 43 mg/g nicotine and Odens 22-25 mg/g. White Fox and Skruf High Strength are also extremely potent options favored by experienced users. These ultra-strong brands are designed for veteran users and should never be used by beginners.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">Is strong snus dangerous for beginners?</summary>
+  <p style="margin-top: 12px;">Yes, strong snus can be dangerous for beginners because high nicotine concentrations can cause nicotine poisoning, dizziness, nausea, and rapid heart rate. Beginners should start with lower strengths (3–8 mg/g) and gradually build tolerance over time. See our <a href="/beginners" style="color: hsl(var(--primary));">beginner guide</a> for safe starting recommendations.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">How much nicotine is in the strongest snus?</summary>
+  <p style="margin-top: 12px;">The strongest snus brands contain between 22 and 43 mg/g of nicotine per pouch, with Siberia leading at 43 mg/g. For comparison, regular snus contains 8–11 mg/g, while extra-strong brands like <a href="/brands/white-fox" style="color: hsl(var(--primary));">White Fox</a> range from 15–20 mg/g. Always check the product label for exact nicotine content.</p>
+</details>
+
+        <p>Nicotine strength in oral products uses two measurements:</p>
+        <p>
+          <strong>mg/pouch (or mg/portion):</strong> The total nicotine contained in one pouch. This is the number
+          that matters for your experience — it's what your body absorbs.
+        </p>
+        <p>
+          <strong>mg/g (milligrams per gram):</strong> The nicotine concentration of the pouch material. This can
+          be misleading — a small pouch with high mg/g delivers less total nicotine than a large pouch with lower mg/g.
+        </p>
+        <p>Always compare mg/pouch when evaluating strength across brands.</p>
+
+        <h2>Complete Brand Strength Comparison</h2>
+
+        <h3>Tier 1: Ultra-Extreme (40–50 mg/pouch) — Experienced Users Only</h3>
+        <p>These brands represent the absolute ceiling of commercial nicotine delivery. They're designed for users who have used 30+ mg products daily for months.</p>
+
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Brand</th><th>Strongest Product</th><th>mg/pouch</th><th>Flavours Available</th><th>Products in Range</th></tr></thead>
+          <tbody>
+            <tr><td><a href="/brands/rabbit">Rabbit</a></td><td>Pepper Mint Extreme</td><td>50.0 mg</td><td>Mint, Pineapple Ice, Bubblegum, Cola, Energy, Double Apple, Jalapeno Lime</td><td>7 at 50 mg</td></tr>
+            <tr><td><a href="/brands/siberia">Siberia</a></td><td>Maxi All White Portion</td><td>49.5 mg</td><td>Mint, Spearmint</td><td>1 at 49.5 mg</td></tr>
+            <tr><td><a href="/brands/maggie">MAGGIE</a></td><td>Jamaican Kola 60mg</td><td>45.0 mg</td><td>Jamaican Kola, Fruit Punch, Cherry Tonic Wine, Sweet Plantain, Grape Soda, Mr Blue</td><td>6 at 45 mg</td></tr>
+            <tr><td><a href="/brands/cuba">CUBA</a></td><td>Black line</td><td>43.0 mg</td><td>15+ flavours including Spearmint, Watermelon, Cola, Cherry, Grape</td><td>15 at 43 mg</td></tr>
+            <tr><td><a href="/brands/iceberg">ICEBERG</a></td><td>Black variants</td><td>40.0 mg</td><td>Mint-focused</td><td>Limited at 40 mg</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p>
+          <strong>Beginner warning:</strong> If you use any of these without established tolerance, expect nausea
+          within 2–3 minutes. These products deliver nicotine equivalent to 10–15 cigarettes in a single pouch.
+          They exist for a specific market segment — not for experimentation.
+        </p>
+
+        <h3>Tier 2: Extreme (25–39 mg/pouch) — Heavy Users</h3>
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Brand</th><th>Strongest Product</th><th>mg/pouch</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td><a href="/brands/garant">Garant</a></td><td>Extreme Series</td><td>38.0 mg</td><td>Wide flavour range, consistent quality</td></tr>
+            <tr><td><a href="/brands/stng">STNG</a></td><td>MAX variants</td><td>27.5 mg</td><td>Bridge between strong and extreme</td></tr>
+            <tr><td><a href="/brands/glick">GLICK</a></td><td>Strong variants</td><td>25.0 mg</td><td>Flavour-forward, unique profiles</td></tr>
+            <tr><td>NOiS</td><td>Extreme variants</td><td>25.0 mg</td><td>High moisture, fast absorption</td></tr>
+            <tr><td><a href="/brands/zeus">Zeus</a></td><td>Strong variants</td><td>25.0 mg</td><td>Large product range (32 products)</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <h3>Tier 3: Very Strong (15–24 mg/pouch) — Experienced Regular Users</h3>
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Brand</th><th>Strongest Product</th><th>mg/pouch</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td><a href="/brands/white-fox">White Fox</a></td><td>Double Mint</td><td>24.0 mg</td><td>Premium tobacco-free, clean delivery</td></tr>
+            <tr><td>RUSH</td><td>Strong variants</td><td>21.0 mg</td><td>Mid-strength stepping stone</td></tr>
+            <tr><td><a href="/brands/77-pouches">77 Pouches</a></td><td>Strong variants</td><td>20.0 mg</td><td>23 products, good variety</td></tr>
+            <tr><td><a href="/brands/clew">CLEW</a></td><td>Strong variants</td><td>20.0 mg</td><td>19 products across flavours</td></tr>
+            <tr><td><a href="/brands/klint">Klint</a></td><td>Avalanche Mint 6</td><td>20.0 mg</td><td>Quality-focused construction</td></tr>
+            <tr><td><a href="/brands/rave">RAVE</a></td><td>Ultra Strong 32.5mg</td><td>19.5 mg</td><td>Unique flavours (Lemoncello, Skittler, Cola)</td></tr>
+            <tr><td>LUMI</td><td>Strong variants</td><td>18.0 mg</td><td>Accessible pricing</td></tr>
+            <tr><td>MYNT</td><td>Strong variants</td><td>18.0 mg</td><td>Clean design</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <h3>Tier 4: Strong (10–17 mg/pouch) — Where Most Users Should Start "Strong"</h3>
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Brand</th><th>Strongest Product</th><th>mg/pouch</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td><a href="/brands/velo">VELO</a></td><td>Max range</td><td>17.0 mg</td><td>Philip Morris brand, widely available</td></tr>
+            <tr><td><a href="/brands/zyn">ZYN</a></td><td>Cool Mint Ice S6</td><td>16.5 mg</td><td>Swedish Match, market leader</td></tr>
+            <tr><td><a href="/brands/loop">Loop</a></td><td>Strongest variant</td><td>15.6 mg</td><td>Good flavours, solid quality</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p>
+          <strong>This is where beginners with some smoking history should consider starting.</strong> ZYN, VELO,
+          and Loop deliberately cap their ranges here because these are large, regulated brands that prioritise
+          responsible positioning.
+        </p>
+
+        <h2>Where Beginners Should Actually Start</h2>
+
+        <h3>If You've Never Used Nicotine</h3>
+        <p>
+          Start at 3–6 mg/pouch. Period. Brands like <a href="/brands/zyn">ZYN Mini</a> (1.5–3 mg),
+          VELO Mini, or Loop Regular give you a gentle introduction. Use 3–4 per day maximum for the first week.
+          If you experience zero effect, move to 6 mg — not 16 mg.
+        </p>
+
+        <h3>If You're Switching from Cigarettes</h3>
+        <p>
+          Start at 6–9 mg/pouch. Your body has existing nicotine tolerance but oral absorption is different from
+          lung absorption. ZYN S3 (9 mg) or VELO Strong (10 mg) are appropriate starting points. Give yourself
+          2 weeks before increasing.
+        </p>
+
+        <h3>If You're Switching from Traditional Snus</h3>
+        <p>
+          You likely have significant oral nicotine tolerance. Starting at 9–12 mg is reasonable. But don't jump
+          straight to 40+ mg — even snus users find the ultra-extreme tier overwhelming because modern pouches are
+          formulated for faster absorption than traditional snus.
+        </p>
+
+        <h3>The 6-Week Rule</h3>
+        <p>
+          <strong>Never increase strength before 6 weeks at your current level.</strong> Tolerance builds gradually.
+          What feels "not enough" in week 1 often feels appropriate by week 3 as your body adjusts to the oral
+          absorption pattern. Jumping to 40+ mg because 6 mg "doesn't hit" after two days is the most common mistake
+          new users make. For detailed dosing guidance, see our <a href="/blog/how-many-nicotine-pouches-a-day">daily dosing guide</a>.
+        </p>
+
+        <h2>Traditional Snus vs. Nicotine Pouches: Strength Comparison</h2>
+        <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>Factor</th><th>Traditional Snus</th><th>Nicotine Pouches</th></tr></thead>
+          <tbody>
+            <tr><td>Nicotine source</td><td>Tobacco leaf</td><td>Synthetic or extracted nicotine</td></tr>
+            <tr><td>Typical strong range</td><td>11–22 mg/g</td><td>15–50 mg/pouch</td></tr>
+            <tr><td>Absorption speed</td><td>Moderate (tobacco slows release)</td><td>Variable (pH and moisture dependent)</td></tr>
+            <tr><td>Strongest available</td><td>General Extra Strong (~22 mg/g)</td><td>Rabbit Extreme (50 mg/pouch)</td></tr>
+            <tr><td>Flavour intensity</td><td>Tobacco flavour always present</td><td>Pure flavour profiles</td></tr>
+            <tr><td>Regulation</td><td>Tobacco Products Directive</td><td>Varies by country (often unregulated)</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p>
+          <strong>Key insight:</strong> A "strong" traditional snus at 15 mg/g feels different from a 15 mg/pouch
+          nicotine pouch. The tobacco matrix slows absorption, creating a more gradual nicotine curve. Pouches can
+          feel "sharper" at the same nominal strength.
+        </p>
+
+        <h2>Safety: When Strength Becomes a Problem</h2>
+
+        <h3>Physical Warning Signs</h3>
+        <p>Stop immediately and remove the pouch if you experience:</p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>Nausea or stomach discomfort</li>
+          <li>Dizziness lasting more than 5 minutes</li>
+          <li>Rapid heartbeat or palpitations</li>
+          <li>Cold sweats or clammy skin</li>
+          <li>Headache or visual disturbances</li>
+        </ul>
+        <p>These symptoms mean your body cannot process the nicotine dose. Step down at least one tier and wait a week before trying again.</p>
+
+        <h3>Dependency Escalation</h3>
+        <p>
+          The biggest risk of ultra-strong products isn't a single bad experience — it's dependency escalation.
+          Using 40+ mg daily builds tolerance that makes lower-strength products feel ineffective. This creates a
+          dependency cycle where you need extreme-strength products just to feel normal.
+        </p>
+        <p>
+          If you find yourself needing to increase strength every few weeks, you're in an escalation pattern.
+          Consider tapering back to a sustainable level (most users find 10–20 mg is their long-term sweet spot).
+        </p>
+
+        <h3>Who Should Never Use High-Strength Products</h3>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>People under 18 (nicotine affects developing brains)</li>
+          <li>Pregnant or breastfeeding women</li>
+          <li>People with cardiovascular conditions</li>
+          <li>People taking certain medications (MAOIs, some blood pressure medications)</li>
+          <li>Anyone who has never used nicotine before</li>
+        </ul>
+
+        <BlogNewsletterCta />
+
+        <h2>FAQ</h2>
+
+        <h3>What's the strongest snus you can buy?</h3>
+        <p>
+          In traditional tobacco snus, products like General Extra Strong and Siberia Red reach 22+ mg/g. In the
+          broader nicotine pouch category, Rabbit Extreme at 50 mg/pouch is the strongest product commercially
+          available in 2026.
+        </p>
+
+        <h3>Is Siberia the strongest snus?</h3>
+        <p>
+          Siberia is one of the strongest, with the Maxi All White Portion at 49.5 mg/pouch. However, Rabbit Extreme
+          (50 mg) technically edges it out. Siberia's reputation comes from being one of the original extreme-strength
+          brands — it was the "strongest" for years before newer brands caught up.
+        </p>
+
+        <h3>Are strong nicotine pouches more dangerous?</h3>
+        <p>
+          Higher nicotine doses increase the risk of dependency and unpleasant side effects (nausea, dizziness).
+          However, nicotine pouches — even strong ones — are considered significantly less harmful than cigarettes
+          because they don't involve combustion. The risk is primarily about addiction, not acute toxicity at commercial doses.
+        </p>
+
+        <h3>How many cigarettes equal one strong nicotine pouch?</h3>
+        <p>
+          A typical cigarette delivers about 1.0–1.5 mg of absorbed nicotine. With oral pouches absorbing
+          approximately 30–40% of their stated nicotine, a 16 mg pouch (like ZYN S6) delivers roughly 5–6 mg —
+          equivalent to 3–6 cigarettes. A 50 mg pouch would be equivalent to roughly 10–20 cigarettes.
+        </p>
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Strength</a> — Complete strength guide for all levels</li>
+          <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest Nicotine Pouches Ranked 2026</a> — Detailed reviews of every high-strength product</li>
+          <li><a href="/blog/zyn-strength-chart-every-level-explained">ZYN Strength Chart: S1 to S6</a> — Every ZYN product mapped by mg/pouch</li>
+          <li><a href="/blog/how-many-nicotine-pouches-a-day">How Many Nicotine Pouches a Day?</a> — Safe dosing guide</li>
+          <li><a href="/blog/how-to-use-nicotine-pouches">How to Use Nicotine Pouches</a> — Complete beginner guide</li>
+          <li><a href="/blog/nicotine-pouch-ingredients-explained">Nicotine Pouch Ingredients Explained</a> — What's actually in your pouch</li>
+        </ul>
+
+      </div>
+
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse by Strength</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/products/strength/light" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Mild</a>
+              <a href="/products/strength/normal" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+              <a href="/products/strength/super-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Super Strong</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Popular Brands</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/brands/zyn" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">ZYN</a>
+              <a href="/brands/velo" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">VELO</a>
+              <a href="/brands/siberia" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Siberia</a>
+              <a href="/brands/cuba" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">CUBA</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+</Shop>

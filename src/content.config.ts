@@ -2,33 +2,17 @@
 import { defineCollection, z } from 'astro:content';
 import { createClient } from '@supabase/supabase-js';
 
-const url = import.meta.env.SUPABASE_URL ?? process.env.SUPABASE_URL ?? '';
-const key = import.meta.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
+const url = import.meta.env.SUPABASE_URL ?? process.env.SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? '';
+const key = import.meta.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? import.meta.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY ?? import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '';
 
 // Lazy-init: only create the Supabase client when credentials are available
 const buildClient = url && key
   ? createClient(url, key, { auth: { persistSession: false } })
   : null;
 
-const RETAIL_MARKUP = 1.55;
-const PACK_DISCOUNT: Record<string, number> = {
-  pack1: 1.0, pack3: 0.95, pack5: 0.90, pack10: 0.85, pack30: 0.80,
-};
-const PACK_QUANTITIES: Record<string, number> = {
-  pack1: 1, pack3: 3, pack5: 5, pack10: 10, pack30: 30,
-};
-
-function computePrices(variants: Array<{ pack_size: number; price: number }>) {
-  const baseCan = variants.find((v) => v.pack_size === 1);
-  const wholesalePerCan = baseCan?.price ?? 3.29;
-  const retailPerCan = wholesalePerCan * RETAIL_MARKUP;
-  const prices: Record<string, number> = {};
-  for (const [packKey, qty] of Object.entries(PACK_QUANTITIES)) {
-    const discount = PACK_DISCOUNT[packKey] ?? 1.0;
-    prices[packKey] = Math.round(retailPerCan * qty * discount * 100) / 100;
-  }
-  return prices;
-}
+// Pricing logic from shared module — single source of truth
+import { computePrices } from './lib/pricing';
+import { brandDescriptions } from './data/brand-descriptions';
 
 function computeStock(variants: Array<{ inventory?: Array<{ quantity: number }> }>) {
   // If no inventory rows exist at all, treat product as available (Nyehandel manages stock).
@@ -47,8 +31,7 @@ function computeStock(variants: Array<{ inventory?: Array<{ quantity: number }> 
 const products = defineCollection({
   loader: async () => {
     if (!url || !key) {
-      console.warn('[content.config] No Supabase credentials — returning empty product catalog');
-      return [];
+      throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY — cannot build without product data');
     }
     const { data, error } = await buildClient!
       .from('products')
@@ -57,7 +40,11 @@ const products = defineCollection({
 
     if (error) {
       console.error('[content.config] Failed to fetch products:', error.message);
-      return [];
+      throw new Error(`[content.config] Product fetch failed — build aborted. Fix Supabase connection. Error: ${error.message}`);
+    }
+
+    if (!data || data.length < 50) {
+      throw new Error(`[content.config] Product fetch returned only ${data?.length ?? 0} products (expected 50+). Possible empty catalog — build aborted.`);
     }
 
     return (data ?? []).map((p: any) => ({
@@ -69,7 +56,7 @@ const products = defineCollection({
       manufacturer: p.brands?.manufacturer ?? '',
       categoryKey: p.category_key ?? 'nicotinePouches',
       flavorKey: p.flavor_key ?? 'mint',
-      strengthKey: p.strength_key ?? 'normal',
+      strengthKey: ({ extraStrong: 'extra-strong', ultraStrong: 'super-strong' } as Record<string, string>)[p.strength_key] ?? p.strength_key ?? 'normal',
       formatKey: p.format_key ?? 'slim',
       nicotineContent: p.nicotine_mg ?? 0,
       portionsPerCan: p.portions_per_can ?? 20,
@@ -111,7 +98,9 @@ const products = defineCollection({
 
 const brands = defineCollection({
   loader: async () => {
-    if (!url || !key) return [];
+    if (!url || !key) {
+      throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY — cannot build without brand data');
+    }
     const { data, error } = await buildClient!
       .from('brands')
       .select('id, slug, name, manufacturer, logo_url, description')
@@ -119,18 +108,21 @@ const brands = defineCollection({
 
     if (error) {
       console.error('[content.config] Failed to fetch brands:', error.message);
-      return [];
+      throw new Error(`[content.config] Brand fetch failed — build aborted. Fix Supabase connection. Error: ${error.message}`);
     }
 
-    return (data ?? []).map((b: any) => ({
-      id: b.slug ?? b.id,
-      slug: b.slug ?? b.id,
-      name: b.name,
-      manufacturer: b.manufacturer ?? '',
-      logoUrl: b.logo_url ?? '',
-      description: b.description ?? '',
-      countryCode: b.country_code ?? '',
-    }));
+    return (data ?? []).map((b: any) => {
+      const slug = b.slug ?? b.id;
+      return {
+        id: slug,
+        slug,
+        name: b.name,
+        manufacturer: b.manufacturer ?? '',
+        logoUrl: b.logo_url ?? '',
+        description: b.description || brandDescriptions[slug] || '',
+        countryCode: b.country_code ?? '',
+      };
+    });
   },
   schema: z.object({
     id: z.string(),

@@ -1,0 +1,371 @@
+---
+export const prerender = true;
+import Shop from '@/layouts/Shop.astro';
+import Breadcrumb from '@/components/astro/Breadcrumb.astro';
+import BlogHero from '@/components/astro/BlogHero.astro';
+import BlogNewsletterCta from '@/components/astro/BlogNewsletterCta.astro';
+import { tenant } from '@/config/tenant';
+import JsonLd from '@/components/astro/JsonLd.astro';
+
+const publishDate = '2026-03-31';
+const title = 'ZYN Strength Chart: Every Level Explained (2026)';
+const description = 'ZYN strength chart with every nicotine level from 1.5mg to 16.5mg. All 52 products ranked by tier (S1-S6) with flavours and dosing guidance.';
+
+const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": publishDate,
+    "dateModified": publishDate,
+    "author": { "@type": "Person", "name": "Erik Lindqvist", "url": "https://snusfriends.com/authors/erik-lindqvist", "sameAs": ["https://www.linkedin.com/in/erik-lindqvist-snusfriend/", "https://x.com/ErikAtSnusFriend"] },
+    "publisher": { "@type": "Organization", "name": "SnusFriend", "logo": { "@type": "ImageObject", "url": "https://snusfriends.com/logo.svg" } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://snusfriends.com/blog/zyn-strength-chart-every-level-explained" }
+  };
+
+const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What mg is ZYN 6?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN's '6' can refer to their S6 strength tier (16.5 mg/pouch in Slim) or the 6 mg/pouch products (Slim S2). In the US market, ZYN uses '6 mg' to label their stronger option (6 mg/pouch). In the European market, the S-rating system is used. Always check the package for mg/pouch." } },
+      { "@type": "Question", "name": "Which ZYN is strongest?", "acceptedAnswer": { "@type": "Answer", "text": "ZYN Cool Mint Ice Slim S6 and ZYN Menthol Ice Slim S6, both at 16.5 mg/pouch. These are ZYN's Ultra Strong tier — the highest nicotine content in the ZYN range." } },
+      { "@type": "Question", "name": "Is ZYN S3 the same as ZYN 3 mg?", "acceptedAnswer": { "@type": "Answer", "text": "No. ZYN S3 (Strong) contains 9 mg/pouch in Slim format. ZYN '3 mg' refers to their Mini S2 products with 3 mg/pouch. The naming is confusing — always check the actual mg/pouch figure." } },
+      { "@type": "Question", "name": "Can I use ZYN to quit smoking?", "acceptedAnswer": { "@type": "Answer", "text": "Many people use ZYN as a smoking replacement. Start at a strength that matches your cigarette consumption, maintain for 2-4 weeks, then consider gradually stepping down. ZYN's range from 1.5 mg to 16.5 mg allows for a controlled tapering journey." } }
+    ]
+  };
+---
+
+<Shop
+  title={title}
+  description={description}
+  canonical="/blog/zyn-strength-chart-every-level-explained"
+  ogType="article"
+>
+  <JsonLd items={[blogPostingJsonLd, faqJsonLd]} />
+
+  <article class="bg-background text-foreground">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <Breadcrumb items={[
+        { label: 'Blog', href: '/blog' },
+        { label: 'ZYN Strength Chart 2026' },
+      ]} />
+
+      <BlogHero
+        category="Strength Guide"
+        title={title}
+        description={description}
+        date="31 March 2026"
+        readTime="10 min read"
+      />
+
+      <details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+        <summary style="font-weight: 600; cursor: pointer;">Quick Answer: ZYN Strength Chart</summary>
+        <p style="margin-top: 12px;">ZYN pouches come in five nicotine strengths across European and US markets: ZYN Mini Dry (1.5 mg), ZYN Slim (6 mg), ZYN Strong (9 mg), ZYN Extra Strong (11 mg), and ZYN Super Strong (up to 12.5 mg). In the US, ZYN is sold in 3 mg and 6 mg variants. For most adult users, 6 mg provides a moderate experience comparable to light smoking, while 9&ndash;11 mg suits those with established nicotine tolerance. Beginners should start at 6 mg or below &mdash; our <a href="/blog/how-to-choose-your-strength" style="color: hsl(var(--primary));">strength guide</a> explains how to calibrate.</p>
+      </details>
+
+      <div class="prose prose-invert max-w-none space-y-6 text-base leading-relaxed text-muted-foreground [&_h2]:text-foreground [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-foreground [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_strong]:text-foreground [&_a]:text-primary [&_a]:underline [&_a:hover]:text-foreground">
+
+        <p>
+          ZYN uses a numbered strength system (S1 through S6) that's straightforward once you understand it — but
+          confusing if you're comparing across formats. A ZYN Mini S2 contains different total nicotine than a ZYN
+          Slim S2, even though both carry the same "S" label.
+        </p>
+        <p>
+          This chart breaks down every ZYN product by its actual mg/pouch content, so you know exactly what you're
+          getting regardless of format. If you're also deciding on flavour, see our <a href="/blog/zyn-flavours-complete-guide">ZYN flavours guide</a> — it ranks every flavour across all strength tiers.
+        </p>
+        <p><strong>Data source:</strong> SnusFriend product database, 52 active ZYN products as of March 2026.</p>
+
+        <h2>ZYN Strength System Explained</h2>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">What do ZYN strength numbers mean?</summary>
+  <p style="margin-top: 12px;">ZYN strength numbers (3, 6, 9, etc.) indicate the milligrams of nicotine per gram of pouch material, with higher numbers representing stronger nicotine concentrations. A "3" ZYN contains approximately 3 mg/g of nicotine, while a "6" contains 6 mg/g. These numbers are directly proportional to the nicotine hit you'll experience, making them an easy reference for comparing strength across products.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">What is the strongest ZYN?</summary>
+  <p style="margin-top: 12px;">The strongest ZYN currently available is the 9 mg/g strength, which is considered moderate-to-strong and suitable for experienced users or those with higher nicotine tolerance. ZYN's maximum strength is intentionally lower than extreme brands like Siberia or White Fox to maintain broad market appeal and safety. For stronger alternatives, see our <a href="/strongest-snus-brands-compared-beginners-warning" style="color: hsl(var(--primary));">strongest brands guide</a>.</p>
+</details>
+
+<details style="margin-top: 12px; padding: 16px; background: hsl(var(--muted)); border-radius: 8px;">
+  <summary style="font-weight: 600; cursor: pointer;">What ZYN strength should a beginner use?</summary>
+  <p style="margin-top: 12px;">Beginners should start with ZYN 3 mg/g, which is the mildest option and allows for safe exploration without overwhelming nicotine effects. After 1–2 weeks, users can try ZYN 6 mg/g if they want stronger effects, and advance to 9 mg/g only after building tolerance. Never start above 3 mg/g, as this risks nicotine sickness and negative first experiences. Read our <a href="/beginners" style="color: hsl(var(--primary));">complete beginner guide</a> for detailed recommendations.</p>
+</details>
+
+        <p>
+          ZYN's "S" system indicates relative strength within a format — not an absolute nicotine value:
+        </p>
+
+        <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr><th>S-Rating</th><th>Label</th><th>Slim mg/pouch</th><th>Mini mg/pouch</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>S1</td><td>Light</td><td>—</td><td>1.5 mg</td></tr>
+            <tr><td>S2</td><td>Regular</td><td>6.0 mg</td><td>3.0 mg</td></tr>
+            <tr><td>S3</td><td>Strong</td><td>9.0 mg</td><td>—</td></tr>
+            <tr><td>S4</td><td>Extra Strong</td><td>10.6–11.0 mg</td><td>6.0 mg</td></tr>
+            <tr><td>S5</td><td>Super Strong</td><td>13.5 mg</td><td>—</td></tr>
+            <tr><td>S6</td><td>Ultra Strong</td><td>16.5 mg</td><td>—</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p>
+          <strong>Key insight:</strong> A Mini S4 (6.0 mg) is weaker than a Slim S2 (6.0 mg) — they're the same
+          nicotine, but the S-rating only compares within the same format. Always check mg/pouch, not just the S number.
+        </p>
+
+        <h2>Complete ZYN Product Chart by Strength</h2>
+
+        <h3>S1 — Light (1.5 mg/pouch)</h3>
+        <p><em>Format: Mini only</em></p>
+
+        <table>
+          <thead><tr><th>Product</th><th>mg/pouch</th><th>Flavour</th><th>Format</th></tr></thead>
+          <tbody>
+            <tr><td>ZYN Spearmint Mini S1</td><td>1.5 mg</td><td>Mint</td><td>Mini</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Best for:</strong> Complete beginners with zero nicotine tolerance. The gentlest ZYN experience available. Use 3–4 per day to start.</p>
+
+        <h3>S2 — Regular (3.0–6.0 mg/pouch)</h3>
+        <p><em>Formats: Mini (3.0 mg) and Slim (6.0 mg)</em></p>
+
+        <p><strong>Mini S2 products (3.0 mg):</strong></p>
+        <table>
+          <thead><tr><th>Product</th><th>mg/pouch</th><th>Flavour</th></tr></thead>
+          <tbody>
+            <tr><td>ZYN Cool Mint Mini S2</td><td>3.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Spearmint Mini S2</td><td>3.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Gentle Mint Mini S2</td><td>3.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Citrus Mini S2</td><td>3.0 mg</td><td>Citrus</td></tr>
+            <tr><td>ZYN Black Cherry Mini S2</td><td>3.0 mg</td><td>Fruit</td></tr>
+            <tr><td>ZYN Black Licorice Mini S2</td><td>3.0 mg</td><td>Licorice</td></tr>
+            <tr><td>ZYN Coffee Mini S2</td><td>3.0 mg</td><td>Coffee</td></tr>
+            <tr><td>ZYN Peach Mini S2</td><td>3.0 mg</td><td>Fruit</td></tr>
+            <tr><td>ZYN Apple Mint Mini S2</td><td>3.0 mg</td><td>Fruit</td></tr>
+            <tr><td>ZYN Original Mini S2</td><td>3.0 mg</td><td>Original</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Slim S2 products (6.0 mg):</strong></p>
+        <table>
+          <thead><tr><th>Product</th><th>mg/pouch</th><th>Flavour</th></tr></thead>
+          <tbody>
+            <tr><td>ZYN Cool Mint Slim S2</td><td>6.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Spearmint Slim S2</td><td>6.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Gentle Mint Slim S2</td><td>6.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Violet Licorice Slim S2</td><td>6.0 mg</td><td>Licorice</td></tr>
+            <tr><td>ZYN Mint Fizz Slim S2</td><td>6.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Red Fruits Slim S2</td><td>6.0 mg</td><td>Fruit</td></tr>
+            <tr><td>ZYN Lemon Spritz Slim</td><td>6.0 mg</td><td>Citrus</td></tr>
+            <tr><td>ZYN Cucumber Lime Slim</td><td>6.0 mg</td><td>Fruit</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Best for:</strong> Beginners stepping up from S1, or former light smokers (5–10 cigarettes/day). The widest flavour selection in ZYN's range.</p>
+
+        <h3>S3 — Strong (9.0 mg/pouch)</h3>
+        <p><em>Format: Slim only</em></p>
+
+        <table>
+          <thead><tr><th>Product</th><th>mg/pouch</th><th>Flavour</th></tr></thead>
+          <tbody>
+            <tr><td>ZYN Cool Mint Slim S3</td><td>9.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Spearmint Slim S3</td><td>9.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Citrus Slim S3</td><td>9.0 mg</td><td>Citrus</td></tr>
+            <tr><td>ZYN Apple Mint Slim S3</td><td>9.0 mg</td><td>Fruit</td></tr>
+            <tr><td>ZYN Mint Fizz Slim S3</td><td>9.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Red Fruits Slim S3</td><td>9.0 mg</td><td>Fruit</td></tr>
+            <tr><td>ZYN Red Berry Fizz Slim S3</td><td>9.0 mg</td><td>Berry</td></tr>
+            <tr><td>ZYN Violet Licorice Slim S3</td><td>9.0 mg</td><td>Licorice</td></tr>
+            <tr><td>ZYN Red Fruits Fizz Slim S3</td><td>9.0 mg</td><td>Berry</td></tr>
+            <tr><td>ZYN Macchiato Slim S3</td><td>9.0 mg</td><td>Coffee</td></tr>
+            <tr><td>ZYN Cactus Spice Slim S3</td><td>9.0 mg</td><td>Spice</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Best for:</strong> Former pack-a-day smokers transitioning to pouches. The "sweet spot" for many regular users — strong enough to satisfy, manageable for all-day use. This tier has the best variety.</p>
+
+        <h3>S4 — Extra Strong (6.0–11.0 mg/pouch)</h3>
+        <p><em>Formats: Slim (10.6–11.0 mg) and Mini (6.0 mg)</em></p>
+
+        <p><strong>Slim S4 products (10.6–11.0 mg):</strong></p>
+        <table>
+          <thead><tr><th>Product</th><th>mg/pouch</th><th>Flavour</th></tr></thead>
+          <tbody>
+            <tr><td>ZYN Cool Mint Slim S4</td><td>10.6 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Citrus Slim S4</td><td>11.0 mg</td><td>Citrus</td></tr>
+            <tr><td>ZYN Apple Mint Slim S4</td><td>11.0 mg</td><td>Fruit</td></tr>
+            <tr><td>ZYN Cactus Spice Slim S4</td><td>11.0 mg</td><td>Spice</td></tr>
+            <tr><td>ZYN Dark Roast Slim S4</td><td>11.0 mg</td><td>Coffee</td></tr>
+            <tr><td>ZYN Menthol Ice Slim S4</td><td>11.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Blackcurrant Ice Slim S4</td><td>11.0 mg</td><td>Berry</td></tr>
+            <tr><td>ZYN Red Fruits Fizz Slim S4</td><td>11.0 mg</td><td>Berry</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Mini S4 products (3.0–6.0 mg):</strong></p>
+        <table>
+          <thead><tr><th>Product</th><th>mg/pouch</th><th>Flavour</th></tr></thead>
+          <tbody>
+            <tr><td>ZYN Cool Mint Mini S4</td><td>6.0 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Apple Mint Mini S4</td><td>6.0 mg</td><td>Fruit</td></tr>
+            <tr><td>ZYN Original Mini S4</td><td>6.0 mg</td><td>Original</td></tr>
+            <tr><td>ZYN Coffee Mini S4</td><td>6.0 mg</td><td>Coffee</td></tr>
+            <tr><td>ZYN Black Cherry Mini S4</td><td>3.0 mg</td><td>Fruit</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Best for:</strong> Experienced users wanting more kick. Slim S4 (11 mg) is where ZYN gets genuinely strong — most users feel a clear nicotine buzz. Not recommended for beginners.</p>
+
+        <h3>S5 — Super Strong (13.5 mg/pouch)</h3>
+        <p><em>Format: Slim only</em></p>
+
+        <table>
+          <thead><tr><th>Product</th><th>mg/pouch</th><th>Flavour</th></tr></thead>
+          <tbody>
+            <tr><td>ZYN Menthol Ice Slim S5</td><td>13.5 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Blackcurrant Ice Slim S5</td><td>13.5 mg</td><td>Berry</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Best for:</strong> Heavy users who find S4 insufficient. Limited flavour selection — ZYN only makes their "Ice" variants at this strength.</p>
+
+        <h3>S6 — Ultra Strong (16.5 mg/pouch)</h3>
+        <p><em>Format: Slim only</em></p>
+
+        <table>
+          <thead><tr><th>Product</th><th>mg/pouch</th><th>Flavour</th></tr></thead>
+          <tbody>
+            <tr><td>ZYN Cool Mint Ice Slim S6</td><td>16.5 mg</td><td>Mint</td></tr>
+            <tr><td>ZYN Menthol Ice Slim S6</td><td>16.5 mg</td><td>Mint</td></tr>
+          </tbody>
+        </table>
+
+        <p><strong>Best for:</strong> The strongest ZYN available. Only 2 products at this level — both mint. For users with established high tolerance who want to stay within the ZYN ecosystem rather than switching to ultra-strong brands like <a href="/brands/siberia">Siberia</a> or <a href="/brands/cuba">CUBA</a>.</p>
+
+        <h2>ZYN vs. Other Brands: Strength Comparison</h2>
+        <p>ZYN's maximum (16.5 mg) is modest compared to the market's extremes:</p>
+
+        <table>
+          <thead><tr><th>Brand</th><th>Max mg/pouch</th><th>vs ZYN S6</th></tr></thead>
+          <tbody>
+            <tr><td><a href="/brands/rabbit">Rabbit</a></td><td>50.0 mg</td><td>3x stronger</td></tr>
+            <tr><td><a href="/brands/siberia">Siberia</a></td><td>49.5 mg</td><td>3x stronger</td></tr>
+            <tr><td><a href="/brands/cuba">CUBA</a></td><td>43.0 mg</td><td>2.6x stronger</td></tr>
+            <tr><td><a href="/brands/iceberg">ICEBERG</a></td><td>40.0 mg</td><td>2.4x stronger</td></tr>
+            <tr><td><a href="/brands/rave">RAVE</a></td><td>19.5 mg</td><td>18% stronger</td></tr>
+            <tr><td><a href="/brands/velo">VELO</a></td><td>17.0 mg</td><td>Comparable</td></tr>
+            <tr><td><strong>ZYN</strong></td><td><strong>16.5 mg</strong></td><td>—</td></tr>
+            <tr><td><a href="/brands/loop">Loop</a></td><td>15.6 mg</td><td>5% weaker</td></tr>
+          </tbody>
+        </table>
+
+        <p>
+          ZYN deliberately caps its strength range. As a Swedish Match (now Philip Morris) brand, ZYN positions itself as
+          the "responsible" mainstream option. This isn't a weakness — it means ZYN's quality control and consistency are
+          exceptional across its range.
+        </p>
+
+        <h2>How to Choose Your ZYN Strength</h2>
+
+        <h3>Step 1: Assess Your Nicotine Background</h3>
+        <table>
+          <thead><tr><th>Your Background</th><th>Start</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Never used nicotine</td><td>S1 Mini (1.5 mg)</td><td>Use 2–3/day for first week</td></tr>
+            <tr><td>Social smoker (&lt;5/day)</td><td>S2 Mini (3 mg)</td><td>4–5/day</td></tr>
+            <tr><td>Regular smoker (5–15/day)</td><td>S2 Slim (6 mg) or S3 (9 mg)</td><td>5–8/day</td></tr>
+            <tr><td>Heavy smoker (15+/day)</td><td>S3 (9 mg) or S4 (11 mg)</td><td>6–10/day</td></tr>
+            <tr><td>Existing pouch user (6 mg+)</td><td>Match your current level</td><td>Check mg/pouch, not S-rating</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Step 2: Choose Your Format</h3>
+        <ul class="list-disc pl-6 space-y-1">
+          <li><strong>Mini:</strong> Smaller, more discreet. Lower mg per pouch. Better for light users or those wanting subtlety.</li>
+          <li><strong>Slim:</strong> Standard size. Higher mg per pouch. Better for most regular users.</li>
+        </ul>
+
+        <h3>Step 3: Dial In Over 2 Weeks</h3>
+        <p>
+          Don't judge your ZYN strength after one pouch. Give yourself 7–14 days at a consistent level before deciding
+          to increase. Your body needs time to adjust to oral nicotine absorption patterns.
+        </p>
+
+        <BlogNewsletterCta />
+
+        <h2>FAQ</h2>
+
+        <h3>What mg is ZYN 6?</h3>
+        <p>
+          ZYN's "6" can refer to their S6 strength tier (16.5 mg/pouch in Slim) or the 6 mg/pouch products (Slim S2).
+          In the US market, ZYN uses "6 mg" to label their stronger option (6 mg/pouch). In the European market, the
+          S-rating system is used. Always check the package for mg/pouch.
+        </p>
+
+        <h3>Which ZYN is strongest?</h3>
+        <p>
+          ZYN Cool Mint Ice Slim S6 and ZYN Menthol Ice Slim S6, both at 16.5 mg/pouch. These are ZYN's "Ultra Strong" tier.
+        </p>
+
+        <h3>Is ZYN S3 the same as ZYN 3 mg?</h3>
+        <p>
+          No. ZYN S3 (Strong) contains 9 mg/pouch in Slim format. ZYN "3 mg" refers to their Mini S2 products with 3 mg/pouch.
+          The naming is confusing — always check the actual mg/pouch figure.
+        </p>
+
+        <h3>Can I use ZYN to quit smoking?</h3>
+        <p>
+          Many people use ZYN as a smoking replacement. Start at a strength that matches your cigarette consumption (see the
+          table above), maintain for 2–4 weeks, then consider gradually stepping down. ZYN's range from 1.5 mg to 16.5 mg
+          allows for a controlled tapering journey. For detailed dosing guidance, see our
+          <a href="/blog/how-many-nicotine-pouches-a-day">daily dosing guide</a>.
+        </p>
+
+        <h2>Related Reading</h2>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><a href="/blog/how-to-choose-your-strength">How to Choose Your Strength</a> — General strength guide for all brands</li>
+          <li><a href="/blog/zyn-nicotine-pouches-complete-guide">ZYN Complete Guide</a> — Everything about ZYN</li>
+          <li><a href="/blog/zyn-flavours-complete-guide">ZYN Flavours: Complete Guide</a> — Every ZYN flavour reviewed</li>
+          <li><a href="/blog/velo-vs-nordic-spirit">ZYN vs VELO 2026</a> — Head-to-head comparison</li>
+          <li><a href="/blog/strongest-nicotine-pouches-ranked-2026">Strongest Nicotine Pouches Ranked</a> — The full strength ranking across all brands</li>
+          <li><a href="/blog/how-many-nicotine-pouches-a-day">How Many Nicotine Pouches a Day?</a> — Dosing guide</li>
+          <li><a href="/blog/how-to-use-nicotine-pouches">How to Use Nicotine Pouches</a> — Beginner basics</li>
+        </ul>
+
+      </div>
+
+      <nav class="mt-16 pt-8 border-t border-border">
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Browse ZYN</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/brands/zyn" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">All ZYN Products</a>
+              <a href="/products/strength/normal" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Regular Strength</a>
+              <a href="/products/strength/strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Strong</a>
+              <a href="/products/strength/extra-strong" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Extra Strong</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Compare Brands</h3>
+            <div class="flex flex-wrap gap-2">
+              <a href="/brands/velo" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">VELO</a>
+              <a href="/brands/loop" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Loop</a>
+              <a href="/brands/siberia" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">Siberia</a>
+              <a href="/brands/cuba" class="rounded-full bg-muted px-3 py-1.5 text-sm hover:bg-primary/10 transition">CUBA</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+          <p style="font-size: 13px; color: hsl(var(--muted-foreground)); margin-top: 32px; font-style: italic;">
+          Disclaimer: This article is for informational purposes only and does not constitute medical advice. Nicotine is an addictive substance. If you have health concerns about nicotine use, consult a qualified healthcare professional.
+        </p>
+</article>
+</Shop>

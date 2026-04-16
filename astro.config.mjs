@@ -3,13 +3,30 @@ import vercel from '@astrojs/vercel';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
-// PWA disabled — incompatible with output:'server' mode
-// import AstroPWA from '@vite-pwa/astro';
 import path from 'path';
+import { readFileSync } from 'node:fs';
+import { getBlogLastmod } from './src/data/blog-registry.ts';
+import { resolveTenantRuntime } from './src/config/tenant.ts';
+
+const runtime = resolveTenantRuntime(process.env);
+const { version: appVersion } = JSON.parse(
+  readFileSync(new URL('./package.json', import.meta.url), 'utf-8'),
+);
 
 export default defineConfig({
-  site: 'https://snusfriends.com',
+  site: runtime.siteUrl,
   output: 'server',
+  trailingSlash: 'never',
+  image: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'nycdn.nyehandel.se' },
+      { protocol: 'https', hostname: '**.supabase.co' },
+    ],
+  },
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: 'hover',
+  },
   adapter: vercel({
     // ISR disabled — causes 404 on SSR pages (known Astro+Vercel bug)
     // Static pages are still cached by Vercel's CDN via Cache-Control headers
@@ -23,12 +40,30 @@ export default defineConfig({
         const exclude = [
           '/account', '/cart', '/checkout', '/login', '/register',
           '/forgot-password', '/update-password', '/order-confirmation',
-          '/search', '/wishlist',
+          '/search', '/wishlist', '/404', '/auth/confirm',
+          // Old blog URLs that have 301 redirects — only new versions should be in sitemap
+          '/blog/zyn-vs-velo/',
+          '/blog/strongest-nicotine-pouches/',
+          '/blog/best-nicotine-pouches-for-beginners/',
         ];
-        return !exclude.some((path) => page.includes(path));
+        return !exclude.some((p) => page.includes(p));
+      },
+      serialize: (item) => {
+        const url = item.url;
+        const today = new Date().toISOString().split('T')[0];
+        if (url.includes('/blog/')) {
+          // Registry-driven — modifiedDate on the entry, else sprint stamp, else date.
+          const slug = url.split('/blog/')[1]?.replace(/\/$/, '');
+          item.lastmod = (slug && getBlogLastmod(slug)) || today;
+        } else if (url.includes('/products/') || url.includes('/brands/')) {
+          // Product + brand catalog is synced on every build — use build date.
+          item.lastmod = today;
+        } else {
+          item.lastmod = today;
+        }
+        return item;
       },
     }),
-    // PWA integration removed — incompatible with output:'server'
   ],
   vite: {
     plugins: [tailwindcss()],
@@ -41,7 +76,7 @@ export default defineConfig({
       noExternal: [/^@radix-ui/],
     },
     define: {
-      __APP_VERSION__: JSON.stringify('1.5.0'),
+      __APP_VERSION__: JSON.stringify(appVersion),
       __BUILD_DATE__: JSON.stringify(new Date().toISOString().split('T')[0]),
     },
   },

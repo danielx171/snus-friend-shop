@@ -1,4 +1,7 @@
 ---
+import JsonLd from '@/components/astro/JsonLd.astro';
+import { siteUrl } from '@/config/site';
+
 interface BreadcrumbItem {
   label: string;
   href?: string;
@@ -9,6 +12,25 @@ interface Props {
 }
 
 const { items } = Astro.props;
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: siteUrl + '/',
+    },
+    ...items.map((item, i) => ({
+      '@type': 'ListItem' as const,
+      position: i + 2,
+      name: item.label,
+      ...(item.href ? { item: siteUrl + item.href } : {}),
+    })),
+  ],
+};
 ---
 
 <nav aria-label="Breadcrumb" class="mb-4">
@@ -36,3 +58,4 @@ const { items } = Astro.props;
     ))}
   </ol>
 </nav>
+<JsonLd data={breadcrumbSchema} />

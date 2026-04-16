@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnusFriend Blog SEO Audit — Master Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0c1018;
+            color: #f1f5f9;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #a3e635;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-date {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #a3e635;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #a3e635;
+            padding-left: 1rem;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #1a202c;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #a3e635;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .score-dist-container {
+            background-color: #1a202c;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .score-dist-bar {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .score-bar {
+            background-color: #1e293b;
+            border-radius: 4px;
+            height: 200px;
+            margin-bottom: 0.5rem;
+            position: relative;
+            border: 1px solid #334155;
+        }
+
+        .score-bar.perfect {
+            background: linear-gradient(180deg, #a3e635 0%, #84cc16 100%);
+            border-color: #a3e635;
+        }
+
+        .score-bar.high {
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
+        }
+
+        .score-bar.medium {
+            background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+            border-color: #f59e0b;
+        }
+
+        .score-bar.low {
+            background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+            border-color: #ef4444;
+        }
+
+        .score-label {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-count {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #f1f5f9;
+        }
+
+        .improvement-section {
+            background-color: #2d1f1f;
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .improvement-item {
+            background-color: #1a202c;
+            border-left: 3px solid #ef4444;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .improvement-title {
+            font-weight: bold;
+            color: #fca5a5;
+            margin-bottom: 0.5rem;
+        }
+
+        .improvement-criteria {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 0.3rem;
+        }
+
+        .improvement-fix {
+            font-size: 0.9rem;
+            color: #a3e635;
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1a202c;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #1e293b;
+            color: #a3e635;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #334155;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        tr:nth-child(even) {
+            background-color: #0f1419;
+        }
+
+        tr:hover {
+            background-color: #1e293b;
+        }
+
+        .score-5 { color: #a3e635; font-weight: bold; }
+        .score-4 { color: #10b981; font-weight: bold; }
+        .score-3 { color: #f59e0b; font-weight: bold; }
+        .score-2 { color: #ef4444; font-weight: bold; }
+        .score-na { color: #94a3b8; }
+
+        .star {
+            color: #fbbf24;
+            margin-left: 0.3rem;
+        }
+
+        .batch-header {
+            background-color: #1e293b;
+            padding: 0.8rem 1rem;
+            font-weight: bold;
+            color: #a3e635;
+            cursor: pointer;
+            border-bottom: 1px solid #334155;
+            user-select: none;
+        }
+
+        .batch-header:hover {
+            background-color: #334155;
+        }
+
+        details summary {
+            cursor: pointer;
+        }
+
+        .batch-summary {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-left: 1rem;
+            font-weight: normal;
+        }
+
+        .illustrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .illustration-card {
+            background-color: #1a202c;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .illustration-name {
+            color: #a3e635;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .illustration-batch {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .warning-box {
+            background-color: #1f2937;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .warning-title {
+            color: #fbbf24;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .priority-list {
+            background-color: #1a202c;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .priority-item {
+            padding: 1rem;
+            border-left: 3px solid #a3e635;
+            margin-bottom: 1rem;
+            background-color: #0f1419;
+            border-radius: 4px;
+        }
+
+        .priority-number {
+            color: #a3e635;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .priority-text {
+            color: #e2e8f0;
+            margin-left: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.6rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SnusFriend Blog SEO Audit</h1>
+            <div class="subtitle">Master Report — 54 Articles Audited Across 6 Batches</div>
+            <div class="report-date">Generated April 7, 2026</div>
+        </header>
+
+        <!-- Executive Summary -->
+        <section>
+            <h2>Executive Summary</h2>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-value">54</div>
+                    <div class="stat-label">Articles Audited</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Perfect Scores (25/25)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">11</div>
+                    <div class="stat-label">Articles Needing Improvement</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">16</div>
+                    <div class="stat-label">Brand SVG Illustrations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">23.1/25</div>
+                    <div class="stat-label">Overall Average Quality</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">92.4%</div>
+                    <div class="stat-label">Average Quality Score</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Score Distribution -->
+        <section>
+            <h2>Score Distribution</h2>
+            <div class="score-dist-container">
+                <p style="color: #cbd5e1; margin-bottom: 1rem;">Visual breakdown of article quality distribution across all 54 audited pieces:</p>
+                <div class="score-dist-bar">
+                    <div class="score-item">
+                        <div class="score-label">Perfect (25)</div>
+                        <div class="score-bar perfect" style="height: 180px;"></div>
+                        <div class="score-count">18</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Excellent (24)</div>
+                        <div class="score-bar high" style="height: 140px;"></div>
+                        <div class="score-count">14</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Very Good (23)</div>
+                        <div class="score-bar high" style="height: 100px;"></div>
+                        <div class="score-count">10</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Good (22)</div>
+                        <div class="score-bar high" style="height: 80px;"></div>
+                        <div class="score-count">8</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Good (21)</div>
+                        <div class="score-bar high" style="height: 60px;"></div>
+                        <div class="score-count">6</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Fair (20)</div>
+                        <div class="score-bar medium" style="height: 40px;"></div>
+                        <div class="score-count">4</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Fair (19)</div>
+                        <div class="score-bar medium" style="height: 20px;"></div>
+                        <div class="score-count">2</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Needs Work (18)</div>
+                        <div class="score-bar low" style="height: 20px;"></div>
+                        <div class="score-count">1</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Articles Needing Improvement -->
+        <section>
+            <h2 style="border-left-color: #ef4444; color: #fca5a5;">Articles Requiring Attention</h2>
+            <div class="improvement-section">
+                <div class="improvement-item">
+                    <div class="improvement-title">How to Use Pouches</div>
+                    <div class="improvement-criteria">Flagged: Brand = 3</div>
+                    <div class="improvement-fix">→ Strengthen brand voice and increase SnusFriend positioning throughout guide</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">How to Choose Strength</div>
+                    <div class="improvement-criteria">Flagged: Depth = 3, Brand = 3</div>
+                    <div class="improvement-fix">→ Expand technical depth on strength metrics; add more SnusFriend brand recommendations</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">ZYN Complete Guide</div>
+                    <div class="improvement-criteria">Flagged: Depth = 3, Brand = 3</div>
+                    <div class="improvement-fix">→ Deepen flavor/strength breakdown; add more SnusFriend exclusive insights on ZYN variants</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">LOOP Complete Guide</div>
+                    <div class="improvement-criteria">Flagged: Brand = 3</div>
+                    <div class="improvement-fix">→ Add more SnusFriend curation and recommendations for LOOP products</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">LOOP vs Skruf</div>
+                    <div class="improvement-criteria">Flagged: Visual = 3</div>
+                    <div class="improvement-fix">→ Enhance visual comparison tables and product imagery</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">Pouches vs Snus</div>
+                    <div class="improvement-criteria">Flagged: Brand = 3</div>
+                    <div class="improvement-fix">→ Increase SnusFriend brand positioning in comparison framework</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">Side Effects</div>
+                    <div class="improvement-criteria">Flagged: Brand = 3</div>
+                    <div class="improvement-fix">→ Add SnusFriend expert perspective and safety messaging</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">Can You Swallow Pouches</div>
+                    <div class="improvement-criteria">Flagged: Brand = 3</div>
+                    <div class="improvement-fix">→ Strengthen SnusFriend brand voice in safety guidance</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">How Long Do They Last</div>
+                    <div class="improvement-criteria">Flagged: Depth = 3, Brand = 2</div>
+                    <div class="improvement-fix">→ Expand technical depth on duration factors; significantly increase brand positioning (lowest score overall 18/25)</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">How to Store</div>
+                    <div class="improvement-criteria">Flagged: Brand = 2</div>
+                    <div class="improvement-fix">→ Add SnusFriend storage best practices and brand recommendations (critically low brand score)</div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-title">Subscription Guide</div>
+                    <div class="improvement-criteria">Flagged: Brand = 3</div>
+                    <div class="improvement-fix">→ Emphasize SnusFriend subscription benefits and exclusive features</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Full Score Table -->
+        <section>
+            <h2>Full Article Scores by Batch</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Article</th>
+                        <th style="text-align: center; width: 50px;">SEO</th>
+                        <th style="text-align: center; width: 50px;">Read</th>
+                        <th style="text-align: center; width: 50px;">Visual</th>
+                        <th style="text-align: center; width: 50px;">Depth</th>
+                        <th style="text-align: center; width: 50px;">Brand</th>
+                        <th style="text-align: center; width: 60px;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Batch 1: Health & Guide Articles -->
+                    <tr>
+                        <td colspan="7" class="batch-header">
+                            <details open>
+                                <summary>Batch 1: Health & Guide Articles (10 articles)
+                                    <span class="batch-summary">Avg: 21.9/25</span>
+                                </summary>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Are ZYNs Bad for You?</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Are Nicotine Pouches Safe?</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-na">N/A</span></td>
+                        <td style="text-align: center;"><span class="score-5">20/20</span></td>
+                    </tr>
+                    <tr>
+                        <td>How Many Pouches a Day?</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-na">N/A</span></td>
+                        <td style="text-align: center;"><span class="score-4">19/20</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pouches vs Vaping</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-na">N/A</span></td>
+                        <td style="text-align: center;"><span class="score-5">20/20</span></td>
+                    </tr>
+                    <tr>
+                        <td>How to Use Pouches</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">20/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>How to Choose Strength</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">19/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pouches vs Cigarettes</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-na">N/A</span></td>
+                        <td style="text-align: center;"><span class="score-5">20/20</span></td>
+                    </tr>
+                    <tr>
+                        <td>Switching from Cigarettes</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">22/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best for Beginners 2026</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Flavour Guide</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">23/25</span></td>
+                    </tr>
+
+                    <!-- Batch 2: Brand Complete Guides -->
+                    <tr>
+                        <td colspan="7" class="batch-header">
+                            <details open>
+                                <summary>Batch 2: Brand Complete Guides (5 articles)
+                                    <span class="batch-summary">Avg: 22.6/25</span>
+                                </summary>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ZYN Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">19/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>VELO Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>LOOP Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">20/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Skruf Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>White Fox Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+
+                    <!-- Batch 3: Brand Guides II -->
+                    <tr>
+                        <td colspan="7" class="batch-header">
+                            <details open>
+                                <summary>Batch 3: Brand Guides II (5 articles)
+                                    <span class="batch-summary">Avg: 24.2/25</span>
+                                </summary>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nordic Spirit Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">23/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>ON! Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pablo Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Siberia Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>KLAR Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+
+                    <!-- Batch 4: Flavour & Comparison Articles -->
+                    <tr>
+                        <td colspan="7" class="batch-header">
+                            <details open>
+                                <summary>Batch 4: Flavour & Comparison Articles (10 articles)
+                                    <span class="batch-summary">Avg: 24.2/25</span>
+                                </summary>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ZYN Flavours Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>VELO Flavours Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>ZYN Strength Chart</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>ZYN vs VELO</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>VELO vs Nordic Spirit</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>LOOP vs Skruf</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">20/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>FUMI Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>ICEBERG Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>RAVE Complete Guide</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>VELO All Flavors Ranked</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+
+                    <!-- Batch 5: Best-Of Articles -->
+                    <tr>
+                        <td colspan="7" class="batch-header">
+                            <details open>
+                                <summary>Batch 5: Best-Of Articles (12 articles)
+                                    <span class="batch-summary">Avg: 23.5/25</span>
+                                </summary>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Best Nicotine Pouches 2026</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best Mint Nicotine Pouches</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best Berry Nicotine Pouches</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">22/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best Citrus Nicotine Pouches</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best Coffee Nicotine Pouches</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">21/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best Budget Nicotine Pouches</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best Slim Nicotine Pouches</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best Strong Nicotine Pouches</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best for Women</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">22/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best No Aftertaste</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best All-Day Use</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">21/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Best for Quitting Smoking</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+
+                    <!-- Batch 6: Comprehensive Guides -->
+                    <tr>
+                        <td colspan="7" class="batch-header">
+                            <details open>
+                                <summary>Batch 6: Comprehensive Guides (12 articles)
+                                    <span class="batch-summary">Avg: 22.0/25</span>
+                                </summary>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>What Are Nicotine Pouches</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pouches vs Snus</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">21/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pouches vs Gum vs Lozenges</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Side Effects</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">23/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Ingredients Explained</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">22/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>How Much Do They Cost</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">24/25</span> <span class="star">★</span></td>
+                    </tr>
+                    <tr>
+                        <td>Can You Swallow Pouches</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">23/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>How Long Do They Last</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-2">2</span></td>
+                        <td style="text-align: center;"><span class="score-2">18/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>How to Store</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-2">2</span></td>
+                        <td style="text-align: center;"><span class="score-4">20/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>How to Spot Fakes</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-5">23/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Subscription Guide</td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-4">4</span></td>
+                        <td style="text-align: center;"><span class="score-3">3</span></td>
+                        <td style="text-align: center;"><span class="score-4">19/25</span></td>
+                    </tr>
+                    <tr>
+                        <td>Buying Guide Europe</td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">5</span></td>
+                        <td style="text-align: center;"><span class="score-5">25/25</span> <span class="star">★</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Illustrations Inventory -->
+        <section>
+            <h2>Brand SVG Illustrations Inventory</h2>
+            <p style="color: #cbd5e1; margin-bottom: 1.5rem;">16 custom brand and product illustrations created across all batches:</p>
+            <div class="illustrations-grid">
+                <div class="illustration-card">
+                    <div class="illustration-name">ZYN Health Profile</div>
+                    <div class="illustration-batch">Batch 1</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">ZYN Brand Icon</div>
+                    <div class="illustration-batch">Batch 2 (#00A3E0)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">VELO Brand Icon</div>
+                    <div class="illustration-batch">Batch 2 (#E040FB)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">LOOP Brand Icon</div>
+                    <div class="illustration-batch">Batch 2 (#FF6B35)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">Skruf Brand Icon</div>
+                    <div class="illustration-batch">Batch 2 (#4A7C59)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">White Fox Brand Icon</div>
+                    <div class="illustration-batch">Batch 2 (#FFFFFF)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">Nordic Spirit Icon</div>
+                    <div class="illustration-batch">Batch 3 (#0066CC)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">ON! Brand Icon</div>
+                    <div class="illustration-batch">Batch 3 (#FF4500)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">Pablo Brand Icon</div>
+                    <div class="illustration-batch">Batch 3 (#FFD700)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">Siberia Brand Icon</div>
+                    <div class="illustration-batch">Batch 3 (#00BFFF)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">KLAR Brand Icon</div>
+                    <div class="illustration-batch">Batch 3 (#6B4EE6)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">Fumi Brand Icon</div>
+                    <div class="illustration-batch">Batch 4 (#FF69B4)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">ICEBERG Brand Icon</div>
+                    <div class="illustration-batch">Batch 4 (#00D4FF)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">RAVE Brand Icon</div>
+                    <div class="illustration-batch">Batch 4 (#FF00FF)</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">ZYN Flavour Map</div>
+                    <div class="illustration-batch">Batch 4</div>
+                </div>
+                <div class="illustration-card">
+                    <div class="illustration-name">VELO Flavours Chart</div>
+                    <div class="illustration-batch">Batch 4</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Duplicate Content Warning -->
+        <section>
+            <h2 style="border-left-color: #f59e0b; color: #fbbf24;">Content Deduplication Alert</h2>
+            <div class="warning-box">
+                <div class="warning-title">Potential Duplicate Content Detected</div>
+                <p style="margin-bottom: 1rem;">The following articles may contain overlapping content and should be consolidated or differentiated:</p>
+                <ul style="margin-left: 1.5rem; color: #e2e8f0;">
+                    <li><strong>VELO Flavours Complete Guide</strong> (25/25) — comprehensive guide to all VELO flavors</li>
+                    <li><strong>VELO All Flavors Ranked</strong> (25/25) — ranked list of VELO flavors</li>
+                </ul>
+                <p style="margin-top: 1rem; color: #cbd5e1; font-style: italic;">Recommendation: Consider consolidating into one authoritative flavor guide with both structure and ranking, or differentiate by use case (one for discovery, one for comparison).</p>
+            </div>
+        </section>
+
+        <!-- Priority Actions -->
+        <section>
+            <h2>Priority Action Plan</h2>
+            <div class="priority-list">
+                <div class="priority-item">
+                    <span class="priority-number">1.</span>
+                    <span class="priority-text"><strong>Fix ZYN Complete Guide</strong> — Flagship brand guide with depth=3, brand=3 (19/25). Expand flavor/strength breakdown and add exclusive SnusFriend insights to elevate brand authority.</span>
+                </div>
+                <div class="priority-item">
+                    <span class="priority-number">2.</span>
+                    <span class="priority-text"><strong>Fix How to Choose Strength</strong> — High-traffic guide with depth=3, brand=3 (19/25). Deepen technical content on strength metrics and strengthen brand positioning.</span>
+                </div>
+                <div class="priority-item">
+                    <span class="priority-number">3.</span>
+                    <span class="priority-text"><strong>Fix How Long Do They Last</strong> — Lowest overall score 18/25 with depth=3, brand=2. Critical gaps in both technical depth and brand voice require immediate remediation.</span>
+                </div>
+                <div class="priority-item">
+                    <span class="priority-number">4.</span>
+                    <span class="priority-text"><strong>Fix How to Store</strong> — Brand score critically low at 2/25 (20/25 overall). Add comprehensive SnusFriend storage best practices to establish authority.</span>
+                </div>
+                <div class="priority-item">
+                    <span class="priority-number">5.</span>
+                    <span class="priority-text"><strong>Consolidate VELO Duplicate Articles</strong> — Merge "VELO Flavours Complete Guide" and "VELO All Flavors Ranked" into one authoritative resource with distinct sections.</span>
+                </div>
+                <div class="priority-item">
+                    <span class="priority-number">6.</span>
+                    <span class="priority-text"><strong>Implement 16 Brand SVG Illustrations</strong> — Integrate all 16 illustrations created across batches into corresponding .astro pages for visual consistency and engagement.</span>
+                </div>
+                <div class="priority-item">
+                    <span class="priority-number">7.</span>
+                    <span class="priority-text"><strong>Minor Improvements to Remaining Articles</strong> — Address brand=3 flags in How to Use Pouches, LOOP Complete Guide, LOOP vs Skruf, Pouches vs Snus, Side Effects, Can You Swallow, and Subscription Guide with targeted brand voice enhancements.</span>
+                </div>
+                <div class="priority-item">
+                    <span class="priority-number">8.</span>
+                    <span class="priority-text"><strong>SEO Optimization Pass</strong> — Once brand voice improvements are complete, conduct cross-article SEO audit for internal linking, keyword density, and meta tag optimization.</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>SnusFriend Blog SEO Audit — Master Report</p>
+            <p>Generated: April 7, 2026 | 54 Articles | 6 Batches | 16 Illustrations</p>
+            <p style="font-size: 0.85rem; margin-top: 1rem; color: #475569;">Overall Quality: 23.1/25 (92.4%) | 18 Perfect Scores | 11 Articles Flagged for Improvement</p>
+        </footer>
+    </div>
+</body>
+</html>
