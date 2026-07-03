@@ -22,6 +22,7 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { ProductSchema } from '@/components/seo/ProductSchema';
 import { ProductCard } from '@/components/product/ProductCard';
 import { PDPSkeleton } from '@/components/product/PDPSkeleton';
+import { BlogLinks } from '@/components/product/BlogLinks';
 import { Input } from '@/components/ui/input';
 import { apiFetch } from '@/lib/api';
 
@@ -329,6 +330,9 @@ export default function ProductDetail() {
             </AccordionItem>
           </Accordion>
         </div>
+
+        {/* From our guides — verified blog links (linkRegistry) */}
+        <BlogLinks />
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (

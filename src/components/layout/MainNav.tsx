@@ -79,6 +79,7 @@ export function MainNav() {
               { href: '/nicotine-pouches?badge=popular', label: 'Bestsellers' },
               { href: '/nicotine-pouches?badge=newPrice', label: 'Offers', highlight: true },
               { href: '/brands', label: 'All Brands' },
+              { href: '/blog', label: 'Blog' },
               { href: '/membership', label: 'Members Club', highlight: true },
             ].map((item) => (
               <NavigationMenuItem key={item.label}>

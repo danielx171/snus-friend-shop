@@ -34,3 +34,4 @@ supabase/.temp/
 customers.csv
 william-automation/.env
 william-automation/keys.json
+.vercel

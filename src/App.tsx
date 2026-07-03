@@ -23,6 +23,8 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import BrandHub from "./pages/BrandHub";
 import BrandsIndex from "./pages/BrandsIndex";
 import MembershipPage from "./pages/MembershipPage";
+import BlogIndex from "./pages/BlogIndex";
+import BlogPost from "./pages/BlogPost";
 import OpsAuthGuard from "./components/auth/OpsAuthGuard";
 import OpsLogin from "./pages/ops/OpsLogin";
 import OpsDashboard from "./pages/ops/OpsDashboard";
@@ -96,6 +98,11 @@ const App = () => (
               <Route path="/order-confirmation" element={<OrderConfirmation />} />
               <Route path="/brands" element={<BrandsIndex />} />
               <Route path="/brand/:brandSlug" element={<BrandHub />} />
+              <Route path="/blog" element={<BlogIndex />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              {/* Language-aware blog scaffold (Phase 3) — sv renders 0 articles until translated */}
+              <Route path="/sv/blog" element={<BlogIndex lang="sv" />} />
+              <Route path="/sv/blog/:slug" element={<BlogPost lang="sv" />} />
               <Route path="/membership" element={<MembershipPage />} />
               {/* Info / legal pages — placeholder content, needs real copy before go-live */}
               <Route path="/contact" element={<InfoPage title="Contact Us" />} />
